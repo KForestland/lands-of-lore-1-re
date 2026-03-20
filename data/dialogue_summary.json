@@ -1,0 +1,551 @@
+{
+  "total_files": 90,
+  "total_strings": 6495,
+  "by_language": {
+    "ENG": 2165,
+    "FRE": 2165,
+    "GER": 2165
+  },
+  "files": [
+    {
+      "file": "LANDS.ENG",
+      "pak": "STARTUP.PAK",
+      "output": "lands_eng.json",
+      "string_count": 735
+    },
+    {
+      "file": "LANDS.FRE",
+      "pak": "STARTUP.PAK",
+      "output": "lands_fre.json",
+      "string_count": 735
+    },
+    {
+      "file": "LANDS.GER",
+      "pak": "STARTUP.PAK",
+      "output": "lands_ger.json",
+      "string_count": 735
+    },
+    {
+      "file": "LEVEL01.ENG",
+      "pak": "L01.PAK",
+      "output": "level01_eng.json",
+      "string_count": 164
+    },
+    {
+      "file": "LEVEL01.FRE",
+      "pak": "L01.PAK",
+      "output": "level01_fre.json",
+      "string_count": 164
+    },
+    {
+      "file": "LEVEL01.GER",
+      "pak": "L01.PAK",
+      "output": "level01_ger.json",
+      "string_count": 164
+    },
+    {
+      "file": "LEVEL02.ENG",
+      "pak": "L02.PAK",
+      "output": "level02_eng.json",
+      "string_count": 103
+    },
+    {
+      "file": "LEVEL02.FRE",
+      "pak": "L02.PAK",
+      "output": "level02_fre.json",
+      "string_count": 103
+    },
+    {
+      "file": "LEVEL02.GER",
+      "pak": "L02.PAK",
+      "output": "level02_ger.json",
+      "string_count": 103
+    },
+    {
+      "file": "LEVEL03.ENG",
+      "pak": "L03.PAK",
+      "output": "level03_eng.json",
+      "string_count": 86
+    },
+    {
+      "file": "LEVEL03.FRE",
+      "pak": "L03.PAK",
+      "output": "level03_fre.json",
+      "string_count": 86
+    },
+    {
+      "file": "LEVEL03.GER",
+      "pak": "L03.PAK",
+      "output": "level03_ger.json",
+      "string_count": 86
+    },
+    {
+      "file": "LEVEL04.ENG",
+      "pak": "L04.PAK",
+      "output": "level04_eng.json",
+      "string_count": 52
+    },
+    {
+      "file": "LEVEL04.FRE",
+      "pak": "L04.PAK",
+      "output": "level04_fre.json",
+      "string_count": 52
+    },
+    {
+      "file": "LEVEL04.GER",
+      "pak": "L04.PAK",
+      "output": "level04_ger.json",
+      "string_count": 52
+    },
+    {
+      "file": "LEVEL05.ENG",
+      "pak": "L05.PAK",
+      "output": "level05_eng.json",
+      "string_count": 10
+    },
+    {
+      "file": "LEVEL05.FRE",
+      "pak": "L05.PAK",
+      "output": "level05_fre.json",
+      "string_count": 10
+    },
+    {
+      "file": "LEVEL05.GER",
+      "pak": "L05.PAK",
+      "output": "level05_ger.json",
+      "string_count": 10
+    },
+    {
+      "file": "LEVEL06.ENG",
+      "pak": "L06.PAK",
+      "output": "level06_eng.json",
+      "string_count": 31
+    },
+    {
+      "file": "LEVEL06.FRE",
+      "pak": "L06.PAK",
+      "output": "level06_fre.json",
+      "string_count": 31
+    },
+    {
+      "file": "LEVEL06.GER",
+      "pak": "L06.PAK",
+      "output": "level06_ger.json",
+      "string_count": 31
+    },
+    {
+      "file": "LEVEL07.ENG",
+      "pak": "L07.PAK",
+      "output": "level07_eng.json",
+      "string_count": 44
+    },
+    {
+      "file": "LEVEL07.FRE",
+      "pak": "L07.PAK",
+      "output": "level07_fre.json",
+      "string_count": 44
+    },
+    {
+      "file": "LEVEL07.GER",
+      "pak": "L07.PAK",
+      "output": "level07_ger.json",
+      "string_count": 44
+    },
+    {
+      "file": "LEVEL08.ENG",
+      "pak": "L08.PAK",
+      "output": "level08_eng.json",
+      "string_count": 49
+    },
+    {
+      "file": "LEVEL08.FRE",
+      "pak": "L08.PAK",
+      "output": "level08_fre.json",
+      "string_count": 49
+    },
+    {
+      "file": "LEVEL08.GER",
+      "pak": "L08.PAK",
+      "output": "level08_ger.json",
+      "string_count": 49
+    },
+    {
+      "file": "LEVEL09.ENG",
+      "pak": "L09.PAK",
+      "output": "level09_eng.json",
+      "string_count": 11
+    },
+    {
+      "file": "LEVEL09.FRE",
+      "pak": "L09.PAK",
+      "output": "level09_fre.json",
+      "string_count": 11
+    },
+    {
+      "file": "LEVEL09.GER",
+      "pak": "L09.PAK",
+      "output": "level09_ger.json",
+      "string_count": 11
+    },
+    {
+      "file": "LEVEL10.ENG",
+      "pak": "L10.PAK",
+      "output": "level10_eng.json",
+      "string_count": 87
+    },
+    {
+      "file": "LEVEL10.FRE",
+      "pak": "L10.PAK",
+      "output": "level10_fre.json",
+      "string_count": 87
+    },
+    {
+      "file": "LEVEL10.GER",
+      "pak": "L10.PAK",
+      "output": "level10_ger.json",
+      "string_count": 87
+    },
+    {
+      "file": "LEVEL11.ENG",
+      "pak": "L11.PAK",
+      "output": "level11_eng.json",
+      "string_count": 102
+    },
+    {
+      "file": "LEVEL11.FRE",
+      "pak": "L11.PAK",
+      "output": "level11_fre.json",
+      "string_count": 102
+    },
+    {
+      "file": "LEVEL11.GER",
+      "pak": "L11.PAK",
+      "output": "level11_ger.json",
+      "string_count": 102
+    },
+    {
+      "file": "LEVEL12.ENG",
+      "pak": "L12.PAK",
+      "output": "level12_eng.json",
+      "string_count": 71
+    },
+    {
+      "file": "LEVEL12.FRE",
+      "pak": "L12.PAK",
+      "output": "level12_fre.json",
+      "string_count": 71
+    },
+    {
+      "file": "LEVEL12.GER",
+      "pak": "L12.PAK",
+      "output": "level12_ger.json",
+      "string_count": 71
+    },
+    {
+      "file": "LEVEL13.ENG",
+      "pak": "L13.PAK",
+      "output": "level13_eng.json",
+      "string_count": 13
+    },
+    {
+      "file": "LEVEL13.FRE",
+      "pak": "L13.PAK",
+      "output": "level13_fre.json",
+      "string_count": 13
+    },
+    {
+      "file": "LEVEL13.GER",
+      "pak": "L13.PAK",
+      "output": "level13_ger.json",
+      "string_count": 13
+    },
+    {
+      "file": "LEVEL14.ENG",
+      "pak": "L14.PAK",
+      "output": "level14_eng.json",
+      "string_count": 22
+    },
+    {
+      "file": "LEVEL14.FRE",
+      "pak": "L14.PAK",
+      "output": "level14_fre.json",
+      "string_count": 22
+    },
+    {
+      "file": "LEVEL14.GER",
+      "pak": "L14.PAK",
+      "output": "level14_ger.json",
+      "string_count": 22
+    },
+    {
+      "file": "LEVEL15.ENG",
+      "pak": "L15.PAK",
+      "output": "level15_eng.json",
+      "string_count": 25
+    },
+    {
+      "file": "LEVEL15.FRE",
+      "pak": "L15.PAK",
+      "output": "level15_fre.json",
+      "string_count": 25
+    },
+    {
+      "file": "LEVEL15.GER",
+      "pak": "L15.PAK",
+      "output": "level15_ger.json",
+      "string_count": 25
+    },
+    {
+      "file": "LEVEL16.ENG",
+      "pak": "L16.PAK",
+      "output": "level16_eng.json",
+      "string_count": 31
+    },
+    {
+      "file": "LEVEL16.FRE",
+      "pak": "L16.PAK",
+      "output": "level16_fre.json",
+      "string_count": 31
+    },
+    {
+      "file": "LEVEL16.GER",
+      "pak": "L16.PAK",
+      "output": "level16_ger.json",
+      "string_count": 31
+    },
+    {
+      "file": "LEVEL17.ENG",
+      "pak": "L17.PAK",
+      "output": "level17_eng.json",
+      "string_count": 24
+    },
+    {
+      "file": "LEVEL17.FRE",
+      "pak": "L17.PAK",
+      "output": "level17_fre.json",
+      "string_count": 24
+    },
+    {
+      "file": "LEVEL17.GER",
+      "pak": "L17.PAK",
+      "output": "level17_ger.json",
+      "string_count": 24
+    },
+    {
+      "file": "LEVEL18.ENG",
+      "pak": "L18.PAK",
+      "output": "level18_eng.json",
+      "string_count": 51
+    },
+    {
+      "file": "LEVEL18.FRE",
+      "pak": "L18.PAK",
+      "output": "level18_fre.json",
+      "string_count": 51
+    },
+    {
+      "file": "LEVEL18.GER",
+      "pak": "L18.PAK",
+      "output": "level18_ger.json",
+      "string_count": 51
+    },
+    {
+      "file": "LEVEL19.ENG",
+      "pak": "L19.PAK",
+      "output": "level19_eng.json",
+      "string_count": 15
+    },
+    {
+      "file": "LEVEL19.FRE",
+      "pak": "L19.PAK",
+      "output": "level19_fre.json",
+      "string_count": 15
+    },
+    {
+      "file": "LEVEL19.GER",
+      "pak": "L19.PAK",
+      "output": "level19_ger.json",
+      "string_count": 15
+    },
+    {
+      "file": "LEVEL20.ENG",
+      "pak": "L20.PAK",
+      "output": "level20_eng.json",
+      "string_count": 15
+    },
+    {
+      "file": "LEVEL20.FRE",
+      "pak": "L20.PAK",
+      "output": "level20_fre.json",
+      "string_count": 15
+    },
+    {
+      "file": "LEVEL20.GER",
+      "pak": "L20.PAK",
+      "output": "level20_ger.json",
+      "string_count": 15
+    },
+    {
+      "file": "LEVEL21.ENG",
+      "pak": "L21.PAK",
+      "output": "level21_eng.json",
+      "string_count": 18
+    },
+    {
+      "file": "LEVEL21.FRE",
+      "pak": "L21.PAK",
+      "output": "level21_fre.json",
+      "string_count": 18
+    },
+    {
+      "file": "LEVEL21.GER",
+      "pak": "L21.PAK",
+      "output": "level21_ger.json",
+      "string_count": 18
+    },
+    {
+      "file": "LEVEL22.ENG",
+      "pak": "L22.PAK",
+      "output": "level22_eng.json",
+      "string_count": 180
+    },
+    {
+      "file": "LEVEL22.FRE",
+      "pak": "L22.PAK",
+      "output": "level22_fre.json",
+      "string_count": 180
+    },
+    {
+      "file": "LEVEL22.GER",
+      "pak": "L22.PAK",
+      "output": "level22_ger.json",
+      "string_count": 180
+    },
+    {
+      "file": "LEVEL23.ENG",
+      "pak": "L23.PAK",
+      "output": "level23_eng.json",
+      "string_count": 35
+    },
+    {
+      "file": "LEVEL23.FRE",
+      "pak": "L23.PAK",
+      "output": "level23_fre.json",
+      "string_count": 35
+    },
+    {
+      "file": "LEVEL23.GER",
+      "pak": "L23.PAK",
+      "output": "level23_ger.json",
+      "string_count": 35
+    },
+    {
+      "file": "LEVEL24.ENG",
+      "pak": "L24.PAK",
+      "output": "level24_eng.json",
+      "string_count": 39
+    },
+    {
+      "file": "LEVEL24.FRE",
+      "pak": "L24.PAK",
+      "output": "level24_fre.json",
+      "string_count": 39
+    },
+    {
+      "file": "LEVEL24.GER",
+      "pak": "L24.PAK",
+      "output": "level24_ger.json",
+      "string_count": 39
+    },
+    {
+      "file": "LEVEL25.ENG",
+      "pak": "L25.PAK",
+      "output": "level25_eng.json",
+      "string_count": 2
+    },
+    {
+      "file": "LEVEL25.FRE",
+      "pak": "L25.PAK",
+      "output": "level25_fre.json",
+      "string_count": 2
+    },
+    {
+      "file": "LEVEL25.GER",
+      "pak": "L25.PAK",
+      "output": "level25_ger.json",
+      "string_count": 2
+    },
+    {
+      "file": "LEVEL26.ENG",
+      "pak": "L26.PAK",
+      "output": "level26_eng.json",
+      "string_count": 38
+    },
+    {
+      "file": "LEVEL26.FRE",
+      "pak": "L26.PAK",
+      "output": "level26_fre.json",
+      "string_count": 38
+    },
+    {
+      "file": "LEVEL26.GER",
+      "pak": "L26.PAK",
+      "output": "level26_ger.json",
+      "string_count": 38
+    },
+    {
+      "file": "LEVEL27.ENG",
+      "pak": "L27.PAK",
+      "output": "level27_eng.json",
+      "string_count": 31
+    },
+    {
+      "file": "LEVEL27.FRE",
+      "pak": "L27.PAK",
+      "output": "level27_fre.json",
+      "string_count": 31
+    },
+    {
+      "file": "LEVEL27.GER",
+      "pak": "L27.PAK",
+      "output": "level27_ger.json",
+      "string_count": 31
+    },
+    {
+      "file": "LEVEL28.ENG",
+      "pak": "L28.PAK",
+      "output": "level28_eng.json",
+      "string_count": 58
+    },
+    {
+      "file": "LEVEL28.FRE",
+      "pak": "L28.PAK",
+      "output": "level28_fre.json",
+      "string_count": 58
+    },
+    {
+      "file": "LEVEL28.GER",
+      "pak": "L28.PAK",
+      "output": "level28_ger.json",
+      "string_count": 58
+    },
+    {
+      "file": "LEVEL29.ENG",
+      "pak": "L29.PAK",
+      "output": "level29_eng.json",
+      "string_count": 23
+    },
+    {
+      "file": "LEVEL29.FRE",
+      "pak": "L29.PAK",
+      "output": "level29_fre.json",
+      "string_count": 23
+    },
+    {
+      "file": "LEVEL29.GER",
+      "pak": "L29.PAK",
+      "output": "level29_ger.json",
+      "string_count": 23
+    }
+  ]
+}

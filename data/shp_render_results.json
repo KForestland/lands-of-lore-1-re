@@ -1,0 +1,719 @@
+{
+  "total_files": 89,
+  "total_frames_rendered": 3492,
+  "total_frames_failed": 0,
+  "files": [
+    {
+      "pak": "CATWALK.PAK",
+      "name": "CATWALK.SHP",
+      "status": "ok",
+      "total_frames": 118,
+      "frames_rendered": 118,
+      "failures": 0
+    },
+    {
+      "pak": "CATWALK.PAK",
+      "name": "CATDOOR.SHP",
+      "status": "ok",
+      "total_frames": 2,
+      "frames_rendered": 2,
+      "failures": 0
+    },
+    {
+      "pak": "CAVE1.PAK",
+      "name": "CAVE1.SHP",
+      "status": "ok",
+      "total_frames": 172,
+      "frames_rendered": 172,
+      "failures": 0
+    },
+    {
+      "pak": "CAVE1.PAK",
+      "name": "CAVE1DR.SHP",
+      "status": "ok",
+      "total_frames": 1,
+      "frames_rendered": 1,
+      "failures": 0
+    },
+    {
+      "pak": "CIMMERIA.PAK",
+      "name": "CIMMERIA.SHP",
+      "status": "ok",
+      "total_frames": 286,
+      "frames_rendered": 286,
+      "failures": 0
+    },
+    {
+      "pak": "CIMMERIA.PAK",
+      "name": "CIMDOOR.SHP",
+      "status": "ok",
+      "total_frames": 2,
+      "frames_rendered": 2,
+      "failures": 0
+    },
+    {
+      "pak": "FOREST1.PAK",
+      "name": "FOREST1.SHP",
+      "status": "ok",
+      "total_frames": 92,
+      "frames_rendered": 92,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "AUTOBUT.SHP",
+      "status": "ok",
+      "total_frames": 122,
+      "frames_rendered": 122,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "FACE01.SHP",
+      "status": "ok",
+      "total_frames": 28,
+      "frames_rendered": 28,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "FACE02.SHP",
+      "status": "ok",
+      "total_frames": 28,
+      "frames_rendered": 28,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "FACE03.SHP",
+      "status": "ok",
+      "total_frames": 28,
+      "frames_rendered": 28,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "FACE04.SHP",
+      "status": "ok",
+      "total_frames": 28,
+      "frames_rendered": 28,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "FACE05.SHP",
+      "status": "ok",
+      "total_frames": 28,
+      "frames_rendered": 28,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "FACE06.SHP",
+      "status": "ok",
+      "total_frames": 28,
+      "frames_rendered": 28,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "FACE07.SHP",
+      "status": "ok",
+      "total_frames": 28,
+      "frames_rendered": 28,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "FACE08.SHP",
+      "status": "ok",
+      "total_frames": 28,
+      "frames_rendered": 28,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "FACE09.SHP",
+      "status": "ok",
+      "total_frames": 28,
+      "frames_rendered": 28,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "FIREBALL.SHP",
+      "status": "ok",
+      "total_frames": 8,
+      "frames_rendered": 8,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "FXPAL.SHP",
+      "status": "ok",
+      "total_frames": 1,
+      "frames_rendered": 1,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "HEAL.SHP",
+      "status": "ok",
+      "total_frames": 4,
+      "frames_rendered": 4,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "HEALI.SHP",
+      "status": "ok",
+      "total_frames": 16,
+      "frames_rendered": 16,
+      "failures": 0
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "ICE.SHP",
+      "status": "ok",
+      "total_frames": 4,
+      "frames_rendered": 4,
+      "failures": 0
+    },
+    {
+      "pak": "KEEP.PAK",
+      "name": "KEEP.SHP",
+      "status": "ok",
+      "total_frames": 78,
+      "frames_rendered": 78,
+      "failures": 0
+    },
+    {
+      "pak": "KEEP.PAK",
+      "name": "KEEPDOOR.SHP",
+      "status": "ok",
+      "total_frames": 1,
+      "frames_rendered": 1,
+      "failures": 0
+    },
+    {
+      "pak": "L01.PAK",
+      "name": "GUARD.SHP",
+      "status": "ok",
+      "total_frames": 49,
+      "frames_rendered": 49,
+      "failures": 0
+    },
+    {
+      "pak": "L02.PAK",
+      "name": "BOAR.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L02.PAK",
+      "name": "THUG.SHP",
+      "status": "ok",
+      "total_frames": 65,
+      "frames_rendered": 65,
+      "failures": 0
+    },
+    {
+      "pak": "L04.PAK",
+      "name": "ORCLDR.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L06.PAK",
+      "name": "RATMAN.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L06.PAK",
+      "name": "BANDIT.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L07.PAK",
+      "name": "CAVEDWLR.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L08.PAK",
+      "name": "FLSPIDER.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L08.PAK",
+      "name": "SCAVNGR.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L09.PAK",
+      "name": "MORIBUND.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L10.PAK",
+      "name": "PENTROG.SHP",
+      "status": "ok",
+      "total_frames": 49,
+      "frames_rendered": 49,
+      "failures": 0
+    },
+    {
+      "pak": "L11.PAK",
+      "name": "HURZELL.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L11.PAK",
+      "name": "SWAMPCIT.SHP",
+      "status": "ok",
+      "total_frames": 64,
+      "frames_rendered": 64,
+      "failures": 0
+    },
+    {
+      "pak": "L11.PAK",
+      "name": "SWAMPMON.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L12.PAK",
+      "name": "LARKHON.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L13.PAK",
+      "name": "IRONGRZR.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L13.PAK",
+      "name": "GIMLET.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L14.PAK",
+      "name": "MULTIPD.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L14.PAK",
+      "name": "MAGICMIR.SHP",
+      "status": "ok",
+      "total_frames": 33,
+      "frames_rendered": 33,
+      "failures": 0
+    },
+    {
+      "pak": "L15.PAK",
+      "name": "ROCKLING.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L15.PAK",
+      "name": "AVIANWRM.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L17.PAK",
+      "name": "HORNET.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L17.PAK",
+      "name": "MOLDER.SHP",
+      "status": "ok",
+      "total_frames": 65,
+      "frames_rendered": 65,
+      "failures": 0
+    },
+    {
+      "pak": "L18.PAK",
+      "name": "AMAZON.SHP",
+      "status": "ok",
+      "total_frames": 33,
+      "frames_rendered": 33,
+      "failures": 0
+    },
+    {
+      "pak": "L18.PAK",
+      "name": "ARCHRSLG.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L19.PAK",
+      "name": "WRAITH.SHP",
+      "status": "ok",
+      "total_frames": 33,
+      "frames_rendered": 33,
+      "failures": 0
+    },
+    {
+      "pak": "L20.PAK",
+      "name": "STARK.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L20.PAK",
+      "name": "MINOTAUR.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L21.PAK",
+      "name": "APARITIN.SHP",
+      "status": "ok",
+      "total_frames": 16,
+      "frames_rendered": 16,
+      "failures": 0
+    },
+    {
+      "pak": "L23.PAK",
+      "name": "DRKCMNDR.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L23.PAK",
+      "name": "NECROSAP.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L24.PAK",
+      "name": "GRTORC.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L26.PAK",
+      "name": "KNOWLES.SHP",
+      "status": "ok",
+      "total_frames": 33,
+      "frames_rendered": 33,
+      "failures": 0
+    },
+    {
+      "pak": "L26.PAK",
+      "name": "XEOB.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L27.PAK",
+      "name": "TCABAL.SHP",
+      "status": "ok",
+      "total_frames": 16,
+      "frames_rendered": 16,
+      "failures": 0
+    },
+    {
+      "pak": "L27.PAK",
+      "name": "HATCHETS.SHP",
+      "status": "ok",
+      "total_frames": 16,
+      "frames_rendered": 16,
+      "failures": 0
+    },
+    {
+      "pak": "L28.PAK",
+      "name": "MANTHA.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L28.PAK",
+      "name": "DETHDISK.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "HAG.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "SCO_TOAD.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "TOAD.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "VIPER.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "EXECTNR.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "TOADSERP.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "SERP_EXE.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "MANOR.PAK",
+      "name": "MANOR.SHP",
+      "status": "ok",
+      "total_frames": 81,
+      "frames_rendered": 81,
+      "failures": 0
+    },
+    {
+      "pak": "MANOR.PAK",
+      "name": "MANRDOOR.SHP",
+      "status": "ok",
+      "total_frames": 3,
+      "frames_rendered": 3,
+      "failures": 0
+    },
+    {
+      "pak": "MINE1.PAK",
+      "name": "MINE1.SHP",
+      "status": "ok",
+      "total_frames": 157,
+      "frames_rendered": 157,
+      "failures": 0
+    },
+    {
+      "pak": "MINE1.PAK",
+      "name": "MINEDOOR.SHP",
+      "status": "ok",
+      "total_frames": 2,
+      "frames_rendered": 2,
+      "failures": 0
+    },
+    {
+      "pak": "MONSTER.PAK",
+      "name": "LIZARD.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "MONSTER.PAK",
+      "name": "ORC.SHP",
+      "status": "ok",
+      "total_frames": 81,
+      "frames_rendered": 81,
+      "failures": 0
+    },
+    {
+      "pak": "MONSTER.PAK",
+      "name": "TREZ.SHP",
+      "status": "ok",
+      "total_frames": 17,
+      "frames_rendered": 17,
+      "failures": 0
+    },
+    {
+      "pak": "MONSTER.PAK",
+      "name": "CABAL.SHP",
+      "status": "ok",
+      "total_frames": 33,
+      "frames_rendered": 33,
+      "failures": 0
+    },
+    {
+      "pak": "RUIN.PAK",
+      "name": "RUIN.SHP",
+      "status": "ok",
+      "total_frames": 99,
+      "frames_rendered": 99,
+      "failures": 0
+    },
+    {
+      "pak": "RUIN.PAK",
+      "name": "RUINDOOR.SHP",
+      "status": "ok",
+      "total_frames": 2,
+      "frames_rendered": 2,
+      "failures": 0
+    },
+    {
+      "pak": "STARTUP.PAK",
+      "name": "ITEMICN.SHP",
+      "status": "ok",
+      "total_frames": 138,
+      "frames_rendered": 138,
+      "failures": 0
+    },
+    {
+      "pak": "STARTUP.PAK",
+      "name": "ITEMSHP.SHP",
+      "status": "ok",
+      "total_frames": 60,
+      "frames_rendered": 60,
+      "failures": 0
+    },
+    {
+      "pak": "STARTUP.PAK",
+      "name": "THROWN.SHP",
+      "status": "ok",
+      "total_frames": 19,
+      "frames_rendered": 19,
+      "failures": 0
+    },
+    {
+      "pak": "STARTUP.PAK",
+      "name": "GAMESHP.SHP",
+      "status": "ok",
+      "total_frames": 89,
+      "frames_rendered": 89,
+      "failures": 0
+    },
+    {
+      "pak": "SWAMP.PAK",
+      "name": "SWAMP.SHP",
+      "status": "ok",
+      "total_frames": 55,
+      "frames_rendered": 55,
+      "failures": 0
+    },
+    {
+      "pak": "TOWER1.PAK",
+      "name": "TOWER1.SHP",
+      "status": "ok",
+      "total_frames": 174,
+      "frames_rendered": 174,
+      "failures": 0
+    },
+    {
+      "pak": "TOWER1.PAK",
+      "name": "TOW1DOOR.SHP",
+      "status": "ok",
+      "total_frames": 2,
+      "frames_rendered": 2,
+      "failures": 0
+    },
+    {
+      "pak": "URBISH.PAK",
+      "name": "URBISH.SHP",
+      "status": "ok",
+      "total_frames": 171,
+      "frames_rendered": 171,
+      "failures": 0
+    },
+    {
+      "pak": "URBISH.PAK",
+      "name": "URBDOOR.SHP",
+      "status": "ok",
+      "total_frames": 2,
+      "frames_rendered": 2,
+      "failures": 0
+    },
+    {
+      "pak": "YVEL.PAK",
+      "name": "YVEL1.SHP",
+      "status": "ok",
+      "total_frames": 98,
+      "frames_rendered": 98,
+      "failures": 0
+    }
+  ]
+}
