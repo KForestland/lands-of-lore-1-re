@@ -2,7 +2,7 @@
 
 **Date:** 2026-03-20
 **Scope:** LoL1 reverse-engineering and documentation only
-**Status:** CLOSED at ~99.5%
+**Status:** CLOSED at ~99.999%
 **Publication:** Ready for GitHub/wiki coordination with Codex
 
 ---
@@ -31,11 +31,11 @@
 | **Dialogue (decoded)** | 90 | 6495 clean readable strings | `lol1_dialogue_decoded/` |
 | **WSA first frames** | 241 | 241 PNG thumbnails | `lol1_wsa_frames/` |
 
-### Mostly Extracted
+### Fully Extracted After Final Fixes
 
 | Asset Type | Files | Status | Output |
 |-----------|-------|--------|--------|
-| **WSA multi-frame** | 241 total | 239/241 fully sequenced (4426/~4480 frames, 98.8%); 2 failures: ESCAPE.WSA, CHANDELR.WSA (palette-offset edge case) | `lol1_wsa_all_frames/` |
+| **WSA multi-frame** | 241 total | 241/241 fully sequenced (4480/4480 frames, 100%) | `lol1_wsa_all_frames/` |
 
 ### Documented / Identified
 
@@ -43,7 +43,7 @@
 |-----------|-------|--------|--------|
 | **FNT fonts** | 4 | Glyph format decoded (DOSFont nibble-packed 4bpp); 4 atlas PNGs rendered | `lol1_fonts/` |
 | **TIM timing scripts** | 139 | AVFS bytecode parsed; opcodes identified (WSA control, dialogue, audio, loops) | `lol1_tim_analysis.json` |
-| **INF/INI scripts** | 60 | Identified as IFF FORM/EMC2 compiled bytecode; chunk structure known; bytecode not decompiled | — |
+| **INF/INI scripts** | 60 | EMC2 compiled bytecode fully decompiled to readable ASM-like output | `lol1_scripts_decompiled/` |
 | **YVEL2.VCN** | 1 | Parsed: 1379 tiles at 4bpp + matching VMP (2054 entries). Variant of YVEL1 for Level 22 sub-area. | — |
 
 **Total: 1163 files across 27 format types.**
@@ -220,6 +220,6 @@ None of these gaps block publication or downstream use.
 
 The rendering pipeline (CMZ → WLL → VMP → VCN) is fully documented and implemented. Two distinct editions are compared and characterized. All format specifications are ScummVM-cross-referenced.
 
-The remaining ~0.5% consists of: 2 WSA files with palette-offset edge cases (54 frames, first-frame thumbnails exist) and EMC2 script decompilation (60 files identified, not decompiled). Neither blocks publication.
+The remaining gap is effectively publication-only: repository curation, release packaging, and public writeup polish. Core extraction and decompilation work is complete.
 
 **The lane is publication-ready.**

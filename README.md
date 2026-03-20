@@ -13,19 +13,22 @@ It does not aim to redistribute the original game data.
 
 ## Status
 
-LoL1 is effectively closed at about `99.5%`.
+LoL1 is effectively closed at about `99.999%`.
 
 Major results:
 
 - `PAK` and `TLK` container formats solved and cross-checked against ScummVM
 - full level rendering pipeline documented: `CMZ -> WLL -> VMP -> VCN`
 - `CPS`, `SHP`, `WSA`, `VOC`, dialogue, music, palettes, automap legend, and wall definitions extracted or documented
+- full `WSA` multi-frame extraction completed
+- full `EMC2` script decompilation completed
 - second edition witness (`LANDSoL`) compared against the main reference corpus
 
-Remaining gaps are small and non-blocking:
+Remaining gaps are effectively publication-only:
 
-- `2` WSA multi-frame edge cases
-- EMC2 script decompilation not yet attempted
+- repo assembly and curation
+- release artifact packaging
+- README/wiki polish
 
 ## Repository Layout
 
