@@ -1,0 +1,5269 @@
+{
+  "description": "LoL1 tileset ID mapping \u2014 high byte \u2192 VCN correlation",
+  "vcn_files": [
+    "CATWALK",
+    "CAVE1",
+    "CIMMERIA",
+    "FOREST1",
+    "KEEP",
+    "MANOR",
+    "MINE1",
+    "RUIN",
+    "SWAMP",
+    "TOWER1",
+    "URBISH",
+    "YVEL1",
+    "YVEL2"
+  ],
+  "all_unique_high_bytes": [
+    "0x00",
+    "0x01",
+    "0x02",
+    "0x03",
+    "0x04",
+    "0x08",
+    "0x0c",
+    "0x0d",
+    "0x12",
+    "0x16",
+    "0x17",
+    "0x18",
+    "0x19",
+    "0x1a",
+    "0x1b",
+    "0x1c",
+    "0x1d",
+    "0x1e",
+    "0x1f",
+    "0x20",
+    "0x21",
+    "0x23",
+    "0x24",
+    "0x25",
+    "0x26",
+    "0x27",
+    "0x28",
+    "0x29",
+    "0x2a",
+    "0x2b",
+    "0x2c",
+    "0x2d",
+    "0x2e",
+    "0x2f",
+    "0x30",
+    "0x31",
+    "0x32",
+    "0x33",
+    "0x34",
+    "0x35",
+    "0x36",
+    "0x37",
+    "0x38",
+    "0x39",
+    "0x3a",
+    "0x3b",
+    "0x3c",
+    "0x3d",
+    "0x3e",
+    "0x3f",
+    "0x40",
+    "0x41",
+    "0x42",
+    "0x43",
+    "0x44",
+    "0x45",
+    "0x46",
+    "0x47",
+    "0x48",
+    "0x49",
+    "0x4a",
+    "0x4b",
+    "0x4c",
+    "0x4d",
+    "0x4e",
+    "0x4f",
+    "0xea"
+  ],
+  "high_byte_to_levels": {
+    "0x00": [
+      "level01",
+      "level02",
+      "level03",
+      "level04",
+      "level05",
+      "level06",
+      "level07",
+      "level09",
+      "level10",
+      "level11",
+      "level12",
+      "level13",
+      "level14",
+      "level15",
+      "level16",
+      "level17",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level22",
+      "level23",
+      "level24",
+      "level25",
+      "level26",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x01": [
+      "level01",
+      "level02",
+      "level03",
+      "level04",
+      "level05",
+      "level06",
+      "level07",
+      "level08",
+      "level09",
+      "level10",
+      "level11",
+      "level12",
+      "level13",
+      "level14",
+      "level17",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level22",
+      "level23",
+      "level24",
+      "level25",
+      "level26",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x02": [
+      "level01",
+      "level02",
+      "level03",
+      "level04",
+      "level05",
+      "level06",
+      "level07",
+      "level08",
+      "level09",
+      "level10",
+      "level11",
+      "level12",
+      "level13",
+      "level14",
+      "level17",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level22",
+      "level23",
+      "level24",
+      "level25",
+      "level26",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x03": [
+      "level01",
+      "level04",
+      "level12",
+      "level14",
+      "level18",
+      "level20",
+      "level21",
+      "level26",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x04": [
+      "level01",
+      "level04",
+      "level06",
+      "level08",
+      "level10",
+      "level11",
+      "level12",
+      "level15",
+      "level16",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level22",
+      "level23",
+      "level24",
+      "level26",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x08": [
+      "level01",
+      "level07",
+      "level08",
+      "level13",
+      "level14",
+      "level15",
+      "level16",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level23",
+      "level27",
+      "level28"
+    ],
+    "0x20": [
+      "level01",
+      "level04",
+      "level06",
+      "level08",
+      "level10",
+      "level11",
+      "level12",
+      "level15",
+      "level16",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level22",
+      "level23",
+      "level26",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x35": [
+      "level01",
+      "level02",
+      "level03",
+      "level04",
+      "level05",
+      "level07",
+      "level08",
+      "level09",
+      "level10",
+      "level11",
+      "level12",
+      "level13",
+      "level14",
+      "level15",
+      "level16",
+      "level17",
+      "level22",
+      "level24",
+      "level26",
+      "level28"
+    ],
+    "0x37": [
+      "level01",
+      "level02",
+      "level03",
+      "level04",
+      "level10",
+      "level11",
+      "level12",
+      "level13",
+      "level14",
+      "level15",
+      "level16",
+      "level17",
+      "level22",
+      "level24",
+      "level27",
+      "level29"
+    ],
+    "0x39": [
+      "level01",
+      "level02",
+      "level03",
+      "level04",
+      "level18",
+      "level22",
+      "level24",
+      "level26",
+      "level28"
+    ],
+    "0x3b": [
+      "level01",
+      "level02",
+      "level03",
+      "level04",
+      "level11",
+      "level22",
+      "level27",
+      "level29"
+    ],
+    "0x3d": [
+      "level01",
+      "level02",
+      "level03",
+      "level04",
+      "level07",
+      "level09",
+      "level11",
+      "level12",
+      "level15",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level22",
+      "level28"
+    ],
+    "0x40": [
+      "level01",
+      "level02",
+      "level03",
+      "level04",
+      "level10",
+      "level12",
+      "level17"
+    ],
+    "0x41": [
+      "level01",
+      "level04",
+      "level06",
+      "level07",
+      "level09",
+      "level10",
+      "level12",
+      "level14",
+      "level24"
+    ],
+    "0x44": [
+      "level01",
+      "level02",
+      "level03",
+      "level04",
+      "level10",
+      "level11",
+      "level12",
+      "level16",
+      "level17",
+      "level28",
+      "level29"
+    ],
+    "0x47": [
+      "level01",
+      "level04",
+      "level08",
+      "level11",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level28",
+      "level29"
+    ],
+    "0x48": [
+      "level01",
+      "level04",
+      "level11",
+      "level15",
+      "level19",
+      "level20",
+      "level21",
+      "level28",
+      "level29"
+    ],
+    "0x49": [
+      "level01",
+      "level04",
+      "level10",
+      "level11",
+      "level15",
+      "level17",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level28"
+    ],
+    "0x4a": [
+      "level01",
+      "level04",
+      "level05",
+      "level06",
+      "level10",
+      "level17",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level27"
+    ],
+    "0x4b": [
+      "level01",
+      "level06",
+      "level10",
+      "level11",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x4c": [
+      "level01",
+      "level10",
+      "level12",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level27",
+      "level28"
+    ],
+    "0x4e": [
+      "level01",
+      "level08",
+      "level09",
+      "level15",
+      "level17",
+      "level18",
+      "level19",
+      "level20",
+      "level21"
+    ],
+    "0x4f": [
+      "level01",
+      "level06",
+      "level07",
+      "level12",
+      "level16",
+      "level18",
+      "level19",
+      "level20",
+      "level21"
+    ],
+    "0x1a": [
+      "level02",
+      "level03",
+      "level07",
+      "level10",
+      "level18",
+      "level21",
+      "level23"
+    ],
+    "0x2e": [
+      "level02",
+      "level03",
+      "level07",
+      "level08",
+      "level10",
+      "level12",
+      "level13",
+      "level14",
+      "level15",
+      "level17",
+      "level21",
+      "level24",
+      "level25",
+      "level26"
+    ],
+    "0x32": [
+      "level02",
+      "level03",
+      "level10",
+      "level12",
+      "level15",
+      "level17",
+      "level22",
+      "level23",
+      "level28"
+    ],
+    "0x33": [
+      "level02",
+      "level03",
+      "level10",
+      "level14",
+      "level15",
+      "level22",
+      "level24",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x34": [
+      "level02",
+      "level03",
+      "level10",
+      "level12",
+      "level17",
+      "level21",
+      "level22",
+      "level29"
+    ],
+    "0x36": [
+      "level02",
+      "level03",
+      "level04",
+      "level07",
+      "level10",
+      "level11",
+      "level12",
+      "level13",
+      "level14",
+      "level15",
+      "level16",
+      "level17",
+      "level18",
+      "level20",
+      "level22",
+      "level24"
+    ],
+    "0x38": [
+      "level02",
+      "level03",
+      "level04",
+      "level06",
+      "level18",
+      "level19",
+      "level20",
+      "level22",
+      "level24"
+    ],
+    "0x3a": [
+      "level02",
+      "level03",
+      "level04",
+      "level06",
+      "level18",
+      "level22",
+      "level24",
+      "level26"
+    ],
+    "0x3c": [
+      "level02",
+      "level03",
+      "level04",
+      "level07",
+      "level11",
+      "level12",
+      "level13",
+      "level15",
+      "level16",
+      "level18",
+      "level20",
+      "level21",
+      "level22"
+    ],
+    "0x3e": [
+      "level02",
+      "level03",
+      "level04",
+      "level10",
+      "level12",
+      "level15",
+      "level17"
+    ],
+    "0x3f": [
+      "level02",
+      "level03",
+      "level04",
+      "level12",
+      "level14",
+      "level17",
+      "level22",
+      "level24",
+      "level28",
+      "level29"
+    ],
+    "0x42": [
+      "level02",
+      "level03",
+      "level04",
+      "level07",
+      "level14",
+      "level16"
+    ],
+    "0x43": [
+      "level02",
+      "level03",
+      "level04",
+      "level11",
+      "level12",
+      "level14",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x0d": [
+      "level04",
+      "level26"
+    ],
+    "0x29": [
+      "level04",
+      "level06",
+      "level07",
+      "level12",
+      "level13",
+      "level14",
+      "level15",
+      "level16",
+      "level20",
+      "level21",
+      "level22"
+    ],
+    "0x2a": [
+      "level04",
+      "level05",
+      "level09",
+      "level12",
+      "level14",
+      "level15",
+      "level16",
+      "level20",
+      "level22",
+      "level23",
+      "level26",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x45": [
+      "level04",
+      "level07",
+      "level10",
+      "level11",
+      "level17",
+      "level20",
+      "level24",
+      "level28",
+      "level29"
+    ],
+    "0x46": [
+      "level04",
+      "level11",
+      "level15",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x1d": [
+      "level05",
+      "level08",
+      "level09",
+      "level12",
+      "level22",
+      "level28",
+      "level29"
+    ],
+    "0x1f": [
+      "level05",
+      "level07",
+      "level12",
+      "level13",
+      "level14",
+      "level16",
+      "level21",
+      "level26",
+      "level27",
+      "level28"
+    ],
+    "0x23": [
+      "level05",
+      "level06",
+      "level08",
+      "level09",
+      "level14",
+      "level15",
+      "level21"
+    ],
+    "0x24": [
+      "level05",
+      "level12",
+      "level23",
+      "level26",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x18": [
+      "level06",
+      "level07",
+      "level08",
+      "level12",
+      "level13",
+      "level15",
+      "level18",
+      "level20",
+      "level21",
+      "level22",
+      "level23",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x26": [
+      "level06",
+      "level07",
+      "level13",
+      "level14",
+      "level20",
+      "level21",
+      "level22",
+      "level27",
+      "level28"
+    ],
+    "0x17": [
+      "level07",
+      "level08",
+      "level09",
+      "level12",
+      "level13",
+      "level14",
+      "level15",
+      "level16",
+      "level18",
+      "level19",
+      "level20",
+      "level22",
+      "level23",
+      "level25",
+      "level26",
+      "level27",
+      "level28"
+    ],
+    "0x1b": [
+      "level07",
+      "level11",
+      "level12",
+      "level13",
+      "level14",
+      "level22",
+      "level23",
+      "level26",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x25": [
+      "level07",
+      "level08",
+      "level12",
+      "level14",
+      "level15",
+      "level18",
+      "level22",
+      "level23",
+      "level26"
+    ],
+    "0x2d": [
+      "level07",
+      "level08",
+      "level12",
+      "level13",
+      "level15",
+      "level18",
+      "level26",
+      "level28",
+      "level29"
+    ],
+    "0x30": [
+      "level07",
+      "level08",
+      "level15",
+      "level18",
+      "level21",
+      "level22",
+      "level23",
+      "level28"
+    ],
+    "0x4d": [
+      "level07",
+      "level08",
+      "level09",
+      "level12",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level24",
+      "level28"
+    ],
+    "0x21": [
+      "level08",
+      "level12"
+    ],
+    "0x27": [
+      "level08",
+      "level12",
+      "level22"
+    ],
+    "0x19": [
+      "level10",
+      "level11",
+      "level15",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level23",
+      "level24"
+    ],
+    "0x31": [
+      "level10",
+      "level15",
+      "level18",
+      "level22",
+      "level23",
+      "level25"
+    ],
+    "0x1c": [
+      "level12",
+      "level22"
+    ],
+    "0x1e": [
+      "level12",
+      "level14",
+      "level18",
+      "level19",
+      "level20",
+      "level21",
+      "level26"
+    ],
+    "0x28": [
+      "level12",
+      "level15",
+      "level20",
+      "level21",
+      "level22",
+      "level23",
+      "level25",
+      "level26",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x2c": [
+      "level12",
+      "level15",
+      "level16",
+      "level18",
+      "level19",
+      "level23",
+      "level27",
+      "level28",
+      "level29"
+    ],
+    "0x2f": [
+      "level13",
+      "level14",
+      "level22",
+      "level23",
+      "level24",
+      "level26",
+      "level28"
+    ],
+    "0x12": [
+      "level18",
+      "level23",
+      "level26"
+    ],
+    "0x2b": [
+      "level19",
+      "level20",
+      "level22",
+      "level26",
+      "level27",
+      "level28"
+    ],
+    "0x16": [
+      "level22",
+      "level24"
+    ],
+    "0x0c": [
+      "level23"
+    ],
+    "0xea": [
+      "level24"
+    ]
+  },
+  "per_level": {
+    "level01": {
+      "pak": "L01.PAK",
+      "cmz": "LEVEL1.CMZ",
+      "cmz_size": 312,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8,
+        32,
+        53,
+        55,
+        57,
+        59,
+        61,
+        64,
+        65,
+        68,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        78,
+        79
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 10,
+          "unique_low_bytes": 3,
+          "max_low_byte": 60
+        },
+        "0x01": {
+          "count": 1807,
+          "unique_low_bytes": 17,
+          "max_low_byte": 79
+        },
+        "0x02": {
+          "count": 111,
+          "unique_low_bytes": 4,
+          "max_low_byte": 72
+        },
+        "0x03": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x04": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x08": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x20": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x35": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x37": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x39": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x3b": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x3d": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x40": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x41": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x44": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 68
+        },
+        "0x47": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x48": {
+          "count": 7,
+          "unique_low_bytes": 5,
+          "max_low_byte": 72
+        },
+        "0x49": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 71
+        },
+        "0x4a": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x4b": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x4c": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x4e": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x4f": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        }
+      }
+    },
+    "level02": {
+      "pak": "L02.PAK",
+      "cmz": "LEVEL2.CMZ",
+      "cmz_size": 453,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        26,
+        46,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        66,
+        67,
+        68
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 63
+        },
+        "0x01": {
+          "count": 652,
+          "unique_low_bytes": 4,
+          "max_low_byte": 64
+        },
+        "0x02": {
+          "count": 734,
+          "unique_low_bytes": 9,
+          "max_low_byte": 68
+        },
+        "0x1a": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 26
+        },
+        "0x2e": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x32": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x33": {
+          "count": 24,
+          "unique_low_bytes": 2,
+          "max_low_byte": 66
+        },
+        "0x34": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x35": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x36": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x37": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x38": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 56
+        },
+        "0x39": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 57
+        },
+        "0x3a": {
+          "count": 10,
+          "unique_low_bytes": 1,
+          "max_low_byte": 58
+        },
+        "0x3b": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 59
+        },
+        "0x3c": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 60
+        },
+        "0x3d": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 61
+        },
+        "0x3e": {
+          "count": 2,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x3f": {
+          "count": 27,
+          "unique_low_bytes": 2,
+          "max_low_byte": 63
+        },
+        "0x40": {
+          "count": 8,
+          "unique_low_bytes": 2,
+          "max_low_byte": 1
+        },
+        "0x42": {
+          "count": 240,
+          "unique_low_bytes": 3,
+          "max_low_byte": 66
+        },
+        "0x43": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 67
+        },
+        "0x44": {
+          "count": 81,
+          "unique_low_bytes": 2,
+          "max_low_byte": 68
+        }
+      }
+    },
+    "level03": {
+      "pak": "L03.PAK",
+      "cmz": "LEVEL3.CMZ",
+      "cmz_size": 451,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        26,
+        46,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        66,
+        67,
+        68
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 63
+        },
+        "0x01": {
+          "count": 662,
+          "unique_low_bytes": 4,
+          "max_low_byte": 64
+        },
+        "0x02": {
+          "count": 749,
+          "unique_low_bytes": 9,
+          "max_low_byte": 68
+        },
+        "0x1a": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 26
+        },
+        "0x2e": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x32": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x33": {
+          "count": 31,
+          "unique_low_bytes": 2,
+          "max_low_byte": 66
+        },
+        "0x34": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x35": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x36": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x37": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x38": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 56
+        },
+        "0x39": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 57
+        },
+        "0x3a": {
+          "count": 10,
+          "unique_low_bytes": 1,
+          "max_low_byte": 58
+        },
+        "0x3b": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 59
+        },
+        "0x3c": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 60
+        },
+        "0x3d": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 61
+        },
+        "0x3e": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x3f": {
+          "count": 23,
+          "unique_low_bytes": 2,
+          "max_low_byte": 63
+        },
+        "0x40": {
+          "count": 8,
+          "unique_low_bytes": 2,
+          "max_low_byte": 1
+        },
+        "0x42": {
+          "count": 243,
+          "unique_low_bytes": 3,
+          "max_low_byte": 66
+        },
+        "0x43": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 67
+        },
+        "0x44": {
+          "count": 69,
+          "unique_low_bytes": 2,
+          "max_low_byte": 68
+        }
+      }
+    },
+    "level04": {
+      "pak": "L04.PAK",
+      "cmz": "LEVEL4.CMZ",
+      "cmz_size": 401,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        13,
+        32,
+        41,
+        42,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 63,
+          "unique_low_bytes": 5,
+          "max_low_byte": 77
+        },
+        "0x01": {
+          "count": 438,
+          "unique_low_bytes": 9,
+          "max_low_byte": 72
+        },
+        "0x02": {
+          "count": 631,
+          "unique_low_bytes": 12,
+          "max_low_byte": 67
+        },
+        "0x03": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 3
+        },
+        "0x04": {
+          "count": 15,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x0d": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 13
+        },
+        "0x20": {
+          "count": 15,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x29": {
+          "count": 21,
+          "unique_low_bytes": 4,
+          "max_low_byte": 71
+        },
+        "0x2a": {
+          "count": 19,
+          "unique_low_bytes": 1,
+          "max_low_byte": 58
+        },
+        "0x35": {
+          "count": 25,
+          "unique_low_bytes": 2,
+          "max_low_byte": 53
+        },
+        "0x36": {
+          "count": 17,
+          "unique_low_bytes": 2,
+          "max_low_byte": 54
+        },
+        "0x37": {
+          "count": 5,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x38": {
+          "count": 8,
+          "unique_low_bytes": 2,
+          "max_low_byte": 56
+        },
+        "0x39": {
+          "count": 59,
+          "unique_low_bytes": 3,
+          "max_low_byte": 58
+        },
+        "0x3a": {
+          "count": 172,
+          "unique_low_bytes": 7,
+          "max_low_byte": 68
+        },
+        "0x3b": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 59
+        },
+        "0x3c": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 60
+        },
+        "0x3d": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 61
+        },
+        "0x3e": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 62
+        },
+        "0x3f": {
+          "count": 41,
+          "unique_low_bytes": 3,
+          "max_low_byte": 63
+        },
+        "0x40": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 64
+        },
+        "0x41": {
+          "count": 110,
+          "unique_low_bytes": 2,
+          "max_low_byte": 65
+        },
+        "0x42": {
+          "count": 27,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x43": {
+          "count": 21,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x44": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 68
+        },
+        "0x45": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 69
+        },
+        "0x46": {
+          "count": 12,
+          "unique_low_bytes": 2,
+          "max_low_byte": 65
+        },
+        "0x47": {
+          "count": 35,
+          "unique_low_bytes": 3,
+          "max_low_byte": 71
+        },
+        "0x48": {
+          "count": 17,
+          "unique_low_bytes": 3,
+          "max_low_byte": 74
+        },
+        "0x49": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 73
+        },
+        "0x4a": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 74
+        }
+      }
+    },
+    "level05": {
+      "pak": "L05.PAK",
+      "cmz": "LEVEL5.CMZ",
+      "cmz_size": 156,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        29,
+        31,
+        35,
+        36,
+        42,
+        53,
+        74
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 82,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x01": {
+          "count": 702,
+          "unique_low_bytes": 7,
+          "max_low_byte": 53
+        },
+        "0x02": {
+          "count": 701,
+          "unique_low_bytes": 8,
+          "max_low_byte": 74
+        },
+        "0x1d": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x1f": {
+          "count": 31,
+          "unique_low_bytes": 1,
+          "max_low_byte": 35
+        },
+        "0x23": {
+          "count": 218,
+          "unique_low_bytes": 2,
+          "max_low_byte": 35
+        },
+        "0x24": {
+          "count": 8,
+          "unique_low_bytes": 2,
+          "max_low_byte": 36
+        },
+        "0x2a": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x35": {
+          "count": 60,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x4a": {
+          "count": 6,
+          "unique_low_bytes": 2,
+          "max_low_byte": 74
+        }
+      }
+    },
+    "level06": {
+      "pak": "L06.PAK",
+      "cmz": "LEVEL6.CMZ",
+      "cmz_size": 285,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        4,
+        24,
+        32,
+        35,
+        38,
+        41,
+        56,
+        58,
+        65,
+        74,
+        75,
+        79
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 8,
+          "unique_low_bytes": 3,
+          "max_low_byte": 32
+        },
+        "0x01": {
+          "count": 1464,
+          "unique_low_bytes": 8,
+          "max_low_byte": 79
+        },
+        "0x02": {
+          "count": 504,
+          "unique_low_bytes": 5,
+          "max_low_byte": 54
+        },
+        "0x04": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x18": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 24
+        },
+        "0x20": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x23": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 35
+        },
+        "0x26": {
+          "count": 28,
+          "unique_low_bytes": 1,
+          "max_low_byte": 38
+        },
+        "0x29": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x38": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x3a": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x41": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x4a": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 74
+        },
+        "0x4b": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 38
+        },
+        "0x4f": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        }
+      }
+    },
+    "level07": {
+      "pak": "L07.PAK",
+      "cmz": "LEVEL7.CMZ",
+      "cmz_size": 441,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        8,
+        23,
+        24,
+        26,
+        27,
+        31,
+        37,
+        38,
+        41,
+        45,
+        46,
+        48,
+        53,
+        54,
+        60,
+        61,
+        65,
+        66,
+        69,
+        77,
+        79
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 32
+        },
+        "0x01": {
+          "count": 783,
+          "unique_low_bytes": 11,
+          "max_low_byte": 66
+        },
+        "0x02": {
+          "count": 1124,
+          "unique_low_bytes": 9,
+          "max_low_byte": 79
+        },
+        "0x08": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x17": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x18": {
+          "count": 10,
+          "unique_low_bytes": 1,
+          "max_low_byte": 24
+        },
+        "0x1a": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 26
+        },
+        "0x1b": {
+          "count": 10,
+          "unique_low_bytes": 3,
+          "max_low_byte": 41
+        },
+        "0x1f": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x25": {
+          "count": 28,
+          "unique_low_bytes": 1,
+          "max_low_byte": 37
+        },
+        "0x26": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 38
+        },
+        "0x29": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x2d": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 31
+        },
+        "0x2e": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 46
+        },
+        "0x30": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 45
+        },
+        "0x35": {
+          "count": 8,
+          "unique_low_bytes": 4,
+          "max_low_byte": 61
+        },
+        "0x36": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x3c": {
+          "count": 27,
+          "unique_low_bytes": 2,
+          "max_low_byte": 60
+        },
+        "0x3d": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 60
+        },
+        "0x41": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x42": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x45": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 69
+        },
+        "0x4d": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 31
+        },
+        "0x4f": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        }
+      }
+    },
+    "level08": {
+      "pak": "L08.PAK",
+      "cmz": "LEVEL8.CMZ",
+      "cmz_size": 390,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        1,
+        2,
+        4,
+        8,
+        23,
+        24,
+        29,
+        32,
+        33,
+        35,
+        37,
+        39,
+        45,
+        46,
+        48,
+        53,
+        71,
+        77,
+        78
+      ],
+      "high_byte_detail": {
+        "0x01": {
+          "count": 1145,
+          "unique_low_bytes": 7,
+          "max_low_byte": 61
+        },
+        "0x02": {
+          "count": 781,
+          "unique_low_bytes": 7,
+          "max_low_byte": 78
+        },
+        "0x04": {
+          "count": 5,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x08": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x17": {
+          "count": 22,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x18": {
+          "count": 10,
+          "unique_low_bytes": 1,
+          "max_low_byte": 24
+        },
+        "0x1d": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x20": {
+          "count": 5,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x21": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 33
+        },
+        "0x23": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 35
+        },
+        "0x25": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 37
+        },
+        "0x27": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 39
+        },
+        "0x2d": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x2e": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 46
+        },
+        "0x30": {
+          "count": 21,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x35": {
+          "count": 2,
+          "unique_low_bytes": 2,
+          "max_low_byte": 61
+        },
+        "0x47": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x4d": {
+          "count": 7,
+          "unique_low_bytes": 3,
+          "max_low_byte": 41
+        },
+        "0x4e": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        }
+      }
+    },
+    "level09": {
+      "pak": "L09.PAK",
+      "cmz": "LEVEL9.CMZ",
+      "cmz_size": 288,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        23,
+        29,
+        35,
+        42,
+        53,
+        61,
+        65,
+        77,
+        78
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 8,
+          "unique_low_bytes": 2,
+          "max_low_byte": 32
+        },
+        "0x01": {
+          "count": 1131,
+          "unique_low_bytes": 7,
+          "max_low_byte": 77
+        },
+        "0x02": {
+          "count": 854,
+          "unique_low_bytes": 6,
+          "max_low_byte": 78
+        },
+        "0x17": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x1d": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x23": {
+          "count": 12,
+          "unique_low_bytes": 1,
+          "max_low_byte": 35
+        },
+        "0x2a": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x35": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x3d": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x41": {
+          "count": 11,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x4d": {
+          "count": 6,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x4e": {
+          "count": 6,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        }
+      }
+    },
+    "level10": {
+      "pak": "L10.PAK",
+      "cmz": "LEVEL10.CMZ",
+      "cmz_size": 532,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        4,
+        25,
+        26,
+        32,
+        46,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        62,
+        64,
+        65,
+        68,
+        69,
+        73,
+        74,
+        75,
+        76
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 14,
+          "unique_low_bytes": 2,
+          "max_low_byte": 32
+        },
+        "0x01": {
+          "count": 1383,
+          "unique_low_bytes": 12,
+          "max_low_byte": 74
+        },
+        "0x02": {
+          "count": 510,
+          "unique_low_bytes": 5,
+          "max_low_byte": 62
+        },
+        "0x04": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x19": {
+          "count": 16,
+          "unique_low_bytes": 1,
+          "max_low_byte": 25
+        },
+        "0x1a": {
+          "count": 12,
+          "unique_low_bytes": 2,
+          "max_low_byte": 26
+        },
+        "0x20": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x2e": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x31": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 49
+        },
+        "0x32": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x33": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x34": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x35": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x36": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x37": {
+          "count": 5,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x3e": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x40": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x41": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x44": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 68
+        },
+        "0x45": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x49": {
+          "count": 12,
+          "unique_low_bytes": 1,
+          "max_low_byte": 73
+        },
+        "0x4a": {
+          "count": 37,
+          "unique_low_bytes": 2,
+          "max_low_byte": 74
+        },
+        "0x4b": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 75
+        },
+        "0x4c": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 76
+        }
+      }
+    },
+    "level11": {
+      "pak": "L11.PAK",
+      "cmz": "LEVEL11.CMZ",
+      "cmz_size": 1230,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        4,
+        25,
+        27,
+        32,
+        53,
+        54,
+        55,
+        59,
+        60,
+        61,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        75
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 25,
+          "unique_low_bytes": 3,
+          "max_low_byte": 55
+        },
+        "0x01": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x02": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x04": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x19": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 25
+        },
+        "0x1b": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 54
+        },
+        "0x20": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x35": {
+          "count": 583,
+          "unique_low_bytes": 6,
+          "max_low_byte": 73
+        },
+        "0x36": {
+          "count": 718,
+          "unique_low_bytes": 7,
+          "max_low_byte": 73
+        },
+        "0x37": {
+          "count": 637,
+          "unique_low_bytes": 9,
+          "max_low_byte": 73
+        },
+        "0x3b": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 59
+        },
+        "0x3c": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 60
+        },
+        "0x3d": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 61
+        },
+        "0x43": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 67
+        },
+        "0x44": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 68
+        },
+        "0x45": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 69
+        },
+        "0x46": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 70
+        },
+        "0x47": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 53
+        },
+        "0x48": {
+          "count": 26,
+          "unique_low_bytes": 3,
+          "max_low_byte": 55
+        },
+        "0x49": {
+          "count": 5,
+          "unique_low_bytes": 1,
+          "max_low_byte": 55
+        },
+        "0x4b": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 75
+        }
+      }
+    },
+    "level12": {
+      "pak": "L12.PAK",
+      "cmz": "LEVEL12.CMZ",
+      "cmz_size": 1270,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        23,
+        24,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        36,
+        37,
+        39,
+        40,
+        41,
+        42,
+        44,
+        45,
+        46,
+        50,
+        52,
+        53,
+        54,
+        55,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        67,
+        68,
+        76,
+        77,
+        79
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 6,
+          "unique_low_bytes": 3,
+          "max_low_byte": 32
+        },
+        "0x01": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x02": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x03": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 55
+        },
+        "0x04": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x17": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x18": {
+          "count": 9,
+          "unique_low_bytes": 1,
+          "max_low_byte": 24
+        },
+        "0x1b": {
+          "count": 5,
+          "unique_low_bytes": 2,
+          "max_low_byte": 54
+        },
+        "0x1c": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x1d": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x1e": {
+          "count": 7,
+          "unique_low_bytes": 1,
+          "max_low_byte": 53
+        },
+        "0x1f": {
+          "count": 5,
+          "unique_low_bytes": 1,
+          "max_low_byte": 54
+        },
+        "0x20": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x21": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 55
+        },
+        "0x24": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 36
+        },
+        "0x25": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x27": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 54
+        },
+        "0x28": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 53
+        },
+        "0x29": {
+          "count": 13,
+          "unique_low_bytes": 5,
+          "max_low_byte": 61
+        },
+        "0x2a": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 54
+        },
+        "0x2c": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 53
+        },
+        "0x2d": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 54
+        },
+        "0x2e": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 46
+        },
+        "0x32": {
+          "count": 6,
+          "unique_low_bytes": 3,
+          "max_low_byte": 55
+        },
+        "0x34": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 52
+        },
+        "0x35": {
+          "count": 577,
+          "unique_low_bytes": 15,
+          "max_low_byte": 79
+        },
+        "0x36": {
+          "count": 674,
+          "unique_low_bytes": 11,
+          "max_low_byte": 78
+        },
+        "0x37": {
+          "count": 656,
+          "unique_low_bytes": 16,
+          "max_low_byte": 77
+        },
+        "0x3c": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 53
+        },
+        "0x3d": {
+          "count": 2,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x3e": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 62
+        },
+        "0x3f": {
+          "count": 10,
+          "unique_low_bytes": 2,
+          "max_low_byte": 79
+        },
+        "0x40": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 64
+        },
+        "0x41": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x43": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 41
+        },
+        "0x44": {
+          "count": 2,
+          "unique_low_bytes": 2,
+          "max_low_byte": 54
+        },
+        "0x4c": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x4d": {
+          "count": 4,
+          "unique_low_bytes": 3,
+          "max_low_byte": 54
+        },
+        "0x4f": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 53
+        }
+      }
+    },
+    "level13": {
+      "pak": "L13.PAK",
+      "cmz": "LEVEL13.CMZ",
+      "cmz_size": 1152,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        8,
+        23,
+        24,
+        27,
+        31,
+        38,
+        41,
+        45,
+        46,
+        47,
+        53,
+        54,
+        55,
+        60
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 6,
+          "unique_low_bytes": 3,
+          "max_low_byte": 55
+        },
+        "0x01": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x02": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x08": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x17": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x18": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 24
+        },
+        "0x1b": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 54
+        },
+        "0x1f": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 53
+        },
+        "0x26": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 38
+        },
+        "0x29": {
+          "count": 2,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x2d": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 55
+        },
+        "0x2e": {
+          "count": 11,
+          "unique_low_bytes": 2,
+          "max_low_byte": 54
+        },
+        "0x2f": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 54
+        },
+        "0x35": {
+          "count": 629,
+          "unique_low_bytes": 9,
+          "max_low_byte": 56
+        },
+        "0x36": {
+          "count": 597,
+          "unique_low_bytes": 5,
+          "max_low_byte": 55
+        },
+        "0x37": {
+          "count": 663,
+          "unique_low_bytes": 5,
+          "max_low_byte": 69
+        },
+        "0x3c": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 54
+        }
+      }
+    },
+    "level14": {
+      "pak": "L14.PAK",
+      "cmz": "LEVEL14.CMZ",
+      "cmz_size": 803,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        3,
+        8,
+        23,
+        27,
+        30,
+        31,
+        35,
+        37,
+        38,
+        41,
+        42,
+        46,
+        47,
+        51,
+        53,
+        54,
+        55,
+        63,
+        65,
+        66,
+        67
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 69,
+          "unique_low_bytes": 2,
+          "max_low_byte": 54
+        },
+        "0x01": {
+          "count": 102,
+          "unique_low_bytes": 5,
+          "max_low_byte": 55
+        },
+        "0x02": {
+          "count": 109,
+          "unique_low_bytes": 8,
+          "max_low_byte": 55
+        },
+        "0x03": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x08": {
+          "count": 10,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x17": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x1b": {
+          "count": 16,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x1e": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 30
+        },
+        "0x1f": {
+          "count": 8,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x23": {
+          "count": 29,
+          "unique_low_bytes": 2,
+          "max_low_byte": 35
+        },
+        "0x25": {
+          "count": 16,
+          "unique_low_bytes": 1,
+          "max_low_byte": 37
+        },
+        "0x26": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 38
+        },
+        "0x29": {
+          "count": 24,
+          "unique_low_bytes": 4,
+          "max_low_byte": 55
+        },
+        "0x2a": {
+          "count": 10,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x2e": {
+          "count": 12,
+          "unique_low_bytes": 1,
+          "max_low_byte": 46
+        },
+        "0x2f": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x33": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x35": {
+          "count": 444,
+          "unique_low_bytes": 9,
+          "max_low_byte": 55
+        },
+        "0x36": {
+          "count": 581,
+          "unique_low_bytes": 9,
+          "max_low_byte": 56
+        },
+        "0x37": {
+          "count": 475,
+          "unique_low_bytes": 15,
+          "max_low_byte": 66
+        },
+        "0x3f": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 54
+        },
+        "0x41": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x42": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 54
+        },
+        "0x43": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 67
+        }
+      }
+    },
+    "level15": {
+      "pak": "L15.PAK",
+      "cmz": "LEVEL15.CMZ",
+      "cmz_size": 1428,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        4,
+        8,
+        23,
+        24,
+        25,
+        32,
+        35,
+        37,
+        40,
+        41,
+        42,
+        44,
+        45,
+        46,
+        48,
+        49,
+        50,
+        51,
+        53,
+        54,
+        55,
+        60,
+        61,
+        62,
+        70,
+        72,
+        73,
+        78
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 61,
+          "unique_low_bytes": 10,
+          "max_low_byte": 61
+        },
+        "0x04": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x08": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x17": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x18": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 24
+        },
+        "0x19": {
+          "count": 5,
+          "unique_low_bytes": 1,
+          "max_low_byte": 25
+        },
+        "0x20": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x23": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 35
+        },
+        "0x25": {
+          "count": 16,
+          "unique_low_bytes": 3,
+          "max_low_byte": 53
+        },
+        "0x28": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 54
+        },
+        "0x29": {
+          "count": 6,
+          "unique_low_bytes": 3,
+          "max_low_byte": 55
+        },
+        "0x2a": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 53
+        },
+        "0x2c": {
+          "count": 8,
+          "unique_low_bytes": 2,
+          "max_low_byte": 54
+        },
+        "0x2d": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 54
+        },
+        "0x2e": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 46
+        },
+        "0x30": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x31": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 48
+        },
+        "0x32": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 49
+        },
+        "0x33": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 50
+        },
+        "0x35": {
+          "count": 662,
+          "unique_low_bytes": 10,
+          "max_low_byte": 66
+        },
+        "0x36": {
+          "count": 519,
+          "unique_low_bytes": 12,
+          "max_low_byte": 75
+        },
+        "0x37": {
+          "count": 583,
+          "unique_low_bytes": 9,
+          "max_low_byte": 73
+        },
+        "0x3c": {
+          "count": 21,
+          "unique_low_bytes": 3,
+          "max_low_byte": 54
+        },
+        "0x3d": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 62
+        },
+        "0x3e": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x46": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 55
+        },
+        "0x48": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 72
+        },
+        "0x49": {
+          "count": 3,
+          "unique_low_bytes": 3,
+          "max_low_byte": 55
+        },
+        "0x4e": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 78
+        }
+      }
+    },
+    "level16": {
+      "pak": "L16.PAK",
+      "cmz": "LEVEL16.CMZ",
+      "cmz_size": 610,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        4,
+        8,
+        23,
+        31,
+        32,
+        41,
+        42,
+        44,
+        53,
+        54,
+        55,
+        60,
+        66,
+        68,
+        79
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 105,
+          "unique_low_bytes": 11,
+          "max_low_byte": 79
+        },
+        "0x04": {
+          "count": 14,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x08": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 54
+        },
+        "0x17": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x1f": {
+          "count": 10,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x20": {
+          "count": 19,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x29": {
+          "count": 5,
+          "unique_low_bytes": 4,
+          "max_low_byte": 60
+        },
+        "0x2a": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 53
+        },
+        "0x2c": {
+          "count": 46,
+          "unique_low_bytes": 5,
+          "max_low_byte": 55
+        },
+        "0x35": {
+          "count": 516,
+          "unique_low_bytes": 9,
+          "max_low_byte": 66
+        },
+        "0x36": {
+          "count": 410,
+          "unique_low_bytes": 8,
+          "max_low_byte": 68
+        },
+        "0x37": {
+          "count": 394,
+          "unique_low_bytes": 10,
+          "max_low_byte": 66
+        },
+        "0x3c": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 53
+        },
+        "0x42": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 55
+        },
+        "0x44": {
+          "count": 16,
+          "unique_low_bytes": 2,
+          "max_low_byte": 68
+        },
+        "0x4f": {
+          "count": 23,
+          "unique_low_bytes": 2,
+          "max_low_byte": 79
+        }
+      }
+    },
+    "level17": {
+      "pak": "L17.PAK",
+      "cmz": "LEVEL17.CMZ",
+      "cmz_size": 523,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        46,
+        50,
+        52,
+        53,
+        54,
+        55,
+        62,
+        63,
+        64,
+        68,
+        69,
+        73,
+        74,
+        78
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x01": {
+          "count": 1141,
+          "unique_low_bytes": 15,
+          "max_low_byte": 78
+        },
+        "0x02": {
+          "count": 806,
+          "unique_low_bytes": 7,
+          "max_low_byte": 69
+        },
+        "0x2e": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x32": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x34": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x35": {
+          "count": 6,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x36": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x37": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x3e": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x3f": {
+          "count": 37,
+          "unique_low_bytes": 4,
+          "max_low_byte": 63
+        },
+        "0x40": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x44": {
+          "count": 18,
+          "unique_low_bytes": 2,
+          "max_low_byte": 68
+        },
+        "0x45": {
+          "count": 7,
+          "unique_low_bytes": 3,
+          "max_low_byte": 54
+        },
+        "0x49": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 73
+        },
+        "0x4a": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 74
+        },
+        "0x4e": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        }
+      }
+    },
+    "level18": {
+      "pak": "L18.PAK",
+      "cmz": "LEVEL18.CMZ",
+      "cmz_size": 755,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8,
+        18,
+        23,
+        24,
+        25,
+        26,
+        30,
+        32,
+        37,
+        44,
+        45,
+        48,
+        49,
+        54,
+        56,
+        57,
+        58,
+        60,
+        61,
+        71,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 91,
+          "unique_low_bytes": 14,
+          "max_low_byte": 78
+        },
+        "0x01": {
+          "count": 529,
+          "unique_low_bytes": 16,
+          "max_low_byte": 79
+        },
+        "0x02": {
+          "count": 511,
+          "unique_low_bytes": 17,
+          "max_low_byte": 79
+        },
+        "0x03": {
+          "count": 10,
+          "unique_low_bytes": 2,
+          "max_low_byte": 1
+        },
+        "0x04": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x08": {
+          "count": 5,
+          "unique_low_bytes": 3,
+          "max_low_byte": 48
+        },
+        "0x12": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x17": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x18": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 24
+        },
+        "0x19": {
+          "count": 34,
+          "unique_low_bytes": 11,
+          "max_low_byte": 78
+        },
+        "0x1a": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 25
+        },
+        "0x1e": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 48
+        },
+        "0x20": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x25": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 37
+        },
+        "0x2c": {
+          "count": 12,
+          "unique_low_bytes": 3,
+          "max_low_byte": 44
+        },
+        "0x2d": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 45
+        },
+        "0x30": {
+          "count": 39,
+          "unique_low_bytes": 3,
+          "max_low_byte": 79
+        },
+        "0x31": {
+          "count": 27,
+          "unique_low_bytes": 5,
+          "max_low_byte": 78
+        },
+        "0x36": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 25
+        },
+        "0x38": {
+          "count": 19,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x39": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x3a": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x3c": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 77
+        },
+        "0x3d": {
+          "count": 15,
+          "unique_low_bytes": 2,
+          "max_low_byte": 74
+        },
+        "0x47": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x49": {
+          "count": 27,
+          "unique_low_bytes": 6,
+          "max_low_byte": 77
+        },
+        "0x4a": {
+          "count": 37,
+          "unique_low_bytes": 8,
+          "max_low_byte": 79
+        },
+        "0x4b": {
+          "count": 24,
+          "unique_low_bytes": 6,
+          "max_low_byte": 79
+        },
+        "0x4c": {
+          "count": 35,
+          "unique_low_bytes": 7,
+          "max_low_byte": 78
+        },
+        "0x4d": {
+          "count": 26,
+          "unique_low_bytes": 7,
+          "max_low_byte": 75
+        },
+        "0x4e": {
+          "count": 31,
+          "unique_low_bytes": 7,
+          "max_low_byte": 73
+        },
+        "0x4f": {
+          "count": 47,
+          "unique_low_bytes": 7,
+          "max_low_byte": 79
+        }
+      }
+    },
+    "level19": {
+      "pak": "L19.PAK",
+      "cmz": "LEVEL19.CMZ",
+      "cmz_size": 309,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        4,
+        8,
+        23,
+        25,
+        30,
+        32,
+        43,
+        44,
+        56,
+        61,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 54,
+          "unique_low_bytes": 5,
+          "max_low_byte": 78
+        },
+        "0x01": {
+          "count": 454,
+          "unique_low_bytes": 8,
+          "max_low_byte": 77
+        },
+        "0x02": {
+          "count": 919,
+          "unique_low_bytes": 13,
+          "max_low_byte": 79
+        },
+        "0x04": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x08": {
+          "count": 27,
+          "unique_low_bytes": 2,
+          "max_low_byte": 1
+        },
+        "0x17": {
+          "count": 36,
+          "unique_low_bytes": 2,
+          "max_low_byte": 30
+        },
+        "0x19": {
+          "count": 20,
+          "unique_low_bytes": 2,
+          "max_low_byte": 73
+        },
+        "0x1e": {
+          "count": 112,
+          "unique_low_bytes": 6,
+          "max_low_byte": 77
+        },
+        "0x20": {
+          "count": 14,
+          "unique_low_bytes": 2,
+          "max_low_byte": 23
+        },
+        "0x2b": {
+          "count": 7,
+          "unique_low_bytes": 1,
+          "max_low_byte": 30
+        },
+        "0x2c": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 44
+        },
+        "0x38": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x3d": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 30
+        },
+        "0x47": {
+          "count": 50,
+          "unique_low_bytes": 3,
+          "max_low_byte": 78
+        },
+        "0x48": {
+          "count": 68,
+          "unique_low_bytes": 5,
+          "max_low_byte": 74
+        },
+        "0x49": {
+          "count": 55,
+          "unique_low_bytes": 4,
+          "max_low_byte": 76
+        },
+        "0x4a": {
+          "count": 54,
+          "unique_low_bytes": 4,
+          "max_low_byte": 72
+        },
+        "0x4b": {
+          "count": 26,
+          "unique_low_bytes": 5,
+          "max_low_byte": 79
+        },
+        "0x4c": {
+          "count": 36,
+          "unique_low_bytes": 3,
+          "max_low_byte": 71
+        },
+        "0x4d": {
+          "count": 33,
+          "unique_low_bytes": 3,
+          "max_low_byte": 73
+        },
+        "0x4e": {
+          "count": 19,
+          "unique_low_bytes": 4,
+          "max_low_byte": 75
+        },
+        "0x4f": {
+          "count": 26,
+          "unique_low_bytes": 3,
+          "max_low_byte": 75
+        }
+      }
+    },
+    "level20": {
+      "pak": "L20.PAK",
+      "cmz": "LEVEL20.CMZ",
+      "cmz_size": 743,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8,
+        23,
+        24,
+        25,
+        30,
+        32,
+        38,
+        40,
+        41,
+        42,
+        43,
+        54,
+        56,
+        60,
+        61,
+        69,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 287,
+          "unique_low_bytes": 10,
+          "max_low_byte": 76
+        },
+        "0x01": {
+          "count": 226,
+          "unique_low_bytes": 17,
+          "max_low_byte": 79
+        },
+        "0x02": {
+          "count": 212,
+          "unique_low_bytes": 19,
+          "max_low_byte": 79
+        },
+        "0x03": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 73
+        },
+        "0x04": {
+          "count": 157,
+          "unique_low_bytes": 9,
+          "max_low_byte": 78
+        },
+        "0x08": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 75
+        },
+        "0x17": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x18": {
+          "count": 10,
+          "unique_low_bytes": 2,
+          "max_low_byte": 77
+        },
+        "0x19": {
+          "count": 7,
+          "unique_low_bytes": 3,
+          "max_low_byte": 76
+        },
+        "0x1e": {
+          "count": 2,
+          "unique_low_bytes": 2,
+          "max_low_byte": 72
+        },
+        "0x20": {
+          "count": 13,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x26": {
+          "count": 16,
+          "unique_low_bytes": 2,
+          "max_low_byte": 41
+        },
+        "0x28": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 40
+        },
+        "0x29": {
+          "count": 15,
+          "unique_low_bytes": 5,
+          "max_low_byte": 77
+        },
+        "0x2a": {
+          "count": 6,
+          "unique_low_bytes": 3,
+          "max_low_byte": 74
+        },
+        "0x2b": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x36": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x38": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 75
+        },
+        "0x3c": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 25
+        },
+        "0x3d": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 76
+        },
+        "0x45": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 74
+        },
+        "0x47": {
+          "count": 41,
+          "unique_low_bytes": 8,
+          "max_low_byte": 78
+        },
+        "0x48": {
+          "count": 267,
+          "unique_low_bytes": 7,
+          "max_low_byte": 79
+        },
+        "0x49": {
+          "count": 265,
+          "unique_low_bytes": 7,
+          "max_low_byte": 78
+        },
+        "0x4a": {
+          "count": 152,
+          "unique_low_bytes": 9,
+          "max_low_byte": 79
+        },
+        "0x4b": {
+          "count": 179,
+          "unique_low_bytes": 8,
+          "max_low_byte": 79
+        },
+        "0x4c": {
+          "count": 41,
+          "unique_low_bytes": 9,
+          "max_low_byte": 75
+        },
+        "0x4d": {
+          "count": 52,
+          "unique_low_bytes": 8,
+          "max_low_byte": 75
+        },
+        "0x4e": {
+          "count": 38,
+          "unique_low_bytes": 7,
+          "max_low_byte": 75
+        },
+        "0x4f": {
+          "count": 28,
+          "unique_low_bytes": 8,
+          "max_low_byte": 75
+        }
+      }
+    },
+    "level21": {
+      "pak": "L21.PAK",
+      "cmz": "LEVEL21.CMZ",
+      "cmz_size": 768,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8,
+        24,
+        25,
+        26,
+        30,
+        31,
+        32,
+        35,
+        38,
+        40,
+        41,
+        46,
+        48,
+        52,
+        60,
+        61,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 155,
+          "unique_low_bytes": 11,
+          "max_low_byte": 79
+        },
+        "0x01": {
+          "count": 604,
+          "unique_low_bytes": 18,
+          "max_low_byte": 79
+        },
+        "0x02": {
+          "count": 599,
+          "unique_low_bytes": 15,
+          "max_low_byte": 79
+        },
+        "0x03": {
+          "count": 8,
+          "unique_low_bytes": 3,
+          "max_low_byte": 77
+        },
+        "0x04": {
+          "count": 11,
+          "unique_low_bytes": 2,
+          "max_low_byte": 48
+        },
+        "0x08": {
+          "count": 46,
+          "unique_low_bytes": 3,
+          "max_low_byte": 76
+        },
+        "0x18": {
+          "count": 6,
+          "unique_low_bytes": 2,
+          "max_low_byte": 24
+        },
+        "0x19": {
+          "count": 31,
+          "unique_low_bytes": 8,
+          "max_low_byte": 78
+        },
+        "0x1a": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 78
+        },
+        "0x1e": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x1f": {
+          "count": 7,
+          "unique_low_bytes": 4,
+          "max_low_byte": 71
+        },
+        "0x20": {
+          "count": 25,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x23": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 35
+        },
+        "0x26": {
+          "count": 8,
+          "unique_low_bytes": 2,
+          "max_low_byte": 38
+        },
+        "0x28": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 40
+        },
+        "0x29": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 41
+        },
+        "0x2e": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 77
+        },
+        "0x30": {
+          "count": 5,
+          "unique_low_bytes": 2,
+          "max_low_byte": 61
+        },
+        "0x34": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 78
+        },
+        "0x3c": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 25
+        },
+        "0x3d": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 77
+        },
+        "0x47": {
+          "count": 31,
+          "unique_low_bytes": 6,
+          "max_low_byte": 79
+        },
+        "0x48": {
+          "count": 24,
+          "unique_low_bytes": 6,
+          "max_low_byte": 78
+        },
+        "0x49": {
+          "count": 19,
+          "unique_low_bytes": 6,
+          "max_low_byte": 78
+        },
+        "0x4a": {
+          "count": 25,
+          "unique_low_bytes": 5,
+          "max_low_byte": 79
+        },
+        "0x4b": {
+          "count": 25,
+          "unique_low_bytes": 5,
+          "max_low_byte": 79
+        },
+        "0x4c": {
+          "count": 34,
+          "unique_low_bytes": 4,
+          "max_low_byte": 73
+        },
+        "0x4d": {
+          "count": 61,
+          "unique_low_bytes": 9,
+          "max_low_byte": 74
+        },
+        "0x4e": {
+          "count": 54,
+          "unique_low_bytes": 8,
+          "max_low_byte": 75
+        },
+        "0x4f": {
+          "count": 39,
+          "unique_low_bytes": 6,
+          "max_low_byte": 74
+        }
+      }
+    },
+    "level22": {
+      "pak": "L22.PAK",
+      "cmz": "LEVEL22.CMZ",
+      "cmz_size": 1443,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        4,
+        22,
+        23,
+        24,
+        27,
+        28,
+        29,
+        32,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        63
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 424,
+          "unique_low_bytes": 27,
+          "max_low_byte": 63
+        },
+        "0x01": {
+          "count": 193,
+          "unique_low_bytes": 20,
+          "max_low_byte": 59
+        },
+        "0x02": {
+          "count": 312,
+          "unique_low_bytes": 25,
+          "max_low_byte": 61
+        },
+        "0x04": {
+          "count": 65,
+          "unique_low_bytes": 6,
+          "max_low_byte": 56
+        },
+        "0x16": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x17": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x18": {
+          "count": 9,
+          "unique_low_bytes": 1,
+          "max_low_byte": 24
+        },
+        "0x1b": {
+          "count": 5,
+          "unique_low_bytes": 3,
+          "max_low_byte": 50
+        },
+        "0x1c": {
+          "count": 6,
+          "unique_low_bytes": 4,
+          "max_low_byte": 52
+        },
+        "0x1d": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x20": {
+          "count": 102,
+          "unique_low_bytes": 6,
+          "max_low_byte": 55
+        },
+        "0x25": {
+          "count": 7,
+          "unique_low_bytes": 4,
+          "max_low_byte": 56
+        },
+        "0x26": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x27": {
+          "count": 7,
+          "unique_low_bytes": 4,
+          "max_low_byte": 56
+        },
+        "0x28": {
+          "count": 5,
+          "unique_low_bytes": 4,
+          "max_low_byte": 32
+        },
+        "0x29": {
+          "count": 2,
+          "unique_low_bytes": 2,
+          "max_low_byte": 1
+        },
+        "0x2a": {
+          "count": 8,
+          "unique_low_bytes": 5,
+          "max_low_byte": 55
+        },
+        "0x2b": {
+          "count": 3,
+          "unique_low_bytes": 3,
+          "max_low_byte": 56
+        },
+        "0x2f": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 58
+        },
+        "0x30": {
+          "count": 17,
+          "unique_low_bytes": 4,
+          "max_low_byte": 55
+        },
+        "0x31": {
+          "count": 13,
+          "unique_low_bytes": 4,
+          "max_low_byte": 49
+        },
+        "0x32": {
+          "count": 34,
+          "unique_low_bytes": 7,
+          "max_low_byte": 52
+        },
+        "0x33": {
+          "count": 15,
+          "unique_low_bytes": 5,
+          "max_low_byte": 51
+        },
+        "0x34": {
+          "count": 38,
+          "unique_low_bytes": 9,
+          "max_low_byte": 58
+        },
+        "0x35": {
+          "count": 33,
+          "unique_low_bytes": 5,
+          "max_low_byte": 53
+        },
+        "0x36": {
+          "count": 37,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x37": {
+          "count": 78,
+          "unique_low_bytes": 9,
+          "max_low_byte": 60
+        },
+        "0x38": {
+          "count": 77,
+          "unique_low_bytes": 7,
+          "max_low_byte": 55
+        },
+        "0x39": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 57
+        },
+        "0x3a": {
+          "count": 12,
+          "unique_low_bytes": 5,
+          "max_low_byte": 58
+        },
+        "0x3b": {
+          "count": 13,
+          "unique_low_bytes": 3,
+          "max_low_byte": 59
+        },
+        "0x3c": {
+          "count": 6,
+          "unique_low_bytes": 3,
+          "max_low_byte": 54
+        },
+        "0x3d": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x3f": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        }
+      }
+    },
+    "level23": {
+      "pak": "L23.PAK",
+      "cmz": "LEVEL23.CMZ",
+      "cmz_size": 851,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        4,
+        8,
+        12,
+        18,
+        23,
+        24,
+        25,
+        26,
+        27,
+        32,
+        36,
+        37,
+        40,
+        42,
+        44,
+        47,
+        48,
+        49,
+        50
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 112,
+          "unique_low_bytes": 8,
+          "max_low_byte": 44
+        },
+        "0x01": {
+          "count": 692,
+          "unique_low_bytes": 11,
+          "max_low_byte": 61
+        },
+        "0x02": {
+          "count": 594,
+          "unique_low_bytes": 15,
+          "max_low_byte": 62
+        },
+        "0x04": {
+          "count": 5,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x08": {
+          "count": 20,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x0c": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x12": {
+          "count": 76,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x17": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x18": {
+          "count": 7,
+          "unique_low_bytes": 2,
+          "max_low_byte": 44
+        },
+        "0x19": {
+          "count": 26,
+          "unique_low_bytes": 2,
+          "max_low_byte": 25
+        },
+        "0x1a": {
+          "count": 33,
+          "unique_low_bytes": 2,
+          "max_low_byte": 26
+        },
+        "0x1b": {
+          "count": 46,
+          "unique_low_bytes": 3,
+          "max_low_byte": 38
+        },
+        "0x20": {
+          "count": 62,
+          "unique_low_bytes": 5,
+          "max_low_byte": 44
+        },
+        "0x24": {
+          "count": 10,
+          "unique_low_bytes": 3,
+          "max_low_byte": 2
+        },
+        "0x25": {
+          "count": 13,
+          "unique_low_bytes": 4,
+          "max_low_byte": 8
+        },
+        "0x28": {
+          "count": 13,
+          "unique_low_bytes": 1,
+          "max_low_byte": 40
+        },
+        "0x2a": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x2c": {
+          "count": 12,
+          "unique_low_bytes": 7,
+          "max_low_byte": 49
+        },
+        "0x2f": {
+          "count": 7,
+          "unique_low_bytes": 2,
+          "max_low_byte": 47
+        },
+        "0x30": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 18
+        },
+        "0x31": {
+          "count": 17,
+          "unique_low_bytes": 4,
+          "max_low_byte": 24
+        },
+        "0x32": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        }
+      }
+    },
+    "level24": {
+      "pak": "L24.PAK",
+      "cmz": "LEVEL24.CMZ",
+      "cmz_size": 549,
+      "decompressed_size": 9222,
+      "n_tiles": 4608,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        4,
+        22,
+        25,
+        46,
+        47,
+        51,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        63,
+        65,
+        69,
+        77,
+        234
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 5,
+          "unique_low_bytes": 4,
+          "max_low_byte": 32
+        },
+        "0x01": {
+          "count": 3921,
+          "unique_low_bytes": 9,
+          "max_low_byte": 69
+        },
+        "0x02": {
+          "count": 619,
+          "unique_low_bytes": 8,
+          "max_low_byte": 56
+        },
+        "0x04": {
+          "count": 2,
+          "unique_low_bytes": 2,
+          "max_low_byte": 57
+        },
+        "0x16": {
+          "count": 2,
+          "unique_low_bytes": 2,
+          "max_low_byte": 236
+        },
+        "0x19": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 164
+        },
+        "0x2e": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x2f": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 47
+        },
+        "0x33": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x35": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x36": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x37": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x38": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 56
+        },
+        "0x39": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 57
+        },
+        "0x3a": {
+          "count": 5,
+          "unique_low_bytes": 2,
+          "max_low_byte": 58
+        },
+        "0x3f": {
+          "count": 9,
+          "unique_low_bytes": 2,
+          "max_low_byte": 63
+        },
+        "0x41": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x45": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x4d": {
+          "count": 5,
+          "unique_low_bytes": 2,
+          "max_low_byte": 77
+        },
+        "0xea": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        }
+      }
+    },
+    "level25": {
+      "pak": "L25.PAK",
+      "cmz": "LEVEL25.CMZ",
+      "cmz_size": 142,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        23,
+        40,
+        46,
+        49
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 8,
+          "unique_low_bytes": 3,
+          "max_low_byte": 32
+        },
+        "0x01": {
+          "count": 1868,
+          "unique_low_bytes": 2,
+          "max_low_byte": 8
+        },
+        "0x02": {
+          "count": 72,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x17": {
+          "count": 88,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x28": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 40
+        },
+        "0x2e": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 46
+        },
+        "0x31": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 44
+        }
+      }
+    },
+    "level26": {
+      "pak": "L26.PAK",
+      "cmz": "LEVEL26.CMZ",
+      "cmz_size": 698,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        13,
+        18,
+        23,
+        27,
+        30,
+        31,
+        32,
+        36,
+        37,
+        40,
+        42,
+        43,
+        45,
+        46,
+        47,
+        53,
+        57,
+        58
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 42,
+          "unique_low_bytes": 8,
+          "max_low_byte": 46
+        },
+        "0x01": {
+          "count": 825,
+          "unique_low_bytes": 9,
+          "max_low_byte": 42
+        },
+        "0x02": {
+          "count": 781,
+          "unique_low_bytes": 8,
+          "max_low_byte": 57
+        },
+        "0x03": {
+          "count": 2,
+          "unique_low_bytes": 2,
+          "max_low_byte": 1
+        },
+        "0x04": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x0d": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 42
+        },
+        "0x12": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x17": {
+          "count": 11,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x1b": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 27
+        },
+        "0x1e": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x1f": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x20": {
+          "count": 10,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x24": {
+          "count": 12,
+          "unique_low_bytes": 2,
+          "max_low_byte": 36
+        },
+        "0x25": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 37
+        },
+        "0x28": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x2a": {
+          "count": 31,
+          "unique_low_bytes": 3,
+          "max_low_byte": 42
+        },
+        "0x2b": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x2d": {
+          "count": 5,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x2e": {
+          "count": 20,
+          "unique_low_bytes": 5,
+          "max_low_byte": 44
+        },
+        "0x2f": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x35": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x39": {
+          "count": 5,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x3a": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        }
+      }
+    },
+    "level27": {
+      "pak": "L27.PAK",
+      "cmz": "LEVEL27.CMZ",
+      "cmz_size": 742,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8,
+        23,
+        24,
+        27,
+        31,
+        32,
+        36,
+        38,
+        40,
+        42,
+        43,
+        44,
+        51,
+        55,
+        59,
+        67,
+        70,
+        74,
+        75,
+        76
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 207,
+          "unique_low_bytes": 14,
+          "max_low_byte": 76
+        },
+        "0x01": {
+          "count": 474,
+          "unique_low_bytes": 11,
+          "max_low_byte": 76
+        },
+        "0x02": {
+          "count": 750,
+          "unique_low_bytes": 14,
+          "max_low_byte": 76
+        },
+        "0x03": {
+          "count": 11,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x04": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x08": {
+          "count": 10,
+          "unique_low_bytes": 2,
+          "max_low_byte": 44
+        },
+        "0x17": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x18": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 24
+        },
+        "0x1b": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 27
+        },
+        "0x1f": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x20": {
+          "count": 8,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x24": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 36
+        },
+        "0x26": {
+          "count": 4,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x28": {
+          "count": 25,
+          "unique_low_bytes": 3,
+          "max_low_byte": 2
+        },
+        "0x2a": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 42
+        },
+        "0x2b": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x2c": {
+          "count": 23,
+          "unique_low_bytes": 4,
+          "max_low_byte": 75
+        },
+        "0x33": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x37": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x3b": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x43": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 67
+        },
+        "0x46": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x4a": {
+          "count": 26,
+          "unique_low_bytes": 3,
+          "max_low_byte": 2
+        },
+        "0x4b": {
+          "count": 10,
+          "unique_low_bytes": 4,
+          "max_low_byte": 44
+        },
+        "0x4c": {
+          "count": 18,
+          "unique_low_bytes": 3,
+          "max_low_byte": 44
+        }
+      }
+    },
+    "level28": {
+      "pak": "L28.PAK",
+      "cmz": "LEVEL28.CMZ",
+      "cmz_size": 967,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8,
+        23,
+        24,
+        27,
+        29,
+        31,
+        32,
+        36,
+        38,
+        40,
+        42,
+        43,
+        44,
+        45,
+        47,
+        48,
+        50,
+        51,
+        53,
+        57,
+        61,
+        63,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        75,
+        76,
+        77
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 8,
+          "unique_low_bytes": 4,
+          "max_low_byte": 32
+        },
+        "0x01": {
+          "count": 743,
+          "unique_low_bytes": 15,
+          "max_low_byte": 76
+        },
+        "0x02": {
+          "count": 847,
+          "unique_low_bytes": 22,
+          "max_low_byte": 76
+        },
+        "0x03": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x04": {
+          "count": 3,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x08": {
+          "count": 8,
+          "unique_low_bytes": 3,
+          "max_low_byte": 38
+        },
+        "0x17": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 23
+        },
+        "0x18": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 24
+        },
+        "0x1b": {
+          "count": 42,
+          "unique_low_bytes": 6,
+          "max_low_byte": 71
+        },
+        "0x1d": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 67
+        },
+        "0x1f": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x20": {
+          "count": 7,
+          "unique_low_bytes": 4,
+          "max_low_byte": 45
+        },
+        "0x24": {
+          "count": 67,
+          "unique_low_bytes": 4,
+          "max_low_byte": 76
+        },
+        "0x26": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x28": {
+          "count": 2,
+          "unique_low_bytes": 2,
+          "max_low_byte": 44
+        },
+        "0x2a": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 42
+        },
+        "0x2b": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x2c": {
+          "count": 36,
+          "unique_low_bytes": 7,
+          "max_low_byte": 67
+        },
+        "0x2d": {
+          "count": 12,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x2f": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x30": {
+          "count": 13,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x32": {
+          "count": 7,
+          "unique_low_bytes": 1,
+          "max_low_byte": 44
+        },
+        "0x33": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x35": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x39": {
+          "count": 21,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x3d": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x3f": {
+          "count": 18,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x43": {
+          "count": 74,
+          "unique_low_bytes": 4,
+          "max_low_byte": 57
+        },
+        "0x44": {
+          "count": 31,
+          "unique_low_bytes": 3,
+          "max_low_byte": 68
+        },
+        "0x45": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 69
+        },
+        "0x46": {
+          "count": 5,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x47": {
+          "count": 10,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x48": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x49": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 73
+        },
+        "0x4b": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x4c": {
+          "count": 56,
+          "unique_low_bytes": 3,
+          "max_low_byte": 29
+        },
+        "0x4d": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        }
+      }
+    },
+    "level29": {
+      "pak": "L29.PAK",
+      "cmz": "LEVEL29.CMZ",
+      "cmz_size": 765,
+      "decompressed_size": 4102,
+      "n_tiles": 2048,
+      "high_bytes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        24,
+        27,
+        29,
+        32,
+        36,
+        40,
+        42,
+        44,
+        45,
+        51,
+        52,
+        55,
+        59,
+        63,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        75
+      ],
+      "high_byte_detail": {
+        "0x00": {
+          "count": 270,
+          "unique_low_bytes": 6,
+          "max_low_byte": 53
+        },
+        "0x01": {
+          "count": 517,
+          "unique_low_bytes": 11,
+          "max_low_byte": 71
+        },
+        "0x02": {
+          "count": 699,
+          "unique_low_bytes": 14,
+          "max_low_byte": 75
+        },
+        "0x03": {
+          "count": 7,
+          "unique_low_bytes": 2,
+          "max_low_byte": 1
+        },
+        "0x04": {
+          "count": 11,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x18": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 24
+        },
+        "0x1b": {
+          "count": 5,
+          "unique_low_bytes": 2,
+          "max_low_byte": 27
+        },
+        "0x1d": {
+          "count": 4,
+          "unique_low_bytes": 3,
+          "max_low_byte": 29
+        },
+        "0x20": {
+          "count": 13,
+          "unique_low_bytes": 2,
+          "max_low_byte": 1
+        },
+        "0x24": {
+          "count": 2,
+          "unique_low_bytes": 1,
+          "max_low_byte": 36
+        },
+        "0x28": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x2a": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 42
+        },
+        "0x2c": {
+          "count": 8,
+          "unique_low_bytes": 4,
+          "max_low_byte": 45
+        },
+        "0x2d": {
+          "count": 18,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x33": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x34": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 2
+        },
+        "0x37": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x3b": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x3f": {
+          "count": 4,
+          "unique_low_bytes": 1,
+          "max_low_byte": 1
+        },
+        "0x43": {
+          "count": 1,
+          "unique_low_bytes": 1,
+          "max_low_byte": 32
+        },
+        "0x44": {
+          "count": 5,
+          "unique_low_bytes": 1,
+          "max_low_byte": 68
+        },
+        "0x45": {
+          "count": 6,
+          "unique_low_bytes": 1,
+          "max_low_byte": 69
+        },
+        "0x46": {
+          "count": 8,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x47": {
+          "count": 5,
+          "unique_low_bytes": 1,
+          "max_low_byte": 0
+        },
+        "0x48": {
+          "count": 3,
+          "unique_low_bytes": 2,
+          "max_low_byte": 2
+        },
+        "0x4b": {
+          "count": 21,
+          "unique_low_bytes": 2,
+          "max_low_byte": 75
+        }
+      }
+    }
+  }
+}
