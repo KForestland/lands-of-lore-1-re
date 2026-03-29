@@ -2,13 +2,14 @@
 
 Public-safe screenshots and output examples for the LoL1 repo.
 
-Planned example set:
+Current example set:
 
-- rendered level output
-- SHP sprite render example
-- WSA multi-frame extraction example
-- dialogue decode example
-- wall or tileset analysis example
+- `level01_keep.png`
+  - one rendered level output from the solved map/render pipeline
+- `guard_frame_000.png`
+  - one extracted/rendered enemy sprite frame from `GUARD.SHP`
+- `knowltk1_frame_000.png`
+  - one extracted `WSA` animation frame from the full multi-frame extraction lane
 
 Working rule:
 
