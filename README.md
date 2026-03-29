@@ -33,6 +33,7 @@ Remaining gaps are effectively publication-only:
 ## Repository Layout
 
 - [`docs/`](docs) - closure memo, edition comparison, and supporting writeups
+- [`examples/`](examples) - public-safe screenshots and output examples
 - [`tools/`](tools) - extraction and analysis scripts
 - [`data/`](data) - structured JSON outputs and inventories
 
@@ -49,6 +50,30 @@ Then use:
 - [`tools/decode_frame4.py`](tools/decode_frame4.py)
 - [`tools/level_renderer.py`](tools/level_renderer.py)
 - [`tools/shp_renderer.py`](tools/shp_renderer.py)
+
+## Quick Start
+
+```bash
+git clone https://github.com/KForestland/Lands-of-lore-1-re.git
+cd Lands-of-lore-1-re
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Typical first commands:
+
+```bash
+python3 tools/level_renderer.py --help
+python3 tools/shp_renderer.py --help
+python3 tools/decode_dialogue.py --help
+```
+
+Then read:
+
+1. [`docs/closure_memo.md`](docs/closure_memo.md)
+2. [`docs/edition_comparison.md`](docs/edition_comparison.md)
+3. [`docs/level_tileset_map.md`](docs/level_tileset_map.md)
 
 ## Asset Policy
 
