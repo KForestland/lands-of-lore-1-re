@@ -11,7 +11,7 @@ Python tools that read the data files of *Lands of Lore: The Throne of Chaos* (D
 
 - `--help` prints usage and changes nothing.
 - The game folder comes from `--data` or `$LOL1_DATA`; there are no built-in paths.
-- Nothing is written unless you pass `--out FILE`, `--out-dir DIR`, `--png FILE` or `--wav FILE`, and then only there.
+- Nothing is written unless you pass `--out FILE`, `--out-dir DIR`, `--png FILE`, `--wav FILE` or `--json FILE`, and then only there. Do not point them inside this repository: `.gitignore` blocks game file types and the example output folders, and `repo_guard.py` fails if any is committed.
 - `--check` reads every file of the tool's kind and prints one `CHECK` line; exit code 0 means it passed. On the CD edition, tools that rebuild a file in `data/` also compare with it.
 - `lol1lib.py` is the shared library (PAK listing, Frame4, bitmap header, palettes); it has no command line.
 
@@ -24,7 +24,7 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 Run every tool's `--check` (26 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;26p"
+$ python3 tools/check_all.py | sed -n "1,3p;27p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
@@ -297,6 +297,15 @@ ScummVM save, CD, version 21: "daraicale cave 2"; ends at 84912 as the layout pr
   Baccata    HP 22/22  MP 18/18  skills [1, 1, 3]  XP [1, 1, 4016]
   Lora       HP 48/48  MP 5/5  skills [1, 4, 1]  XP [1, 15001, 1]
   level 6, block 257 (x 1, y 8), facing 2, money 58, 49 game flags set, levels stored [1, 2, 3, 4, 5, 6, 7], 73 items in use
+```
+
+### `repo_guard.py`
+
+Asset-policy guard, run by `check_all.py`: fails if git tracks any game file type (`.PAK`, `.CPS`, `.SHP`, `.XMI`, …), converted media (`.MID`, `.WAV`, …), a PNG outside `examples/` and `docs/images/`, or a file over 1 MiB. Needs no game data.
+
+```
+$ python3 tools/repo_guard.py --check
+CHECK repo_guard: 126 tracked files; game files, converted media, stray PNGs or files over 1 MiB: none (0)
 ```
 
 ### `tests/test_emc2_corpus.py`

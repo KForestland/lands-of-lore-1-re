@@ -62,7 +62,7 @@ Two editions were read: the CD-ROM edition with speech (version CD1.02) and an E
 
 ## Asset policy
 
-No game files and no dumps of extracted game media are included. Short quotations of game text and short byte excerpts appear in the documentation as examples. To run the tools you need your own copy of the game.
+No game files and no dumps of extracted game media are included. Short quotations of game text and short byte excerpts appear in the documentation as examples. `tools/check_all.py` includes `repo_guard.py`, which fails if a game file, converted media or a stray image is ever committed. To run the tools you need your own copy of the game.
 
 ## Sources and thanks
 
