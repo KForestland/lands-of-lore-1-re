@@ -9,7 +9,8 @@ the files git tracks (or every file, outside a git checkout) and fails on:
     .PAL .COL .FNT .TIM .INF .INI .ENG .FRE .GER .EXE .DAT .TMP .XMI .C55
     .ADL .PCS .VOC .AUD, and converted media .MID .MIDI .WAV .OGG .MP3 .FLAC
   - PNG files outside examples/ and docs/images/
-  - any file larger than 1 MiB
+  - any file larger than 300 KB, except the existing data tables in SIZE_ALLOWED
+    (generated listings of game content are tool output, not tracked files)
   - in the git history: any author or committer address not in ALLOWED_AUTHORS
     (committers may also be GitHub's noreply@github.com); the address is not printed
   - in text files: machine paths (/home/, /media/, /mnt/, C:\\Users\\) and
@@ -92,6 +93,10 @@ def identity_findings(root):
     return bad
 
 
+# No tracked file over 300 KB, except these existing data tables (listed by name).
+SIZE_LIMIT = 300_000
+SIZE_ALLOWED = {"data/music_inventory.json"}
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--check", action="store_true")
@@ -109,12 +114,12 @@ def main():
             bad.append(f"{f} (game file type)")
         elif ext == ".png" and not f.startswith(PNG_OK):
             bad.append(f"{f} (PNG outside examples/ and docs/images/)")
-        elif os.path.isfile(p) and os.path.getsize(p) > 1 << 20:
-            bad.append(f"{f} (larger than 1 MiB)")
+        elif os.path.isfile(p) and os.path.getsize(p) > SIZE_LIMIT and f not in SIZE_ALLOWED:
+            bad.append(f"{f} (larger than 300 KB)")
         if os.path.isfile(p):
             bad.extend(text_findings(root, f))
     bad.extend(identity_findings(root))
-    print(f"CHECK repo_guard: {len(files)} tracked files; game files, converted media, stray PNGs, files over 1 MiB, machine paths, private or assistant names, or commit identities: "
+    print(f"CHECK repo_guard: {len(files)} tracked files; game files, converted media, stray PNGs, files over 300 KB, machine paths, private or assistant names, or commit identities: "
           f"{bad[:5] or 'none'}{' ...' if len(bad) > 5 else ''} ({len(bad)})")
     return 0 if not bad else 1
 
