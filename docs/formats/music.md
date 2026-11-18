@@ -17,6 +17,24 @@ ScummVM plays XMI through its XMIDI parser and ADL through `engines/kyra/sound/d
 
 "C55" is a file extension; what it stands for (the closure memo says "Creative Music File"; the files are XMIDI containers like XMI) is OPEN, [Q15](../OPEN_QUESTIONS.md). Which driver file plays it: [Q5](../OPEN_QUESTIONS.md) ([drivers.md](drivers.md)).
 
+
+## Worked example
+
+First 40 bytes of CD `LORESFX.XMI`:
+
+```
+46 4f 52 4d 00 00 00 0e 58 44 49 52  49 4e 46 4f 00 00 00 02 35 00  43 41 54 20 00 00 10 72 58 4d 49 44  46 4f 52 4d …
+```
+
+| Bytes | Meaning |
+|-------|---------|
+| `FORM`, `00 00 00 0e`, `XDIR` | IFF form of 14 bytes, type XDIR (an XMIDI directory) |
+| `INFO`, `00 00 00 02`, `35 00` | 0x35 = 53 sequences in this file (the catalogue below has 53 `FORM XMID` children, `data/music_inventory.json`) |
+| `CAT `, `00 00 10 72`, `XMID` | a catalogue of 4210 bytes holding the sequences |
+| `FORM` … | the first sequence (`FORM XMID`, then its `EVNT` events) |
+
+ADL files have no IFF header; CD `LORESFX.ADL` starts `00 00 01 00 ff ff ff ff …`, not documented field by field ([Q15](../OPEN_QUESTIONS.md)).
+
 ## Tool
 
 `tools/extract_music.py` (inventory, `--out-dir` for raw files, `--check` rebuilds the file list and IFF trees of `data/music_inventory.json`: 67 files, no IFF parse errors). No decoder to MIDI in this repo.

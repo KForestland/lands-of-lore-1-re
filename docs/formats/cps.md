@@ -27,6 +27,25 @@ CONFIRMED, `tools/cps_reader.py --check`:
 
 Only type 4 occurs in LoL1. Types 1 and 3 are handled by the engine for other games (UNCONFIRMED for LoL1, never seen).
 
+
+## Worked example
+
+First 12 bytes of CD `PARCH.CPS` (the automap parchment):
+
+```
+79 31   04   00   00 fa 00 00   00 03   00 00 …
+```
+
+| Bytes | Meaning |
+|-------|---------|
+| `79 31` | 0x3179 = 12665 = file size − 2 |
+| `04` | compression type 4 (Frame4) |
+| `00` | unused |
+| `00 fa 00 00` | uncompressed size 0xFA00 = 64000 = 320 x 200 |
+| `00 03` | palette size 0x300 = 768 bytes, starting at byte 10 |
+
+The pixel data starts at 10 + 768 = 778; [lcw.md](lcw.md) decodes its first bytes.
+
 ## Tool
 
 `tools/cps_reader.py NAME.CPS [--png out.png]`, `--check`. Older: `tools/decode_frame4.py`.

@@ -32,6 +32,21 @@ All 29 files: (size − 2) % 12 == 0; area indexes 0..11 all used. CONFIRMED (CD
 
 The meaning of each flag bit and special type is game logic, not file format: [Q7](../OPEN_QUESTIONS.md).
 
+
+## Worked example
+
+CD `LEVEL1.WLL` starts:
+
+```
+00 00   00 00 00 00 00 00 00 00 80 00 3f 00   01 00 01 00 01 00 00 00 00 00 07 00   ff ff …
+```
+
+| Bytes | Meaning |
+|-------|---------|
+| `00 00` | area 0: `KEEP.SHP` / `KEEP.DAT` |
+| record 0: `00 00 00 00 00 00 00 00 80 00 3f 00` | wall type 0: no geometry, no shape, special 0, flags 0x80, automap 0x3F |
+| record 1: `01 00 01 00 01 00 00 00 00 00 07 00` | wall type 1: VMP page 1, shape 1, special 0, flags 0, automap 7 |
+
 ## Tool
 
 `tools/wll_parser.py` (summary, `--out`, `--check` rebuilds `data/wll_parsed.json` exactly: 29 files, 1726 records). Wall types used by a CMZ but missing from its WLL: see [cmz.md](cmz.md#open).

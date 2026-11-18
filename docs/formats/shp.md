@@ -55,6 +55,24 @@ The closure memo's "3492/3492 frames" count was right in number, but the March 2
 
 Monster and item shapes are drawn through the scene palette plus run-time colour tables (`sprites_lol.cpp:908-980`), so a PNG made with a fixed CPS palette shows the right shapes in the wrong colours.
 
+
+## Worked example
+
+CD `KEEP.SHP` (plain, not wrapped). First 10 bytes: `4e 00  3c 01 00 00  bf 05 00 00`: 0x4E = 78 shapes; shape 0 offset 0x13C, shape 1 offset 0x5BF. Shape 0 therefore starts at 0x13C + 2 = 0x13E:
+
+```
+01 00   4f   21 00   4f   83 04   f6 09   …
+```
+
+| Bytes | Meaning |
+|-------|---------|
+| `01 00` | flags 1: a 16-byte colour table follows the header; bit 1 clear, so the line data is Frame4-compressed |
+| `4f` | height 79 |
+| `21 00` | width 33 |
+| `4f` | height again (79) |
+| `83 04` | shape size 0x483 = 1155 bytes |
+| `f6 09` | line data is 0x9F6 = 2550 bytes after decompression |
+
 ## Tool
 
 `tools/shp_renderer.py NAME.SHP [--out-dir pngs/] [--pal-from X.CPS]`, `--check`, `--out inventory.json`. Inventory: `data/shp_inventory.json`.

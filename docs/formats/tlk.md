@@ -31,6 +31,22 @@ Example on the data: `01.TLK` holds `00000.VOC`, `000_0.01`, `000_1.01`, `001A0.
 
 `tools/tlk_verify.py --check` (CD): `30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none`. Every speech-pattern name carries its own TLK number or 00.
 
+
+## Worked example
+
+First 32 bytes of CD `01.TLK`:
+
+```
+f0 19 00 00  30 30 30 30 30 2e 56 4f 43 00  43 c6 00 00  30 30 30 5f 30 2e 30 31 00  ea 69 01 00 …
+```
+
+| Bytes | Meaning |
+|-------|---------|
+| `f0 19 00 00` | first member at 0x19F0 = 6640: a PAK directory, not a count |
+| `30 30 30 30 30 2e 56 4f 43 00` | `00000.VOC` |
+| `43 c6 00 00` | next member at 0xC643 = 50755 |
+| `30 30 30 5f 30 2e 30 31 00` | `000_0.01`: line 000, no speaker letter (`_`), part 0, TLK 01 |
+
 ## Tool
 
 `tools/pak_reader.py list 01.TLK`; `tools/voc_reader.py 01.TLK:000_0.01 --wav out.wav`; `tools/tlk_verify.py`.

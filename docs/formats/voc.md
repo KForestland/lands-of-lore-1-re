@@ -29,6 +29,26 @@ Only block type 1 occurs; every file passes the header check value.
 
 **Correction to the closure memo:** "majority 11111 Hz" — the majority divisor is the 11025 Hz class (0xA5/0xA6) for effects and the 22050 Hz class for CD speech. The memo's figure is the raw formula for divisor 0xA6 (1000000/90 = 11111). Both are the same files; the label differs.
 
+
+## Worked example
+
+First 32 bytes of CD `1BOLTC.VOC` (in `VOC.PAK`):
+
+```
+43 72 65 61 74 69 76 65 20 56 6f 69 63 65 20 46 69 6c 65 1a   1a 00   0a 01   29 11   01 48 53 00   a6   00 …
+```
+
+| Bytes | Meaning |
+|-------|---------|
+| `43 72 … 65 1a` | `Creative Voice File` + 0x1A |
+| `1a 00` | first block at 26 |
+| `0a 01` | version 0x010A |
+| `29 11` | check word: ~0x010A + 0x1234 = 0x1129 |
+| `01` | block type 1 (sound data) |
+| `48 53 00` | block length 0x5348 = 21320 |
+| `a6` | rate divisor 166: 1000000 / (256 − 166) = 11111 Hz, which ScummVM rounds to 11025 |
+| `00` | codec 0: 8-bit unsigned PCM; 21318 samples follow |
+
 ## Tool
 
 `tools/voc_reader.py [CONTAINER:]MEMBER [--wav out.wav]`, `--check`.

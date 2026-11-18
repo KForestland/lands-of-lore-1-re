@@ -17,4 +17,20 @@ There is no mode flag: short copies are always relative, medium and long always 
 
 **Correction history:** the closure memo (section B.4) records the earlier decoder bug (relative/absolute mixed up), fixed in `tools/decode_frame4.py`.
 
+
+## Worked example
+
+The pixel data of CD `PARCH.CPS` (after its 10-byte header and 768-byte palette) starts:
+
+```
+81 40   00 01   82 3b 3e   10 06 …
+```
+
+| Code | Meaning | Output so far |
+|------|---------|---------------|
+| `81` + `40` | 0x80 + 1: copy 1 literal byte | `40` |
+| `00 01` | bit 7 clear: copy (0 >> 4) + 3 = 3 bytes from 1 byte back (relative) | `40 40 40 40` |
+| `82` + `3b 3e` | copy 2 literal bytes | `40 40 40 40 3b 3e` |
+| `10 06` | copy (1) + 3 = 4 bytes from 6 bytes back | `40 40 40 40 3b 3e 40 40 40 40` |
+
 **Tool:** `tools/lol1lib.py: decode_frame4()` (port of the function above); `tools/decode_frame4.py` (the March 2026 port; `--check` runs both ports on all 140 CPS, CMZ, VCN and VMP files of the CD: identical output, 140/140).

@@ -10,7 +10,7 @@ Every `.ADV` carries `Copyright (C) 1991,1992 Miles Design, Inc.` and its device
 
 Who loads them: the strings `ALGDIG.ADV`, `ALFX.DRV` and "Unable to load sound driver" sit in the floppy `LANDS.EXE`, `MAIN.EXE` and `FINALE.EXE`, which also name ten drivers that are not in either `DRIVERS.PAK` (`PASDIG.ADV`, `ADLIB.ADV`, `SBFM.ADV`, …). ScummVM loads none of them; it emulates the sound devices itself. CONFIRMED.
 
-## `TRIG.TBL`: copy-protection text
+## Worked example: `TRIG.TBL`, copy-protection text
 
 `GENERAL.PAK` holds `TRIG.TBL`, 166 bytes, identical in both editions. It has the same layout as the text files ([text.md](text.md)): five uint16 offsets (10, 71, 77, 159, 165), then NUL-terminated strings with the game's text compression. Decoded with the same routine as the `.ENG` files (`engines/kyra/engine/util.cpp:29-87`) they read:
 

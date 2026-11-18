@@ -27,6 +27,23 @@ CONFIRMED, `tools/pak_reader.py --check`:
 
 "bad" means the members do not tile the file exactly from the end of the directory to the end of the file.
 
+
+## Worked example
+
+First 40 bytes of CD `GENERAL.PAK` (`tools/pak_reader.py list GENERAL.PAK` shows the same entries):
+
+```
+66 04 00 00  4c 4f 52 45 53 46 58 2e 41 44 4c 00   3e 28 00 00  4c 4f 4c 53 59 53 45 58 2e 43 35 35 00   ea 31 00 00 …
+```
+
+| Bytes | Meaning |
+|-------|---------|
+| `66 04 00 00` | member 0 starts at 0x466 = 1126 (also: the directory is 1126 bytes long) |
+| `4c 4f … 00` | name `LORESFX.ADL` |
+| `3e 28 00 00` | member 1 starts at 0x283E = 10302, so member 0 is 10302 − 1126 = 9176 bytes |
+| `4c 4f … 35 00` | name `LOLSYSEX.C55` |
+| `ea 31 00 00` | member 2 starts at 0x31EA = 12778 (`LORESFX.C55`) |
+
 ## Tool
 
 `tools/pak_reader.py list|extract <PAK> [member]`, `--check`. Library: `tools/lol1lib.py: pak_entries()`. `tools/pak_indexer.py` rebuilds `data/pak_index.json` (`--check` matches it: 81 PAKs, 1163 members).

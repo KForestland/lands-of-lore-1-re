@@ -27,6 +27,21 @@ The ten slots are the views at the ten scene positions where a decoration can be
 
 There is no YVEL2.DAT; Level 22, the only level that uses YVEL2, takes its decorations from YVEL1.DAT via its WLL area (index 8). The level 22 scripts load only `YVEL1.SHP`/`YVEL1.DAT`, on both the YVEL1 and the YVEL2 path, so decorations do not change with the tile set. CONFIRMED.
 
+
+## Worked example
+
+CD `KEEP.DAT` starts `1a 00`: 26 records. Record 1 (bytes 74-145), read with `tools/dat_reader.py KEEP.DAT --index 1`:
+
+| Field | Values (slots 0-9) |
+|-------|-------------------|
+| shapeIndex | –, 17, 20, 21, –, –, –, –, –, – (– = 0xFFFF, not drawn) |
+| scaleFlag | all 0 |
+| shapeX | 0, 99, 65, 40, 0, … |
+| shapeY | 0, 41, 27, 18, 0, … |
+| next, flags | 0, 8 |
+
+So this decoration has views at three of the ten positions (shapes 17, 20 and 21 of `KEEP.SHP`), each with its own screen offset.
+
 ## Tool
 
 `tools/dat_reader.py KEEP.DAT [--index n]`, `--check`.

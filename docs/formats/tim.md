@@ -40,4 +40,21 @@ The March 2026 `data/tim_analysis.json` listed opcodes 112 and 176; those are no
 
 Native behaviour of the commands ScummVM leaves unimplemented (0x07 in game, nested 0x02); extra argument words in a few calls (`giveItem`, `characterChat`, `playDialogueTalkText`) that the ScummVM functions do not read.
 
+
+## Worked example
+
+CD `AUTOMAP.TIM` starts:
+
+```
+46 4f 52 4d 00 00 01 36 41 56 46 53   41 56 54 4c 00 00 01 1e   01 00   03 00 00 00 18 01   09 00 00 00 02 01 …
+```
+
+| Bytes | Meaning |
+|-------|---------|
+| `FORM`, `00 00 01 36`, `AVFS` | IFF form, type AVFS |
+| `AVTL`, `00 00 01 1e` | 286 bytes of code (little-endian words from here on) |
+| `01 00` | function 0 starts at word 1 |
+| `03 00 00 00 18 01` | instruction: length 3 words, delay 0, opcode word 0x0118: command 0x18 (return 1) |
+| `09 00 00 00 02 01 …` | instruction: length 9, delay 0, command 0x02 (init WSA) with 6 parameters |
+
 **Tool:** `tools/parse_tim.py` (chunk structure; `--check` rebuilds the file list and statistics of `data/tim_analysis.json`: 139/139, chunks AVTL 139, TEXT 51).

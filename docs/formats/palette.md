@@ -15,4 +15,9 @@ Generic loader: `Screen::loadPalette` `engines/kyra/graphics/screen.cpp:3404-344
 
 All 11 CD files are 768 bytes. CONFIRMED (CD scan). CPS files carry their own 768-byte palette ([cps.md](cps.md)).
 
+
+## Worked example
+
+CD `ALTPAL1.PAL` starts `00 00 00  00 00 00  3f 33 34  3f 24 25 …`: colour 0 black, colour 1 black, colour 2 = (63, 51, 52) on the 0-63 VGA scale = (255, 206, 210) in 8-bit RGB, colour 3 = (63, 36, 37).
+
 **Tool:** `tools/cps_reader.py NAME.CPS --png out.png --pal-from ALTPAL1.PAL`; `lol1lib.vga_palette()`.

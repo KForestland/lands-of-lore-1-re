@@ -29,6 +29,25 @@ Source: `engines/kyra/graphics/wsamovie.cpp:361-440` (`WSAMovie_v2::open`).
 - No CD file lacks a first frame. CONFIRMED.
 - `data/wsa_inventory.json` (March 2026): its header fields match this parser for all 241 files. CONFIRMED.
 
+
+## Worked example
+
+First 30 bytes of CD `ESCAPE.WSA` (29,544 bytes):
+
+```
+33 00  04 00  00 00  88 00  68 00  43 07  01 00   e2 00 00 00  84 03 00 00  8c 03 00 00  f4 03 …
+```
+
+| Bytes | Meaning |
+|-------|---------|
+| `33 00` | 51 frames |
+| `04 00`, `00 00` | draw at x + 4, y + 0 |
+| `88 00`, `68 00` | 136 x 104 pixels |
+| `43 07` | delta buffer 1859 bytes |
+| `01 00` | flags 1: a 768-byte palette follows the offset table |
+| `e2 00 00 00` | offset[0] = 226 = 14 + 4 x 53, the end of the table: it does not count the palette |
+| `84 03 00 00` … | offset[1] = 900. Frame 1 starts at (226 + 768) + (900 − 226) = 1668 |
+
 ## Tool
 
 `tools/wsa_extract.py NAME.WSA [--out-dir d/ --all]`, `--check`; `tools/wsa_all_frames_extract.py --out-dir d/` for every file.

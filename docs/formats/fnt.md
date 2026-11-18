@@ -33,6 +33,25 @@ Use: FONT9P/FONT6P are the normal fonts (`engines/kyra/engine/lol.cpp:596-597`, 
 
 The memo's "226 glyphs per font, 172 with bitmaps" holds for the CD fonts only.
 
+
+## Worked example
+
+CD `FONT9P.FNT` starts:
+
+```
+29 0f   00 05   0e 00   14 00   d8 01   ba 02   65 0d   12 10 00 e1 09 08
+```
+
+| Bytes | Meaning |
+|-------|---------|
+| `29 0f` | 0xF29 = 3881 = file size |
+| `00 05` | signature 0x0500 |
+| `0e 00` | descriptor at 14 |
+| `14 00` | glyph offset table at 20 |
+| `d8 01` | width table at 472 |
+| `65 0d` | height table at 3429 |
+| descriptor `12 10 00 e1 09 08` | +3 `e1` = 225, so 226 glyphs; +4 height 9; +5 max width 8 |
+
 ## Tool
 
 `tools/fnt_reader.py FONT9P.FNT [--png atlas.png]`, `--check`.

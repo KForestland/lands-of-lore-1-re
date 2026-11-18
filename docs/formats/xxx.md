@@ -27,6 +27,24 @@ The memo's field names (shapeDrawX, shapeDrawY, shapeIndex, labelBlockX, labelBl
 
 `tools/xxx_reader.py --check` (CD): `29 files, 73 records (all sizes multiple of 12, <=32 records), 0 without shape, string-id top bits [1, 3], bad=none`. All coordinates are < 32. String ids carry bit 0x4000 (global `LANDS` strings) and some also 0x8000; what 0x8000 means here is UNCONFIRMED (`printMapText` not traced), [Q12](../OPEN_QUESTIONS.md).
 
+
+## Worked example
+
+CD `LEVEL1.XXX` (72 bytes = 6 records), record 0 and 1:
+
+```
+0d 00 0d 00 01 00 0d 00 0e 00 d0 41     12 00 08 00 04 00 10 00 08 00 d1 41
+```
+
+| Record 0 | Meaning |
+|----------|---------|
+| `0d 00`, `0d 00` | symbol on square x 13, y 13 |
+| `01 00` | automap symbol 1 |
+| `0d 00`, `0e 00` | shown once square x 13, y 14 is explored |
+| `d0 41` | string 0x41D0: bit 0x4000 = global strings (`LANDS.ENG`), index 0x1D0 = 464 = "FOUNTAIN" |
+
+Record 1 the same way: symbol 4 at (18, 8), shown after (16, 8) is explored, string 465 = "THRONE ROOM".
+
 ## Tool
 
 `tools/xxx_reader.py LEVEL1.XXX`, `--check`.

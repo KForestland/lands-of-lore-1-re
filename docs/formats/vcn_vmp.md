@@ -68,6 +68,13 @@ The VCN/VMP set is chosen by the level script, not by the WLL area index: `loadL
 
 Correction: `docs/level_tileset_map.md` lists level 25 under CATWALK for VCN/VMP; that holds only for its decorations (SHP/DAT).
 
+
+## Worked example
+
+CD `KEEP.VCN` decompressed starts `02 05  70 70 70 …`: 0x502 = 1282 tiles, then the per-tile shift bytes (0x70 = 112, bank 7). The file is 2 + 1282 + 128 + 384 + 1282 x 32 = 42820 bytes, as decompressed.
+
+CD `KEEP.VMP` decompressed starts `64 0b  01 00 02 00 03 00 04 00 05 00 …`: 0xB64 = 2916 words = 330 + 6 x 431. Words 0-329 are the floor and ceiling: tiles 1, 2, 3, … in reading order. Word 330, the start of wall page 1, is `fa 00` = tile 250; the next words `fb 80`, `fc 80` have bit 15 set (0x80FB): in the drawing code that bit marks a tile drawn over the floor/ceiling instead of replacing it (`engines/kyra/engine/scene_rpg.cpp:359-363`).
+
 ## Tool
 
 `tools/vcn_vmp_reader.py AREA [--png tiles.png]`, `--check`. Level maps: `tools/level_renderer.py --level N --out-dir d/` (top-down overview, `--check`). Level-to-set table: `tools/tileset_mapper.py` (`data/tileset_mapping.json`).
