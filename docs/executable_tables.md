@@ -6,7 +6,7 @@ Evidence references use ScummVM revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801
 
 ## Locating the executables
 
-**CONFIRMED** The reference CD stores its DOS executables in `WESTWOOD.001`. The little-endian `u32` at `0x03` gives the length of the CRLF-delimited member list at `0x07`. The first list line names the list itself. For each subsequent line, read a length `u32 LE` and then that many payload bytes. The walk consumes the whole archive (end `0x3139A1`). The two gameplay images both start with MZ headers. The archive member length includes overlay bytes beyond the MZ-declared image. The floppy witness is the loose LANDSoL `MAIN.EXE`. See `WESTWOOD.001+0x07` for names and the prefix offsets below, and LANDSoL `MAIN.EXE+0x00` for its MZ header.
+**CONFIRMED** The reference CD stores its DOS executables in `WESTWOOD.001`. The little-endian `u32` at `0x03` gives the length of the CRLF-delimited member list at `0x07`. The first list line names the list itself. For each subsequent line, read a length `u32 LE` and then that many payload bytes. The walk consumes the whole archive (end `0x3139A1`). The two gameplay images are also loose under CD `DATA/HARDRIVE`, where both match their archive member byte for byte. Both start with MZ headers. The archive member length includes overlay bytes beyond the MZ-declared image. The floppy witness is the loose LANDSoL `MAIN.EXE`. See `WESTWOOD.001+0x07` for names and the prefix offsets below, and LANDSoL `MAIN.EXE+0x00` for its MZ header.
 
 | Image | CD length prefix | CD archive start | Member size |
 | --- | ---: | ---: | ---: |
