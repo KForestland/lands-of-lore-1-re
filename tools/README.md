@@ -1,49 +1,272 @@
 # Tools
 
-Readers and extractors for the *Lands of Lore: The Throne of Chaos* (DOS) data files. Format documentation: [`../docs/formats/`](../docs/formats/README.md).
+Python tools that read the data files of *Lands of Lore: The Throne of Chaos* (DOS) from your own copy of the game. Format pages: [`../docs/formats/`](../docs/formats/README.md); terms: [glossary](../docs/GLOSSARY.md).
 
 ## Setup
 
-- Python 3.8+
-- Pillow (`pip install Pillow`) for the tools that write PNG files
-- Your own copy of the game. Point the tools at its `DATA` folder with `--data /path/to/DATA` or `export LOL1_DATA=/path/to/DATA`.
+- Python 3.8+ and Pillow (`pip install -r requirements.txt`) for the tools that write PNG files.
+- Your own copy of the game. Point the tools at its main `DATA` folder (the one holding `GENERAL.PAK` and, on the CD, `L01.PAK`) with `--data /path/to/DATA`, or once with `export LOL1_DATA=/path/to/DATA`. A language subfolder such as the CD's `DATA/ENG` is not a complete game folder.
 
-## Common options
+## Rules every tool follows
 
-Every tool has `--help`, takes `--data`, and writes nothing unless you give it `--out` (a JSON file) or `--out-dir` (a folder). Every tool has a `--check` that reads all files of its kind and prints one line; exit code 0 means the check passed. `check_all.py` runs all 21 checks.
+- `--help` prints usage and changes nothing.
+- The game folder comes from `--data` or `$LOL1_DATA`; there are no built-in paths.
+- Nothing is written unless you pass `--out FILE`, `--out-dir DIR`, `--png FILE` or `--wav FILE`, and then only there.
+- `--check` reads every file of the tool's kind and prints one `CHECK` line; exit code 0 means it passed. On the CD edition, tools that rebuild a file in `data/` also compare with it.
+- `lol1lib.py` is the shared library (PAK listing, Frame4, bitmap header, palettes); it has no command line.
 
-## Tool index
+## Examples and expected output
 
-### Shared code and containers
-- `lol1lib.py`: shared code: PAK/TLK listing, Frame4 (LCW) decompression, the 10-byte bitmap header, palette helpers
-- `pak_reader.py`: list or extract members of a PAK (and of the CD speech `NN.TLK` files)
-- `pak_indexer.py`: index of every PAK member (`data/pak_index.json`); `--survey` lists every file under the game folder
-- `tlk_verify.py`: checks the CD speech archives `NN.TLK` (PAK archives of VOC samples)
-- `decode_frame4.py`: an independent Frame4 port; `--check` compares it with `lol1lib`; `--out-dir` writes every CPS as PNG
+Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` folder. Long lines are cut with `...`.
 
-### Images and animation
-- `cps_reader.py`: CPS full-screen images (header, PNG)
-- `shp_renderer.py`: SHP sprites (strict decode, PNG per shape, `--out` inventory as in `data/shp_inventory.json`)
-- `wsa_extract.py`: WSA animations (header, frame 0 or every frame as PNG)
-- `wsa_all_frames_extract.py`: every frame of every WSA (or of the named ones)
-- `fnt_reader.py`: fonts (header, glyph atlas PNG)
+### `check_all.py`
 
-### Levels
-- `cmz_analyzer.py`: wall-type statistics of the level maps (`data/wall_type_analysis.json`)
-- `wll_parser.py`: wall-type tables (`data/wll_parsed.json`)
-- `vcn_vmp_reader.py`: wall tile sets and tile layouts (tile atlas PNG)
-- `tileset_mapper.py`: which tile set, decorations and palette each level uses (`data/tileset_mapping.json`)
-- `level_renderer.py`: top-down map PNG per level
-- `xxx_reader.py`: automap legend records
-- `dat_reader.py`: wall decoration records
-- `tlc_reader.py`: CD transparency tables
+Run every tool's `--check` (22 checks) and print one line each; exit 0 when all pass.
 
-### Text, sound, music, scripts
-- `extract_dialogue.py`: raw strings of every text file (`data/dialogue_summary.json`)
-- `decode_dialogue.py`: decoded, readable text, straight from the game data
-- `voc_reader.py`: VOC sound samples (WAV output)
-- `extract_music.py`: music file inventory (`data/music_inventory.json`), raw extraction
-- `parse_tim.py`: TIM sequence-script chunk structure (`data/tim_analysis.json`)
-- `check_all.py`: runs every `--check`
+```
+$ python3 tools/check_all.py
+CHECK pak: 111 containers, 6075 members, bad=none
+CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
+CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
+```
 
-Where a `data/*.json` file is named, the tool's `--out` produces it and its `--check` compares with it.
+### `pak_reader.py`
+
+List or extract the members of a PAK archive (also the CD speech files `NN.TLK`).
+
+```
+$ python3 tools/pak_reader.py list GENERAL.PAK
+      1126      9176  LORESFX.ADL
+     10302      2476  LOLSYSEX.C55
+     12778      3924  LORESFX.C55
+     16702       768  FXPAL.COL
+```
+
+### `pak_indexer.py`
+
+Index every PAK member (rebuilds `data/pak_index.json` with `--out`); `--survey --out f.json` lists every file under the game folder.
+
+```
+$ python3 tools/pak_indexer.py
+81 PAKs, 1163 members
+```
+
+### `tlk_verify.py`
+
+Check the CD speech archives `NN.TLK`: PAK layout, every member a VOC, names as the game builds them.
+
+```
+$ python3 tools/tlk_verify.py
+00.TLK: 349 members, directory ends 4548, VOC 349, first 00000.VOC@4548, 019A0.00@48663, 019B0.00@86850, other names []
+01.TLK: 506 members, directory ends 6640, VOC 506, first 00000.VOC@6640, 000_0.01@50755, 000_1.01@92650, other names []
+```
+
+### `decode_frame4.py`
+
+An independent port of the Frame4 (LCW) decompressor; `--check` compares it with `lol1lib`; `--out-dir` writes every CPS as PNG.
+
+```
+$ python3 tools/decode_frame4.py --check
+CHECK frame4: 140 files (CPS, CMZ, VCN, VMP), both decoders agree and reach the stated size: 140/140, bad=none
+```
+
+### `cps_reader.py`
+
+CPS full-screen pictures: header, decode, PNG.
+
+```
+$ python3 tools/cps_reader.py PARCH.CPS --png parch.png
+PARCH.CPS in GENERAL.PAK: {'size_field': 12665, 'comp_type': 4, 'byte3': 0, 'uncompressed_size': 64000, 'palette_size': 768}, decoded 64000 bytes
+wrote parch.png
+```
+
+### `shp_renderer.py`
+
+SHP sprites: list the shapes, write one PNG per shape (`--out-dir`), inventory (`--out`).
+
+```
+$ python3 tools/shp_renderer.py GUARD.SHP --out-dir guard
+  0 56x96 flags=0x0005 frame_size=2846 exact=True
+  1 56x96 flags=0x0005 frame_size=2867 exact=True
+  2 56x96 flags=0x0005 frame_size=2948 exact=True
+```
+
+### `wsa_extract.py`
+
+WSA animations: header and frame table; frame 0 (or every frame with `--all`) as PNG.
+
+```
+$ python3 tools/wsa_extract.py ESCAPE.WSA --out-dir escape
+ESCAPE.WSA O27A.PAK {'frames': 51, 'x_add': 4, 'y_add': 0, 'width': 136, 'height': 104, 'delta_buffer': 1859, 'flags': 1, 'has_first_frame': True, ...
+wrote PNGs to escape
+```
+
+### `wsa_all_frames_extract.py`
+
+Every frame of every WSA, or of the named ones.
+
+```
+$ python3 tools/wsa_all_frames_extract.py --out-dir frames CHANDELR.WSA
+wrote 3 frames of 1 WSA files to frames
+```
+
+### `fnt_reader.py`
+
+Fonts: header and a glyph atlas PNG.
+
+```
+$ python3 tools/fnt_reader.py FONT9P.FNT --png font.png
+FONT9P.FNT STARTUP.PAK {'size_field': 3881, 'signature': '0x500', 'glyphs': 226, 'height': 9, 'width': 8}
+wrote font.png
+```
+
+### `cmz_analyzer.py`
+
+Wall-type statistics of every level map (rebuilds `data/wall_type_analysis.json`).
+
+```
+$ python3 tools/cmz_analyzer.py
+  Level  1: len=4 blocks=1024 wall_types=26 size=OK decomp=4102
+  Level  2: len=4 blocks=1024 wall_types=24 size=OK decomp=4102
+  Level  3: len=4 blocks=1024 wall_types=24 size=OK decomp=4102
+  Level  4: len=4 blocks=1024 wall_types=30 size=OK decomp=4102
+```
+
+### `wll_parser.py`
+
+Wall-type tables of every level (rebuilds `data/wll_parsed.json`).
+
+```
+$ python3 tools/wll_parser.py
+  Level  1: shape_idx=0 records=52 with_vmp=47 without=5
+  Level  2: shape_idx=1 records=41 with_vmp=32 without=7
+```
+
+### `vcn_vmp_reader.py`
+
+An area's wall tiles (VCN) and tile layouts (VMP); tile atlas PNG.
+
+```
+$ python3 tools/vcn_vmp_reader.py KEEP --png keep_tiles.png
+KEEP (KEEP.PAK): VCN {'tiles': 1282, 'decoded': 42820, 'expected': 42820}, shift values [0, 16, 32, 48, 64, 80, 96, 112]; VMP 2916 words = 330 floo...
+wrote keep_tiles.png
+```
+
+### `tileset_mapper.py`
+
+Which area, tile set and override palette each level uses (rebuilds `data/tileset_mapping.json`).
+
+```
+$ python3 tools/tileset_mapper.py
+L01  WLL area  0 KEEP      graphics: INI:KEEP
+L02  WLL area  1 FOREST1   graphics: INI:FOREST1+ALTPAL2.PAL
+L03  WLL area  1 FOREST1   graphics: INI:FOREST1+ALTPAL1.PAL
+```
+
+### `level_renderer.py`
+
+Top-down map PNG of a level, with the game's tiles or as a plain drawing (`--schematic`).
+
+```
+$ python3 tools/level_renderer.py --level 1 --out-dir maps --schematic
+wrote maps/level01_schematic.png
+```
+
+### `xxx_reader.py`
+
+Automap legend records of a level.
+
+```
+$ python3 tools/xxx_reader.py LEVEL1.XXX
+0 shape_x=13 shape_y=13 shape=0x0001 label_x=13 label_y=14 string_id=0x41d0
+1 shape_x=18 shape_y=8 shape=0x0004 label_x=16 label_y=8 string_id=0x41d1
+2 shape_x=9 shape_y=13 shape=0x0002 label_x=10 label_y=13 string_id=0x41d2
+```
+
+### `dat_reader.py`
+
+Decoration records of an area.
+
+```
+$ python3 tools/dat_reader.py KEEP.DAT --index 1
+KEEP.DAT in KEEP.PAK: 26 records
+1 {'shapeIndex': [65535, 17, 20, 21, 65535, 65535, 65535, 65535, 65535, 65535], 'scaleFlag': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'shapeX': [0, 99, 65, ...
+```
+
+### `tlc_reader.py`
+
+CD transparency tables of a level.
+
+```
+$ python3 tools/tlc_reader.py LEVEL01.TLC
+LEVEL01.TLC in L01.PAK: 5376 bytes; effect colours -> slot: {0: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 7: 6, 8: 7, 9: 8, 10: 9, 11: 10, 12: 11, 13: 12, 1...
+slot 0: first 16 of row = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+```
+
+### `extract_dialogue.py`
+
+Raw strings of every text file (`--out-dir` writes one JSON per file).
+
+```
+$ python3 tools/extract_dialogue.py
+90 files, 6495 strings, {'ENG': 2165, 'FRE': 2165, 'GER': 2165}
+```
+
+### `decode_dialogue.py`
+
+Readable text straight from the game files (any language file; also `TRIG.TBL`).
+
+```
+$ python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
+[0] Welcome to Gladstone Keep.  King Richard awaits you in the throne room.
+```
+
+### `voc_reader.py`
+
+Sound samples: blocks and rate; WAV output.
+
+```
+$ python3 tools/voc_reader.py VOC.PAK:1BOLTC.VOC --wav bolt.wav
+{'header_size': 26, 'version': '0x10a', 'check_ok': True, 'blocks': [(1, 21320)], 'rate': 11025, 'samples': 21318}
+wrote bolt.wav
+```
+
+### `extract_music.py`
+
+Music file inventory (rebuilds `data/music_inventory.json`); `--out-dir` writes the raw files.
+
+```
+$ python3 tools/extract_music.py
+67 files {'C55': 17, 'ADL': 16, 'PCS': 16, 'XMI': 18}
+```
+
+### `parse_tim.py`
+
+TIM cut-scene scripts: chunk structure and statistics (rebuilds `data/tim_analysis.json`).
+
+```
+$ python3 tools/parse_tim.py
+Parsed 139/139 TIM files
+```
+
+### `emc2_decompile.py`
+
+Disassemble a level or item script (EMC2) to a readable listing. Takes a loose `.INF`/`.INI` file, or a PAK with `--entry`. The corpus test is `tests/test_emc2_corpus.py`.
+
+```
+$ python3 tools/emc2_decompile.py $LOL1_DATA/L01.PAK --entry LEVEL1.INI
+; L01.PAK/LEVEL1.INI (PAK+0xF225) | 260 DATA words | 10 TEXT strings
+; ORDR payload at file+0x14 (4 bytes)
+; TEXT payload at file+0x20 (109 bytes)
+; DATA payload at file+0x96 (520 bytes)
+; TEXT[0] +0x0014 "KEEP"
+; TEXT[1] +0x0019 "LEVEL01"
+; TEXT[2] +0x0021 "KEEPDOOR.SHP"
+; TEXT[3] +0x002E "LEVEL1.CMZ"
+; TEXT[4] +0x0039 "GUARD.SHP"
+; TEXT[5] +0x0043 "KEEP.DAT"
+; TEXT[6] +0x004C "KEEP.SHP"
+; TEXT[7] +0x0055 "ORCLDR1"
+; TEXT[8] +0x005D "SWING1"
+; TEXT[9] +0x0064 "MALEOOF2"
+```
