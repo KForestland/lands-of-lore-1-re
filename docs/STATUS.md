@@ -76,7 +76,7 @@ All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--dat
 9. WSA needs no per-file palette fix: frame offsets are relative to the frame data, which starts after the palette ([wsa.md](formats/wsa.md)).
 10. `data/wall_type_analysis.json` was built with the old LCW bug and had wrong wall counts; regenerated ([cmz.md](formats/cmz.md)).
 11. `data/tileset_mapping.json` (uint16 "tile ID" guess) replaced by the real level-to-set mapping. Level 25 draws its walls with CAVE1 and CAV_PLT3.PAL, not CATWALK ([vcn_vmp.md](formats/vcn_vmp.md)).
-12. `data/tim_analysis.json` lists opcodes 112 and 176, which are not TIM commands; superseded by the counts in [tim.md](formats/tim.md).
+12. `data/tim_analysis.json` listed opcodes 112 and 176, which are not TIM commands, and copied the raw script words of 11 TIM files; regenerated without either (2.6 MB to 40 KB). Command counts: [tim.md](formats/tim.md).
 13. `data/shp_inventory.json` (frame sizes up to 12,974,107 bytes) replaced; `data/shp_render_results.json` removed (it counted the old fallback decoder's output).
 14. Local machine paths removed from `data/pak_index.json` and `data/music_inventory.json`.
 

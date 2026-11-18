@@ -34,7 +34,7 @@ The full table with parameters, ScummVM lines, and the intro (`LOLINTRO.TIM`) an
 
 ## Correction
 
-`data/tim_analysis.json` (March 2026) lists opcodes 112 and 176; those are not commands (the table ends at 0x1E), and its opcode map is superseded by the counts above.
+The March 2026 `data/tim_analysis.json` listed opcodes 112 and 176; those are not commands (the table ends at 0x1E). The file was regenerated on 2026-11-18 by `tools/parse_tim.py` without that opcode map and without the raw script words it used to copy; the counts above replace it.
 
 ## Open
 

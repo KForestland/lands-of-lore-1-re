@@ -12,7 +12,8 @@ import lol1lib as L
 
 USAGE = """
   parse_tim.py                     # summary + sample files
-  parse_tim.py --out tim.json      # same shape as data/tim_analysis.json
+  parse_tim.py --out tim.json      # same shape as data/tim_analysis.json (raw script words left out;
+                                   # --with-words keeps them for local study)
   parse_tim.py --check             # rebuild and compare with data/tim_analysis.json
 See docs/formats/tim.md. The opcode table is open question Q6 (docs/OPEN_QUESTIONS.md).
 """
@@ -166,7 +167,11 @@ def decode_avtl_instructions(words, entry_points):
 
 
 def main():
-    a = L.tool_args((__doc__ or "") + USAGE).parse_args()
+    ap = L.tool_args((__doc__ or "") + USAGE)
+    ap.add_argument("--with-words", action="store_true",
+                    help="keep the raw AVTL words, decoded instructions and TEXT strings of the sample files in --out "
+                         "(left out by default: they copy game script content)")
+    a = ap.parse_args()
     DATA_DIR = a.data
     tim_files = []
     for pak_name in L.list_paks(a.data):
@@ -280,6 +285,11 @@ def main():
         "files": all_results
     }
 
+    if not a.with_words:
+        for f in analysis["files"]:
+            for c in f.get("chunks", []):
+                for k in ("words", "decoded_functions", "strings", "first_bytes_hex"):
+                    c.pop(k, None)
     if a.check:
         ref = L.repo_json("tim_analysis.json")
         # data/tim_analysis.json also carries keys added later by hand/other scripts
