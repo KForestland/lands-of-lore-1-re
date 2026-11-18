@@ -122,21 +122,21 @@ def parse_evnt(e):
     return ev, end, stats
 
 
-def to_smf(ev, end):
+def to_smf(ev, end, division=60):
     trk = bytearray(b"\x00\xff\x51\x03\x07\xa1\x20")      # tempo 500000
     last = 0
     for t, _, data in ev:
         trk += wvlq(t - last) + data
         last = t
     trk += wvlq(end - last) + b"\xff\x2f\x00"
-    return b"MThd" + struct.pack(">IHHH", 6, 0, 1, 60) + b"MTrk" + struct.pack(">I", len(trk)) + bytes(trk)
+    return b"MThd" + struct.pack(">IHHH", 6, 0, 1, division) + b"MTrk" + struct.pack(">I", len(trk)) + bytes(trk)
 
 
-def verify_smf(smf):
+def verify_smf(smf, division=60):
     """Strict re-read of a written file (separate from the writer): header,
     track length, every event parses, track ends exactly at its end-of-track,
     and every note-on has a matching note-off. Returns (ok, notes)."""
-    if smf[:4] != b"MThd" or struct.unpack_from(">IHHH", smf, 4) != (6, 0, 1, 60) or smf[14:18] != b"MTrk":
+    if smf[:4] != b"MThd" or struct.unpack_from(">IHHH", smf, 4) != (6, 0, 1, division) or smf[14:18] != b"MTrk":
         return False, 0
     n = struct.unpack_from(">I", smf, 18)[0]
     t = smf[22:22 + n]

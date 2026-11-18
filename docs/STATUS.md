@@ -9,7 +9,7 @@
 - **Checked on data**: the tool's `--check` parses every file of that kind. CD = the top-level `DATA/` folder of the CD-ROM edition with spoken dialogue (version CD1.02); ENG = its `DATA/ENG` folder; LS = floppy, an English floppy-edition installation (no speech, chapter-based PAKs). Details: [formats/README.md](formats/README.md).
 - **Open**: what is not known yet, as numbered in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 
-Run every check at once: `python3 tools/check_all.py --data <DATA>` (26 checks; all pass on the CD and on the floppy edition, about 6 seconds).
+Run every check at once: `python3 tools/check_all.py --data <DATA>` (27 checks; all pass on the CD and on the floppy edition, about 10 to 15 seconds).
 
 ## File formats
 
@@ -23,7 +23,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (26 checks; 
 | WSA | [wsa.md](formats/wsa.md) | `wsa_extract.py`, `wsa_all_frames_extract.py` | CD 4480/4480 frames, ENG 2699/2699, LS 5227/5227 | — |
 | VOC | [voc.md](formats/voc.md) | `voc_reader.py` | CD 215 + 4912 in TLK, ENG 127, LS 277 | — |
 | XMI / C55 / PCS | [music.md](formats/music.md) | `extract_music.py` | IFF trees of all 51 IFF files among the 67 CD music files (rebuilds `data/music_inventory.json`); `xmi_to_midi.py` converts all 620 XMIDI sequences to MIDI | Q15 (what C55 stands for) |
-| ADL | [music.md](formats/music.md), [Q15](unknowns/15_adl_and_c55.md) | `extract_music.py` (raw only) | layout traced; program 0 at 0x7D0 in all 16 CD files | an ADL player/converter |
+| ADL | [music.md](formats/music.md), [Q15](unknowns/15_adl_and_c55.md) | `adl_to_midi.py` | both original track-map widths and a four-second MIDI projection of all usable entry programs in 16 CD and 18 floppy assets | native sound effects and timbre |
 | ENG / FRE / GER text | [text.md](formats/text.md) | `decode_dialogue.py`, `extract_dialogue.py` | 90 files, 6495 strings, all bigram bytes in range (CD) | — |
 | CMZ level map | [cmz.md](formats/cmz.md) | `cmz_analyzer.py`, `level_renderer.py` | 29/29, size = 6 + 1024 x len (rebuilds the corrected `data/wall_type_analysis.json`) | Q3 settled, Q11 answered ([page](unknowns/11_undefined_walls.md)) |
 | WLL wall types | [wll.md](formats/wll.md) | `wll_parser.py` | 29/29, 1726 records (rebuilds `data/wll_parsed.json`) | Q7 (meaning of flag bits and special types) |
@@ -65,7 +65,7 @@ Pages: [executable_tables.md](executable_tables.md), [savegame_format.md](savega
 
 ## Tools
 
-All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 26 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
+All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 27 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
 
 ## Corrections to the closure memo and the March data
 

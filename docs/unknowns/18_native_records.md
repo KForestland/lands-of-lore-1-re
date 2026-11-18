@@ -23,7 +23,7 @@ There are four different native layouts. An item or monster **definition** descr
 | `05` | `u16` type/equipment code | 3 | `0x4A63B` | `0x53C0F` |
 | `07` | `u8` item-script entry | 4 | `0x4A65C` | `0x53C30` |
 | `08`, `09`, `0A` | `i8` might, `u8` skill category, `u8` protection | 5, 6, 7 | `0x4A6C3–0x4A6CD` | `0x53C97–0x53CA1` |
-| `0B` | `u16` auxiliary value, exposed by getter selector 14. Semantic purpose **UNCONFIRMED**. | 9 | `0x4A69E`, getter `0x1399C` | `0x53C72`, getter `0x1835F` |
+| `0B` | `u16` base shop price in crowns, exposed by getter selector 14. | 9 | `0x4A69E`, getter `0x1399C` | `0x53C72`, getter `0x1835F` |
 
 Worked example (**CONFIRMED**). Definition 1 receives name `0x40F6`, shape 6, flags `0x1000`, type 0, script 25, might 8, skill 1, protection 0 and auxiliary 0. This creates the packed record `F6 40 06 00 10 00 00 19 08 01 00 00 00`. It follows from the stores above and the call in CD `STARTUP.PAK+0x212DD` and floppy `GENERAL.PAK+0xDAB34`. The record ends after the auxiliary word.
 
@@ -42,7 +42,7 @@ Worked example (**CONFIRMED**). Definition 1 receives name `0x40F6`, shape 6, fl
 | `28` | 8 × two-byte category factors from converted args 17–24. Native damage applies the sign of the word. | `0x47A13–0x47A49, +0xAFD8–0xAFFF` | `0x511F2–0x51228, +0xAEFA–0xAF21` |
 | `38`, `3A` | `u16` item protection and base HP, args 25 and 26 | `0x47A74, +0x47A8D` | `0x51253, +0x5126C` |
 | `3C` | `u8` total speed wait, initialized to 1 | `0x47AAA` | `0x51289` |
-| `3D` | One-byte critical skill level, read by the hit test. Loader leaves it unwritten. Writer or initialization source **UNCONFIRMED**. | `0xAD82–0xAD8F, +0x47AA6–0x47AAF` | `0xACC3–0xACD0, +0x51285–0x5128E` |
+| `3D` | One-byte critical skill level, read by the hit test. Starts at zero in the loaded executable image. The definition setter leaves it unwritten. | `0xAD82–0xAD8F, +0x47AA6–0x47AAF` | `0xACC3–0xACD0, +0x51285–0x5128E` |
 | `3E` | `u16` definition flags, arg 27 | `0x47AA6` | `0x51285` |
 | `40` | `u16` auxiliary word. Arg 29 immediately overwrites arg 28. Interpretation **UNCONFIRMED**. | `0x47AAD–0x47ADD` | `0x5128C–0x512BC` |
 | `42`, `44`, `46`, `48`, `4A` | Five `u16` words from args 30–34: ranged charge count, ranged weapon count, three ranged weapon IDs | `0x47AE1–0x47B08` | `0x512C0–0x512E7` |
@@ -61,6 +61,17 @@ The native attack test follows the embedded stat pointer at `+14`; the monster i
 | Item `+0E` bit 15 marks an available slot, low 13 bits can be replaced independently | CD `+0xB504–0xB517, +0x13A34–0x13A45`; floppy `+0xD66E–0xD681, +0x183F7–0x18408`. |
 | Monster `+14` mode, `+16` ID, `+17` direction, `+18` facing, `+1D` current HP, `+20` type, `+21` far pointer to definition | CD spawn code `+0x146B3–0x14769`; floppy spawn body `+0x18FB1`. Active slot 0 in original floppy `_LEVEL1.TMP` starts at `0x69`, and its pointer bytes are at `0x8A`. |
 
-## Remaining measurements
+## Item price in the original scripts
 
-**UNCONFIRMED** The data and setter traces locate the fields with undecided meanings above. They do not identify a consumer of the item auxiliary word or a writer for monster critical skill level. An original execution watch on the two fields after allocation, or an independently sourced script call that uses item selector 14 in a typed operation, would settle those uses. A trace of writes to monster definition offsets `+0C` through `+12` beyond `0x3F` and reads of `+40` would settle those modifier roles.
+
+**CONFIRMED** The auxiliary word is the unrounded shop price. CD `LEVEL1.INF` calls getter `0x12` with selector 14 and uses the result as the argument to price routine `0xBD` (CD `L01.PAK+0xE559, +0xE55F`, native price handler `MAIN.EXE+0x16837`). A second branch passes the result shifted right by one to the same routine (CD `L01.PAK+0xE5EF–0xE5F9`). floppy passes the full result directly to credit adjustment `0x46` on one branch, and half on the other (floppy `CHAPTER1.PAK+0x5821B–0x58235`, native credit handler `MAIN.EXE+0x194EB`). The full and half values also reach the floppy dialogue at `CHAPTER1.PAK+0x59A69, +0x59AEB`.
+
+**CONFIRMED** All 285 startup slot-9 values agree between editions. 113 are zero and 172 are nonzero, up to 3000. The definition for item 24 passes 300 at CD `STARTUP.PAK+0x2151F` and floppy `GENERAL.PAK+0xDAD76`. Item 51 passes 3000 at CD `+0x218E3` and floppy `+0xDB13A`. Static operand reconstruction across the 60 scripts per edition identifies nine CD and eleven floppy literal selector-14 calls. Three CD getter selectors and one floppy selector could not be settled from the immediate argument sequences. Corpus anchors are the shop calls above and CD `L03.PAK+0x3EB0`, floppy `CHAPTER1.PAK+0x5E023`.
+
+## Remaining monster-field measurements
+
+**CONFIRMED** All five 83-byte definition slots are zero in the resident engine-state image: CD `MAIN.EXE+0x2D38E–0x2D52C` and floppy `+0x34030–0x341CE`. The hit test reads the signed critical skill byte at `+0x3D` and computes `100 − value` (CD `+0xAD82–0xAD8F`, floppy `+0xACC3–0xACD0`). The definition setter stores `+0x3C` then proceeds to `+0x40` (CD `+0x47AA6–0x47AC4`, floppy `+0x51285–0x512A3`). The sidecar load rebuilds each active instance's definition pointer from its stored type byte, using the resident definitions (CD `+0x48828–0x4883F`, floppy `+0x51EF8–0x51F0F`).
+
+**CONFIRMED** In all 79 original property-load calls per edition, modifier args 6–8 are jointly zero in 50 calls and each is nonzero in 29. A nonzero example is `LEVEL27.INI` at CD `L27.PAK+0xACB9` and floppy `CHAPTER8.PAK+0x3C940`, with inputs 100, 25, 100 and stored words 256, 64, 256. The same decoder finds that arg 28 spans 0–15 and arg 29 spans 20–1000 in both editions. For example, the inputs 10 and 768 in `LEVEL1.INI` leave 768 at `+0x40` because the second write immediately overwrites the first (CD `L01.PAK+0xF3B3`, floppy `CHAPTER1.PAK+0x61B53`, stores above).
+
+**UNCONFIRMED** No writer beyond startup initialization was found for `+0x3D`. A bounded search of direct far loads from instance `+0x21` and its displacement aliases found the hit-test reads above. It also verified speed lookup through the embedded pointer at `+0x14` (CD `+0x12740, +0x12993`, floppy `+0x170DE, +0x17332`), but found no use of modifier offsets `+0x0C–0x10` or the last word at `+0x40` from the same pointer-loading pattern. The CD selector table for EMC getter `0x5C` has no branch for these fields (`+0x1502C–0x150CA`). A watch on those definition fields during the original level-27 fights would distinguish unused fields from accesses through a generic pointer.

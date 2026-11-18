@@ -84,9 +84,9 @@ Short references `lol_dos_cd.h`, `lol_dos.h` and `lol_dos_english.h` are under `
 | 6 | Skill/attack category | `u8` |
 | 7 | Protection | `u8` |
 | 8 | Flags | `u16` |
-| 9 | `unkB` | `u16` |
+| 9 | Base shop price | `u16` |
 
-The table gives the script ABI checked on data and reference field widths from `script_lol.cpp:241–261` and `engines/kyra/engine/lol.h:156–167`. The native 13-byte record has no extra `unkD` byte. The word at `+0B` still has an **UNCONFIRMED** purpose. See [native record layout](unknowns/18_native_records.md#item-definition) for the stores in both executables.
+The table gives the script ABI checked on data and reference field widths from `script_lol.cpp:241–261` and `engines/kyra/engine/lol.h:156–167`. The native 13-byte record has no extra `unkD` byte. Both native getters expose the word at `+0B` as selector 14. **CONFIRMED** by the shop witnesses that pass it to price or credit routines. See [item price in the original scripts](unknowns/18_native_records.md#item-price-in-the-original-scripts).
 
 **CONFIRMED** Four decoded rows differ between editions. Indexes 243 and 249 use shape indexes 45 and 44 on CD, 43 and 42 on floppy. Indexes 263 and 264 use equipment/type 0 on CD, 5 on floppy. The reference definition loader special-cases 264 (`script_lol.cpp:249–252`). For indexes 243, 249, 263 and 264 respectively, see CD `STARTUP.PAK+0x2319B, +0x23279, +0x2346F, +0x2348F` and floppy `GENERAL.PAK+0xDC9F2, +0xDCAD0, +0xDCCC6, +0xDCCE6`.
 

@@ -1,10 +1,10 @@
 # TIM opcodes
 
-A TIM file is an IFF FORM. The AVTL chunk is a little-endian uint16 array. An optional TEXT chunk holds C strings indexed by a big-endian uint16 offset table. `TIMInterpreter::load` (`engines/kyra/script/script_tim.cpp:142-178`) reads both. The first words of AVTL are function entry indexes, up to `TIM::kCountFuncs` which is 10 (`script_tim.h:118`). WSA slots are 6 (`script_tim.h:133`).
+A TIM file is an IFF FORM. The AVTL chunk is a little-endian uint16 array. An optional TEXT chunk holds C strings indexed by a little-endian uint16 offset table (`script_tim.cpp:643,703,756`). `TIMInterpreter::load` (`engines/kyra/script/script_tim.cpp:142-178`) reads both. The first words of AVTL are function entry indexes, up to `TIM::kCountFuncs` which is 10 (`script_tim.h:118`). WSA slots are 6 (`script_tim.h:133`).
 
 An instruction is `length, delay, opcode_word, parameters...`. `length` is in words. The opcode is the low byte of word 2 (`script_tim.cpp:232`, `int8(cur.ip[2] & 0xFF)`). The next instruction is `ip + length` (`script_tim.cpp:258-259`). The delay added to the clock is the next instruction's word 1 (`script_tim.cpp:260-261`). CONFIRMED.
 
-The high byte of every opcode word accepted by the walk below is 1. The interpreter ignores it. What that byte means is UNCONFIRMED.
+The high byte of every opcode word accepted by the walk below is 1. The runtime ignores it (native dispatch below). A separate compiler use of that byte is **UNCONFIRMED**.
 
 `data/tim_analysis.json` lines 43-44 list opcodes 112 and 176. The command tables end at 0x1E. Those two numbers are not commands. The counts below replace that file's opcode map.
 
@@ -60,7 +60,7 @@ The LoL column is `script_tim.cpp:853-892`. Where it matches the base table, the
 
 The one CD file with no opcode 0x06 is `DRARCLE8.TIM`. It uses 0x01 once and 0x14, 0x15, 0x17, 0x18, 0x19, 0x1D twice each. CONFIRMED.
 
-Opcode 0x07's two uses are both in `VICTOR4.TIM` in `O02B.PAK`. The AVTL chunk starts at file offset 20. The instructions are AVTL word 6 (file offset 32), parameters `0, 0`, and AVTL word 263 (file offset 546), parameters `2, 0`. Under `TIMInterpreter_LoL` they warn and return 0. Whether the DOS in-game interpreter treated 0x07 as `cmd_displayText` is UNCONFIRMED.
+Opcode 0x07's two uses are both in `VICTOR4.TIM` in `O02B.PAK`. The AVTL chunk starts at file offset 20. The instructions are AVTL word 6 (file offset 32), parameters `0, 0`, and AVTL word 263 (file offset 546), parameters `2, 0`. Under `TIMInterpreter_LoL` they warn and return 0. The native in-game interpreter has a return-1 stub in both editions. See the native table below.
 
 Opcode 0x19 parameter-word counts in the 139, including the nested opcode: 1 word on 80 instructions, 2 on 187, 3 on 16, 4 on 23, 5 on 4, 9 on 497. CONFIRMED.
 
@@ -138,4 +138,40 @@ Commands: 0x01 x3, 0x02 x12 (6), 0x03 x11 (1), 0x06 x194 (2), 0x07 x1 (2), 0x08 
 | 0x0E | `tlol_displayText` | 3 on the outro path (`:2409-2410`) | 5 | 3 |
 | 0x0F | unimplemented | 0 | 0 | |
 
-Both `tlol_fadeOutSound` calls encode zero argument words, so a build that evaluates the debug argument reads the next instruction's first word. `common/debug.h:33` makes `debugC` an empty inline when `DISABLE_TEXT_CONSOLE` is set, and a real call otherwise (`debug.h:88`). Whether the DOS outro read a parameter here is UNCONFIRMED.
+Both `tlol_fadeOutSound` calls encode zero argument words, so a build that evaluates the debug argument reads the next instruction's first word. `common/debug.h:33` makes `debugC` an empty inline when `DISABLE_TEXT_CONSOLE` is set, and a real call otherwise (`debug.h:88`). The native outro has a vestigial read and forwards no argument to the audio helper. See the executable trace below.
+
+## Native DOS tables
+
+**CONFIRMED** Native offsets below are file offsets. CD `MAIN.EXE+0x14D6C` and floppy `MAIN.EXE+0x196F3` call the in-game TIM loaders. The loaders request `AVTL` and `TEXT` at CD `+0x9C09–0x9CBC` and floppy `+0x9D64–0x9E17`. At dispatch the processor reads the signed low byte of the opcode word from instruction `+4`, passes the instruction's `+6` operand pointer, and indexes far pointers by 4. CD `+0x9EDA–0x9F04` uses `DS:1DCC` (file `+0x3389C`). Floppy `+0x9FCC–0x9FF6` uses `DS:1F08` (file `+0x39768`). The stepper adds two times the instruction's first word to the IP and reads the next instruction's signed delay word (CD `+0x9D26–0x9D64`, floppy `+0x9E81–0x9EB1`). The source counterpart is `engines/kyra/script/script_tim.cpp:232–261,853–892` at upstream `3b4db303`.
+
+| Slot | CD routine | floppy routine | Native result (**CONFIRMED**) |
+| --- | ---: | ---: | --- |
+| `07` | `0x94B9` | `0x96A0` | Return 1. Both bodies leave the operands unread. |
+| `0A` | `0x94D1` | `0x96B8` | CD returns 1. Floppy resolves the first word to a TIM TEXT offset, plays it through the voice helper and increments the original operand in memory (`0x96BB–0x96E2`, helper `0x11CD2–0x11D23`). |
+| `0B` | `0x94D9` | `0x96E7` | CD returns 1. Floppy calls a voice-stop and buffer-release helper, then returns 1 (`0x11C71–0x11CAB`). |
+| `0F` | `0x9505` | `0x9718` | Both call the music-stop helper and return 1. The helper stops/releases the current track when present (CD `0x1B22E–0x1B27E`, floppy `0x120BE–0x1210F`). |
+| `12` | `0x9522` | `0x9735` | Both read one word and send it to the sound-effect track helper with default level `0xFF`, then return 1 (CD `0x1B566–0x1B5AA`, floppy `0x11DEE–0x11E32`). |
+| `13` | `0x9536` | `0x9749` | Both stop and release up to four effect tracks, clearing their IDs to `FFFF`, then return 1 (CD `0x1B683–0x1B6D9`, floppy `0x12031–0x12087`). |
+| `1A`, `1B` | `0x33904`, `0x33908` | `0x397D0`, `0x397D4` | Null in both native in-game tables. These have separate valid entries in the sequence executable. |
+| `19/02` | `0x9837` | `0x9A02` | Return 1, with no read of the supplied word. The `19` handler indexes the nested table at CD `+0x33918` or floppy `+0x397E0` and skips the selector when passing the operand pointer (`0x9621–0x964B`, `0x980F–0x9839`). |
+
+**CONFIRMED** Both editions store the same `VICTOR4.TIM` witness sequence. The `19/02` call passes 0 at CD `O02B.PAK+0xCEE1` and floppy `CHAPTER1.PAK+0xE7548`. The two `07` calls pass `(0, 0)` and `(2, 0)` at CD `+0xCEEB, +0xD0ED` and floppy `+0xE7552, +0xE774E`. Those arguments go to the return-1 routines above.
+
+### floppy finale executable
+
+**CONFIRMED** `FINALE.EXE+0x6ED7–0x6EE1` loads `LOLFINAL.TIM` using the name at `+0x2272A`. Its TIM dispatcher at `+0xB722–0xB741` uses `DS:3B52` (file `+0x26142`). Opcode `19` at `+0xB173–0xB1A4` dispatches through `DS:3BCE` (file `+0x261BE`). The DS segment is set at `+0x2E00–0x2E16`.
+
+| Slot in `FINALE.EXE` | File entry | Native observation (**CONFIRMED**) |
+| --- | ---: | --- |
+| `07` | `0xAE40` | Forwards the two operand words and fixed value `0xF2` to the text helper. The outro example at `FINALE2.PAK+0x750DE` supplies `(1, FFFF)`. |
+| `0B`, `0F`, `12`, `13` | `0xAFAF`, `0xB042`, `0xB065`, `0xB07B` | Call the voice cleanup, music-stop and two effect helpers respectively, using one operand for `12`. Their callees are `0xC561`, `0xCA24`, `0xC704`, `0xC983`. Each returns 1. |
+| `19/01` | `0x261C2` (table) | Null far pointer. |
+| `19/04` | `0x78CC` | Reads multiple frame operands and branches on the high and low nibbles of word 3 (`0x78D4–0x7942`). |
+| `19/06`, `19/07` | `0x7B80`, `0x7BAA` | Each reads a TEXT offset by the supplied index and forwards the resulting string to a separate resource routine (`+0x11DF0`, `+0x11C58`). `FINALE2.PAK+0x7503C` and `+0x7531C` provide examples. |
+| `19/09`, `19/0A` | `0x7688`, `0x7838` | Both read word 0. The former scales it by `0x8C` and branches on word 1. The latter chooses one of four name pointers from a global and indexes a far-handle array by word 0. See `+0x768F–0x76D1` and `+0x783F–0x78A0`. |
+| `19/0B` | `0x7820` | Compares the first following word to zero, with a zero-distance branch. Calls the audio helper at `0xCAFC` with no arguments and returns 1. Original commands at `FINALE2.PAK+0x75CC8, +0x75FA2` encode only the nested selector. |
+| `19/0F` | `0xB1FD` | Calls three functions, with a fixed string pointer on the first call, and returns `FFFF` (`+0xB1FD–0xB21C`). Its fixed string is at `+0x261FE`. |
+
+**UNCONFIRMED** The separate intro loader's final table selection and higher-level roles of the unused finale callbacks remain open. The original `LOLINTRO.TIM` path name is present at `FINALE.EXE+0x22737`, and the original intro uses `19/04` at `INTRO.PAK+0xB538B`. The `LOLFINAL.TIM` loader above gives a direct entry to the outro table. Static callers of the loader that pass the intro name, or a capture of the dispatch table after intro startup, would settle whether the same table is active in the intro.
+
+**CONFIRMED** TEXT offsets in these files are little-endian. floppy `VICTOR4.TIM` stores its initial offsets as `06 00 3C 00 BF 00` at `CHAPTER1.PAK+0xE7926`; the floppy `0A` handler reads the offset word directly at `MAIN.EXE+0x96CC`. The equivalent read in ScummVM is `engines/kyra/script/script_tim.cpp:643,703,756`.

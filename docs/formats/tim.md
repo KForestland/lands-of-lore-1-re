@@ -20,7 +20,7 @@ Use in the 139 CD scripts (instructions / files), CONFIRMED by two independent w
 | 0x02 | init WSA animation (slot, name, x, y, offscreen, flags) | 74 | 50 |
 | 0x03 | release WSA slot | 60 | 43 |
 | 0x06 | display WSA frame (slot, frame) | 4658 | 138 |
-| 0x07 | display text (not implemented for the in-game table in ScummVM) | 2 | 1 |
+| 0x07 | display text (not implemented for the in-game table in ScummVM; natively a return-1 stub in both editions, [Q6](../unknowns/06_tim_opcodes.md)) | 2 | 1 |
 | 0x14 | set loop point | 175 | 118 |
 | 0x15 | continue loop (pause) | 175 | 118 |
 | 0x17 | reset all run times | 170 | 76 |
@@ -38,7 +38,7 @@ The March 2026 `data/tim_analysis.json` listed opcodes 112 and 176; those are no
 
 ## Open
 
-Native behaviour of the commands ScummVM leaves unimplemented (0x07 in game, nested 0x02); extra argument words in a few calls (`giveItem`, `characterChat`, `playDialogueTalkText`) that the ScummVM functions do not read.
+Extra argument words in a few calls (`giveItem`, `characterChat`, `playDialogueTalkText`) that the ScummVM functions do not read.
 
 
 ## Worked example

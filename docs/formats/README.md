@@ -25,7 +25,7 @@ One page per file type of *Lands of Lore: The Throne of Chaos* (Westwood, 1993, 
 | [shp.md](shp.md) | `*.SHP` | `tools/shp_renderer.py` | CONFIRMED on CD and floppy (closure memo corrected: no 2-byte prefix); demo unread (Q1) |
 | [wsa.md](wsa.md) | `*.WSA` | `tools/wsa_extract.py` | CONFIRMED |
 | [voc.md](voc.md) | `*.VOC` (and TLK members) | `tools/voc_reader.py` | CONFIRMED |
-| [music.md](music.md) | `*.XMI *.C55 *.ADL *.PCS` | `tools/extract_music.py` | XMIDI converts to MIDI (`xmi_to_midi.py`); ADL layout documented (Q15 answered) |
+| [music.md](music.md) | `*.XMI *.C55 *.ADL *.PCS` | `tools/extract_music.py` | XMIDI converts to MIDI (`xmi_to_midi.py`); ADL layout documented (Q15 answered); `adl_to_midi.py` projects ADL tracks to a MIDI note timeline |
 | [text.md](text.md) | `*.ENG *.FRE *.GER` | `tools/decode_dialogue.py` | CONFIRMED |
 | [cmz.md](cmz.md) | `LEVELn.CMZ` | `tools/cmz_analyzer.py`, `tools/level_renderer.py` | CONFIRMED (Q2 answered); Q3 settled, Q11 answered |
 | [wll.md](wll.md) | `LEVELn.WLL` | `tools/wll_parser.py` | CONFIRMED layout; meaning of flags Q7 |

@@ -21,14 +21,14 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 
 ### `check_all.py`
 
-Run every tool's `--check` (26 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (27 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
 $ python3 tools/check_all.py | sed -n "1,3p;27p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 26 CHECKS PASSED
+ALL 27 CHECKS PASSED
 ```
 
 ### `pak_reader.py`
@@ -260,6 +260,15 @@ $ python3 tools/xmi_to_midi.py LORE01A.XMI --out-dir midi | head -3
 LORE01A #00: 0 notes, 0 controller, 0 program, 4 meta, 0 sysex events; 0.0 s; end-of-track: True
 LORE01A #01: 0 notes, 0 controller, 0 program, 4 meta, 0 sysex events; 0.0 s; end-of-track: True
 LORE01A #02: 8 notes, 8 controller, 3 program, 7 meta, 0 sysex events; 35.7 s; end-of-track: True
+```
+
+### `adl_to_midi.py`
+
+Project an original AdLib music track to a Standard MIDI File with notes and timing. Output carries default MIDI instrument sounds. Repeat and jump handling, corpus coverage and remaining OPL effects are described in [Q15](../docs/unknowns/15_adl_and_c55.md#midi-note-projection). Choose an output path outside the checkout and the original game folder.
+
+```sh
+python3 tools/adl_to_midi.py --data DATA LORE01B.ADL --track 2 --seconds 30 --out ../lore01b.mid
+python3 tools/adl_to_midi.py --data DATA --check
 ```
 
 ### `parse_tim.py`

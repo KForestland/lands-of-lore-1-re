@@ -39,7 +39,7 @@ First 40 bytes of CD `LORESFX.XMI`:
 | `CAT `, `00 00 10 72`, `XMID` | a catalogue of 4210 bytes holding the sequences |
 | `FORM` … | the first sequence (`FORM XMID`, then its `EVNT` events) |
 
-ADL files have no IFF header; CD `LORESFX.ADL` starts `00 00 01 00 ff ff ff ff …`; the layout is documented field by field in [Q15](../unknowns/15_adl_and_c55.md).
+ADL files have no IFF header; CD `LORESFX.ADL` starts `00 00 01 00 ff ff ff ff …`; the layout is documented field by field in [Q15](../unknowns/15_adl_and_c55.md), and `tools/adl_to_midi.py` projects ADL tracks to a MIDI note timeline.
 
 ## Tool
 

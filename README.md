@@ -26,7 +26,7 @@ cd lands-of-lore-1-re
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt                 # Pillow, for PNG output
 export LOL1_DATA=/path/to/your/LOL1/DATA        # the folder holding GENERAL.PAK (CD: DATA; floppy: the install folder)
-python3 tools/check_all.py                      # 26 checks, ends with ALL 26 CHECKS PASSED
+python3 tools/check_all.py                      # 27 checks, ends with ALL 27 CHECKS PASSED
 python3 tools/level_renderer.py --level 1 --out-dir maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
 ```
@@ -44,7 +44,7 @@ Full table with evidence: [`docs/STATUS.md`](docs/STATUS.md). Open questions: [`
 | Level and item scripts (EMC2), cut-scene scripts (TIM) | Documented with full opcode and function tables; all 60 scripts of both editions and the 139 TIM files of the CD checked |
 | Tables inside the program, save files | Documented and checked in both executables and on save files |
 | Game rules (combat, magic, experience, monsters, light, time) | Traced in both original executables: combat, spells, timers, regeneration, lamp oil, monster modes; clock CONFIRMED at 60 ticks per second; WLL bit 0x40 and a few monster details open (Q7) |
-| Music | XMIDI (XMI, C55, PCS) converts to standard MIDI; the AdLib (ADL) layout is documented field by field (Q15), with no player or converter yet |
+| Music | XMIDI (XMI, C55, PCS) converts to standard MIDI; the AdLib (ADL) layout is documented field by field (Q15) and `adl_to_midi.py` projects ADL tracks to a MIDI note timeline |
 
 Two editions were read: the CD-ROM edition with speech (version CD1.02) and an English floppy edition. See [`docs/edition_comparison.md`](docs/edition_comparison.md).
 

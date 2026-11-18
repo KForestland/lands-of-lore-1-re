@@ -4,7 +4,7 @@ You need Python 3.8+, Pillow (`pip install Pillow`) and your own copy of *Lands 
 
 ```bash
 export LOL1_DATA=/path/to/your/LOL1/DATA
-python3 tools/check_all.py        # 26 checks; the last line should read ALL 26 CHECKS PASSED
+python3 tools/check_all.py        # 27 checks; the last line should read ALL 27 CHECKS PASSED
 ```
 
 Words you do not know are in the [glossary](GLOSSARY.md).

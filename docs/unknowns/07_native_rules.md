@@ -137,7 +137,7 @@
 | `0x02` | Blocks ranged monster targeting and thrown items. | `0x124CF`, `0x1040B` | `0x16E6D`, `0x14D69` |
 | `0x04` | Monster collision. The wall-changing routine checks it before removing monsters of the affected block. | `0x1145D–0x114B5`, `0x1349B` | `0x15EF9–0x15F51`, `0x17E5E` |
 | `0x08` | Marks the door side for direction selection and drawing. | `0x17A2F`, `0x3EA36` | `0x1C05A`, `0x47B7C` |
-| `0x10` | Fully open door end state. | `0x17AA8–0x17AC3`, mask pair at `0x34319, 0x3431B` | `0x1C0D5–0x1C0EE`, mask pair at `0x3D574, 0x3D576` |
+| `0x10` | Fully open door end state. | `0x17AA8–0x17AC3`, mask pair at `0x34318, 0x3431A` | `0x1C0D5–0x1C0EE`, mask pair at `0x3D574, 0x3D576` |
 | `0x20` | Fully closed end state. The timer selects a closing sound on this bit, and monsters with definition flag `0x1000` substitute it for their ordinary wall collision mask. | `0xF490`, `0x1147D–0x11489` | `0x13E7E`, `0x15F19–0x15F25` |
 | `0x40` | **UNCONFIRMED**. None of the supplied wall records sets the bit. | WLL records loaded at `0x47350` | WLL records loaded at `0x50B33` |
 | `0x80` | Draws the block's visible objects in the pass between two wall draws, when the block's render-object list is populated. The renderer also forces the bit for view entry 16. | `0x3E9E8–0x3EA35` | `0x47B2E–0x47B7B` |
@@ -163,3 +163,15 @@
 **CONFIRMED** Syscall `0x5A` returns the complete zero-extended WLL byte (CD `0x134F0–0x1352A`, floppy `0x17EB3–0x17EED`). There are four calls in each 60-script corpus. One compares the whole byte to zero, so a hypothetical set bit could affect that test when all other bits are clear. The example calls ask for block 172, face 1 at CD `L08.PAK+0xCAA8` and floppy `CHAPTER2.PAK+0x23687`. The other three call sites apply masks of 0 or 7 in the adjacent instructions (CD `L01.PAK+0xD08F`, `L12.PAK+0xEEFA`, `L13.PAK+0x823C`, floppy `CHAPTER1.PAK+0x58601`, `CHAPTER4.PAK+0x17CC4, +0x18A26`).
 
 **UNCONFIRMED** A dedicated role for bit `0x40` remains open. The follow-up compared the original WLL records, the door flag writes, direct accesses to CD `DS:531E` and floppy `DS:87C4`, and the EMC queries. The direct tests inspected use masks such as collision 7, door state `0x30` and draw flag `0x80` (CD `0xC91C, 0x481AB, 0x3EA1A`, floppy `0x10138, 0x5198B, 0x47B60`). A trace of an isolated WLL copy with only bit `0x40` toggled would test for a hidden pointer-relative consumer. The known whole-byte zero test should be accounted for separately.
+
+### Additional wall consumers in both editions
+
+**CONFIRMED** The ordinary click table uses resident far pointers. CD `MAIN.EXE+0x342FC` starts with null slot 0 and six consecutive entries at segment `0x13E8`. floppy `+0x3D558` uses segment `0x174B` for the same six slots. Type 1 has one edition difference after the hit test. CD calls `0x154C:0x000F` with 1 before forwarding event `0x40` (CD `+0x1777B–0x1778F`). floppy calls the event immediately (floppy `+0x1BDAE–0x1BDBA`).
+
+**CONFIRMED** The monster movement search can act on a closed type-5 wall without using the click handler. It requires wall bit `0x20` and special type 5, then calls the door-frame helper with selector 1. The helper reads the mask from CD `+0x3431A` or floppy `+0x3D576`. The calling conditions are at CD `+0x115C4–0x115E6` and floppy `+0x16060–0x16082`. The helpers start at CD `+0x17A69` and floppy `+0x1C094`.
+
+**CONFIRMED** Bit `0x80` also qualifies the separate held-item placement branch. The wall must have `0x80` set and `0x02` clear before the branch computes placement coordinates and invokes the item-placement routine. CD `MAIN.EXE+0x10AFC–0x10B6F`, floppy `+0x15440–0x154B3`. The click type and this flag test are separate decisions, as seen in the far call at CD `+0x179C1` and floppy `+0x1BFEC`.
+
+**CONFIRMED** The generic native collision helper takes a caller-provided mask. Given a specific side it tests the opposite wall. With side `-1` it tests all four walls. Its three resident far-call sites pass mask 1 for party movement, 0 for the nearby-block search, and the caller's stack parameter for the all-sides collision test. CD `+0xC947–0xC9AD, +0xD6AE, +0xA362, +0x11159`, floppy `+0x10163–0x101C9, +0x10E34, +0xA3BA, +0x15BF5`. Both fixed door masks are `0x10` or `0x20`, and the script getter still exposes the entire wall byte.
+
+**UNCONFIRMED** The paired displacement search for `DS:531E` and `DS:87C4` covered the literal flag-table references, including the additional placement and monster-door consumers above. It found no dedicated `0x40` test. The dynamic collision mask leaves one route to check. Following tail calls into the all-sides helper and tracing its argument would establish which callers can supply `0x40`. No supplied WLL sets it, as measured above.
