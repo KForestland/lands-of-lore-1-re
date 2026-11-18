@@ -25,7 +25,7 @@ cd lands-of-lore-1-re
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt                 # Pillow, for PNG output
 export LOL1_DATA=/path/to/your/LOL1/DATA        # the game's DATA folder
-python3 tools/check_all.py                      # 23 checks, ends with ALL 23 CHECKS PASSED
+python3 tools/check_all.py                      # 24 checks, ends with ALL 24 CHECKS PASSED
 python3 tools/level_renderer.py --level 1 --out-dir maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
 ```
@@ -43,7 +43,7 @@ Full table with evidence: [`docs/STATUS.md`](docs/STATUS.md). Open questions: [`
 | Level and item scripts (EMC2), cut-scene scripts (TIM) | Documented with full opcode and function tables; all 60 scripts of both editions and the 139 TIM files of the CD checked |
 | Tables inside the program, save files | Documented and checked in both executables and on save files |
 | Game rules (combat, magic, experience, monsters, light, time) | Written; the core combat arithmetic is checked in the original code, the rest is taken from ScummVM so far (Q7) |
-| Music | File containers only; no MIDI converter yet (Q15) |
+| Music | XMIDI (XMI, C55, PCS) converts to standard MIDI; AdLib (ADL) layout still open (Q15) |
 
 Two editions were read: the CD-ROM edition with speech (version CD1.02) and an English floppy edition. See [`docs/edition_comparison.md`](docs/edition_comparison.md).
 

@@ -18,6 +18,12 @@ ScummVM plays XMI through its XMIDI parser and ADL through `engines/kyra/sound/d
 "C55" is a file extension; what it stands for (the closure memo says "Creative Music File"; the files are XMIDI containers like XMI) is OPEN, [Q15](../OPEN_QUESTIONS.md). Which driver file plays it: [Q5](../OPEN_QUESTIONS.md) ([drivers.md](drivers.md)).
 
 
+## XMIDI to MIDI
+
+`tools/xmi_to_midi.py` follows ScummVM's XMIDI reader (`audio/midiparser_xmidi.cpp`, upstream `3b4db303`): delays are runs of bytes below 0x80, summed (`:104-110`); there is no running status; a note-on carries its duration as a variable-length number and there are no note-off events (`:166-186`); sysex and meta events have a variable-length size (`:296-311`); the timebase is 60 ticks per quarter at 500000 us per quarter, i.e. 120 ticks per second, with tempo events forced to that value (`:510-512`). The converter writes format-0 MIDI with that division and tempo and generates the note-offs from the durations.
+
+CONFIRMED (`tools/xmi_to_midi.py --check`, CD): 18 XMI files, 220 sequences, 27,696 notes; 17 C55 files, 210 sequences; 16 PCS files, 190 sequences. Every sequence parses to its end-of-track event, the sequence count equals the INFO count in every file, and every written file re-reads as valid MIDI with every note closed. In 368 sequences one zero byte follows the end-of-track (padding inside the EVNT chunk). `LOLTITLE.XMI` and `LOLSYSEX.XMI` each hold one sequence of sysex setup data (94 and 135 sysex events) and no notes.
+
 ## Worked example
 
 First 40 bytes of CD `LORESFX.XMI`:
@@ -37,4 +43,4 @@ ADL files have no IFF header; CD `LORESFX.ADL` starts `00 00 01 00 ff ff ff ff â
 
 ## Tool
 
-`tools/extract_music.py` (inventory, `--out-dir` for raw files, `--check` rebuilds the file list and IFF trees of `data/music_inventory.json`: 67 files, no IFF parse errors). No decoder to MIDI in this repo.
+`tools/extract_music.py` (inventory, `--out-dir` for raw files, `--check` rebuilds the file list and IFF trees of `data/music_inventory.json`: 67 files, no IFF parse errors). `tools/xmi_to_midi.py` converts XMI (and the XMIDI-container C55 and PCS files) to standard MIDI, one file per sequence.

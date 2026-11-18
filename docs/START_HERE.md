@@ -4,7 +4,7 @@ You need Python 3.8+, Pillow (`pip install Pillow`) and your own copy of *Lands 
 
 ```bash
 export LOL1_DATA=/path/to/your/LOL1/DATA
-python3 tools/check_all.py        # 23 checks; the last line should read ALL 23 CHECKS PASSED
+python3 tools/check_all.py        # 24 checks; the last line should read ALL 24 CHECKS PASSED
 ```
 
 Words you do not know are in the [glossary](GLOSSARY.md).
@@ -28,7 +28,7 @@ Words you do not know are in the [glossary](GLOSSARY.md).
 
 - [formats/voc.md](formats/voc.md): `python3 tools/voc_reader.py VOC.PAK:1BOLTC.VOC --wav bolt.wav`.
 - CD speech is in `NN.TLK` files ([formats/tlk.md](formats/tlk.md)): `python3 tools/pak_reader.py list 01.TLK`, then `python3 tools/voc_reader.py 01.TLK:000_0.01 --wav line.wav`.
-- Music files: [formats/music.md](formats/music.md) (containers only; no MIDI converter yet).
+- Music: [formats/music.md](formats/music.md), `python3 tools/xmi_to_midi.py LORE01A.XMI --out-dir midi/` (standard MIDI files you can play).
 
 ## I want to read the game's text
 
