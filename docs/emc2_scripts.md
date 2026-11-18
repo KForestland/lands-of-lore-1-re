@@ -96,7 +96,7 @@ Numbering is hexadecimal. Arguments are listed from stack slot 0 upward, with `T
 | 0B | loadMonsterShapes | filename (TEXT), monster shape slot, animation type | Loads monster shapes. | 77 | 78 | LoL:2704, LoL:220–224 |
 | 0C | deleteHandItem | — | Deletes and clears held item. Returns old handle. | 80 | 80 | LoL:2707, LoL:226–232 |
 | 0D | allocItemPropertiesBuffer | count | Reallocates item property records. | 1 | 1 | LoL:2708, LoL:234–239 |
-| 0E | setItemProperty | type index, name ID, shape, type, script entry, might, skill, protection, flags, extra byte | Sets the item property record. ScummVM changes type 5 to 0 at index 264. | 285 | 285 | LoL:2709, LoL:241–261 |
+| 0E | setItemProperty | type index, name ID, shape, type, script entry, might, skill, protection, flags, extra word | Sets the item property record. ScummVM changes type 5 to 0 at index 264. | 285 | 285 | LoL:2709, LoL:241–261 |
 | 0F | makeItem | type index, shape/frame flags, placed flag | Creates an item instance and returns its handle. | 110 | 110 | LoL:2710, LoL:263–266 |
 | 10 | placeMoveLevelItem | item, level, block, local X, local Y, flying height | Places or moves an existing item. Masks local coordinates to one byte. | 10 | 10 | LoL:2713, LoL:268–272 |
 | 11 | createLevelItem | type index, frame flags, placed flag, level, block, local X, local Y, flying height | Creates and positions an item. Returns handle or failure. | 228 | 228 | LoL:2714, LoL:274–281 |
