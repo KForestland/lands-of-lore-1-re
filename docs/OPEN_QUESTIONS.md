@@ -2,6 +2,33 @@
 
 Numbered so the format pages and [`STATUS.md`](STATUS.md) can point at them. Each is something not yet known about the original game files or rules. When one is answered, its page is updated and the entry says so. Detailed notes: [Q1](unknowns/01_shp_header.md), [Q2](unknowns/02_wll_header.md) (WLL and CMZ header bytes), [Q3](unknowns/03_level24_cmz.md), [Q4](unknowns/04_yvel2.md), [Q5](unknowns/05_adv_drv_tbl.md), [Q6](unknowns/06_tim_opcodes.md).
 
+## At a glance
+
+One line per question: its state and what would settle what is left. Details are in the table below.
+
+| ID | State | What would settle the rest |
+|---|---|---|
+| Q1 | Partly | Read the SHP files of the demo release; CD and floppy are answered |
+| Q2 | Answered | — |
+| Q3 | Answered for the game | The game never reads the 5 extra bytes; what the level author stored there would need the original editor |
+| Q4 | Answered | — |
+| Q5 | Answered | — |
+| Q6 | Mostly | Trace the few commands ScummVM leaves unimplemented in the CD executable's TIM dispatch |
+| Q7 | Mostly | Trace the native tick-to-time conversion, the users of WLL wall bit 0x40 and the remaining monster mode branches |
+| Q8 | Answered | Which optional sound/video shutdown callbacks run depends on the setup; run it on a chosen setup to list them |
+| Q9 | Answered | — |
+| Q10 | Mostly | Find any caller of the `00000.VOC` name (only `FINALE.EXE` lists it) |
+| Q11 | Answered | Which earlier level supplies the row depends on the play order of a given game |
+| Q12 | Answered | — |
+| Q13 | Answered | — |
+| Q14 | Partly | Find a caller of the three palettes; none is in scripts, TIM files or code read so far |
+| Q15 | Answered | What the letters "C55" stand for is not in the files |
+| Q16 | Answered | — |
+| Q17 | Mostly | Three single bytes; read an original `_SAVEnnn.DAT` written by the DOS game |
+| Q18 | Mostly | Trace who reads the item auxiliary word and who writes the monster critical-skill byte |
+
+## Questions
+
 | ID | Question | Page |
 |----|----------|------|
 | Q1 | SHP shape header in every edition. **Answered for CD and floppy** (10-byte header, byte dumps match; 2026-11-18). Still open: the demo release, which was not read | [formats/shp.md](formats/shp.md) |
