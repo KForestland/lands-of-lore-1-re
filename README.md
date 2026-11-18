@@ -58,7 +58,7 @@ Formats the three games share, with links to the LoL2 and LoL3 repositories: [do
 - [`docs/levels/`](docs/levels/README.md): one sheet per level
 - [`docs/unknowns/`](docs/unknowns): detailed notes on the numbered questions (answered and open)
 - [`tools/`](tools/README.md): readers, renderers and extractors
-- [`tests/`](tests): the script disassembler's corpus test
+- [`tests/`](tests): synthetic reader tests (`python3 -m unittest`, no game files) and the script disassembler's corpus test (needs game data)
 - [`data/`](data): tables produced by the tools (inventories, wall tables, counts)
 - [`examples/`](examples): three small example outputs
 
