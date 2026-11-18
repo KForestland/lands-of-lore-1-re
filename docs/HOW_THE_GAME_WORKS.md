@@ -1,59 +1,96 @@
-# How the game works
+# How Lands of Lore works
 
-A short tour for a reader who has the game and wants to know how it runs: which files it reads, what drives each level, and how the rules are computed. Each section links to the detailed page with the evidence. Terms: [glossary](GLOSSARY.md).
+This guide follows the original DOS game from loading its files to saving
+your progress. The linked pages give the original offsets and distinguish
+native evidence from readings based on ScummVM. [Glossary](GLOSSARY.md)
 
 ## The program and its data
 
-The game program is `MAIN.EXE`. On the CD it sits inside the install archive `WESTWOOD.001` and again in `DATA/HARDRIVE`; on the floppy edition it is a loose file ([executable_tables.md](executable_tables.md)). It holds the code and a few fixed tables: the 17 spells, the starting values of the 9 characters who can join the party (the four heroes you choose from, and five companions met during the game), the experience needed for each level, and difficulty factors.
+The game runs from `MAIN.EXE`. On CD the DOS executable is in
+`WESTWOOD.001` and also appears loose under `DATA/HARDRIVE`. The floppy
+edition has a loose `MAIN.EXE`. It holds the code and tables for spells,
+character defaults, experience and difficulty. [Executable tables](executable_tables.md#locating-the-executables)
 
-Everything else is data in PAK archives ([formats/pak.md](formats/pak.md)): pictures, sprites, animations, sounds, music, text in three languages, and one set of files per level.
+PAK archives hold level files, graphics, audio and text. The CD edition
+also uses TLK archives for speech. [PAK directory](formats/pak.md) ·
+[CD speech archives](formats/tlk.md)
 
 ## Starting the game
 
-At start-up the program runs the script `ONETIME.INF`. It calls one script function 285 times, once per item type, to define every item in the game: name, picture, type, might, protection and so on ([executable_tables.md](executable_tables.md#item-types-and-item-properties)). Item behaviour (what happens when one is used) lives in `ITEM.INF`.
+The original `ONETIME.INF` (in `STARTUP.PAK`) allocates 285 item types and supplies one
+definition for each. A definition has a name ID, a shape, combat values
+and an item-script entry. The separate `ITEM.INF` holds the event code
+for items. [Item definitions and script loader](executable_tables.md#item-types-and-item-properties)
 
 ## Entering a level
 
-Each of the 29 levels has its own scripts. When a level loads, its `LEVELn.INI` script runs ([formats/emc2.md](formats/emc2.md)). For level 1 it:
-
-- loads the wall tiles (`KEEP.VCN`/`.VMP`, [formats/vcn_vmp.md](formats/vcn_vmp.md)) and the map (`LEVEL1.CMZ`, [formats/cmz.md](formats/cmz.md));
-- loads door and decoration graphics (`KEEPDOOR.SHP`, `KEEP.SHP` with `KEEP.DAT`, [formats/dat.md](formats/dat.md));
-- loads the monsters' sprites and defines their statistics (79 such definitions across the game);
-- loads the level's text file and sounds.
-
-The map is a 32 x 32 grid. Each square stores four *wall types* (north, east, south, west); the level's `LEVELn.WLL` file says what each wall type is: plain wall, door, switch, decorated wall, nothing ([formats/wll.md](formats/wll.md)). The 3D view is drawn from those wall types: each one picks a page of tile layouts in the VMP file, whose tiles come from the VCN file.
+Level scripts load the map and the art used to draw it. For example,
+the first level's scripts load the KEEP wall tiles and define a monster
+type. The map uses a 32 × 32 grid. Each block has four wall type bytes,
+one per direction. A wall type selects a WLL record, which can refer to
+a VMP tile layout and the tile pixels in the VCN file.
+[Level 1 sheet](levels/level01.md) · [Monster definitions](executable_tables.md#monster-properties) ·
+[Map blocks](formats/cmz.md) · [Wall types](formats/wll.md) · [Tile selection](formats/vcn_vmp.md)
 
 ## While you play
 
-`LEVELn.INF` holds the level's event handlers. The engine calls them when you step on a square, click a wall, use an item and so on. Handlers call script functions to change walls (open a door), set and test game flags, start conversations, give items, move monsters and play sounds. All 192 functions are listed in [emc2_scripts.md](emc2_scripts.md).
+`LEVELn.INF` holds handlers for events such as entering a block,
+clicking a wall or taking an item. An event runs an entry when its flag
+shares a bit with the entry's mask. A handler can change walls, set
+flags, give items and play sounds. In level 22 a click under the right
+conditions loads the YVEL2 tile set and sets flag 357. The level loader
+uses that flag when it loads the level again.
+[EMC2 format](formats/emc2.md) · [EMC2 dispatch](emc2_scripts.md) · [Wall click tutorial](tutorial-one-event.md) ·
+[YVEL2 event](unknowns/04_yvel2.md)
 
-Example: on level 22, a click while a certain wall is showing switches the walls to a second tile set (`YVEL2`) and sets game flag 357, so the switch survives a reload ([unknowns/04_yvel2.md](unknowns/04_yvel2.md)).
-
-Conversations and cut-ins are TIM scripts: they play WSA animations frame by frame, show text and choices, and play speech ([formats/tim.md](formats/tim.md)). On the CD, speech comes from the level's `NN.TLK` archive ([formats/tlk.md](formats/tlk.md)).
+TIM commands can play animation frames, show text and choices, and
+request speech. WSA files store changes between frames. The CD edition
+carries speech clips in TLK archives. [TIM commands](formats/tim.md) ·
+[WSA frames](formats/wsa.md) · [TLK speech](formats/tlk.md)
 
 ## Combat
 
-([game_rules.md](game_rules.md#combat); the parts below were checked in the original program code)
-
-- Dice: "n d s" rolls n dice of s sides. Each die is 1 + (a 15-bit random number x s / 32768).
-- To hit: roll 1d100. A roll at or above `100 − (skill level + modifier)` is a critical (hit code 2). Otherwise a roll below the defender's evade threshold misses (0), anything else hits (1).
-- Damage: each of eight damage categories (item might x attacker factor x target factor, as fractions of 256) is summed; the attack then rolls 2 dice of that sum.
-- Armour: unless the hit is critical, the target's protection reduces damage by up to 217/256 (`256 − min(217, protection x 128 / damage)`, then x/256), never below 2.
+The native hit test rolls once. A roll at or above the critical
+threshold gives a critical hit. Below that, the defender's evade
+threshold separates misses from ordinary hits. The game calculates
+damage across eight categories. For a positive total `S`, the
+standard item damage routine rolls two dice with `S` sides. Armour can
+reduce a nonzero ordinary hit, with a minimum of two in that branch.
+[Hit test, version differences and damage formulas](game_rules.md#combat)
 
 ## Experience and magic
 
-Experience levels start at 0, 500, 1500, 5000, 25000, 50000, 80000, 120000, 180000 and 270000 points, the same in both editions ([executable_tables.md](executable_tables.md)). On each new level a character gains hit points, and magic points for the mage skill; the amounts are so far taken from ScummVM ([game_rules.md](game_rules.md#experience-and-skills)).
+The native experience thresholds start at 0, 500, 1,500 and 5,000 in
+both editions. The exact HP and MP gains at each new level come from
+ScummVM and are **UNCONFIRMED** in the native executables.
+[Experience and skills](game_rules.md#experience-and-skills)
 
-Spells cost magic points per rank (for example Spark 5 / 10 / 15 / 25) and do fixed damage inputs per rank, stored in the program (Spark 7 / 15 / 25 / 60, Fireball 20 / 40 / 80 / 100) ([game_rules.md](game_rules.md#magic)). What each spell does beyond those numbers is so far taken from ScummVM.
+The program has tables for spell costs and separate routines for the
+effects. For example, Fireball checks up to three blocks starting at
+the party's block. It sends an event along the path and stops when the
+wall or occupancy tests succeed. [Native spell effects](unknowns/07_native_rules.md#casting)
 
-## Monsters
+## Monsters, light and time
 
-Each monster has a *mode*: waiting, walking to a place, watching, chasing, recovering after an attack, fleeing, dying … ([game_rules.md](game_rules.md#monster-behavior)). A table in the program says which checks run in each mode; the transitions between modes are so far taken from ScummVM.
+A monster's current mode selects what it does during an update. The
+original code can change that mode before running its handler. For
+example, a recent hit or successful visibility check can put a monster
+into mode 7 (attack) when the corresponding mode flag allows it.
+[Monster updates](unknowns/07_native_rules.md#monster-transitions)
 
-## Light and time
-
-The lamp burns oil every 360 ticks of 1/60 second, and the screen darkens in steps as the oil runs low; characters regenerate every 1200 ticks ([game_rules.md](game_rules.md#light-and-time)). These periods (360 and 1200 ticks, and the others in the game's 12-entry timer table) are confirmed in both original executables ([unknowns/07_native_rules.md](unknowns/07_native_rules.md)); how a tick converts to real time in the original is still open (Q7).
+The timer table schedules lamp oil use every 360 enabled ticks and
+passive regeneration every 1,200. Both DOS editions run the game clock at
+60 ticks per second, so 360 ticks is about 6 seconds and 1,200 about 20. The game can pause the gameplay timer while its separate
+delay clock continues. [Lamp and regeneration](unknowns/07_native_rules.md#lamp-regeneration-and-the-clock) ·
+[Native clock](unknowns/07_native_rules.md#native-tick-duration-and-pause)
 
 ## Saving
 
-An original save (`_SAVEnnn.DAT`) holds the four party members, the game state (position, inventory, game flags, money, spells, options), 400 item records and 30 level snapshots of 2500 bytes each; the game has 29 levels, but the save code always writes 30 slots ([savegame_format.md](savegame_format.md)). This layout comes from the save and load code in both executables; no original save file has been examined yet ([Q17](OPEN_QUESTIONS.md)).
+The original DOS save writer stores four character records, global
+state, 400 item slots and 30 level snapshot slots of 2,500 bytes each.
+A mask tells the loader which snapshots are populated. The layout comes
+from the save code in both DOS executables and four level files
+(`_LEVELn.TMP`) written by the original floppy program. No complete
+original save file has been examined yet, so the end of the file and a
+few skipped bytes are still **UNCONFIRMED**.
+[Save layout](savegame_format.md) · [Unresolved save bytes](unknowns/17_native_save_fields.md#isolated-bytes)
