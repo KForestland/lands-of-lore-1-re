@@ -20,6 +20,43 @@ Code in the FBOV overlay (CD file offsets from 0x3CC40, floppy from
 conventional memory for its bytes and break at the match (the
 procedures below give the pattern where one is needed).
 
+## Working launch for the English DOS CD
+
+**CONFIRMED.** DOSBox 0.74-3 reached character selection and
+level 1, and wrote an 82,559-byte native `_SAVE000.DAT` (written by the game in this run; not shipped, not tracked). The
+installed 356,928-byte `MAIN.EXE` matched the copy on the disc at
+`DATA/HARDRIVE/MAIN.EXE` (SHA-256 prefix `10a9bdce8e23`).
+The resident code at file `+0x2689C` was at linear `0x24ABC`,
+giving load segment `01A2` in this run. The wall getter at
+`+0x134F0` was also present at its relocated address `0x11710`.
+The save starts in level 1 (slot `+0x269` = 1).
+
+1. Use a private display and a writable scratch disk. Mount that
+   disk as `C:` and the copied CD root that contains `INSTALL.EXE`
+   as `D:` with `mount d <cd-copy> -t cdrom -label LANDSOFLORE`.
+2. Run `D:\INSTALL.EXE`, select English and accept source `D:`,
+   destination `C:` and the default `\WESTWOOD\LOLCD`. Run
+   Setup when the installer offers it. Choose Sound Blaster music,
+   answer Yes to digitized samples and save the configuration. The
+   setup summary selects Sound Blaster for music, effects and voice.
+   The witnessed DOSBox used `core=normal`, `cputype=486_slow`,
+   `cycles=fixed 25000`, 30 MiB, and emulated SB16 at port 220,
+   IRQ 5, DMA 0 and high DMA 5. Host output was disabled using
+   `SDL_AUDIODRIVER=dummy` and `[mixer] nosound=true`.
+3. Close the installer notes with Escape. From `C:\WESTWOOD` run
+   `LOLCD.BAT`, the installer-generated entry that changes to
+   `LOLCD` and invokes `LOLCD.EXE`. The launcher and config file
+   names are in `LOLCD.EXE+0x42BE` (`lands.cfg`) and
+   `+0x4767` (`MAIN.EXE`). Skip the intro with Escape, select a
+   character and confirm. Escape opens the in-play menu and
+   **Save this game** writes a native slot in the install folder.
+
+The mounted disc and original setup matter for reproducing this route.
+Record the new load segment and DS from the game instance used for
+each trace. Starting `MAIN.EXE` by itself does not work: without its one
+argument it takes the refusal branch at file `0x51F00` and exits with
+status 1 at `0x51F9D`.
+
 ## Q7a. Can wall bit 0x40 change anything besides the EMC byte test?
 
 Question: [Q7 in OPEN_QUESTIONS](OPEN_QUESTIONS.md).
