@@ -75,3 +75,46 @@ The native attack test follows the embedded stat pointer at `+14`; the monster i
 **CONFIRMED** In all 79 original property-load calls per edition, modifier args 6–8 are jointly zero in 50 calls and each is nonzero in 29. A nonzero example is `LEVEL27.INI` at CD `L27.PAK+0xACB9` and floppy `CHAPTER8.PAK+0x3C940`, with inputs 100, 25, 100 and stored words 256, 64, 256. The same decoder finds that arg 28 spans 0–15 and arg 29 spans 20–1000 in both editions. For example, the inputs 10 and 768 in `LEVEL1.INI` leave 768 at `+0x40` because the second write immediately overwrites the first (CD `L01.PAK+0xF3B3`, floppy `CHAPTER1.PAK+0x61B53`, stores above).
 
 **UNCONFIRMED** No writer beyond startup initialization was found for `+0x3D`. A bounded search of direct far loads from instance `+0x21` and its displacement aliases found the hit-test reads above. It also verified speed lookup through the embedded pointer at `+0x14` (CD `+0x12740, +0x12993`, floppy `+0x170DE, +0x17332`), but found no use of modifier offsets `+0x0C–0x10` or the last word at `+0x40` from the same pointer-loading pattern. The CD selector table for EMC getter `0x5C` has no branch for these fields (`+0x1502C–0x150CA`). A watch on those definition fields during the original level-27 fights would distinguish unused fields from accesses through a generic pointer.
+
+### Additional native pointer tests
+
+**CONFIRMED** An executable-byte search for the far-pointer
+load of instance +0x21 found 52 candidates in the CD image and
+51 in floppy. The immediate accesses after those loads include
+definition byte +1 for collision width (CD `+0x111C1–0x111C5`,
+floppy `+0x15C5D–0x15C61`) and the four attack and defense
+bytes at +0x4C–0x4F (CD `+0x119A5–0x119BE, +0x11C09–0x11C22`,
+floppy `+0x16441–0x1645A, +0x16617–0x16630`). A separate
+search for the far-pointer load of definition +0x14 finds two
+exact matches per edition. Both read stat-pointer +8, which is
+definition +0x0A (CD `+0x12740–0x12744, +0x12993–0x12997`,
+floppy `+0x170DE–0x170E2, +0x17332–0x17336`). These
+checked access paths do not consume +0x0C, +0x0E, +0x10 or +0x40.
+
+**CONFIRMED** The level-27 example that sets the three modifiers
+uses definition slot 1, with +0x40 = 155 after overwriting 7.
+The next definition load uses slot 2, zero modifiers and +0x40
+= 132 after overwriting 5 (CD `L27.PAK+0xACB9/0xAD45`,
+floppy `CHAPTER8.PAK+0x3C940/0x3C9CC`). The definition
+bank's 83-byte stride and the spawn path's segment and
+base come from CD `MAIN.EXE+0x14675–0x1467F` and
+floppy `+0x1900D–0x19017`.
+
+**UNCONFIRMED** The bounded scan tracked the immediate
+ES:BX access until a pointer reload, unconditional transfer or
+call. It cannot settle a copied far pointer or a computed index.
+After the slot-1 setter returns in level 27, watch reads of the
+following original relative segment offsets (add the program's
+load segment, PSP+0x10, at run time) while a slot-1
+monster moves, attacks, takes damage and uses a ranged effect.
+
+| Edition | Three modifier words | Critical byte | Last word |
+|---|---|---|---|
+| CD | `2803:1BBD/1BBF/1BC1` | `2803:1BEE` | `2803:1BF1` |
+| floppy | `2DCF:1B9F/1BA1/1BA3` | `2DCF:1BD0` | `2DCF:1BD3` |
+
+Record the first reading instruction and its result, and any
+write to the critical byte beyond initialization or loading.
+Use the adjacent +0x0A read as a control to verify the address
+and active definition slot. The raw byte counts and attached
+offsets above bound the static result.

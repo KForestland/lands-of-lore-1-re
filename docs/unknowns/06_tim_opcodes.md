@@ -172,6 +172,46 @@ Both `tlol_fadeOutSound` calls encode zero argument words, so a build that evalu
 | `19/0B` | `0x7820` | Compares the first following word to zero, with a zero-distance branch. Calls the audio helper at `0xCAFC` with no arguments and returns 1. Original commands at `FINALE2.PAK+0x75CC8, +0x75FA2` encode only the nested selector. |
 | `19/0F` | `0xB1FD` | Calls three functions, with a fixed string pointer on the first call, and returns `FFFF` (`+0xB1FD–0xB21C`). Its fixed string is at `+0x261FE`. |
 
-**UNCONFIRMED** The separate intro loader's final table selection and higher-level roles of the unused finale callbacks remain open. The original `LOLINTRO.TIM` path name is present at `FINALE.EXE+0x22737`, and the original intro uses `19/04` at `INTRO.PAK+0xB538B`. The `LOLFINAL.TIM` loader above gives a direct entry to the outro table. Static callers of the loader that pass the intro name, or a capture of the dispatch table after intro startup, would settle whether the same table is active in the intro.
+### Floppy intro table selection
+
+**CONFIRMED** In `LANDS.EXE`, startup sets the relative DS segment
+to 0x1A56 (`+0x1E00–0x1E16`), so DS-relative data starts at file
+`+0x1C360`. The intro call at `+0x6EB7–0x6EC8` passes
+DS:0684, the `LOLINTRO.TIM` name at `+0x1C9E4`, to the loader
+at `+0x8539`. The loader selects AVTL at `+0x85EE–0x85FE`.
+The caller saves the returned pointer and passes it to the TIM
+runner at `+0x6ED3–0x6EEC`. The runner dispatches through
+DS:06EC at `+0x895E–0x897D` (file table `+0x1CA4C`).
+Outer slot 0x19 at `+0x1CAB0` resolves to `+0x83AF`.
+That handler reads the first operand word as the nested selector, passes the following words, and indexes the nested far pointers
+at DS:0768, file `+0x1CAC8` (`+0x83B5–0x83D3`).
+
+**CONFIRMED** The first seven word pairs in that nested table
+resolve to callbacks `0x786B, null, 0x77E5, 0x781F, 0x78B9,
+0x80AF, 0x8439` in selector order. At `LANDS.EXE+0x78C1–0x78F6`,
+selector 4 reads five words from its operand pointer, including word 0
+as a 0x8C-byte record index and word 4 at +8. Selector 5 forwards
+two words to its helper (`+0x80AF–0x80C6`). The selector-4
+witness is `INTRO.PAK+0xB538B`. Upstream ScummVM's intro
+selection and operand reads are in `engines/kyra/sequence/sequences_lol.cpp:234–247`
+and `engines/kyra/script/script_lol.cpp:2379–2387,2407–2412,2978–2991`
+at `3b4db303`.
+
+**CONFIRMED** The same filename has a separate path in
+`FINALE.EXE`. When its branch at `+0x6F72–0x6F7D` succeeds,
+it frees the prior sequence and passes DS:0147 to the same loader
+as the outro (`+0x6F85–0x6FB1` and `+0x6ED7–0x6EE8`).
+That operand resolves to `LOLINTRO.TIM` at `+0x22737`.
+Both calls place the returned pointer in DS:00CA/00CC.
+The shared call at `+0x6EFC–0x6F0C` runs it through the
+TIM runner at `+0xB5CA`, whose dispatcher is at `+0xB722–0xB741`. Its hard-coded nested table is DS:3BCE
+(`+0xB193`), with selector 4 at file `+0x261CE` resolving to
+`+0x78CC`. Thus the two sequence executables each have a fixed
+table, and the `FINALE.EXE` branch uses its own table for either
+filename. The two intro filename calls and their fixed tables can
+thus be located without a runtime breakpoint.
+
+**UNCONFIRMED** Higher-level names for several unused native
+callbacks remain open.
 
 **CONFIRMED** TEXT offsets in these files are little-endian. floppy `VICTOR4.TIM` stores its initial offsets as `06 00 3C 00 BF 00` at `CHAPTER1.PAK+0xE7926`; the floppy `0A` handler reads the offset word directly at `MAIN.EXE+0x96CC`. The equivalent read in ScummVM is `engines/kyra/script/script_tim.cpp:643,703,756`.

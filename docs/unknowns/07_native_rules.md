@@ -174,4 +174,29 @@
 
 **CONFIRMED** The generic native collision helper takes a caller-provided mask. Given a specific side it tests the opposite wall. With side `-1` it tests all four walls. Its three resident far-call sites pass mask 1 for party movement, 0 for the nearby-block search, and the caller's stack parameter for the all-sides collision test. CD `+0xC947–0xC9AD, +0xD6AE, +0xA362, +0x11159`, floppy `+0x10163–0x101C9, +0x10E34, +0xA3BA, +0x15BF5`. Both fixed door masks are `0x10` or `0x20`, and the script getter still exposes the entire wall byte.
 
-**UNCONFIRMED** The paired displacement search for `DS:531E` and `DS:87C4` covered the literal flag-table references, including the additional placement and monster-door consumers above. It found no dedicated `0x40` test. The dynamic collision mask leaves one route to check. Following tail calls into the all-sides helper and tracing its argument would establish which callers can supply `0x40`. No supplied WLL sets it, as measured above.
+**CONFIRMED** The all-sides mask chain bottoms out in two
+resident callers in each edition. The movement wrapper passes its
+word argument at BP+0x0E to all six calls to the side helper
+(CD `+0x1122C–0x11239, +0x11297–0x112A4, +0x112F6–0x11303,
++0x11364–0x11371, +0x113CC–0x113D9, +0x1141C–0x11429`;
+floppy supplies the same argument through the six sites in
+`+0x15CC8–0x15EC5`). The side helper pushes this value at
+`+0x11159` / `+0x15BF5`. Monster placement supplies fixed
+mask 7 (CD `+0x14688–0x14695`, floppy `+0x19020–0x1902D`).
+Flying-object movement supplies record byte +0x10 (CD
+`+0xF34B–0xF37E`, floppy `+0x13D39–0x13D6C`), which its
+17-byte record constructor sets to 2 (CD `+0xF274–0xF2DC`,
+floppy `+0x13C62–0x13CCA`). The nearby mask selection
+0x3F/0x100 is a different argument (CD `+0xF367–0xF377`,
+floppy `+0x13D55–0x13D65`). Party movement and the
+nearby-block search continue to pass the fixed masks 1 and 0.
+
+**UNCONFIRMED** The recovered collision callers supply only
+0, 1, 2 and 7. No dedicated consumer of 0x40 was found in the
+literal wall-table search, and the supplied WLL records leave it
+clear. To detect an indirect consumer, compare otherwise identical
+wall bytes 0 and 0x40 on the level-8 block-172 face-1 witness.
+An original runtime trace would record the instruction and input
+mask at each access to that wall-table byte and separate the known
+whole-byte EMC test from masked native checks. The watched bases
+are CD DS:531E and floppy DS:87C4, each plus the wall ID.

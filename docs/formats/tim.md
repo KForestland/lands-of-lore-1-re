@@ -36,10 +36,13 @@ The full table with parameters, ScummVM lines, and the intro (`LOLINTRO.TIM`) an
 
 The March 2026 `data/tim_analysis.json` listed opcodes 112 and 176; those are not commands (the table ends at 0x1E). The file was regenerated on 2026-11-18 by `tools/parse_tim.py` without that opcode map and without the raw script words it used to copy; the counts above replace it.
 
+The [native table selection](../unknowns/06_tim_opcodes.md#floppy-intro-table-selection)
+identifies the separate intro and finale tables from the original
+floppy executables. CONFIRMED.
+
 ## Open
 
-Extra argument words in a few calls (`giveItem`, `characterChat`, `playDialogueTalkText`) that the ScummVM functions do not read.
-
+Extra argument words in a few calls (`giveItem`, `characterChat`, `playDialogueTalkText`) that the ScummVM functions do not read. UNCONFIRMED.
 
 ## Worked example
 
