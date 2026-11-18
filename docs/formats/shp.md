@@ -49,6 +49,21 @@ The closure memo (sections A and B.6) says shapes have a 12-byte header that sta
 
 This agrees with ScummVM: the 2-byte prefix (`GameFlags::useAltShapeHeader`, `engines/kyra/detection.h:51`; skipped in `screen.cpp:1637-1638`) is set only for the LoL demo (`engines/kyra/detection_tables.h:63`), not for CD (`:56`) or floppy (`:58`). Independent byte dumps (three files per edition: `FOREST1.SHP` raw, `GUARD.SHP` and `ITEMICN.SHP` wrapped; shapes 0, middle and last) show the same 10-byte header on CD and floppy, at offset + 2. CONFIRMED. The demo was not read: [Q1](../OPEN_QUESTIONS.md). Byte dumps: [`../unknowns/01_shp_header.md`](../unknowns/01_shp_header.md).
 
+## What a demo copy would show
+
+No demo release was read for this page. A reader who has one can close the question with the files and the two commands below.
+
+Point `--data` (or `$LOL1_DATA`) at that release's DATA folder. Every `.SHP` in the folder is in scope. Three names are enough when the demo has them, because this page already records their CD headers: `FOREST1.SHP` (a raw offset table), `GUARD.SHP` (a bitmap whose image is the table), and `ITEMICN.SHP` (the same kind of bitmap). For each, read shape 0, the middle shape, and the last shape. `KEEP.SHP` is the worked example above: shape 0 is the 10 bytes at stored offset + 2.
+
+Run both commands. They write nothing.
+
+```
+python3 tools/shp_renderer.py --data <demo DATA> --check
+python3 tools/shp_renderer.py --data <demo DATA> --check --alt-header
+```
+
+`--alt-header` reads two bytes and then the 10-byte record. The demo uses that prefix when the second command prints `bad=none` and the first command does not. The demo uses the same 10-byte header as the CD when the first command prints `bad=none` and the second command does not. If both commands pass, or both fail, lay the three shapes' first 12 bytes next to the CD bytes on this page. The prefix is present when those 12 bytes are two bytes followed by flags, height, width, and the same height again.
+
 The closure memo's "3492/3492 frames" count was right in number, but the March 2026 tool reached it with fallbacks that accept any bytes. The strict decode above is what confirms it.
 
 ## Colours

@@ -8,7 +8,7 @@ One line per question: its state and what would settle what is left. Details are
 
 | ID | State | What would settle the rest |
 |---|---|---|
-| Q1 | Partly | Read the SHP files of the demo release; CD and floppy are answered |
+| Q1 | Partly | On a demo DATA folder, `shp_renderer.py --check` once plain and once with `--alt-header`. `FOREST1.SHP`, `GUARD.SHP` and `ITEMICN.SHP` (shapes 0, middle, last) cover a copy that does not hold every file. No demo copy was read here |
 | Q2 | Answered | — |
 | Q3 | Answered for the game | The game never reads the 5 extra bytes; what the level author stored there would need the original editor |
 | Q4 | Answered | — |
@@ -31,7 +31,7 @@ One line per question: its state and what would settle what is left. Details are
 
 | ID | Question | Page |
 |----|----------|------|
-| Q1 | SHP shape header in every edition. **Answered for CD and floppy** (10-byte header, byte dumps match; 2026-11-18). Still open: the demo release, which was not read | [formats/shp.md](formats/shp.md) |
+| Q1 | SHP shape header in every edition. **Answered for CD and floppy** (10-byte header, byte dumps match; 2026-11-18). Still open: the demo release, which was not read. A demo DATA folder settles it by `shp_renderer.py --check` plain and with `--alt-header`; the three files and the byte comparison are on the shape page | [formats/shp.md](formats/shp.md) |
 | Q2 | CMZ header bytes 0-3. **Answered:** `20 00 20 00` on all 29 levels of both editions, read by no engine code found. Calling them width and height (32 x 32) is a reading of the values, not of code | [formats/cmz.md](formats/cmz.md) |
 | Q3 | Level 24's CMZ has 9 bytes per block instead of 4: what the extra 5 bytes hold, and why only this level. **Settled as far as the program goes:** both editions' `MAIN.EXE` copy 4 bytes per block and step over the rest, so the game never reads the tail ([unknowns/03_level24_cmz.md](unknowns/03_level24_cmz.md)). What the level's author stored there is still open | [formats/cmz.md](formats/cmz.md) |
 | Q4 | When the level 22 scripts switch between YVEL1 and YVEL2. **Answered:** a click in a screen rectangle while block 145's north wall is type 8 loads YVEL2 and sets game flag 357; `LEVEL22.INI` reloads YVEL2 when flag 357 is set; another script path loads YVEL1 and clears the flag. Decorations stay YVEL1 | [formats/vcn_vmp.md](formats/vcn_vmp.md), [unknowns/04_yvel2.md](unknowns/04_yvel2.md) |
