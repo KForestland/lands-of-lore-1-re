@@ -114,7 +114,7 @@ def main():
         if os.path.isfile(p):
             bad.extend(text_findings(root, f))
     bad.extend(identity_findings(root))
-    print(f"CHECK repo_guard: {len(files)} tracked files; game files, converted media, stray PNGs, files over 1 MiB, machine paths, lane/agent names or commit identities: "
+    print(f"CHECK repo_guard: {len(files)} tracked files; game files, converted media, stray PNGs, files over 1 MiB, machine paths, private or assistant names, or commit identities: "
           f"{bad[:5] or 'none'}{' ...' if len(bad) > 5 else ''} ({len(bad)})")
     return 0 if not bad else 1
 
