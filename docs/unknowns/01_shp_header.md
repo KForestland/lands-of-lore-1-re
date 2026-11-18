@@ -2,7 +2,7 @@
 
 The retail shape header is 10 bytes. Both trees use it. The 2-byte prefix in `docs/closure_memo.md` is the demo alt-header flag, and neither tree here contains a demo disc.
 
-Sources read: CD `/media/bob/Arikv/REFERENCE/game_files/lol1/DATA`, LANDSoL `/media/bob/Arikv/new files or things/LANDSoL`. PAK names below are the archive that held the file. A later PAK does not replace an earlier file of the same name.
+Sources read: the CD `DATA` tree and the LANDSoL tree. PAK names below are the archive that held the file. A later PAK does not replace an earlier file of the same name.
 
 ## What the engine reads
 

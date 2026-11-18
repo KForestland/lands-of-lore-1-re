@@ -6,7 +6,7 @@ This note stops at the copyright string and the file's first instruction byte. T
 
 ## Drivers in DRIVERS.PAK
 
-CONFIRMED. Both editions have one `DRIVERS.PAK` with these eight names. Sizes differ. The CD file and the LANDSoL file of each name are not the same bytes.
+CONFIRMED. Both editions have one `DRIVERS.PAK`. The directory names seven files: six `.ADV` files and `ALFX.DRV`. At directory offset 109 both archives store a 0 byte and a uint32 0, and the first file begins at offset 114. That last slot is the end marker. Sizes differ. The CD file and the LANDSoL file of each name are different bytes.
 
 | Name | CD size | CD bytes 0-1 | LANDSoL size | LANDSoL bytes 0-1 | Identity string at byte 2, unless noted |
 | --- | --- | --- | --- | --- | --- |
@@ -48,7 +48,23 @@ The first five little-endian uint16s are 10, 71, 77, 159, 165. The value 10 is t
 
 The last byte is `00`. CONFIRMED.
 
-A 42-byte run at file offset 29 is repeated at file offset 117: `85 59 b3 20 f9 79 20 66 a0 e0 a2 84 a8 f5 67 88 25 e4 20 cc ac 20 25 e0 77 b1 e0 25 e0 b4 20 47 89 b0 27 b8 47 ef e1 2e 0d 00`. CONFIRMED as the bytes. What each span is used for is UNCONFIRMED. `MAIN.EXE` and `FINALE.EXE` name the file, and the Kyra sources do not.
+Each offset is the start of one string, and the next offset, or the end of the file, is its end. The bytes use the Westwood language-string coding. `decodeString1` (`engines/kyra/engine/util.cpp:29-67`) expands a byte with the high bit set into two characters from the tables at `util.cpp:30-48`. `decodeString2` (`util.cpp:70-84`) turns a `1B` prefix into one character plus `0x7F`. `getLangString` runs those two in that order on the English path (`engines/kyra/engine/lol.cpp:1090-1091`). `getTableEntry` (`lol.cpp:1100-1104`) finds a string at `buffer +` the little-endian uint16 stored at `id * 2`. These five words are that kind of table: the first value, 10, is five uint16s. CONFIRMED by decoding the file with those two functions.
+
+| Index | Start | Text |
+| --- | --- | --- |
+| 0 | 10 | Halt!  What is the password?  You may find it on page %d, line %d word %d of Geron's Guide. |
+| 1 | 71 | Zanthia |
+| 2 | 77 | I will give you one more chance to give me the correct password.  You may find it on page %d, line %d word %d of Geron's Guide. |
+| 3 | 159 | Zanthia |
+| 4 | 165 | empty |
+
+Worked example, index 1. File offset 71 holds `5a 98 90 69 61 00`. After `decodeString1` and then `decodeString2` the text is `Zanthia`. CONFIRMED.
+
+The 42-byte run at file offset 29 is repeated at file offset 117: `85 59 b3 20 f9 79 20 66 a0 e0 a2 84 a8 f5 67 88 25 e4 20 cc ac 20 25 e0 77 b1 e0 25 e0 b4 20 47 89 b0 27 b8 47 ef e1 2e 0d 00`. Decoded alone, that run is `  You may find it on page %d, line %d word %d of Geron's Guide.` followed by `0x0D` and `0x00`. It is the shared ending of strings 0 and 2. CONFIRMED.
+
+The 16-byte first table and the 128-byte second table from `util.cpp:30-48` are present in the executables, and the 144 bytes match. LANDSoL: `MAIN.EXE` at 253658, `FINALE.EXE` at 159392, `LANDS.EXE` at 123002. CD: `DATA/ENG/FINALE.EXE` at 130438, `DATA/ENG/LANDS.EXE` at 140150, `DATA/HARDRIVE/MAIN.EXE` at 217984. CONFIRMED.
+
+LANDSoL `MAIN.EXE` names `TRIG.TBL` at 238876 and `FINALE.EXE` names it at 144880. The filename string is absent from CD `DATA/ENG/FINALE.EXE`, `DATA/ENG/LANDS.EXE`, and `DATA/HARDRIVE/MAIN.EXE`. CONFIRMED. Kyra has no loader for this filename. Which instruction opens the file, and how a typed password is compared, stay UNCONFIRMED.
 
 Full file, 166 bytes:
 
