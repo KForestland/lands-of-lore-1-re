@@ -71,7 +71,7 @@ def tracked(root):
 # Commit identity: every author and committer address in the history of the checked-out branch (HEAD,
 # what gets published) must be one of these.
 # GitHub's own web merges commit as noreply@github.com (committer only).
-ALLOWED_AUTHORS = {'261564562+KForestland@users.noreply.github.com', 'kskogland-gif@users.noreply.github.com'}
+ALLOWED_AUTHORS = {'261564562+KForestland@users.noreply.github.com'}
 ALLOWED_COMMITTERS = ALLOWED_AUTHORS | {"noreply@github.com"}
 
 
