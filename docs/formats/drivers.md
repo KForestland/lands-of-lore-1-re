@@ -22,4 +22,6 @@ Who loads them: the strings `ALGDIG.ADV`, `ALFX.DRV` and "Unable to load sound d
 
 CONFIRMED (decoded on CD). It is the manual-lookup copy protection: the speaker name and two prompts that ask for a word from the printed manual (*Geron's Guide*). `MAIN.EXE` and `FINALE.EXE` name the file; ScummVM skips copy protection and does not read it.
 
+Details: [`../unknowns/05_adv_drv_tbl.md`](../unknowns/05_adv_drv_tbl.md).
+
 **Tool:** `tools/pak_reader.py list DRIVERS.PAK`; `tools/decode_dialogue.py TRIG.TBL --pak GENERAL.PAK` (the decoder works on any file with this layout).

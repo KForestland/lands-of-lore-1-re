@@ -4,7 +4,7 @@
 
 ## Evidence
 
-The CD witness is the reference `DATA` directory. The second witness is the English LANDSoL floppy distribution. ScummVM line numbers refer to local revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801a3`. Short source references in this page resolve under `engines/kyra/`: `VM` = `script/script.cpp`, `LoL` = `script/script_lol.cpp`, `ABI` = `script/script.h`, `V1` = `script/script_v1.cpp`. **CONFIRMED** marks checks on the original data. **UNCONFIRMED** marks an effect inferred from the ScummVM implementation without a native execution witness. Corpus locations are in the last table.
+The CD edition is its `DATA` directory. The second edition is LANDSoL, an English floppy installation (see [formats/README.md](formats/README.md)). ScummVM line numbers refer to upstream revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801a3`. Short source references in this page resolve under `engines/kyra/`: `VM` = `script/script.cpp`, `LoL` = `script/script_lol.cpp`, `ABI` = `script/script.h`, `V1` = `script/script_v1.cpp`. **CONFIRMED** marks checks on the original data. **UNCONFIRMED** marks an effect inferred from the ScummVM implementation without a check in the original executable. Corpus locations are in the last table.
 
 ## Container and entry points
 
@@ -15,10 +15,10 @@ All integer fields here are big-endian. File offsets are relative to the INF or 
 | `0x00` | Four-byte `FORM` tag. | **CONFIRMED** CD and LANDSoL `LEVEL1.INI+0x00`. |
 | `0x04` | `u32` length. The original files in both corpora store the full member size, including the first eight bytes. | **CONFIRMED** CD and LANDSoL `LEVEL1.INI+0x04`, value `0x29E` for a 670-byte member. Same convention across the corpus. |
 | `0x08` | Four-byte `EMC2` form type. | **CONFIRMED** CD and LANDSoL `LEVEL1.INI+0x08`. |
-| `0x0C` onward | Chunks have a four-byte tag, a `u32` payload size, payload bytes and one pad byte after an odd-sized payload. | **CONFIRMED** both witnesses' `LEVEL1.INI`, where the 109-byte TEXT payload starts at `0x20`, pad is at `0x8D` and next header starts at `0x8E`. ScummVM `common/formats/iff_container.cpp:52–75` drives reading. |
-| `ORDR` | Array of `u16` DATA **word indexes**, indexed by the external entry number. `0xFFFF` is absent. An active entry points to a header word, and execution begins at the following word. In level INF scripts ScummVM tests the header against the caller's event flags. | **CONFIRMED** both witnesses' `LEVEL1.INI+0x14` points to words `0x1B` and `0x9F`, with code at `0x1C` and `0xA0`. The level mask test is documented by VM:156–178 and LoL:68–89. |
-| `TEXT` | Optional. Array of `u16` **byte offsets relative to this payload**, then NUL-terminated byte strings. The first offset equals twice the number of entries in both English corpora. Index 0 reads the first pointer at offset 0. | **CONFIRMED** both witnesses' `LEVEL1.INI+0x20`. The first pointer `0x0014` leads to `KEEP` at script offset `0x34`. ABI:68 implements lookup as `TEXT[BE16(TEXT + 2 × index)]`. |
-| `DATA` | Array of `u16` words. A word can be an instruction, the operand of the previous word, or an ORDR entry header. Jump addresses are DATA word indexes. | **CONFIRMED** both witnesses' `LEVEL1.INI+0x96`; VM:81–89, 195–218, 228–230, 323–328. |
+| `0x0C` onward | Chunks have a four-byte tag, a `u32` payload size, payload bytes and one pad byte after an odd-sized payload. | **CONFIRMED** both editions' `LEVEL1.INI`, where the 109-byte TEXT payload starts at `0x20`, pad is at `0x8D` and next header starts at `0x8E`. ScummVM `common/formats/iff_container.cpp:52–75` drives reading. |
+| `ORDR` | Array of `u16` DATA **word indexes**, indexed by the external entry number. `0xFFFF` is absent. An active entry points to a header word, and execution begins at the following word. In level INF scripts ScummVM tests the header against the caller's event flags. | **CONFIRMED** both editions' `LEVEL1.INI+0x14` points to words `0x1B` and `0x9F`, with code at `0x1C` and `0xA0`. The level mask test is documented by VM:156–178 and LoL:68–89. |
+| `TEXT` | Optional. Array of `u16` **byte offsets relative to this payload**, then NUL-terminated byte strings. The first offset equals twice the number of entries in both English corpora. Index 0 reads the first pointer at offset 0. | **CONFIRMED** both editions' `LEVEL1.INI+0x20`. The first pointer `0x0014` leads to `KEEP` at script offset `0x34`. ABI:68 implements lookup as `TEXT[BE16(TEXT + 2 × index)]`. |
+| `DATA` | Array of `u16` words. A word can be an instruction, the operand of the previous word, or an ORDR entry header. Jump addresses are DATA word indexes. | **CONFIRMED** both editions' `LEVEL1.INI+0x96`; VM:81–89, 195–218, 228–230, 323–328. |
 
 **UNCONFIRMED in the original caller:** ScummVM starts an INI at entry 0 and may call an additional entry. On INF load it dispatches entry `0x400` with flags `-1`. The level dispatch seeds registers 0–6 with event flags, character number, item, two caller-supplied values, block, and script direction. LoL:34–89.
 
@@ -279,8 +279,8 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 
 ## Edition differences and verification
 
-- **CONFIRMED** Both witnesses have the same 60 script names. CD and floppy share 24 byte-identical files, all INI. Read the test results and PAK offsets below to reproduce the comparison.
-- **CONFIRMED** Call IDs present only on CD are 0xBB–0xBE. Examples are `L03.PAK+0x4CA6` (0xBB) and `L01.PAK+0xD2A3`, `+0xD255`, `+0xDA6B` (0xBC, 0xBD, 0xBE). Floppy-only 0x80 appears at `CHAPTER1.PAK+0x5E047`. The call-site totals above describe these particular corpora.
+- **CONFIRMED** Both editions have the same 60 script names. CD and floppy share 24 byte-identical files, all INI. Read the test results and PAK offsets below to reproduce the comparison.
+- **CONFIRMED** Call IDs present only on CD are 0xBA–0xBE (0xBA is called twice on CD and never on floppy, although the floppy executable's table has a slot for it). Examples are `L03.PAK+0x4CA6` (0xBB) and `L01.PAK+0xD2A3`, `+0xD255`, `+0xDA6B` (0xBC, 0xBD, 0xBE). Floppy-only 0x80 appears at `CHAPTER1.PAK+0x5E047`. The call-site totals above describe these particular corpora.
 - **CONFIRMED** Dispatch slot 0x7E is called once on CD at `L02.PAK+0xF40D` and twice on floppy at `CHAPTER1.PAK+0x5B351` and `CHAPTER5.PAK+0x2C68C`. Both native handlers take zero stack arguments, run update callbacks and return 1, as shown in the function table. Further downstream effects remain **UNCONFIRMED**. ScummVM leaves it unimplemented (LoL:2877, VM:309–321).
 - **CONFIRMED** All 60 members per edition decompile with zero invalid opcode numbers, out-of-range function IDs, or invalid branch targets using the input members below. DATA word totals include ORDR headers and operand words. Counts are static, including instructions outside the external entry points.
 
@@ -289,7 +289,7 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | Reference CD | 60 | 124,298 | 109,845 | 756 | 54 |
 | LANDSoL floppy | 60 | 120,706 | 106,782 | 746 | 54 |
 
-**CONFIRMED** VM opcodes 0x01, 0x12 have no static occurrence in either witness. The function table uses the full dispatch numbering, including slots the scripts never call. VM:29–55 and LoL:2683–2974.
+**CONFIRMED** VM opcodes 0x01, 0x12 have no static occurrence in either edition. The function table uses the full dispatch numbering, including slots the scripts never call. VM:29–55 and LoL:2683–2974.
 
 ### Corpus locations
 

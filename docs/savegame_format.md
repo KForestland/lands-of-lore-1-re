@@ -19,13 +19,13 @@ The CD addresses are file offsets in `DATA/HARDRIVE/MAIN.EXE`, identical to the 
 | Level snapshot slots | `0x1D87`, 30 × 2500 | `0x1D76`, 30 × 2500 | CD `+0x48BC7–0x48C49`; floppy `+0x52222–0x522A4`. |
 | Calculated EOF | `0x1427F` | `0x1426E` | Sum of serialized section lengths in the preceding rows. |
 
-The floppy reader compares the five-byte field as a C string against `.13` at `MAIN.EXE+0x3890C`; the comparison stops at NUL (floppy `+0x51F95–0x51FC8`). **CONFIRMED** ScummVM's original-save recognition checks for `CD04` at a candidate description boundary and ` CD1` after advancing past two bytes. This matches the native CD header at the 60-byte boundary and brings its reader to offset `0x4C`. The branch recognizes only the CD signature for LoL (Header:54–101). **UNCONFIRMED** The native file-end prediction and meanings of the skipped fields below await complete original `_SAVEnnn.DAT` witnesses. The offsets derived directly from the two native writers can be checked without an original save file.
+The floppy reader compares the five-byte field as a C string against `.13` at `MAIN.EXE+0x3890C`; the comparison stops at NUL (floppy `+0x51F95–0x51FC8`). **CONFIRMED** ScummVM's original-save recognition checks for `CD04` at a candidate description boundary and ` CD1` after advancing past two bytes. This matches the native CD header at the 60-byte boundary and brings its reader to offset `0x4C`. The branch recognizes only the CD signature for LoL (Header:54–101). **UNCONFIRMED** The native file-end prediction and meanings of the skipped fields below await an original `_SAVEnnn.DAT` file to check against. The offsets derived directly from the two native writers can be checked without an original save file.
 
 ## ScummVM header
 
 **CONFIRMED** In eleven local `lol-cd.*` save files, on-disk offset `0x00` is gzip magic `1F 8B`. The following layout uses the decompressed stream, with `lol-cd.001` as an example. The file is version 21. The current reference writer uses version 24 and emits these same header fields (Header:31,104–149,203–258; `backends/saves/default/default-saves.cpp:130,170`).
 
-| Offset in decompressed stream | Field | `lol-cd.001` witness |
+| Offset in decompressed stream | Field | `lol-cd.001` example |
 | --- | --- | --- |
 | `0x0000` | 4-byte `WWSV` | `WWSV` |
 | `0x0004` | `u8` game ID | 4 |
@@ -72,7 +72,7 @@ Offsets below are decimal relative to the start of global state, using version 2
 | 553 | 201 + F | `u32` level mask. Bit 0 is the level 1 snapshot. |
 | 557 | — | Six more bytes in CD only. The native loader tests several as booleans (CD `MAIN.EXE+0x489A0–0x48A1E`). Their complete meanings are **UNCONFIRMED**. |
 
-**UNCONFIRMED** Legacy ScummVM layouts lack local byte witnesses. The reader skips 80 bytes after characters for versions below 17, and four bytes after each item slot. Its version 14 flags comprise words 0–15, 26 and 36. Version 15 reads 40 words. Version 16 onward reads a count and a byte array (Save:104–105,134–159,189–202).
+**UNCONFIRMED** Legacy ScummVM layouts have no example files checked here. The reader skips 80 bytes after characters for versions below 17, and four bytes after each item slot. Its version 14 flags comprise words 0–15, 26 and 36. Version 15 reads 40 words. Version 16 onward reads a count and a byte array (Save:104–105,134–159,189–202).
 
 ## Item instance record
 
@@ -135,7 +135,7 @@ Field offsets are decimal. **CONFIRMED** The 46-byte native and 42-byte ScummVM 
 
 ### Flying object slot
 
-Offsets are decimal. **CONFIRMED** The same 17-byte boundaries fit both sets of witnesses. See Save:292–307,478–493. The purposes of `field_D` and `c` remain **UNCONFIRMED**.
+Offsets are decimal. **CONFIRMED** The same 17-byte boundaries fit both sets of examples. See Save:292–307,478–493. The purposes of `field_D` and `c` remain **UNCONFIRMED**.
 
 | Offset | Field |
 | ---: | --- |

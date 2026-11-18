@@ -12,7 +12,7 @@ The high byte of every opcode word accepted by the walk below is 1. The interpre
 
 CONFIRMED. The base table is `TIMInterpreter` (`script_tim.cpp:40-80`). `showIntro` and `showOutro` construct that class (`engines/kyra/sequence/sequences_lol.cpp:234` and `:1111`) and load `LOLINTRO.TIM` with `_timIntroOpcodes` (`sequences_lol.cpp:247`) and `LOLFINAL.TIM` with `_timOutroOpcodes` (`sequences_lol.cpp:1120`).
 
-The running game constructs `TIMInterpreter_LoL` (`engines/kyra/engine/lol.cpp:565`). Its table is `script_tim.cpp:853-892`. `olol_loadTimScript` (`script_lol.cpp:1110-1115`) appends `.TIM` and loads with `_timIngameOpcodes`.
+The running game constructs `TIMInterpreter_LoL` (`engines/kyra/engine/lol.cpp:563`). Its table is `script_tim.cpp:853-892`. `olol_loadTimScript` (`script_lol.cpp:1110-1115`) appends `.TIM` and loads with `_timIngameOpcodes`.
 
 The 139 counts are the CD set: 139 `.TIM` names. LANDSoL has 147. CD-only names: `BUCKBUY`, `COMPASSE`, `COMPASSF`, `COMPASSG`, `SPELLBKE`, `SPELLBKF`, `SPELLBKG`, `TYRUS1` through `TYRUS5`, `YFLETCH2`. LANDSoL-only names include `LOLINTRO.TIM` (`INTRO.PAK`, 14086 bytes) and `LOLFINAL.TIM` (`FINALE2.PAK`, 5040 bytes). Intro and outro counts are those two LANDSoL files and are not part of the 139. CONFIRMED.
 

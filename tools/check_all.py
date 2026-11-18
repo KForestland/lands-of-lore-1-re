@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run every reader's --check against a LoL1 DATA folder and print one line each.
 
-  check_all.py --data DATA       # or set $LOL1_DATA
+  check_all.py --data DATA       # or set $LOL1_DATA; runs 22 checks
 Exit code 0 when every check passes.
 """
 import argparse, os, subprocess, sys
@@ -24,6 +24,12 @@ def main():
                            capture_output=True, text=True)
         print((p.stdout or p.stderr).strip().splitlines()[-1] if (p.stdout or p.stderr) else f"{r}: no output")
         rc |= p.returncode
+    # EMC2 script corpus test (tests/test_emc2_corpus.py): every INF/INI disassembles
+    test = os.path.join(here, "..", "tests", "test_emc2_corpus.py")
+    p = subprocess.run([sys.executable, test, a.data], capture_output=True, text=True)
+    out = (p.stdout or p.stderr).strip().splitlines()
+    print("CHECK emc2: " + (out[-1].split(": ", 1)[-1] if out else "no output"))
+    rc |= p.returncode
     return rc
 
 

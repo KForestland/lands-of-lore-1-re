@@ -49,7 +49,7 @@ The stored uint32 for shape 0 is 372. `getPtrToShape` adds 2, which lands on fil
 | 24 | 29580 | `01 00 60 38 00 60 66 00 f5 00` | 1, 96, 56, 96, 102, 245 |
 | 48 | 31297 | `01 00 60 38 00 60 7f 00 13 01` | 1, 96, 56, 96, 127, 275 |
 
-`ITEMICN.SHP` in `STARTUP.PAK`, 22733 bytes. File bytes 0-5 are `cb 58 04 00 49 6e`: compression 4, image size 28233. Image begins `8a 00 2c 02`, count 138. `LoLEngine::loadItemIconShapes` (`engines/kyra/engine/lol.cpp:618-623`) loads this file as a bitmap and copies shapes with `makeShapeCopy`, which uses `getPtrToShape`. CONFIRMED.
+`ITEMICN.SHP` in `STARTUP.PAK`, 22733 bytes. File bytes 0-5 are `cb 58 04 00 49 6e`: compression 4, image size 28233. Image begins `8a 00 2c 02`, count 138. `LoLEngine::loadItemIconShapes` (`engines/kyra/engine/lol.cpp:616-621`) loads this file as a bitmap and copies shapes with `makeShapeCopy`, which uses `getPtrToShape`. CONFIRMED.
 
 | Shape | Image offset | Bytes | flags, h, w, h2, size, uncomp |
 | --- | --- | --- | --- |

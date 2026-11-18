@@ -1,6 +1,6 @@
 # Open questions
 
-Numbered so the format pages and [`STATUS.md`](STATUS.md) can point at them. Each is something not yet known about the original game files or rules. When one is answered, its page is updated and the entry says so. Detailed notes for Q1-Q6 are being added as `docs/unknowns/01_shp_header.md` … `06_tim_opcodes.md`.
+Numbered so the format pages and [`STATUS.md`](STATUS.md) can point at them. Each is something not yet known about the original game files or rules. When one is answered, its page is updated and the entry says so. Detailed notes: [Q1](unknowns/01_shp_header.md), [Q2](unknowns/02_wll_header.md), [Q3](unknowns/03_level24_cmz.md), [Q4](unknowns/04_yvel2.md), [Q5](unknowns/05_adv_drv_tbl.md), [Q6](unknowns/06_tim_opcodes.md).
 
 | ID | Question | Page |
 |----|----------|------|
@@ -10,7 +10,7 @@ Numbered so the format pages and [`STATUS.md`](STATUS.md) can point at them. Eac
 | Q4 | When the level 22 scripts switch between YVEL1 and YVEL2. **Answered:** a click in a screen rectangle while block 145's north wall is type 8 loads YVEL2 and sets game flag 357; `LEVEL22.INI` reloads YVEL2 when flag 357 is set; another script path loads YVEL1 and clears the flag. Decorations stay YVEL1 | [formats/vcn_vmp.md](formats/vcn_vmp.md) |
 | Q5 | The `.ADV`, `.DRV` and `.TBL` files. **Answered:** 7 Miles Design sound drivers (code), named by `LANDS.EXE`, `MAIN.EXE`, `FINALE.EXE`; `TRIG.TBL` is the copy-protection prompt string table | [formats/drivers.md](formats/drivers.md) |
 | Q6 | The full TIM opcode table. **Answered** for the 139 CD scripts and the floppy intro/outro; a few ScummVM-unimplemented commands remain (see the page) | [formats/tim.md](formats/tim.md) |
-| Q7 | Game rules as formulas: combat, magic, experience and skills, monster behaviour, light, time; meaning of the WLL wall flags and special types. **Written** (`docs/game_rules.md`, being added): dice, hit test, armour and damage, experience thresholds and awards, spell damage tables and monster mode flags are checked in the original executables; magic effects, light, time, regeneration and most monster transitions are still ScummVM's version only. WLL flag meanings still open | [STATUS.md](STATUS.md#game-rules-and-executable-tables), [formats/wll.md](formats/wll.md) |
+| Q7 | Game rules as formulas: combat, magic, experience and skills, monster behaviour, light, time; meaning of the WLL wall flags and special types. **Written** ([game_rules.md](game_rules.md)): dice, hit test, armour and damage, experience thresholds and awards, spell damage tables and monster mode flags are checked in the original executables; magic effects, light, time, regeneration and most monster transitions are still ScummVM's version only. WLL flag meanings still open | [STATUS.md](STATUS.md#game-rules-and-executable-tables), [formats/wll.md](formats/wll.md) |
 | Q8 | What script function 0x7E did in the original. **Answered:** in both executables the handler takes no arguments, calls one engine routine (game update and callback service) and returns 1. What that routine changes downstream is still open | [formats/emc2.md](formats/emc2.md) |
 | Q9 | Which PAK wins when two PAKs hold the same member name | [formats/pak.md](formats/pak.md) |
 | Q10 | Who plays the 59 `NNNNN.VOC` members of the CD speech files | [formats/tlk.md](formats/tlk.md) |

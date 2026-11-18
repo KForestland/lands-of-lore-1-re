@@ -30,7 +30,7 @@ Use in the 139 CD scripts (instructions / files), CONFIRMED by two independent w
 
 The other commands of the table (0x00, 0x04, 0x05, 0x08-0x13, 0x16, 0x1A-0x1C, 0x1E) occur in none of the 139. Nested functions used (count): scene-window dialogue on/off 5/5, give item 2, set party position 2, fade/clear window 23, copy screen region 497, character chat 25, draw scene 6, update 71, clear text field 9, load sound file 4, play music 5, play dialogue/talk text 77, play sound effect 71, start background animation 4; one call of an unimplemented slot (0x02) in `VICTOR4.TIM`.
 
-The full table with parameters, ScummVM lines, and the intro (`LOLINTRO.TIM`) and outro (`LOLFINAL.TIM`) lists of the floppy edition is being added as `docs/unknowns/06_tim_opcodes.md`.
+The full table with parameters, ScummVM lines, and the intro (`LOLINTRO.TIM`) and outro (`LOLFINAL.TIM`) lists of the floppy edition: [`../unknowns/06_tim_opcodes.md`](../unknowns/06_tim_opcodes.md).
 
 ## Correction
 

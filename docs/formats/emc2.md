@@ -10,12 +10,9 @@ IFF `FORM` with type `EMC2`; chunks `TEXT` (optional strings), `ORDR` (function 
 
 ## Full documentation
 
-The detailed pages are being added in the same pass and are not in this checkout yet:
-
-- `docs/emc2_scripts.md`: container details (the FORM length includes the 8 header bytes; ORDR word indexes and entry headers; TEXT offsets), the 19 VM opcodes and 18 `eval` operators, the full 192-entry LoL1 function table with call counts per edition, and where each script sits in its PAK. With a disassembler `tools/emc2_decompile.py` and a test that disassembles all 60 scripts of both editions.
-- `docs/executable_tables.md`: the 285 item definitions and 79 monster definitions are supplied by script calls (`ONETIME.INF`, level scripts); argument layouts.
-
-Their content was re-checked against the data with an independent decoder (function table vs ScummVM's 192-entry dispatch table, call counts, item and monster argument counts, the four item rows that differ between editions).
+- [`../emc2_scripts.md`](../emc2_scripts.md): container details (the FORM length includes the 8 header bytes; ORDR word indexes and entry headers; TEXT offsets), the 19 VM opcodes and 18 `eval` operators, the full 192-entry LoL1 function table with call counts per edition and the native handler addresses, and where each script sits in its PAK.
+- [`../executable_tables.md`](../executable_tables.md): the 285 item definitions and 79 monster definitions are supplied by script calls (`ONETIME.INF`, level scripts), with their argument layouts.
+- Disassembler: `tools/emc2_decompile.py`; test: `tests/test_emc2_corpus.py` (all 60 scripts of both editions disassemble with no unknown opcode or function).
 
 ## Open
 

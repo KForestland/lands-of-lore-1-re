@@ -31,7 +31,7 @@ Syscall 8 is `olol_testGameFlag` (`script_lol.cpp:2701`, `:200-205`). Syscall 7 
 
 `op_ifNotJmp` jumps when the popped value is 0, and masks the target with `0x7FFF` (`engines/kyra/script/script.cpp:323-327`). `op_eval` case 2 is equality and case 3 is inequality (`script.cpp:370-375`). EMC data words are big-endian. A syscall whose parameter fits in a signed byte is one word: opcode 14 with bit 0x4000 set. Syscall 9 is the word `4E 09`.
 
-Strings cited below come from the EMC TEXT chunk. The asm listings under `lol1_scripts_decompiled/` garble those strings; the bytes here are from the chunk.
+Strings cited below come from the script's TEXT chunk.
 
 ## LEVEL22.INI, both editions
 

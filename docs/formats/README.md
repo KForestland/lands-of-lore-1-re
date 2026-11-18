@@ -35,10 +35,10 @@ One page per file type of *Lands of Lore: The Throne of Chaos* (Westwood, 1993, 
 | [tlc.md](tlc.md) | CD `LEVELnn.TLC` | `tools/tlc_reader.py` | CONFIRMED (closure memo corrected) |
 | [palette.md](palette.md) | `*.PAL`, `*.COL` | `tools/cps_reader.py --pal-from` | CONFIRMED (sizes); Q14 open |
 | [fnt.md](fnt.md) | `*.FNT` | `tools/fnt_reader.py` | CONFIRMED |
-| [emc2.md](emc2.md) | `LEVELn.INF`, `LEVELn.INI`, `ITEM.INF`, `ONETIME.INF` | disassembler to be added (see page) | container CONFIRMED; Q8 open |
+| [emc2.md](emc2.md) | `LEVELn.INF`, `LEVELn.INI`, `ITEM.INF`, `ONETIME.INF` | `tools/emc2_decompile.py` | CONFIRMED (all 60 scripts, both editions) |
 | [tim.md](tim.md) | `*.TIM` | `tools/parse_tim.py` | CONFIRMED: container and command use (Q6 answered) |
 | [drivers.md](drivers.md) | `*.ADV *.DRV *.TBL` | `tools/decode_dialogue.py` (TRIG.TBL) | CONFIRMED: drivers identified (code, not documented inside); TRIG.TBL decoded (Q5 answered) |
 
-Pages being added in the same pass, not yet in this checkout: `docs/executable_tables.md` (tables inside `MAIN.EXE`: spells, characters, experience levels, difficulty, prices), `docs/savegame_format.md` (original and ScummVM save files) and `docs/game_rules.md` (combat, magic, experience, monsters, light, time). See [`../STATUS.md`](../STATUS.md).
+How the game works (scripts, rules, saves): [`../emc2_scripts.md`](../emc2_scripts.md), [`../executable_tables.md`](../executable_tables.md), [`../game_rules.md`](../game_rules.md), [`../savegame_format.md`](../savegame_format.md). Answered questions in detail: [`../unknowns/`](../unknowns/).
 
 Inventory note (CONFIRMED, `pak_reader.py --check`): the closure memo's "81 PAKs, 1163 entries" covers only the top level of the CD `DATA/` folder. The CD also has `DATA/ENG`, `DATA/FRE`, `DATA/GER`, each with 17 PAKs and 378 members (INTRO1-9, FINALE*, HISTORY, INTROVOC, a language GENERAL/STARTUP, NEW6P/NEW8P/INTRO fonts, .TXT, .DIP). `DATA/ENG/GENERAL.PAK` is not byte-identical to `DATA/GENERAL.PAK`. The 30 `NN.TLK` files hold another 4912 members.

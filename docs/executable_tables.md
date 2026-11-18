@@ -6,7 +6,7 @@ Evidence references use ScummVM revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801
 
 ## Locating the executables
 
-**CONFIRMED** The reference CD stores its DOS executables in `WESTWOOD.001`. The little-endian `u32` at `0x03` gives the length of the CRLF-delimited member list at `0x07`. The first list line names the list itself. For each subsequent line, read a length `u32 LE` and then that many payload bytes. The walk consumes the whole archive (end `0x3139A1`). The two gameplay images are also loose under CD `DATA/HARDRIVE`, where both match their archive member byte for byte. Both start with MZ headers. The archive member length includes overlay bytes beyond the MZ-declared image. The floppy witness is the loose LANDSoL `MAIN.EXE`. See `WESTWOOD.001+0x07` for names and the prefix offsets below, and LANDSoL `MAIN.EXE+0x00` for its MZ header.
+**CONFIRMED** The reference CD stores its DOS executables in `WESTWOOD.001`. The little-endian `u32` at `0x03` gives the length of the CRLF-delimited member list at `0x07`. The first list line names the list itself. For each subsequent line, read a length `u32 LE` and then that many payload bytes. The walk consumes the whole archive (end `0x3139A1`). The two gameplay images are also loose under CD `DATA/HARDRIVE`, where both match their archive member byte for byte. Both start with MZ headers. The archive member length includes overlay bytes beyond the MZ-declared image. The floppy executable is the loose LANDSoL `MAIN.EXE`. See `WESTWOOD.001+0x07` for names and the prefix offsets below, and LANDSoL `MAIN.EXE+0x00` for its MZ header.
 
 | Image | CD length prefix | CD archive start | Member size |
 | --- | ---: | ---: | ---: |
@@ -42,7 +42,7 @@ Short references `lol_dos_cd.h`, `lol_dos.h` and `lol_dos_english.h` are under `
 | `0D` | `u8` race/class/sex |
 | `0E` | `i16` character ID |
 | `10`, `11`, `12` | `u8` current face, temporary face, scream sound |
-| `13` | DOS 16:16 far pointer, offset first, segment second. ScummVM's static reader discards this word pair and maps the modifier row when adding the character (`engines/kyra/engine/lol.cpp:1257–1263`). |
+| `13` | DOS 16:16 far pointer, offset first, segment second. ScummVM's static reader discards this word pair and maps the modifier row when adding the character (`engines/kyra/engine/lol.cpp:1204–1210`). |
 | `17`, `27` | 8 × `u16` item might and 8 × `u16` protection against each item category |
 | `37` | `u16` item protection |
 | `39`, `3B`, `3D`, `3F` | Current and max HP, current and max MP, each a 16-bit word. Current values are signed. |
@@ -51,7 +51,7 @@ Short references `lol_dos_cd.h`, `lol_dos.h` and `lol_dos_english.h` are under `
 | `46`, `48` | `u16` total might and total protection multipliers |
 | `4A`, `4C` | `u16` base might and protection |
 | `4E` | `i16` next animation update countdown |
-| `50` | 11 × `u16` default equipment type indexes. ScummVM turns nonzero entries into item handles on joining (`engines/kyra/engine/lol.cpp:1272–1276`). |
+| `50` | 11 × `u16` default equipment type indexes. ScummVM turns nonzero entries into item handles on joining (`engines/kyra/engine/lol.cpp:1219–1223`). |
 | `66`, `69` | 3 × `u8` skill levels and 3 × `i8` modifiers |
 | `6C` | 3 × `i32` experience totals |
 | `78`, `7D` | 5 × `u8` update events and 5 × `u8` delays |
@@ -67,11 +67,11 @@ Short references `lol_dos_cd.h`, `lol_dos.h` and `lol_dos_english.h` are under `
 | `0A`, `0C` | `field_a`, `field_c`. Their native meanings remain **UNCONFIRMED**. |
 | `0E` | HP costs, four words in rank order |
 | `16`, `18` | `field_16`, `field_18`. Further native use **UNCONFIRMED**. |
-| `1A` | Spell flags. ScummVM uses bit 8 to check the forward wall and tests the low byte for the Heal target click (`engines/kyra/engine/lol.cpp:2144–2175`, `engines/kyra/gui/gui_lol.cpp:1469–1476`). |
+| `1A` | Spell flags. ScummVM uses bit 8 to check the forward wall and tests the low byte for the Heal target click (`engines/kyra/engine/lol.cpp:2091–2122`, `engines/kyra/gui/gui_lol.cpp:1469–1476`). |
 
 ## Item types and item properties
 
-**CONFIRMED** The 285 type definitions are embedded in `ONETIME.INF` bytecode. The record is a set of stack arguments of variable encoded length. In both editions, syscall `0x0D` at DATA word `0x06` allocates 285 slots. The next 285 calls to `0x0E` supply exactly one definition for each index 0 through 284. Check CD `STARTUP.PAK+0x212A5` for the allocation and `+0x212C1` for the first property call, or floppy `GENERAL.PAK+0xDAAFC` and `+0xDAB18`. The code leading into each call supplies the arguments in reverse push order and occasionally uses constant expressions. The reference loader runs `ONETIME.INF` at startup and separately loads `ITEM.INF` for event code (`engines/kyra/engine/lol.cpp:859–860`, `script_lol.cpp:234–261`).
+**CONFIRMED** The 285 type definitions are embedded in `ONETIME.INF` bytecode. The record is a set of stack arguments of variable encoded length. In both editions, syscall `0x0D` at DATA word `0x06` allocates 285 slots. The next 285 calls to `0x0E` supply exactly one definition for each index 0 through 284. Check CD `STARTUP.PAK+0x212A5` for the allocation and `+0x212C1` for the first property call, or floppy `GENERAL.PAK+0xDAAFC` and `+0xDAB18`. The code leading into each call supplies the arguments in reverse push order and occasionally uses constant expressions. The reference loader runs `ONETIME.INF` at startup and separately loads `ITEM.INF` for event code (`engines/kyra/engine/lol.cpp:857–858`, `script_lol.cpp:234–261`).
 
 | Stack slot | Field | Reference storage |
 | --- | --- | --- |
