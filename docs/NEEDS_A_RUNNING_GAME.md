@@ -92,9 +92,10 @@ EMC example at CD `L08.PAK+0xCAA8` or floppy
 face 1 against zero. Its native getter is CD `MAIN.EXE+0x134F0`
 or floppy `+0x17EB3`. [Wall-flag evidence](unknowns/07_native_rules.md#follow-up-on-bit-0x40)
 
-**CONFIRMED, level-1 control.** The 52 original WLL wall IDs
-showed the same flags at `DS:531E + id` before and after movement
-and a wall click. No declared ID had bit `0x40` set. The available
+**CONFIRMED, level-1 control.** All 52 declared WLL wall IDs
+matched their file bytes at `DS:531E + id` after movement and a
+wall click, with bit `0x40` clear. The 256-byte read had the same
+counts for each value before and after. The available
 CD slot begins in level 1, so block 172 in level 8 was out of reach.
 [Addresses and original record comparison](unknowns/07_native_rules.md#follow-up-on-bit-0x40)
 

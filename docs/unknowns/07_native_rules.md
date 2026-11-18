@@ -178,10 +178,13 @@ level 1 through the [installed launcher](../NEEDS_A_RUNNING_GAME.md#working-laun
 The resident getter at `MAIN.EXE+0x134F0` matched guest linear
 `0x11710` (load segment `01A2`). With game `DS=2FCF`, the bytes
 at `DS:531E + id` for all 52 original `LEVEL1.WLL` records matched
-the shipped flags both before and after a forward/turn/click sequence.
-Those declared IDs range from 0 to 79, and every flag had bit `0x40`
-clear. For example, wall 3 stayed `0xAF` (record at `L01.PAK+0x109E9`,
-flag at record +8, `+0x109F1`). **UNCONFIRMED:** the proposed level-8
+the shipped flags after a forward/turn/click sequence. The before and
+after reads of the 256-byte table had the same counts for each byte
+value, and the first 16 bytes matched in order. The declared IDs range
+from 0 to 79, and every declared flag had bit `0x40` clear after the
+sequence. Wall 3 stayed `0xAF` (record at `L01.PAK+0x109E9`, flag at record +8,
+`+0x109F1`).
+**UNCONFIRMED:** the proposed level-8
 block-172 contrast still needs a native level-8 starting state.
 
 ### Additional wall consumers in both editions
