@@ -1,6 +1,6 @@
 # Q9. Which PAK wins when the name is shared
 
-A loose file wins over every archive. Among archives, the one loaded earlier wins. Inside one archive, the later directory entry replaces the earlier one. On these two discs the only names that actually collide are in the prologue, plus one identical pair inside a single floppy archive.
+A loose file wins over every archive. Among archives, the one loaded earlier wins. Inside one archive, the later directory entry replaces the earlier one. On these two discs the only names that actually collide are in the prologue, plus two identical pairs inside single archives: `CIMMERIA.DAT` twice in the floppy `CHAPTER8` and `GONG.VOC` twice in the CD `ENG/INTROVOC.PAK` (30155 bytes each, identical bytes).
 
 ## The three rules
 
@@ -32,7 +32,7 @@ CONFIRMED. `LOL_CD_FLAGS` sets the talkie flag (`detection_tables.h:56`), so `GE
 
 The prologue is the collision. `processPrologue` loads the root `GENERAL.PAK` first (`sequences_lol.cpp:38`). `setupPrologueData` then loads `ENG/GENERAL.PAK`, `ENG/INTROVOC.PAK`, `ENG/STARTUP.PAK`, `ENG/INTRO1.PAK` through `ENG/INTRO9.PAK` and `ENG/HISTORY.PAK` (`sequences_lol.cpp:151-156` and `:176-186`; the language directory is prefixed for a talkie build that is not the demo). Those are different archive names from the root file, so both stay loaded. The root archive was inserted first and is searched first.
 
-Worked example. `FACE08.SHP` is 11462 bytes in the root `GENERAL.PAK`, 11475 bytes in `ENG/GENERAL.PAK`, and 11491 bytes in `ENG/INTRO9.PAK`. The root file wins while the prologue archives are loaded. `FACE01.SHP` is 10563 in the root file and 10569 in both `ENG/GENERAL.PAK` and `ENG/INTRO9.PAK`. `ITEMICN.SHP` is 22733 bytes in `STARTUP.PAK` and 361 bytes in `ENG/INTRO9.PAK`. It is not in either general archive. `STARTUP.PAK` is loaded before `INTRO9.PAK`, so the 22733-byte file wins during the prologue. `LANDS.ENG` is in `STARTUP.PAK` (10059 bytes) and is not in either general archive.
+Worked example (the root and language-directory copies of several other files differ too, for example `AUTOBUT`, `FACE02`-`FACE06`, `HEALI.SHP`, `WRITE3E/4E.WSA` and `LORESFX.ADL`). `FACE08.SHP` is 11462 bytes in the root `GENERAL.PAK`, 11475 bytes in `ENG/GENERAL.PAK`, and 11491 bytes in `ENG/INTRO9.PAK`. The root file wins while the prologue archives are loaded. `FACE01.SHP` is 10563 in the root file and 10569 in both `ENG/GENERAL.PAK` and `ENG/INTRO9.PAK`. The prologue loads `ENG/STARTUP.PAK`, whose 11 members are the `LOREINTR` music files, four fonts, `LOLINTRO.TIM` and the two DIP files; it holds neither `ITEMICN.SHP` nor `LANDS.ENG`. Those two (22733 and 10059 bytes) are in the root `STARTUP.PAK`, one of the 81 `FILEDATA.FDT` archives, which is not loaded during the prologue. So during the CD prologue the only `ITEMICN.SHP` is the 361-byte copy in `ENG/INTRO9.PAK`.
 
 `setupPrologueData(false)` unloads the language-directory list and does not unload the root `GENERAL.PAK` loaded at line 38. `go` then loads `FILEDATA.FDT` (`engines/kyra/engine/lol.cpp:537-538` upstream). `GENERAL.PAK` is already present, so it is not moved. Because the 81 archives share no member names, that leftover copy does not hide a different file of the same name.
 

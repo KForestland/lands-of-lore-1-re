@@ -15,8 +15,8 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (26 checks; 
 
 | Format | Documented | Tool | Checked on data | Open |
 |--------|-----------|------|-----------------|------|
-| PAK container | [pak.md](formats/pak.md) | `pak_reader.py`, `pak_indexer.py` | CD 81 PAK / 1163 members (rebuilds `data/pak_index.json`), ENG 17/378, LS 15/1213 | Q9 |
-| TLK speech (CD) | [tlk.md](formats/tlk.md) | `tlk_verify.py`, `pak_reader.py`, `voc_reader.py` | 30 files, 4912 VOC members; names follow the engine's speech patterns | Q10 |
+| PAK container | [pak.md](formats/pak.md) | `pak_reader.py`, `pak_indexer.py` | CD 81 PAK / 1163 members (rebuilds `data/pak_index.json`), ENG 17/378, LS 15/1213 | Q9 answered ([page](unknowns/09_pak_order.md)) |
+| TLK speech (CD) | [tlk.md](formats/tlk.md) | `tlk_verify.py`, `pak_reader.py`, `voc_reader.py` | 30 files, 4912 VOC members; names follow the engine's speech patterns | Q10 mostly answered: one padding clip ([page](unknowns/10_nnnnn_voc.md)) |
 | Frame4 / LCW | [lcw.md](formats/lcw.md) | `lol1lib.py`, `decode_frame4.py` | two independent ports agree on 140/140 CD files; every CPS/CMZ/VCN/VMP in CD, ENG, LS decodes to its stated size | — |
 | CPS | [cps.md](formats/cps.md) | `cps_reader.py` | CD 85/85, ENG 60/60, LS 112/112 | — |
 | SHP | [shp.md](formats/shp.md) | `shp_renderer.py` | strict decode CD 3492/3492, ENG 1269/1269, LS 3601/3601; 2-byte-prefix variant 0/197 | Q1 (demo only) |
@@ -25,13 +25,13 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (26 checks; 
 | XMI / C55 / PCS | [music.md](formats/music.md) | `extract_music.py` | IFF trees of all 51 IFF files among the 67 CD music files (rebuilds `data/music_inventory.json`); `xmi_to_midi.py` converts all 620 XMIDI sequences to MIDI | Q15 (what C55 stands for) |
 | ADL | [music.md](formats/music.md), [Q15](unknowns/15_adl_and_c55.md) | `extract_music.py` (raw only) | layout traced; program 0 at 0x7D0 in all 16 CD files | an ADL player/converter |
 | ENG / FRE / GER text | [text.md](formats/text.md) | `decode_dialogue.py`, `extract_dialogue.py` | 90 files, 6495 strings, all bigram bytes in range (CD) | — |
-| CMZ level map | [cmz.md](formats/cmz.md) | `cmz_analyzer.py`, `level_renderer.py` | 29/29, size = 6 + 1024 x len (rebuilds the corrected `data/wall_type_analysis.json`) | Q3 (meaning of level 24's extra 5 bytes per block), Q11 (wall types missing from the WLL on levels 2, 3, 21) |
+| CMZ level map | [cmz.md](formats/cmz.md) | `cmz_analyzer.py`, `level_renderer.py` | 29/29, size = 6 + 1024 x len (rebuilds the corrected `data/wall_type_analysis.json`) | Q3 settled, Q11 answered ([page](unknowns/11_undefined_walls.md)) |
 | WLL wall types | [wll.md](formats/wll.md) | `wll_parser.py` | 29/29, 1726 records (rebuilds `data/wll_parsed.json`) | Q7 (meaning of flag bits and special types) |
-| VCN / VMP | [vcn_vmp.md](formats/vcn_vmp.md) | `vcn_vmp_reader.py`, `tileset_mapper.py` | 13/13 sets CD and LS; 35 `loadLevelGraphics` calls mapped | Q16 |
-| XXX automap legend | [xxx.md](formats/xxx.md) | `xxx_reader.py` | 29 files, 73 records, CD and LS | Q12 |
-| DAT decorations | [dat.md](formats/dat.md) | `dat_reader.py` | 12/12 CD and LS | Q13 |
+| VCN / VMP | [vcn_vmp.md](formats/vcn_vmp.md) | `vcn_vmp_reader.py`, `tileset_mapper.py` | 13/13 sets CD and LS; 35 `loadLevelGraphics` calls mapped | Q16 answered ([page](unknowns/16_vcn_colour_banks.md)) |
+| XXX automap legend | [xxx.md](formats/xxx.md) | `xxx_reader.py` | 29 files, 73 records, CD and LS | Q12 answered ([page](unknowns/12_legend_bit.md)) |
+| DAT decorations | [dat.md](formats/dat.md) | `dat_reader.py` | 12/12 CD and LS | Q13 answered ([page](unknowns/13_decoration_positions.md)) |
 | TLC (CD) | [tlc.md](formats/tlc.md) | `tlc_reader.py` | 29/29 CD; LS has none | — |
-| PAL / COL | [palette.md](formats/palette.md) | `cps_reader.py --pal-from` | 11/11 are 768 bytes (CD); level use of 3 PALs by script scan | Q14 |
+| PAL / COL | [palette.md](formats/palette.md) | `cps_reader.py --pal-from` | 11/11 are 768 bytes (CD); level use of 3 PALs by script scan | Q14 partly answered: catalogued, no caller found ([page](unknowns/14_palette_callers.md)) |
 | FNT | [fnt.md](formats/fnt.md) | `fnt_reader.py` | CD 4, ENG 7, LS 9 | — |
 | EMC2 scripts (INF/INI) | [emc2.md](formats/emc2.md), [emc2_scripts.md](emc2_scripts.md) | `emc2_decompile.py`, `tests/test_emc2_corpus.py` | CD 60/60, LS 60/60, 0 unknown opcodes or functions; native dispatch tables located (independently re-checked) | Q8 (downstream effect only) |
 | TIM sequences | [tim.md](formats/tim.md) | `parse_tim.py` | 139/139 `FORM…AVFS`; command use counted by two independent walkers | native effect of a few unimplemented commands |
@@ -86,6 +86,6 @@ All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--dat
 
 ## What "done" means here
 
-A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 7 of the 21 format rows meet that: LCW, CPS, WSA, VOC, TLC, FNT, text. Eleven more have a page, a reader and a passing check but one or more open points: PAK, TLK, SHP (demo edition unread), CMZ, WLL, VCN/VMP, XXX, DAT, EMC2, TIM (a few commands ScummVM leaves unimplemented), ADV/DRV/TBL (the drivers are program code, not documented inside). Three are only partly documented: XMI/C55/PCS and ADL (Q15), PAL/COL (Q14). All five rules and tables rows are documented. Four are checked against the data; the game-rules row is checked in the original program for its core combat arithmetic, and the rest of it is now traced in both executables too ([Q7](unknowns/07_native_rules.md)); a few details stay open.
+A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 12 of the 21 format rows meet that: LCW, CPS, WSA, VOC, TLC, FNT, text, PAK, CMZ, VCN/VMP, XXX, DAT. Six more have a page, a reader and a passing check but one or more open points: TLK (why the padding clip is there), SHP (demo edition unread), WLL, EMC2, TIM (a few commands ScummVM leaves unimplemented), ADV/DRV/TBL (the drivers are program code, not documented inside). Three are only partly documented: XMI/C55/PCS and ADL (Q15), PAL/COL (Q14). All five rules and tables rows are documented. Four are checked against the data; the game-rules row is checked in the original program for its core combat arithmetic, and the rest of it is now traced in both executables too ([Q7](unknowns/07_native_rules.md)); a few details stay open.
 
 "Checked independently" in this page means a second program, written separately from the one that produced the claim, gave the same result on the same files (for example two separate Frame4 decoders, or two separate TIM walkers).

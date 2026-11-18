@@ -24,3 +24,20 @@
 - The next VMP word is `FB 80`, an overlay using tile 251 and its own stored shift. VMP word 0 selects floor tile 1, with shift `0x70`. Its first nibble is 1 and maps to palette index 98 through lookup index `0x71`.
 
 **UNCONFIRMED** The original authoring procedure that assigned the shift bytes is open. The table inspection and executable trace establish where the renderer gets every bank. To identify whether an artist or a tool chose bank 3 for KEEP tile 250, the specific evidence needed is an original tileset source with that tile's bank metadata or an exporter that reproduces the shift table.
+
+## Shift values in KEEP.VCN
+
+**CONFIRMED** CD and LANDSoL `KEEP.VCN` decompress to the same 42820-byte image: tile count 1282 (`02 05`), then the 1282-byte shift table. The only values in the table are the eight multiples of 16:
+
+| Shift byte | Bank | Tiles |
+| --- | --- | --- |
+| 0 | 0 | 298 |
+| 16 | 1 | 181 |
+| 32 | 2 | 77 |
+| 48 | 3 | 133 |
+| 64 | 4 | 124 |
+| 80 | 5 | 219 |
+| 96 | 6 | 160 |
+| 112 | 7 | 90 |
+
+298 + 181 + 77 + 133 + 124 + 219 + 160 + 90 = 1282. The image size matches the layout: 2 + 1282 + 128 + 384 + 1282 times 32 = 42820.

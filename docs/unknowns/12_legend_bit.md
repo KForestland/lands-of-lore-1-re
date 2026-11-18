@@ -4,7 +4,7 @@ On both retail discs the bit is clear on every legend string. ScummVM masks it o
 
 ## What the loader does
 
-CONFIRMED. `loadMapLegendData` (`engines/kyra/engine/lol.cpp:4250-4280` upstream) reads up to 32 records of 12 bytes. The uint16 at offset 10 of each record is the string id, stored for the draw as `l[2]`. `printMapText` passes that id straight to `getLangString` (`lol.cpp:4595` upstream). It does not test bit 0x8000.
+CONFIRMED. `loadMapLegendData` (`engines/kyra/engine/lol.cpp:4250-4280` upstream) reads up to 32 records of 12 bytes. The uint16 at offset 10 of each record is the string id, stored for the draw as `l[2]`. `printMapText` (defined at `lol.cpp:4595` upstream) passes that id straight to `getLangString` (`lol.cpp:4598` and `:4600`). It does not test bit 0x8000.
 
 `getLangString` (`lol.cpp:1066` upstream) returns nothing when the id is `0xFFFF`. Otherwise:
 

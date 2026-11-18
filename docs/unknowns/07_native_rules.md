@@ -39,7 +39,7 @@
 | Test both words of effect slot 7, containing `00 00 00 00` | `0x4FFF8–0x50000`, slot `0x32F10` | `0x5A2FB–0x5A303`, slot `0x39620` |
 | Skip the indirect call and return 1 | Skips `0x50018`, returns at `0x50024–0x5002A` | Skips `0x5A31B`, returns at `0x5A327–0x5A32D` |
 
-**CONFIRMED** An accepted ordinary Vortex cast spends MP and runs no spell effect. The separate no-cost path uses the supplied effect ID directly at CD `0x4FF4D` and LANDSoL `0x5A250`. Its indirect call lacks the paid path's zero-pointer guard. EMC `0xAD` reaches the cast routine at CD `0x16353` and floppy `0x1AC43`. The five `0xAD` calls per edition are in `ITEM.INF`. Their fixed effects are 4 and 12, and the other three use item attributes. In the startup definitions, the item handlers feeding those three calls supply 3, 5, 6, 9 (entry 20), 4, 5, 9, 16 (entry 24), and 8 (entry 29). For example, entry 20's getter and cast are CD `STARTUP.PAK+0x11A97–0x11AFD` and LANDSoL `GENERAL.PAK+0xDA49E–0xDA4EE`. The corresponding startup definitions span CD `STARTUP.PAK+0x22FD1–0x2302D, +0x234AF–0x23525` and LANDSoL `GENERAL.PAK+0xDC828–0xDC884, +0xDCD06–0xDCD7C`.
+**CONFIRMED** An accepted ordinary Vortex cast spends MP and runs no spell effect. The separate no-cost path uses the supplied effect ID directly at CD `0x4FF4D` and LANDSoL `0x5A250`. Its indirect call lacks the paid path's zero-pointer guard. EMC `0xAD` reaches the cast routine at CD `0x16353` and floppy `0x1AC43`. The five `0xAD` calls per edition are in `ITEM.INF`. Four of them pass `-1 - caster` and take the no-cost path; one (CD `STARTUP.PAK+0x11CBB`) passes the caster itself and takes the paid path. None of the five can supply ID 7. Their fixed effects are 4 and 12, and the other three use item attributes. In the startup definitions, the item handlers feeding those three calls supply 3, 5, 6, 9 (entry 20), 4, 5, 9, 16 (entry 24), and 8 (entry 29). For example, entry 20's getter and cast are CD `STARTUP.PAK+0x11A97–0x11AFD` and LANDSoL `GENERAL.PAK+0xDA49E–0xDA4EE`. The corresponding startup definitions span CD `STARTUP.PAK+0x22FD1–0x2302D, +0x234AF–0x23525` and LANDSoL `GENERAL.PAK+0xDC828–0xDC884, +0xDCD06–0xDCD7C`.
 
 **UNCONFIRMED** An ordinary shipped-play route that awards item 239 remains open. The definition and its reading path are present. The corpus check tested literal uses of 239 in the level scripts and found it as a block or rectangle operand, e.g. in CD `L01.PAK+0xD5D7` and LANDSoL `CHAPTER1.PAK+0x58B4D`. To verify reachability, trace native item grants and placements filtered by type 239, including the shop and any computed script arguments.
 
@@ -79,7 +79,7 @@
 | Pick shortest period | `0x566CA–0x56749` | `0x26A2A–0x26ABD` |
 | Convert to divisor and write PIT ports | `0x56654–0x5667C, 0x564D2–0x564F3` | `0x269B6–0x269DE, 0x2698D–0x269B5` |
 | Install the IRQ 0 vector and schedule enabled callbacks | `0x56947–0x5698D, 0x1F2FD–0x1F3A0` | `0x2690D–0x26953, 0x26827–0x26893` |
-| Increment the game clock counters | `0x26982–0x269C7` | `0x2938C–0x293D5` |
+| Advance the game clock counters (CD: counters whose bit is set in `DS:3848` count down, initially `DS:3850`; `DS:384C` and `DS:3858` increment. LANDSoL: `DS:6F18` counts down) | `0x26982–0x269C7` | `0x2938C–0x293D5` |
 | Pause and resume the gameplay clock with argument 2 | `0x4C5B3–0x4C5D4, 0x269C8–0x26A49` | `0x5521A–0x55249, 0x24F85–0x24FEC` |
 
 **CONFIRMED** At the nominal 60 ticks per second, 360 ticks of an enabled clock is about 6 seconds, and 1200 is about 20 seconds. The gameplay timer table uses the gated counter, CD `DS:3858` (enable bit 3 of `DS:384A`) or LANDSoL `DS:6F14` (enable bit 1 of `DS:6F1C`). The delay clock is `DS:384C` or `DS:6F0C` and keeps advancing when those gameplay bits are cleared. The CD data image initializes its delay clock's enable bit 0 at `MAIN.EXE+0x3531A`. LANDSoL advances the delay clock unconditionally in the callback. The script pause and resume entry points are `0x9A` and `0x9B` (CD wrappers `0x4D4E0–0x4D4F7`, floppy `0x56078–0x5608F`). ScummVM's DOS engine represents its interval as an integer `16 ms` (`engines/kyra/engine/kyra_v1.cpp:46–50,715–732`).
@@ -99,7 +99,7 @@
 | 7 | Tries ranged action before the close-attack or movement path. | `0x12950–0x1296D` | `0x172EF–0x1730C` |
 | 8 | Increments the counter, then switches to 5 when it exceeds 2. New counter is `trunc(2048 / speed)` narrowed to a signed byte before multiplying by difficulty modifier 3 and dividing by 256. | `0x1296E–0x129E5` | `0x1730D–0x17384` |
 | 9 | Counts down. At zero, clear runtime bit 8 and switch to 7. Otherwise use the close-attack or movement path. | `0x129E6–0x12A17` | `0x17385–0x173B6` |
-| 10, 11 | Both use the common display cleanup. Mode 11 also bypasses the shared shift-animation update. | `0x12830–0x1283C, 0x12A30–0x12A67, 0x12A7F–0x12A82` | `0x171CE–0x171DA, 0x173CF–0x17406, 0x1741E–0x17421` |
+| 10, 11 | Both use the common display cleanup. Mode 11 (like mode 14) also bypasses the shared shift-animation update. | `0x12830–0x1283C, 0x12A30–0x12A67, 0x12A7F–0x12A82` | `0x171CE–0x171DA, 0x173CF–0x17406, 0x1741E–0x17421` |
 | 12 | Once the counter passes 13, invokes level event `0x404` with the monster ID. | `0x12879–0x128B6` | `0x17218–0x17255` |
 | 13 | Calls death handling once the death counter passes 2. | `0x12A18–0x12A23` → `0x12214–0x12284` | `0x173B7–0x173C2` → `0x16BB2–0x16C22` |
 | 14 | Clears the damage display and exits. | `0x12A25–0x12A2F` | `0x173C4–0x173CE` |
@@ -112,7 +112,7 @@
 
 **CONFIRMED** In the walk helper, runtime flag 8 reverses the intended eight-way direction by XORing it with 4 before the movement search. This is the flag cleared by mode 9 on its return to mode 7 (CD `MAIN.EXE+0x1151F–0x1152F, +0x129E6–0x12A17`, LANDSoL `+0x15FBB–0x15FCB, +0x17385–0x173B6`). Upstream `engines/kyra/engine/sprites_lol.cpp:1123–1129,1336–1344`.
 
-**CONFIRMED** Modes 10 and 11 have the same update-table target, the shared cleanup at CD `0x12A30` and LANDSoL `0x173CF`. The mode-10 and mode-11 table words are identical at CD `0x12A7F–0x12A82` and floppy `0x1741E–0x17421`. The earlier update code runs its one-in-four shift update for mode 10 and skips it for mode 11 (CD `0x12830–0x12860`, floppy `0x171CE–0x171FF`).
+**CONFIRMED** Modes 10 and 11 have the same update-table target, the shared cleanup at CD `0x12A30` and LANDSoL `0x173CF`. The mode-10 and mode-11 table words are identical at CD `0x12A7F–0x12A82` and floppy `0x1741E–0x17421`. The earlier update code runs its one-in-four shift update for mode 10 and skips it for modes 11 and 14 (CD `0x12830–0x12860`, floppy `0x171CE–0x171FF`).
 
 **CONFIRMED** The native renderer resolves the animation type from the monster's shape bank, then calls one of four frame selectors (CD `0x3DDEF–0x3DE52`, LANDSoL `0x46F35–0x46F98`). The selected frame is an index within the shape bank. This is how the two modes differ in the four selectors.
 

@@ -39,3 +39,32 @@
 ## Worked example
 
 **CONFIRMED** Record 1 of `KEEP.DAT` begins at file offset `0x4A`, which is CD `KEEP.PAK+0x98` and LANDSoL `CHAPTER1.PAK+0x534EB`. In both editions the first four words are `FFFF 0011 0014 0015`, so slots 1, 2 and 3 select shape IDs 17, 20 and 21. The other slots are empty and all ten scale flags are zero. The record ends with next byte `00`, flags `08` (CD `KEEP.PAK+0xDE–0xDF`, LANDSoL `CHAPTER1.PAK+0x53531–0x53532`). The flags test makes it a centre-line decoration at one, two or three steps ahead. For instance, cell 13 pass 0 selects its slot 1 and draws shape 17 on the south face when facing north.
+
+## Cell table
+
+**CONFIRMED** The shape-index and wall-delta tables at CD `MAIN.EXE+0x3203B` and `+0x32017` (LANDSoL `+0x37E4D` and `+0x37E29`), read per view cell. Cell 16 is the party's own square.
+
+Shape bytes, one pair per cell, as signed values. The second of the pair is drawn first:
+
+| Cell | Slots | Wall deltas, facing north |
+| --- | --- | --- |
+| 0 | 3, 9 | west, west |
+| 1 | 3, 8 | south, east |
+| 2 | 3, 7 | south, east |
+| 3 | 3, 3 | south, west |
+| 4 | 3, -7 | south, west |
+| 5 | 3, -8 | south, west |
+| 6 | 3, -9 | west, west |
+| 7 | 2, 9 | south, east |
+| 8 | 2, 6 | south, east |
+| 9 | 2, 2 | south, west |
+| 10 | 2, -6 | south, west |
+| 11 | 2, -9 | south, west |
+| 12 | 1, 5 | south, east |
+| 13 | 1, 1 | south, west |
+| 14 | 1, -5 | south, west |
+| 15 | 0, 4 | west, east |
+| 16 | 0, 0 | south, west |
+| 17 | 0, -4 | west, west |
+
+A scale of 0 drops the second entry of cells 0, 3, 6, 9 and 13, the first entry of cells 15 and 17, and the second entry of cell 16. Those entries are present in the index and never drawn.

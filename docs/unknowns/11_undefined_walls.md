@@ -1,6 +1,6 @@
 # Q11. Wall types the level file never defines
 
-Levels 2, 3 and 21 name wall types in the map that their own wall file does not define. The wall-property tables are not cleared when a level loads, so those types keep whatever row was written last. The level scripts do not assign these type numbers.
+Levels 2, 3 and 21 name wall types in the map that their own wall file does not define. The wall-property tables are not cleared by the level's wall loader (ScummVM, and the LANDSoL loader body; its callers were not checked), so those types keep whatever row was written last. The level scripts do not assign these type numbers.
 
 ## The missing types
 
@@ -49,11 +49,11 @@ LANDSoL level 29 has one extra undefined face that the CD map does not. Block 87
 
 ## The property row is left in place
 
-CONFIRMED for ScummVM. The four property arrays are allocated once, filled with 0 (`engines/kyra/engine/kyra_rpg.cpp:190-193`). `loadLevelWallData` writes one row per record and does not clear the arrays first (`scene_lol.cpp:153-172`). A type the new file does not mention keeps the previous level's row, or 0 if no level has written it.
+CONFIRMED for ScummVM. Five property arrays are allocated once and filled with 0: four in `engines/kyra/engine/kyra_rpg.cpp:190-193`, and the automap array (80 entries) in `engines/kyra/engine/lol.cpp:442`. `loadLevelWallData` writes one row per record and does not clear the arrays first (`scene_lol.cpp:153-172`). A type the new file does not mention keeps the previous level's row, or 0 if no level has written it.
 
 CONFIRMED for the LANDSoL loader's body. `MAIN.EXE` (373872 bytes) reads the 12-byte records at file `0x50b33-0x50c04`. That span contains no `rep stos`. The CD `MAIN.EXE` (356928 bytes) has the same `level%00d.wll` format string. Its loader body was not opened. The wall files of these levels are byte-identical, so the rows the CD program would read are the same bytes.
 
-The row is not the same number on every level that defines the id. Worked example, type 60, the four walls of level 2 block 526. Level 2 has no record. Level 1 does. Its 12 bytes are `3c 00 06 00 03 00 04 00 06 00 0d 00`: type 60, VMP page 6, shape 3, flags 4, special 6, automap 0x0D. If level 1 was the last level that wrote type 60, those are the bytes the drawer still holds. No later file in a level-1-then-level-2 load replaces them.
+The row is not the same number on every level that defines the id. Worked example, type 60, the four walls of level 2 block 526. Level 2 has no record. Level 1 does. Its 12 bytes are `3c 00 06 00 03 00 04 00 06 00 0d 00`: type 60, VMP page 6, shape 3, special 4, flags 6, automap 0x0D (record order id, VMP, shape, special, flags, automap: `scene_lol.cpp:156-171`). If level 1 was the last level that wrote type 60, those are the bytes the drawer still holds. No later file in a level-1-then-level-2 load replaces them.
 
 Who already has a row (CD wall files; LANDSoL matches on levels 1, 2 and 24):
 
@@ -74,7 +74,7 @@ Who already has a row (CD wall files; LANDSoL matches on levels 1, 2 and 24):
 | 67 | yes | yes, different bytes | level 3 does not |
 | 42 | no | no | 4-9, 12, 14-16, 18, 20, 22, 23, 26-29. Not level 21 |
 
-Level 1's type 58 is `3a 00 05 00 00 00 04 00 07 00 ff ff`. Level 2's type 58 is `3a 00 00 00 03 00 00 00 06 00 3f 00`. Same id, different shape and flags. A level 3 wall of type 58 therefore looks like level 2 if level 2 was loaded more recently, and like level 1 if only level 1 was. Which order a game actually loads is UNCONFIRMED.
+Level 1's type 58 is `3a 00 05 00 00 00 04 00 07 00 ff ff`. Level 2's type 58 is `3a 00 00 00 03 00 00 00 06 00 3f 00`. Same id, different VMP page, shape, special, flags and automap. A level 3 wall of type 58 therefore looks like level 2 if level 2 was loaded more recently, and like level 1 if only level 1 was. Which order a game actually loads is UNCONFIRMED.
 
 Types 46 and 56 are in neither level 1 nor level 2. A path that has loaded only those two has not written a row for them. Level 3 does define both. Levels 18 and 20 share area index 7 with level 21 and both define type 42.
 
