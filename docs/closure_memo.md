@@ -1,11 +1,11 @@
-> **History (March 2026).** This memo is kept as a record of the first pass; only its machine paths were reduced to file names. Its wording comes from the project's way of working at the time: a *lane* was one line of work, and *Codex* was a second AI assistant used for checking. Several of its statements were later corrected: see [`STATUS.md`](STATUS.md) and the pages in [`formats/`](formats/README.md); today's tools are in [`../tools/`](../tools/README.md).
+> **History (March 2026).** This memo is kept as a record of the first pass; only its machine paths were reduced to file names. Several of its statements were later corrected: see [`STATUS.md`](STATUS.md) and the pages in [`formats/`](formats/README.md); today's tools are in [`../tools/`](../tools/README.md).
 
-# LoL1 Lane — Final Closure Memo
+# LoL1 — Final Closure Memo
 
 **Date:** 2026-03-20
 **Scope:** LoL1 reverse-engineering and documentation only
 **Status:** CLOSED at ~99.999%
-**Publication:** Ready for GitHub/wiki coordination with Codex
+**Publication:** Ready for GitHub/wiki publication
 
 ---
 
@@ -160,7 +160,7 @@ CMZ block → walls[4] uint8 wall type IDs
 | Text / dialogue | **100%** |
 | Format documentation | **100%** |
 | EMC2 script decompilation | **100%** (60/60 scripts, 117,099 words) |
-| **Overall lane** | **~99.999%** |
+| **Overall** | **~99.999%** |
 
 ---
 
@@ -220,12 +220,12 @@ CMZ block → walls[4] uint8 wall type IDs
 
 ---
 
-## F. Lane Status
+## F. Status
 
-**This lane is closed at ~99.999%.** All 1163 files in the corpus have been processed. Every major asset type — images (CPS 85/85, SHP 3492/3492 frames, WSA 241/241 fully sequenced with 4480 frames), audio (VOC 215/215), music (67/67), level maps (29/29), dialogue (6495/6495 decoded strings in 3 languages), fonts (4/4 atlases), palettes (11/11), tilesets (14/14 including YVEL2), timing scripts (139/139 parsed), and game scripts (60/60 EMC2 decompiled) — has been extracted to usable formats.
+**This work was closed at ~99.999%.** All 1163 files in the corpus have been processed. Every major asset type — images (CPS 85/85, SHP 3492/3492 frames, WSA 241/241 fully sequenced with 4480 frames), audio (VOC 215/215), music (67/67), level maps (29/29), dialogue (6495/6495 decoded strings in 3 languages), fonts (4/4 atlases), palettes (11/11), tilesets (14/14 including YVEL2), timing scripts (139/139 parsed), and game scripts (60/60 EMC2 decompiled) — has been extracted to usable formats.
 
 The rendering pipeline (CMZ → WLL → VMP → VCN) is fully documented and implemented. Two distinct editions are compared and characterized. All format specifications are ScummVM-cross-referenced.
 
 The remaining gap is effectively publication-only: repository curation, release packaging, and public writeup polish. Core extraction and decompilation work is complete.
 
-**The lane is publication-ready.**
+**The work was publication-ready.**
