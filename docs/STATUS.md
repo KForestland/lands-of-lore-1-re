@@ -13,6 +13,8 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (27 checks; 
 
 ## File formats
 
+**Running-game results** (English CD installed with its own installer, run under the DOSBox debugger; [procedures and results](NEEDS_A_RUNNING_GAME.md)): on level 1 the wall flags never change in play and wall bit 0x40 is never set (Q7); the three isolated save bytes stay zero and are touched only by saving and loading (Q17); a start without the launcher's argument is a refusal exit (Q8). Levels 8, 23 and 27 need played saves.
+
 | Format | Documented | Tool | Checked on data | Open |
 |--------|-----------|------|-----------------|------|
 | PAK container | [pak.md](formats/pak.md) | `pak_reader.py`, `pak_indexer.py` | CD 81 PAK / 1163 members (rebuilds `data/pak_index.json`), ENG 17/378, floppy 15/1213 | Q9 answered ([page](unknowns/09_pak_order.md)) |
