@@ -229,15 +229,32 @@ def tool_args(doc, out_help="write the JSON result here (default: print a summar
 
 
 def level_member(level, ext, data_dir=DEFAULT_DATA):
-    """Bytes of LEVELn.<ext> from Lnn.PAK, or None when absent."""
-    try:
-        return find_member(f"LEVEL{level}.{ext}", data_dir, f"L{level:02d}.PAK")[1]
-    except (FileNotFoundError, OSError):
-        return None
+    """Bytes of LEVELn.<ext>: from Lnn.PAK on the CD, else from whichever PAK
+    holds it (the floppy edition keeps levels in CHAPTERn.PAK). None if absent."""
+    name = f"LEVEL{level}.{ext}"
+    for pak in (f"L{level:02d}.PAK", None):
+        try:
+            if pak and not os.path.isfile(os.path.join(data_dir, pak)):
+                continue
+            return find_member(name, data_dir, pak)[1]
+        except (FileNotFoundError, OSError):
+            continue
+    return None
 
 
-def repo_json(name):
+def is_cd_layout(data_dir):
+    """True when data_dir looks like the CD edition's DATA folder, the corpus
+    the files in data/ were made from (L01.PAK present)."""
+    return os.path.isfile(os.path.join(data_dir, "L01.PAK"))
+
+
+def repo_json(name, data_dir=None):
+    """The repo's data/<name>, or None. With data_dir given, None unless that
+    folder is the CD layout the JSON describes (other editions are checked
+    structurally only)."""
     import json
+    if data_dir is not None and not is_cd_layout(data_dir):
+        return None
     p = os.path.join(REPO_DATA, name)
     if not os.path.isfile(p):
         return None

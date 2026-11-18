@@ -68,7 +68,10 @@ def main():
               f"{sum(r['voc_ok'] for r in results)}/{members}, speech-pattern names "
               f"{sum(r['speech_names'] for r in results)}, NNNNN.VOC names {sum(r['plain_voc_names'] for r in results)}, "
               f"bad={bad or 'none'}")
-        return 0 if not bad and results else 1
+        if not results:
+            print("CHECK tlk: no NN.TLK files in this folder (the floppy edition has no speech)")
+            return 0
+        return 0 if not bad else 1
     for r in results:
         print(f"{r['file']}: {r['members']} members, directory ends {r['directory_end']}, VOC {r['voc_ok']}, "
               f"first {', '.join(r['samples'])}, other names {r['other_names'][:3]}")

@@ -155,11 +155,11 @@ def main():
               f"decomp={analysis['decompressed_size']}")
 
     if quiet:
-        ref = L.repo_json("wall_type_analysis.json")
+        ref = L.repo_json("wall_type_analysis.json", a.data)
         ok = len(results) == 29 and all(r["size_match"] for r in results.values())
         same = ref is not None and json.loads(json.dumps(results)) == ref["per_level"]
         print(f"CHECK cmz: {len(results)} levels, all sizes 6+1024*len: {ok}, "
-              f"matches data/wall_type_analysis.json: {same if ref else 'no file'}")
+              f"matches data/wall_type_analysis.json: {same if ref else 'skipped (not the CD layout)'}")
         return 0 if ok and (same or ref is None) else 1
     print(f"\n=== SUMMARY ===")
     print(f"Levels analyzed: {len(results)}")

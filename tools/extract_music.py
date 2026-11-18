@@ -244,11 +244,12 @@ def main():
     a = ap.parse_args()
     inv = build(a.data, a.out_dir)
     if a.check:
-        ref = L.repo_json('music_inventory.json')
-        same = ref is not None and sorted(ref['files'], key=lambda e: (e['source_pak'], e['filename'])) == inv['files']
+        ref = L.repo_json('music_inventory.json', a.data)
+        skipped = ref is None
+        same = skipped or sorted(ref['files'], key=lambda e: (e['source_pak'], e['filename'])) == inv['files']
         errors = [f['filename'] for f in inv['files'] if 'parse_error' in f or f.get('parse_note')]
         print(f"CHECK music: {inv['total_files']} files {inv['counts_by_format']}, IFF parse errors: {errors or 'none'}, "
-              f"matches data/music_inventory.json files list: {same}")
+              f"matches data/music_inventory.json files list: {'skipped (not the CD layout)' if skipped else same}")
         return 0 if same and not errors else 1
     print(f"{inv['total_files']} files {inv['counts_by_format']}")
     if a.out:

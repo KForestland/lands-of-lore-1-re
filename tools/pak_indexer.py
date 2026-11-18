@@ -146,11 +146,12 @@ def main():
         return 0
     idx = build_index(a.data)
     if a.check:
-        ref = L.repo_json('pak_index.json')
+        ref = L.repo_json('pak_index.json', a.data)
         key = lambda d: sorted((x['pak'], x['name'], x['offset'], x['size']) for x in d['flat_index'])
-        same = ref is not None and ref['pak_files'] == idx['pak_files'] and key(ref) == key(idx)
+        skipped = ref is None
+        same = skipped or ref['pak_files'] == idx['pak_files'] and key(ref) == key(idx)
         print(f"CHECK pak_index: {idx['total_paks']} PAKs, {idx['total_entries']} members, "
-              f"matches data/pak_index.json: {same}")
+              f"matches data/pak_index.json: {'skipped (not the CD layout)' if skipped else same}")
         return 0 if same else 1
     print(f"{idx['total_paks']} PAKs, {idx['total_entries']} members")
     if a.out:

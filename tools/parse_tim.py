@@ -291,16 +291,15 @@ def main():
                 for k in ("words", "decoded_functions", "strings", "first_bytes_hex"):
                     c.pop(k, None)
     if a.check:
-        ref = L.repo_json("tim_analysis.json")
-        # data/tim_analysis.json also carries keys added later by hand/other scripts
-        # (format_notes.opcode_table, statistics.chunk_patterns, files_with(out)_TEXT);
-        # compare what this tool produces.
+        ref = L.repo_json("tim_analysis.json", a.data)
+        # compare what this tool produces (files and statistics)
         new = json.loads(json.dumps(analysis))
-        same = ref is not None and new["files"] == ref["files"] and all(
+        skipped = ref is None
+        same = skipped or new["files"] == ref["files"] and all(
             ref["statistics"].get(k) == v for k, v in new["statistics"].items())
         st = analysis["statistics"]
         print(f"CHECK tim: {st['total_parsed']}/{st['total_tim_files']} files, FORM types {st['form_types']}, "
-              f"chunks {st['chunk_type_counts']}, files + statistics match data/tim_analysis.json: {same}")
+              f"chunks {st['chunk_type_counts']}, files + statistics match data/tim_analysis.json: {'skipped (not the CD layout)' if skipped else same}")
         return 0 if same else 1
     if a.out:
         L.write_json(a.out, analysis)

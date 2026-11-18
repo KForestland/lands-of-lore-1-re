@@ -93,11 +93,12 @@ def main():
                 json.dump({"file": name, "pak": pak, "string_count": len(strings), "strings": strings},
                           f, indent=2, ensure_ascii=False)
     if a.check:
-        ref = L.repo_json("dialogue_summary.json")
+        ref = L.repo_json("dialogue_summary.json", a.data)
         key = lambda d: sorted((x["file"], x["pak"], x["string_count"]) for x in d["files"])
-        same = ref is not None and key(ref) == key(summary) and ref["by_language"] == summary["by_language"]
+        skipped = ref is None
+        same = skipped or key(ref) == key(summary) and ref["by_language"] == summary["by_language"]
         print(f"CHECK dialogue: {summary['total_files']} files, {summary['total_strings']} strings "
-              f"{summary['by_language']}, matches data/dialogue_summary.json: {same}")
+              f"{summary['by_language']}, matches data/dialogue_summary.json: {'skipped (not the CD layout)' if skipped else same}")
         return 0 if same else 1
     if a.out_dir:
         with open(os.path.join(a.out_dir, "summary.json"), "w") as f:

@@ -115,7 +115,7 @@ def main():
         all_results[f"level{level_num:02d}"] = level_result
 
     if quiet:
-        return check(all_results)
+        return check(all_results, a.data)
     # Summary
     print(f"\n=== CROSS-LEVEL SUMMARY ===")
     print(f"Unique VMP map values: {sorted(vmp_map_values)}")
@@ -166,11 +166,12 @@ def main():
         L.write_json(a.out, output)
 
 
-def check(per_level):
-    ref = L.repo_json("wll_parsed.json")
+def check(per_level, data_dir):
+    ref = L.repo_json("wll_parsed.json", data_dir)
     n = sum(v["n_records"] for v in per_level.values())
     if ref is None:
-        print(f"CHECK wll: {len(per_level)} files, {n} records (no data/wll_parsed.json to compare)")
+        print(f"CHECK wll: {len(per_level)} files, {n} records, all (size-2) % 12 == 0; "
+              f"compare with data/wll_parsed.json skipped (not the CD layout)")
         return 0 if len(per_level) == 29 else 1
     same = json.loads(json.dumps(per_level)) == ref["per_level"]
     print(f"CHECK wll: {len(per_level)} files, {n} records, matches data/wll_parsed.json: {same}")
