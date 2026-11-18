@@ -10,6 +10,8 @@ the files git tracks (or every file, outside a git checkout) and fails on:
     .ADL .PCS .VOC .AUD, and converted media .MID .MIDI .WAV .OGG .MP3 .FLAC
   - PNG files outside examples/ and docs/images/
   - any file larger than 1 MiB
+  - in the git history: any author or committer address not in ALLOWED_AUTHORS
+    (committers may also be GitHub's noreply@github.com); the address is not printed
   - in text files: machine paths (/home/, /media/, /mnt/, C:\\Users\\) and
     lane, agent or private names (list in NAMES below)
 
@@ -66,6 +68,30 @@ def tracked(root):
         return files
 
 
+# Commit identity: every author and committer address in the history of the checked-out branch (HEAD,
+# what gets published) must be one of these.
+# GitHub's own web merges commit as noreply@github.com (committer only).
+ALLOWED_AUTHORS = {'261564562+KForestland@users.noreply.github.com', 'kskogland-gif@users.noreply.github.com'}
+ALLOWED_COMMITTERS = ALLOWED_AUTHORS | {"noreply@github.com"}
+
+
+def identity_findings(root):
+    """Authors and committers in the git history that are not on the allowed lists."""
+    try:
+        out = subprocess.run(["git", "-C", root, "log", "HEAD", "--format=%h %ae %ce"],
+                             capture_output=True, text=True, check=True).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return []  # not a git checkout (for example a downloaded archive): nothing to check
+    bad = []
+    for line in out.splitlines():
+        h, author, committer = line.split(" ")
+        if author not in ALLOWED_AUTHORS:
+            bad.append(f"commit {h} (author address not allowed)")
+        if committer not in ALLOWED_COMMITTERS:
+            bad.append(f"commit {h} (committer address not allowed)")
+    return bad
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--check", action="store_true")
@@ -87,7 +113,8 @@ def main():
             bad.append(f"{f} (larger than 1 MiB)")
         if os.path.isfile(p):
             bad.extend(text_findings(root, f))
-    print(f"CHECK repo_guard: {len(files)} tracked files; game files, converted media, stray PNGs, files over 1 MiB, machine paths or lane/agent names: "
+    bad.extend(identity_findings(root))
+    print(f"CHECK repo_guard: {len(files)} tracked files; game files, converted media, stray PNGs, files over 1 MiB, machine paths, lane/agent names or commit identities: "
           f"{bad[:5] or 'none'}{' ...' if len(bad) > 5 else ''} ({len(bad)})")
     return 0 if not bad else 1
 
