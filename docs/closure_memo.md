@@ -1,3 +1,5 @@
+> **History (March 2026).** This memo is kept unchanged as a record of the first pass. It mentions the author's working folders and internal project names, and several of its statements were later corrected: see [`STATUS.md`](STATUS.md) and the pages in [`formats/`](formats/README.md).
+
 # LoL1 Lane — Final Closure Memo
 
 **Date:** 2026-03-20
