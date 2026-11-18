@@ -1,5 +1,7 @@
 # What the three games share
 
+For a comparison of how the programs load levels, run scripts and save, see [how the engine changed](engine-evolution.md).
+
 *Lands of Lore: The Throne of Chaos* (1993), *Lands of Lore: Guardians of Destiny* (1997) and *Lands of Lore III* (1999) were made by Westwood Studios. Each game is documented in its own repository:
 - **LoL1:** [lands-of-lore-1-re](https://github.com/KForestland/lands-of-lore-1-re)
 - **LoL2:** [lands-of-lore-2-re](https://github.com/KForestland/lands-of-lore-2-re)
