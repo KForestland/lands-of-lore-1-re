@@ -36,6 +36,7 @@ transparent pixels.
       (colours: monster and item shapes are drawn through the scene palette
        and runtime colour tables, so a CPS palette gives wrong colours)
   shp_renderer.py --check      # every shape in every SHP decodes exactly
+  shp_renderer.py --out inv.json   # per-file inventory (data/shp_inventory.json)
 """
 import os
 import struct
@@ -129,6 +130,23 @@ def main():
               f"(rows fill width, line data == frame size, height == height copy): {exact}/{shapes}, "
               f"bad={bad[:8] or 'none'}{' ...' if len(bad) > 8 else ''} ({len(bad)})")
         return 0 if not bad else 1
+    if a.out and not a.name:
+        files = []
+        for pak, name, blob in L.find_all(".SHP", a.data):
+            shapes = [x for x in read_shp(blob, a.alt_header) if x]
+            flags = {}
+            for x in shapes:
+                flags[f"{x['flags']:#06x}"] = flags.get(f"{x['flags']:#06x}", 0) + 1
+            files.append({"pak": pak, "name": name, "size": len(blob),
+                          "wrapped_in_bitmap_container": unwrap(blob) is not blob,
+                          "shapes": len(shapes), "decoded_exactly": sum(x["exact"] for x in shapes),
+                          "flags": flags, "max_width": max((x["width"] for x in shapes), default=0),
+                          "max_height": max((x["height"] for x in shapes), default=0)})
+        L.write_json(a.out, {"description": "LoL1 SHP inventory from tools/shp_renderer.py (ScummVM-exact decode, 2026-11-18). "
+                             "Replaces the March inventory and render results, which used a 2-byte offset slip and fallbacks.",
+                             "total_files": len(files), "total_shapes": sum(f["shapes"] for f in files),
+                             "decoded_exactly": sum(f["decoded_exactly"] for f in files), "files": files})
+        return 0
     if not a.name:
         ap.print_help(); return 2
     pak, blob = L.find_member(a.name, a.data, a.pak)

@@ -161,76 +161,67 @@ def decode_lol_string(encoded_str):
     return format_control_codes(decoded2)
 
 
+def decode_raw(raw):
+    """ScummVM getLangString path: decodeString1 then decodeString2 (util.cpp:29-87)."""
+    return format_control_codes(decode_string2(decode_string1(raw)))
+
+
+def file_strings(data):
+    import struct
+    n = struct.unpack_from("<H", data, 0)[0] // 2
+    offs = struct.unpack_from(f"<{n}H", data, 0)
+    return [data[o:data.index(b"\0", o)] for o in offs]
+
+
+USAGE = """
+  decode_dialogue.py LEVEL01.ENG [--index 5]   # decode straight from the game data
+  decode_dialogue.py --in-dir raw/ --out-dir decoded/   # decode extract_dialogue.py output
+  decode_dialogue.py --check     # decode all strings; every bigram byte maps inside the tables
+"""
+
+
 def main():
-    input_dir = '/home/bob/lol1_dialogue/'
-    output_dir = '/home/bob/lol1_dialogue_decoded/'
-    os.makedirs(output_dir, exist_ok=True)
-
-    all_files = sorted(os.listdir(input_dir))
-    json_files = [f for f in all_files if f.endswith('.json')]
-
-    print(f"Found {len(json_files)} JSON files to decode.\n")
-
-    # Process all files
-    for fn in json_files:
-        with open(os.path.join(input_dir, fn)) as f:
-            data = json.load(f)
-
-        decoded_strings = []
-        for s in data['strings']:
-            decoded_strings.append(decode_lol_string(s))
-
-        out_data = {
-            'file': data['file'],
-            'string_count': data['string_count'],
-            'strings': decoded_strings
-        }
-        if 'pak' in data:
-            out_data['pak'] = data['pak']
-
-        with open(os.path.join(output_dir, fn), 'w', encoding='utf-8') as f:
-            json.dump(out_data, f, indent=2, ensure_ascii=False)
-
-    # Show samples
-    print("=" * 70)
-    print("SAMPLE: First 10 strings from LANDS.ENG")
-    print("=" * 70)
-    with open(os.path.join(input_dir, 'lands_eng.json')) as f:
-        data = json.load(f)
-    for i, s in enumerate(data['strings'][:10]):
-        decoded = decode_lol_string(s)
-        print(f"\n[{i}] ENCODED: {s}")
-        print(f"    DECODED: {decoded}")
-
-    print("\n" + "=" * 70)
-    print("SAMPLE: First 10 strings from LEVEL01.ENG")
-    print("=" * 70)
-    with open(os.path.join(input_dir, 'level01_eng.json')) as f:
-        data = json.load(f)
-    for i, s in enumerate(data['strings'][:10]):
-        decoded = decode_lol_string(s)
-        print(f"\n[{i}] ENCODED: {s}")
-        print(f"    DECODED: {decoded}")
-
-    # Stats
-    print("\n" + "=" * 70)
-    print("STATISTICS")
-    print("=" * 70)
-    total_encoded = 0
-    total_decoded = 0
-    for fn in json_files:
-        with open(os.path.join(input_dir, fn)) as f:
-            data = json.load(f)
-        total_encoded += len(data['strings'])
-        for s in data['strings']:
-            raw = parse_encoded_string(s)
-            high_count = sum(1 for b in raw if b >= 0x80)
-            total_decoded += high_count
-
-    print(f"Total strings across {len(json_files)} files: {total_encoded}")
-    print(f"Total high bytes decoded: {total_decoded}")
-    print(f"Output written to: {output_dir}")
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import lol1lib as L
+    ap = L.tool_args(__doc__ + USAGE)
+    ap.add_argument("name", nargs="?")
+    ap.add_argument("--index", type=int)
+    ap.add_argument("--in-dir"); ap.add_argument("--out-dir")
+    a = ap.parse_args()
+    if a.check:
+        n = files = bad = accented = 0
+        for pak, name, data in L.find_all("", a.data):
+            if not name.endswith((".ENG", ".FRE", ".GER")):
+                continue
+            files += 1
+            for raw in file_strings(data):
+                n += 1
+                if any(b & 0x80 and (b & 0x7F) >= len(decodeTable2) for b in raw):
+                    bad += 1
+                t = decode_raw(raw)
+                accented += any(ord(c) > 127 for c in t)
+        print(f"CHECK decode_dialogue: {files} files, {n} strings decoded, bigram index out of table: {bad}, "
+              f"strings with accented characters: {accented}")
+        return 0 if bad == 0 and n else 1
+    if a.name:
+        pak, data = L.find_member(a.name, a.data, a.pak)
+        for i, raw in enumerate(file_strings(data)):
+            if a.index is None or a.index == i:
+                print(f"[{i}] {decode_raw(raw)}")
+        return 0
+    if a.in_dir and a.out_dir:
+        os.makedirs(a.out_dir, exist_ok=True)
+        for fn in sorted(f for f in os.listdir(a.in_dir) if f.endswith(".json") and f != "summary.json"):
+            with open(os.path.join(a.in_dir, fn)) as f:
+                d = json.load(f)
+            d["strings"] = [decode_lol_string(x) for x in d["strings"]]
+            with open(os.path.join(a.out_dir, fn), "w", encoding="utf-8") as f:
+                json.dump(d, f, indent=2, ensure_ascii=False)
+        print("wrote", a.out_dir)
+        return 0
+    ap.print_help()
+    return 2
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

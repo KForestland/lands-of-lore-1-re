@@ -7,8 +7,10 @@ Exit code 0 when every check passes.
 import argparse, os, subprocess, sys
 import lol1lib as L
 
-READERS = ["pak_reader", "cps_reader", "voc_reader", "fnt_reader", "xxx_reader",
-           "dat_reader", "tlc_reader", "vcn_vmp_reader"]
+READERS = ["pak_reader", "pak_indexer", "tlk_verify", "decode_frame4", "cps_reader", "voc_reader",
+           "fnt_reader", "xxx_reader", "dat_reader", "tlc_reader", "vcn_vmp_reader",
+           "wll_parser", "cmz_analyzer", "tileset_mapper", "level_renderer", "shp_renderer",
+           "wsa_extract", "extract_dialogue", "decode_dialogue", "extract_music", "parse_tim"]
 
 
 def main():

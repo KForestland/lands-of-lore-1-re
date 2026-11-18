@@ -22,8 +22,15 @@ import os
 import json
 from PIL import Image
 
-PAK_DIR = "/media/bob/Arikv/REFERENCE/game_files/lol1/DATA"
-INDEX_FILE = "/home/bob/lol1_pak_index.json"
+import sys
+
+import lol1lib as L
+
+USAGE = """
+  decode_frame4.py --out-dir cps/   # every CPS to PNG
+  decode_frame4.py --check          # this file's decoder vs lol1lib.decode_frame4 on every
+                                    # CPS, CMZ, VCN and VMP (two independent ports must agree)
+"""
 
 
 def decode_frame4(src, dst_size):
@@ -131,46 +138,42 @@ def cps_to_image(pixels, palette, width=320, height=200):
 
 
 def main():
-    """Decode all CPS files from the LoL1 corpus."""
-    with open(INDEX_FILE) as f:
-        index = json.load(f)
-
-    output_dir = "/home/bob/lol1_cps_complete"
-    os.makedirs(output_dir, exist_ok=True)
-
-    total = 0
-    success = 0
-    fail = 0
-
-    for pak_name, pak_info in sorted(index["pak_files"].items()):
-        pak_path = os.path.join(PAK_DIR, pak_name)
-        if not os.path.exists(pak_path):
-            continue
-
-        for entry in pak_info["entries"]:
-            if not entry["name"].endswith(".CPS"):
+    ap = L.tool_args(__doc__ + USAGE)
+    ap.add_argument("--out-dir")
+    a = ap.parse_args()
+    if a.check:
+        n = same = 0; bad = []
+        for ext in (".CPS", ".CMZ", ".VCN", ".VMP"):
+            for pak, name, data in L.find_all(ext, a.data):
+                h = L.bitmap_header(data)
+                payload = data[10 + h["palette_size"]:]
+                x = decode_frame4(payload, h["uncompressed_size"])
+                y = L.decode_frame4(payload, h["uncompressed_size"])
+                n += 1
+                if x == y and len(x) == h["uncompressed_size"]:
+                    same += 1
+                else:
+                    bad.append(name)
+        print(f"CHECK frame4: {n} files (CPS, CMZ, VCN, VMP), both decoders agree and reach the stated size: "
+              f"{same}/{n}, bad={bad or 'none'}")
+        return 0 if not bad else 1
+    if not a.out_dir:
+        ap.print_help(); return 2
+    os.makedirs(a.out_dir, exist_ok=True)
+    total = ok = 0
+    for pak, name, data in L.find_all(".CPS", a.data):
+        total += 1
+        pixels, palette = decode_cps(data)
+        if pixels and palette and len(pixels) >= 64000:
+            img = cps_to_image(pixels, palette)
+            if img:
+                img.save(os.path.join(a.out_dir, name.replace(".CPS", ".png").lower()))
+                ok += 1
                 continue
-
-            total += 1
-            with open(pak_path, 'rb') as f:
-                f.seek(entry["offset"])
-                data = f.read(entry["size"])
-
-            pixels, palette = decode_cps(data)
-            if pixels and palette and len(pixels) >= 64000:
-                img = cps_to_image(pixels, palette)
-                if img:
-                    out_name = entry["name"].replace(".CPS", ".png").lower()
-                    img.save(os.path.join(output_dir, out_name))
-                    success += 1
-                    continue
-
-            fail += 1
-            print(f"  FAIL: {entry['name']} in {pak_name}")
-
-    print(f"\nCPS decode: {success}/{total} success, {fail} failures")
-    print(f"Output: {output_dir}")
+        print(f"  FAIL: {name} in {pak}")
+    print(f"CPS decode: {ok}/{total}, output {a.out_dir}")
+    return 0 if ok == total else 1
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

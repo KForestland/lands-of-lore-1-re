@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
-"""
-LoL1 Investigation Step 1: Build baseline structural inventory.
-Phase 1: Local file archaeology
+"""LoL1 PAK index: every member of every PAK in a DATA folder.
+
+Rebuilds data/pak_index.json (pak_files: name/offset/header_pos/size per
+member; flat_index). header_pos = position of the member's offset field in
+the PAK directory. Layout: docs/formats/pak.md.
+
+  pak_indexer.py                       # summary
+  pak_indexer.py --out pak_index.json
+  pak_indexer.py --check               # compare with data/pak_index.json
+  pak_indexer.py --survey --out s.json # the March loose-file survey (every file
+                                       # under --game-dir grouped by extension)
 """
 
 import os
@@ -10,8 +18,11 @@ import struct
 from pathlib import Path
 from collections import defaultdict
 
-GAME_DIR = Path("/media/bob/Arikv/REFERENCE/game_files/lol1")
-OUTPUT_DIR = Path("/home/bob")
+import sys
+
+import lol1lib as L
+
+GAME_DIR = Path(L.DEFAULT_DATA).parent
 
 def scan_all_files():
     """Scan all files in the game directory and group by extension."""
@@ -86,50 +97,66 @@ def analyze_file_structure(filepath, size):
     except Exception as e:
         return {'error': str(e)}
 
-def main():
-    print("LoL1 Investigation Step 1: Building structural inventory...")
-    
+def survey(out_path):
+    """The March step-1 inventory, kept for reference."""
     files_by_ext = scan_all_files()
-    
-    # Build inventory
     inventory = {}
-    for ext, files in sorted(files_by_ext.items(), key=lambda x: -len(x[1])):
-        print(f"\nProcessing {ext}: {len(files)} files")
-        
+    for ext, files in sorted(files_by_ext.items()):
         sizes = [f['size'] for f in files]
-        sample_files = files[:min(5, len(files))]  # Sample up to 5
-        
-        ext_entry = {
+        inventory[ext] = {
             'count': len(files),
             'size_range': {'min': min(sizes), 'max': max(sizes)} if sizes else None,
             'total_bytes': sum(sizes),
-            'sample_analysis': []
+            'sample_analysis': [{'file': sf['path'], 'analysis': analyze_file_structure(sf['abs_path'], sf['size'])}
+                                for sf in files[:5]],
         }
-        
-        for sf in sample_files:
-            analysis = analyze_file_structure(sf['abs_path'], sf['size'])
-            ext_entry['sample_analysis'].append({
-                'file': sf['path'],
-                'analysis': analysis
-            })
-        
-        inventory[ext] = ext_entry
-    
-    # Write inventory
-    output_path = OUTPUT_DIR / 'lol1_inventory_step1.json'
-    with open(output_path, 'w') as f:
+    with open(out_path, 'w') as f:
         json.dump(inventory, f, indent=2)
-    
-    print(f"\nInventory written to: {output_path}")
-    
-    # Summary
-    print("\n=== SUMMARY ===")
-    for ext, data in sorted(inventory.items(), key=lambda x: -x[1]['count']):
-        print(f"{ext}: {data['count']} files, {data['total_bytes']:,} bytes")
-        for sample in data['sample_analysis'][:2]:
-            a = sample['analysis']
-            magic = a.get('detected_magic', 'none')
-            print(f"  - {sample['file']}: magic={magic}")
+    print('wrote', out_path)
+
+
+def build_index(data_dir):
+    pak_files = {}
+    flat = []
+    for pak in L.list_paks(data_dir):
+        blob = open(os.path.join(data_dir, pak), 'rb').read()
+        entries = []
+        pos = 0
+        for name, off, size in L.pak_entries(blob):
+            entries.append({'name': name, 'offset': off, 'header_pos': pos, 'size': size})
+            flat.append({'pak': pak, 'name': name, 'offset': off, 'size': size})
+            pos += 4 + len(name) + 1
+        pak_files[pak] = {'size': len(blob), 'entry_count': len(entries), 'entries': entries}
+    return {'description': 'Complete file index for all LoL1 PAK containers',
+            'total_paks': len(pak_files), 'total_entries': len(flat),
+            'pak_files': pak_files, 'flat_index': flat}
+
+
+def main():
+    global GAME_DIR
+    ap = L.tool_args(__doc__)
+    ap.add_argument('--survey', action='store_true', help='run the loose-file survey instead (needs --out)')
+    ap.add_argument('--game-dir', default=str(GAME_DIR), help='folder for --survey (default: parent of --data)')
+    a = ap.parse_args()
+    if a.survey:
+        GAME_DIR = Path(a.game_dir)
+        if not a.out:
+            ap.error('--survey needs --out')
+        survey(a.out)
+        return 0
+    idx = build_index(a.data)
+    if a.check:
+        ref = L.repo_json('pak_index.json')
+        key = lambda d: sorted((x['pak'], x['name'], x['offset'], x['size']) for x in d['flat_index'])
+        same = ref is not None and ref['pak_files'] == idx['pak_files'] and key(ref) == key(idx)
+        print(f"CHECK pak_index: {idx['total_paks']} PAKs, {idx['total_entries']} members, "
+              f"matches data/pak_index.json: {same}")
+        return 0 if same else 1
+    print(f"{idx['total_paks']} PAKs, {idx['total_entries']} members")
+    if a.out:
+        L.write_json(a.out, idx)
+    return 0
+
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

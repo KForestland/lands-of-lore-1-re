@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
-"""Extract dialogue text from all ENG/FRE/GER files in the LoL1 PAK corpus."""
+"""Extract the raw strings of every ENG/FRE/GER text file in the LoL1 PAKs.
+
+Layout (docs/formats/text.md; ScummVM LoLEngine::getTableEntry
+engines/kyra/engine/lol.cpp:1153-1157): uint16 offsets, count = first / 2,
+NUL-terminated strings. Output keeps the bytes as text with [XX] for
+non-ASCII bytes; decode_dialogue.py turns them into readable text.
+
+  extract_dialogue.py --out-dir dialogue/   # one JSON per file + summary.json
+  extract_dialogue.py --check               # counts vs data/dialogue_summary.json
+"""
 
 import json
 import os
 import struct
 
-PAK_INDEX = "/home/bob/lol1_pak_index.json"
-PAK_DIR = "/media/bob/Arikv/REFERENCE/game_files/lol1/DATA/"
-OUTPUT_DIR = "/home/bob/lol1_dialogue/"
-SUMMARY_FILE = "/home/bob/lol1_dialogue_summary.json"
+import sys
+import lol1lib as L
 
 LANG_EXTENSIONS = (".ENG", ".FRE", ".GER")
 
@@ -64,84 +71,41 @@ def extract_strings(data):
 
 
 def main():
-    with open(PAK_INDEX) as f:
-        index = json.load(f)
-
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-    # Collect all language file entries
-    lang_files = []
-    for pak_name, pak_info in index["pak_files"].items():
-        for entry in pak_info["entries"]:
-            if any(entry["name"].endswith(ext) for ext in LANG_EXTENSIONS):
-                lang_files.append({
-                    "pak": pak_name,
-                    "name": entry["name"],
-                    "offset": entry["offset"],
-                    "size": entry["size"],
-                })
-
-    lang_files.sort(key=lambda x: x["name"])
-
-    summary = {
-        "total_files": len(lang_files),
-        "total_strings": 0,
-        "by_language": {"ENG": 0, "FRE": 0, "GER": 0},
-        "files": [],
-    }
-
-    total_strings = 0
-
-    for lf in lang_files:
-        pak_path = os.path.join(PAK_DIR, lf["pak"])
-
-        with open(pak_path, "rb") as f:
-            f.seek(lf["offset"])
-            data = f.read(lf["size"])
-
-        strings = extract_strings(data)
-
-        # Determine output filename
-        base = lf["name"].rsplit(".", 1)[0].lower()
-        ext = lf["name"].rsplit(".", 1)[1].lower()
-        out_name = f"{base}_{ext}.json"
-
-        result = {
-            "file": lf["name"],
-            "pak": lf["pak"],
-            "string_count": len(strings),
-            "strings": strings,
-        }
-
-        out_path = os.path.join(OUTPUT_DIR, out_name)
-        with open(out_path, "w", encoding="utf-8") as f:
-            json.dump(result, f, indent=2, ensure_ascii=False)
-
-        lang = ext.upper()
-        summary["by_language"][lang] += len(strings)
-        summary["files"].append({
-            "file": lf["name"],
-            "pak": lf["pak"],
-            "output": out_name,
-            "string_count": len(strings),
-        })
-        total_strings += len(strings)
-
-        print(f"  {lf['name']:20s} ({lf['pak']:15s}) -> {len(strings):4d} strings -> {out_name}")
-
-    summary["total_strings"] = total_strings
-
-    with open(SUMMARY_FILE, "w", encoding="utf-8") as f:
-        json.dump(summary, f, indent=2, ensure_ascii=False)
-
-    print(f"\nDone. {len(lang_files)} files processed, {total_strings} total strings.")
-    print(f"Output: {OUTPUT_DIR}")
-    print(f"Summary: {SUMMARY_FILE}")
-
-    # Per-language breakdown
-    for lang, count in summary["by_language"].items():
-        print(f"  {lang}: {count} strings")
+    ap = L.tool_args(__doc__)
+    ap.add_argument("--out-dir", help="write one JSON per text file and summary.json here")
+    a = ap.parse_args()
+    files = []
+    for pak, name, data in L.find_all("", a.data):
+        if name.endswith(LANG_EXTENSIONS):
+            files.append((name, pak, extract_strings(data)))
+    files.sort()
+    summary = {"total_files": len(files), "total_strings": 0,
+               "by_language": {"ENG": 0, "FRE": 0, "GER": 0}, "files": []}
+    for name, pak, strings in files:
+        base, ext = name.rsplit(".", 1)
+        out_name = f"{base.lower()}_{ext.lower()}.json"
+        summary["by_language"][ext] += len(strings)
+        summary["total_strings"] += len(strings)
+        summary["files"].append({"file": name, "pak": pak, "output": out_name, "string_count": len(strings)})
+        if a.out_dir:
+            os.makedirs(a.out_dir, exist_ok=True)
+            with open(os.path.join(a.out_dir, out_name), "w", encoding="utf-8") as f:
+                json.dump({"file": name, "pak": pak, "string_count": len(strings), "strings": strings},
+                          f, indent=2, ensure_ascii=False)
+    if a.check:
+        ref = L.repo_json("dialogue_summary.json")
+        key = lambda d: sorted((x["file"], x["pak"], x["string_count"]) for x in d["files"])
+        same = ref is not None and key(ref) == key(summary) and ref["by_language"] == summary["by_language"]
+        print(f"CHECK dialogue: {summary['total_files']} files, {summary['total_strings']} strings "
+              f"{summary['by_language']}, matches data/dialogue_summary.json: {same}")
+        return 0 if same else 1
+    if a.out_dir:
+        with open(os.path.join(a.out_dir, "summary.json"), "w") as f:
+            json.dump(summary, f, indent=2)
+        print(f"wrote {len(files)} files to {a.out_dir}")
+    print(f"{summary['total_files']} files, {summary['total_strings']} strings, {summary['by_language']}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

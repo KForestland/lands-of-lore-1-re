@@ -1,7 +1,5 @@
 {
   "description": "LoL1 music file inventory",
-  "source": "/media/bob/Arikv/REFERENCE/game_files/lol1/DATA",
-  "output_dir": "/home/bob/lol1_music",
   "total_files": 67,
   "counts_by_format": {
     "C55": 17,

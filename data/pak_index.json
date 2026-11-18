@@ -1,7 +1,5 @@
 {
   "description": "Complete file index for all LoL1 PAK containers",
-  "source_path": "/media/bob/Arikv/REFERENCE/game_files/lol1/DATA",
-  "generated": "2026-03-13",
   "total_paks": 81,
   "total_entries": 1163,
   "pak_files": {
@@ -7472,486 +7470,6 @@
   },
   "flat_index": [
     {
-      "pak": "VOC.PAK",
-      "name": "1BOLTC.VOC",
-      "offset": 3435,
-      "size": 21351
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "2BOLTC.VOC",
-      "offset": 24786,
-      "size": 19041
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "3BOLTC.VOC",
-      "offset": 43827,
-      "size": 18661
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "ACCEPT.WSA",
-      "offset": 37455,
-      "size": 24324
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "ACCEPT2.VOC",
-      "offset": 761935,
-      "size": 17795
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "ADAMAGE1.VOC",
-      "offset": 2144471,
-      "size": 3362
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "AFALL2.VOC",
-      "offset": 2199482,
-      "size": 11177
-    },
-    {
-      "pak": "DRIVERS.PAK",
-      "name": "ALFX.DRV",
-      "offset": 34746,
-      "size": 6960
-    },
-    {
-      "pak": "DRIVERS.PAK",
-      "name": "ALGDIG.ADV",
-      "offset": 114,
-      "size": 4449
-    },
-    {
-      "pak": "FOREST1.PAK",
-      "name": "ALTPAL1.PAL",
-      "offset": 111285,
-      "size": 768
-    },
-    {
-      "pak": "FOREST1.PAK",
-      "name": "ALTPAL2.PAL",
-      "offset": 112053,
-      "size": 768
-    },
-    {
-      "pak": "FOREST1.PAK",
-      "name": "ALTPAL3.PAL",
-      "offset": 112821,
-      "size": 768
-    },
-    {
-      "pak": "L18.PAK",
-      "name": "AMAZON.SHP",
-      "offset": 185,
-      "size": 24056
-    },
-    {
-      "pak": "L21.PAK",
-      "name": "APARITIN.SHP",
-      "offset": 170,
-      "size": 12426
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "APPARD.VOC",
-      "offset": 1337364,
-      "size": 7301
-    },
-    {
-      "pak": "L18.PAK",
-      "name": "ARCHRSLG.SHP",
-      "offset": 24241,
-      "size": 9445
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "AUTOBUT.SHP",
-      "offset": 122004,
-      "size": 2150
-    },
-    {
-      "pak": "O00A.PAK",
-      "name": "AUTOMAP.TIM",
-      "offset": 17233,
-      "size": 322
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "AUTOMAP.VOC",
-      "offset": 62488,
-      "size": 25249
-    },
-    {
-      "pak": "O00A.PAK",
-      "name": "AUTOMAP2.TIM",
-      "offset": 17555,
-      "size": 322
-    },
-    {
-      "pak": "L15.PAK",
-      "name": "AVIANWRM.SHP",
-      "offset": 38432,
-      "size": 14444
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "AWHOA2.VOC",
-      "offset": 2185156,
-      "size": 4359
-    },
-    {
-      "pak": "L06.PAK",
-      "name": "BANDIT.SHP",
-      "offset": 32007,
-      "size": 23839
-    },
-    {
-      "pak": "O00A.PAK",
-      "name": "BARRIER.TIM",
-      "offset": 21242,
-      "size": 3272
-    },
-    {
-      "pak": "O00A.PAK",
-      "name": "BARRIER.WSA",
-      "offset": 27476,
-      "size": 78358
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BDAMAGE1.VOC",
-      "offset": 2160061,
-      "size": 6437
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BEZEL.VOC",
-      "offset": 1452430,
-      "size": 31886
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "BEZEL.WSA",
-      "offset": 229448,
-      "size": 30373
-    },
-    {
-      "pak": "O18A.PAK",
-      "name": "BIGLYLE.CPS",
-      "offset": 162,
-      "size": 15657
-    },
-    {
-      "pak": "O23A.PAK",
-      "name": "BIGVIC.WSA",
-      "offset": 50439,
-      "size": 41597
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BITE1.VOC",
-      "offset": 87737,
-      "size": 6785
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BITE2.VOC",
-      "offset": 94522,
-      "size": 11199
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BLUDCURL.VOC",
-      "offset": 1895258,
-      "size": 31188
-    },
-    {
-      "pak": "L02.PAK",
-      "name": "BOAR.SHP",
-      "offset": 174,
-      "size": 18576
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BOARATAK.VOC",
-      "offset": 105721,
-      "size": 9233
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BOARHIT.VOC",
-      "offset": 114954,
-      "size": 7447
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BOARMOVE.VOC",
-      "offset": 122401,
-      "size": 4921
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "BOAT.TIM",
-      "offset": 44411,
-      "size": 742
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "BOAT.WSA",
-      "offset": 48503,
-      "size": 34101
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BOLT2.VOC",
-      "offset": 1731186,
-      "size": 4565
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BOLT3.VOC",
-      "offset": 1735751,
-      "size": 4565
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BOLTQUK2.VOC",
-      "offset": 1704016,
-      "size": 27170
-    },
-    {
-      "pak": "O16A.PAK",
-      "name": "BONESUP.WSA",
-      "offset": 18222,
-      "size": 40300
-    },
-    {
-      "pak": "O00A.PAK",
-      "name": "BOOK.WSA",
-      "offset": 17877,
-      "size": 3365
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BOW2.VOC",
-      "offset": 779730,
-      "size": 4137
-    },
-    {
-      "pak": "O24A.PAK",
-      "name": "BRIDGE.CPS",
-      "offset": 207,
-      "size": 9807
-    },
-    {
-      "pak": "O24A.PAK",
-      "name": "BRIDGE1.WSA",
-      "offset": 26371,
-      "size": 2929
-    },
-    {
-      "pak": "O24A.PAK",
-      "name": "BRIDGE2.WSA",
-      "offset": 29300,
-      "size": 9578
-    },
-    {
-      "pak": "O24A.PAK",
-      "name": "BRIDGE3.WSA",
-      "offset": 38878,
-      "size": 1910
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "BRUCLIFF.TIM",
-      "offset": 46719,
-      "size": 222
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "BRUCLIFF.WSA",
-      "offset": 47657,
-      "size": 37173
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "BRUFRAN.TIM",
-      "offset": 46941,
-      "size": 212
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "BRUFRANK.CPS",
-      "offset": 292,
-      "size": 11819
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "BRUFRANK.WSA",
-      "offset": 84830,
-      "size": 15600
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "BRUNO.CPS",
-      "offset": 12111,
-      "size": 18036
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "BRUNORM.TIM",
-      "offset": 47153,
-      "size": 282
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "BRUNORM.WSA",
-      "offset": 100430,
-      "size": 58399
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "BRUNO_E.CPS",
-      "offset": 30147,
-      "size": 16572
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "BRUSAM.TIM",
-      "offset": 47435,
-      "size": 222
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "BRUSAM.WSA",
-      "offset": 158829,
-      "size": 51322
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK.CPS",
-      "offset": 260,
-      "size": 11073
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK01.TIM",
-      "offset": 25339,
-      "size": 652
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK02.TIM",
-      "offset": 25991,
-      "size": 242
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK06.TIM",
-      "offset": 26385,
-      "size": 242
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK07.TIM",
-      "offset": 26627,
-      "size": 232
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK08.TIM",
-      "offset": 26859,
-      "size": 232
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK09.TIM",
-      "offset": 27091,
-      "size": 232
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK1.WSA",
-      "offset": 28311,
-      "size": 17034
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK12.TIM",
-      "offset": 27323,
-      "size": 232
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK13.TIM",
-      "offset": 27555,
-      "size": 362
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK15.TIM",
-      "offset": 27917,
-      "size": 162
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK16.TIM",
-      "offset": 28079,
-      "size": 232
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK2.WSA",
-      "offset": 45345,
-      "size": 546
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK3.WSA",
-      "offset": 45891,
-      "size": 501
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCK4.WSA",
-      "offset": 46392,
-      "size": 4246
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "BUCKBELL.VOC",
-      "offset": 783867,
-      "size": 8858
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCKBUY.TIM",
-      "offset": 26233,
-      "size": 152
-    },
-    {
-      "pak": "O03C.PAK",
-      "name": "BUCKHUT.CPS",
-      "offset": 11333,
-      "size": 14006
-    },
-    {
-      "pak": "MONSTER.PAK",
-      "name": "CABAL.SHP",
-      "offset": 82693,
-      "size": 27635
-    },
-    {
-      "pak": "CATWALK.PAK",
-      "name": "CATDOOR.SHP",
-      "offset": 112989,
-      "size": 3286
-    },
-    {
       "pak": "CATWALK.PAK",
       "name": "CATWALK.DAT",
       "offset": 89,
@@ -7976,10 +7494,10 @@
       "size": 4077
     },
     {
-      "pak": "VOC.PAK",
-      "name": "CAUSFOG.VOC",
-      "offset": 1484316,
-      "size": 10435
+      "pak": "CATWALK.PAK",
+      "name": "CATDOOR.SHP",
+      "offset": 112989,
+      "size": 3286
     },
     {
       "pak": "CAVE1.PAK",
@@ -8012,24 +7530,6 @@
       "size": 2241
     },
     {
-      "pak": "VOC.PAK",
-      "name": "CAVEDAM.VOC",
-      "offset": 1099034,
-      "size": 8641
-    },
-    {
-      "pak": "L07.PAK",
-      "name": "CAVEDWLR.SHP",
-      "offset": 165,
-      "size": 23226
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "CAVEMOV.VOC",
-      "offset": 1043463,
-      "size": 3186
-    },
-    {
       "pak": "CAVE1.PAK",
       "name": "CAV_PLT2.PAL",
       "offset": 120620,
@@ -8046,114 +7546,6 @@
       "name": "CAV_PLT4.PAL",
       "offset": 122156,
       "size": 768
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "CDAMAGE1.VOC",
-      "offset": 2179763,
-      "size": 5393
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "CFALL2.VOC",
-      "offset": 2210659,
-      "size": 16122
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "CHANDELR.WSA",
-      "offset": 285,
-      "size": 1562
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "CHEST.VOC",
-      "offset": 127322,
-      "size": 7234
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "CHIEF.CPS",
-      "offset": 482,
-      "size": 16768
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "CHIEF0A.WSA",
-      "offset": 104232,
-      "size": 24320
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "CHIEF0B.WSA",
-      "offset": 128552,
-      "size": 11010
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "CHIEF0C.WSA",
-      "offset": 139562,
-      "size": 11007
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "CHIEF1.TIM",
-      "offset": 103512,
-      "size": 132
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "CHIEF1.WSA",
-      "offset": 150569,
-      "size": 1069
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "CHIEF2.TIM",
-      "offset": 103644,
-      "size": 92
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "CHIEF2.WSA",
-      "offset": 151638,
-      "size": 1516
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "CHIEF3.WSA",
-      "offset": 153154,
-      "size": 2068
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "CHIEF4.WSA",
-      "offset": 155222,
-      "size": 647
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "CHULLA.VOC",
-      "offset": 1107675,
-      "size": 5216
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "CHULLD.VOC",
-      "offset": 1112891,
-      "size": 7457
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "CHULLM.VOC",
-      "offset": 1120348,
-      "size": 8276
-    },
-    {
-      "pak": "CIMMERIA.PAK",
-      "name": "CIMDOOR.SHP",
-      "offset": 110709,
-      "size": 3679
     },
     {
       "pak": "CIMMERIA.PAK",
@@ -8180,724 +7572,202 @@
       "size": 3858
     },
     {
-      "pak": "O01D.PAK",
-      "name": "CLEANGD.WSA",
-      "offset": 1555,
-      "size": 24598
+      "pak": "CIMMERIA.PAK",
+      "name": "CIMDOOR.SHP",
+      "offset": 110709,
+      "size": 3679
     },
     {
-      "pak": "VOC.PAK",
-      "name": "CLEANGL1.VOC",
-      "offset": 792725,
-      "size": 5252
+      "pak": "DRIVERS.PAK",
+      "name": "ALGDIG.ADV",
+      "offset": 114,
+      "size": 4449
     },
     {
-      "pak": "VOC.PAK",
-      "name": "CLEANGL2.VOC",
-      "offset": 797977,
-      "size": 4777
+      "pak": "DRIVERS.PAK",
+      "name": "MT32MPU.ADV",
+      "offset": 4563,
+      "size": 10378
     },
     {
-      "pak": "O22D.PAK",
-      "name": "CLIFNORM.WSA",
-      "offset": 210151,
-      "size": 34474
+      "pak": "DRIVERS.PAK",
+      "name": "PCSPKR.ADV",
+      "offset": 14941,
+      "size": 8153
     },
     {
-      "pak": "O24A.PAK",
-      "name": "COLAPSE.WSA",
-      "offset": 40788,
-      "size": 7755
+      "pak": "DRIVERS.PAK",
+      "name": "SBDIG.ADV",
+      "offset": 23094,
+      "size": 3797
     },
     {
-      "pak": "O23A.PAK",
-      "name": "COMNDR2.CPS",
-      "offset": 153,
-      "size": 17050
+      "pak": "DRIVERS.PAK",
+      "name": "SBPDIG.ADV",
+      "offset": 26891,
+      "size": 4076
     },
     {
-      "pak": "O23A.PAK",
-      "name": "COMNDR2.WSA",
-      "offset": 92036,
-      "size": 40932
+      "pak": "DRIVERS.PAK",
+      "name": "TANDYDIG.ADV",
+      "offset": 30967,
+      "size": 3779
     },
     {
-      "pak": "VOC.PAK",
-      "name": "COMPASS2.VOC",
-      "offset": 802754,
-      "size": 18202
+      "pak": "DRIVERS.PAK",
+      "name": "ALFX.DRV",
+      "offset": 34746,
+      "size": 6960
     },
     {
-      "pak": "O00A.PAK",
-      "name": "COMPASSE.TIM",
-      "offset": 191541,
-      "size": 326
+      "pak": "FOREST1.PAK",
+      "name": "FOREST1.DAT",
+      "offset": 121,
+      "size": 3098
     },
     {
-      "pak": "O00A.PAK",
-      "name": "COMPASSE.WSA",
-      "offset": 192519,
-      "size": 14395
+      "pak": "FOREST1.PAK",
+      "name": "FOREST1.SHP",
+      "offset": 3219,
+      "size": 77136
     },
     {
-      "pak": "O00A.PAK",
-      "name": "COMPASSF.TIM",
-      "offset": 191867,
-      "size": 326
+      "pak": "FOREST1.PAK",
+      "name": "FOREST1.VCN",
+      "offset": 80355,
+      "size": 28603
     },
     {
-      "pak": "O00A.PAK",
-      "name": "COMPASSF.WSA",
-      "offset": 206914,
-      "size": 14447
+      "pak": "FOREST1.PAK",
+      "name": "FOREST1.VMP",
+      "offset": 108958,
+      "size": 2327
     },
     {
-      "pak": "O00A.PAK",
-      "name": "COMPASSG.TIM",
-      "offset": 192193,
-      "size": 326
+      "pak": "FOREST1.PAK",
+      "name": "ALTPAL1.PAL",
+      "offset": 111285,
+      "size": 768
     },
     {
-      "pak": "O00A.PAK",
-      "name": "COMPASSG.WSA",
-      "offset": 221361,
-      "size": 14380
+      "pak": "FOREST1.PAK",
+      "name": "ALTPAL2.PAL",
+      "offset": 112053,
+      "size": 768
     },
     {
-      "pak": "O01C.PAK",
-      "name": "CONFRONT.CPS",
-      "offset": 111,
-      "size": 12763
+      "pak": "FOREST1.PAK",
+      "name": "ALTPAL3.PAL",
+      "offset": 112821,
+      "size": 768
     },
     {
-      "pak": "O01C.PAK",
-      "name": "CONFRONT.TIM",
-      "offset": 29126,
-      "size": 1654
+      "pak": "GENERAL.PAK",
+      "name": "LORESFX.ADL",
+      "offset": 1126,
+      "size": 9176
     },
     {
-      "pak": "O01C.PAK",
-      "name": "CONFRONT.WSA",
-      "offset": 34178,
-      "size": 238368
+      "pak": "GENERAL.PAK",
+      "name": "LOLSYSEX.C55",
+      "offset": 10302,
+      "size": 2476
     },
     {
-      "pak": "O22C.PAK",
-      "name": "COUNC1.TIM",
-      "offset": 18424,
-      "size": 202
+      "pak": "GENERAL.PAK",
+      "name": "LORESFX.C55",
+      "offset": 12778,
+      "size": 3924
     },
     {
-      "pak": "O22C.PAK",
-      "name": "COUNC1.WSA",
-      "offset": 20290,
-      "size": 51759
+      "pak": "GENERAL.PAK",
+      "name": "FXPAL.COL",
+      "offset": 16702,
+      "size": 768
     },
     {
-      "pak": "O22C.PAK",
-      "name": "COUNC2.TIM",
-      "offset": 18626,
-      "size": 202
+      "pak": "GENERAL.PAK",
+      "name": "SWAMPICE.COL",
+      "offset": 17470,
+      "size": 768
     },
     {
-      "pak": "O22C.PAK",
-      "name": "COUNC2.WSA",
-      "offset": 72049,
-      "size": 47867
+      "pak": "GENERAL.PAK",
+      "name": "INVENT1.CPS",
+      "offset": 18238,
+      "size": 9075
     },
     {
-      "pak": "O22C.PAK",
-      "name": "COUNC3.TIM",
-      "offset": 18828,
-      "size": 202
+      "pak": "GENERAL.PAK",
+      "name": "INVENT2.CPS",
+      "offset": 27313,
+      "size": 9120
     },
     {
-      "pak": "O22C.PAK",
-      "name": "COUNC3.WSA",
-      "offset": 119916,
-      "size": 38310
+      "pak": "GENERAL.PAK",
+      "name": "INVENT3.CPS",
+      "offset": 36433,
+      "size": 9127
     },
     {
-      "pak": "O22C.PAK",
-      "name": "COUNC4.TIM",
-      "offset": 19030,
-      "size": 202
+      "pak": "GENERAL.PAK",
+      "name": "INVENT4.CPS",
+      "offset": 45560,
+      "size": 9173
     },
     {
-      "pak": "O22C.PAK",
-      "name": "COUNC4.WSA",
-      "offset": 158226,
-      "size": 41869
+      "pak": "GENERAL.PAK",
+      "name": "INVENT5.CPS",
+      "offset": 54733,
+      "size": 9160
     },
     {
-      "pak": "O22C.PAK",
-      "name": "COUNCIL.CPS",
-      "offset": 340,
-      "size": 18084
+      "pak": "GENERAL.PAK",
+      "name": "INVENT6.CPS",
+      "offset": 63893,
+      "size": 8905
     },
     {
-      "pak": "VOC.PAK",
-      "name": "CREAK1.VOC",
-      "offset": 820956,
-      "size": 11425
+      "pak": "GENERAL.PAK",
+      "name": "PARCH.CPS",
+      "offset": 72798,
+      "size": 12667
     },
     {
-      "pak": "VOC.PAK",
-      "name": "CROSSBOW.VOC",
-      "offset": 134556,
-      "size": 2951
+      "pak": "GENERAL.PAK",
+      "name": "PLAYFLD.CPS",
+      "offset": 85465,
+      "size": 16009
     },
     {
-      "pak": "VOC.PAK",
-      "name": "CROWCAW.VOC",
-      "offset": 137507,
-      "size": 3931
+      "pak": "GENERAL.PAK",
+      "name": "SCROLL.CPS",
+      "offset": 101474,
+      "size": 9522
     },
     {
-      "pak": "O19A.PAK",
-      "name": "CRUCIBLE.TIM",
-      "offset": 43,
-      "size": 572
+      "pak": "GENERAL.PAK",
+      "name": "FONT6PN.FNT",
+      "offset": 110996,
+      "size": 2311
     },
     {
-      "pak": "O19A.PAK",
-      "name": "CRUCIBLE.WSA",
-      "offset": 615,
-      "size": 105472
+      "pak": "GENERAL.PAK",
+      "name": "FONT9PN.FNT",
+      "offset": 113307,
+      "size": 3729
     },
     {
-      "pak": "O28A.PAK",
-      "name": "CRYSTALS.CPS",
-      "offset": 2647,
-      "size": 3920
+      "pak": "GENERAL.PAK",
+      "name": "LORESFX.PCS",
+      "offset": 117036,
+      "size": 4968
     },
     {
-      "pak": "VOC.PAK",
-      "name": "CWHOA1.VOC",
-      "offset": 2194673,
-      "size": 4809
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "DARK.WSA",
-      "offset": 118257,
-      "size": 39520
-    },
-    {
-      "pak": "O23A.PAK",
-      "name": "DARKCOM.CPS",
-      "offset": 17203,
-      "size": 17290
-    },
-    {
-      "pak": "O23A.PAK",
-      "name": "DARKCOM.TIM",
-      "offset": 49653,
-      "size": 222
-    },
-    {
-      "pak": "O23A.PAK",
-      "name": "DARKCOM.WSA",
-      "offset": 132968,
-      "size": 73443
-    },
-    {
-      "pak": "O23A.PAK",
-      "name": "DARKCOS.TIM",
-      "offset": 49875,
-      "size": 342
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "DARKLITE.WSA",
-      "offset": 157777,
-      "size": 45513
-    },
-    {
-      "pak": "O23A.PAK",
-      "name": "DARKVIC.TIM",
-      "offset": 50217,
-      "size": 222
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DAWN.TIM",
-      "offset": 76645,
-      "size": 190
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DAWN.WSA",
-      "offset": 77509,
-      "size": 23012
-    },
-    {
-      "pak": "O01B.PAK",
-      "name": "DAWN1.TIM",
-      "offset": 258,
-      "size": 512
-    },
-    {
-      "pak": "O27A.PAK",
-      "name": "DAWNORB.TIM",
-      "offset": 11577,
-      "size": 252
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "DAWNSPL1.VOC",
-      "offset": 141438,
-      "size": 49718
-    },
-    {
-      "pak": "O01B.PAK",
-      "name": "DAWN_L.WSA",
-      "offset": 5222,
-      "size": 23085
-    },
-    {
-      "pak": "O24A.PAK",
-      "name": "DAWN_LIZ.TIM",
-      "offset": 23341,
-      "size": 1398
-    },
-    {
-      "pak": "O24A.PAK",
-      "name": "DAWN_LIZ.WSA",
-      "offset": 48543,
-      "size": 33542
-    },
-    {
-      "pak": "O24A.PAK",
-      "name": "DAWN_SCO.TIM",
-      "offset": 24739,
-      "size": 162
-    },
-    {
-      "pak": "O24A.PAK",
-      "name": "DAWN_SCO.WSA",
-      "offset": 82085,
-      "size": 138601
-    },
-    {
-      "pak": "O23A.PAK",
-      "name": "DCOM_EMP.CPS",
-      "offset": 34493,
-      "size": 15160
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DEDFRANK.CPS",
-      "offset": 296,
-      "size": 12760
-    },
-    {
-      "pak": "O18A.PAK",
-      "name": "DEDLYL.CPS",
-      "offset": 15819,
-      "size": 14281
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DEDROEK.CPS",
-      "offset": 13056,
-      "size": 12186
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DEDROEK.TIM",
-      "offset": 76835,
-      "size": 190
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DEDROEK.WSA",
-      "offset": 100521,
-      "size": 54224
-    },
-    {
-      "pak": "L28.PAK",
-      "name": "DETHDISK.SHP",
-      "offset": 26371,
-      "size": 30684
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "DETHDSKD.VOC",
-      "offset": 1344665,
-      "size": 2319
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "DETHDSKM.VOC",
-      "offset": 1346984,
-      "size": 7643
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "DISOLVE.WSA",
-      "offset": 203290,
-      "size": 27582
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "DLDORCL.VOC",
-      "offset": 191156,
-      "size": 6655
-    },
-    {
-      "pak": "O02B.PAK",
-      "name": "DMPOINT.WSA",
-      "offset": 178185,
-      "size": 14931
-    },
-    {
-      "pak": "O02B.PAK",
-      "name": "DOM.CPS",
-      "offset": 312,
-      "size": 8614
-    },
-    {
-      "pak": "O02B.PAK",
-      "name": "DOM.WSA",
-      "offset": 193116,
-      "size": 58758
-    },
-    {
-      "pak": "O02B.PAK",
-      "name": "DOM1.TIM",
-      "offset": 51107,
-      "size": 282
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "DOORMTCL.VOC",
-      "offset": 197811,
-      "size": 4359
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "DOORMTOP.VOC",
-      "offset": 202170,
-      "size": 3545
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "DOORWDCL.VOC",
-      "offset": 205715,
-      "size": 8863
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "DOORWDOP.VOC",
-      "offset": 214578,
-      "size": 11425
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "DORSTNCL.VOC",
-      "offset": 832381,
-      "size": 8944
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "DORSTNOP.VOC",
-      "offset": 841325,
-      "size": 8944
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "DORWDSLM.VOC",
-      "offset": 226003,
-      "size": 3421
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "DOR_BRNO.WSA",
-      "offset": 244625,
-      "size": 8651
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "DOR_CNCL.WSA",
-      "offset": 200095,
-      "size": 8869
-    },
-    {
-      "pak": "O22A.PAK",
-      "name": "DOR_FLCH.WSA",
-      "offset": 48248,
-      "size": 8938
-    },
-    {
-      "pak": "O22A.PAK",
-      "name": "DOR_SADY.WSA",
-      "offset": 57186,
-      "size": 8739
-    },
-    {
-      "pak": "O22A.PAK",
-      "name": "DOR_VCTR.WSA",
-      "offset": 65925,
-      "size": 8931
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRARACLE.CPS",
-      "offset": 370,
-      "size": 18329
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRARCLE1.TIM",
-      "offset": 29777,
-      "size": 902
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRARCLE2.TIM",
-      "offset": 30679,
-      "size": 2064
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRARCLE3.TIM",
-      "offset": 32743,
-      "size": 852
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRARCLE4.TIM",
-      "offset": 33595,
-      "size": 514
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRARCLE5.TIM",
-      "offset": 34109,
-      "size": 1828
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRARCLE6.TIM",
-      "offset": 35937,
-      "size": 508
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRARCLE7.TIM",
-      "offset": 36445,
-      "size": 464
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRARCLE8.TIM",
-      "offset": 36909,
-      "size": 136
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRARCLE9.TIM",
-      "offset": 37045,
-      "size": 410
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRARCL_1.WSA",
-      "offset": 61779,
-      "size": 87599
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRARCL_2.WSA",
-      "offset": 149378,
-      "size": 11535
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRA_FACE.WSA",
-      "offset": 160913,
-      "size": 1497
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRA_FOOT.WSA",
-      "offset": 162410,
-      "size": 727
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "DRA_HAND.WSA",
-      "offset": 163137,
-      "size": 1252
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "DRGEREM.WSA",
-      "offset": 39268,
-      "size": 6819
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "DRGERIM.TIM",
-      "offset": 34904,
-      "size": 144
-    },
-    {
-      "pak": "L23.PAK",
-      "name": "DRKCMNDR.SHP",
-      "offset": 187,
-      "size": 32085
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "DRNATHAN.TIM",
-      "offset": 35048,
-      "size": 146
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "DRNATHAN.WSA",
-      "offset": 46087,
-      "size": 6600
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DROEK.CPS",
-      "offset": 25242,
-      "size": 14995
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DROEK.TIM",
-      "offset": 77025,
-      "size": 202
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DROEK.WSA",
-      "offset": 154745,
-      "size": 12079
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DROEK1.WSA",
-      "offset": 166824,
-      "size": 11940
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DROEK1A.WSA",
-      "offset": 178764,
-      "size": 18675
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DROEK1C.WSA",
-      "offset": 197439,
-      "size": 1327
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DROEK1D.WSA",
-      "offset": 198766,
-      "size": 4125
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "DROEKA.WSA",
-      "offset": 202891,
-      "size": 19096
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "DRVICTOR.TIM",
-      "offset": 35194,
-      "size": 156
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "DRVICTOR.WSA",
-      "offset": 52687,
-      "size": 6413
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "DWIGHT.CPS",
-      "offset": 203,
-      "size": 16193
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "DWIGHT1.TIM",
-      "offset": 27392,
-      "size": 182
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "DWIGHT2.TIM",
-      "offset": 27574,
-      "size": 212
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "DWIGHT2.WSA",
-      "offset": 27968,
-      "size": 12818
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "DWIGHT3.TIM",
-      "offset": 27786,
-      "size": 182
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "DWIGHT3.WSA",
-      "offset": 40786,
-      "size": 18495
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "DWIGHT4.WSA",
-      "offset": 59281,
-      "size": 12000
-    },
-    {
-      "pak": "O27A.PAK",
-      "name": "ESCAPE.TIM",
-      "offset": 11829,
-      "size": 3156
-    },
-    {
-      "pak": "O27A.PAK",
-      "name": "ESCAPE.WSA",
-      "offset": 15247,
-      "size": 29544
-    },
-    {
-      "pak": "L29.PAK",
-      "name": "EXECTNR.SHP",
-      "offset": 118606,
-      "size": 40517
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "EXPLODE.VOC",
-      "offset": 229424,
-      "size": 11808
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "EXPLODE2.VOC",
-      "offset": 1682967,
-      "size": 10791
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "EXPLODE3.VOC",
-      "offset": 1693758,
-      "size": 10258
+      "pak": "GENERAL.PAK",
+      "name": "AUTOBUT.SHP",
+      "offset": 122004,
+      "size": 2150
     },
     {
       "pak": "GENERAL.PAK",
@@ -8954,196 +7824,10 @@
       "size": 9758
     },
     {
-      "pak": "O21A.PAK",
-      "name": "FAITH.TIM",
-      "offset": 69,
-      "size": 302
-    },
-    {
-      "pak": "O21A.PAK",
-      "name": "FAITH.WSA",
-      "offset": 553,
-      "size": 22977
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "FEYELL1.VOC",
-      "offset": 1354627,
-      "size": 9864
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "FIRE.WSA",
-      "offset": 164389,
-      "size": 8370
-    },
-    {
       "pak": "GENERAL.PAK",
       "name": "FIREBALL.SHP",
       "offset": 212443,
       "size": 8529
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "FIREPLCE.WSA",
-      "offset": 1847,
-      "size": 2708
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "FIRESPL1.VOC",
-      "offset": 241232,
-      "size": 13843
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "FLAGON1.WSA",
-      "offset": 253276,
-      "size": 32758
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "FLAGON2.WSA",
-      "offset": 286034,
-      "size": 37423
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "FLETCH.TIM",
-      "offset": 103736,
-      "size": 152
-    },
-    {
-      "pak": "L08.PAK",
-      "name": "FLSPIDER.SHP",
-      "offset": 181,
-      "size": 11477
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "FLUTTER3.VOC",
-      "offset": 1058957,
-      "size": 7041
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "FLYSPD2A.VOC",
-      "offset": 1019812,
-      "size": 1972
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "FLYSPD2M.VOC",
-      "offset": 1011208,
-      "size": 8604
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "FOG.WSA",
-      "offset": 259821,
-      "size": 139380
-    },
-    {
-      "pak": "STARTUP.PAK",
-      "name": "FONT6P.FNT",
-      "offset": 221,
-      "size": 2334
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "FONT6PN.FNT",
-      "offset": 110996,
-      "size": 2311
-    },
-    {
-      "pak": "STARTUP.PAK",
-      "name": "FONT9P.FNT",
-      "offset": 2555,
-      "size": 3881
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "FONT9PN.FNT",
-      "offset": 113307,
-      "size": 3729
-    },
-    {
-      "pak": "FOREST1.PAK",
-      "name": "FOREST1.DAT",
-      "offset": 121,
-      "size": 3098
-    },
-    {
-      "pak": "FOREST1.PAK",
-      "name": "FOREST1.SHP",
-      "offset": 3219,
-      "size": 77136
-    },
-    {
-      "pak": "FOREST1.PAK",
-      "name": "FOREST1.VCN",
-      "offset": 80355,
-      "size": 28603
-    },
-    {
-      "pak": "FOREST1.PAK",
-      "name": "FOREST1.VMP",
-      "offset": 108958,
-      "size": 2327
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "FORSTMIN.CPS",
-      "offset": 40237,
-      "size": 10580
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "FOUNDRY2.VOC",
-      "offset": 850269,
-      "size": 1058
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "FOUNDRY4.VOC",
-      "offset": 851327,
-      "size": 2338
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "FOUNDRY6.VOC",
-      "offset": 853665,
-      "size": 7202
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "FRANK.CPS",
-      "offset": 50817,
-      "size": 13713
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "FRANK.TIM",
-      "offset": 77227,
-      "size": 282
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "FRANK.WSA",
-      "offset": 221987,
-      "size": 54100
-    },
-    {
-      "pak": "O22D.PAK",
-      "name": "FRANK_B.WSA",
-      "offset": 323457,
-      "size": 10146
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "FXPAL.COL",
-      "offset": 16702,
-      "size": 768
     },
     {
       "pak": "GENERAL.PAK",
@@ -9152,502 +7836,16 @@
       "size": 193
     },
     {
-      "pak": "STARTUP.PAK",
-      "name": "GAMESHP.SHP",
-      "offset": 120095,
-      "size": 15708
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GARDIAN2.VOC",
-      "offset": 1889642,
-      "size": 5616
-    },
-    {
-      "pak": "O14A.PAK",
-      "name": "GASEXP1.WSA",
-      "offset": 57,
-      "size": 41525
-    },
-    {
-      "pak": "O14A.PAK",
-      "name": "GASEXP2.WSA",
-      "offset": 41582,
-      "size": 20352
-    },
-    {
-      "pak": "O14A.PAK",
-      "name": "GASEXP3.WSA",
-      "offset": 61934,
-      "size": 11118
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "GEREM.WSA",
-      "offset": 208964,
-      "size": 2243
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "GEREM1.TIM",
-      "offset": 19232,
-      "size": 202
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "GEREM1.WSA",
-      "offset": 211207,
-      "size": 2604
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "GEREM2.TIM",
-      "offset": 19434,
-      "size": 252
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "GEREM2.WSA",
-      "offset": 213811,
-      "size": 11920
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "GEREM3.TIM",
-      "offset": 19686,
-      "size": 292
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "GEREM3.WSA",
-      "offset": 225731,
-      "size": 17445
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "GEREM4.TIM",
-      "offset": 19978,
-      "size": 312
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "GEREM4.WSA",
-      "offset": 243176,
-      "size": 41333
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "GERIM.CPS",
-      "offset": 853,
-      "size": 9593
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "GERIM1.TIM",
-      "offset": 35350,
-      "size": 330
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "GERIM1.WSA",
-      "offset": 59100,
-      "size": 4175
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "GERIM2.TIM",
-      "offset": 35680,
-      "size": 1118
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "GERIM2.WSA",
-      "offset": 63275,
-      "size": 3202
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "GERIM3.TIM",
-      "offset": 36798,
-      "size": 202
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "GERIM3.WSA",
-      "offset": 66477,
-      "size": 11042
-    },
-    {
-      "pak": "O01B.PAK",
-      "name": "GERIM4.TIM",
-      "offset": 770,
-      "size": 512
-    },
-    {
-      "pak": "O01A.PAK",
-      "name": "GERIM4.WSA",
-      "offset": 77519,
-      "size": 2183
-    },
-    {
-      "pak": "O01B.PAK",
-      "name": "GERIM_L.WSA",
-      "offset": 28307,
-      "size": 16110
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "GETSPELL.WSA",
-      "offset": 399201,
-      "size": 10465
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GHORKAD.VOC",
-      "offset": 1128624,
-      "size": 3750
-    },
-    {
-      "pak": "L13.PAK",
-      "name": "GIMLET.SHP",
-      "offset": 15351,
-      "size": 13358
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GIMLETD2.VOC",
-      "offset": 1132374,
-      "size": 6274
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GIMLETM2.VOC",
-      "offset": 1138648,
-      "size": 5929
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GLASBRK2.VOC",
-      "offset": 1046649,
-      "size": 12308
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "GLITTER1.WSA",
-      "offset": 172759,
-      "size": 2411
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "GLITTER2.WSA",
-      "offset": 175170,
-      "size": 1790
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GLOWY1.VOC",
-      "offset": 860867,
-      "size": 31019
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GOOD1.VOC",
-      "offset": 1065998,
-      "size": 10471
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GOOD2.VOC",
-      "offset": 1076469,
-      "size": 12620
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GOOEY1.VOC",
-      "offset": 891886,
-      "size": 4402
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GOOEY2.VOC",
-      "offset": 896288,
-      "size": 2824
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GOOEY3.VOC",
-      "offset": 1144577,
-      "size": 2950
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GRAZERA.VOC",
-      "offset": 1147527,
-      "size": 4675
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GRAZERD.VOC",
-      "offset": 1152202,
-      "size": 4457
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "GRAZERM.VOC",
-      "offset": 1156659,
-      "size": 4475
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "GREYEAGL.CPS",
-      "offset": 92743,
-      "size": 17423
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "GROUP.WSA",
-      "offset": 284509,
-      "size": 12429
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "GROUP1.WSA",
-      "offset": 296938,
-      "size": 55438
-    },
-    {
-      "pak": "O22C.PAK",
-      "name": "GROUP2.WSA",
-      "offset": 352376,
-      "size": 37328
-    },
-    {
-      "pak": "L24.PAK",
-      "name": "GRTORC.SHP",
-      "offset": 168,
-      "size": 41516
-    },
-    {
-      "pak": "L01.PAK",
-      "name": "GUARD.SHP",
-      "offset": 162,
-      "size": 24909
-    },
-    {
-      "pak": "O01D.PAK",
-      "name": "GUARD.WSA",
-      "offset": 26153,
-      "size": 21779
-    },
-    {
-      "pak": "O01D.PAK",
-      "name": "GUARD1.TIM",
-      "offset": 131,
-      "size": 352
-    },
-    {
-      "pak": "O01D.PAK",
-      "name": "GUARD2.TIM",
-      "offset": 483,
-      "size": 340
-    },
-    {
-      "pak": "O01D.PAK",
-      "name": "GUARD4.TIM",
-      "offset": 823,
-      "size": 258
-    },
-    {
-      "pak": "O01D.PAK",
-      "name": "GUARD5.TIM",
-      "offset": 1081,
-      "size": 232
-    },
-    {
-      "pak": "O01D.PAK",
-      "name": "GUARD6.TIM",
-      "offset": 1313,
-      "size": 242
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "GUARDIAN.WSA",
-      "offset": 409666,
-      "size": 19840
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HACHUCKD.VOC",
-      "offset": 1364491,
-      "size": 2418
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HACHUCKM.VOC",
-      "offset": 1366909,
-      "size": 9124
-    },
-    {
-      "pak": "O17A.PAK",
-      "name": "HAG.CPS",
-      "offset": 101,
-      "size": 14086
-    },
-    {
-      "pak": "L29.PAK",
-      "name": "HAG.SHP",
-      "offset": 259,
-      "size": 14240
-    },
-    {
-      "pak": "O17A.PAK",
-      "name": "HAG1.TIM",
-      "offset": 14187,
-      "size": 142
-    },
-    {
-      "pak": "O17A.PAK",
-      "name": "HAG1.WSA",
-      "offset": 16427,
-      "size": 26479
-    },
-    {
-      "pak": "O17A.PAK",
-      "name": "HAG2.TIM",
-      "offset": 14329,
-      "size": 172
-    },
-    {
-      "pak": "O17A.PAK",
-      "name": "HAG2.WSA",
-      "offset": 42906,
-      "size": 15693
-    },
-    {
-      "pak": "O17A.PAK",
-      "name": "HAG_S.TIM",
-      "offset": 14501,
-      "size": 1926
-    },
-    {
-      "pak": "O17A.PAK",
-      "name": "HAG_S.WSA",
-      "offset": 58599,
-      "size": 12533
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "HAND.WSA",
-      "offset": 429506,
-      "size": 107818
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HANDFATE.VOC",
-      "offset": 1494751,
-      "size": 3436
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HANDGLOW.VOC",
-      "offset": 1745483,
-      "size": 5658
-    },
-    {
-      "pak": "L27.PAK",
-      "name": "HATCHETS.SHP",
-      "offset": 20983,
-      "size": 9576
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HDAMAGE1.VOC",
-      "offset": 2147833,
-      "size": 6708
-    },
-    {
       "pak": "GENERAL.PAK",
       "name": "HEAL.SHP",
       "offset": 221165,
       "size": 451
     },
     {
-      "pak": "O28A.PAK",
-      "name": "HEAL.WSA",
-      "offset": 230872,
-      "size": 60184
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HEAL1.VOC",
-      "offset": 255075,
-      "size": 31400
-    },
-    {
       "pak": "GENERAL.PAK",
       "name": "HEALI.SHP",
       "offset": 221616,
       "size": 2131
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HEALKING.VOC",
-      "offset": 286475,
-      "size": 43634
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "HEAL_L.WSA",
-      "offset": 291056,
-      "size": 11489
-    },
-    {
-      "pak": "L17.PAK",
-      "name": "HORNET.SHP",
-      "offset": 183,
-      "size": 11287
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HORNETD.VOC",
-      "offset": 1376033,
-      "size": 3802
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HORNETM.VOC",
-      "offset": 1379835,
-      "size": 7256
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HORSEY2.VOC",
-      "offset": 899112,
-      "size": 10713
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HURZELD1.VOC",
-      "offset": 1161134,
-      "size": 8875
-    },
-    {
-      "pak": "L11.PAK",
-      "name": "HURZELL.SHP",
-      "offset": 203,
-      "size": 23233
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HURZELM.VOC",
-      "offset": 1170009,
-      "size": 5969
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "HWHOA1.VOC",
-      "offset": 2189515,
-      "size": 5158
     },
     {
       "pak": "GENERAL.PAK",
@@ -9657,129 +7855,249 @@
     },
     {
       "pak": "GENERAL.PAK",
+      "name": "TRIG.TBL",
+      "offset": 229282,
+      "size": 166
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "BEZEL.WSA",
+      "offset": 229448,
+      "size": 30373
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "FOG.WSA",
+      "offset": 259821,
+      "size": 139380
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "GETSPELL.WSA",
+      "offset": 399201,
+      "size": 10465
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "GUARDIAN.WSA",
+      "offset": 409666,
+      "size": 19840
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "HAND.WSA",
+      "offset": 429506,
+      "size": 107818
+    },
+    {
+      "pak": "GENERAL.PAK",
       "name": "ICE.WSA",
       "offset": 537324,
       "size": 15573
     },
     {
-      "pak": "VOC.PAK",
-      "name": "ICEFORM.VOC",
-      "offset": 1498187,
-      "size": 10300
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "ICESPEL2.VOC",
-      "offset": 330109,
-      "size": 19937
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "ICEXPLOD.VOC",
-      "offset": 1508487,
-      "size": 16106
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "INN1.TIM",
-      "offset": 78712,
-      "size": 312
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "INN3.TIM",
-      "offset": 79024,
-      "size": 198
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "INN4.TIM",
-      "offset": 79222,
-      "size": 302
+      "pak": "GENERAL.PAK",
+      "name": "LITNING1.WSA",
+      "offset": 552897,
+      "size": 5916
     },
     {
       "pak": "GENERAL.PAK",
-      "name": "INVENT1.CPS",
-      "offset": 18238,
-      "size": 9075
+      "name": "LITNING2.WSA",
+      "offset": 558813,
+      "size": 20643
     },
     {
       "pak": "GENERAL.PAK",
-      "name": "INVENT2.CPS",
-      "offset": 27313,
-      "size": 9120
+      "name": "LITNING3.WSA",
+      "offset": 579456,
+      "size": 23970
     },
     {
       "pak": "GENERAL.PAK",
-      "name": "INVENT3.CPS",
-      "offset": 36433,
-      "size": 9127
+      "name": "LITNING4.WSA",
+      "offset": 603426,
+      "size": 39883
     },
     {
       "pak": "GENERAL.PAK",
-      "name": "INVENT4.CPS",
-      "offset": 45560,
-      "size": 9173
+      "name": "MISTS1.WSA",
+      "offset": 643309,
+      "size": 40624
     },
     {
       "pak": "GENERAL.PAK",
-      "name": "INVENT5.CPS",
-      "offset": 54733,
-      "size": 9160
+      "name": "MISTS2.WSA",
+      "offset": 683933,
+      "size": 77397
     },
     {
       "pak": "GENERAL.PAK",
-      "name": "INVENT6.CPS",
-      "offset": 63893,
-      "size": 8905
+      "name": "MISTS3.WSA",
+      "offset": 761330,
+      "size": 52399
     },
     {
-      "pak": "VOC.PAK",
-      "name": "INVISO.VOC",
-      "offset": 909825,
-      "size": 27311
+      "pak": "GENERAL.PAK",
+      "name": "MISTS4.WSA",
+      "offset": 813729,
+      "size": 48667
     },
     {
-      "pak": "L13.PAK",
-      "name": "IRONGRZR.SHP",
-      "offset": 185,
-      "size": 15166
+      "pak": "GENERAL.PAK",
+      "name": "PGAS.WSA",
+      "offset": 862396,
+      "size": 14789
     },
     {
-      "pak": "STARTUP.PAK",
-      "name": "ITEM.INF",
-      "offset": 68901,
-      "size": 5158
+      "pak": "GENERAL.PAK",
+      "name": "SAP.WSA",
+      "offset": 877185,
+      "size": 1039
     },
     {
-      "pak": "STARTUP.PAK",
-      "name": "ITEMICN.SHP",
-      "offset": 74059,
-      "size": 22733
+      "pak": "GENERAL.PAK",
+      "name": "SHATTER.WSA",
+      "offset": 878224,
+      "size": 85129
     },
     {
-      "pak": "STARTUP.PAK",
-      "name": "ITEMSHP.SHP",
-      "offset": 96792,
-      "size": 16117
+      "pak": "GENERAL.PAK",
+      "name": "SNOW.WSA",
+      "offset": 963353,
+      "size": 73350
     },
     {
-      "pak": "O18A.PAK",
-      "name": "JANA.TIM",
-      "offset": 51840,
-      "size": 312
+      "pak": "GENERAL.PAK",
+      "name": "SPARK1.WSA",
+      "offset": 1036703,
+      "size": 1911
     },
     {
-      "pak": "O18A.PAK",
-      "name": "JANA.WSA",
-      "offset": 52878,
-      "size": 28857
+      "pak": "GENERAL.PAK",
+      "name": "SPARK2.WSA",
+      "offset": 1038614,
+      "size": 3961
     },
     {
-      "pak": "O02A.PAK",
-      "name": "KEEP.CPS",
-      "offset": 242,
-      "size": 16698
+      "pak": "GENERAL.PAK",
+      "name": "SPELLEXP.WSA",
+      "offset": 1042575,
+      "size": 8015
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "SWARM.WSA",
+      "offset": 1050590,
+      "size": 51303
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "VIPER.WSA",
+      "offset": 1101893,
+      "size": 57154
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE2E.WSA",
+      "offset": 1159047,
+      "size": 3597
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE3E.WSA",
+      "offset": 1162644,
+      "size": 3582
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE4E.WSA",
+      "offset": 1166226,
+      "size": 4666
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE5E.WSA",
+      "offset": 1170892,
+      "size": 4316
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE6E.WSA",
+      "offset": 1175208,
+      "size": 3155
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE2F.WSA",
+      "offset": 1178363,
+      "size": 3733
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE3F.WSA",
+      "offset": 1182096,
+      "size": 4846
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE4F.WSA",
+      "offset": 1186942,
+      "size": 4897
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE5F.WSA",
+      "offset": 1191839,
+      "size": 5113
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE6F.WSA",
+      "offset": 1196952,
+      "size": 3789
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE2G.WSA",
+      "offset": 1200741,
+      "size": 3684
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE3G.WSA",
+      "offset": 1204425,
+      "size": 3428
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE4G.WSA",
+      "offset": 1207853,
+      "size": 3427
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE5G.WSA",
+      "offset": 1211280,
+      "size": 4628
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITE6G.WSA",
+      "offset": 1215908,
+      "size": 4008
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "WRITING.WSA",
+      "offset": 1219916,
+      "size": 877
+    },
+    {
+      "pak": "GENERAL.PAK",
+      "name": "LORESFX.XMI",
+      "offset": 1220793,
+      "size": 4240
     },
     {
       "pak": "KEEP.PAK",
@@ -9806,208 +8124,22 @@
       "size": 4380
     },
     {
-      "pak": "O02B.PAK",
-      "name": "KEEPBRN.CPS",
-      "offset": 161143,
-      "size": 17042
-    },
-    {
-      "pak": "O02B.PAK",
-      "name": "KEEPBRN.WSA",
-      "offset": 251874,
-      "size": 4553
-    },
-    {
       "pak": "KEEP.PAK",
       "name": "KEEPDOOR.SHP",
       "offset": 68112,
       "size": 933
     },
     {
-      "pak": "VOC.PAK",
-      "name": "KEEPXIT2.VOC",
-      "offset": 937136,
-      "size": 15604
+      "pak": "L01.PAK",
+      "name": "GUARD.SHP",
+      "offset": 162,
+      "size": 24909
     },
     {
-      "pak": "VOC.PAK",
-      "name": "KEYLOCK.VOC",
-      "offset": 350046,
-      "size": 4064
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "KEYOPEN.VOC",
-      "offset": 354110,
-      "size": 5936
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "KEYS.CPS",
-      "offset": 6567,
-      "size": 9464
-    },
-    {
-      "pak": "O01E.PAK",
-      "name": "KING1.TIM",
-      "offset": 91,
-      "size": 3412
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "KINGDOR1.VOC",
-      "offset": 1089089,
-      "size": 9945
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "KINGPAL.CPS",
-      "offset": 17250,
-      "size": 17444
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "KINGPAL.WSA",
-      "offset": 155869,
-      "size": 4998
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "KINGSIT.TIM",
-      "offset": 117885,
-      "size": 372
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "KING_LAY.CPS",
-      "offset": 16031,
-      "size": 20863
-    },
-    {
-      "pak": "O23B.PAK",
-      "name": "KNOWLE.TIM",
-      "offset": 95223,
-      "size": 162
-    },
-    {
-      "pak": "L26.PAK",
-      "name": "KNOWLES.SHP",
-      "offset": 182,
-      "size": 5861
-    },
-    {
-      "pak": "O23B.PAK",
-      "name": "KNOWLTK.CPS",
-      "offset": 168,
-      "size": 16286
-    },
-    {
-      "pak": "O23B.PAK",
-      "name": "KNOWLTK1.WSA",
-      "offset": 95527,
-      "size": 41426
-    },
-    {
-      "pak": "O23B.PAK",
-      "name": "KNOWLTK2.WSA",
-      "offset": 136953,
-      "size": 6660
-    },
-    {
-      "pak": "O23B.PAK",
-      "name": "KNOWLTK3.WSA",
-      "offset": 143613,
-      "size": 4638
-    },
-    {
-      "pak": "O23B.PAK",
-      "name": "KNOWLTK4.WSA",
-      "offset": 148251,
-      "size": 118
-    },
-    {
-      "pak": "O23B.PAK",
-      "name": "KNOWLTK5.WSA",
-      "offset": 148369,
-      "size": 587
-    },
-    {
-      "pak": "O26A.PAK",
-      "name": "KNWLFNT.CPS",
-      "offset": 157,
-      "size": 14802
-    },
-    {
-      "pak": "O26A.PAK",
-      "name": "KNWLFNT.TIM",
-      "offset": 30385,
-      "size": 182
-    },
-    {
-      "pak": "O26A.PAK",
-      "name": "KNWLFNT1.WSA",
-      "offset": 30899,
-      "size": 56318
-    },
-    {
-      "pak": "O26A.PAK",
-      "name": "KNWLFNT2.WSA",
-      "offset": 87217,
-      "size": 5580
-    },
-    {
-      "pak": "O26A.PAK",
-      "name": "KNWLFNT3.WSA",
-      "offset": 92797,
-      "size": 885
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "LADDER.VOC",
-      "offset": 1298221,
-      "size": 536
-    },
-    {
-      "pak": "O10A.PAK",
-      "name": "LAKEVIEW.CPS",
-      "offset": 64530,
-      "size": 12115
-    },
-    {
-      "pak": "STARTUP.PAK",
-      "name": "LANDS.ENG",
-      "offset": 35560,
-      "size": 10059
-    },
-    {
-      "pak": "STARTUP.PAK",
-      "name": "LANDS.FRE",
-      "offset": 45619,
-      "size": 11694
-    },
-    {
-      "pak": "STARTUP.PAK",
-      "name": "LANDS.GER",
-      "offset": 57313,
-      "size": 11588
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "LARKA.VOC",
-      "offset": 1175978,
-      "size": 7045
-    },
-    {
-      "pak": "L12.PAK",
-      "name": "LARKHON.SHP",
-      "offset": 169,
-      "size": 43093
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "LDAMAGE1.VOC",
-      "offset": 2166498,
-      "size": 4807
+      "pak": "L01.PAK",
+      "name": "LEVEL1.CMZ",
+      "offset": 25071,
+      "size": 312
     },
     {
       "pak": "L01.PAK",
@@ -10029,9 +8161,51 @@
     },
     {
       "pak": "L01.PAK",
+      "name": "LEVEL1.INF",
+      "offset": 49753,
+      "size": 12236
+    },
+    {
+      "pak": "L01.PAK",
+      "name": "LEVEL1.INI",
+      "offset": 61989,
+      "size": 670
+    },
+    {
+      "pak": "L01.PAK",
       "name": "LEVEL01.TLC",
       "offset": 62659,
       "size": 5376
+    },
+    {
+      "pak": "L01.PAK",
+      "name": "LEVEL1.WLL",
+      "offset": 68035,
+      "size": 626
+    },
+    {
+      "pak": "L01.PAK",
+      "name": "LEVEL1.XXX",
+      "offset": 68661,
+      "size": 72
+    },
+    {
+      "pak": "L02.PAK",
+      "name": "BOAR.SHP",
+      "offset": 174,
+      "size": 18576
+    },
+    {
+      "pak": "L02.PAK",
+      "name": "THUG.SHP",
+      "offset": 18750,
+      "size": 29248
+    },
+    {
+      "pak": "L02.PAK",
+      "name": "LEVEL2.CMZ",
+      "offset": 47998,
+      "size": 453
     },
     {
       "pak": "L02.PAK",
@@ -10053,9 +8227,39 @@
     },
     {
       "pak": "L02.PAK",
+      "name": "LEVEL2.INF",
+      "offset": 59189,
+      "size": 9794
+    },
+    {
+      "pak": "L02.PAK",
+      "name": "LEVEL2.INI",
+      "offset": 68983,
+      "size": 1352
+    },
+    {
+      "pak": "L02.PAK",
       "name": "LEVEL02.TLC",
       "offset": 70335,
       "size": 5376
+    },
+    {
+      "pak": "L02.PAK",
+      "name": "LEVEL2.WLL",
+      "offset": 75711,
+      "size": 494
+    },
+    {
+      "pak": "L02.PAK",
+      "name": "LEVEL2.XXX",
+      "offset": 76205,
+      "size": 60
+    },
+    {
+      "pak": "L03.PAK",
+      "name": "LEVEL3.CMZ",
+      "offset": 148,
+      "size": 451
     },
     {
       "pak": "L03.PAK",
@@ -10077,9 +8281,45 @@
     },
     {
       "pak": "L03.PAK",
+      "name": "LEVEL3.INF",
+      "offset": 10792,
+      "size": 10740
+    },
+    {
+      "pak": "L03.PAK",
+      "name": "LEVEL3.INI",
+      "offset": 21532,
+      "size": 1520
+    },
+    {
+      "pak": "L03.PAK",
       "name": "LEVEL03.TLC",
       "offset": 23052,
       "size": 5376
+    },
+    {
+      "pak": "L03.PAK",
+      "name": "LEVEL3.WLL",
+      "offset": 28428,
+      "size": 530
+    },
+    {
+      "pak": "L03.PAK",
+      "name": "LEVEL3.XXX",
+      "offset": 28958,
+      "size": 48
+    },
+    {
+      "pak": "L04.PAK",
+      "name": "ORCLDR.SHP",
+      "offset": 163,
+      "size": 36486
+    },
+    {
+      "pak": "L04.PAK",
+      "name": "LEVEL4.CMZ",
+      "offset": 36649,
+      "size": 401
     },
     {
       "pak": "L04.PAK",
@@ -10101,9 +8341,39 @@
     },
     {
       "pak": "L04.PAK",
+      "name": "LEVEL4.INF",
+      "offset": 42466,
+      "size": 5448
+    },
+    {
+      "pak": "L04.PAK",
+      "name": "LEVEL4.INI",
+      "offset": 47914,
+      "size": 1804
+    },
+    {
+      "pak": "L04.PAK",
       "name": "LEVEL04.TLC",
       "offset": 49718,
       "size": 5376
+    },
+    {
+      "pak": "L04.PAK",
+      "name": "LEVEL4.WLL",
+      "offset": 55094,
+      "size": 662
+    },
+    {
+      "pak": "L04.PAK",
+      "name": "LEVEL4.XXX",
+      "offset": 55756,
+      "size": 24
+    },
+    {
+      "pak": "L05.PAK",
+      "name": "LEVEL5.CMZ",
+      "offset": 148,
+      "size": 156
     },
     {
       "pak": "L05.PAK",
@@ -10125,9 +8395,45 @@
     },
     {
       "pak": "L05.PAK",
+      "name": "LEVEL5.INF",
+      "offset": 702,
+      "size": 4094
+    },
+    {
+      "pak": "L05.PAK",
+      "name": "LEVEL5.INI",
+      "offset": 4796,
+      "size": 690
+    },
+    {
+      "pak": "L05.PAK",
       "name": "LEVEL05.TLC",
       "offset": 5486,
       "size": 5376
+    },
+    {
+      "pak": "L05.PAK",
+      "name": "LEVEL5.WLL",
+      "offset": 10862,
+      "size": 518
+    },
+    {
+      "pak": "L05.PAK",
+      "name": "LEVEL5.XXX",
+      "offset": 11380,
+      "size": 12
+    },
+    {
+      "pak": "L06.PAK",
+      "name": "RATMAN.SHP",
+      "offset": 178,
+      "size": 31829
+    },
+    {
+      "pak": "L06.PAK",
+      "name": "BANDIT.SHP",
+      "offset": 32007,
+      "size": 23839
     },
     {
       "pak": "L06.PAK",
@@ -10149,9 +8455,51 @@
     },
     {
       "pak": "L06.PAK",
+      "name": "LEVEL6.CMZ",
+      "offset": 57572,
+      "size": 285
+    },
+    {
+      "pak": "L06.PAK",
+      "name": "LEVEL6.INF",
+      "offset": 57857,
+      "size": 5408
+    },
+    {
+      "pak": "L06.PAK",
+      "name": "LEVEL6.INI",
+      "offset": 63265,
+      "size": 1304
+    },
+    {
+      "pak": "L06.PAK",
       "name": "LEVEL06.TLC",
       "offset": 64569,
       "size": 5376
+    },
+    {
+      "pak": "L06.PAK",
+      "name": "LEVEL6.WLL",
+      "offset": 69945,
+      "size": 638
+    },
+    {
+      "pak": "L06.PAK",
+      "name": "LEVEL6.XXX",
+      "offset": 70583,
+      "size": 12
+    },
+    {
+      "pak": "L07.PAK",
+      "name": "CAVEDWLR.SHP",
+      "offset": 165,
+      "size": 23226
+    },
+    {
+      "pak": "L07.PAK",
+      "name": "LEVEL7.CMZ",
+      "offset": 23391,
+      "size": 441
     },
     {
       "pak": "L07.PAK",
@@ -10173,9 +8521,51 @@
     },
     {
       "pak": "L07.PAK",
+      "name": "LEVEL7.INF",
+      "offset": 27754,
+      "size": 8968
+    },
+    {
+      "pak": "L07.PAK",
+      "name": "LEVEL7.INI",
+      "offset": 36722,
+      "size": 1492
+    },
+    {
+      "pak": "L07.PAK",
       "name": "LEVEL07.TLC",
       "offset": 38214,
       "size": 5376
+    },
+    {
+      "pak": "L07.PAK",
+      "name": "LEVEL7.WLL",
+      "offset": 43590,
+      "size": 734
+    },
+    {
+      "pak": "L07.PAK",
+      "name": "LEVEL7.XXX",
+      "offset": 44324,
+      "size": 12
+    },
+    {
+      "pak": "L08.PAK",
+      "name": "FLSPIDER.SHP",
+      "offset": 181,
+      "size": 11477
+    },
+    {
+      "pak": "L08.PAK",
+      "name": "SCAVNGR.SHP",
+      "offset": 11658,
+      "size": 27849
+    },
+    {
+      "pak": "L08.PAK",
+      "name": "LEVEL8.CMZ",
+      "offset": 39507,
+      "size": 390
     },
     {
       "pak": "L08.PAK",
@@ -10197,9 +8587,45 @@
     },
     {
       "pak": "L08.PAK",
+      "name": "LEVEL8.INF",
+      "offset": 45368,
+      "size": 8724
+    },
+    {
+      "pak": "L08.PAK",
+      "name": "LEVEL8.INI",
+      "offset": 54092,
+      "size": 1056
+    },
+    {
+      "pak": "L08.PAK",
       "name": "LEVEL08.TLC",
       "offset": 55148,
       "size": 5376
+    },
+    {
+      "pak": "L08.PAK",
+      "name": "LEVEL8.WLL",
+      "offset": 60524,
+      "size": 698
+    },
+    {
+      "pak": "L08.PAK",
+      "name": "LEVEL8.XXX",
+      "offset": 61222,
+      "size": 12
+    },
+    {
+      "pak": "L09.PAK",
+      "name": "MORIBUND.SHP",
+      "offset": 165,
+      "size": 22729
+    },
+    {
+      "pak": "L09.PAK",
+      "name": "LEVEL9.CMZ",
+      "offset": 22894,
+      "size": 288
     },
     {
       "pak": "L09.PAK",
@@ -10221,39 +8647,39 @@
     },
     {
       "pak": "L09.PAK",
+      "name": "LEVEL9.INF",
+      "offset": 23980,
+      "size": 5636
+    },
+    {
+      "pak": "L09.PAK",
+      "name": "LEVEL9.INI",
+      "offset": 29616,
+      "size": 780
+    },
+    {
+      "pak": "L09.PAK",
       "name": "LEVEL09.TLC",
       "offset": 30396,
       "size": 5376
     },
     {
-      "pak": "L01.PAK",
-      "name": "LEVEL1.CMZ",
-      "offset": 25071,
-      "size": 312
+      "pak": "L09.PAK",
+      "name": "LEVEL9.WLL",
+      "offset": 35772,
+      "size": 542
     },
     {
-      "pak": "L01.PAK",
-      "name": "LEVEL1.INF",
-      "offset": 49753,
-      "size": 12236
+      "pak": "L09.PAK",
+      "name": "LEVEL9.XXX",
+      "offset": 36314,
+      "size": 12
     },
     {
-      "pak": "L01.PAK",
-      "name": "LEVEL1.INI",
-      "offset": 61989,
-      "size": 670
-    },
-    {
-      "pak": "L01.PAK",
-      "name": "LEVEL1.WLL",
-      "offset": 68035,
-      "size": 626
-    },
-    {
-      "pak": "L01.PAK",
-      "name": "LEVEL1.XXX",
-      "offset": 68661,
-      "size": 72
+      "pak": "L10.PAK",
+      "name": "PENTROG.SHP",
+      "offset": 169,
+      "size": 32098
     },
     {
       "pak": "L10.PAK",
@@ -10311,6 +8737,24 @@
     },
     {
       "pak": "L11.PAK",
+      "name": "HURZELL.SHP",
+      "offset": 203,
+      "size": 23233
+    },
+    {
+      "pak": "L11.PAK",
+      "name": "SWAMPCIT.SHP",
+      "offset": 23436,
+      "size": 23545
+    },
+    {
+      "pak": "L11.PAK",
+      "name": "SWAMPMON.SHP",
+      "offset": 46981,
+      "size": 20098
+    },
+    {
+      "pak": "L11.PAK",
       "name": "LEVEL11.CMZ",
       "offset": 67079,
       "size": 1230
@@ -10362,6 +8806,12 @@
       "name": "LEVEL11.XXX",
       "offset": 104704,
       "size": 72
+    },
+    {
+      "pak": "L12.PAK",
+      "name": "LARKHON.SHP",
+      "offset": 169,
+      "size": 43093
     },
     {
       "pak": "L12.PAK",
@@ -10419,6 +8869,18 @@
     },
     {
       "pak": "L13.PAK",
+      "name": "IRONGRZR.SHP",
+      "offset": 185,
+      "size": 15166
+    },
+    {
+      "pak": "L13.PAK",
+      "name": "GIMLET.SHP",
+      "offset": 15351,
+      "size": 13358
+    },
+    {
+      "pak": "L13.PAK",
       "name": "LEVEL13.CMZ",
       "offset": 28709,
       "size": 1152
@@ -10473,6 +8935,18 @@
     },
     {
       "pak": "L14.PAK",
+      "name": "MULTIPD.SHP",
+      "offset": 186,
+      "size": 11244
+    },
+    {
+      "pak": "L14.PAK",
+      "name": "MAGICMIR.SHP",
+      "offset": 11430,
+      "size": 14156
+    },
+    {
+      "pak": "L14.PAK",
       "name": "LEVEL14.CMZ",
       "offset": 25586,
       "size": 803
@@ -10524,6 +8998,18 @@
       "name": "LEVEL14.XXX",
       "offset": 43497,
       "size": 12
+    },
+    {
+      "pak": "L15.PAK",
+      "name": "ROCKLING.SHP",
+      "offset": 187,
+      "size": 38245
+    },
+    {
+      "pak": "L15.PAK",
+      "name": "AVIANWRM.SHP",
+      "offset": 38432,
+      "size": 14444
     },
     {
       "pak": "L15.PAK",
@@ -10635,6 +9121,18 @@
     },
     {
       "pak": "L17.PAK",
+      "name": "HORNET.SHP",
+      "offset": 183,
+      "size": 11287
+    },
+    {
+      "pak": "L17.PAK",
+      "name": "MOLDER.SHP",
+      "offset": 11470,
+      "size": 24773
+    },
+    {
+      "pak": "L17.PAK",
       "name": "LEVEL17.CMZ",
       "offset": 36243,
       "size": 523
@@ -10686,6 +9184,18 @@
       "name": "LEVEL17.XXX",
       "offset": 52982,
       "size": 48
+    },
+    {
+      "pak": "L18.PAK",
+      "name": "AMAZON.SHP",
+      "offset": 185,
+      "size": 24056
+    },
+    {
+      "pak": "L18.PAK",
+      "name": "ARCHRSLG.SHP",
+      "offset": 24241,
+      "size": 9445
     },
     {
       "pak": "L18.PAK",
@@ -10743,6 +9253,12 @@
     },
     {
       "pak": "L19.PAK",
+      "name": "WRAITH.SHP",
+      "offset": 168,
+      "size": 19546
+    },
+    {
+      "pak": "L19.PAK",
       "name": "LEVEL19.CMZ",
       "offset": 19714,
       "size": 309
@@ -10796,34 +9312,16 @@
       "size": 12
     },
     {
-      "pak": "L02.PAK",
-      "name": "LEVEL2.CMZ",
-      "offset": 47998,
-      "size": 453
+      "pak": "L20.PAK",
+      "name": "STARK.SHP",
+      "offset": 184,
+      "size": 16215
     },
     {
-      "pak": "L02.PAK",
-      "name": "LEVEL2.INF",
-      "offset": 59189,
-      "size": 9794
-    },
-    {
-      "pak": "L02.PAK",
-      "name": "LEVEL2.INI",
-      "offset": 68983,
-      "size": 1352
-    },
-    {
-      "pak": "L02.PAK",
-      "name": "LEVEL2.WLL",
-      "offset": 75711,
-      "size": 494
-    },
-    {
-      "pak": "L02.PAK",
-      "name": "LEVEL2.XXX",
-      "offset": 76205,
-      "size": 60
+      "pak": "L20.PAK",
+      "name": "MINOTAUR.SHP",
+      "offset": 16399,
+      "size": 46526
     },
     {
       "pak": "L20.PAK",
@@ -10878,6 +9376,12 @@
       "name": "LEVEL20.XXX",
       "offset": 77749,
       "size": 12
+    },
+    {
+      "pak": "L21.PAK",
+      "name": "APARITIN.SHP",
+      "offset": 170,
+      "size": 12426
     },
     {
       "pak": "L21.PAK",
@@ -10989,6 +9493,18 @@
     },
     {
       "pak": "L23.PAK",
+      "name": "DRKCMNDR.SHP",
+      "offset": 187,
+      "size": 32085
+    },
+    {
+      "pak": "L23.PAK",
+      "name": "NECROSAP.SHP",
+      "offset": 32272,
+      "size": 2415
+    },
+    {
+      "pak": "L23.PAK",
       "name": "LEVEL23.CMZ",
       "offset": 34687,
       "size": 851
@@ -11040,6 +9556,12 @@
       "name": "LEVEL23.XXX",
       "offset": 61726,
       "size": 48
+    },
+    {
+      "pak": "L24.PAK",
+      "name": "GRTORC.SHP",
+      "offset": 168,
+      "size": 41516
     },
     {
       "pak": "L24.PAK",
@@ -11151,6 +9673,18 @@
     },
     {
       "pak": "L26.PAK",
+      "name": "KNOWLES.SHP",
+      "offset": 182,
+      "size": 5861
+    },
+    {
+      "pak": "L26.PAK",
+      "name": "XEOB.SHP",
+      "offset": 6043,
+      "size": 21191
+    },
+    {
+      "pak": "L26.PAK",
       "name": "LEVEL26.CMZ",
       "offset": 27234,
       "size": 698
@@ -11202,6 +9736,18 @@
       "name": "LEVEL26.XXX",
       "offset": 51878,
       "size": 12
+    },
+    {
+      "pak": "L27.PAK",
+      "name": "TCABAL.SHP",
+      "offset": 185,
+      "size": 20798
+    },
+    {
+      "pak": "L27.PAK",
+      "name": "HATCHETS.SHP",
+      "offset": 20983,
+      "size": 9576
     },
     {
       "pak": "L27.PAK",
@@ -11259,6 +9805,18 @@
     },
     {
       "pak": "L28.PAK",
+      "name": "MANTHA.SHP",
+      "offset": 185,
+      "size": 26186
+    },
+    {
+      "pak": "L28.PAK",
+      "name": "DETHDISK.SHP",
+      "offset": 26371,
+      "size": 30684
+    },
+    {
+      "pak": "L28.PAK",
       "name": "LEVEL28.CMZ",
       "offset": 57055,
       "size": 967
@@ -11310,6 +9868,48 @@
       "name": "LEVEL28.XXX",
       "offset": 87455,
       "size": 12
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "HAG.SHP",
+      "offset": 259,
+      "size": 14240
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "SCO_TOAD.SHP",
+      "offset": 14499,
+      "size": 27862
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "TOAD.SHP",
+      "offset": 42361,
+      "size": 38913
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "VIPER.SHP",
+      "offset": 81274,
+      "size": 37332
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "EXECTNR.SHP",
+      "offset": 118606,
+      "size": 40517
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "TOADSERP.SHP",
+      "offset": 159123,
+      "size": 48813
+    },
+    {
+      "pak": "L29.PAK",
+      "name": "SERP_EXE.SHP",
+      "offset": 207936,
+      "size": 49669
     },
     {
       "pak": "L29.PAK",
@@ -11366,816 +9966,6 @@
       "size": 12
     },
     {
-      "pak": "L03.PAK",
-      "name": "LEVEL3.CMZ",
-      "offset": 148,
-      "size": 451
-    },
-    {
-      "pak": "L03.PAK",
-      "name": "LEVEL3.INF",
-      "offset": 10792,
-      "size": 10740
-    },
-    {
-      "pak": "L03.PAK",
-      "name": "LEVEL3.INI",
-      "offset": 21532,
-      "size": 1520
-    },
-    {
-      "pak": "L03.PAK",
-      "name": "LEVEL3.WLL",
-      "offset": 28428,
-      "size": 530
-    },
-    {
-      "pak": "L03.PAK",
-      "name": "LEVEL3.XXX",
-      "offset": 28958,
-      "size": 48
-    },
-    {
-      "pak": "L04.PAK",
-      "name": "LEVEL4.CMZ",
-      "offset": 36649,
-      "size": 401
-    },
-    {
-      "pak": "L04.PAK",
-      "name": "LEVEL4.INF",
-      "offset": 42466,
-      "size": 5448
-    },
-    {
-      "pak": "L04.PAK",
-      "name": "LEVEL4.INI",
-      "offset": 47914,
-      "size": 1804
-    },
-    {
-      "pak": "L04.PAK",
-      "name": "LEVEL4.WLL",
-      "offset": 55094,
-      "size": 662
-    },
-    {
-      "pak": "L04.PAK",
-      "name": "LEVEL4.XXX",
-      "offset": 55756,
-      "size": 24
-    },
-    {
-      "pak": "L05.PAK",
-      "name": "LEVEL5.CMZ",
-      "offset": 148,
-      "size": 156
-    },
-    {
-      "pak": "L05.PAK",
-      "name": "LEVEL5.INF",
-      "offset": 702,
-      "size": 4094
-    },
-    {
-      "pak": "L05.PAK",
-      "name": "LEVEL5.INI",
-      "offset": 4796,
-      "size": 690
-    },
-    {
-      "pak": "L05.PAK",
-      "name": "LEVEL5.WLL",
-      "offset": 10862,
-      "size": 518
-    },
-    {
-      "pak": "L05.PAK",
-      "name": "LEVEL5.XXX",
-      "offset": 11380,
-      "size": 12
-    },
-    {
-      "pak": "L06.PAK",
-      "name": "LEVEL6.CMZ",
-      "offset": 57572,
-      "size": 285
-    },
-    {
-      "pak": "L06.PAK",
-      "name": "LEVEL6.INF",
-      "offset": 57857,
-      "size": 5408
-    },
-    {
-      "pak": "L06.PAK",
-      "name": "LEVEL6.INI",
-      "offset": 63265,
-      "size": 1304
-    },
-    {
-      "pak": "L06.PAK",
-      "name": "LEVEL6.WLL",
-      "offset": 69945,
-      "size": 638
-    },
-    {
-      "pak": "L06.PAK",
-      "name": "LEVEL6.XXX",
-      "offset": 70583,
-      "size": 12
-    },
-    {
-      "pak": "L07.PAK",
-      "name": "LEVEL7.CMZ",
-      "offset": 23391,
-      "size": 441
-    },
-    {
-      "pak": "L07.PAK",
-      "name": "LEVEL7.INF",
-      "offset": 27754,
-      "size": 8968
-    },
-    {
-      "pak": "L07.PAK",
-      "name": "LEVEL7.INI",
-      "offset": 36722,
-      "size": 1492
-    },
-    {
-      "pak": "L07.PAK",
-      "name": "LEVEL7.WLL",
-      "offset": 43590,
-      "size": 734
-    },
-    {
-      "pak": "L07.PAK",
-      "name": "LEVEL7.XXX",
-      "offset": 44324,
-      "size": 12
-    },
-    {
-      "pak": "L08.PAK",
-      "name": "LEVEL8.CMZ",
-      "offset": 39507,
-      "size": 390
-    },
-    {
-      "pak": "L08.PAK",
-      "name": "LEVEL8.INF",
-      "offset": 45368,
-      "size": 8724
-    },
-    {
-      "pak": "L08.PAK",
-      "name": "LEVEL8.INI",
-      "offset": 54092,
-      "size": 1056
-    },
-    {
-      "pak": "L08.PAK",
-      "name": "LEVEL8.WLL",
-      "offset": 60524,
-      "size": 698
-    },
-    {
-      "pak": "L08.PAK",
-      "name": "LEVEL8.XXX",
-      "offset": 61222,
-      "size": 12
-    },
-    {
-      "pak": "L09.PAK",
-      "name": "LEVEL9.CMZ",
-      "offset": 22894,
-      "size": 288
-    },
-    {
-      "pak": "L09.PAK",
-      "name": "LEVEL9.INF",
-      "offset": 23980,
-      "size": 5636
-    },
-    {
-      "pak": "L09.PAK",
-      "name": "LEVEL9.INI",
-      "offset": 29616,
-      "size": 780
-    },
-    {
-      "pak": "L09.PAK",
-      "name": "LEVEL9.WLL",
-      "offset": 35772,
-      "size": 542
-    },
-    {
-      "pak": "L09.PAK",
-      "name": "LEVEL9.XXX",
-      "offset": 36314,
-      "size": 12
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "LEVERDN.VOC",
-      "offset": 360046,
-      "size": 4713
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "LEVERUP.VOC",
-      "offset": 364759,
-      "size": 4713
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "LION1.VOC",
-      "offset": 1631107,
-      "size": 19314
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "LITENIN1.VOC",
-      "offset": 369472,
-      "size": 17193
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "LITEPAL1.COL",
-      "offset": 343,
-      "size": 768
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "LITEPAL2.COL",
-      "offset": 1111,
-      "size": 768
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "LITEPAL3.COL",
-      "offset": 1879,
-      "size": 768
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "LITNING1.WSA",
-      "offset": 552897,
-      "size": 5916
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "LITNING2.WSA",
-      "offset": 558813,
-      "size": 20643
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "LITNING3.WSA",
-      "offset": 579456,
-      "size": 23970
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "LITNING4.WSA",
-      "offset": 603426,
-      "size": 39883
-    },
-    {
-      "pak": "MONSTER.PAK",
-      "name": "LIZARD.SHP",
-      "offset": 63,
-      "size": 35820
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "LIZBITE.VOC",
-      "offset": 1005018,
-      "size": 6190
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "LIZLISP.VOC",
-      "offset": 1183023,
-      "size": 4378
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "LIZMOVE.VOC",
-      "offset": 994694,
-      "size": 10324
-    },
-    {
-      "pak": "O24A.PAK",
-      "name": "LIZ_BIRD.TIM",
-      "offset": 24901,
-      "size": 1470
-    },
-    {
-      "pak": "O24A.PAK",
-      "name": "LIZ_BIRD.WSA",
-      "offset": 220686,
-      "size": 32370
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "LOKPICK.VOC",
-      "offset": 386665,
-      "size": 1856
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "LOLSYSEX.C55",
-      "offset": 10302,
-      "size": 2476
-    },
-    {
-      "pak": "STARTUP.PAK",
-      "name": "LOLSYSEX.XMI",
-      "offset": 145235,
-      "size": 18944
-    },
-    {
-      "pak": "STARTUP.PAK",
-      "name": "LOLTITLE.XMI",
-      "offset": 164179,
-      "size": 3094
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "LORAGASP.VOC",
-      "offset": 1926446,
-      "size": 9805
-    },
-    {
-      "pak": "O07A.PAK",
-      "name": "LORA_L.WSA",
-      "offset": 61329,
-      "size": 36449
-    },
-    {
-      "pak": "O07A.PAK",
-      "name": "LORA_S.WSA",
-      "offset": 97778,
-      "size": 17050
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01A.ADL",
-      "offset": 969,
-      "size": 20431
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01A.C55",
-      "offset": 293328,
-      "size": 11890
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01A.PCS",
-      "offset": 449140,
-      "size": 2454
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01A.XMI",
-      "offset": 465450,
-      "size": 11406
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01B.ADL",
-      "offset": 21400,
-      "size": 21343
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01B.C55",
-      "offset": 305218,
-      "size": 13180
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01B.PCS",
-      "offset": 451594,
-      "size": 698
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01B.XMI",
-      "offset": 476856,
-      "size": 12296
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01C.ADL",
-      "offset": 42743,
-      "size": 19511
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01C.C55",
-      "offset": 318398,
-      "size": 9762
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01C.PCS",
-      "offset": 452292,
-      "size": 924
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01C.XMI",
-      "offset": 489152,
-      "size": 9842
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01D.ADL",
-      "offset": 62254,
-      "size": 18870
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01D.C55",
-      "offset": 328160,
-      "size": 16724
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01D.PCS",
-      "offset": 453216,
-      "size": 1428
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE01D.XMI",
-      "offset": 498994,
-      "size": 8888
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE02A.ADL",
-      "offset": 81124,
-      "size": 22717
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE02A.C55",
-      "offset": 344884,
-      "size": 12452
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE02A.PCS",
-      "offset": 454644,
-      "size": 706
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE02A.XMI",
-      "offset": 507882,
-      "size": 12612
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE03A.ADL",
-      "offset": 103841,
-      "size": 21516
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE03A.C55",
-      "offset": 357336,
-      "size": 14040
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE03A.PCS",
-      "offset": 455350,
-      "size": 1932
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE03A.XMI",
-      "offset": 520494,
-      "size": 11982
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE03B.ADL",
-      "offset": 125357,
-      "size": 10971
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE03B.C55",
-      "offset": 371376,
-      "size": 1842
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE03B.PCS",
-      "offset": 457282,
-      "size": 1036
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE03B.XMI",
-      "offset": 532476,
-      "size": 1842
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE04A.ADL",
-      "offset": 136328,
-      "size": 15170
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE04A.C55",
-      "offset": 373218,
-      "size": 5040
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE04A.PCS",
-      "offset": 458318,
-      "size": 910
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE04A.XMI",
-      "offset": 534318,
-      "size": 5134
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE05A.ADL",
-      "offset": 151498,
-      "size": 17383
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE05A.C55",
-      "offset": 378258,
-      "size": 6192
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE05A.PCS",
-      "offset": 459228,
-      "size": 816
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE05A.XMI",
-      "offset": 539452,
-      "size": 8656
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE05B.ADL",
-      "offset": 168881,
-      "size": 24180
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE05B.C55",
-      "offset": 384450,
-      "size": 15606
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE05B.PCS",
-      "offset": 460044,
-      "size": 726
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE05B.XMI",
-      "offset": 548108,
-      "size": 15648
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE06A.ADL",
-      "offset": 193061,
-      "size": 18314
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE06A.C55",
-      "offset": 400056,
-      "size": 6174
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE06A.PCS",
-      "offset": 460770,
-      "size": 1080
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE06A.XMI",
-      "offset": 563756,
-      "size": 6172
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE06B.ADL",
-      "offset": 211375,
-      "size": 22981
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE06B.C55",
-      "offset": 406230,
-      "size": 11776
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE06B.PCS",
-      "offset": 461850,
-      "size": 518
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE06B.XMI",
-      "offset": 569928,
-      "size": 11780
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE07A.ADL",
-      "offset": 234356,
-      "size": 11381
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE07A.C55",
-      "offset": 418006,
-      "size": 2674
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE07A.PCS",
-      "offset": 462368,
-      "size": 834
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE07A.XMI",
-      "offset": 581708,
-      "size": 2520
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE08A.ADL",
-      "offset": 245737,
-      "size": 23215
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE08A.C55",
-      "offset": 420680,
-      "size": 14172
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE08A.PCS",
-      "offset": 463202,
-      "size": 1500
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE08A.XMI",
-      "offset": 584228,
-      "size": 13972
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE08B.ADL",
-      "offset": 268952,
-      "size": 24376
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE08B.C55",
-      "offset": 434852,
-      "size": 14288
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE08B.PCS",
-      "offset": 464702,
-      "size": 748
-    },
-    {
-      "pak": "MUSIC.PAK",
-      "name": "LORE08B.XMI",
-      "offset": 598200,
-      "size": 13758
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "LORESFX.ADL",
-      "offset": 1126,
-      "size": 9176
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "LORESFX.C55",
-      "offset": 12778,
-      "size": 3924
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "LORESFX.PCS",
-      "offset": 117036,
-      "size": 4968
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "LORESFX.XMI",
-      "offset": 1220793,
-      "size": 4240
-    },
-    {
-      "pak": "O18A.PAK",
-      "name": "LYLE.WSA",
-      "offset": 81735,
-      "size": 27319
-    },
-    {
-      "pak": "O18A.PAK",
-      "name": "LYLESAD.TIM",
-      "offset": 52152,
-      "size": 212
-    },
-    {
-      "pak": "O18A.PAK",
-      "name": "LYLESLY.TIM",
-      "offset": 52364,
-      "size": 322
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "LYNN.CPS",
-      "offset": 16940,
-      "size": 12970
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "LYNN1.TIM",
-      "offset": 45153,
-      "size": 832
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "LYNN1.WSA",
-      "offset": 82604,
-      "size": 8728
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "LYNN2.TIM",
-      "offset": 45985,
-      "size": 364
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "LYNN2.WSA",
-      "offset": 91332,
-      "size": 592
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "LYNN3.TIM",
-      "offset": 46349,
-      "size": 202
-    },
-    {
-      "pak": "L14.PAK",
-      "name": "MAGICMIR.SHP",
-      "offset": 11430,
-      "size": 14156
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "MAGMIRRA.VOC",
-      "offset": 1187401,
-      "size": 6878
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "MALEOOF2.VOC",
-      "offset": 388521,
-      "size": 7369
-    },
-    {
       "pak": "MANOR.PAK",
       "name": "MANOR.DAT",
       "offset": 82,
@@ -12206,72 +9996,6 @@
       "size": 1379
     },
     {
-      "pak": "L28.PAK",
-      "name": "MANTHA.SHP",
-      "offset": 185,
-      "size": 26186
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "MANTHAD.VOC",
-      "offset": 1387091,
-      "size": 9045
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "MANTHAM.VOC",
-      "offset": 1396136,
-      "size": 8068
-    },
-    {
-      "pak": "O03A.PAK",
-      "name": "MARINA1.CPS",
-      "offset": 92,
-      "size": 14601
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "MARINA2.CPS",
-      "offset": 29910,
-      "size": 14501
-    },
-    {
-      "pak": "O02B.PAK",
-      "name": "MARINA_D.CPS",
-      "offset": 8926,
-      "size": 14845
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "MDAMAGE2.VOC",
-      "offset": 2234730,
-      "size": 7674
-    },
-    {
-      "pak": "O00A.PAK",
-      "name": "MELTDOWN.WSA",
-      "offset": 284,
-      "size": 16949
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "MFALL2.VOC",
-      "offset": 2226781,
-      "size": 7949
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "MILLD.VOC",
-      "offset": 1194279,
-      "size": 6396
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "MILLIM.VOC",
-      "offset": 1200675,
-      "size": 7552
-    },
-    {
       "pak": "MINE1.PAK",
       "name": "MINE1.DAT",
       "offset": 82,
@@ -12296,160 +10020,496 @@
       "size": 4730
     },
     {
-      "pak": "VOC.PAK",
-      "name": "MINECRT3.VOC",
-      "offset": 395890,
-      "size": 3083
-    },
-    {
       "pak": "MINE1.PAK",
       "name": "MINEDOOR.SHP",
       "offset": 134486,
       "size": 4627
     },
     {
-      "pak": "L20.PAK",
-      "name": "MINOTAUR.SHP",
-      "offset": 16399,
-      "size": 46526
+      "pak": "MONSTER.PAK",
+      "name": "LIZARD.SHP",
+      "offset": 63,
+      "size": 35820
     },
     {
-      "pak": "VOC.PAK",
-      "name": "MINOTD.VOC",
-      "offset": 1404204,
-      "size": 8282
+      "pak": "MONSTER.PAK",
+      "name": "ORC.SHP",
+      "offset": 35883,
+      "size": 28412
     },
     {
-      "pak": "GENERAL.PAK",
-      "name": "MISTS1.WSA",
-      "offset": 643309,
-      "size": 40624
+      "pak": "MONSTER.PAK",
+      "name": "TREZ.SHP",
+      "offset": 64295,
+      "size": 18398
     },
     {
-      "pak": "GENERAL.PAK",
-      "name": "MISTS2.WSA",
-      "offset": 683933,
-      "size": 77397
+      "pak": "MONSTER.PAK",
+      "name": "CABAL.SHP",
+      "offset": 82693,
+      "size": 27635
     },
     {
-      "pak": "GENERAL.PAK",
-      "name": "MISTS3.WSA",
-      "offset": 761330,
-      "size": 52399
+      "pak": "MUSIC.PAK",
+      "name": "LORE01A.ADL",
+      "offset": 969,
+      "size": 20431
     },
     {
-      "pak": "GENERAL.PAK",
-      "name": "MISTS4.WSA",
-      "offset": 813729,
-      "size": 48667
+      "pak": "MUSIC.PAK",
+      "name": "LORE01B.ADL",
+      "offset": 21400,
+      "size": 21343
     },
     {
-      "pak": "O18A.PAK",
-      "name": "MIX.CPS",
-      "offset": 30100,
-      "size": 7957
+      "pak": "MUSIC.PAK",
+      "name": "LORE01C.ADL",
+      "offset": 42743,
+      "size": 19511
     },
     {
-      "pak": "O18A.PAK",
-      "name": "MIX.TIM",
-      "offset": 52686,
-      "size": 192
+      "pak": "MUSIC.PAK",
+      "name": "LORE01D.ADL",
+      "offset": 62254,
+      "size": 18870
     },
     {
-      "pak": "O18A.PAK",
-      "name": "MIX.WSA",
-      "offset": 109054,
-      "size": 14297
+      "pak": "MUSIC.PAK",
+      "name": "LORE02A.ADL",
+      "offset": 81124,
+      "size": 22717
     },
     {
-      "pak": "L17.PAK",
-      "name": "MOLDER.SHP",
-      "offset": 11470,
-      "size": 24773
+      "pak": "MUSIC.PAK",
+      "name": "LORE03A.ADL",
+      "offset": 103841,
+      "size": 21516
     },
     {
-      "pak": "VOC.PAK",
-      "name": "MONEY.VOC",
-      "offset": 398973,
-      "size": 11187
+      "pak": "MUSIC.PAK",
+      "name": "LORE03B.ADL",
+      "offset": 125357,
+      "size": 10971
     },
     {
-      "pak": "L09.PAK",
-      "name": "MORIBUND.SHP",
-      "offset": 165,
-      "size": 22729
+      "pak": "MUSIC.PAK",
+      "name": "LORE04A.ADL",
+      "offset": 136328,
+      "size": 15170
     },
     {
-      "pak": "VOC.PAK",
-      "name": "MORIEAT2.VOC",
-      "offset": 1208227,
-      "size": 8427
+      "pak": "MUSIC.PAK",
+      "name": "LORE05A.ADL",
+      "offset": 151498,
+      "size": 17383
     },
     {
-      "pak": "VOC.PAK",
-      "name": "MORIMOV1.VOC",
-      "offset": 1216654,
-      "size": 9101
+      "pak": "MUSIC.PAK",
+      "name": "LORE05B.ADL",
+      "offset": 168881,
+      "size": 24180
     },
     {
-      "pak": "VOC.PAK",
-      "name": "MORPH1.VOC",
-      "offset": 410160,
-      "size": 39464
+      "pak": "MUSIC.PAK",
+      "name": "LORE06A.ADL",
+      "offset": 193061,
+      "size": 18314
     },
     {
-      "pak": "VOC.PAK",
-      "name": "MORPH2.VOC",
-      "offset": 449624,
-      "size": 20515
+      "pak": "MUSIC.PAK",
+      "name": "LORE06B.ADL",
+      "offset": 211375,
+      "size": 22981
     },
     {
-      "pak": "VOC.PAK",
-      "name": "MSTDOOM1.VOC",
-      "offset": 1751141,
-      "size": 29930
+      "pak": "MUSIC.PAK",
+      "name": "LORE07A.ADL",
+      "offset": 234356,
+      "size": 11381
     },
     {
-      "pak": "VOC.PAK",
-      "name": "MSTDOOM2.VOC",
-      "offset": 1781071,
-      "size": 50684
+      "pak": "MUSIC.PAK",
+      "name": "LORE08A.ADL",
+      "offset": 245737,
+      "size": 23215
     },
     {
-      "pak": "VOC.PAK",
-      "name": "MSTDOOM3.VOC",
-      "offset": 1831755,
-      "size": 57887
+      "pak": "MUSIC.PAK",
+      "name": "LORE08B.ADL",
+      "offset": 268952,
+      "size": 24376
     },
     {
-      "pak": "DRIVERS.PAK",
-      "name": "MT32MPU.ADV",
-      "offset": 4563,
-      "size": 10378
+      "pak": "MUSIC.PAK",
+      "name": "LORE01A.C55",
+      "offset": 293328,
+      "size": 11890
     },
     {
-      "pak": "VOC.PAK",
-      "name": "MTLDRSLM.VOC",
-      "offset": 470139,
-      "size": 5509
+      "pak": "MUSIC.PAK",
+      "name": "LORE01B.C55",
+      "offset": 305218,
+      "size": 13180
     },
     {
-      "pak": "L14.PAK",
-      "name": "MULTIPD.SHP",
-      "offset": 186,
-      "size": 11244
+      "pak": "MUSIC.PAK",
+      "name": "LORE01C.C55",
+      "offset": 318398,
+      "size": 9762
     },
     {
-      "pak": "VOC.PAK",
-      "name": "MWHOA1.VOC",
-      "offset": 2271531,
-      "size": 4809
+      "pak": "MUSIC.PAK",
+      "name": "LORE01D.C55",
+      "offset": 328160,
+      "size": 16724
     },
     {
-      "pak": "O01A.PAK",
-      "name": "NATE1.TIM",
-      "offset": 37000,
-      "size": 490
+      "pak": "MUSIC.PAK",
+      "name": "LORE02A.C55",
+      "offset": 344884,
+      "size": 12452
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE03A.C55",
+      "offset": 357336,
+      "size": 14040
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE03B.C55",
+      "offset": 371376,
+      "size": 1842
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE04A.C55",
+      "offset": 373218,
+      "size": 5040
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE05A.C55",
+      "offset": 378258,
+      "size": 6192
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE05B.C55",
+      "offset": 384450,
+      "size": 15606
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE06A.C55",
+      "offset": 400056,
+      "size": 6174
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE06B.C55",
+      "offset": 406230,
+      "size": 11776
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE07A.C55",
+      "offset": 418006,
+      "size": 2674
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE08A.C55",
+      "offset": 420680,
+      "size": 14172
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE08B.C55",
+      "offset": 434852,
+      "size": 14288
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE01A.PCS",
+      "offset": 449140,
+      "size": 2454
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE01B.PCS",
+      "offset": 451594,
+      "size": 698
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE01C.PCS",
+      "offset": 452292,
+      "size": 924
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE01D.PCS",
+      "offset": 453216,
+      "size": 1428
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE02A.PCS",
+      "offset": 454644,
+      "size": 706
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE03A.PCS",
+      "offset": 455350,
+      "size": 1932
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE03B.PCS",
+      "offset": 457282,
+      "size": 1036
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE04A.PCS",
+      "offset": 458318,
+      "size": 910
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE05A.PCS",
+      "offset": 459228,
+      "size": 816
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE05B.PCS",
+      "offset": 460044,
+      "size": 726
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE06A.PCS",
+      "offset": 460770,
+      "size": 1080
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE06B.PCS",
+      "offset": 461850,
+      "size": 518
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE07A.PCS",
+      "offset": 462368,
+      "size": 834
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE08A.PCS",
+      "offset": 463202,
+      "size": 1500
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE08B.PCS",
+      "offset": 464702,
+      "size": 748
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE01A.XMI",
+      "offset": 465450,
+      "size": 11406
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE01B.XMI",
+      "offset": 476856,
+      "size": 12296
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE01C.XMI",
+      "offset": 489152,
+      "size": 9842
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE01D.XMI",
+      "offset": 498994,
+      "size": 8888
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE02A.XMI",
+      "offset": 507882,
+      "size": 12612
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE03A.XMI",
+      "offset": 520494,
+      "size": 11982
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE03B.XMI",
+      "offset": 532476,
+      "size": 1842
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE04A.XMI",
+      "offset": 534318,
+      "size": 5134
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE05A.XMI",
+      "offset": 539452,
+      "size": 8656
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE05B.XMI",
+      "offset": 548108,
+      "size": 15648
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE06A.XMI",
+      "offset": 563756,
+      "size": 6172
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE06B.XMI",
+      "offset": 569928,
+      "size": 11780
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE07A.XMI",
+      "offset": 581708,
+      "size": 2520
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE08A.XMI",
+      "offset": 584228,
+      "size": 13972
+    },
+    {
+      "pak": "MUSIC.PAK",
+      "name": "LORE08B.XMI",
+      "offset": 598200,
+      "size": 13758
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "MELTDOWN.WSA",
+      "offset": 284,
+      "size": 16949
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "AUTOMAP.TIM",
+      "offset": 17233,
+      "size": 322
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "AUTOMAP2.TIM",
+      "offset": 17555,
+      "size": 322
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "BOOK.WSA",
+      "offset": 17877,
+      "size": 3365
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "BARRIER.TIM",
+      "offset": 21242,
+      "size": 3272
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "SMSHWL1.TIM",
+      "offset": 24514,
+      "size": 650
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "UNBAR1.TIM",
+      "offset": 25164,
+      "size": 1284
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "UNBAR2.TIM",
+      "offset": 26448,
+      "size": 1028
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "BARRIER.WSA",
+      "offset": 27476,
+      "size": 78358
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "SMSHWL.WSA",
+      "offset": 105834,
+      "size": 46835
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "UNBARIER.WSA",
+      "offset": 152669,
+      "size": 38872
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "COMPASSE.TIM",
+      "offset": 191541,
+      "size": 326
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "COMPASSF.TIM",
+      "offset": 191867,
+      "size": 326
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "COMPASSG.TIM",
+      "offset": 192193,
+      "size": 326
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "COMPASSE.WSA",
+      "offset": 192519,
+      "size": 14395
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "COMPASSF.WSA",
+      "offset": 206914,
+      "size": 14447
+    },
+    {
+      "pak": "O00A.PAK",
+      "name": "COMPASSG.WSA",
+      "offset": 221361,
+      "size": 14380
     },
     {
       "pak": "O01A.PAK",
@@ -12459,15 +10519,123 @@
     },
     {
       "pak": "O01A.PAK",
+      "name": "GERIM.CPS",
+      "offset": 853,
+      "size": 9593
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "NATHNIAL.CPS",
+      "offset": 10446,
+      "size": 15513
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "VICTOR.CPS",
+      "offset": 25959,
+      "size": 8945
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "DRGERIM.TIM",
+      "offset": 34904,
+      "size": 144
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "DRNATHAN.TIM",
+      "offset": 35048,
+      "size": 146
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "DRVICTOR.TIM",
+      "offset": 35194,
+      "size": 156
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "GERIM1.TIM",
+      "offset": 35350,
+      "size": 330
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "GERIM2.TIM",
+      "offset": 35680,
+      "size": 1118
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "GERIM3.TIM",
+      "offset": 36798,
+      "size": 202
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "NATE1.TIM",
+      "offset": 37000,
+      "size": 490
+    },
+    {
+      "pak": "O01A.PAK",
       "name": "NATE3.TIM",
       "offset": 37490,
       "size": 232
     },
     {
-      "pak": "O01B.PAK",
-      "name": "NATE4.TIM",
-      "offset": 1282,
-      "size": 442
+      "pak": "O01A.PAK",
+      "name": "VICTOR1.TIM",
+      "offset": 37722,
+      "size": 1234
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "VICTOR3.TIM",
+      "offset": 38956,
+      "size": 312
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "DRGEREM.WSA",
+      "offset": 39268,
+      "size": 6819
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "DRNATHAN.WSA",
+      "offset": 46087,
+      "size": 6600
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "DRVICTOR.WSA",
+      "offset": 52687,
+      "size": 6413
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "GERIM1.WSA",
+      "offset": 59100,
+      "size": 4175
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "GERIM2.WSA",
+      "offset": 63275,
+      "size": 3202
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "GERIM3.WSA",
+      "offset": 66477,
+      "size": 11042
+    },
+    {
+      "pak": "O01A.PAK",
+      "name": "GERIM4.WSA",
+      "offset": 77519,
+      "size": 2183
     },
     {
       "pak": "O01A.PAK",
@@ -12482,124 +10650,478 @@
       "size": 2976
     },
     {
+      "pak": "O01A.PAK",
+      "name": "VICTOR.WSA",
+      "offset": 93809,
+      "size": 25793
+    },
+    {
+      "pak": "O01B.PAK",
+      "name": "DAWN1.TIM",
+      "offset": 258,
+      "size": 512
+    },
+    {
+      "pak": "O01B.PAK",
+      "name": "GERIM4.TIM",
+      "offset": 770,
+      "size": 512
+    },
+    {
+      "pak": "O01B.PAK",
+      "name": "NATE4.TIM",
+      "offset": 1282,
+      "size": 442
+    },
+    {
+      "pak": "O01B.PAK",
+      "name": "PAUL1.TIM",
+      "offset": 1724,
+      "size": 514
+    },
+    {
+      "pak": "O01B.PAK",
+      "name": "SPELLBKE.TIM",
+      "offset": 2238,
+      "size": 864
+    },
+    {
+      "pak": "O01B.PAK",
+      "name": "SPELLBKF.TIM",
+      "offset": 3102,
+      "size": 864
+    },
+    {
+      "pak": "O01B.PAK",
+      "name": "SPELLBKG.TIM",
+      "offset": 3966,
+      "size": 864
+    },
+    {
+      "pak": "O01B.PAK",
+      "name": "WILL1.TIM",
+      "offset": 4830,
+      "size": 392
+    },
+    {
+      "pak": "O01B.PAK",
+      "name": "DAWN_L.WSA",
+      "offset": 5222,
+      "size": 23085
+    },
+    {
+      "pak": "O01B.PAK",
+      "name": "GERIM_L.WSA",
+      "offset": 28307,
+      "size": 16110
+    },
+    {
       "pak": "O01B.PAK",
       "name": "NATHL_L.WSA",
       "offset": 44417,
       "size": 23771
     },
     {
-      "pak": "O01A.PAK",
-      "name": "NATHNIAL.CPS",
-      "offset": 10446,
-      "size": 15513
+      "pak": "O01B.PAK",
+      "name": "PAULSN_L.WSA",
+      "offset": 68188,
+      "size": 20733
     },
     {
-      "pak": "VOC.PAK",
-      "name": "NECROA.VOC",
-      "offset": 1412486,
-      "size": 7438
+      "pak": "O01B.PAK",
+      "name": "SCROLLE.WSA",
+      "offset": 88921,
+      "size": 56992
     },
     {
-      "pak": "VOC.PAK",
-      "name": "NECROM.VOC",
-      "offset": 1419924,
-      "size": 3833
+      "pak": "O01B.PAK",
+      "name": "SCROLLF.WSA",
+      "offset": 145913,
+      "size": 59001
     },
     {
-      "pak": "L23.PAK",
-      "name": "NECROSAP.SHP",
-      "offset": 32272,
-      "size": 2415
+      "pak": "O01B.PAK",
+      "name": "SCROLLG.WSA",
+      "offset": 204914,
+      "size": 59122
     },
     {
-      "pak": "O22D.PAK",
-      "name": "NORM.WSA",
-      "offset": 333603,
-      "size": 16272
+      "pak": "O01B.PAK",
+      "name": "WILL_L.WSA",
+      "offset": 264036,
+      "size": 23135
     },
     {
-      "pak": "VOC.PAK",
-      "name": "NUNCHUK.VOC",
-      "offset": 475648,
-      "size": 1951
+      "pak": "O01C.PAK",
+      "name": "CONFRONT.CPS",
+      "offset": 111,
+      "size": 12763
     },
     {
-      "pak": "VOC.PAK",
-      "name": "OCEAN2.VOC",
-      "offset": 477599,
-      "size": 51106
+      "pak": "O01C.PAK",
+      "name": "TALAMSCA.CPS",
+      "offset": 12874,
+      "size": 16252
     },
     {
-      "pak": "STARTUP.PAK",
-      "name": "ONETIME.INF",
-      "offset": 135803,
-      "size": 9432
+      "pak": "O01C.PAK",
+      "name": "CONFRONT.TIM",
+      "offset": 29126,
+      "size": 1654
     },
     {
-      "pak": "O08A.PAK",
-      "name": "OPEN.WSA",
-      "offset": 176960,
-      "size": 5814
+      "pak": "O01C.PAK",
+      "name": "TALAMSCA.TIM",
+      "offset": 30780,
+      "size": 3398
     },
     {
-      "pak": "VOC.PAK",
-      "name": "OPENBOX2.VOC",
-      "offset": 952740,
-      "size": 13421
+      "pak": "O01C.PAK",
+      "name": "CONFRONT.WSA",
+      "offset": 34178,
+      "size": 238368
     },
     {
-      "pak": "O27A.PAK",
-      "name": "ORB.CPS",
-      "offset": 112,
-      "size": 11465
+      "pak": "O01C.PAK",
+      "name": "TALAMSCA.WSA",
+      "offset": 272546,
+      "size": 304397
     },
     {
-      "pak": "O27A.PAK",
-      "name": "ORB.WSA",
-      "offset": 44791,
-      "size": 30447
+      "pak": "O01D.PAK",
+      "name": "GUARD1.TIM",
+      "offset": 131,
+      "size": 352
     },
     {
-      "pak": "MONSTER.PAK",
-      "name": "ORC.SHP",
-      "offset": 35883,
-      "size": 28412
+      "pak": "O01D.PAK",
+      "name": "GUARD2.TIM",
+      "offset": 483,
+      "size": 340
     },
     {
-      "pak": "VOC.PAK",
-      "name": "ORC.VOC",
-      "offset": 528705,
-      "size": 5811
+      "pak": "O01D.PAK",
+      "name": "GUARD4.TIM",
+      "offset": 823,
+      "size": 258
     },
     {
-      "pak": "L04.PAK",
-      "name": "ORCLDR.SHP",
-      "offset": 163,
-      "size": 36486
+      "pak": "O01D.PAK",
+      "name": "GUARD5.TIM",
+      "offset": 1081,
+      "size": 232
     },
     {
-      "pak": "VOC.PAK",
-      "name": "ORCLDR1.VOC",
-      "offset": 1225755,
-      "size": 2702
+      "pak": "O01D.PAK",
+      "name": "GUARD6.TIM",
+      "offset": 1313,
+      "size": 242
     },
     {
-      "pak": "VOC.PAK",
-      "name": "ORCMOVE.VOC",
-      "offset": 534516,
-      "size": 8154
+      "pak": "O01D.PAK",
+      "name": "CLEANGD.WSA",
+      "offset": 1555,
+      "size": 24598
     },
     {
-      "pak": "O16A.PAK",
-      "name": "ORIN.TIM",
-      "offset": 17564,
+      "pak": "O01D.PAK",
+      "name": "GUARD.WSA",
+      "offset": 26153,
+      "size": 21779
+    },
+    {
+      "pak": "O01D.PAK",
+      "name": "PORTCLLS.WSA",
+      "offset": 47932,
+      "size": 11202
+    },
+    {
+      "pak": "O01E.PAK",
+      "name": "KING1.TIM",
+      "offset": 91,
+      "size": 3412
+    },
+    {
+      "pak": "O01E.PAK",
+      "name": "THRNDOOR.WSA",
+      "offset": 3503,
+      "size": 12031
+    },
+    {
+      "pak": "O01E.PAK",
+      "name": "RICHARD1.WSA",
+      "offset": 15534,
+      "size": 29190
+    },
+    {
+      "pak": "O01E.PAK",
+      "name": "RICHARD2.WSA",
+      "offset": 44724,
+      "size": 51331
+    },
+    {
+      "pak": "O01E.PAK",
+      "name": "RICHARD3.WSA",
+      "offset": 96055,
+      "size": 75389
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "KEEP.CPS",
+      "offset": 242,
+      "size": 16698
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "LYNN.CPS",
+      "offset": 16940,
+      "size": 12970
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "MARINA2.CPS",
+      "offset": 29910,
+      "size": 14501
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "BOAT.TIM",
+      "offset": 44411,
+      "size": 742
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "LYNN1.TIM",
+      "offset": 45153,
+      "size": 832
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "LYNN2.TIM",
+      "offset": 45985,
+      "size": 364
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "LYNN3.TIM",
+      "offset": 46349,
       "size": 202
     },
     {
-      "pak": "GENERAL.PAK",
-      "name": "PARCH.CPS",
-      "offset": 72798,
-      "size": 12667
+      "pak": "O02A.PAK",
+      "name": "SCOTIA1.TIM",
+      "offset": 46551,
+      "size": 1952
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "BOAT.WSA",
+      "offset": 48503,
+      "size": 34101
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "LYNN1.WSA",
+      "offset": 82604,
+      "size": 8728
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "LYNN2.WSA",
+      "offset": 91332,
+      "size": 592
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "SCOTIA.WSA",
+      "offset": 91924,
+      "size": 27159
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "THUGCMP.CPS",
+      "offset": 119083,
+      "size": 11866
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "THUGCMP1.WSA",
+      "offset": 130949,
+      "size": 6419
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "THUGCMP2.WSA",
+      "offset": 137368,
+      "size": 4213
+    },
+    {
+      "pak": "O02A.PAK",
+      "name": "XFORM.WSA",
+      "offset": 141581,
+      "size": 13643
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "DOM.CPS",
+      "offset": 312,
+      "size": 8614
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "MARINA_D.CPS",
+      "offset": 8926,
+      "size": 14845
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "VICBUSH.CPS",
+      "offset": 23771,
+      "size": 13675
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "VICBUSH1.CPS",
+      "offset": 37446,
+      "size": 13661
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "DOM1.TIM",
+      "offset": 51107,
+      "size": 282
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "TIM1.TIM",
+      "offset": 51389,
+      "size": 1090
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "VICTOR2.TIM",
+      "offset": 52479,
+      "size": 460
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "VICTOR4.TIM",
+      "offset": 52939,
+      "size": 1380
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "VICTOR5.TIM",
+      "offset": 54319,
+      "size": 304
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "VICTOR6.TIM",
+      "offset": 54623,
+      "size": 678
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "VICTOR7.TIM",
+      "offset": 55301,
+      "size": 284
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "TIM.WSA",
+      "offset": 55585,
+      "size": 20804
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "VICBUSH1.WSA",
+      "offset": 76389,
+      "size": 73091
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "VICBUSH2.WSA",
+      "offset": 149480,
+      "size": 2815
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "WATER.WSA",
+      "offset": 152295,
+      "size": 7788
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "WATER2.WSA",
+      "offset": 160083,
+      "size": 1060
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "KEEPBRN.CPS",
+      "offset": 161143,
+      "size": 17042
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "DMPOINT.WSA",
+      "offset": 178185,
+      "size": 14931
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "DOM.WSA",
+      "offset": 193116,
+      "size": 58758
+    },
+    {
+      "pak": "O02B.PAK",
+      "name": "KEEPBRN.WSA",
+      "offset": 251874,
+      "size": 4553
+    },
+    {
+      "pak": "O03A.PAK",
+      "name": "MARINA1.CPS",
+      "offset": 92,
+      "size": 14601
+    },
+    {
+      "pak": "O03A.PAK",
+      "name": "PETRICIA.CPS",
+      "offset": 14693,
+      "size": 9972
+    },
+    {
+      "pak": "O03A.PAK",
+      "name": "ROLRECK.CPS",
+      "offset": 24665,
+      "size": 15551
+    },
+    {
+      "pak": "O03A.PAK",
+      "name": "THOMGOG3.TIM",
+      "offset": 40216,
+      "size": 292
+    },
+    {
+      "pak": "O03A.PAK",
+      "name": "PETRICA1.WSA",
+      "offset": 40508,
+      "size": 5027
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "CHANDELR.WSA",
+      "offset": 285,
+      "size": 1562
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "FIREPLCE.WSA",
+      "offset": 1847,
+      "size": 2708
     },
     {
       "pak": "O03B.PAK",
@@ -12608,10 +11130,832 @@
       "size": 898
     },
     {
-      "pak": "O01B.PAK",
-      "name": "PAUL1.TIM",
-      "offset": 1724,
+      "pak": "O03B.PAK",
+      "name": "TIMOTHYL.WSA",
+      "offset": 5453,
+      "size": 19288
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "TYRUS_L.WSA",
+      "offset": 24741,
+      "size": 22784
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "TYRUS_S.WSA",
+      "offset": 47525,
+      "size": 3671
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "PHILIP.WSA",
+      "offset": 51196,
+      "size": 25876
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "TYRUS1.TIM",
+      "offset": 77072,
+      "size": 318
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "TYRUS2.TIM",
+      "offset": 77390,
+      "size": 448
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "TYRUS3.TIM",
+      "offset": 77838,
+      "size": 278
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "TYRUS4.TIM",
+      "offset": 78116,
+      "size": 278
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "TYRUS5.TIM",
+      "offset": 78394,
+      "size": 318
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "INN1.TIM",
+      "offset": 78712,
+      "size": 312
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "INN3.TIM",
+      "offset": 79024,
+      "size": 198
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "INN4.TIM",
+      "offset": 79222,
+      "size": 302
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "TAVERN.CPS",
+      "offset": 79524,
+      "size": 13219
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "GREYEAGL.CPS",
+      "offset": 92743,
+      "size": 17423
+    },
+    {
+      "pak": "O03B.PAK",
+      "name": "TIMOTHYS.WSA",
+      "offset": 110166,
+      "size": 1524
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK.CPS",
+      "offset": 260,
+      "size": 11073
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCKHUT.CPS",
+      "offset": 11333,
+      "size": 14006
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK01.TIM",
+      "offset": 25339,
+      "size": 652
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK02.TIM",
+      "offset": 25991,
+      "size": 242
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCKBUY.TIM",
+      "offset": 26233,
+      "size": 152
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK06.TIM",
+      "offset": 26385,
+      "size": 242
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK07.TIM",
+      "offset": 26627,
+      "size": 232
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK08.TIM",
+      "offset": 26859,
+      "size": 232
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK09.TIM",
+      "offset": 27091,
+      "size": 232
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK12.TIM",
+      "offset": 27323,
+      "size": 232
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK13.TIM",
+      "offset": 27555,
+      "size": 362
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK15.TIM",
+      "offset": 27917,
+      "size": 162
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK16.TIM",
+      "offset": 28079,
+      "size": 232
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK1.WSA",
+      "offset": 28311,
+      "size": 17034
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK2.WSA",
+      "offset": 45345,
+      "size": 546
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK3.WSA",
+      "offset": 45891,
+      "size": 501
+    },
+    {
+      "pak": "O03C.PAK",
+      "name": "BUCK4.WSA",
+      "offset": 46392,
+      "size": 4246
+    },
+    {
+      "pak": "O04A.PAK",
+      "name": "ROLAND.CPS",
+      "offset": 120,
+      "size": 9322
+    },
+    {
+      "pak": "O04A.PAK",
+      "name": "ROLAND1.TIM",
+      "offset": 9442,
+      "size": 1410
+    },
+    {
+      "pak": "O04A.PAK",
+      "name": "ROLAND2.TIM",
+      "offset": 10852,
+      "size": 1378
+    },
+    {
+      "pak": "O04A.PAK",
+      "name": "ROLAND1.WSA",
+      "offset": 12230,
+      "size": 2781
+    },
+    {
+      "pak": "O04A.PAK",
+      "name": "ROLAND2.WSA",
+      "offset": 15011,
+      "size": 3092
+    },
+    {
+      "pak": "O04A.PAK",
+      "name": "ROLAND3.WSA",
+      "offset": 18103,
+      "size": 3197
+    },
+    {
+      "pak": "O04A.PAK",
+      "name": "ROLAND4.WSA",
+      "offset": 21300,
+      "size": 17677
+    },
+    {
+      "pak": "O07A.PAK",
+      "name": "PODS.CPS",
+      "offset": 121,
+      "size": 19822
+    },
+    {
+      "pak": "O07A.PAK",
+      "name": "POD1.TIM",
+      "offset": 19943,
       "size": 514
+    },
+    {
+      "pak": "O07A.PAK",
+      "name": "POD2.TIM",
+      "offset": 20457,
+      "size": 1440
+    },
+    {
+      "pak": "O07A.PAK",
+      "name": "POD1.WSA",
+      "offset": 21897,
+      "size": 14864
+    },
+    {
+      "pak": "O07A.PAK",
+      "name": "POD2_L.WSA",
+      "offset": 36761,
+      "size": 17987
+    },
+    {
+      "pak": "O07A.PAK",
+      "name": "WIGGLE.WSA",
+      "offset": 54748,
+      "size": 6581
+    },
+    {
+      "pak": "O07A.PAK",
+      "name": "LORA_L.WSA",
+      "offset": 61329,
+      "size": 36449
+    },
+    {
+      "pak": "O07A.PAK",
+      "name": "LORA_S.WSA",
+      "offset": 97778,
+      "size": 17050
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRARACLE.CPS",
+      "offset": 370,
+      "size": 18329
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "PEDESTAL.CPS",
+      "offset": 18699,
+      "size": 11078
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRARCLE1.TIM",
+      "offset": 29777,
+      "size": 902
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRARCLE2.TIM",
+      "offset": 30679,
+      "size": 2064
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRARCLE3.TIM",
+      "offset": 32743,
+      "size": 852
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRARCLE4.TIM",
+      "offset": 33595,
+      "size": 514
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRARCLE5.TIM",
+      "offset": 34109,
+      "size": 1828
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRARCLE6.TIM",
+      "offset": 35937,
+      "size": 508
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRARCLE7.TIM",
+      "offset": 36445,
+      "size": 464
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRARCLE8.TIM",
+      "offset": 36909,
+      "size": 136
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRARCLE9.TIM",
+      "offset": 37045,
+      "size": 410
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "ACCEPT.WSA",
+      "offset": 37455,
+      "size": 24324
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRARCL_1.WSA",
+      "offset": 61779,
+      "size": 87599
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRARCL_2.WSA",
+      "offset": 149378,
+      "size": 11535
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRA_FACE.WSA",
+      "offset": 160913,
+      "size": 1497
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRA_FOOT.WSA",
+      "offset": 162410,
+      "size": 727
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "DRA_HAND.WSA",
+      "offset": 163137,
+      "size": 1252
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "FIRE.WSA",
+      "offset": 164389,
+      "size": 8370
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "GLITTER1.WSA",
+      "offset": 172759,
+      "size": 2411
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "GLITTER2.WSA",
+      "offset": 175170,
+      "size": 1790
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "OPEN.WSA",
+      "offset": 176960,
+      "size": 5814
+    },
+    {
+      "pak": "O08A.PAK",
+      "name": "TOADY.WSA",
+      "offset": 182774,
+      "size": 25243
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DEDFRANK.CPS",
+      "offset": 296,
+      "size": 12760
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DEDROEK.CPS",
+      "offset": 13056,
+      "size": 12186
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DROEK.CPS",
+      "offset": 25242,
+      "size": 14995
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "FORSTMIN.CPS",
+      "offset": 40237,
+      "size": 10580
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "FRANK.CPS",
+      "offset": 50817,
+      "size": 13713
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "LAKEVIEW.CPS",
+      "offset": 64530,
+      "size": 12115
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DAWN.TIM",
+      "offset": 76645,
+      "size": 190
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DEDROEK.TIM",
+      "offset": 76835,
+      "size": 190
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DROEK.TIM",
+      "offset": 77025,
+      "size": 202
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "FRANK.TIM",
+      "offset": 77227,
+      "size": 282
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DAWN.WSA",
+      "offset": 77509,
+      "size": 23012
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DEDROEK.WSA",
+      "offset": 100521,
+      "size": 54224
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DROEK.WSA",
+      "offset": 154745,
+      "size": 12079
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DROEK1.WSA",
+      "offset": 166824,
+      "size": 11940
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DROEK1A.WSA",
+      "offset": 178764,
+      "size": 18675
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DROEK1C.WSA",
+      "offset": 197439,
+      "size": 1327
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DROEK1D.WSA",
+      "offset": 198766,
+      "size": 4125
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "DROEKA.WSA",
+      "offset": 202891,
+      "size": 19096
+    },
+    {
+      "pak": "O10A.PAK",
+      "name": "FRANK.WSA",
+      "offset": 221987,
+      "size": 54100
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "CHIEF.CPS",
+      "offset": 482,
+      "size": 16768
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "KINGPAL.CPS",
+      "offset": 17250,
+      "size": 17444
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "SFLETCH.CPS",
+      "offset": 34694,
+      "size": 15901
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "SMITHY.CPS",
+      "offset": 50595,
+      "size": 15834
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "SWAMPICE.CPS",
+      "offset": 66429,
+      "size": 4244
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "WDR.CPS",
+      "offset": 70673,
+      "size": 16109
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "WDRHUT.CPS",
+      "offset": 86782,
+      "size": 16730
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "CHIEF1.TIM",
+      "offset": 103512,
+      "size": 132
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "CHIEF2.TIM",
+      "offset": 103644,
+      "size": 92
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "FLETCH.TIM",
+      "offset": 103736,
+      "size": 152
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "SMITHY.TIM",
+      "offset": 103888,
+      "size": 222
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "WDR.TIM",
+      "offset": 104110,
+      "size": 122
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "CHIEF0A.WSA",
+      "offset": 104232,
+      "size": 24320
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "CHIEF0B.WSA",
+      "offset": 128552,
+      "size": 11010
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "CHIEF0C.WSA",
+      "offset": 139562,
+      "size": 11007
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "CHIEF1.WSA",
+      "offset": 150569,
+      "size": 1069
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "CHIEF2.WSA",
+      "offset": 151638,
+      "size": 1516
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "CHIEF3.WSA",
+      "offset": 153154,
+      "size": 2068
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "CHIEF4.WSA",
+      "offset": 155222,
+      "size": 647
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "KINGPAL.WSA",
+      "offset": 155869,
+      "size": 4998
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "SFLETCH1.WSA",
+      "offset": 160867,
+      "size": 11726
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "SFLETCH2.WSA",
+      "offset": 172593,
+      "size": 443
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "SMITHY1.WSA",
+      "offset": 173036,
+      "size": 1735
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "SMITHY2.WSA",
+      "offset": 174771,
+      "size": 4445
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "SMITHY3.WSA",
+      "offset": 179216,
+      "size": 369
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "WDR1.WSA",
+      "offset": 179585,
+      "size": 9444
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "WDR2.WSA",
+      "offset": 189029,
+      "size": 48009
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "WDRHUT1.WSA",
+      "offset": 237038,
+      "size": 1308
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "WDRHUT2.WSA",
+      "offset": 238346,
+      "size": 306
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "WDRHUT3.WSA",
+      "offset": 238652,
+      "size": 354
+    },
+    {
+      "pak": "O11A.PAK",
+      "name": "WDRHUT4.WSA",
+      "offset": 239006,
+      "size": 172
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "DWIGHT.CPS",
+      "offset": 203,
+      "size": 16193
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "PUMP.CPS",
+      "offset": 16396,
+      "size": 10996
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "DWIGHT1.TIM",
+      "offset": 27392,
+      "size": 182
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "DWIGHT2.TIM",
+      "offset": 27574,
+      "size": 212
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "DWIGHT3.TIM",
+      "offset": 27786,
+      "size": 182
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "DWIGHT2.WSA",
+      "offset": 27968,
+      "size": 12818
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "DWIGHT3.WSA",
+      "offset": 40786,
+      "size": 18495
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "DWIGHT4.WSA",
+      "offset": 59281,
+      "size": 12000
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "PUMP1.WSA",
+      "offset": 71281,
+      "size": 1897
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "PUMP2.WSA",
+      "offset": 73178,
+      "size": 3230
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "PUMP3.WSA",
+      "offset": 76408,
+      "size": 1137
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "PUMP4.WSA",
+      "offset": 77545,
+      "size": 1800
+    },
+    {
+      "pak": "O12A.PAK",
+      "name": "PUMP5.WSA",
+      "offset": 79345,
+      "size": 1070
+    },
+    {
+      "pak": "O14A.PAK",
+      "name": "GASEXP1.WSA",
+      "offset": 57,
+      "size": 41525
+    },
+    {
+      "pak": "O14A.PAK",
+      "name": "GASEXP2.WSA",
+      "offset": 41582,
+      "size": 20352
+    },
+    {
+      "pak": "O14A.PAK",
+      "name": "GASEXP3.WSA",
+      "offset": 61934,
+      "size": 11118
+    },
+    {
+      "pak": "O16A.PAK",
+      "name": "PAULSON.CPS",
+      "offset": 170,
+      "size": 9933
+    },
+    {
+      "pak": "O16A.PAK",
+      "name": "XPAULSON.CPS",
+      "offset": 10103,
+      "size": 7461
+    },
+    {
+      "pak": "O16A.PAK",
+      "name": "ORIN.TIM",
+      "offset": 17564,
+      "size": 202
     },
     {
       "pak": "O16A.PAK",
@@ -12632,16 +11976,10 @@
       "size": 132
     },
     {
-      "pak": "O01B.PAK",
-      "name": "PAULSN_L.WSA",
-      "offset": 68188,
-      "size": 20733
-    },
-    {
       "pak": "O16A.PAK",
-      "name": "PAULSON.CPS",
-      "offset": 170,
-      "size": 9933
+      "name": "BONESUP.WSA",
+      "offset": 18222,
+      "size": 40300
     },
     {
       "pak": "O16A.PAK",
@@ -12662,16 +12000,820 @@
       "size": 3308
     },
     {
-      "pak": "DRIVERS.PAK",
-      "name": "PCSPKR.ADV",
-      "offset": 14941,
-      "size": 8153
+      "pak": "O17A.PAK",
+      "name": "HAG.CPS",
+      "offset": 101,
+      "size": 14086
     },
     {
-      "pak": "O08A.PAK",
-      "name": "PEDESTAL.CPS",
-      "offset": 18699,
-      "size": 11078
+      "pak": "O17A.PAK",
+      "name": "HAG1.TIM",
+      "offset": 14187,
+      "size": 142
+    },
+    {
+      "pak": "O17A.PAK",
+      "name": "HAG2.TIM",
+      "offset": 14329,
+      "size": 172
+    },
+    {
+      "pak": "O17A.PAK",
+      "name": "HAG_S.TIM",
+      "offset": 14501,
+      "size": 1926
+    },
+    {
+      "pak": "O17A.PAK",
+      "name": "HAG1.WSA",
+      "offset": 16427,
+      "size": 26479
+    },
+    {
+      "pak": "O17A.PAK",
+      "name": "HAG2.WSA",
+      "offset": 42906,
+      "size": 15693
+    },
+    {
+      "pak": "O17A.PAK",
+      "name": "HAG_S.WSA",
+      "offset": 58599,
+      "size": 12533
+    },
+    {
+      "pak": "O18A.PAK",
+      "name": "BIGLYLE.CPS",
+      "offset": 162,
+      "size": 15657
+    },
+    {
+      "pak": "O18A.PAK",
+      "name": "DEDLYL.CPS",
+      "offset": 15819,
+      "size": 14281
+    },
+    {
+      "pak": "O18A.PAK",
+      "name": "MIX.CPS",
+      "offset": 30100,
+      "size": 7957
+    },
+    {
+      "pak": "O18A.PAK",
+      "name": "SMLYLE.CPS",
+      "offset": 38057,
+      "size": 13783
+    },
+    {
+      "pak": "O18A.PAK",
+      "name": "JANA.TIM",
+      "offset": 51840,
+      "size": 312
+    },
+    {
+      "pak": "O18A.PAK",
+      "name": "LYLESAD.TIM",
+      "offset": 52152,
+      "size": 212
+    },
+    {
+      "pak": "O18A.PAK",
+      "name": "LYLESLY.TIM",
+      "offset": 52364,
+      "size": 322
+    },
+    {
+      "pak": "O18A.PAK",
+      "name": "MIX.TIM",
+      "offset": 52686,
+      "size": 192
+    },
+    {
+      "pak": "O18A.PAK",
+      "name": "JANA.WSA",
+      "offset": 52878,
+      "size": 28857
+    },
+    {
+      "pak": "O18A.PAK",
+      "name": "LYLE.WSA",
+      "offset": 81735,
+      "size": 27319
+    },
+    {
+      "pak": "O18A.PAK",
+      "name": "MIX.WSA",
+      "offset": 109054,
+      "size": 14297
+    },
+    {
+      "pak": "O19A.PAK",
+      "name": "CRUCIBLE.TIM",
+      "offset": 43,
+      "size": 572
+    },
+    {
+      "pak": "O19A.PAK",
+      "name": "CRUCIBLE.WSA",
+      "offset": 615,
+      "size": 105472
+    },
+    {
+      "pak": "O21A.PAK",
+      "name": "FAITH.TIM",
+      "offset": 69,
+      "size": 302
+    },
+    {
+      "pak": "O21A.PAK",
+      "name": "WARNING.TIM",
+      "offset": 371,
+      "size": 182
+    },
+    {
+      "pak": "O21A.PAK",
+      "name": "FAITH.WSA",
+      "offset": 553,
+      "size": 22977
+    },
+    {
+      "pak": "O21A.PAK",
+      "name": "WARNING.WSA",
+      "offset": 23530,
+      "size": 69556
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "SADIE.CPS",
+      "offset": 230,
+      "size": 15901
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "VICSMITH.CPS",
+      "offset": 16131,
+      "size": 14522
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "YFLETCH.CPS",
+      "offset": 30653,
+      "size": 16275
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "SADIE.TIM",
+      "offset": 46928,
+      "size": 202
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "SADIE_E.TIM",
+      "offset": 47130,
+      "size": 222
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "YFLETCH.TIM",
+      "offset": 47352,
+      "size": 262
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "YFLETCH2.TIM",
+      "offset": 47614,
+      "size": 342
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "YVIC.TIM",
+      "offset": 47956,
+      "size": 292
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "DOR_FLCH.WSA",
+      "offset": 48248,
+      "size": 8938
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "DOR_SADY.WSA",
+      "offset": 57186,
+      "size": 8739
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "DOR_VCTR.WSA",
+      "offset": 65925,
+      "size": 8931
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "SADIE.WSA",
+      "offset": 74856,
+      "size": 77700
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "VICSMITH.WSA",
+      "offset": 152556,
+      "size": 26021
+    },
+    {
+      "pak": "O22A.PAK",
+      "name": "YFLETCH.WSA",
+      "offset": 178577,
+      "size": 42776
+    },
+    {
+      "pak": "O22B.PAK",
+      "name": "PORTCLIS.WSA",
+      "offset": 90,
+      "size": 16160
+    },
+    {
+      "pak": "O22B.PAK",
+      "name": "YID1OPN.WSA",
+      "offset": 16250,
+      "size": 15915
+    },
+    {
+      "pak": "O22B.PAK",
+      "name": "YID2OPN.WSA",
+      "offset": 32165,
+      "size": 15963
+    },
+    {
+      "pak": "O22B.PAK",
+      "name": "YOD1OPN.WSA",
+      "offset": 48128,
+      "size": 11140
+    },
+    {
+      "pak": "O22B.PAK",
+      "name": "YOD2OPN.WSA",
+      "offset": 59268,
+      "size": 10702
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "COUNCIL.CPS",
+      "offset": 340,
+      "size": 18084
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "COUNC1.TIM",
+      "offset": 18424,
+      "size": 202
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "COUNC2.TIM",
+      "offset": 18626,
+      "size": 202
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "COUNC3.TIM",
+      "offset": 18828,
+      "size": 202
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "COUNC4.TIM",
+      "offset": 19030,
+      "size": 202
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "GEREM1.TIM",
+      "offset": 19232,
+      "size": 202
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "GEREM2.TIM",
+      "offset": 19434,
+      "size": 252
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "GEREM3.TIM",
+      "offset": 19686,
+      "size": 292
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "GEREM4.TIM",
+      "offset": 19978,
+      "size": 312
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "COUNC1.WSA",
+      "offset": 20290,
+      "size": 51759
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "COUNC2.WSA",
+      "offset": 72049,
+      "size": 47867
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "COUNC3.WSA",
+      "offset": 119916,
+      "size": 38310
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "COUNC4.WSA",
+      "offset": 158226,
+      "size": 41869
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "DOR_CNCL.WSA",
+      "offset": 200095,
+      "size": 8869
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "GEREM.WSA",
+      "offset": 208964,
+      "size": 2243
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "GEREM1.WSA",
+      "offset": 211207,
+      "size": 2604
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "GEREM2.WSA",
+      "offset": 213811,
+      "size": 11920
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "GEREM3.WSA",
+      "offset": 225731,
+      "size": 17445
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "GEREM4.WSA",
+      "offset": 243176,
+      "size": 41333
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "GROUP.WSA",
+      "offset": 284509,
+      "size": 12429
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "GROUP1.WSA",
+      "offset": 296938,
+      "size": 55438
+    },
+    {
+      "pak": "O22C.PAK",
+      "name": "GROUP2.WSA",
+      "offset": 352376,
+      "size": 37328
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "BRUFRANK.CPS",
+      "offset": 292,
+      "size": 11819
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "BRUNO.CPS",
+      "offset": 12111,
+      "size": 18036
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "BRUNO_E.CPS",
+      "offset": 30147,
+      "size": 16572
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "BRUCLIFF.TIM",
+      "offset": 46719,
+      "size": 222
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "BRUFRAN.TIM",
+      "offset": 46941,
+      "size": 212
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "BRUNORM.TIM",
+      "offset": 47153,
+      "size": 282
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "BRUSAM.TIM",
+      "offset": 47435,
+      "size": 222
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "BRUCLIFF.WSA",
+      "offset": 47657,
+      "size": 37173
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "BRUFRANK.WSA",
+      "offset": 84830,
+      "size": 15600
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "BRUNORM.WSA",
+      "offset": 100430,
+      "size": 58399
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "BRUSAM.WSA",
+      "offset": 158829,
+      "size": 51322
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "CLIFNORM.WSA",
+      "offset": 210151,
+      "size": 34474
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "DOR_BRNO.WSA",
+      "offset": 244625,
+      "size": 8651
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "FLAGON1.WSA",
+      "offset": 253276,
+      "size": 32758
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "FLAGON2.WSA",
+      "offset": 286034,
+      "size": 37423
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "FRANK_B.WSA",
+      "offset": 323457,
+      "size": 10146
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "NORM.WSA",
+      "offset": 333603,
+      "size": 16272
+    },
+    {
+      "pak": "O22D.PAK",
+      "name": "SAM.WSA",
+      "offset": 349875,
+      "size": 33997
+    },
+    {
+      "pak": "O23A.PAK",
+      "name": "COMNDR2.CPS",
+      "offset": 153,
+      "size": 17050
+    },
+    {
+      "pak": "O23A.PAK",
+      "name": "DARKCOM.CPS",
+      "offset": 17203,
+      "size": 17290
+    },
+    {
+      "pak": "O23A.PAK",
+      "name": "DCOM_EMP.CPS",
+      "offset": 34493,
+      "size": 15160
+    },
+    {
+      "pak": "O23A.PAK",
+      "name": "DARKCOM.TIM",
+      "offset": 49653,
+      "size": 222
+    },
+    {
+      "pak": "O23A.PAK",
+      "name": "DARKCOS.TIM",
+      "offset": 49875,
+      "size": 342
+    },
+    {
+      "pak": "O23A.PAK",
+      "name": "DARKVIC.TIM",
+      "offset": 50217,
+      "size": 222
+    },
+    {
+      "pak": "O23A.PAK",
+      "name": "BIGVIC.WSA",
+      "offset": 50439,
+      "size": 41597
+    },
+    {
+      "pak": "O23A.PAK",
+      "name": "COMNDR2.WSA",
+      "offset": 92036,
+      "size": 40932
+    },
+    {
+      "pak": "O23A.PAK",
+      "name": "DARKCOM.WSA",
+      "offset": 132968,
+      "size": 73443
+    },
+    {
+      "pak": "O23B.PAK",
+      "name": "KNOWLTK.CPS",
+      "offset": 168,
+      "size": 16286
+    },
+    {
+      "pak": "O23B.PAK",
+      "name": "XEOBTK.CPS",
+      "offset": 16454,
+      "size": 14995
+    },
+    {
+      "pak": "O23B.PAK",
+      "name": "XEOBTK.WSA",
+      "offset": 31449,
+      "size": 63774
+    },
+    {
+      "pak": "O23B.PAK",
+      "name": "KNOWLE.TIM",
+      "offset": 95223,
+      "size": 162
+    },
+    {
+      "pak": "O23B.PAK",
+      "name": "XEOB.TIM",
+      "offset": 95385,
+      "size": 142
+    },
+    {
+      "pak": "O23B.PAK",
+      "name": "KNOWLTK1.WSA",
+      "offset": 95527,
+      "size": 41426
+    },
+    {
+      "pak": "O23B.PAK",
+      "name": "KNOWLTK2.WSA",
+      "offset": 136953,
+      "size": 6660
+    },
+    {
+      "pak": "O23B.PAK",
+      "name": "KNOWLTK3.WSA",
+      "offset": 143613,
+      "size": 4638
+    },
+    {
+      "pak": "O23B.PAK",
+      "name": "KNOWLTK4.WSA",
+      "offset": 148251,
+      "size": 118
+    },
+    {
+      "pak": "O23B.PAK",
+      "name": "KNOWLTK5.WSA",
+      "offset": 148369,
+      "size": 587
+    },
+    {
+      "pak": "O24A.PAK",
+      "name": "BRIDGE.CPS",
+      "offset": 207,
+      "size": 9807
+    },
+    {
+      "pak": "O24A.PAK",
+      "name": "WHITOWER.CPS",
+      "offset": 10014,
+      "size": 13327
+    },
+    {
+      "pak": "O24A.PAK",
+      "name": "DAWN_LIZ.TIM",
+      "offset": 23341,
+      "size": 1398
+    },
+    {
+      "pak": "O24A.PAK",
+      "name": "DAWN_SCO.TIM",
+      "offset": 24739,
+      "size": 162
+    },
+    {
+      "pak": "O24A.PAK",
+      "name": "LIZ_BIRD.TIM",
+      "offset": 24901,
+      "size": 1470
+    },
+    {
+      "pak": "O24A.PAK",
+      "name": "BRIDGE1.WSA",
+      "offset": 26371,
+      "size": 2929
+    },
+    {
+      "pak": "O24A.PAK",
+      "name": "BRIDGE2.WSA",
+      "offset": 29300,
+      "size": 9578
+    },
+    {
+      "pak": "O24A.PAK",
+      "name": "BRIDGE3.WSA",
+      "offset": 38878,
+      "size": 1910
+    },
+    {
+      "pak": "O24A.PAK",
+      "name": "COLAPSE.WSA",
+      "offset": 40788,
+      "size": 7755
+    },
+    {
+      "pak": "O24A.PAK",
+      "name": "DAWN_LIZ.WSA",
+      "offset": 48543,
+      "size": 33542
+    },
+    {
+      "pak": "O24A.PAK",
+      "name": "DAWN_SCO.WSA",
+      "offset": 82085,
+      "size": 138601
+    },
+    {
+      "pak": "O24A.PAK",
+      "name": "LIZ_BIRD.WSA",
+      "offset": 220686,
+      "size": 32370
+    },
+    {
+      "pak": "O26A.PAK",
+      "name": "KNWLFNT.CPS",
+      "offset": 157,
+      "size": 14802
+    },
+    {
+      "pak": "O26A.PAK",
+      "name": "XEOBCLB.CPS",
+      "offset": 14959,
+      "size": 15426
+    },
+    {
+      "pak": "O26A.PAK",
+      "name": "KNWLFNT.TIM",
+      "offset": 30385,
+      "size": 182
+    },
+    {
+      "pak": "O26A.PAK",
+      "name": "XEOBCLB.TIM",
+      "offset": 30567,
+      "size": 332
+    },
+    {
+      "pak": "O26A.PAK",
+      "name": "KNWLFNT1.WSA",
+      "offset": 30899,
+      "size": 56318
+    },
+    {
+      "pak": "O26A.PAK",
+      "name": "KNWLFNT2.WSA",
+      "offset": 87217,
+      "size": 5580
+    },
+    {
+      "pak": "O26A.PAK",
+      "name": "KNWLFNT3.WSA",
+      "offset": 92797,
+      "size": 885
+    },
+    {
+      "pak": "O26A.PAK",
+      "name": "XEOBCLB.WSA",
+      "offset": 93682,
+      "size": 11679
+    },
+    {
+      "pak": "O26A.PAK",
+      "name": "XEOBCLB1.WSA",
+      "offset": 105361,
+      "size": 62204
+    },
+    {
+      "pak": "O27A.PAK",
+      "name": "ORB.CPS",
+      "offset": 112,
+      "size": 11465
+    },
+    {
+      "pak": "O27A.PAK",
+      "name": "DAWNORB.TIM",
+      "offset": 11577,
+      "size": 252
+    },
+    {
+      "pak": "O27A.PAK",
+      "name": "ESCAPE.TIM",
+      "offset": 11829,
+      "size": 3156
+    },
+    {
+      "pak": "O27A.PAK",
+      "name": "RESCDWN.TIM",
+      "offset": 14985,
+      "size": 262
+    },
+    {
+      "pak": "O27A.PAK",
+      "name": "ESCAPE.WSA",
+      "offset": 15247,
+      "size": 29544
+    },
+    {
+      "pak": "O27A.PAK",
+      "name": "ORB.WSA",
+      "offset": 44791,
+      "size": 30447
+    },
+    {
+      "pak": "O27A.PAK",
+      "name": "RELEASED.WSA",
+      "offset": 75238,
+      "size": 58406
+    },
+    {
+      "pak": "O28A.PAK",
+      "name": "LITEPAL1.COL",
+      "offset": 343,
+      "size": 768
+    },
+    {
+      "pak": "O28A.PAK",
+      "name": "LITEPAL2.COL",
+      "offset": 1111,
+      "size": 768
+    },
+    {
+      "pak": "O28A.PAK",
+      "name": "LITEPAL3.COL",
+      "offset": 1879,
+      "size": 768
+    },
+    {
+      "pak": "O28A.PAK",
+      "name": "CRYSTALS.CPS",
+      "offset": 2647,
+      "size": 3920
+    },
+    {
+      "pak": "O28A.PAK",
+      "name": "KEYS.CPS",
+      "offset": 6567,
+      "size": 9464
+    },
+    {
+      "pak": "O28A.PAK",
+      "name": "KING_LAY.CPS",
+      "offset": 16031,
+      "size": 20863
     },
     {
       "pak": "O28A.PAK",
@@ -12716,370 +12858,70 @@
       "size": 9215
     },
     {
-      "pak": "L10.PAK",
-      "name": "PENTROG.SHP",
-      "offset": 169,
-      "size": 32098
+      "pak": "O28A.PAK",
+      "name": "SIT.CPS",
+      "offset": 107678,
+      "size": 10207
     },
     {
-      "pak": "VOC.PAK",
-      "name": "PENTROGA.VOC",
-      "offset": 1228457,
-      "size": 6493
+      "pak": "O28A.PAK",
+      "name": "KINGSIT.TIM",
+      "offset": 117885,
+      "size": 372
     },
     {
-      "pak": "VOC.PAK",
-      "name": "PENTROGM.VOC",
-      "offset": 1234950,
-      "size": 5089
+      "pak": "O28A.PAK",
+      "name": "DARK.WSA",
+      "offset": 118257,
+      "size": 39520
     },
     {
-      "pak": "O03A.PAK",
-      "name": "PETRICA1.WSA",
-      "offset": 40508,
-      "size": 5027
+      "pak": "O28A.PAK",
+      "name": "DARKLITE.WSA",
+      "offset": 157777,
+      "size": 45513
     },
     {
-      "pak": "O03A.PAK",
-      "name": "PETRICIA.CPS",
-      "offset": 14693,
-      "size": 9972
+      "pak": "O28A.PAK",
+      "name": "DISOLVE.WSA",
+      "offset": 203290,
+      "size": 27582
     },
     {
-      "pak": "GENERAL.PAK",
-      "name": "PGAS.WSA",
-      "offset": 862396,
-      "size": 14789
+      "pak": "O28A.PAK",
+      "name": "HEAL.WSA",
+      "offset": 230872,
+      "size": 60184
     },
     {
-      "pak": "O03B.PAK",
-      "name": "PHILIP.WSA",
-      "offset": 51196,
-      "size": 25876
+      "pak": "O28A.PAK",
+      "name": "HEAL_L.WSA",
+      "offset": 291056,
+      "size": 11489
     },
     {
-      "pak": "VOC.PAK",
-      "name": "PLATEOFF.VOC",
-      "offset": 542670,
-      "size": 3933
+      "pak": "O28A.PAK",
+      "name": "SITTING.WSA",
+      "offset": 302545,
+      "size": 35187
     },
     {
-      "pak": "VOC.PAK",
-      "name": "PLATEON.VOC",
-      "offset": 546603,
-      "size": 4657
+      "pak": "O28A.PAK",
+      "name": "TRUTH.WSA",
+      "offset": 337732,
+      "size": 7416
     },
     {
-      "pak": "GENERAL.PAK",
-      "name": "PLAYFLD.CPS",
-      "offset": 85465,
-      "size": 16009
+      "pak": "O29A.PAK",
+      "name": "TAUNT.TIM",
+      "offset": 37,
+      "size": 202
     },
     {
-      "pak": "VOC.PAK",
-      "name": "PMETLHI.VOC",
-      "offset": 551260,
-      "size": 5616
-    },
-    {
-      "pak": "O07A.PAK",
-      "name": "POD1.TIM",
-      "offset": 19943,
-      "size": 514
-    },
-    {
-      "pak": "O07A.PAK",
-      "name": "POD1.WSA",
-      "offset": 21897,
-      "size": 14864
-    },
-    {
-      "pak": "O07A.PAK",
-      "name": "POD2.TIM",
-      "offset": 20457,
-      "size": 1440
-    },
-    {
-      "pak": "O07A.PAK",
-      "name": "POD2_L.WSA",
-      "offset": 36761,
-      "size": 17987
-    },
-    {
-      "pak": "O07A.PAK",
-      "name": "PODS.CPS",
-      "offset": 121,
-      "size": 19822
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "PODSKEL1.VOC",
-      "offset": 966161,
-      "size": 11064
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "POLGULP1.VOC",
-      "offset": 977225,
-      "size": 4655
-    },
-    {
-      "pak": "O22B.PAK",
-      "name": "PORTCLIS.WSA",
-      "offset": 90,
-      "size": 16160
-    },
-    {
-      "pak": "O01D.PAK",
-      "name": "PORTCLLS.WSA",
-      "offset": 47932,
-      "size": 11202
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "PORTCUL.VOC",
-      "offset": 556876,
-      "size": 5666
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "PORTCULD.VOC",
-      "offset": 562542,
-      "size": 4706
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "POURH2O.VOC",
-      "offset": 1936251,
-      "size": 13283
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "PRESSIN.VOC",
-      "offset": 567248,
-      "size": 846
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "PRESSOUT.VOC",
-      "offset": 568094,
-      "size": 2651
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "PUMP.CPS",
-      "offset": 16396,
-      "size": 10996
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "PUMP1.WSA",
-      "offset": 71281,
-      "size": 1897
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "PUMP2.WSA",
-      "offset": 73178,
-      "size": 3230
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "PUMP3.WSA",
-      "offset": 76408,
-      "size": 1137
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "PUMP4.WSA",
-      "offset": 77545,
-      "size": 1800
-    },
-    {
-      "pak": "O12A.PAK",
-      "name": "PUMP5.WSA",
-      "offset": 79345,
-      "size": 1070
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "PUMPDOR1.VOC",
-      "offset": 1324467,
-      "size": 3671
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "PUMPSM2.VOC",
-      "offset": 1328138,
-      "size": 4613
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "PUMPSM3.VOC",
-      "offset": 1332751,
-      "size": 4613
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "QUAKE1.VOC",
-      "offset": 2242404,
-      "size": 19241
-    },
-    {
-      "pak": "L06.PAK",
-      "name": "RATMAN.SHP",
-      "offset": 178,
-      "size": 31829
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "RATMOV3.VOC",
-      "offset": 1021784,
-      "size": 5151
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "RATTLER.VOC",
-      "offset": 2261645,
-      "size": 9886
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "RATWOK.VOC",
-      "offset": 1240039,
-      "size": 2185
-    },
-    {
-      "pak": "O27A.PAK",
-      "name": "RELEASED.WSA",
-      "offset": 75238,
-      "size": 58406
-    },
-    {
-      "pak": "O27A.PAK",
-      "name": "RESCDWN.TIM",
-      "offset": 14985,
-      "size": 262
-    },
-    {
-      "pak": "O01E.PAK",
-      "name": "RICHARD1.WSA",
-      "offset": 15534,
-      "size": 29190
-    },
-    {
-      "pak": "O01E.PAK",
-      "name": "RICHARD2.WSA",
-      "offset": 44724,
-      "size": 51331
-    },
-    {
-      "pak": "O01E.PAK",
-      "name": "RICHARD3.WSA",
-      "offset": 96055,
-      "size": 75389
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "RIPPOD4.VOC",
-      "offset": 981880,
-      "size": 5815
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "ROARSPL1.VOC",
-      "offset": 1524593,
-      "size": 14472
-    },
-    {
-      "pak": "L15.PAK",
-      "name": "ROCKLING.SHP",
-      "offset": 187,
-      "size": 38245
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "ROKD1.VOC",
-      "offset": 1242224,
-      "size": 7042
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "ROKEAT1.VOC",
-      "offset": 570745,
-      "size": 10964
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "ROKMOV1.VOC",
-      "offset": 581709,
-      "size": 6589
-    },
-    {
-      "pak": "O04A.PAK",
-      "name": "ROLAND.CPS",
-      "offset": 120,
-      "size": 9322
-    },
-    {
-      "pak": "O04A.PAK",
-      "name": "ROLAND1.TIM",
-      "offset": 9442,
-      "size": 1410
-    },
-    {
-      "pak": "O04A.PAK",
-      "name": "ROLAND1.WSA",
-      "offset": 12230,
-      "size": 2781
-    },
-    {
-      "pak": "O04A.PAK",
-      "name": "ROLAND2.TIM",
-      "offset": 10852,
-      "size": 1378
-    },
-    {
-      "pak": "O04A.PAK",
-      "name": "ROLAND2.WSA",
-      "offset": 15011,
-      "size": 3092
-    },
-    {
-      "pak": "O04A.PAK",
-      "name": "ROLAND3.WSA",
-      "offset": 18103,
-      "size": 3197
-    },
-    {
-      "pak": "O04A.PAK",
-      "name": "ROLAND4.WSA",
-      "offset": 21300,
-      "size": 17677
-    },
-    {
-      "pak": "O03A.PAK",
-      "name": "ROLRECK.CPS",
-      "offset": 24665,
-      "size": 15551
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "ROWBOAT1.VOC",
-      "offset": 1302544,
-      "size": 17815
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "RUCKUS1.VOC",
-      "offset": 2115903,
-      "size": 15030
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "RUCKUS3.VOC",
-      "offset": 2130933,
-      "size": 13538
+      "pak": "O29A.PAK",
+      "name": "TAUNT.WSA",
+      "offset": 239,
+      "size": 36357
     },
     {
       "pak": "RUIN.PAK",
@@ -13112,364 +12954,88 @@
       "size": 3195
     },
     {
-      "pak": "O22A.PAK",
-      "name": "SADIE.CPS",
-      "offset": 230,
-      "size": 15901
+      "pak": "STARTUP.PAK",
+      "name": "FONT6P.FNT",
+      "offset": 221,
+      "size": 2334
     },
     {
-      "pak": "O22A.PAK",
-      "name": "SADIE.TIM",
-      "offset": 46928,
-      "size": 202
+      "pak": "STARTUP.PAK",
+      "name": "FONT9P.FNT",
+      "offset": 2555,
+      "size": 3881
     },
     {
-      "pak": "O22A.PAK",
-      "name": "SADIE.WSA",
-      "offset": 74856,
-      "size": 77700
+      "pak": "STARTUP.PAK",
+      "name": "TITLE.CPS",
+      "offset": 6436,
+      "size": 29124
     },
     {
-      "pak": "O22A.PAK",
-      "name": "SADIE_E.TIM",
-      "offset": 47130,
-      "size": 222
+      "pak": "STARTUP.PAK",
+      "name": "LANDS.ENG",
+      "offset": 35560,
+      "size": 10059
     },
     {
-      "pak": "O22D.PAK",
-      "name": "SAM.WSA",
-      "offset": 349875,
-      "size": 33997
+      "pak": "STARTUP.PAK",
+      "name": "LANDS.FRE",
+      "offset": 45619,
+      "size": 11694
     },
     {
-      "pak": "GENERAL.PAK",
-      "name": "SAP.WSA",
-      "offset": 877185,
-      "size": 1039
+      "pak": "STARTUP.PAK",
+      "name": "LANDS.GER",
+      "offset": 57313,
+      "size": 11588
     },
     {
-      "pak": "VOC.PAK",
-      "name": "SAP2.VOC",
-      "offset": 1539065,
-      "size": 19784
+      "pak": "STARTUP.PAK",
+      "name": "ITEM.INF",
+      "offset": 68901,
+      "size": 5158
     },
     {
-      "pak": "DRIVERS.PAK",
-      "name": "SBDIG.ADV",
-      "offset": 23094,
-      "size": 3797
+      "pak": "STARTUP.PAK",
+      "name": "ITEMICN.SHP",
+      "offset": 74059,
+      "size": 22733
     },
     {
-      "pak": "DRIVERS.PAK",
-      "name": "SBPDIG.ADV",
-      "offset": 26891,
-      "size": 4076
+      "pak": "STARTUP.PAK",
+      "name": "ITEMSHP.SHP",
+      "offset": 96792,
+      "size": 16117
     },
     {
-      "pak": "VOC.PAK",
-      "name": "SCAVEAT1.VOC",
-      "offset": 1034765,
-      "size": 8698
+      "pak": "STARTUP.PAK",
+      "name": "THROWN.SHP",
+      "offset": 112909,
+      "size": 7186
     },
     {
-      "pak": "VOC.PAK",
-      "name": "SCAVMOV2.VOC",
-      "offset": 1026935,
-      "size": 7830
+      "pak": "STARTUP.PAK",
+      "name": "GAMESHP.SHP",
+      "offset": 120095,
+      "size": 15708
     },
     {
-      "pak": "L08.PAK",
-      "name": "SCAVNGR.SHP",
-      "offset": 11658,
-      "size": 27849
+      "pak": "STARTUP.PAK",
+      "name": "ONETIME.INF",
+      "offset": 135803,
+      "size": 9432
     },
     {
-      "pak": "O02A.PAK",
-      "name": "SCOTIA.WSA",
-      "offset": 91924,
-      "size": 27159
+      "pak": "STARTUP.PAK",
+      "name": "LOLSYSEX.XMI",
+      "offset": 145235,
+      "size": 18944
     },
     {
-      "pak": "O02A.PAK",
-      "name": "SCOTIA1.TIM",
-      "offset": 46551,
-      "size": 1952
-    },
-    {
-      "pak": "L29.PAK",
-      "name": "SCO_TOAD.SHP",
-      "offset": 14499,
-      "size": 27862
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "SCROLL.CPS",
-      "offset": 101474,
-      "size": 9522
-    },
-    {
-      "pak": "O01B.PAK",
-      "name": "SCROLLE.WSA",
-      "offset": 88921,
-      "size": 56992
-    },
-    {
-      "pak": "O01B.PAK",
-      "name": "SCROLLF.WSA",
-      "offset": 145913,
-      "size": 59001
-    },
-    {
-      "pak": "O01B.PAK",
-      "name": "SCROLLG.WSA",
-      "offset": 204914,
-      "size": 59122
-    },
-    {
-      "pak": "L29.PAK",
-      "name": "SERP_EXE.SHP",
-      "offset": 207936,
-      "size": 49669
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "SFLETCH.CPS",
-      "offset": 34694,
-      "size": 15901
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "SFLETCH1.WSA",
-      "offset": 160867,
-      "size": 11726
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "SFLETCH2.WSA",
-      "offset": 172593,
-      "size": 443
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "SHATTER.WSA",
-      "offset": 878224,
-      "size": 85129
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SHIELD1.VOC",
-      "offset": 588298,
-      "size": 32163
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SHWING1.VOC",
-      "offset": 620461,
-      "size": 5118
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "SIT.CPS",
-      "offset": 107678,
-      "size": 10207
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "SITTING.WSA",
-      "offset": 302545,
-      "size": 35187
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SKELWOK1.VOC",
-      "offset": 1423757,
-      "size": 8516
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SLIDEMUG.VOC",
-      "offset": 1663645,
-      "size": 8674
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "SMITHY.CPS",
-      "offset": 50595,
-      "size": 15834
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "SMITHY.TIM",
-      "offset": 103888,
-      "size": 222
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "SMITHY1.WSA",
-      "offset": 173036,
-      "size": 1735
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "SMITHY2.WSA",
-      "offset": 174771,
-      "size": 4445
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "SMITHY3.WSA",
-      "offset": 179216,
-      "size": 369
-    },
-    {
-      "pak": "O18A.PAK",
-      "name": "SMLYLE.CPS",
-      "offset": 38057,
-      "size": 13783
-    },
-    {
-      "pak": "O00A.PAK",
-      "name": "SMSHWL.WSA",
-      "offset": 105834,
-      "size": 46835
-    },
-    {
-      "pak": "O00A.PAK",
-      "name": "SMSHWL1.TIM",
-      "offset": 24514,
-      "size": 650
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SNKBITE.VOC",
-      "offset": 1740316,
-      "size": 5167
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SNORT.VOC",
-      "offset": 1320359,
-      "size": 4108
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "SNOW.WSA",
-      "offset": 963353,
-      "size": 73350
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SPARK1.VOC",
-      "offset": 1558849,
-      "size": 14553
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "SPARK1.WSA",
-      "offset": 1036703,
-      "size": 1911
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "SPARK2.WSA",
-      "offset": 1038614,
-      "size": 3961
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SPARKHIT.VOC",
-      "offset": 1573402,
-      "size": 5324
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SPARKHT2.VOC",
-      "offset": 1672319,
-      "size": 5324
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SPARKHT3.VOC",
-      "offset": 1677643,
-      "size": 5324
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SPELBK2.VOC",
-      "offset": 625579,
-      "size": 50690
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SPELL4B.VOC",
-      "offset": 676269,
-      "size": 22931
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SPELL7.VOC",
-      "offset": 699200,
-      "size": 26009
-    },
-    {
-      "pak": "O01B.PAK",
-      "name": "SPELLBKE.TIM",
-      "offset": 2238,
-      "size": 864
-    },
-    {
-      "pak": "O01B.PAK",
-      "name": "SPELLBKF.TIM",
-      "offset": 3102,
-      "size": 864
-    },
-    {
-      "pak": "O01B.PAK",
-      "name": "SPELLBKG.TIM",
-      "offset": 3966,
-      "size": 864
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "SPELLEXP.WSA",
-      "offset": 1042575,
-      "size": 8015
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SQUAWCK.VOC",
-      "offset": 1656891,
-      "size": 6754
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "STAB.VOC",
-      "offset": 1249266,
-      "size": 1320
-    },
-    {
-      "pak": "L20.PAK",
-      "name": "STARK.SHP",
-      "offset": 184,
-      "size": 16215
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "STARKA2.VOC",
-      "offset": 1432273,
-      "size": 3575
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "STARKD1.VOC",
-      "offset": 1435848,
-      "size": 5715
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "STEAM.VOC",
-      "offset": 1650421,
-      "size": 6470
+      "pak": "STARTUP.PAK",
+      "name": "LOLTITLE.XMI",
+      "offset": 164179,
+      "size": 3094
     },
     {
       "pak": "SWAMP.PAK",
@@ -13496,228 +13062,6 @@
       "size": 3232
     },
     {
-      "pak": "L11.PAK",
-      "name": "SWAMPCIT.SHP",
-      "offset": 23436,
-      "size": 23545
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "SWAMPICE.COL",
-      "offset": 17470,
-      "size": 768
-    },
-    {
-      "pak": "O11A.PAK",
-      "name": "SWAMPICE.CPS",
-      "offset": 66429,
-      "size": 4244
-    },
-    {
-      "pak": "L11.PAK",
-      "name": "SWAMPMON.SHP",
-      "offset": 46981,
-      "size": 20098
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SWARM.VOC",
-      "offset": 1578726,
-      "size": 29281
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "SWARM.WSA",
-      "offset": 1050590,
-      "size": 51303
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SWING.VOC",
-      "offset": 725209,
-      "size": 3617
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SWING1.VOC",
-      "offset": 728826,
-      "size": 4708
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "SWING6.VOC",
-      "offset": 733534,
-      "size": 4129
-    },
-    {
-      "pak": "O01C.PAK",
-      "name": "TALAMSCA.CPS",
-      "offset": 12874,
-      "size": 16252
-    },
-    {
-      "pak": "O01C.PAK",
-      "name": "TALAMSCA.TIM",
-      "offset": 30780,
-      "size": 3398
-    },
-    {
-      "pak": "O01C.PAK",
-      "name": "TALAMSCA.WSA",
-      "offset": 272546,
-      "size": 304397
-    },
-    {
-      "pak": "DRIVERS.PAK",
-      "name": "TANDYDIG.ADV",
-      "offset": 30967,
-      "size": 3779
-    },
-    {
-      "pak": "O29A.PAK",
-      "name": "TAUNT.TIM",
-      "offset": 37,
-      "size": 202
-    },
-    {
-      "pak": "O29A.PAK",
-      "name": "TAUNT.WSA",
-      "offset": 239,
-      "size": 36357
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "TAVERN.CPS",
-      "offset": 79524,
-      "size": 13219
-    },
-    {
-      "pak": "L27.PAK",
-      "name": "TCABAL.SHP",
-      "offset": 185,
-      "size": 20798
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "TDAMAGE1.VOC",
-      "offset": 2154541,
-      "size": 5520
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "TDAMAGE2.VOC",
-      "offset": 2171305,
-      "size": 8458
-    },
-    {
-      "pak": "O03A.PAK",
-      "name": "THOMGOG3.TIM",
-      "offset": 40216,
-      "size": 292
-    },
-    {
-      "pak": "O01E.PAK",
-      "name": "THRNDOOR.WSA",
-      "offset": 3503,
-      "size": 12031
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "THROW.VOC",
-      "offset": 737663,
-      "size": 2351
-    },
-    {
-      "pak": "STARTUP.PAK",
-      "name": "THROWN.SHP",
-      "offset": 112909,
-      "size": 7186
-    },
-    {
-      "pak": "L02.PAK",
-      "name": "THUG.SHP",
-      "offset": 18750,
-      "size": 29248
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "THUGCMP.CPS",
-      "offset": 119083,
-      "size": 11866
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "THUGCMP1.WSA",
-      "offset": 130949,
-      "size": 6419
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "THUGCMP2.WSA",
-      "offset": 137368,
-      "size": 4213
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "THUGWALK.VOC",
-      "offset": 740014,
-      "size": 2268
-    },
-    {
-      "pak": "O02B.PAK",
-      "name": "TIM.WSA",
-      "offset": 55585,
-      "size": 20804
-    },
-    {
-      "pak": "O02B.PAK",
-      "name": "TIM1.TIM",
-      "offset": 51389,
-      "size": 1090
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "TIMOTHYL.WSA",
-      "offset": 5453,
-      "size": 19288
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "TIMOTHYS.WSA",
-      "offset": 110166,
-      "size": 1524
-    },
-    {
-      "pak": "STARTUP.PAK",
-      "name": "TITLE.CPS",
-      "offset": 6436,
-      "size": 29124
-    },
-    {
-      "pak": "L29.PAK",
-      "name": "TOAD.SHP",
-      "offset": 42361,
-      "size": 38913
-    },
-    {
-      "pak": "L29.PAK",
-      "name": "TOADSERP.SHP",
-      "offset": 159123,
-      "size": 48813
-    },
-    {
-      "pak": "O08A.PAK",
-      "name": "TOADY.WSA",
-      "offset": 182774,
-      "size": 25243
-    },
-    {
-      "pak": "TOWER1.PAK",
-      "name": "TOW1DOOR.SHP",
-      "offset": 71066,
-      "size": 2062
-    },
-    {
       "pak": "TOWER1.PAK",
       "name": "TOWER1.DAT",
       "offset": 86,
@@ -13742,106 +13086,10 @@
       "size": 3898
     },
     {
-      "pak": "MONSTER.PAK",
-      "name": "TREZ.SHP",
-      "offset": 64295,
-      "size": 18398
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "TREZA1.VOC",
-      "offset": 1250586,
-      "size": 2380
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "TREZD1.VOC",
-      "offset": 1252966,
-      "size": 6481
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "TRIG.TBL",
-      "offset": 229282,
-      "size": 166
-    },
-    {
-      "pak": "O28A.PAK",
-      "name": "TRUTH.WSA",
-      "offset": 337732,
-      "size": 7416
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "TURNPAG2.VOC",
-      "offset": 987695,
-      "size": 2357
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "TYRUS1.TIM",
-      "offset": 77072,
-      "size": 318
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "TYRUS2.TIM",
-      "offset": 77390,
-      "size": 448
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "TYRUS3.TIM",
-      "offset": 77838,
-      "size": 278
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "TYRUS4.TIM",
-      "offset": 78116,
-      "size": 278
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "TYRUS5.TIM",
-      "offset": 78394,
-      "size": 318
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "TYRUS_L.WSA",
-      "offset": 24741,
-      "size": 22784
-    },
-    {
-      "pak": "O03B.PAK",
-      "name": "TYRUS_S.WSA",
-      "offset": 47525,
-      "size": 3671
-    },
-    {
-      "pak": "O00A.PAK",
-      "name": "UNBAR1.TIM",
-      "offset": 25164,
-      "size": 1284
-    },
-    {
-      "pak": "O00A.PAK",
-      "name": "UNBAR2.TIM",
-      "offset": 26448,
-      "size": 1028
-    },
-    {
-      "pak": "O00A.PAK",
-      "name": "UNBARIER.WSA",
-      "offset": 152669,
-      "size": 38872
-    },
-    {
-      "pak": "URBISH.PAK",
-      "name": "URBDOOR.SHP",
-      "offset": 99558,
-      "size": 2410
+      "pak": "TOWER1.PAK",
+      "name": "TOW1DOOR.SHP",
+      "offset": 71066,
+      "size": 2062
     },
     {
       "pak": "URBISH.PAK",
@@ -13868,112 +13116,520 @@
       "size": 4636
     },
     {
+      "pak": "URBISH.PAK",
+      "name": "URBDOOR.SHP",
+      "offset": 99558,
+      "size": 2410
+    },
+    {
       "pak": "VOC.PAK",
-      "name": "VAELAN2.VOC",
-      "offset": 1608007,
-      "size": 23100
+      "name": "1BOLTC.VOC",
+      "offset": 3435,
+      "size": 21351
     },
     {
-      "pak": "O02B.PAK",
-      "name": "VICBUSH.CPS",
-      "offset": 23771,
-      "size": 13675
+      "pak": "VOC.PAK",
+      "name": "2BOLTC.VOC",
+      "offset": 24786,
+      "size": 19041
     },
     {
-      "pak": "O02B.PAK",
-      "name": "VICBUSH1.CPS",
-      "offset": 37446,
-      "size": 13661
+      "pak": "VOC.PAK",
+      "name": "3BOLTC.VOC",
+      "offset": 43827,
+      "size": 18661
     },
     {
-      "pak": "O02B.PAK",
-      "name": "VICBUSH1.WSA",
-      "offset": 76389,
-      "size": 73091
+      "pak": "VOC.PAK",
+      "name": "AUTOMAP.VOC",
+      "offset": 62488,
+      "size": 25249
     },
     {
-      "pak": "O02B.PAK",
-      "name": "VICBUSH2.WSA",
-      "offset": 149480,
-      "size": 2815
+      "pak": "VOC.PAK",
+      "name": "BITE1.VOC",
+      "offset": 87737,
+      "size": 6785
     },
     {
-      "pak": "O22A.PAK",
-      "name": "VICSMITH.CPS",
-      "offset": 16131,
-      "size": 14522
+      "pak": "VOC.PAK",
+      "name": "BITE2.VOC",
+      "offset": 94522,
+      "size": 11199
     },
     {
-      "pak": "O22A.PAK",
-      "name": "VICSMITH.WSA",
-      "offset": 152556,
-      "size": 26021
+      "pak": "VOC.PAK",
+      "name": "BOARATAK.VOC",
+      "offset": 105721,
+      "size": 9233
     },
     {
-      "pak": "O01A.PAK",
-      "name": "VICTOR.CPS",
-      "offset": 25959,
-      "size": 8945
+      "pak": "VOC.PAK",
+      "name": "BOARHIT.VOC",
+      "offset": 114954,
+      "size": 7447
     },
     {
-      "pak": "O01A.PAK",
-      "name": "VICTOR.WSA",
-      "offset": 93809,
-      "size": 25793
+      "pak": "VOC.PAK",
+      "name": "BOARMOVE.VOC",
+      "offset": 122401,
+      "size": 4921
     },
     {
-      "pak": "O01A.PAK",
-      "name": "VICTOR1.TIM",
-      "offset": 37722,
-      "size": 1234
+      "pak": "VOC.PAK",
+      "name": "CHEST.VOC",
+      "offset": 127322,
+      "size": 7234
     },
     {
-      "pak": "O02B.PAK",
-      "name": "VICTOR2.TIM",
-      "offset": 52479,
-      "size": 460
+      "pak": "VOC.PAK",
+      "name": "CROSSBOW.VOC",
+      "offset": 134556,
+      "size": 2951
     },
     {
-      "pak": "O01A.PAK",
-      "name": "VICTOR3.TIM",
-      "offset": 38956,
-      "size": 312
+      "pak": "VOC.PAK",
+      "name": "CROWCAW.VOC",
+      "offset": 137507,
+      "size": 3931
     },
     {
-      "pak": "O02B.PAK",
-      "name": "VICTOR4.TIM",
-      "offset": 52939,
-      "size": 1380
+      "pak": "VOC.PAK",
+      "name": "DAWNSPL1.VOC",
+      "offset": 141438,
+      "size": 49718
     },
     {
-      "pak": "O02B.PAK",
-      "name": "VICTOR5.TIM",
-      "offset": 54319,
-      "size": 304
+      "pak": "VOC.PAK",
+      "name": "DLDORCL.VOC",
+      "offset": 191156,
+      "size": 6655
     },
     {
-      "pak": "O02B.PAK",
-      "name": "VICTOR6.TIM",
-      "offset": 54623,
-      "size": 678
+      "pak": "VOC.PAK",
+      "name": "DOORMTCL.VOC",
+      "offset": 197811,
+      "size": 4359
     },
     {
-      "pak": "O02B.PAK",
-      "name": "VICTOR7.TIM",
-      "offset": 55301,
-      "size": 284
+      "pak": "VOC.PAK",
+      "name": "DOORMTOP.VOC",
+      "offset": 202170,
+      "size": 3545
     },
     {
-      "pak": "L29.PAK",
-      "name": "VIPER.SHP",
-      "offset": 81274,
-      "size": 37332
+      "pak": "VOC.PAK",
+      "name": "DOORWDCL.VOC",
+      "offset": 205715,
+      "size": 8863
     },
     {
-      "pak": "GENERAL.PAK",
-      "name": "VIPER.WSA",
-      "offset": 1101893,
-      "size": 57154
+      "pak": "VOC.PAK",
+      "name": "DOORWDOP.VOC",
+      "offset": 214578,
+      "size": 11425
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "DORWDSLM.VOC",
+      "offset": 226003,
+      "size": 3421
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "EXPLODE.VOC",
+      "offset": 229424,
+      "size": 11808
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "FIRESPL1.VOC",
+      "offset": 241232,
+      "size": 13843
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "HEAL1.VOC",
+      "offset": 255075,
+      "size": 31400
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "HEALKING.VOC",
+      "offset": 286475,
+      "size": 43634
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "ICESPEL2.VOC",
+      "offset": 330109,
+      "size": 19937
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "KEYLOCK.VOC",
+      "offset": 350046,
+      "size": 4064
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "KEYOPEN.VOC",
+      "offset": 354110,
+      "size": 5936
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "LEVERDN.VOC",
+      "offset": 360046,
+      "size": 4713
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "LEVERUP.VOC",
+      "offset": 364759,
+      "size": 4713
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "LITENIN1.VOC",
+      "offset": 369472,
+      "size": 17193
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "LOKPICK.VOC",
+      "offset": 386665,
+      "size": 1856
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MALEOOF2.VOC",
+      "offset": 388521,
+      "size": 7369
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MINECRT3.VOC",
+      "offset": 395890,
+      "size": 3083
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MONEY.VOC",
+      "offset": 398973,
+      "size": 11187
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MORPH1.VOC",
+      "offset": 410160,
+      "size": 39464
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MORPH2.VOC",
+      "offset": 449624,
+      "size": 20515
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MTLDRSLM.VOC",
+      "offset": 470139,
+      "size": 5509
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "NUNCHUK.VOC",
+      "offset": 475648,
+      "size": 1951
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "OCEAN2.VOC",
+      "offset": 477599,
+      "size": 51106
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "ORC.VOC",
+      "offset": 528705,
+      "size": 5811
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "ORCMOVE.VOC",
+      "offset": 534516,
+      "size": 8154
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PLATEOFF.VOC",
+      "offset": 542670,
+      "size": 3933
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PLATEON.VOC",
+      "offset": 546603,
+      "size": 4657
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PMETLHI.VOC",
+      "offset": 551260,
+      "size": 5616
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PORTCUL.VOC",
+      "offset": 556876,
+      "size": 5666
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PORTCULD.VOC",
+      "offset": 562542,
+      "size": 4706
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PRESSIN.VOC",
+      "offset": 567248,
+      "size": 846
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PRESSOUT.VOC",
+      "offset": 568094,
+      "size": 2651
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "ROKEAT1.VOC",
+      "offset": 570745,
+      "size": 10964
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "ROKMOV1.VOC",
+      "offset": 581709,
+      "size": 6589
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SHIELD1.VOC",
+      "offset": 588298,
+      "size": 32163
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SHWING1.VOC",
+      "offset": 620461,
+      "size": 5118
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SPELBK2.VOC",
+      "offset": 625579,
+      "size": 50690
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SPELL4B.VOC",
+      "offset": 676269,
+      "size": 22931
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SPELL7.VOC",
+      "offset": 699200,
+      "size": 26009
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SWING.VOC",
+      "offset": 725209,
+      "size": 3617
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SWING1.VOC",
+      "offset": 728826,
+      "size": 4708
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SWING6.VOC",
+      "offset": 733534,
+      "size": 4129
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "THROW.VOC",
+      "offset": 737663,
+      "size": 2351
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "THUGWALK.VOC",
+      "offset": 740014,
+      "size": 2268
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "WORMEAT2.VOC",
+      "offset": 742282,
+      "size": 8962
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "WORMMOV.VOC",
+      "offset": 751244,
+      "size": 5204
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "YELL1.VOC",
+      "offset": 756448,
+      "size": 5487
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "ACCEPT2.VOC",
+      "offset": 761935,
+      "size": 17795
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "BOW2.VOC",
+      "offset": 779730,
+      "size": 4137
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "BUCKBELL.VOC",
+      "offset": 783867,
+      "size": 8858
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "CLEANGL1.VOC",
+      "offset": 792725,
+      "size": 5252
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "CLEANGL2.VOC",
+      "offset": 797977,
+      "size": 4777
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "COMPASS2.VOC",
+      "offset": 802754,
+      "size": 18202
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "CREAK1.VOC",
+      "offset": 820956,
+      "size": 11425
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "DORSTNCL.VOC",
+      "offset": 832381,
+      "size": 8944
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "DORSTNOP.VOC",
+      "offset": 841325,
+      "size": 8944
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "FOUNDRY2.VOC",
+      "offset": 850269,
+      "size": 1058
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "FOUNDRY4.VOC",
+      "offset": 851327,
+      "size": 2338
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "FOUNDRY6.VOC",
+      "offset": 853665,
+      "size": 7202
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "GLOWY1.VOC",
+      "offset": 860867,
+      "size": 31019
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "GOOEY1.VOC",
+      "offset": 891886,
+      "size": 4402
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "GOOEY2.VOC",
+      "offset": 896288,
+      "size": 2824
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "HORSEY2.VOC",
+      "offset": 899112,
+      "size": 10713
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "INVISO.VOC",
+      "offset": 909825,
+      "size": 27311
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "KEEPXIT2.VOC",
+      "offset": 937136,
+      "size": 15604
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "OPENBOX2.VOC",
+      "offset": 952740,
+      "size": 13421
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PODSKEL1.VOC",
+      "offset": 966161,
+      "size": 11064
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "POLGULP1.VOC",
+      "offset": 977225,
+      "size": 4655
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "RIPPOD4.VOC",
+      "offset": 981880,
+      "size": 5815
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "TURNPAG2.VOC",
+      "offset": 987695,
+      "size": 2357
     },
     {
       "pak": "VOC.PAK",
@@ -13983,129 +13639,255 @@
     },
     {
       "pak": "VOC.PAK",
-      "name": "WALLFALL.VOC",
-      "offset": 1282775,
-      "size": 10638
+      "name": "LIZMOVE.VOC",
+      "offset": 994694,
+      "size": 10324
     },
     {
       "pak": "VOC.PAK",
-      "name": "WALLHIT.VOC",
-      "offset": 1293413,
-      "size": 4808
+      "name": "LIZBITE.VOC",
+      "offset": 1005018,
+      "size": 6190
     },
     {
-      "pak": "O21A.PAK",
-      "name": "WARNING.TIM",
-      "offset": 371,
-      "size": 182
+      "pak": "VOC.PAK",
+      "name": "FLYSPD2M.VOC",
+      "offset": 1011208,
+      "size": 8604
     },
     {
-      "pak": "O21A.PAK",
-      "name": "WARNING.WSA",
-      "offset": 23530,
-      "size": 69556
+      "pak": "VOC.PAK",
+      "name": "FLYSPD2A.VOC",
+      "offset": 1019812,
+      "size": 1972
     },
     {
-      "pak": "O02B.PAK",
-      "name": "WATER.WSA",
-      "offset": 152295,
-      "size": 7788
+      "pak": "VOC.PAK",
+      "name": "RATMOV3.VOC",
+      "offset": 1021784,
+      "size": 5151
     },
     {
-      "pak": "O02B.PAK",
-      "name": "WATER2.WSA",
-      "offset": 160083,
-      "size": 1060
+      "pak": "VOC.PAK",
+      "name": "SCAVMOV2.VOC",
+      "offset": 1026935,
+      "size": 7830
     },
     {
-      "pak": "O11A.PAK",
-      "name": "WDR.CPS",
-      "offset": 70673,
-      "size": 16109
+      "pak": "VOC.PAK",
+      "name": "SCAVEAT1.VOC",
+      "offset": 1034765,
+      "size": 8698
     },
     {
-      "pak": "O11A.PAK",
-      "name": "WDR.TIM",
-      "offset": 104110,
-      "size": 122
+      "pak": "VOC.PAK",
+      "name": "CAVEMOV.VOC",
+      "offset": 1043463,
+      "size": 3186
     },
     {
-      "pak": "O11A.PAK",
-      "name": "WDR1.WSA",
-      "offset": 179585,
-      "size": 9444
+      "pak": "VOC.PAK",
+      "name": "GLASBRK2.VOC",
+      "offset": 1046649,
+      "size": 12308
     },
     {
-      "pak": "O11A.PAK",
-      "name": "WDR2.WSA",
-      "offset": 189029,
-      "size": 48009
+      "pak": "VOC.PAK",
+      "name": "FLUTTER3.VOC",
+      "offset": 1058957,
+      "size": 7041
     },
     {
-      "pak": "O11A.PAK",
-      "name": "WDRHUT.CPS",
-      "offset": 86782,
-      "size": 16730
+      "pak": "VOC.PAK",
+      "name": "GOOD1.VOC",
+      "offset": 1065998,
+      "size": 10471
     },
     {
-      "pak": "O11A.PAK",
-      "name": "WDRHUT1.WSA",
-      "offset": 237038,
-      "size": 1308
+      "pak": "VOC.PAK",
+      "name": "GOOD2.VOC",
+      "offset": 1076469,
+      "size": 12620
     },
     {
-      "pak": "O11A.PAK",
-      "name": "WDRHUT2.WSA",
-      "offset": 238346,
-      "size": 306
+      "pak": "VOC.PAK",
+      "name": "KINGDOR1.VOC",
+      "offset": 1089089,
+      "size": 9945
     },
     {
-      "pak": "O11A.PAK",
-      "name": "WDRHUT3.WSA",
-      "offset": 238652,
-      "size": 354
+      "pak": "VOC.PAK",
+      "name": "CAVEDAM.VOC",
+      "offset": 1099034,
+      "size": 8641
     },
     {
-      "pak": "O11A.PAK",
-      "name": "WDRHUT4.WSA",
-      "offset": 239006,
-      "size": 172
+      "pak": "VOC.PAK",
+      "name": "CHULLA.VOC",
+      "offset": 1107675,
+      "size": 5216
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "CHULLD.VOC",
+      "offset": 1112891,
+      "size": 7457
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "CHULLM.VOC",
+      "offset": 1120348,
+      "size": 8276
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "GHORKAD.VOC",
+      "offset": 1128624,
+      "size": 3750
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "GIMLETD2.VOC",
+      "offset": 1132374,
+      "size": 6274
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "GIMLETM2.VOC",
+      "offset": 1138648,
+      "size": 5929
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "GOOEY3.VOC",
+      "offset": 1144577,
+      "size": 2950
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "GRAZERA.VOC",
+      "offset": 1147527,
+      "size": 4675
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "GRAZERD.VOC",
+      "offset": 1152202,
+      "size": 4457
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "GRAZERM.VOC",
+      "offset": 1156659,
+      "size": 4475
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "HURZELD1.VOC",
+      "offset": 1161134,
+      "size": 8875
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "HURZELM.VOC",
+      "offset": 1170009,
+      "size": 5969
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "LARKA.VOC",
+      "offset": 1175978,
+      "size": 7045
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "LIZLISP.VOC",
+      "offset": 1183023,
+      "size": 4378
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MAGMIRRA.VOC",
+      "offset": 1187401,
+      "size": 6878
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MILLD.VOC",
+      "offset": 1194279,
+      "size": 6396
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MILLIM.VOC",
+      "offset": 1200675,
+      "size": 7552
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MORIEAT2.VOC",
+      "offset": 1208227,
+      "size": 8427
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MORIMOV1.VOC",
+      "offset": 1216654,
+      "size": 9101
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "ORCLDR1.VOC",
+      "offset": 1225755,
+      "size": 2702
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PENTROGA.VOC",
+      "offset": 1228457,
+      "size": 6493
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PENTROGM.VOC",
+      "offset": 1234950,
+      "size": 5089
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "RATWOK.VOC",
+      "offset": 1240039,
+      "size": 2185
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "ROKD1.VOC",
+      "offset": 1242224,
+      "size": 7042
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "STAB.VOC",
+      "offset": 1249266,
+      "size": 1320
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "TREZA1.VOC",
+      "offset": 1250586,
+      "size": 2380
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "TREZD1.VOC",
+      "offset": 1252966,
+      "size": 6481
     },
     {
       "pak": "VOC.PAK",
       "name": "WETWHAP.VOC",
       "offset": 1259447,
       "size": 5240
-    },
-    {
-      "pak": "O24A.PAK",
-      "name": "WHITOWER.CPS",
-      "offset": 10014,
-      "size": 13327
-    },
-    {
-      "pak": "VOC.PAK",
-      "name": "WHITTL3.VOC",
-      "offset": 1298757,
-      "size": 3787
-    },
-    {
-      "pak": "O07A.PAK",
-      "name": "WIGGLE.WSA",
-      "offset": 54748,
-      "size": 6581
-    },
-    {
-      "pak": "O01B.PAK",
-      "name": "WILL1.TIM",
-      "offset": 4830,
-      "size": 392
-    },
-    {
-      "pak": "O01B.PAK",
-      "name": "WILL_L.WSA",
-      "offset": 264036,
-      "size": 23135
     },
     {
       "pak": "VOC.PAK",
@@ -14133,21 +13915,153 @@
     },
     {
       "pak": "VOC.PAK",
-      "name": "WORMEAT2.VOC",
-      "offset": 742282,
-      "size": 8962
+      "name": "WALLFALL.VOC",
+      "offset": 1282775,
+      "size": 10638
     },
     {
       "pak": "VOC.PAK",
-      "name": "WORMMOV.VOC",
-      "offset": 751244,
-      "size": 5204
+      "name": "WALLHIT.VOC",
+      "offset": 1293413,
+      "size": 4808
     },
     {
-      "pak": "L19.PAK",
-      "name": "WRAITH.SHP",
-      "offset": 168,
-      "size": 19546
+      "pak": "VOC.PAK",
+      "name": "LADDER.VOC",
+      "offset": 1298221,
+      "size": 536
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "WHITTL3.VOC",
+      "offset": 1298757,
+      "size": 3787
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "ROWBOAT1.VOC",
+      "offset": 1302544,
+      "size": 17815
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SNORT.VOC",
+      "offset": 1320359,
+      "size": 4108
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PUMPDOR1.VOC",
+      "offset": 1324467,
+      "size": 3671
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PUMPSM2.VOC",
+      "offset": 1328138,
+      "size": 4613
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "PUMPSM3.VOC",
+      "offset": 1332751,
+      "size": 4613
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "APPARD.VOC",
+      "offset": 1337364,
+      "size": 7301
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "DETHDSKD.VOC",
+      "offset": 1344665,
+      "size": 2319
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "DETHDSKM.VOC",
+      "offset": 1346984,
+      "size": 7643
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "FEYELL1.VOC",
+      "offset": 1354627,
+      "size": 9864
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "HACHUCKD.VOC",
+      "offset": 1364491,
+      "size": 2418
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "HACHUCKM.VOC",
+      "offset": 1366909,
+      "size": 9124
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "HORNETD.VOC",
+      "offset": 1376033,
+      "size": 3802
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "HORNETM.VOC",
+      "offset": 1379835,
+      "size": 7256
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MANTHAD.VOC",
+      "offset": 1387091,
+      "size": 9045
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MANTHAM.VOC",
+      "offset": 1396136,
+      "size": 8068
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MINOTD.VOC",
+      "offset": 1404204,
+      "size": 8282
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "NECROA.VOC",
+      "offset": 1412486,
+      "size": 7438
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "NECROM.VOC",
+      "offset": 1419924,
+      "size": 3833
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SKELWOK1.VOC",
+      "offset": 1423757,
+      "size": 8516
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "STARKA2.VOC",
+      "offset": 1432273,
+      "size": 3575
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "STARKD1.VOC",
+      "offset": 1435848,
+      "size": 5715
     },
     {
       "pak": "VOC.PAK",
@@ -14160,6 +14074,192 @@
       "name": "WRAITHD.VOC",
       "offset": 1447174,
       "size": 5256
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "BEZEL.VOC",
+      "offset": 1452430,
+      "size": 31886
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "CAUSFOG.VOC",
+      "offset": 1484316,
+      "size": 10435
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "HANDFATE.VOC",
+      "offset": 1494751,
+      "size": 3436
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "ICEFORM.VOC",
+      "offset": 1498187,
+      "size": 10300
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "ICEXPLOD.VOC",
+      "offset": 1508487,
+      "size": 16106
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "ROARSPL1.VOC",
+      "offset": 1524593,
+      "size": 14472
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SAP2.VOC",
+      "offset": 1539065,
+      "size": 19784
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SPARK1.VOC",
+      "offset": 1558849,
+      "size": 14553
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SPARKHIT.VOC",
+      "offset": 1573402,
+      "size": 5324
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SWARM.VOC",
+      "offset": 1578726,
+      "size": 29281
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "VAELAN2.VOC",
+      "offset": 1608007,
+      "size": 23100
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "LION1.VOC",
+      "offset": 1631107,
+      "size": 19314
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "STEAM.VOC",
+      "offset": 1650421,
+      "size": 6470
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SQUAWCK.VOC",
+      "offset": 1656891,
+      "size": 6754
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SLIDEMUG.VOC",
+      "offset": 1663645,
+      "size": 8674
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SPARKHT2.VOC",
+      "offset": 1672319,
+      "size": 5324
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SPARKHT3.VOC",
+      "offset": 1677643,
+      "size": 5324
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "EXPLODE2.VOC",
+      "offset": 1682967,
+      "size": 10791
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "EXPLODE3.VOC",
+      "offset": 1693758,
+      "size": 10258
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "BOLTQUK2.VOC",
+      "offset": 1704016,
+      "size": 27170
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "BOLT2.VOC",
+      "offset": 1731186,
+      "size": 4565
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "BOLT3.VOC",
+      "offset": 1735751,
+      "size": 4565
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "SNKBITE.VOC",
+      "offset": 1740316,
+      "size": 5167
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "HANDGLOW.VOC",
+      "offset": 1745483,
+      "size": 5658
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MSTDOOM1.VOC",
+      "offset": 1751141,
+      "size": 29930
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MSTDOOM2.VOC",
+      "offset": 1781071,
+      "size": 50684
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MSTDOOM3.VOC",
+      "offset": 1831755,
+      "size": 57887
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "GARDIAN2.VOC",
+      "offset": 1889642,
+      "size": 5616
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "BLUDCURL.VOC",
+      "offset": 1895258,
+      "size": 31188
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "LORAGASP.VOC",
+      "offset": 1926446,
+      "size": 9805
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "POURH2O.VOC",
+      "offset": 1936251,
+      "size": 13283
     },
     {
       "pak": "VOC.PAK",
@@ -14198,214 +14298,118 @@
       "size": 30600
     },
     {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE2E.WSA",
-      "offset": 1159047,
-      "size": 3597
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE2F.WSA",
-      "offset": 1178363,
-      "size": 3733
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE2G.WSA",
-      "offset": 1200741,
-      "size": 3684
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE3E.WSA",
-      "offset": 1162644,
-      "size": 3582
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE3F.WSA",
-      "offset": 1182096,
-      "size": 4846
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE3G.WSA",
-      "offset": 1204425,
-      "size": 3428
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE4E.WSA",
-      "offset": 1166226,
-      "size": 4666
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE4F.WSA",
-      "offset": 1186942,
-      "size": 4897
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE4G.WSA",
-      "offset": 1207853,
-      "size": 3427
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE5E.WSA",
-      "offset": 1170892,
-      "size": 4316
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE5F.WSA",
-      "offset": 1191839,
-      "size": 5113
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE5G.WSA",
-      "offset": 1211280,
-      "size": 4628
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE6E.WSA",
-      "offset": 1175208,
-      "size": 3155
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE6F.WSA",
-      "offset": 1196952,
-      "size": 3789
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITE6G.WSA",
-      "offset": 1215908,
-      "size": 4008
-    },
-    {
-      "pak": "GENERAL.PAK",
-      "name": "WRITING.WSA",
-      "offset": 1219916,
-      "size": 877
-    },
-    {
-      "pak": "L26.PAK",
-      "name": "XEOB.SHP",
-      "offset": 6043,
-      "size": 21191
-    },
-    {
-      "pak": "O23B.PAK",
-      "name": "XEOB.TIM",
-      "offset": 95385,
-      "size": 142
-    },
-    {
-      "pak": "O26A.PAK",
-      "name": "XEOBCLB.CPS",
-      "offset": 14959,
-      "size": 15426
-    },
-    {
-      "pak": "O26A.PAK",
-      "name": "XEOBCLB.TIM",
-      "offset": 30567,
-      "size": 332
-    },
-    {
-      "pak": "O26A.PAK",
-      "name": "XEOBCLB.WSA",
-      "offset": 93682,
-      "size": 11679
-    },
-    {
-      "pak": "O26A.PAK",
-      "name": "XEOBCLB1.WSA",
-      "offset": 105361,
-      "size": 62204
-    },
-    {
-      "pak": "O23B.PAK",
-      "name": "XEOBTK.CPS",
-      "offset": 16454,
-      "size": 14995
-    },
-    {
-      "pak": "O23B.PAK",
-      "name": "XEOBTK.WSA",
-      "offset": 31449,
-      "size": 63774
-    },
-    {
-      "pak": "O02A.PAK",
-      "name": "XFORM.WSA",
-      "offset": 141581,
-      "size": 13643
-    },
-    {
-      "pak": "O16A.PAK",
-      "name": "XPAULSON.CPS",
-      "offset": 10103,
-      "size": 7461
+      "pak": "VOC.PAK",
+      "name": "RUCKUS1.VOC",
+      "offset": 2115903,
+      "size": 15030
     },
     {
       "pak": "VOC.PAK",
-      "name": "YELL1.VOC",
-      "offset": 756448,
-      "size": 5487
+      "name": "RUCKUS3.VOC",
+      "offset": 2130933,
+      "size": 13538
     },
     {
-      "pak": "O22A.PAK",
-      "name": "YFLETCH.CPS",
-      "offset": 30653,
-      "size": 16275
+      "pak": "VOC.PAK",
+      "name": "ADAMAGE1.VOC",
+      "offset": 2144471,
+      "size": 3362
     },
     {
-      "pak": "O22A.PAK",
-      "name": "YFLETCH.TIM",
-      "offset": 47352,
-      "size": 262
+      "pak": "VOC.PAK",
+      "name": "HDAMAGE1.VOC",
+      "offset": 2147833,
+      "size": 6708
     },
     {
-      "pak": "O22A.PAK",
-      "name": "YFLETCH.WSA",
-      "offset": 178577,
-      "size": 42776
+      "pak": "VOC.PAK",
+      "name": "TDAMAGE1.VOC",
+      "offset": 2154541,
+      "size": 5520
     },
     {
-      "pak": "O22A.PAK",
-      "name": "YFLETCH2.TIM",
-      "offset": 47614,
-      "size": 342
+      "pak": "VOC.PAK",
+      "name": "BDAMAGE1.VOC",
+      "offset": 2160061,
+      "size": 6437
     },
     {
-      "pak": "O22B.PAK",
-      "name": "YID1OPN.WSA",
-      "offset": 16250,
-      "size": 15915
+      "pak": "VOC.PAK",
+      "name": "LDAMAGE1.VOC",
+      "offset": 2166498,
+      "size": 4807
     },
     {
-      "pak": "O22B.PAK",
-      "name": "YID2OPN.WSA",
-      "offset": 32165,
-      "size": 15963
+      "pak": "VOC.PAK",
+      "name": "TDAMAGE2.VOC",
+      "offset": 2171305,
+      "size": 8458
     },
     {
-      "pak": "O22B.PAK",
-      "name": "YOD1OPN.WSA",
-      "offset": 48128,
-      "size": 11140
+      "pak": "VOC.PAK",
+      "name": "CDAMAGE1.VOC",
+      "offset": 2179763,
+      "size": 5393
     },
     {
-      "pak": "O22B.PAK",
-      "name": "YOD2OPN.WSA",
-      "offset": 59268,
-      "size": 10702
+      "pak": "VOC.PAK",
+      "name": "AWHOA2.VOC",
+      "offset": 2185156,
+      "size": 4359
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "HWHOA1.VOC",
+      "offset": 2189515,
+      "size": 5158
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "CWHOA1.VOC",
+      "offset": 2194673,
+      "size": 4809
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "AFALL2.VOC",
+      "offset": 2199482,
+      "size": 11177
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "CFALL2.VOC",
+      "offset": 2210659,
+      "size": 16122
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MFALL2.VOC",
+      "offset": 2226781,
+      "size": 7949
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MDAMAGE2.VOC",
+      "offset": 2234730,
+      "size": 7674
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "QUAKE1.VOC",
+      "offset": 2242404,
+      "size": 19241
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "RATTLER.VOC",
+      "offset": 2261645,
+      "size": 9886
+    },
+    {
+      "pak": "VOC.PAK",
+      "name": "MWHOA1.VOC",
+      "offset": 2271531,
+      "size": 4809
     },
     {
       "pak": "YVEL.PAK",
@@ -14442,12 +14446,6 @@
       "name": "YVEL2.VMP",
       "offset": 115112,
       "size": 3412
-    },
-    {
-      "pak": "O22A.PAK",
-      "name": "YVIC.TIM",
-      "offset": 47956,
-      "size": 292
     }
   ]
 }

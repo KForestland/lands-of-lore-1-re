@@ -6,9 +6,16 @@ import struct
 import os
 import sys
 
-DATA_DIR = "/media/bob/Arikv/REFERENCE/game_files/lol1/DATA"
-PAK_INDEX = "/home/bob/lol1_pak_index.json"
-OUTPUT = "/home/bob/lol1_tim_analysis.json"
+import sys
+
+import lol1lib as L
+
+USAGE = """
+  parse_tim.py                     # summary + sample files
+  parse_tim.py --out tim.json      # same shape as data/tim_analysis.json
+  parse_tim.py --check             # rebuild and compare with data/tim_analysis.json
+See docs/formats/tim.md. The opcode table is lead-order item 6 (Grok).
+"""
 
 def read_pak_entry(pak_path, offset, size):
     """Read a single entry from a PAK file."""
@@ -159,20 +166,14 @@ def decode_avtl_instructions(words, entry_points):
 
 
 def main():
-    with open(PAK_INDEX) as f:
-        pak_index = json.load(f)
-
-    # Collect all TIM files
+    a = L.tool_args((__doc__ or "") + USAGE).parse_args()
+    DATA_DIR = a.data
     tim_files = []
-    for pak_name, pak_info in pak_index["pak_files"].items():
-        for entry in pak_info["entries"]:
-            if entry["name"].upper().endswith(".TIM"):
-                tim_files.append({
-                    "pak": pak_name,
-                    "name": entry["name"],
-                    "offset": entry["offset"],
-                    "size": entry["size"]
-                })
+    for pak_name in L.list_paks(a.data):
+        blob = open(os.path.join(a.data, pak_name), "rb").read()
+        for name, off, size in L.pak_entries(blob):
+            if name.upper().endswith(".TIM"):
+                tim_files.append({"pak": pak_name, "name": name, "offset": off, "size": size})
 
     tim_files.sort(key=lambda x: (x["pak"], x["name"]))
 
@@ -279,8 +280,20 @@ def main():
         "files": all_results
     }
 
-    with open(OUTPUT, "w") as f:
-        json.dump(analysis, f, indent=2)
+    if a.check:
+        ref = L.repo_json("tim_analysis.json")
+        # data/tim_analysis.json also carries keys added later by hand/other scripts
+        # (format_notes.opcode_table, statistics.chunk_patterns, files_with(out)_TEXT);
+        # compare what this tool produces.
+        new = json.loads(json.dumps(analysis))
+        same = ref is not None and new["files"] == ref["files"] and all(
+            ref["statistics"].get(k) == v for k, v in new["statistics"].items())
+        st = analysis["statistics"]
+        print(f"CHECK tim: {st['total_parsed']}/{st['total_tim_files']} files, FORM types {st['form_types']}, "
+              f"chunks {st['chunk_type_counts']}, files + statistics match data/tim_analysis.json: {same}")
+        return 0 if same else 1
+    if a.out:
+        L.write_json(a.out, analysis)
 
     # Print summary
     print(f"Parsed {len(all_results)}/{len(tim_files)} TIM files")
@@ -305,7 +318,8 @@ def main():
                         opcodes_used = set(i.get("opcode", -1) for i in func["instructions"] if i.get("type") != "END")
                         print(f"      func[{func['function_index']}] ep={func['entry_point']}: {n} instructions, opcodes={sorted(opcodes_used)}")
 
-    print(f"\nOutput saved to {OUTPUT}")
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

@@ -1,35 +1,24 @@
 #!/usr/bin/env python3
-"""Extract and catalogue all music files from LoL1 PAK archives."""
+"""Catalogue (and optionally extract) every LoL1 music file: XMI, C55, ADL, PCS.
+
+XMI, C55 and PCS are IFF (FORM XDIR + CAT XMID) containers; ADL has no IFF
+header. See docs/formats/music.md. No conversion to MIDI is done here.
+
+  extract_music.py                         # summary
+  extract_music.py --out inventory.json    # same shape as data/music_inventory.json
+  extract_music.py --out-dir music/        # also write the raw files
+  extract_music.py --check                 # files, sizes and IFF trees vs data/music_inventory.json
+"""
 
 import json
 import struct
 import os
+import sys
 
-PAK_DIR = "/media/bob/Arikv/REFERENCE/game_files/lol1/DATA"
-OUT_DIR = "/home/bob/lol1_music"
-INDEX_PATH = "/home/bob/lol1_pak_index.json"
-INVENTORY_PATH = "/home/bob/lol1_music_inventory.json"
+import lol1lib as L
 
 MUSIC_EXTS = ('.XMI', '.C55', '.ADL', '.PCS')
 
-os.makedirs(OUT_DIR, exist_ok=True)
-
-with open(INDEX_PATH) as f:
-    pak_index = json.load(f)
-
-# Collect all music entries
-music_entries = []
-for pak_name, pak_info in pak_index['pak_files'].items():
-    for entry in pak_info['entries']:
-        if any(entry['name'].upper().endswith(ext) for ext in MUSIC_EXTS):
-            music_entries.append({
-                'pak': pak_name,
-                'name': entry['name'],
-                'offset': entry['offset'],
-                'size': entry['size'],
-            })
-
-print(f"Found {len(music_entries)} music entries across PAK files")
 
 def read_be_u32(data, off):
     return struct.unpack('>I', data[off:off+4])[0]
@@ -212,82 +201,60 @@ def analyse_adl(data):
     return info
 
 
-# Extract and analyse
-inventory = []
-pak_cache = {}
-
-for me in sorted(music_entries, key=lambda e: (e['pak'], e['name'])):
-    pak_path = os.path.join(PAK_DIR, me['pak'])
-
-    # Cache PAK reads
-    if me['pak'] not in pak_cache:
-        with open(pak_path, 'rb') as f:
-            pak_cache[me['pak']] = f.read()
-    pak_data = pak_cache[me['pak']]
-
-    # Extract raw data
-    raw = pak_data[me['offset']:me['offset'] + me['size']]
-    assert len(raw) == me['size'], f"Short read for {me['name']}: got {len(raw)}, expected {me['size']}"
-
-    # Save to output directory
-    out_path = os.path.join(OUT_DIR, me['name'])
-    with open(out_path, 'wb') as f:
-        f.write(raw)
-
-    ext = me['name'].rsplit('.', 1)[1].upper()
-
-    entry_info = {
-        'filename': me['name'],
-        'source_pak': me['pak'],
-        'format': ext,
-        'size': me['size'],
-        'pak_offset': me['offset'],
-    }
-
-    if ext == 'ADL':
-        adl_info = analyse_adl(raw)
-        entry_info['adl_info'] = adl_info
-    else:
-        # XMI, C55, PCS — all IFF-based
-        try:
-            chunks = parse_iff_chunks(raw)
-            if chunks:
-                entry_info['iff_structure'] = [chunk_tree_to_dict(c) for c in chunks]
-                # Summarise top-level
-                top = chunks[0]
-                entry_info['container'] = top.get('form_type', top.get('tag', '?'))
+def build(data_dir, out_dir=None):
+    inventory = []
+    for pak in L.list_paks(data_dir):
+        blob = open(os.path.join(data_dir, pak), 'rb').read()
+        for name, off, size in L.pak_entries(blob):
+            if not name.upper().endswith(MUSIC_EXTS):
+                continue
+            raw = blob[off:off + size]
+            if out_dir:
+                os.makedirs(out_dir, exist_ok=True)
+                with open(os.path.join(out_dir, name), 'wb') as f:
+                    f.write(raw)
+            ext = name.rsplit('.', 1)[1].upper()
+            info = {'filename': name, 'source_pak': pak, 'format': ext, 'size': size, 'pak_offset': off}
+            if ext == 'ADL':
+                info['adl_info'] = analyse_adl(raw)
             else:
-                entry_info['iff_structure'] = []
-                entry_info['parse_note'] = 'no IFF chunks found'
-        except Exception as ex:
-            entry_info['parse_error'] = str(ex)
+                try:
+                    chunks = parse_iff_chunks(raw)
+                    if chunks:
+                        info['iff_structure'] = [chunk_tree_to_dict(c) for c in chunks]
+                        top = chunks[0]
+                        info['container'] = top.get('form_type', top.get('tag', '?'))
+                    else:
+                        info['iff_structure'] = []
+                        info['parse_note'] = 'no IFF chunks found'
+                except Exception as ex:
+                    info['parse_error'] = str(ex)
+            inventory.append(info)
+    inventory.sort(key=lambda e: (e['source_pak'], e['filename']))
+    counts = {}
+    for item in inventory:
+        counts[item['format']] = counts.get(item['format'], 0) + 1
+    return {'description': 'LoL1 music file inventory', 'total_files': len(inventory),
+            'counts_by_format': counts, 'files': inventory}
 
-    inventory.append(entry_info)
-    print(f"  Extracted: {me['name']:20s}  {me['size']:8d} bytes  [{ext}]")
 
-# Write inventory
-with open(INVENTORY_PATH, 'w') as f:
-    json.dump({
-        'description': 'LoL1 music file inventory',
-        'source': PAK_DIR,
-        'output_dir': OUT_DIR,
-        'total_files': len(inventory),
-        'counts_by_format': {},
-        'files': inventory,
-    }, f, indent=2)
+def main():
+    ap = L.tool_args(__doc__)
+    ap.add_argument('--out-dir', help='also write the raw music files here')
+    a = ap.parse_args()
+    inv = build(a.data, a.out_dir)
+    if a.check:
+        ref = L.repo_json('music_inventory.json')
+        same = ref is not None and sorted(ref['files'], key=lambda e: (e['source_pak'], e['filename'])) == inv['files']
+        errors = [f['filename'] for f in inv['files'] if 'parse_error' in f or f.get('parse_note')]
+        print(f"CHECK music: {inv['total_files']} files {inv['counts_by_format']}, IFF parse errors: {errors or 'none'}, "
+              f"matches data/music_inventory.json files list: {same}")
+        return 0 if same and not errors else 1
+    print(f"{inv['total_files']} files {inv['counts_by_format']}")
+    if a.out:
+        L.write_json(a.out, inv)
+    return 0
 
-# Update counts
-with open(INVENTORY_PATH) as f:
-    inv = json.load(f)
-counts = {}
-for item in inv['files']:
-    fmt = item['format']
-    counts[fmt] = counts.get(fmt, 0) + 1
-inv['counts_by_format'] = counts
-with open(INVENTORY_PATH, 'w') as f:
-    json.dump(inv, f, indent=2)
 
-print(f"\nDone. {len(inventory)} files extracted to {OUT_DIR}")
-print("Counts by format:")
-for fmt, count in sorted(counts.items()):
-    print(f"  {fmt}: {count}")
+if __name__ == '__main__':
+    sys.exit(main())
