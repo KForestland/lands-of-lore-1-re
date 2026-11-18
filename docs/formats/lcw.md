@@ -15,6 +15,6 @@
 
 There is no mode flag: short copies are always relative, medium and long always absolute. CONFIRMED in code (lines above) and on data: every CPS, CMZ, VCN and VMP in the CD and LANDSoL corpora decodes to exactly the size in its header (`cps_reader.py --check` 85/85 CD, 60/60 ENG, 112/112 LANDSoL; `vcn_vmp_reader.py --check` 13/13 both; CMZ 29/29 with `lol1lib.load_bitmap`).
 
-**Correction history:** the memo (section B.4) records the earlier decoder bug (relative/absolute mixed up), fixed in `tools/decode_frame4.py`.
+**Correction history:** the closure memo (section B.4) records the earlier decoder bug (relative/absolute mixed up), fixed in `tools/decode_frame4.py`.
 
-**Tool:** `tools/lol1lib.py: decode_frame4()` (port of the function above); `tools/decode_frame4.py` (the March port; `--check` runs both ports on all 140 CPS, CMZ, VCN and VMP files of the CD: identical output, 140/140).
+**Tool:** `tools/lol1lib.py: decode_frame4()` (port of the function above); `tools/decode_frame4.py` (the March 2026 port; `--check` runs both ports on all 140 CPS, CMZ, VCN and VMP files of the CD: identical output, 140/140).

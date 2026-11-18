@@ -1,13 +1,13 @@
 # LoL1 reverse-engineering status
 
-**As of:** 2026-11-18. This page replaces the "~99.999%" figure in the README and the closure memo with what is actually documented, which tool reads it, and what was checked on the data. The closure memo (2026-03-20) stays in `docs/` as history.
+**As of:** 2026-11-18. This page replaces the "~99.999%" figure that the March 2026 README and the closure memo gave with what is actually documented, which tool reads it, and what was checked on the data. The closure memo ([`closure_memo.md`](closure_memo.md), 2026-03-20, written when the work was first declared finished) stays as history; section letters refer to its headings.
 
 **Columns**
 
 - **Documented**: a page in [`formats/`](formats/README.md) (or the named doc) describes the layout with ScummVM citations.
 - **Tool**: a reader in `tools/` with `--help`, reading the original data through `--data <DATA folder>` or `$LOL1_DATA`.
-- **Checked on data**: the tool's `--check` parses every file of that kind. CD = the CD edition's top-level `DATA/` folder; ENG = its `DATA/ENG` folder; LS = LANDSoL, the second edition.
-- **Open**: what is not known yet, and which lead-order item owns it (Grok 1-6, Sol 7-8).
+- **Checked on data**: the tool's `--check` parses every file of that kind. CD = the top-level `DATA/` folder of the CD-ROM edition with spoken dialogue (version CD1.02); ENG = its `DATA/ENG` folder; LS = LANDSoL, an English floppy-edition installation (no speech, chapter-based PAKs). Details: [formats/README.md](formats/README.md).
+- **Open**: what is not known yet, as numbered in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 
 Run every check at once: `python3 tools/check_all.py --data <DATA>` (21 checks; all pass on CD, about 6 seconds).
 
@@ -15,27 +15,27 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (21 checks; 
 
 | Format | Documented | Tool | Checked on data | Open |
 |--------|-----------|------|-----------------|------|
-| PAK container | [pak.md](formats/pak.md) | `pak_reader.py`, `pak_indexer.py` | CD 81 PAK / 1163 members (rebuilds `data/pak_index.json`), ENG 17/378, LS 15/1213 | which PAK wins for duplicate names |
-| TLK speech (CD) | [tlk.md](formats/tlk.md) | `tlk_verify.py`, `pak_reader.py`, `voc_reader.py` | 30 files, 4912 VOC members; names follow the engine's speech patterns | who plays the 59 `NNNNN.VOC` members |
+| PAK container | [pak.md](formats/pak.md) | `pak_reader.py`, `pak_indexer.py` | CD 81 PAK / 1163 members (rebuilds `data/pak_index.json`), ENG 17/378, LS 15/1213 | Q9 |
+| TLK speech (CD) | [tlk.md](formats/tlk.md) | `tlk_verify.py`, `pak_reader.py`, `voc_reader.py` | 30 files, 4912 VOC members; names follow the engine's speech patterns | Q10 |
 | Frame4 / LCW | [lcw.md](formats/lcw.md) | `lol1lib.py`, `decode_frame4.py` | two independent ports agree on 140/140 CD files; every CPS/CMZ/VCN/VMP in CD, ENG, LS decodes to its stated size | — |
 | CPS | [cps.md](formats/cps.md) | `cps_reader.py` | CD 85/85, ENG 60/60, LS 112/112 | — |
-| SHP | [shp.md](formats/shp.md) | `shp_renderer.py` | strict decode CD 3492/3492, ENG 1269/1269, LS 3601/3601; 2-byte-prefix variant 0/197 | Grok item 1 cross-check of the header per edition |
+| SHP | [shp.md](formats/shp.md) | `shp_renderer.py` | strict decode CD 3492/3492, ENG 1269/1269, LS 3601/3601; 2-byte-prefix variant 0/197 | Q1 (other editions, byte dumps) |
 | WSA | [wsa.md](formats/wsa.md) | `wsa_extract.py`, `wsa_all_frames_extract.py` | CD 4480/4480 frames, ENG 2699/2699, LS 5227/5227 | — |
 | VOC | [voc.md](formats/voc.md) | `voc_reader.py` | CD 215 + 4912 in TLK, ENG 127, LS 277 | — |
-| XMI / C55 / PCS | [music.md](formats/music.md) | `extract_music.py` | IFF trees of all 51 CD files (rebuilds `data/music_inventory.json`) | no MIDI decoder; meaning of "C55" |
-| ADL | [music.md](formats/music.md) | `extract_music.py` (raw only) | first bytes of 16 CD files | layout not documented field by field |
+| XMI / C55 / PCS | [music.md](formats/music.md) | `extract_music.py` | IFF trees of all 51 IFF files among the 67 CD music files (rebuilds `data/music_inventory.json`) | Q15 |
+| ADL | [music.md](formats/music.md) | `extract_music.py` (raw only) | first bytes of the 16 CD ADL files (part of the 67) | Q15 |
 | ENG / FRE / GER text | [text.md](formats/text.md) | `decode_dialogue.py`, `extract_dialogue.py` | 90 files, 6495 strings, all bigram bytes in range (CD) | — |
-| CMZ level map | [cmz.md](formats/cmz.md) | `cmz_analyzer.py`, `level_renderer.py` | 29/29, size = 6 + 1024 x len (rebuilds the corrected `data/wall_type_analysis.json`) | header bytes 0-3: Grok item 2; level 24's 9-byte blocks: Grok item 3; wall types missing from the WLL on levels 2, 3, 21 |
-| WLL wall types | [wll.md](formats/wll.md) | `wll_parser.py` | 29/29, 1726 records (rebuilds `data/wll_parsed.json`) | meaning of flag bits and special types: Sol item 8b |
-| VCN / VMP | [vcn_vmp.md](formats/vcn_vmp.md) | `vcn_vmp_reader.py`, `tileset_mapper.py` | 13/13 sets CD and LS; 35 `loadLevelGraphics` calls mapped | when YVEL2 is switched in on level 22: Grok item 4 |
-| XXX automap legend | [xxx.md](formats/xxx.md) | `xxx_reader.py` | 29 files, 73 records, CD and LS | string-id bit 0x8000 |
-| DAT decorations | [dat.md](formats/dat.md) | `dat_reader.py` | 12/12 CD and LS | slot-to-scene-position order |
+| CMZ level map | [cmz.md](formats/cmz.md) | `cmz_analyzer.py`, `level_renderer.py` | 29/29, size = 6 + 1024 x len (rebuilds the corrected `data/wall_type_analysis.json`) | Q2 (header bytes 0-3), Q3 (level 24's 9-byte blocks), Q11 (wall types missing from the WLL on levels 2, 3, 21) |
+| WLL wall types | [wll.md](formats/wll.md) | `wll_parser.py` | 29/29, 1726 records (rebuilds `data/wll_parsed.json`) | Q7 (meaning of flag bits and special types) |
+| VCN / VMP | [vcn_vmp.md](formats/vcn_vmp.md) | `vcn_vmp_reader.py`, `tileset_mapper.py` | 13/13 sets CD and LS; 35 `loadLevelGraphics` calls mapped | Q4 (when YVEL2 is switched in on level 22), Q16 |
+| XXX automap legend | [xxx.md](formats/xxx.md) | `xxx_reader.py` | 29 files, 73 records, CD and LS | Q12 |
+| DAT decorations | [dat.md](formats/dat.md) | `dat_reader.py` | 12/12 CD and LS | Q13 |
 | TLC (CD) | [tlc.md](formats/tlc.md) | `tlc_reader.py` | 29/29 CD; LS has none | — |
-| PAL / COL | [palette.md](formats/palette.md) | `cps_reader.py --pal-from` | 11/11 are 768 bytes (CD); level use of 3 PALs by script scan | who loads CAV_PLT2, CAV_PLT4, ALTPAL3 |
+| PAL / COL | [palette.md](formats/palette.md) | `cps_reader.py --pal-from` | 11/11 are 768 bytes (CD); level use of 3 PALs by script scan | Q14 |
 | FNT | [fnt.md](formats/fnt.md) | `fnt_reader.py` | CD 4, ENG 7, LS 9 | — |
-| EMC2 scripts (INF/INI) | [emc2.md](formats/emc2.md); Sol's `emc2_scripts.md` | Sol's `emc2_decompile.py` + test | CD 60/60, LS 60/60, 0 unknown opcodes or functions (reviewed PASS) | native effect of function 0x7E |
-| TIM sequences | [tim.md](formats/tim.md) | `parse_tim.py` | 139/139 `FORM…AVFS` (rebuilds `data/tim_analysis.json`) | opcode table: Grok item 6 |
-| ADV / DRV / TBL | [drivers.md](formats/drivers.md) | — | names and sizes only | Grok item 5 |
+| EMC2 scripts (INF/INI) | [emc2.md](formats/emc2.md); full page `emc2_scripts.md` being added | disassembler `emc2_decompile.py` being added | CD 60/60, LS 60/60, 0 unknown opcodes or functions (independently re-checked) | Q8 |
+| TIM sequences | [tim.md](formats/tim.md) | `parse_tim.py` | 139/139 `FORM…AVFS` (rebuilds `data/tim_analysis.json`) | Q6 (opcode table) |
+| ADV / DRV / TBL | [drivers.md](formats/drivers.md) | — | names and sizes only | Q5 |
 
 ## Corpus coverage
 
@@ -43,23 +43,25 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (21 checks; 
 |--------|-----------|---------|------------------------|
 | CD `DATA/` | 81 PAK + 30 TLK | 1163 + 4912 | PAK members yes (1163); TLK only as "parsed" |
 | CD `DATA/ENG`, `FRE`, `GER` | 17 PAK each | 378 each | **no**: INTRO1-9, FINALE*, HISTORY, INTROVOC, language GENERAL/STARTUP, NEW6P/NEW8P/INTRO fonts |
-| LANDSoL | 15 PAK + `MAIN.EXE` + `_LEVELn.TMP` | 1213 | compared in `docs/edition_comparison.md` |
+| LANDSoL | 15 PAK + `MAIN.EXE` + four `_LEVELn.TMP` level-state files left by the game | 1213 | compared in `docs/edition_comparison.md` |
 
 The readers have been run on all three. The JSON files in `data/` describe CD `DATA/` only.
 
 ## Game rules and executable tables
 
+The pages `executable_tables.md` and `savegame_format.md` are being added in the same pass; their content was re-checked against the data independently.
+
 | Topic | Documented | Checked on data | Open |
 |-------|-----------|-----------------|------|
-| Where the executables are | Sol's `executable_tables.md` (8a) | CD `WESTWOOD.001` members = `DATA/HARDRIVE/MAIN.EXE`, `MAINW.EXE`; LANDSoL `MAIN.EXE` (reviewed PASS) | — |
-| Spells (17 x 28 bytes), XP thresholds, character defaults (9 x 130), difficulty modifiers, CD price table | Sol 8a | offsets in all three images, values = ScummVM tables (reviewed PASS) | native meaning of a few fields |
-| Item types (285) and monster properties (79 calls) | Sol 8a, emc2 pages | script-fed in both editions; 4 item rows differ between editions (reviewed PASS) | native in-memory offsets |
-| Save file (original `_SAVEnnn.DAT`, `_LEVELn.TMP`, ScummVM) | Sol's `savegame_format.md` (8c) | literals and section sums in both EXEs; 4 LANDSoL sidecars; 11 ScummVM saves end where predicted (reviewed PASS) | skipped native fields; no original `_SAVEnnn.DAT` witness yet |
-| Combat, magic, experience and skills, monster behaviour, light, time | — | — | Sol 8b (in progress) |
+| Where the executables are | `executable_tables.md` | CD: inside `WESTWOOD.001` (the CD's install archive) and loose in `DATA/HARDRIVE` (`MAIN.EXE`, `MAINW.EXE`), byte-identical; LS `MAIN.EXE` | — |
+| Spells (17 x 28 bytes), experience thresholds, character defaults (9 x 130), difficulty modifiers, CD price table | `executable_tables.md` | offsets in all three executables, values equal ScummVM's tables | native meaning of a few fields |
+| Item types (285) and monster properties (79 script calls) | `executable_tables.md`, [emc2.md](formats/emc2.md) | supplied by scripts in both editions; 4 item rows differ between editions | Q18 |
+| Save file (original `_SAVEnnn.DAT`, level-state `_LEVELn.TMP`, ScummVM saves) | `savegame_format.md` | save-name and version strings and section sizes in both executables; 4 LS `_LEVELn.TMP` files; 11 ScummVM saves end where the layout predicts | Q17 |
+| Combat, magic, experience and skills, monster behaviour, light, time | — | — | Q7 |
 
 ## Tools
 
-All tools in `tools/` now run from a fresh checkout. Each has `--help`, takes `--data`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 21 checks. The March versions had fixed `/home/bob/…` paths, imports of modules that are not in the repo, and two (`pak_indexer.py`, `tlk_verify.py`) ran on start instead of showing help. Repaired on 2026-11-18 (branch `opus/lol1-unknowns-20261118`).
+All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 21 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
 
 ## Corrections to the closure memo and the March data
 
@@ -79,4 +81,4 @@ All tools in `tools/` now run from a fresh checkout. Each has `--help`, takes `-
 
 ## What "done" means here
 
-A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 8 of the 21 format rows meet that strictly: LCW, CPS, WSA, VOC, TLC, FNT, text, and SHP once Grok's item 1 agrees. Eight more have a page, a reader and a passing check but one named open point (PAK, TLK, CMZ, WLL, VCN/VMP, XXX, DAT, EMC2). The remaining five wait on Grok items 5-6 or on music decoding: XMI/C55/PCS, ADL, PAL/COL, TIM, ADV/DRV/TBL. Of the rules and tables rows, four are documented and reviewed; the game-rules row waits on Sol 8b.
+A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 7 of the 21 format rows meet that: LCW, CPS, WSA, VOC, TLC, FNT, text. SHP will join them when Q1 confirms the header in the other editions. Eight more have a page, a reader and a passing check but one or more numbered open points: PAK, TLK, CMZ, WLL, VCN/VMP, XXX, DAT, EMC2. The remaining five are only partly documented: XMI/C55/PCS and ADL (Q15), PAL/COL (Q14), TIM (Q6), ADV/DRV/TBL (Q5). Of the rules and tables rows, four are documented and checked; the game rules (Q7) are not written yet.

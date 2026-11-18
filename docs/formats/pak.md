@@ -33,4 +33,4 @@ CONFIRMED, `tools/pak_reader.py --check`:
 
 ## Open
 
-- Which PAK wins when two PAKs hold the same member name (search order of `Resource::loadPakFile`). Not needed to read files; matters for the edition comparison. UNCONFIRMED.
+- [Q9](../OPEN_QUESTIONS.md): which PAK wins when two PAKs hold the same member name (search order of `Resource::loadPakFile`). Not needed to read files; matters for the edition comparison. UNCONFIRMED.

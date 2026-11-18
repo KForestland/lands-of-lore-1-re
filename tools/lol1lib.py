@@ -15,15 +15,14 @@ Sources (ScummVM, engines/kyra/):
   LCW  graphics/screen.cpp:2484-2530  Screen::decodeFrame4
   CPS  graphics/screen.cpp:3355-3401  Screen::loadBitmap
 
-The game DATA folder defaults to $LOL1_DATA, else the project reference
-corpus path below. No game data is stored in this repository.
+The game DATA folder comes from --data or the $LOL1_DATA environment
+variable. No game data is stored in this repository.
 """
 
 import os
 import struct
 
-DEFAULT_DATA = os.environ.get(
-    "LOL1_DATA", "/media/bob/Arikv/REFERENCE/game_files/lol1/DATA")
+DEFAULT_DATA = os.environ.get("LOL1_DATA")
 
 
 # --------------------------------------------------------------------------
@@ -205,8 +204,8 @@ def vga_palette(raw):
 
 
 def add_data_arg(parser):
-    parser.add_argument("--data", default=DEFAULT_DATA,
-                        help="game DATA folder (default: $LOL1_DATA or %(default)s)")
+    parser.add_argument("--data", default=DEFAULT_DATA, required=DEFAULT_DATA is None,
+                        help="the game's DATA folder (default: $LOL1_DATA)")
     parser.add_argument("--pak", default=None,
                         help="search only this PAK (default: all PAKs, loose files first)")
 

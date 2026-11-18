@@ -21,16 +21,16 @@ Record:
 | 2 | uint8 (byte 3 skipped) | `_wllVmpMap[c]`: VMP wall layout (page) 1..6, 0 = none |
 | 4 | int16 | shape map: > 0 = index into `AREA.DAT` ([dat.md](dat.md)) via `assignLevelDecorationShapes`; else the low byte is stored |
 | 6 | uint8 (byte 7 skipped) | `_specialWallTypes[c]` |
-| 8 | uint8 (byte 9 skipped) | `_wllWallFlags[c]` (bits used e.g. 1, 2, 7, 8, 0x20: `scene_lol.cpp:522-534`, `sprites_lol.cpp:1367-1408`, `lol.cpp:2633`, `:3060-3063`) |
-| 10 | uint8 (byte 11 skipped) | `_wllAutomapData[c]` (17 = special in `loadBlockProperties`; `& 0xC0` tested by the automap, `lol.cpp:4281-4395`) |
+| 8 | uint8 (byte 9 skipped) | `_wllWallFlags[c]` (bits used e.g. 1, 2, 7, 8, 0x20: `scene_lol.cpp:522-534`, `sprites_lol.cpp:1367-1408`, `lol.cpp:2580`, `:3007-3010`) |
+| 10 | uint8 (byte 11 skipped) | `_wllAutomapData[c]` (17 = special in `loadBlockProperties`; `& 0xC0` tested by the automap, `lol.cpp:4228-4342`) |
 
 The skipped odd bytes are the high bytes of 16-bit fields; ScummVM keeps only the low byte. Whether the original ever sets them is UNCONFIRMED.
 
 ## Confirmed
 
-All 29 files: (size − 2) % 12 == 0; area indexes 0..11 all used. CONFIRMED (CD scan). Full per-level parse: `data/wll_parsed.json` (memo).
+All 29 files: (size − 2) % 12 == 0; area indexes 0..11 all used. CONFIRMED (CD scan). Full per-level parse: `data/wll_parsed.json` (from March 2026, rebuilt exactly by `tools/wll_parser.py`).
 
-The meaning of each flag bit and special type is game logic, not file format: Sol item 8b.
+The meaning of each flag bit and special type is game logic, not file format: [Q7](../OPEN_QUESTIONS.md).
 
 ## Tool
 

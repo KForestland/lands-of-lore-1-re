@@ -6,7 +6,7 @@ Layout (ScummVM engines/kyra/engine/scene_lol.cpp:458-462): 5376 bytes =
   table2: 20 x 256   for slot i, screen colour -> blended colour
 Only the talkie (CD) edition reads the file; the floppy edition computes the
 same tables at run time from FXPAL.COL and FXPAL.SHP
-(lol.cpp:1897-1932, Screen_LoL::createTransparencyTablesIntern
+(lol.cpp:1844-1879, Screen_LoL::createTransparencyTablesIntern
 screen_lol.cpp:144-185, 20 slots, weight 70).
 Used when drawing shapes and TIM animations with transparency
 (screen.cpp:2314-2331, sprites_lol.cpp:908-980, animator_tim.cpp:212).

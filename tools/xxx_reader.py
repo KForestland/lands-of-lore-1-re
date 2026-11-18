@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read a LoL1 automap legend file LEVELn.XXX.
 
-Layout (ScummVM engines/kyra/engine/lol.cpp:4303-4333, loadMapLegendData;
+Layout (ScummVM engines/kyra/engine/lol.cpp:4250-4280, loadMapLegendData;
 use at :4416-4440): up to 32 records of 12 bytes (6 x uint16 LE):
   +0  shape block x   (l[3])  map square where the legend symbol is drawn
   +2  shape block y   (l[4])

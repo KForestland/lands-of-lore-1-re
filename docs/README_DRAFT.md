@@ -1,15 +1,3 @@
-<!--
-DRAFT for the owner (item 9e of LOL1_RE_ORDER_20261118). Not the live README.
-If approved, this text replaces README.md. Changes against the current README:
-  1. "Status" no longer claims ~99.999%; it points to docs/STATUS.md and states what is and is not done.
-  2. The duplicate "Then read" list after Quick Start is removed; one reading order remains.
-  3. "Start Here" points to docs/formats/ (one page per format) and STATUS.md before the March memo.
-  4. Tool list names the readers that run as shipped; the older tools are flagged until the cleanup.
-  5. Game data location: tools take --data or $LOL1_DATA instead of fixed paths.
-  6. "Remaining gaps are publication-only" is removed (it was not true: see STATUS.md).
-Everything else (scope, asset policy, provenance) is unchanged in meaning.
--->
-
 # Lands of Lore I RE
 
 Reverse-engineering and documentation of the DOS version of *Lands of Lore: The Throne of Chaos* (Westwood, 1993): how its data files and rules work.
@@ -29,12 +17,14 @@ See [`docs/STATUS.md`](docs/STATUS.md) for the per-format table: documented, rea
 
 In short:
 
-- Containers (PAK, CD speech TLK), compression (Frame4/LCW), images (CPS), sound (VOC), fonts, palettes, level tile sets (VCN/VMP), automap legends, decoration tables and transparency tables are documented, have readers, and are checked on every file of the CD edition and of a second edition.
-- The level rendering pipeline `CMZ -> WLL -> VMP -> VCN` is documented.
-- The level scripts (EMC2 INF/INI) have a disassembler and a full function table, checked on all 60 scripts of both editions.
-- Open: the SHP header per edition, two CMZ header details, the YVEL2 tile set's use, the TIM opcode table, the sound driver files, and the game rules and executable tables (items, monsters, spells, combat, experience, save file).
+Two editions were read: the CD-ROM edition with spoken dialogue (version CD1.02) and an English floppy-edition installation (called LANDSoL in these pages). Details in [`docs/formats/README.md`](docs/formats/README.md).
 
-The March 2026 closure memo is kept in [`docs/closure_memo.md`](docs/closure_memo.md) as history. Corrections to it are listed in `docs/STATUS.md`.
+- Containers (PAK), compression (Frame4/LCW), full-screen images (CPS), sprites (SHP), animations (WSA), sound (VOC), fonts, level tile sets (VCN/VMP), automap legends and decoration tables are documented, have readers, and are checked on every file of both editions. The CD-only speech archives (TLK) and transparency tables (TLC) are checked on every CD file.
+- The level map pipeline `CMZ -> WLL -> VMP -> VCN` is documented and rendered by `tools/level_renderer.py`.
+- Text (all three CD languages) and the level scripts' container are documented and checked.
+- Still open: see [`docs/OPEN_QUESTIONS.md`](docs/OPEN_QUESTIONS.md). Among them: the TIM sequence-script opcode table, the sound driver files, a few header bytes in level maps, when level 22 switches to its alternate tile set (YVEL2), music decoding, and the game rules (combat, magic, experience, monsters, light, time).
+
+The closure memo [`docs/closure_memo.md`](docs/closure_memo.md) is a March 2026 summary written when this work was first declared finished. It is kept as history; its corrections are listed in `docs/STATUS.md`.
 
 ## Repository layout
 
@@ -47,9 +37,10 @@ The March 2026 closure memo is kept in [`docs/closure_memo.md`](docs/closure_mem
 ## Start here
 
 1. [`docs/STATUS.md`](docs/STATUS.md)
-2. [`docs/formats/README.md`](docs/formats/README.md)
-3. [`docs/level_tileset_map.md`](docs/level_tileset_map.md)
+2. [`docs/formats/README.md`](docs/formats/README.md) and the pages it lists
+3. [`docs/OPEN_QUESTIONS.md`](docs/OPEN_QUESTIONS.md)
 4. [`docs/edition_comparison.md`](docs/edition_comparison.md)
+5. History: [`docs/closure_memo.md`](docs/closure_memo.md), [`docs/level_tileset_map.md`](docs/level_tileset_map.md) (March 2026; corrected in the format pages)
 
 ## Quick start
 
@@ -60,7 +51,7 @@ python3 -m venv .venv
 . .venv/bin/activate
 pip install -r requirements.txt
 export LOL1_DATA=/path/to/your/LOL1/DATA   # your own copy of the game
-python3 tools/check_all.py                 # one line per format, exit 0 when all pass
+python3 tools/check_all.py                 # 21 checks, one line each; all pass on the CD edition
 ```
 
 Readers (each has `--help` and `--check`):
@@ -76,7 +67,7 @@ python3 tools/dat_reader.py KEEP.DAT
 python3 tools/tlc_reader.py LEVEL01.TLC
 ```
 
-The older tools in `tools/` (level renderer, SHP and WSA extractors, dialogue and music extractors) still expect the original workspace paths; see `docs/STATUS.md`. They are being cleaned up.
+More tools (each with `--help` and `--check`): `level_renderer.py`, `shp_renderer.py`, `wsa_extract.py`, `decode_dialogue.py`, `extract_music.py`, `parse_tim.py`, `wll_parser.py`, `cmz_analyzer.py`, `tileset_mapper.py`, `tlk_verify.py`, `pak_indexer.py`. See [`tools/README.md`](tools/README.md).
 
 ## Asset policy
 

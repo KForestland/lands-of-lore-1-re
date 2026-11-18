@@ -1,13 +1,13 @@
 # LoL1 LANDSoL Comparison (2026-03-18)
 
 Scope:
-- existing LoL1 reference corpus indexed in `/home/bob/lol1_pak_index.json`
-- new install tree at `/media/bob/Arikv/new files or things/LANDSoL`
+- the CD edition's `DATA/` folder, indexed in [`../data/pak_index.json`](../data/pak_index.json)
+- LANDSoL, an English floppy-edition installation (no speech, chapter-based PAKs)
 
 ## Main Result
 
 - `LANDSoL` is a real LoL1 install tree, not just patch junk.
-- It uses the same underlying LoL1 `PAK` container grammar already proven in the main LoL1 lane:
+- It uses the same underlying LoL1 `PAK` container grammar documented in `formats/pak.md`:
   - leading absolute offset
   - null-terminated filename
   - repeated directory entries until payload area
@@ -38,14 +38,18 @@ These match the already-proven LoL1 `PAK` directory model.
 
 ## Edition / Build Difference
 
-- The new `GENERAL.PAK` hash does **not** match the known LoL1 CD hash in `/home/bob/lol1_scummvm_references.md`.
-- New `GENERAL.PAK` md5:
-  - `74aa23c530155c2c9a7f894a616b4464`
-- Known reference `GENERAL.PAK` md5:
-  - `05a4f588fb81dc9c0ef1f2ec20d89e24`
+ScummVM identifies a LoL release by the MD5 of the first 1 MiB of `GENERAL.PAK` (Kyra sets `_md5Bytes = 1024 * 1024`, `engines/kyra/detection.cpp:58`). Measured that way (2026-11-18, corrected; the earlier version of this page compared a full-file MD5 with a detection hash):
+
+| Copy | MD5 of first 1 MiB of `GENERAL.PAK` | ScummVM detection entry |
+|------|-------------------------------------|-------------------------|
+| CD `DATA/` | `05a4f588fb81dc9c0ef1f2ec20d89e24` | "Lands of Lore CD", English (`engines/kyra/detection_tables.h:1349`) |
+| CD `DATA/ENG` (also FRE, GER) | `2dd5305434b11b40cbda565c0f729913` | the warning entry "You added the game incorrectly. Please add the root folder of the game." (`:1434`): the language folders are part of the CD layout, not a game on their own |
+| LANDSoL | `0f1fabc1f67b772a30d8e05ece720ac5` | English floppy, labelled "Extracted", no speech (`:1716`, `LOL_FLOPPY_FLAGS`) |
+
+Full-file MD5s: CD `DATA/` `a7dbbf23c4438967f89dc221bc659e88`, LANDSoL `74aa23c530155c2c9a7f894a616b4464`.
 
 Practical read:
-- this is a materially different build / edition witness, not a duplicate of the existing reference corpus
+- LANDSoL is a different edition (the floppy release), not a copy of the CD corpus
 
 ## Content Comparison
 
@@ -123,14 +127,14 @@ Practical read:
   - old entry count: `73`
 
 Practical read:
-- `VOC.PAK` and `DRIVERS.PAK` are structurally very stable across the two witnesses
+- `VOC.PAK` and `DRIVERS.PAK` are structurally very stable across the two editions
 - `GENERAL.PAK` changed more materially
 
 ## Best Use
 
-- treat `LANDSoL` as a second strong LoL1 witness
+- treat `LANDSoL` as the second edition to check against
 - use it to:
   - confirm the `PAK` format across editions
   - compare stable versus drifting asset families
   - inspect whether chapter-based grouping simplifies any remaining LoL1 closure work
-- do **not** treat it as the same indexed corpus already covered by the main LoL1 lane
+- do **not** treat it as the same indexed corpus as the CD `DATA/` folder

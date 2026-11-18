@@ -14,7 +14,7 @@ USAGE = """
   parse_tim.py                     # summary + sample files
   parse_tim.py --out tim.json      # same shape as data/tim_analysis.json
   parse_tim.py --check             # rebuild and compare with data/tim_analysis.json
-See docs/formats/tim.md. The opcode table is lead-order item 6 (Grok).
+See docs/formats/tim.md. The opcode table is open question Q6 (docs/OPEN_QUESTIONS.md).
 """
 
 def read_pak_entry(pak_path, offset, size):

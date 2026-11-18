@@ -25,9 +25,9 @@ Source: `engines/kyra/graphics/wsamovie.cpp:361-440` (`WSAMovie_v2::open`).
 
 - Flags on the CD data: 219 files flags 0, 22 files flags 1 (palette); none has bit 1. CONFIRMED (header scan).
 - Every frame of every file decodes, and every delta stream ends at its terminator inside width x height: CD 4480/4480 frames in 241 files, CD `DATA/ENG` 2699 in 96, LANDSoL 5227 in 254. CONFIRMED (`tools/wsa_extract.py --check`).
-- offset[0] equals the start of the frame data in 219 of 241 CD files. In the other 22 (exactly the files with a palette) the offsets do not count the 768 palette bytes, which is why they must be taken relative to offset[0]. CONFIRMED. This explains the memo's special "palette fix" for ESCAPE.WSA and CHANDELR.WSA (section D.1): with the offsets read as ScummVM reads them, no per-file fix is needed.
+- offset[0] equals the start of the frame data in 219 of 241 CD files. In the other 22 (exactly the files with a palette) the offsets do not count the 768 palette bytes, which is why they must be taken relative to offset[0]. CONFIRMED. This explains the closure memo's special "palette fix" for ESCAPE.WSA and CHANDELR.WSA (section D.1): with the offsets read as ScummVM reads them, no per-file fix is needed.
 - No CD file lacks a first frame. CONFIRMED.
-- `data/wsa_inventory.json` (March): its header fields match this parser for all 241 files. CONFIRMED.
+- `data/wsa_inventory.json` (March 2026): its header fields match this parser for all 241 files. CONFIRMED.
 
 ## Tool
 

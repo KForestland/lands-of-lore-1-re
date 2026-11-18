@@ -101,14 +101,14 @@ Bytes 2+:  tile_count bytes of shift table (_vcnShift)
 
 ## Files Produced
 
-- `/home/bob/lol1_wall_type_analysis.json` — all wall type IDs per level
-- `/home/bob/lol1_wll_parsed.json` — complete WLL parse for all 29 levels
-- `/home/bob/lol1_tileset_mapping.json` — (superseded, used wrong uint16 interpretation)
+- `data/wall_type_analysis.json`: all wall type IDs per level (regenerated 2026-11-18, see the banner above)
+- `data/wll_parsed.json`: complete WLL parse for all 29 levels
+- `data/tileset_mapping.json`: replaced 2026-11-18 (the March version used the wrong uint16 interpretation)
 
 ## Corrections to Prior Work
 
 1. **Grid is 32×32 (1024 blocks), NOT 64×32 (2048 tiles)**
-   - The old maps at `/home/bob/lol1_maps/` rendered 2048 uint16 values — these were actually pairs of adjacent wall bytes misread as single uint16 values
+   - The old maps rendered 2048 uint16 values — these were actually pairs of adjacent wall bytes misread as single uint16 values
 2. **CMZ contains uint8 wall type indices, NOT uint16 tile IDs**
    - The "high byte" analysis was actually seeing adjacent wall pairs
 3. **Tileset mapping is NOT in the tile data** — it's in the WLL file header

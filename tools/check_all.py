@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run every reader's --check against a LoL1 DATA folder and print one line each.
 
-  check_all.py [--data DATA]     # default $LOL1_DATA or the project reference path
+  check_all.py --data DATA       # or set $LOL1_DATA
 Exit code 0 when every check passes.
 """
 import argparse, os, subprocess, sys
@@ -15,7 +15,7 @@ READERS = ["pak_reader", "pak_indexer", "tlk_verify", "decode_frame4", "cps_read
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--data", default=L.DEFAULT_DATA)
+    ap.add_argument("--data", default=L.DEFAULT_DATA, required=L.DEFAULT_DATA is None)
     a = ap.parse_args()
     here = os.path.dirname(os.path.abspath(__file__))
     rc = 0

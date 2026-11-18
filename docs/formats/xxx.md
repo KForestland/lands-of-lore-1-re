@@ -6,7 +6,7 @@
 
 ## Layout
 
-Source: `LoLEngine::loadMapLegendData` `engines/kyra/engine/lol.cpp:4303-4333`; use in the map drawing at `:4416-4440`.
+Source: `LoLEngine::loadMapLegendData` `engines/kyra/engine/lol.cpp:4250-4280`; use in the map drawing at `:4363-4387`.
 
 Up to 32 records (the loader caps at 32) of 12 bytes:
 
@@ -25,7 +25,7 @@ The memo's field names (shapeDrawX, shapeDrawY, shapeIndex, labelBlockX, labelBl
 
 ## Confirmed
 
-`tools/xxx_reader.py --check` (CD): `29 files, 73 records (all sizes multiple of 12, <=32 records), 0 without shape, string-id top bits [1, 3], bad=none`. All coordinates are < 32. String ids carry bit 0x4000 (global `LANDS` strings) and some also 0x8000; what 0x8000 means here is UNCONFIRMED (`printMapText` not traced).
+`tools/xxx_reader.py --check` (CD): `29 files, 73 records (all sizes multiple of 12, <=32 records), 0 without shape, string-id top bits [1, 3], bad=none`. All coordinates are < 32. String ids carry bit 0x4000 (global `LANDS` strings) and some also 0x8000; what 0x8000 means here is UNCONFIRMED (`printMapText` not traced), [Q12](../OPEN_QUESTIONS.md).
 
 ## Tool
 

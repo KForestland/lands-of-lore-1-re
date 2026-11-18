@@ -11,13 +11,13 @@
 | 0 | uint16 x n | offset of each string from file start; n = first offset / 2 |
 | … | | NUL-terminated strings, Westwood-compressed |
 
-Source: `LoLEngine::getTableEntry` `engines/kyra/engine/lol.cpp:1153-1157`; `getLangString` `:1119-1150` picks `_landsFile` for ids with 0x4000, else the level file, then decodes with `Util::decodeString1` + `decodeString2` (`engines/kyra/engine/util.cpp:29-68`, `:70-90`). `LANDS.<lang>` is loaded at `lol.cpp:604-607`; level files by script function `olol_loadLangFile` `engines/kyra/script/script_lol.cpp:1160-1165`.
+Source: `LoLEngine::getTableEntry` `engines/kyra/engine/lol.cpp:1100-1104`; `getLangString` `:1066-1097` picks `_landsFile` for ids with 0x4000, else the level file, then decodes with `Util::decodeString1` + `decodeString2` (`engines/kyra/engine/util.cpp:29-68`, `:70-90`). `LANDS.<lang>` is loaded at `lol.cpp:602-605`; level files by script function `olol_loadLangFile` `engines/kyra/script/script_lol.cpp:1160-1165`.
 
 Compression: bytes >= 0x80 expand to two characters from two fixed tables; 0x1B + byte is an escape for high characters (accents).
 
 ## Confirmed
 
-String count = first offset / 2, summed over the 30 files: ENG 2165, FRE 2165, GER 2165. CONFIRMED (CD, `lol1lib` scan) — matches the memo's 2165 per language / 6495 total.
+String count = first offset / 2, summed over the 30 files: ENG 2165, FRE 2165, GER 2165. CONFIRMED (CD, `lol1lib` scan) — matches the closure memo's 2165 per language / 6495 total.
 
 ## Tool
 

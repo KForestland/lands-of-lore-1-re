@@ -2,13 +2,13 @@
 
 **What:** one speech archive per level: `00.TLK` … `29.TLK` in the CD `DATA/` folder. Each member is a Creative Voice (VOC) sample.
 
-**Edition read:** CD. LANDSoL has no TLK files (no speech in that witness).
+**Edition read:** CD. LANDSoL (the floppy edition, see [README](README.md)) has no TLK files: it has no speech.
 
 ## Correction to the closure memo
 
 The memo (section A, "TLK: uint16 count + 8-byte entries (uint32 ID + uint32 offset)") describes ScummVM's `ResLoaderTlk` (`resource/resource_intern.cpp:453-492`), which serves `%08u.AUD` members (`:118-143`). **LoL1 CD TLK files are not in that layout.** They are PAK archives:
 
-- `LoLEngine::loadTalkFile` opens `"%02d.TLK"` with `_res->loadPakFile` — `engines/kyra/engine/lol.cpp:1945-1955`. CONFIRMED in code.
+- `LoLEngine::loadTalkFile` opens `"%02d.TLK"` with `_res->loadPakFile` — `engines/kyra/engine/lol.cpp:1892-1902`. CONFIRMED in code.
 - On the data: `01.TLK` starts `f0 19 00 00 "00000.VOC\0"` — a PAK directory (first member at 0x19F0 = 6640). CONFIRMED.
 - All 30 parse as PAK: 4912 members, every one starts with `Creative Voice File`. CONFIRMED (`tools/voc_reader.py --check`: `215 in PAKs + 4912 in TLKs ... bad=none`).
 
@@ -25,7 +25,7 @@ Built by `LoLEngine::snd_playCharacterSpeech`, `engines/kyra/sound/sound_lol.cpp
 | `%03X` … `.00` | id has bit 0x4000 (global lines, TLK number forced to 00) |
 | `@%04d` + speaker + `.%02d` | id >= 1000 |
 
-Example on the data: `01.TLK` holds `00000.VOC`, `000_0.01`, `000_1.01`, `001A0.01`, … CONFIRMED (`pak_reader.py list 01.TLK`). The `NNNNN.VOC` members (59 in total) are not produced by these patterns; who plays them is UNCONFIRMED.
+Example on the data: `01.TLK` holds `00000.VOC`, `000_0.01`, `000_1.01`, `001A0.01`, … CONFIRMED (`pak_reader.py list 01.TLK`). The `NNNNN.VOC` members (59 in total) are not produced by these patterns; who plays them is UNCONFIRMED, [Q10](../OPEN_QUESTIONS.md).
 
 ## Confirmed
 

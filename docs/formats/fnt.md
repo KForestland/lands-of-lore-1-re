@@ -22,7 +22,7 @@ Source: `DOSFont::load` `engines/kyra/graphics/screen.cpp:3678-3706`; `DOSFont::
 
 Glyph bitmap: 4 bits per pixel, low nibble = left pixel, ceil(width/2) bytes per row. Bitmap offset 0 = glyph not drawn.
 
-Use: FONT9P/FONT6P are the normal fonts (`engines/kyra/engine/lol.cpp:598-599`, `:4232-4233`); FONT9PN/FONT6PN while the automap is open (`:4176-4177`).
+Use: FONT9P/FONT6P are the normal fonts (`engines/kyra/engine/lol.cpp:596-597`, `:4179-4180`); FONT9PN/FONT6PN while the automap is open (`:4123-4124`).
 
 ## Confirmed
 

@@ -7,7 +7,7 @@ the directory ends at an empty name or when an offset equals the file size.
 A member runs from its own offset to the next member's offset.
 
 The CD speech files NN.TLK use the same layout: LoLEngine::loadTalkFile
-opens "%02d.TLK" with loadPakFile (engines/kyra/engine/lol.cpp:1945-1955).
+opens "%02d.TLK" with loadPakFile (engines/kyra/engine/lol.cpp:1892-1902).
 
   pak_reader.py list GENERAL.PAK
   pak_reader.py extract GENERAL.PAK PARCH.CPS -o /tmp/out
@@ -23,7 +23,7 @@ def main():
     ap.add_argument("container", nargs="?", help="PAK or TLK file name in the DATA folder")
     ap.add_argument("member", nargs="?", help="member to extract")
     ap.add_argument("-o", "--out", help="output folder for extract")
-    ap.add_argument("--data", default=L.DEFAULT_DATA)
+    ap.add_argument("--data", default=L.DEFAULT_DATA, required=L.DEFAULT_DATA is None)
     ap.add_argument("--check", action="store_true", help="parse all containers and print one summary line")
     a = ap.parse_args()
     if a.check:

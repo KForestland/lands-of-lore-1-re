@@ -6,7 +6,7 @@ fixed folders, and paired each member name with the next member's offset in
 its sample list. See docs/formats/tlk.md.
 
 Checks per file (ScummVM LoLEngine::loadTalkFile opens "%02d.TLK" as a PAK,
-engines/kyra/engine/lol.cpp:1945-1955; names built in
+engines/kyra/engine/lol.cpp:1892-1902; names built in
 engines/kyra/sound/sound_lol.cpp:59-81):
   - the PAK directory parses and the members tile the file exactly;
   - every member starts "Creative Voice File" and parses as VOC;

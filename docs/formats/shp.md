@@ -6,7 +6,7 @@
 
 ## File layout
 
-77 of the 89 CD files are wrapped in the CPS bitmap container ([cps.md](cps.md), Frame4); unwrap them first. The 12 area decoration files (`KEEP.SHP`, `CAVE1.SHP`, …) are stored plain, because the engine reads them piece by piece from the file (`engines/kyra/engine/scene_lol.cpp:216-233`). CONFIRMED (`tools/shp_renderer.py --out`, field `wrapped_in_bitmap_container`).
+77 of the 89 CD files are wrapped in the CPS bitmap container ([cps.md](cps.md), Frame4); unwrap them first. The 12 area decoration files (`KEEP.SHP`, `CAVE1.SHP`, …; there is no `YVEL2.SHP`, level 22 uses `YVEL1.SHP`) are stored plain, because the engine reads them piece by piece from the file (`engines/kyra/engine/scene_lol.cpp:216-233`). CONFIRMED (`tools/shp_renderer.py --out`, field `wrapped_in_bitmap_container`).
 
 After unwrapping:
 
@@ -41,15 +41,15 @@ Line data (`screen.cpp:2095-2108`, `drawShapeProcessLineNoScaleUpwind`): each ro
 `tools/shp_renderer.py --check` decodes every shape strictly: every row fills its width exactly, the line data is exactly the frame size, and the two height bytes agree.
 
 - CD `DATA/`: 3492/3492 shapes. CD `DATA/ENG`: 1269/1269. LANDSoL: 3601/3601. CONFIRMED.
-- Negative control: with `--alt-header` (a 2-byte prefix before each header) **0 of 197** shapes decode on the CD. CONFIRMED.
+- Negative control: with `--alt-header` (a 2-byte prefix before each header) no CD file decodes: most stop with a read past the end of their data, and of the 197 shapes that can be read at all, none decodes. CONFIRMED.
 
 ## Correction to the closure memo: no 2-byte prefix on CD or LANDSoL
 
-The memo (sections A and B.6) says shapes have a 12-byte header that starts with a 2-byte prefix. That came from the March renderer, which took the shape offsets as counted from the start of the file, not from byte 2. It therefore read each shape 2 bytes early. For shape 0 those 2 bytes are the high half of the table's end entry; for later shapes they are the last 2 bytes of the previous shape. The real header is the 10-byte one above.
+The closure memo (sections A and B.6) says shapes have a 12-byte header that starts with a 2-byte prefix. That came from the March 2026 renderer, which took the shape offsets as counted from the start of the file, not from byte 2. It therefore read each shape 2 bytes early. For shape 0 those 2 bytes are the high half of the table's end entry; for later shapes they are the last 2 bytes of the previous shape. The real header is the 10-byte one above.
 
-This agrees with ScummVM: the 2-byte prefix (`GameFlags::useAltShapeHeader`, `engines/kyra/detection.h:51`; skipped in `screen.cpp:1637-1638`) is set only for the LoL demo (`engines/kyra/detection_tables.h:63`), not for CD (`:56`) or floppy (`:58`). The demo itself was not read. Lead-order item 1 (Grok) settles the per-edition byte dumps independently.
+This agrees with ScummVM: the 2-byte prefix (`GameFlags::useAltShapeHeader`, `engines/kyra/detection.h:51`; skipped in `screen.cpp:1637-1638`) is set only for the LoL demo (`engines/kyra/detection_tables.h:63`), not for CD (`:56`) or floppy (`:58`). The demo itself was not read. Byte dumps per edition, including the demo, are [Q1](../OPEN_QUESTIONS.md).
 
-The memo's "3492/3492 frames" count was right in number, but the March tool reached it with fallbacks that accept any bytes. The strict decode above is what confirms it.
+The closure memo's "3492/3492 frames" count was right in number, but the March 2026 tool reached it with fallbacks that accept any bytes. The strict decode above is what confirms it.
 
 ## Colours
 

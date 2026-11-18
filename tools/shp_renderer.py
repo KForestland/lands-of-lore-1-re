@@ -12,7 +12,7 @@ engines/kyra/engine/scene_lol.cpp:216-233):
   offsets[i] + 2. Offset 0 = no shape.
   A few SHP files are themselves wrapped in the CPS bitmap container
   (Frame4); they are unwrapped first (e.g. FXPAL.SHP, loaded with
-  loadBitmap at engines/kyra/engine/lol.cpp:1924).
+  loadBitmap at engines/kyra/engine/lol.cpp:1871).
 
 Shape (engines/kyra/graphics/screen.cpp:1805-1842, Screen::drawShape;
 header writer encodeShape :2833-2846):

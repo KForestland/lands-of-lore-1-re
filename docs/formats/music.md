@@ -15,7 +15,7 @@
 
 ScummVM plays XMI through its XMIDI parser and ADL through `engines/kyra/sound/drivers/adlib.cpp` (Westwood AdLib driver; the driver version it uses for LoL is not checked here). The ADL layout (track table, program table) is described by that driver; not checked field by field in this repo. UNCONFIRMED.
 
-What "C55" stands for (the memo says "Creative Music File"; the files are XMIDI containers like XMI) is OPEN. Which driver file plays it is Grok's item 5 ([drivers.md](drivers.md)).
+"C55" is a file extension; what it stands for (the closure memo says "Creative Music File"; the files are XMIDI containers like XMI) is OPEN, [Q15](../OPEN_QUESTIONS.md). Which driver file plays it: [Q5](../OPEN_QUESTIONS.md) ([drivers.md](drivers.md)).
 
 ## Tool
 

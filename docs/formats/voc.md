@@ -27,7 +27,7 @@ CONFIRMED, `tools/voc_reader.py --check`:
 
 Only block type 1 occurs; every file passes the header check value.
 
-**Correction to the memo:** "majority 11111 Hz" — the majority divisor is the 11025 Hz class (0xA5/0xA6) for effects and the 22050 Hz class for CD speech. The memo's figure is the raw formula for divisor 0xA6 (1000000/90 = 11111). Both are the same files; the label differs.
+**Correction to the closure memo:** "majority 11111 Hz" — the majority divisor is the 11025 Hz class (0xA5/0xA6) for effects and the 22050 Hz class for CD speech. The memo's figure is the raw formula for divisor 0xA6 (1000000/90 = 11111). Both are the same files; the label differs.
 
 ## Tool
 

@@ -22,7 +22,7 @@ import sys
 
 import lol1lib as L
 
-GAME_DIR = Path(L.DEFAULT_DATA).parent
+GAME_DIR = Path(L.DEFAULT_DATA).parent if L.DEFAULT_DATA else None
 
 def scan_all_files():
     """Scan all files in the game directory and group by extension."""
@@ -136,10 +136,10 @@ def main():
     global GAME_DIR
     ap = L.tool_args(__doc__)
     ap.add_argument('--survey', action='store_true', help='run the loose-file survey instead (needs --out)')
-    ap.add_argument('--game-dir', default=str(GAME_DIR), help='folder for --survey (default: parent of --data)')
+    ap.add_argument('--game-dir', default=None, help='folder for --survey (default: parent of --data)')
     a = ap.parse_args()
     if a.survey:
-        GAME_DIR = Path(a.game_dir)
+        GAME_DIR = Path(a.game_dir) if a.game_dir else Path(a.data).parent
         if not a.out:
             ap.error('--survey needs --out')
         survey(a.out)

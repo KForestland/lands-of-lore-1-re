@@ -2,7 +2,7 @@
 """Extract the raw strings of every ENG/FRE/GER text file in the LoL1 PAKs.
 
 Layout (docs/formats/text.md; ScummVM LoLEngine::getTableEntry
-engines/kyra/engine/lol.cpp:1153-1157): uint16 offsets, count = first / 2,
+engines/kyra/engine/lol.cpp:1100-1104): uint16 offsets, count = first / 2,
 NUL-terminated strings. Output keeps the bytes as text with [XX] for
 non-ASCII bytes; decode_dialogue.py turns them into readable text.
 

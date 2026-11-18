@@ -41,12 +41,12 @@ The memo's "431-entry pages, stride = 22×15 viewport + overhead" is now precise
 
 ## Open
 
-- Which script loads YVEL2 and when: Grok item 4. Static scan (`tools/tileset_mapper.py`): only level 22 names YVEL2: `LEVEL22.INI` calls `loadLevelGraphics` with YVEL1, YVEL2, YVEL1 and `LEVEL22.INF` with YVEL2, YVEL1, YVEL1, YVEL2. CONFIRMED (calls on CD); when each runs is Grok's item. (`loadLevelGraphics` is called by script function `olol_loadLevelGraphics`, `engines/kyra/script/script_lol.cpp:208-212`, with the file name as a string; `scene_lol.cpp:315` names YVEL2 for the 16-colour mode.)
-- The shift table values on KEEP are 0, 16, …, 112 (CONFIRMED, `vcn_vmp_reader.py KEEP`): each tile picks one of 8 banks of 16 entries in the 128-byte colour table. What decides the bank per tile (artist choice vs. lighting) is UNCONFIRMED.
+- [Q4](../OPEN_QUESTIONS.md): when YVEL2 is switched in. Static scan (`tools/tileset_mapper.py`): only level 22 names YVEL2: `LEVEL22.INI` calls `loadLevelGraphics` with YVEL1, YVEL2, YVEL1 and `LEVEL22.INF` with YVEL2, YVEL1, YVEL1, YVEL2. CONFIRMED (calls on CD); when each runs is open. (`loadLevelGraphics` is called by script function `olol_loadLevelGraphics`, `engines/kyra/script/script_lol.cpp:208-212`, with the file name as a string; `scene_lol.cpp:315` names YVEL2 for the 16-colour mode.)
+- The shift table values on KEEP are 0, 16, …, 112 (CONFIRMED, `vcn_vmp_reader.py KEEP`): each tile picks one of 8 banks of 16 entries in the 128-byte colour table. What decides the bank per tile (artist choice vs. lighting) is UNCONFIRMED, [Q16](../OPEN_QUESTIONS.md).
 
 ## Which level uses which set
 
-The VCN/VMP set is chosen by the level script, not by the WLL area index: `loadLevelGraphics` (script function 0x09) names it. `tools/tileset_mapper.py` lists every call (35 on CD, the same count as the EMC2 function table). CONFIRMED on CD:
+The VCN/VMP set is chosen by the level script, not by the WLL area index: `loadLevelGraphics` (script function 0x09) names it. `tools/tileset_mapper.py` lists every call (35 on CD, the same as the call count of function 0x09 in the script function table). CONFIRMED on CD:
 
 | Levels | Set (+ override palette) |
 |--------|--------------------------|

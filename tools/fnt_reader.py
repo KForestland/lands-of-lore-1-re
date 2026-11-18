@@ -14,8 +14,8 @@ and :3714-3760 DOSFont::drawChar):
   Glyph bitmap: 4 bits per pixel, low nibble first, rows of ceil(w/2) bytes.
   A glyph whose bitmap offset is 0 is not drawn.
 
-Loaded as FONT6P/FONT9P (lol.cpp:598-599) and FONT6PN/FONT9PN for the
-automap (lol.cpp:4176-4177).
+Loaded as FONT6P/FONT9P (lol.cpp:596-597) and FONT6PN/FONT9PN for the
+automap (lol.cpp:4123-4124).
 
   fnt_reader.py FONT9P.FNT [--png atlas.png]
   fnt_reader.py --check

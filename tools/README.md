@@ -1,67 +1,49 @@
 # Tools
 
-Public extraction and analysis helpers for LoL1 reverse engineering.
+Readers and extractors for the *Lands of Lore: The Throne of Chaos* (DOS) data files. Format documentation: [`../docs/formats/`](../docs/formats/README.md).
 
 ## Setup
 
 - Python 3.8+
-- Pillow (`pip install Pillow`) for render and image-output tools
+- Pillow (`pip install Pillow`) for the tools that write PNG files
+- Your own copy of the game. Point the tools at its `DATA` folder with `--data /path/to/DATA` or `export LOL1_DATA=/path/to/DATA`.
 
-## Tool Index
+## Common options
 
-### Containers and Core Parsing
-- `pak_indexer.py` — build structured indexes for `PAK` container contents
-  - example: `python3 tools/pak_indexer.py --help`
-- `tlk_verify.py` — verify and inspect `TLK` dialogue/container assumptions
-  - example: `python3 tools/tlk_verify.py --help`
-- `wll_parser.py` — parse wall definition/layout data
-  - example: `python3 tools/wll_parser.py --help`
-- `parse_tim.py` — parse TIM-related data structures used in the pipeline
-  - example: `python3 tools/parse_tim.py --help`
-- `cmz_analyzer.py` — inspect `CMZ` level-side content
-  - example: `python3 tools/cmz_analyzer.py --help`
+Every tool has `--help`, takes `--data`, and writes nothing unless you give it `--out` (a JSON file) or `--out-dir` (a folder). Every tool has a `--check` that reads all files of its kind and prints one line; exit code 0 means the check passed. `check_all.py` runs all 21 checks.
 
-### Rendering and Visual Output
-- `level_renderer.py` — render level-side outputs from the solved map pipeline
-  - example: `python3 tools/level_renderer.py --help`
-- `shp_renderer.py` — render `SHP` sprite outputs
-  - example: `python3 tools/shp_renderer.py --help`
-- `decode_frame4.py` — decode the relevant image/frame path used in the repo notes
-  - example: `python3 tools/decode_frame4.py --help`
+## Tool index
 
-### Dialogue, Audio, and Animation
-- `decode_dialogue.py` — inspect/decode dialogue-side content
-  - example: `python3 tools/decode_dialogue.py --help`
-- `extract_dialogue.py` — extract dialogue outputs
-  - example: `python3 tools/extract_dialogue.py --help`
-- `extract_music.py` — extract music outputs
-  - example: `python3 tools/extract_music.py --help`
-- `wsa_extract.py` — extract `WSA` animation outputs
-  - example: `python3 tools/wsa_extract.py --help`
-- `wsa_all_frames_extract.py` — multi-frame `WSA` extraction
-  - example: `python3 tools/wsa_all_frames_extract.py --help`
+### Shared code and containers
+- `lol1lib.py`: shared code: PAK/TLK listing, Frame4 (LCW) decompression, the 10-byte bitmap header, palette helpers
+- `pak_reader.py`: list or extract members of a PAK (and of the CD speech `NN.TLK` files)
+- `pak_indexer.py`: index of every PAK member (`data/pak_index.json`); `--survey` lists every file under the game folder
+- `tlk_verify.py`: checks the CD speech archives `NN.TLK` (PAK archives of VOC samples)
+- `decode_frame4.py`: an independent Frame4 port; `--check` compares it with `lol1lib`; `--out-dir` writes every CPS as PNG
 
-### Mapping and Analysis
-- `tileset_mapper.py` — map level tilesets and related outputs
-  - example: `python3 tools/tileset_mapper.py --help`
+### Images and animation
+- `cps_reader.py`: CPS full-screen images (header, PNG)
+- `shp_renderer.py`: SHP sprites (strict decode, PNG per shape, `--out` inventory as in `data/shp_inventory.json`)
+- `wsa_extract.py`: WSA animations (header, frame 0 or every frame as PNG)
+- `wsa_all_frames_extract.py`: every frame of every WSA (or of the named ones)
+- `fnt_reader.py`: fonts (header, glyph atlas PNG)
 
-### Format readers (added 2026-11-18)
+### Levels
+- `cmz_analyzer.py`: wall-type statistics of the level maps (`data/wall_type_analysis.json`)
+- `wll_parser.py`: wall-type tables (`data/wll_parsed.json`)
+- `vcn_vmp_reader.py`: wall tile sets and tile layouts (tile atlas PNG)
+- `tileset_mapper.py`: which tile set, decorations and palette each level uses (`data/tileset_mapping.json`)
+- `level_renderer.py`: top-down map PNG per level
+- `xxx_reader.py`: automap legend records
+- `dat_reader.py`: wall decoration records
+- `tlc_reader.py`: CD transparency tables
 
-Each takes `--data <DATA folder>` (default `$LOL1_DATA`), prints `--help`, and has a `--check` that parses every file of its kind and prints one line. Format pages: [`../docs/formats/`](../docs/formats/README.md).
+### Text, sound, music, scripts
+- `extract_dialogue.py`: raw strings of every text file (`data/dialogue_summary.json`)
+- `decode_dialogue.py`: decoded, readable text, straight from the game data
+- `voc_reader.py`: VOC sound samples (WAV output)
+- `extract_music.py`: music file inventory (`data/music_inventory.json`), raw extraction
+- `parse_tim.py`: TIM sequence-script chunk structure (`data/tim_analysis.json`)
+- `check_all.py`: runs every `--check`
 
-- `lol1lib.py` — shared PAK/TLK listing, Frame4 (LCW), bitmap header, palette helpers
-- `pak_reader.py` — list/extract PAK and CD `NN.TLK` members
-- `cps_reader.py` — CPS header, decode, optional PNG
-- `voc_reader.py` — VOC blocks/rate, optional WAV (PAK and TLK members)
-- `fnt_reader.py` — DOS font header and glyphs, optional atlas PNG
-- `xxx_reader.py` — automap legend records
-- `dat_reader.py` — area decoration records
-- `tlc_reader.py` — CD transparency tables
-- `vcn_vmp_reader.py` — wall tile set and layouts, optional tile atlas PNG
-- `check_all.py` — run every `--check`; exit 0 when all pass
-
-Known issue with the older tools above: most import modules that are not in the repo (`lol1_decompress_lcw`, `lol1_decode_frame4`) or read fixed paths under `/home/bob`, and `pak_indexer.py` / `tlk_verify.py` ignore `--help` and run (writing their outputs). See `docs/STATUS.md`.
-
-Working rule:
-
-- keep the public tool surface smaller and cleaner than the full private workspace
+Where a `data/*.json` file is named, the tool's `--out` produces it and its `--check` compares with it.

@@ -9,7 +9,7 @@ Current example set:
 - `guard_frame_000.png`
   - one extracted/rendered enemy sprite frame from `GUARD.SHP`
 - `knowltk1_frame_000.png`
-  - one extracted `WSA` animation frame from the full multi-frame extraction lane
+  - one extracted `WSA` animation frame from the full multi-frame extraction
 
 Working rule:
 
