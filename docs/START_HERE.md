@@ -1,13 +1,13 @@
 # Start here, by goal
 
-You need Python 3.8+, Pillow (`pip install Pillow`) and your own copy of *Lands of Lore: The Throne of Chaos* for DOS. Point the tools once at the folder holding `GENERAL.PAK` (on the CD the `DATA` folder; on the floppy the install folder). Either edition works; on the floppy, four checks skip their comparison with the CD tables in `data/`:
+You need Python 3.8+, Pillow (`pip install Pillow`) and your own copy of *Lands of Lore: The Throne of Chaos* for DOS. Point the tools once at the folder holding `GENERAL.PAK` (on the CD the `DATA` folder; on the floppy the install folder). Either edition works; on the floppy, six checks (pak_index, wll, cmz, dialogue, music, tim) skip their comparison with the CD tables in `data/`:
 
 ```bash
 export LOL1_DATA=/path/to/your/LOL1/DATA
 python3 tools/check_all.py        # 27 checks; the last line should read ALL 27 CHECKS PASSED
 ```
 
-Words you do not know are in the [glossary](GLOSSARY.md).
+Words you do not know are in the [glossary](GLOSSARY.md). The examples write into folders such as `maps/`: run them from a folder outside the clone, or give paths outside it, so nothing from your game ends up in the repository. To contribute, see [CONTRIBUTING](../CONTRIBUTING.md).
 
 ## I want to read the level maps
 
