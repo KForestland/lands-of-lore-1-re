@@ -39,7 +39,7 @@ def check_corpus(root):
                     # Original TEXT index 0 points to its first actual filename.
                     if script.strings[0] != (0x14, b"KEEP") or 'TEXT[0] +0x0014 "KEEP"' not in listing:
                         raise ValueError("first TEXT string decoded incorrectly")
-                if name == "LEVEL2.INF" and "0x7E updateAndServiceCallbacks" not in listing:
+                if name == "LEVEL2.INF" and "0x7E exitGame" not in listing:
                     raise ValueError("native 0x7E syscall name missing from listing")
                 if name == "ONETIME.INF" and "setItemProperty" not in listing:
                     raise ValueError("item syscall names missing from listing")

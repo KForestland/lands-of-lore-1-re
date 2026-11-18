@@ -210,7 +210,7 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | 7B | checkMonsterTypeHostility | type or −1 | Checks the first matching monster. Returns 0 for mode 1, otherwise 1. | 8 | 8 | `0x1592C` | `0x1A239` | LoL:2872, LoL:1604–1612 |
 | 7C | setNextFunc | entry number | Sets the next script function. | 5 | 5 | `0x1598A` | `0x1A297` | LoL:2875, LoL:1614–1618 |
 | 7D | dummy1 | — | Returns 1. | 1 | 2 | `0x30F90` | `0x37575` | LoL:2876, LoL:1620–1622 |
-| 7E | updateAndServiceCallbacks | — | **CONFIRMED** Native handler calls the game update and runtime callback dispatcher, then returns 1. The listing uses a descriptive name. ScummVM leaves this slot unimplemented. | 1 | 2 | `0x159A4` | `0x1A2B1` | CD `MAIN.EXE+0x159A4–0x159B0, +0xC846–0xC857, +0x3DFD`; floppy `+0x1A2B1–0x1A2BD, +0x10062–0x10073, +0x4DFD`; LoL:2877 |
+| 7E | exitGame | — | **CONFIRMED** Prepare game shutdown and terminate to DOS with status 0. ScummVM leaves the slot unimplemented. | 1 | 2 | `0x159A4` | `0x1A2B1` | CD `MAIN.EXE+0xC846–0xC857, +0x396B–0x3973`; floppy `+0x10062–0x10073, +0x496B–0x4973`; LoL:2877. [Native exit and script branch](unknowns/08_native_script_exit.md) |
 | 7F | suspendMonster | monster | Sets mode 14 and removes its placement. | 26 | 24 | `0x159B1` | `0x1A2BE` | LoL:2878, LoL:1624–1631 |
 | 80 | setScriptTextParameter | value | Sets the script text formatting parameter. | 0 | 1 | `0x15A0D` | `0x1A31A` | LoL:2881, LoL:1633–1637 |
 | 81 | triggerEventOnMouseButtonClick | event ID | Polls input and optionally triggers the event. Returns whether it handled input. | 3 | 4 | `0x15A27` | `0x1A334` | LoL:2882, LoL:1639–1658 |
@@ -281,7 +281,7 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 
 - **CONFIRMED** Both witnesses have the same 60 script names. CD and floppy share 24 byte-identical files, all INI. Read the test results and PAK offsets below to reproduce the comparison.
 - **CONFIRMED** Call IDs present only on CD are 0xBB–0xBE. Examples are `L03.PAK+0x4CA6` (0xBB) and `L01.PAK+0xD2A3`, `+0xD255`, `+0xDA6B` (0xBC, 0xBD, 0xBE). Floppy-only 0x80 appears at `CHAPTER1.PAK+0x5E047`. The call-site totals above describe these particular corpora.
-- **CONFIRMED** Dispatch slot 0x7E is called once on CD at `L02.PAK+0xF40D` and twice on floppy at `CHAPTER1.PAK+0x5B351` and `CHAPTER5.PAK+0x2C68C`. Both native handlers take zero stack arguments, run update callbacks and return 1, as shown in the function table. Further downstream effects remain **UNCONFIRMED**. ScummVM leaves it unimplemented (LoL:2877, VM:309–321).
+- **CONFIRMED** Dispatch slot 0x7E is called once on CD at `L02.PAK+0xF40D` and twice on floppy at `CHAPTER1.PAK+0x5B351` and `CHAPTER5.PAK+0x2C68C`. Both native handlers take zero stack arguments, perform cleanup, then terminate to DOS with status 0. See [the native exit trace](unknowns/08_native_script_exit.md). ScummVM leaves it unimplemented (LoL:2877, VM:309–321).
 - **CONFIRMED** All 60 members per edition decompile with zero invalid opcode numbers, out-of-range function IDs, or invalid branch targets using the input members below. DATA word totals include ORDR headers and operand words. Counts are static, including instructions outside the external entry points.
 
 | Edition | Files | DATA words | Instructions | TEXT indexes | Files with TEXT |
