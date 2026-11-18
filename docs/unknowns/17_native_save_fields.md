@@ -33,6 +33,16 @@ Example (**CONFIRMED**, CD `+0xCC86–0xCC93`; floppy `+0x10498–0x104A5`). The
 
 The four-byte character and monster fields skipped by the importer are native far pointers. The native character load paths replace the modifier pointer after loading (`CD MAIN.EXE+0x48923–0x4898B`; floppy `+0x51FE2–0x5204A`). The monster pointer is present in the original LANDSoL `_LEVEL1.TMP+0x8A`, and ScummVM rebuilds it from the saved monster type (`saveload_lol.cpp:279–289`). A populated native level slot begins with a four-byte sidecar length. The original loaders consume that length and the fixed-size buffer to recreate the temporary file, while ScummVM uses the fixed slot stride (`CD MAIN.EXE+0x48A70–0x48AEC`; floppy `+0x520E1–0x5215D`; ScummVM `saveload_lol.cpp:237–245,309–310`).
 
-## Remaining measurements
+## Isolated bytes
 
-**UNCONFIRMED** The purposes of the three single bytes at relative offsets `0x014`, `0x20F` and CD `0x232`. Checked both serializers, both readers and direct data-address references around the adjacent fields. No instruction reviewed identifies a separate field there. This leaves indirect accesses and alignment bytes as possibilities. No complete original LoL1 slot file was present in the examined CD, LANDSoL and patch-testing directories. The `_SAVE000.DAT` under the CD's Dune II demo belongs to a separate title. A differential pair of original saves with one setting changed would verify the options bytes and show whether these three bytes vary. A read/write watch on the three native addresses, armed after restoring a copied original save, would identify a consumer or a producer if present. Both are follow-up measurements.
+**CONFIRMED** The native game-state initialization zero-fills the entire saved global block, including these bytes. CD calls its byte-fill routine with zero, length `0x233` and `DS:7FD0` at `MAIN.EXE+0x4A437–0x4A445`. LANDSoL calls the equivalent with zero, length `0x22D` and `DS:B476` at `MAIN.EXE+0x53A1D–0x53A2B`. Both fill the final odd byte as well as the whole words (CD `+0x7512–0x7535`, floppy `+0x7790–0x77B3`). The resident data image also starts each byte at zero.
+
+| Block offset | CD save / runtime / initial executable byte | LANDSoL save / runtime / initial executable byte |
+| --- | --- | --- |
+| `0x014` | `0x268` / `DS:7FE4` / `MAIN.EXE+0x39AB4` | `0x25D` / `DS:B48A` / `MAIN.EXE+0x42CEA` |
+| `0x20F` | `0x463` / `DS:81DF` / `MAIN.EXE+0x39CAF` | `0x458` / `DS:B685` / `MAIN.EXE+0x42EE5` |
+| `0x232` | `0x486` / `DS:8202` / `MAIN.EXE+0x39CD2` | Outside the saved block |
+
+**CONFIRMED** The loader restores these bytes as part of its block read and the writer copies them again. No normalization of these particular bytes appears in the surrounding save and load code (CD `MAIN.EXE+0x4898D–0x48A09, +0x48B92–0x48BBF`, floppy `+0x5204C–0x52094, +0x521ED–0x52209`).
+
+**UNCONFIRMED** The zero initialization and narrow accesses to the adjacent fields make alignment or unused space plausible. The targeted static check compared literal data addresses, direct memory operands, and accesses beginning at the preceding field. For example, the CD occurrence of word `81DF` at `MAIN.EXE+0x1EE77` straddles `add bx, di` and the next instruction, while `+0x4A8E1` is part of `mov bx, di` followed by `and bx, 0x7FFF`. Neither is a memory access. The individual meanings remain open because a pointer-relative access can avoid the literal address. The examined local DOS originals contained level sidecars and no complete LoL1 `_SAVEnnn.DAT`. To settle this, watch the five runtime addresses above after initialization, through a save/load round trip and subsequent gameplay, and distinguish block copies from any byte-specific write or consumer.
