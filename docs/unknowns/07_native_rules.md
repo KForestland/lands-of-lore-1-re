@@ -71,13 +71,14 @@
 
 **CONFIRMED** Both DOS sound-driver initializers register the game-clock callback at frequency 60. CD `MAIN.EXE+0x52458–0x5247E` passes offset 2 with overlay segment index `0x458`. That index selects segment `0x2318` from the directory at `0x2FC50`, giving callback file offset `0x26982`. LANDSoL `+0x57E0C–0x57E32` passes offset `0xC` with index `0x2F0`. Its directory at `0x36500` gives segment `0x24B8` and callback `0x2938C`. Frequency 60 is the literal `0x3C` in each registration path.
 
-**CONFIRMED** The driver derives the logical period as integer `1,000,000 / frequency` microseconds, so 60 gives `16,666 μs`. It chooses the shortest registered period for the hardware clock. When that period is `16,666`, the integer PIT divisor is `floor(16666 × 10000 / 8380) = 19887` (`0x4DAF`). The timer setup writes `0x36` to port `0x43` and then the divisor's low and high bytes to port `0x40`. Other registrations can change the hardware interrupt period. The software scheduler accumulates elapsed periods and calls the registered handler when its slot period is reached.
+**CONFIRMED** The driver derives the logical period as integer `1,000,000 / frequency` microseconds, so 60 gives `16,666 μs`. It chooses the shortest registered period for the hardware clock. When that period is `16,666`, the integer PIT divisor is `floor(16666 × 10000 / 8380) = 19887` (`0x4DAF`). The timer setup writes `0x36` to port `0x43` and then the divisor's low and high bytes to port `0x40`. Other registrations can change the hardware interrupt period. The interrupt routine adds the current timer period to each enabled slot's accumulator. When it reaches the slot's period, the routine subtracts that period and calls its registered handler.
 
 | Native evidence | CD `MAIN.EXE` | LANDSoL `MAIN.EXE` |
 | --- | --- | --- |
 | Integer frequency-to-period conversion and slot write | `0x5679B–0x56853` | `0x26E73–0x26EB2, 0x26CE9–0x26D3C` |
 | Pick shortest period | `0x566CA–0x56749` | `0x26A2A–0x26ABD` |
 | Convert to divisor and write PIT ports | `0x56654–0x5667C, 0x564D2–0x564F3` | `0x269B6–0x269DE, 0x2698D–0x269B5` |
+| Install the IRQ 0 vector and schedule enabled callbacks | `0x56947–0x5698D, 0x1F2FD–0x1F3A0` | `0x2690D–0x26953, 0x26827–0x26893` |
 | Increment the game clock counters | `0x26982–0x269C7` | `0x2938C–0x293D5` |
 | Pause and resume the gameplay clock with argument 2 | `0x4C5B3–0x4C5D4, 0x269C8–0x26A49` | `0x5521A–0x55249, 0x24F85–0x24FEC` |
 
@@ -153,7 +154,7 @@
 | 5 | Door switch hit-test, sound 78, event `0x40`, then a 15-tick delay and a toggle if the script leaves it enabled. | `0x17871` | `0x1BE9C` |
 | 6 | Niche shape hit-test and placement of the held item at height 8, then clear the held item. | `0x178E1–0x17979` | `0x1BF0C–0x1BFA4` |
 
-**CONFIRMED** Worked example: CD `L01.PAK+0x109E9` and floppy `CHAPTER1.PAK+0xD1E` both record wall 3, special type 5 and flag byte `0xAF`. This is a clickable door switch. Its flags include `0x20` (closed), `0x08` (door side), and the three collision bits. In 29 WLL tables per edition, 1726 wall records per edition use special types 0–6 with frequencies 770 / 448 / 91 / 88 / 7 / 290 / 32. The table comparison begins with this L01 record and includes, for example, type 6 at CD `L04.PAK+0xD930`.
+**CONFIRMED** CD `L01.PAK+0x109E9` and floppy `CHAPTER1.PAK+0xD1E` both record wall 3, special type 5 and flag byte `0xAF`. This is a clickable door switch. Its flags include `0x20` (closed), `0x08` (door side), and the three collision bits. In 29 WLL tables per edition, 1726 wall records per edition use special types 0–6 with frequencies 770 / 448 / 91 / 88 / 7 / 290 / 32. The table comparison begins with this L01 record and includes, for example, type 6 at CD `L04.PAK+0xD930`.
 
 ### Follow-up on bit 0x40
 

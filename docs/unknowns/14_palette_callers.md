@@ -4,13 +4,13 @@
 
 | Name | CD member | LANDSoL member | LANDSoL `MAIN.EXE` name and resource row |
 | --- | --- | --- | --- |
-| `CAV_PLT2.PAL` | `CAVE1.PAK+0x1D72C` | `GENERAL.PAK+0x5B2` | name `0x3A525`, row 227 at `0x2E21C` |
-| `CAV_PLT4.PAL` | `CAVE1.PAK+0x1DD2C` | `GENERAL.PAK+0xBB2` | name `0x3A53F`, row 229 at `0x2E244` |
-| `ALTPAL3.PAL` | `FOREST1.PAK+0x1B8B5` | `GENERAL.PAK+0x14B2` | name `0x3A564`, row 232 at `0x2E280` |
+| `CAV_PLT2.PAL` | `CAVE1.PAK+0x1D72C` | `GENERAL.PAK+0x5B2` | name `0x3A525`, on-disk row 227 at `0x2E21C` |
+| `CAV_PLT4.PAL` | `CAVE1.PAK+0x1DD2C` | `GENERAL.PAK+0xBB2` | name `0x3A53F`, on-disk row 229 at `0x2E244` |
+| `ALTPAL3.PAL` | `FOREST1.PAK+0x1B8B5` | `GENERAL.PAK+0x14B2` | name `0x3A564`, on-disk row 232 at `0x2E280` |
 
 **CONFIRMED** The LANDSoL `MAIN.EXE` names are registered resources. The 20-byte row begins with a relocated far pointer, followed by a four-byte length of `0x300`. A word at +0x12 contains `0x1000`. The native file lookup searches names in this table, then the generic open routine uses the returned row in the `0x1000` branch. LANDSoL `MAIN.EXE+0x236D3–0x2383E` (name comparison and row lookup), `+0xB480–0xB4E9` (open routine), table base `+0x2D060`. This accounts for the relocations without a direct instruction pushing any of the three filename addresses.
 
-**CONFIRMED** Worked example: row 227 starts `C5 2C 06 33 00 03 00 00`. The MZ header is `0x4800` bytes, so this pointer resolves to `0x4800 + 0x3306 × 16 + 0x2CC5 = 0x3A525`, the string `CAV_PLT2.PAL`. The `0x300` length matches the PAK member at `GENERAL.PAK+0x5B2`. The floppy `FINALE.EXE` contains the same three names at `0x235F9`, `0x23613` and `0x23638`.
+**CONFIRMED** On-disk row 227 starts `C5 2C 06 33 00 03 00 00`. The MZ header is `0x4800` bytes, so this pointer resolves to `0x4800 + 0x3306 × 16 + 0x2CC5 = 0x3A525`, the string `CAV_PLT2.PAL`. The `0x300` length matches the PAK member at `GENERAL.PAK+0x5B2`. The floppy `FINALE.EXE` contains the same three names at `0x235F9`, `0x23613` and `0x23638`.
 
 ## Palette loads observed
 
@@ -27,4 +27,4 @@
 
 ## Remaining question
 
-**UNCONFIRMED** No specific gameplay caller of the three resource rows was identified. The check searched exact and prefix names in the 60 EMC2 scripts of each edition and the 139 CD and 147 LANDSoL TIM members. It found the four EMC2 controls above and no occurrence of the three names in question. The CD executables checked have no corresponding name strings. In LANDSoL the direct near-address search returned only the relocated descriptor pointers for the three names and an incidental byte match for the ALTPAL3 offset. The generic lookup and open paths above take a filename at runtime. A computed filename could reach them. A trace of LANDSoL's open routine at `0xB442` filtered for rows 227, 229 and 232, with the caller address and requested length, would distinguish a palette use from registration alone.
+**UNCONFIRMED** No specific gameplay caller of the three resource rows was identified. The check searched exact and prefix names in the 60 EMC2 scripts of each edition and the 139 CD and 147 LANDSoL TIM members. It found the four EMC2 controls above and no occurrence of the three names in question. The CD executables checked have no corresponding name strings. In LANDSoL the direct near-address search returned only the relocated descriptor pointers for the three names and an incidental byte match for the ALTPAL3 offset. The generic lookup and open paths above take a filename at runtime. A computed filename could reach them. The lookup prepares and searches a runtime table, including a sort step at `0x2377E`, so the file row positions serve as byte anchors. A trace of LANDSoL's open routine at `0xB442` should filter by the incoming filename and capture the caller address and requested read length.
