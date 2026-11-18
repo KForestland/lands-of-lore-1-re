@@ -44,7 +44,7 @@ Before a release branch is pushed:
 
 1. Work from contributor branches is squash-merged (`git merge --squash`), then committed with the identity above, so no contributor address enters the published history.
 2. Never merge, cherry-pick or push from `refs/original`, a reflog entry or a commit hash from before a history rewrite.
-3. In a fresh clone of the release branch, with `$LOL1_DATA` set to your game files, `python3 tools/check_all.py` must end with `ALL ... CHECKS PASSED`. It includes `tools/repo_guard.py`. The guard fails on game files and media, on machine paths and private or assistant names, and on any author or committer address in the branch history other than the allowed noreply ones (`ALLOWED_AUTHORS` in the guard; GitHub web merges may commit as `noreply@github.com`).
+3. In a fresh clone of the release branch, with `$LOL1_DATA` set to your game files, `python3 tools/check_all.py` must end with `ALL ... CHECKS PASSED`. It includes `tools/repo_guard.py`, which fails on game files and media, on files over 300 KB, and on machine paths and private or assistant names. Then run `python3 tools/repo_guard.py --check --release`: it also fails on any author or committer address in the branch history other than the allowed noreply ones (`ALLOWED_AUTHORS`; GitHub web merges may commit as `noreply@github.com`). Contributors do not need `--release`.
 4. The tree must be clean after the checks, and the tools must write nothing into the repository.
 
 ## Pull Requests
