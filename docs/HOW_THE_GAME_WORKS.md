@@ -17,7 +17,7 @@ also uses TLK archives for speech. [PAK directory](formats/pak.md) ·
 
 ## Starting the game
 
-The original `ONETIME.INF` (in `STARTUP.PAK`) allocates 285 item types and supplies one
+The original `ONETIME.INF` (CD `STARTUP.PAK`, floppy `GENERAL.PAK`) allocates 285 item types and supplies one
 definition for each. A definition has a name ID, a shape, combat values
 and an item-script entry. The separate `ITEM.INF` holds the event code
 for items. [Item definitions and script loader](executable_tables.md#item-types-and-item-properties)
