@@ -89,7 +89,26 @@
 | 15 | Used temporarily during the collision query. The existing mode is saved and restored. | `0x1145D–0x114B5` | `0x15EF9–0x15F51` |
 | 16 | An inactive slot value. | `0x12766–0x1276E` | `0x17104–0x1710C`, `_LEVEL5.TMP+0x63` |
 
-**CONFIRMED** Spawn HP is `floor(base HP × difficulty modifier 1 / 256)`, then `floor(result × (192 + 1d128) / 256)`, with a floor of 1 HP. CD skips the second multiply for type 2 on level 12. LANDSoL always takes it. For example with normal difficulty, base HP 40 and a roll of 64, the result is 40 in either edition (CD `0x14740–0x147B2`, floppy `0x190D8–0x19139`). The renderer's complete treatment of mode 11 and the script role of mode 10 are **UNCONFIRMED**. The tables and update branch above establish the cleanup behavior. Trace assignments to the mode byte and the frame selector for a placed monster in each mode to label further effects.
+**CONFIRMED** Spawn HP is `floor(base HP × difficulty modifier 1 / 256)`, then `floor(result × (192 + 1d128) / 256)`, with a floor of 1 HP. CD skips the second multiply for type 2 on level 12. LANDSoL always takes it. For example with normal difficulty, base HP 40 and a roll of 64, the result is 40 in either edition (CD `0x14740–0x147B2`, floppy `0x190D8–0x19139`).
+
+### Follow-up on modes 9–11
+
+**CONFIRMED** In the walk helper, runtime flag 8 reverses the intended eight-way direction by XORing it with 4 before the movement search. This is the flag cleared by mode 9 on its return to mode 7 (CD `MAIN.EXE+0x1151F–0x1152F, +0x129E6–0x12A17`, LANDSoL `+0x15FBB–0x15FCB, +0x17385–0x173B6`). Upstream `engines/kyra/engine/sprites_lol.cpp:1123–1129,1336–1344`.
+
+**CONFIRMED** Modes 10 and 11 have the same update-table target, the shared cleanup at CD `0x12A30` and LANDSoL `0x173CF`. The mode-10 and mode-11 table words are identical at CD `0x12A7F–0x12A82` and floppy `0x1741E–0x17421`. The earlier update code runs its one-in-four shift update for mode 10 and skips it for mode 11 (CD `0x12830–0x12860`, floppy `0x171CE–0x171FF`).
+
+**CONFIRMED** The native renderer resolves the animation type from the monster's shape bank, then calls one of four frame selectors (CD `0x3DDEF–0x3DE52`, LANDSoL `0x46F35–0x46F98`). The selected frame is an index within the shape bank. This is how the two modes differ in the four selectors.
+
+| Animation type | Mode 10 result | Mode 11 result | CD / LANDSoL selector |
+| --- | --- | --- | --- |
+| 0 | Uses the ordinary subframe. Direction flags are added when set. With no direction offset a pending damage display takes frame 12. | Direction offset and damage result take precedence as in mode 10. Otherwise uses fixed frame 14. | `0x3DC34–0x3DCD1` / `0x46D88–0x46E25`. Jump table at `0x3DCD2` / `0x46E26`. |
+| 1 | Uses the HP band index 0, 4 or 8. CD calculates the thresholds from difficulty-adjusted base HP. Floppy uses raw base HP. | Fixed frame 12. | `0x3DCE4–0x3DD74` / `0x46E38–0x46EBA` |
+| 2 | Uses the fight counter, capped above at 13. | Same counter rule. | `0x3DDD6–0x3DDEE` / `0x46F1C–0x46F34` |
+| 3 | Uses the ordinary subframe or frame 5 when showing damage. | Fixed frame 5. | `0x3DD75–0x3DDD5` / `0x46EBB–0x46F1B` |
+
+**CONFIRMED** There are three literal mode-11 assignments in `LEVEL23.INF` in each edition. They find a monster in block 105, 121 or 369, play sounds 88 and 87, then invoke EMC `0x5B` with selector 0 and value 11. The native selector 0 calls the mode setter (CD `MAIN.EXE+0x14FBC–0x14FC6`, floppy `+0x19943–0x1994D`). For example, the state change for block 105 is the call at CD `L23.PAK+0xC2AE` and floppy `CHAPTER6.PAK+0x6AC2D`. The other calls are CD `+0xC2DE, +0xC310` and floppy `+0x6AC5D, +0x6AC8F`.
+
+**UNCONFIRMED** The intended gameplay entry into mode 10 remains open. The native update and frame tables establish what it does once set. The search checked direct immediate accesses to mode byte +0x14 and literal mode inputs to EMC `0x5B` and `0x38` in both 60-script corpora. It found the mode-11 witnesses above, and did not resolve every computed argument. A trace of mode writes in the original, conditioned on new value 10, or a static reconstruction of the computed parameters to those two EMC handlers would settle whether the state is used in shipped gameplay.
 
 ## WLL flags and special types
 
