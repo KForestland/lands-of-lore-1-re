@@ -57,6 +57,31 @@ each trace. Starting `MAIN.EXE` by itself does not work: without its one
 argument it takes the refusal branch at file `0x51F00` and exits with
 status 1 at `0x51F9D`.
 
+### An earlier launch that was refused
+
+**CONFIRMED.** An earlier pass used the DOSBox 0.74-3 debugger,
+SVGA S3, 32 MB of memory, a fixed 100000 cycles, and no sound hardware.
+Drive C held only the launcher-side files: `MAIN.EXE` (356,928 bytes),
+`MAINW.EXE`, `LOLCD.EXE`, `SETUP.EXE` and `LANDS.CFG`. Drive D was a
+copy of the disc, mounted as a CD-ROM. The setup was English, with no
+musical scores, no sound effects and no digitized sounds. The session
+changed to drive C and the typed command was `debug main.exe`, with no
+game argument. The debugger loaded `MAIN.EXE`. No later file open was
+traced. The program printed the RAM and XMS lines and returned to the
+DOS prompt on drive C, before a level loaded.
+
+**CONFIRMED.** That return is the no-argument refusal, not a quit from
+play. At `MAIN.EXE+0x51F00` the image compares `SI` with 1 and, when
+`SI` is less than or equal to 1, jumps to `+0x51F6A`. That block prints
+the two lines and calls the runtime exit wrapper at `+0x3E54` with
+status 1 (`+0x51F9D`). The one-shot setter at `+0x5197B` is not on this
+path. The registered prep at `+0x2689C` still ran. In this run the load
+segment was `01EB` and `DS` was `3018`. `DS:3618` was `0000` and
+`DS:361E` was `0000:0000`, so the compare at `+0x2689F` jumped to
+`+0x2692E`. The next break was `INT 21h` `AH=4Ch` at `+0x3972`. The working launch above starts the game through `LOLCD.EXE`.
+
+`DATA/ENG/LANDS.EXE` (357,509 bytes) is the intro and character-generation program; it does not contain the `MAIN.EXE` prologues used for breakpoints. After character select it starts `MAIN.EXE` with one argument, and the `MAIN.EXE` breakpoints apply from then on (a new PSP).
+
 ## Q7a. Can wall bit 0x40 change anything besides the EMC byte test?
 
 Question: [Q7 in OPEN_QUESTIONS](OPEN_QUESTIONS.md).
@@ -83,7 +108,7 @@ Also walk past and click that face from the same state in both runs.
 A changed result only at the whole-byte EMC test is the expected
 control. A second changed branch whose input is bit 0x40 identifies
 an additional consumer. A match over this one route bounds that
-route's behavior.
+route's behavior. Not reached on this pass: see the CD launch note.
 
 ## Q7b. Which animation actually displays when a script selects mode 11?
 
@@ -113,7 +138,8 @@ bank, selector, direction offset and pending-damage state. Fixed frame
 that fixed arm reached the screen. Any other frame should be accounted
 for by the captured selector or draw flags. A write watch on that
 instance's mode byte +0x14 also distinguishes an actual mode-10
-transition from a frame picked while mode 11 remains set.
+transition from a frame picked while mode 11 remains set. Not
+reached on this pass: see the CD launch note.
 
 ## Q8. Which shutdown callbacks run on a given installation?
 
@@ -132,6 +158,14 @@ pointer skips the optional callback, and a nonzero one must supply
 the executed target. A different current and saved video mode must
 reach the video helper with argument 9. Keep the recorded setup with
 the result since the callbacks can differ by installation.
+
+**CONFIRMED** for the no-argument refusal in the launch note above, not
+for a quit from play. The runtime exit calls the prep. On this path the
+one-shot word is still clear, because `+0x5197B` did not run, so the
+optional callback and the video-mode query do not run. A breakpoint on
+the dword test at `+0x268EB` did not fire. A quit from play, which is
+when a setup would register a callback and that init would set the
+one-shot flag, was not reached, so that branch stays **UNCONFIRMED**.
 
 ## Q17. Are the isolated save bytes touched during play?
 
@@ -155,7 +189,9 @@ reload and save again. The known copy path gives equal saved and
 live values. A byte-specific access outside that path identifies a
 new producer or consumer. A stable zero and only bulk copies give
 an unused-byte witness for that play sequence. Keep the watchpoints
-active through the resume following the load.
+active through the resume following the load. Not reached on this
+pass: the launch returns to DOS before a new game, a level change or
+a save.
 
 ## Q18. Which monster definition fields does an actual fight use?
 
@@ -183,4 +219,5 @@ control. The known critical read computes `100 − value` (CD
 nonzero write after setup identifies the producer. A word read with
 its downstream calculation identifies that word's role. A trace
 containing only the known critical and control reads bounds the
-result to the actions taken.
+result to the actions taken. Not reached on this pass: see the CD
+launch note.
