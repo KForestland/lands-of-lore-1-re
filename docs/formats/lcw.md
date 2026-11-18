@@ -1,0 +1,20 @@
+# Frame4 / LCW compression ("format 80")
+
+**What:** the byte-oriented LZ used by CPS, CMZ, VCN, VMP (compression type 4 in the 10-byte bitmap header, see [cps.md](cps.md)), by WSA frames and by compressed SHP frames.
+
+**Source:** `engines/kyra/graphics/screen.cpp:2484-2530` (`Screen::decodeFrame4`).
+
+| Code byte | Meaning |
+|-----------|---------|
+| `0ccc oooo` + 1 byte | copy `ccc + 3` bytes from `out_pos - offset` (12-bit offset, **relative**) |
+| `10cc cccc`, c != 0 | copy the next `c` bytes from the input |
+| `1000 0000` (0x80) | end |
+| `11cc cccc`, c < 0x3E | copy `c + 3` bytes from absolute offset `uint16` (from start of output) |
+| `0xFE` + uint16 n + byte v | write `v` n times |
+| `0xFF` + uint16 n + uint16 o | copy n bytes from absolute offset `o` |
+
+There is no mode flag: short copies are always relative, medium and long always absolute. CONFIRMED in code (lines above) and on data: every CPS, CMZ, VCN and VMP in the CD and LANDSoL corpora decodes to exactly the size in its header (`cps_reader.py --check` 85/85 CD, 60/60 ENG, 112/112 LANDSoL; `vcn_vmp_reader.py --check` 13/13 both; CMZ 29/29 with `lol1lib.load_bitmap`).
+
+**Correction history:** the memo (section B.4) records the earlier decoder bug (relative/absolute mixed up), fixed in `tools/decode_frame4.py`.
+
+**Tool:** `tools/lol1lib.py: decode_frame4()` (port of the function above); `tools/decode_frame4.py` (older copy, needs its paths edited).
