@@ -18,6 +18,9 @@ override palette, if any), as listed by tileset_mapper.py. This is a map
 overview, not the in-game 3D view.
 
   level_renderer.py --level 1 --out-dir maps/     # one PNG
+  level_renderer.py --level 1 --out-dir maps/ --schematic
+      # drawing from CMZ + WLL only, no game pixels: open squares light, solid dark,
+      # mixed (doors, switches, part walls) orange, decorated walls (WLL shape > 0) red marks
   level_renderer.py --out-dir maps/                # all 29
   level_renderer.py --check                        # every wall page resolves; lists wall types
                                                    # missing from the level's WLL; no PNGs written
@@ -93,10 +96,47 @@ def render(level, data_dir, check_only=False):
     return name, img
 
 
+def wll_records(level, data_dir):
+    b = L.level_member(level, "WLL", data_dir)
+    out = {}
+    for i in range((len(b) - 2) // 12):
+        o = 2 + i * 12
+        out[struct.unpack_from("<H", b, o)[0]] = (b[o + 2], struct.unpack_from("<h", b, o + 4)[0])
+    return out
+
+
+def render_schematic(level, data_dir, cell=10):
+    """Map drawing that uses only the CMZ wall bytes and the WLL table (no game pixels).
+
+    open square (no wall with geometry): light; solid square (all four walls have
+    geometry): dark; mixed square (doors, switches, niches, part walls): orange;
+    a wall with a decoration (WLL shape > 0) adds a red mark on that side.
+    """
+    from PIL import Image, ImageDraw
+    rec = wll_records(level, data_dir)
+    blocks = level_blocks(level, data_dir)
+    geo = lambda w: rec.get(w, (0, 0))[0] > 0
+    deco = lambda w: rec.get(w, (0, 0))[1] > 0
+    img = Image.new("RGB", (32 * cell, 32 * cell), (40, 40, 48))
+    d = ImageDraw.Draw(img)
+    for i, walls in enumerate(blocks):
+        x, y = (i % 32) * cell, (i // 32) * cell
+        n = sum(geo(w) for w in walls)
+        colour = (235, 232, 220) if n == 0 else (40, 40, 48) if n == 4 else (230, 150, 50)
+        d.rectangle([x, y, x + cell - 1, y + cell - 1], fill=colour)
+        marks = [(x + cell // 2, y + 1), (x + cell - 2, y + cell // 2), (x + cell // 2, y + cell - 2), (x + 1, y + cell // 2)]
+        for side, w in enumerate(walls):     # walls[N, E, S, W] (docs/formats/cmz.md)
+            if deco(w):
+                mx, my = marks[side]
+                d.rectangle([mx - 1, my - 1, mx + 1, my + 1], fill=(200, 30, 30))
+    return img
+
+
 def main():
     ap = L.tool_args(__doc__)
     ap.add_argument("--level", type=int, help="1..29 (default: all)")
     ap.add_argument("--out-dir", default=".", help="folder for levelNN_<area>.png")
+    ap.add_argument("--schematic", action="store_true", help="line drawing without game pixels")
     a = ap.parse_args()
     levels = [a.level] if a.level else range(1, 30)
     if a.check:
@@ -113,6 +153,10 @@ def main():
         return 0 if not bad else 1
     os.makedirs(a.out_dir, exist_ok=True)
     for lv in levels:
+        if a.schematic:
+            img = render_schematic(lv, a.data)
+            p = os.path.join(a.out_dir, f"level{lv:02d}_schematic.png")
+            img.save(p); print("wrote", p); continue
         name, img = render(lv, a.data)
         p = os.path.join(a.out_dir, f"level{lv:02d}_{name.lower()}.png")
         img.save(p)
