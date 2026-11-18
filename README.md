@@ -43,8 +43,8 @@ Full table with evidence: [`docs/STATUS.md`](docs/STATUS.md). Open questions: [`
 | Level maps (CMZ, WLL, VCN/VMP, decorations, automap legend) | Documented, readers and renderer, checked on every file; a few bytes open (Q3, Q11) |
 | Level and item scripts (EMC2), cut-scene scripts (TIM) | Documented with full opcode and function tables; all 60 scripts of both editions and the 139 TIM files of the CD checked |
 | Tables inside the program, save files | Documented and checked in both executables and on save files |
-| Game rules (combat, magic, experience, monsters, light, time) | Written; the core combat arithmetic is checked in the original code, the rest is taken from ScummVM so far (Q7) |
-| Music | XMIDI (XMI, C55, PCS) converts to standard MIDI; AdLib (ADL) layout still open (Q15) |
+| Game rules (combat, magic, experience, monsters, light, time) | Traced in both original executables: combat, spells, timers, regeneration, lamp oil, monster modes; tick-to-time conversion and a few details open (Q7) |
+| Music | XMIDI (XMI, C55, PCS) converts to standard MIDI; the AdLib (ADL) layout is documented field by field (Q15), with no player or converter yet |
 
 Two editions were read: the CD-ROM edition with speech (version CD1.02) and an English floppy edition. See [`docs/edition_comparison.md`](docs/edition_comparison.md).
 
