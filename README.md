@@ -48,6 +48,10 @@ Full table with evidence: [`docs/STATUS.md`](docs/STATUS.md). Open questions: [`
 
 Two editions were read: the CD-ROM edition with speech (version CD1.02) and an English floppy edition. See [`docs/edition_comparison.md`](docs/edition_comparison.md).
 
+## The other Lands of Lore games
+
+Formats the three games share, with links to the LoL2 and LoL3 repositories: [docs/series-formats.md](docs/series-formats.md).
+
 ## Repository layout
 
 - [`docs/`](docs): format pages, how the game works, status, open questions, glossary
