@@ -147,123 +147,125 @@ Made by `tools/level_report.py` from `LEVEL11.CMZ`, `.WLL`, `.XXX`, `.INI`, `.IN
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL11.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles SWAMP; loads monster sprites SWAMPMON.SHP into slot 0; loads monster sprites HURZELL.SHP into slot 0; loads monster sprites SWAMPCIT.SHP into slot 1; defines monster type 1; defines monster type 2; sets game flag 77; tests game flag 86 |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 2) on block 135; places a monster (slot 2) on block 515; places a monster (slot 2) on block 668; places a monster (slot 1) on block 545; places a monster (slot 1) on block 449; places a monster (slot 1) on block 521; places a monster (slot 1) on block 357; places a monster (slot 1) on block 268 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x004A` | — | loads wall tiles SWAMP; loads monster sprites SWAMPMON.SHP into slot 0; loads monster sprites HURZELL.SHP into slot 0; loads monster sprites SWAMPCIT.SHP into slot 1; defines monster type 1; defines monster type 2; sets game flag 77; tests game flag 86 |
+| INI entry 1 (runs when the level loads) | `0x0159` | — | places a monster of type slot 2 on block 135 in mode 2; places a monster of type slot 2 on block 515 in mode 2; places a monster of type slot 2 on block 668 in mode 2; places a monster of type slot 1 on block 545 in mode 3; places a monster of type slot 1 on block 449 in mode 3; places a monster of type slot 1 on block 521 in mode 3; places a monster of type slot 1 on block 357 in mode 3; places a monster of type slot 1 on block 268 in mode 3 … |
 
 ### LEVEL11.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 42 (x 10, y 1) | wall clicked | a character speaks |
-| block 45 (x 13, y 1) | wall clicked | places a monster (slot 1) on block 659; sets the north wall of block 992 to type 0; moves the party to level 11, block 109; places a monster (slot 2) on block 109; gives item 220 (Ruby of Truth); places item 125 (Trident "Mantis") on block 109; gives item 125 (Trident "Mantis"); sets game flag 83 … |
-| block 77 (x 13, y 2) | party steps in, wall clicked | shows a message; a character speaks; set global var; tests game flag 284; tests game flag 84; tests game flag 81 |
-| block 104 (x 8, y 3) | party arrives (second path) | tests game flag 84 |
-| block 106 (x 10, y 3) | wall clicked | a character speaks |
-| block 108 (x 12, y 3) | party steps in | sets the north wall of block 992 to type 0; checks a wall of block 992 |
-| block 109 (x 13, y 3) | party steps in, bits 0x4000 (no engine caller found) | sets the north wall of block 992 to type 1; sets the north wall of block 992 to type 0; checks a wall of block 992 |
-| block 113 (x 17, y 3) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 114 (x 18, y 3) | party arrives (second path) | deals damage; paralyze poison character; shows a message |
-| block 117 (x 21, y 3) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 121 (x 25, y 3) | wall clicked | a character speaks |
-| block 122 (x 26, y 3) | wall clicked | a character speaks |
-| block 131 (x 3, y 4) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 135 (x 7, y 4) | party arrives (second path) | tests game flag 84 |
-| block 139 (x 11, y 4) | wall clicked | a character speaks |
-| block 163 (x 3, y 5) | wall clicked | a character speaks |
-| block 165 (x 5, y 5) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 167 (x 7, y 5) | party arrives (second path), bits 0x10 (no engine caller found) | check equipped item script flags; a character speaks; starts a dialogue; sets game flag 270; move monster; sets game flag 271; tests game flag 271 |
-| block 168 (x 8, y 5) | wall clicked | a character speaks |
-| block 193 (x 1, y 6) | party arrives (second path) | deals damage; paralyze poison character; shows a message |
-| block 197 (x 5, y 6) | party arrives (second path) | deals damage; paralyze poison character; shows a message |
-| block 208 (x 16, y 6) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 209 (x 17, y 6) | party arrives (second path) | deals damage; paralyze poison character; shows a message |
-| block 225 (x 1, y 7) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 248 (x 24, y 7) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 264 (x 8, y 8) | party arrives (second path) | deals damage; paralyze poison character; shows a message |
-| block 265 (x 9, y 8) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 270 (x 14, y 8) | wall clicked | a character speaks |
-| block 272 (x 16, y 8) | wall clicked | a character speaks |
-| block 274 (x 18, y 8) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 275 (x 19, y 8) | wall clicked | a character speaks |
-| block 277 (x 21, y 8) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 281 (x 25, y 8) | wall clicked | no game action (only stack and screen bookkeeping) |
-| block 282 (x 26, y 8) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 284 (x 28, y 8) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 290 (x 2, y 9) | wall clicked | a character speaks |
-| block 309 (x 21, y 9) | party arrives (second path) | deals damage; paralyze poison character; shows a message |
-| block 316 (x 28, y 9) | party arrives (second path) | deals damage; paralyze poison character; shows a message |
-| block 321 (x 1, y 10) | wall clicked | deals damage; checks a wall of block 993 |
-| block 334 (x 14, y 10) | wall clicked | sets the north wall of block 0 to type 83; sets the north wall of block 0 to type 0; gives ? crown(s); gives item 39 (Crossbow); gives item 35 (Bow); gives item 66 (Great bow); get item price; clears game flag ? … |
-| block 337 (x 17, y 10) | wall clicked | a character speaks |
-| block 353 (x 1, y 11) | bits 0x400 (no engine caller found) | deals damage; checks a wall of block 993 |
-| block 358 (x 6, y 11) | wall clicked | places a monster (slot 2) on block 109; a character speaks; suspend monster; make item; give item to monster; changes a monster; sets game flag 84; tests game flag 84 … |
-| block 366 (x 14, y 11) | party steps in, party arrives (second path), bits 0x4000 (no engine caller found) | sets the north wall of block 992 to type 1; set global var; tests game flag 275; tests game flag 274; tests game flag 276; plays a sound; tests game flag 84; tests game flag 81 |
-| block 369 (x 17, y 11) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 380 (x 28, y 11) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 409 (x 25, y 12) | wall clicked | a character speaks |
-| block 415 (x 31, y 12) | wall clicked | a character speaks |
-| block 418 (x 2, y 13) | wall clicked | a character speaks |
-| block 426 (x 10, y 13) | wall clicked | a character speaks |
-| block 432 (x 16, y 13) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 433 (x 17, y 13) | party arrives (second path) | deals damage; paralyze poison character; shows a message |
-| block 434 (x 18, y 13) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 448 (x 0, y 14) | wall clicked | a character speaks |
-| block 451 (x 3, y 14) | wall clicked | a character speaks |
-| block 452 (x 4, y 14) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 453 (x 5, y 14) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 454 (x 6, y 14) | party arrives (second path) | deals damage; paralyze poison character; shows a message |
-| block 455 (x 7, y 14) | party arrives (second path) | tests game flag 84 |
-| block 463 (x 15, y 14) | wall clicked | a character speaks |
-| block 473 (x 25, y 14) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 474 (x 26, y 14) | party arrives (second path) | deals damage; paralyze poison character; shows a message |
-| block 475 (x 27, y 14) | party arrives (second path) | tests game flag 84 |
-| block 487 (x 7, y 15) | wall clicked | gives ? crown(s); sets the north wall of block 0 to type 87; sets the north wall of block 0 to type 0; takes 300 crown(s); gives item 232 (Wand of Fireballs); sets game flag 314; sets game flag 313; sets game flag 316 … |
-| block 490 (x 10, y 15) | wall clicked | a character speaks |
-| block 497 (x 17, y 15) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 498 (x 18, y 15) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 500 (x 20, y 15) | wall clicked | a character speaks |
-| block 503 (x 23, y 15) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 515 (x 3, y 16) | party arrives (second path) | tests game flag 84 |
-| block 519 (x 7, y 16) | party steps in, wall clicked | shows a message; starts a dialogue; set global var; tests game flag 84 |
-| block 523 (x 11, y 16) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 530 (x 18, y 16) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 531 (x 19, y 16) | wall clicked | a character speaks |
-| block 545 (x 1, y 17) | bits 0x400 (no engine caller found) | deals damage; checks a wall of block 992 |
-| block 547 (x 3, y 17) | party arrives (second path), bits 0x10 (no engine caller found) | a character speaks; starts a dialogue; move monster; sets game flag 269; tests game flag 269 |
-| block 551 (x 7, y 17) | party steps in, party arrives (second path), bits 0x4000 (no engine caller found) | sets the north wall of block 992 to type 1; sets the north wall of block 992 to type 0; set global var; checks a wall of block 992 |
-| block 553 (x 9, y 17) | wall clicked | a character speaks |
-| block 555 (x 11, y 17) | party arrives (second path) | deals damage; paralyze poison character; shows a message |
-| block 560 (x 16, y 17) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 561 (x 17, y 17) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 577 (x 1, y 18) | wall clicked | deals damage; checks a wall of block 992 |
-| block 583 (x 7, y 18) | party steps in | sets the north wall of block 992 to type 0; checks a wall of block 992 |
-| block 593 (x 17, y 18) | party arrives (second path) | deals damage; paralyze poison character; shows a message |
-| block 595 (x 19, y 18) | wall clicked | a character speaks |
-| block 604 (x 28, y 18) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 611 (x 3, y 19) | party arrives (second path) | sets game flag 255; a character speaks; tests game flag 255 |
-| block 612 (x 4, y 19) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 613 (x 5, y 19) | wall clicked | a character speaks |
-| block 617 (x 9, y 19) | wall clicked | a character speaks |
-| block 621 (x 13, y 19) | party arrives (second path), wall clicked, item put down, fireball passes | gives item 212 (Swamp Vial); delete hand item; plays a sound |
-| block 628 (x 20, y 19) | party steps in, party arrives (second path), bits 0x4000 (no engine caller found) | sets the north wall of block 992 to type 1; sets game flag 82; a character speaks; set global var; tests game flag 277; tests game flag 278; tests game flag 279; tests game flag 280 … |
-| block 653 (x 13, y 20) | wall clicked | no game action (only stack and screen bookkeeping) |
-| block 660 (x 20, y 20) | wall clicked | sets the north wall of block 0 to type 71; sets the north wall of block 0 to type 0; gives ? crown(s); gives item 70 (Great sword); gives item 52 (Great axe); gives item 124 (Trident); gives item 149 (Kite shield); get item price … |
-| block 668 (x 28, y 20) | party arrives (second path) | tests game flag 84 |
-| block 673 (x 1, y 21) | party steps in, party arrives (second path), item put down | moves objects from block 673 to block 161 |
-| block 689 (x 17, y 21) | wall clicked | a character speaks |
-| block 700 (x 28, y 21) | party arrives (second path), bits 0x10 (no engine caller found) | a character speaks; starts a dialogue; move monster; sets game flag 269; tests game flag 269 |
-| block 734 (x 30, y 22) | party arrives (second path) | a character speaks; sets game flag 590; tests game flag 590 |
-| block 735 (x 31, y 22) | party steps in, party arrives (second path), item put down | moves objects from block 735 to block 705 |
-| `0x400` level loaded | — | sets the north wall of block 992 to type 0; starts script timer 0; starts script timer 1; starts script timer 2 |
-| `0x401` script timer 0 | — | check equipped item script flags; move monster; sets game flag 271; tests game flag 270; tests game flag 271 |
-| `0x402` script timer 1 | — | places a monster (slot 2) on block 361; places a monster (slot 2) on block 475; places a monster (slot 2) on block 455; tests game flag 284; tests game flag 84 |
-| `0x403` script timer 2 | — | update block animations2; tests game flag 418; checks a wall of block 131; plays a sound; checks a wall of block 533; checks a wall of block 553; checks a wall of block 617; checks a wall of block 463 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 42 (x 10, y 1) | `0x1B49` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 45 (x 13, y 1) | `0x17B3` | wall clicked | places a monster of type slot 1 on block 659 in mode 4; sets the north wall of block 992 to type 0; moves the party to level 11, block 109, facing 3; places a monster of type slot 2 on block 109 in mode 7; gives item 220 (Ruby of Truth) if inventory placement succeeds; puts item 220 (Ruby of Truth) on an empty cursor; deletes the held item; places item 125 (Trident "Mantis") on block 109 … |
+| block 77 (x 13, y 2) | `0x177A` | party steps in, wall clicked | requests engine global change, selector 0, operands 0, 109; shows text ID 0x403f; plays chat/dialogue text ID 0x005a; requests engine global change, selector 0, operands 0, 77; requests engine global change, selector 10, operands 0, 0; tests game flag 284; tests game flag 84; tests game flag 81 |
+| block 104 (x 8, y 3) | `0x1CE3` | party arrives (second path) | tests game flag 84 |
+| block 106 (x 10, y 3) | `0x1AE9` | wall clicked | plays chat/dialogue text ID 0x0063 |
+| block 108 (x 12, y 3) | `0x1725` | party steps in | sets the north wall of block 992 to type 0; checks the north wall of block 992 |
+| block 109 (x 13, y 3) | `0x1733` | party steps in, bits 0x4000 (no engine caller found) | sets the north wall of block 992 to type 1; sets the north wall of block 992 to type 0; checks the north wall of block 992 |
+| block 113 (x 17, y 3) | `0x0E79` | party arrives (second path) | no action summarized |
+| block 114 (x 18, y 3) | `0x0FB9` | party arrives (second path) | deals damage to target ? (amount ?); paralyze poison character; shows text ID 0x005b |
+| block 117 (x 21, y 3) | `0x0EC6` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 121 (x 25, y 3) | `0x1BA9` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 122 (x 26, y 3) | `0x1B91` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 131 (x 3, y 4) | `0x0EBF` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 135 (x 7, y 4) | `0x1CDF` | party arrives (second path) | tests game flag 84 |
+| block 139 (x 11, y 4) | `0x1B01` | wall clicked | plays chat/dialogue text ID 0x0063 |
+| block 163 (x 3, y 5) | `0x1BF1` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 165 (x 5, y 5) | `0x0E6F` | party arrives (second path) | no action summarized |
+| block 167 (x 7, y 5) | `0x1094` | party arrives (second path), bits 0x10 (no engine caller found) | check equipped item script flags; plays chat/dialogue text ID 0x002f; sets up 1 dialogue choices; reads the dialogue result; sets game flag 270; move monster; sets game flag 271; tests game flag 271 |
+| block 168 (x 8, y 5) | `0x1AD1` | wall clicked | plays chat/dialogue text ID 0x0063 |
+| block 193 (x 1, y 6) | `0x0F9F` | party arrives (second path) | deals damage to target ? (amount ?); paralyze poison character; shows text ID 0x005b |
+| block 197 (x 5, y 6) | `0x0FAC` | party arrives (second path) | deals damage to target ? (amount ?); paralyze poison character; shows text ID 0x005b |
+| block 208 (x 16, y 6) | `0x0E97` | party arrives (second path) | no action summarized |
+| block 209 (x 17, y 6) | `0x0F64` | party arrives (second path) | deals damage to target ? (amount ?); paralyze poison character; shows text ID 0x005b |
+| block 225 (x 1, y 7) | `0x0E65` | party arrives (second path) | no action summarized |
+| block 248 (x 24, y 7) | `0x0ECC` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 264 (x 8, y 8) | `0x0F92` | party arrives (second path) | deals damage to target ? (amount ?); paralyze poison character; shows text ID 0x005b |
+| block 265 (x 9, y 8) | `0x0E5B` | party arrives (second path) | no action summarized |
+| block 270 (x 14, y 8) | `0x1C81` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 272 (x 16, y 8) | `0x1C69` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 274 (x 18, y 8) | `0x0F12` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 275 (x 19, y 8) | `0x1BC1` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 277 (x 21, y 8) | `0x0EA1` | party arrives (second path) | no action summarized |
+| block 281 (x 25, y 8) | `0x1A17` | wall clicked | no action summarized |
+| block 282 (x 26, y 8) | `0x0F27` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 284 (x 28, y 8) | `0x0EB5` | party arrives (second path) | no action summarized |
+| block 290 (x 2, y 9) | `0x1C09` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 309 (x 21, y 9) | `0x0F6F` | party arrives (second path) | deals damage to target ? (amount ?); paralyze poison character; shows text ID 0x005b |
+| block 316 (x 28, y 9) | `0x0FC5` | party arrives (second path) | deals damage to target ? (amount ?); paralyze poison character; shows text ID 0x005b |
+| block 321 (x 1, y 10) | `0x171D` | wall clicked | deals damage to the party (amount ?); checks the south wall of block 993 |
+| block 334 (x 14, y 10) | `0x1393` | wall clicked | sets the north wall of block 0 to type 83; sets the north wall of block 0 to type 0; deletes the held item; gives ? crown(s); gives item 39 (Crossbow) if inventory placement succeeds; puts item 39 (Crossbow) on an empty cursor; gives item 35 (Bow) if inventory placement succeeds; puts item 35 (Bow) on an empty cursor … |
+| block 337 (x 17, y 10) | `0x1BD9` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 353 (x 1, y 11) | `0x1721` | bits 0x400 (no engine caller found) | deals damage to the party (amount ?); checks the south wall of block 993 |
+| block 358 (x 6, y 11) | `0x1CB1` | wall clicked | places a monster of type slot 2 on block 109 in mode 7; plays chat/dialogue text ID 0x0062; requests engine global change, selector 0, operands 0, 108; requests engine global change, selector 1, operands 0, 1; suspend monster; creates item type 220 and returns its handle; give item to monster; creates item type 125 and returns its handle … |
+| block 366 (x 14, y 11) | `0x12E2` | party steps in, party arrives (second path), bits 0x4000 (no engine caller found) | sets the north wall of block 992 to type 1; requests engine global change, selector 10, operands 0, 2; requests engine global change, selector 1, operands 0, 0; plays music track 283; requests engine global change, selector 0, operands 0, 398; requests engine global change, selector 1, operands 0, 2; plays music track 284; tests game flag 275 … |
+| block 369 (x 17, y 11) | `0x0EE8` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 380 (x 28, y 11) | `0x0F19` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 409 (x 25, y 12) | `0x1B61` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 415 (x 31, y 12) | `0x1B79` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 418 (x 2, y 13) | `0x1C21` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 426 (x 10, y 13) | `0x1A59` | wall clicked | plays chat/dialogue text ID 0x0063 |
+| block 432 (x 16, y 13) | `0x0E83` | party arrives (second path) | no action summarized |
+| block 433 (x 17, y 13) | `0x0F57` | party arrives (second path) | deals damage to target ? (amount ?); paralyze poison character; shows text ID 0x005b |
+| block 434 (x 18, y 13) | `0x0ED3` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 448 (x 0, y 14) | `0x1B31` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 451 (x 3, y 14) | `0x1C39` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 452 (x 4, y 14) | `0x0EE1` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 453 (x 5, y 14) | `0x0E47` | party arrives (second path) | no action summarized |
+| block 454 (x 6, y 14) | `0x0F3D` | party arrives (second path) | deals damage to target ? (amount ?); paralyze poison character; shows text ID 0x005b |
+| block 455 (x 7, y 14) | `0x1CEB` | party arrives (second path) | tests game flag 84 |
+| block 463 (x 15, y 14) | `0x1A89` | wall clicked | plays chat/dialogue text ID 0x0063 |
+| block 473 (x 25, y 14) | `0x0EAB` | party arrives (second path) | no action summarized |
+| block 474 (x 26, y 14) | `0x0F7A` | party arrives (second path) | deals damage to target ? (amount ?); paralyze poison character; shows text ID 0x005b |
+| block 475 (x 27, y 14) | `0x1CEF` | party arrives (second path) | tests game flag 84 |
+| block 487 (x 7, y 15) | `0x11D4` | wall clicked | gives ? crown(s); sets the north wall of block 0 to type 87; sets the north wall of block 0 to type 0; takes 300 crown(s); gives item 232 (Wand of Fireballs) if inventory placement succeeds; puts item 232 (Wand of Fireballs) on an empty cursor; requests engine global change, selector 0, operands 0, 551; requests engine global change, selector 1, operands 0, 2 … |
+| block 490 (x 10, y 15) | `0x1A71` | wall clicked | plays chat/dialogue text ID 0x0063 |
+| block 497 (x 17, y 15) | `0x0EEF` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 498 (x 18, y 15) | `0x0EF6` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 500 (x 20, y 15) | `0x1AA1` | wall clicked | plays chat/dialogue text ID 0x0063 |
+| block 503 (x 23, y 15) | `0x0F20` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 515 (x 3, y 16) | `0x1CE7` | party arrives (second path) | tests game flag 84 |
+| block 519 (x 7, y 16) | `0x1199` | party steps in, wall clicked | requests engine global change, selector 0, operands 0, 551; shows text ID 0x403f; starts a dialogue sequence in mode 0; plays music track 285; plays music track 284; requests engine global change, selector 0, operands 0, 519; requests engine global change, selector 10, operands 0, 0; tests game flag 84 |
+| block 523 (x 11, y 16) | `0x0E51` | party arrives (second path) | no action summarized |
+| block 530 (x 18, y 16) | `0x0EFD` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 531 (x 19, y 16) | `0x1AB9` | wall clicked | plays chat/dialogue text ID 0x0063 |
+| block 545 (x 1, y 17) | `0x0F39` | bits 0x400 (no engine caller found) | deals damage to the party (amount ?); checks the south wall of block 992 |
+| block 547 (x 3, y 17) | `0x0FD0` | party arrives (second path), bits 0x10 (no engine caller found) | plays chat/dialogue text ID 0x0001; sets up 1 dialogue choices; reads the dialogue result; plays chat/dialogue text ID 0x0002; plays chat/dialogue text ID 0x0003; move monster; sets game flag 269; tests game flag 269 |
+| block 551 (x 7, y 17) | `0x10F3` | party steps in, party arrives (second path), bits 0x4000 (no engine caller found) | sets the north wall of block 992 to type 1; sets the north wall of block 992 to type 0; requests engine global change, selector 10, operands 0, 2; checks the north wall of block 992 |
+| block 553 (x 9, y 17) | `0x1A29` | wall clicked | plays chat/dialogue text ID 0x0063 |
+| block 555 (x 11, y 17) | `0x0F4A` | party arrives (second path) | deals damage to target ? (amount ?); paralyze poison character; shows text ID 0x005b |
+| block 560 (x 16, y 17) | `0x0F04` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 561 (x 17, y 17) | `0x0E8D` | party arrives (second path) | no action summarized |
+| block 577 (x 1, y 18) | `0x0F35` | wall clicked | deals damage to the party (amount ?); checks the south wall of block 992 |
+| block 583 (x 7, y 18) | `0x10E5` | party steps in | sets the north wall of block 992 to type 0; checks the north wall of block 992 |
+| block 593 (x 17, y 18) | `0x0F85` | party arrives (second path) | deals damage to target ? (amount ?); paralyze poison character; shows text ID 0x005b |
+| block 595 (x 19, y 18) | `0x1C51` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 604 (x 28, y 18) | `0x0F2E` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 611 (x 3, y 19) | `0x0E3E` | party arrives (second path) | sets game flag 255; plays chat/dialogue text ID 0x0000; tests game flag 255 |
+| block 612 (x 4, y 19) | `0x0EDA` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 613 (x 5, y 19) | `0x1B19` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 617 (x 9, y 19) | `0x1A41` | wall clicked | plays chat/dialogue text ID 0x0063 |
+| block 621 (x 13, y 19) | `0x0F0B` | party arrives (second path), wall clicked, item put down, fireball passes | deletes the held item; puts item 212 (Swamp Vial) on an empty cursor; plays a sound (ID 181) |
+| block 628 (x 20, y 19) | `0x14BB` | party steps in, party arrives (second path), bits 0x4000 (no engine caller found) | sets the north wall of block 992 to type 1; requests engine global change, selector 10, operands 0, 2; requests engine global change, selector 1, operands 0, 2; plays music track 283; requests engine global change, selector 0, operands 0, 660; requests engine global change, selector 0, operands 0, 596; requests engine global change, selector 1, operands 0, 0; plays music track 284 … |
+| block 653 (x 13, y 20) | `0x1A20` | wall clicked | no action summarized |
+| block 660 (x 20, y 20) | `0x15C7` | wall clicked | sets the north wall of block 0 to type 71; sets the north wall of block 0 to type 0; deletes the held item; gives ? crown(s); gives item 70 (Great sword) if inventory placement succeeds; puts item 70 (Great sword) on an empty cursor; gives item 52 (Great axe) if inventory placement succeeds; puts item 52 (Great axe) on an empty cursor … |
+| block 668 (x 28, y 20) | `0x1CF3` | party arrives (second path) | tests game flag 84 |
+| block 673 (x 1, y 21) | `0x0E31` | party steps in, party arrives (second path), item put down | moves items from block 673 to level 10, block 161 |
+| block 689 (x 17, y 21) | `0x1C99` | wall clicked | plays chat/dialogue text ID 0x0062 |
+| block 700 (x 28, y 21) | `0x1032` | party arrives (second path), bits 0x10 (no engine caller found) | plays chat/dialogue text ID 0x0001; sets up 1 dialogue choices; reads the dialogue result; plays chat/dialogue text ID 0x0002; plays chat/dialogue text ID 0x0003; move monster; sets game flag 269; tests game flag 269 |
+| block 734 (x 30, y 22) | `0x19FF` | party arrives (second path) | plays chat/dialogue text ID 0x004b; sets game flag 590; tests game flag 590 |
+| block 735 (x 31, y 22) | `0x19F2` | party steps in, party arrives (second path), item put down | moves items from block 735 to level 17, block 705 |
+| `0x400` level loaded | `0x0BB7` | — | sets the north wall of block 992 to type 0; sets music theme 284; sets script timer 0 to 60 ticks; sets script timer 1 to 10800 ticks; sets script timer 2 to 8 ticks |
+| `0x401` script timer 0 | `0x0BD3` | — | check equipped item script flags; move monster; sets game flag 271; tests game flag 270; tests game flag 271 |
+| `0x402` script timer 1 | `0x0C05` | — | places a monster of type slot 2 on block 361 in mode 4; places a monster of type slot 2 on block 475 in mode 4; places a monster of type slot 2 on block 455 in mode 4; tests game flag 284; tests game flag 84 |
+| `0x403` script timer 2 | `0x0C54` | — | update block animations2; tests game flag 418; checks the north wall of block 131; plays a sound (ID 107); checks the west wall of block 533; checks the south wall of block 553; checks the north wall of block 617; checks the west wall of block 463 … |
 
 ## Items placed by the scripts
 

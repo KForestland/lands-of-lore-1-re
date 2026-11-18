@@ -94,81 +94,83 @@ Made by `tools/level_report.py` from `LEVEL20.CMZ`, `.WLL`, `.XXX`, `.INI`, `.IN
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL20.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles TOWER1; loads monster sprites STARK.SHP into slot 0; loads monster sprites MINOTAUR.SHP into slot 1; defines monster type 1; defines monster type 2 |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 2) on block 105; places item 195 (Mystic Key) on block 335; places item 97 (Rapier "Talon") on block 209; places item 147 (Helm "Prentis") on block 77; places item 196 (Mystic Key) on block 398; places item 197 (Mystic Key) on block 300; places item 197 (Mystic Key) on block 321; places item 236 (Fireball scroll) on block 450 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x0000` | — | loads wall tiles TOWER1; loads monster sprites STARK.SHP into slot 0; loads monster sprites MINOTAUR.SHP into slot 1; defines monster type 1; defines monster type 2 |
+| INI entry 1 (runs when the level loads) | `0x00B8` | — | places a monster of type slot 2 on block 105 in mode 2; places item 195 (Mystic Key) on block 335; places item 97 (Rapier "Talon") on block 209; places item 147 (Helm "Prentis") on block 77; places item 196 (Mystic Key) on block 398; places item 197 (Mystic Key) on block 300; places item 197 (Mystic Key) on block 321; places item 236 (Fireball scroll) on block 450 … |
 
 ### LEVEL20.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 100 (x 4, y 3) | party arrives (second path) | sets the west wall of block 132 to type 35; a character speaks; checks a wall of block 132 |
-| block 131 (x 3, y 4) | party arrives (second path) | sets the west wall of block 132 to type 35; a character speaks; checks a wall of block 132 |
-| block 132 (x 4, y 4) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 132 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 132; plays a sound |
-| block 133 (x 5, y 4) | party arrives (second path) | sets the west wall of block 132 to type 35; a character speaks; checks a wall of block 132 |
-| block 135 (x 7, y 4) | wall clicked | a character speaks |
-| block 137 (x 9, y 4) | party arrives (second path), bits 0x10 (no engine caller found) | a character speaks; changes a monster |
-| block 165 (x 5, y 5) | party arrives (second path) | sets the west wall of block 197 to type 77; checks a wall of block 197; plays a sound |
-| block 166 (x 6, y 5) | wall clicked | sets the south wall of block 166 to type 70; a character speaks |
-| block 192 (x 0, y 6) | wall clicked | a character speaks |
-| block 194 (x 2, y 6) | party arrives (second path) | sets the west wall of block 226 to type 35; a character speaks; checks a wall of block 226 |
-| block 196 (x 4, y 6) | party arrives (second path) | sets the west wall of block 197 to type 77; checks a wall of block 197; plays a sound |
-| block 226 (x 2, y 7) | party arrives (second path), party leaves (second path) | sets the west wall of block 226 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 226; plays a sound |
-| block 231 (x 7, y 7) | wall clicked | plays a sound |
-| block 233 (x 9, y 7) | wall clicked | plays a sound |
-| block 235 (x 11, y 7) | wall clicked | plays a sound |
-| block 237 (x 13, y 7) | wall clicked | plays a sound |
-| block 258 (x 2, y 8) | party arrives (second path) | sets the west wall of block 226 to type 35; a character speaks; checks a wall of block 226 |
-| block 260 (x 4, y 8) | wall clicked | a character speaks |
-| block 262 (x 6, y 8) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 262 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 262; plays a sound; checks a wall of block 231 |
-| block 264 (x 8, y 8) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 264 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 264; plays a sound; checks a wall of block 233 |
-| block 266 (x 10, y 8) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 266 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 266; plays a sound; checks a wall of block 235 |
-| block 268 (x 12, y 8) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 268 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 268; plays a sound; checks a wall of block 237 |
-| block 322 (x 2, y 10) | wall clicked | a character speaks |
-| block 323 (x 3, y 10) | wall clicked | a character speaks |
-| block 330 (x 10, y 10) | party steps in, party arrives (second path), item put down | moves objects from block 330 to block 331 |
-| block 331 (x 11, y 10) | wall clicked | toggles the south wall of block 300 between types 30 and 77; sets the east wall of block 331 to type 56; sets the east wall of block 331 to type 57; a character speaks; checks a wall of block 364; plays a sound; checks a wall of block 331 |
-| block 333 (x 13, y 10) | wall clicked | a character speaks |
-| block 334 (x 14, y 10) | party steps in, party arrives (second path), item put down | moves objects from block 334 to block 333 |
-| block 352 (x 0, y 11) | wall clicked | a character speaks |
-| block 353 (x 1, y 11) | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets the west wall of block 353 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 353; plays a sound; tests game flag 339 |
-| block 354 (x 2, y 11) | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets the west wall of block 354 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 354; plays a sound |
-| block 355 (x 3, y 11) | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets the west wall of block 355 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 355; plays a sound |
-| block 356 (x 4, y 11) | wall clicked | a character speaks |
-| block 369 (x 17, y 11) | party arrives (second path) | a character speaks |
-| block 384 (x 0, y 12) | wall clicked | a character speaks |
-| block 385 (x 1, y 12) | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets the west wall of block 385 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 385; plays a sound |
-| block 386 (x 2, y 12) | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets the west wall of block 386 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 386; plays a sound |
-| block 387 (x 3, y 12) | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets the west wall of block 387 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 387; plays a sound |
-| block 391 (x 7, y 12) | wall clicked | sets the east wall of block 391 to type 68; a character speaks |
-| block 397 (x 13, y 12) | wall clicked | sets the west wall of block 495 to type 0; sets the west wall of block 495 to type 38; drops the party through a pit; deals damage; moves the party to level 18, block 495; moves objects from block 495 to block 495; sets game flag 46; plays a sound … |
-| block 401 (x 17, y 12) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 18, block 401; sets game flag 46; moves objects from block 401 to block 401; checks a wall of block 401 |
-| block 416 (x 0, y 13) | wall clicked | a character speaks |
-| block 417 (x 1, y 13) | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets the west wall of block 417 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 417; plays a sound |
-| block 418 (x 2, y 13) | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets the west wall of block 418 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 418; plays a sound |
-| block 419 (x 3, y 13) | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets the west wall of block 419 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 419; plays a sound |
-| block 420 (x 4, y 13) | wall clicked | a character speaks |
-| block 430 (x 14, y 13) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 18, block 430; sets game flag 46; moves objects from block 430 to block 430; checks a wall of block 430 |
-| block 431 (x 15, y 13) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 18, block 431; sets game flag 46; moves objects from block 431 to block 431; checks a wall of block 431 |
-| block 433 (x 17, y 13) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 18, block 433; sets game flag 46; moves objects from block 433 to block 433; checks a wall of block 433 |
-| block 450 (x 2, y 14) | wall clicked, item taken | a character speaks; sets game flag 339 |
-| block 451 (x 3, y 14) | wall clicked | a character speaks |
-| block 461 (x 13, y 14) | wall clicked | a character speaks |
-| block 465 (x 17, y 14) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 18, block 465; sets game flag 46; moves objects from block 465 to block 465; checks a wall of block 465 |
-| block 481 (x 1, y 15) | wall clicked | a character speaks |
-| block 494 (x 14, y 15) | party arrives (second path) | operates the door at block 493; checks a wall of block 526 |
-| block 495 (x 15, y 15) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 18, block 495; sets game flag 46; moves objects from block 495 to block 495; checks a wall of block 495 |
-| block 526 (x 14, y 16) | wall clicked | sets the north wall of block 526 to type 67; a character speaks |
-| block 550 (x 6, y 17) | wall clicked | sets the west wall of block 550 to type 64; a character speaks |
-| block 559 (x 15, y 17) | wall clicked | sets the west wall of block 401 to type 0; sets the west wall of block 401 to type 38; drops the party through a pit; deals damage; moves the party to level 18, block 401; moves objects from block 401 to block 401; sets game flag 46; plays a sound … |
-| block 584 (x 8, y 18) | party steps in, party arrives (second path), item put down | moves objects from block 584 to block 586; plays a sound |
-| `0x400` level loaded | — | drops the party through a pit; clears game flag 46; starts script timer 0; tests game flag 46 |
-| `0x401` script timer 0 | — | places a monster (slot 1) on block 515; places a monster (slot 1) on block 173 |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 100 (x 4, y 3) | `0x0707` | party arrives (second path) | sets all four walls of block 132 to type 35; plays chat/dialogue text ID 0x0006; checks the north wall of block 132 |
+| block 131 (x 3, y 4) | `0x06C3` | party arrives (second path) | sets all four walls of block 132 to type 35; plays chat/dialogue text ID 0x0008; checks the north wall of block 132 |
+| block 132 (x 4, y 4) | `0x0668` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 132 to type 36; creates item type 9 and returns its handle; launches a projectile from block 134 in direction 3; checks the north wall of block 132; plays a sound (ID 69) at block 134; checks the south wall of block 132; plays a sound (ID 80) |
+| block 133 (x 5, y 4) | `0x06E5` | party arrives (second path) | sets all four walls of block 132 to type 35; plays chat/dialogue text ID 0x0007; checks the north wall of block 132 |
+| block 135 (x 7, y 4) | `0x0729` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 137 (x 9, y 4) | `0x0772` | party arrives (second path), bits 0x10 (no engine caller found) | plays chat/dialogue text ID 0x0000; sets monster ? facing to 1; sets monster ? facing to 2; sets monster ? mode to 7 |
+| block 165 (x 5, y 5) | `0x0745` | party arrives (second path) | sets all four walls of block 197 to type 77; checks the north wall of block 197; plays a sound (ID 38) |
+| block 166 (x 6, y 5) | `0x075A` | wall clicked | sets the south wall of block 166 to type 70; plays chat/dialogue text ID 0x0003 |
+| block 192 (x 0, y 6) | `0x0661` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 194 (x 2, y 6) | `0x061D` | party arrives (second path) | sets all four walls of block 226 to type 35; plays chat/dialogue text ID 0x0006; checks the north wall of block 226 |
+| block 196 (x 4, y 6) | `0x0730` | party arrives (second path) | sets all four walls of block 197 to type 77; checks the north wall of block 197; plays a sound (ID 38) |
+| block 226 (x 2, y 7) | `0x05C7` | party arrives (second path), party leaves (second path) | sets all four walls of block 226 to type 36; creates item type 9 and returns its handle; launches a projectile from block 193 in direction 1; checks the north wall of block 226; plays a sound (ID 69) at block 193; checks the south wall of block 226; plays a sound (ID 80) |
+| block 231 (x 7, y 7) | `0x0588` | wall clicked | plays a sound (ID 79) |
+| block 233 (x 9, y 7) | `0x0550` | wall clicked | plays a sound (ID 79) |
+| block 235 (x 11, y 7) | `0x0518` | wall clicked | plays a sound (ID 79) |
+| block 237 (x 13, y 7) | `0x04E0` | wall clicked | plays a sound (ID 79) |
+| block 258 (x 2, y 8) | `0x063F` | party arrives (second path) | sets all four walls of block 226 to type 35; plays chat/dialogue text ID 0x0005; checks the north wall of block 226 |
+| block 260 (x 4, y 8) | `0x05C0` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 262 (x 6, y 8) | `0x058D` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 262 to type 36; creates item type 9 and returns its handle; launches a projectile from block 261 in direction 1; checks the south wall of block 262; plays a sound (ID 80); checks the south wall of block 231; plays a sound (ID 69) at block 261 |
+| block 264 (x 8, y 8) | `0x0555` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 264 to type 36; creates item type 9 and returns its handle; launches a projectile from block 261 in direction 1; checks the south wall of block 264; plays a sound (ID 80); checks the south wall of block 233; plays a sound (ID 69) at block 261 |
+| block 266 (x 10, y 8) | `0x051D` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 266 to type 36; creates item type 9 and returns its handle; launches a projectile from block 261 in direction 1; checks the south wall of block 266; plays a sound (ID 80); checks the south wall of block 235; plays a sound (ID 69) at block 261 |
+| block 268 (x 12, y 8) | `0x04E5` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 268 to type 36; creates item type 9 and returns its handle; launches a projectile from block 261 in direction 1; checks the south wall of block 268; plays a sound (ID 80); checks the south wall of block 237; plays a sound (ID 69) at block 261 |
+| block 322 (x 2, y 10) | `0x03B6` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 323 (x 3, y 10) | `0x0385` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 330 (x 10, y 10) | `0x0241` | party steps in, party arrives (second path), item put down | moves items from block 330 to level 18, block 331 |
+| block 331 (x 11, y 10) | `0x028B` | wall clicked | toggles the south wall of block 300 between types 30 and 77; sets the east wall of block 331 to type 56; sets the east wall of block 331 to type 57; plays chat/dialogue text ID 0x000d; checks the north wall of block 364; plays a sound (ID 38); checks the east wall of block 331 |
+| block 333 (x 13, y 10) | `0x0234` | wall clicked | plays chat/dialogue text ID 0x000c |
+| block 334 (x 14, y 10) | `0x024E` | party steps in, party arrives (second path), item put down | moves items from block 334 to level 18, block 333 |
+| block 352 (x 0, y 11) | `0x03FD` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 353 (x 1, y 11) | `0x03BD` | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets all four walls of block 353 to type 36; creates item type 9 and returns its handle; launches a projectile from block 449 in direction 0; launches a projectile from block 355 in direction 3; launches a projectile from block 418 in direction 0; checks the south wall of block 353; plays a sound (ID 80); tests game flag 339 … |
+| block 354 (x 2, y 11) | `0x0393` | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets all four walls of block 354 to type 36; creates item type 9 and returns its handle; launches a projectile from block 418 in direction 0; launches a projectile from block 353 in direction 1; launches a projectile from block 355 in direction 3; checks the south wall of block 354; plays a sound (ID 80); plays a sound (ID 69) at block 418 … |
+| block 355 (x 3, y 11) | `0x0368` | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets all four walls of block 355 to type 36; creates item type 9 and returns its handle; launches a projectile from block 353 in direction 1; launches a projectile from block 419 in direction 0; checks the south wall of block 355; plays a sound (ID 80); plays a sound (ID 69) at block 353; plays a sound (ID 69) at block 419 |
+| block 356 (x 4, y 11) | `0x038C` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 369 (x 17, y 11) | `0x033E` | party arrives (second path) | plays chat/dialogue text ID 0x000b |
+| block 384 (x 0, y 12) | `0x041B` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 385 (x 1, y 12) | `0x0404` | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets all four walls of block 385 to type 36; creates item type 9 and returns its handle; launches a projectile from block 449 in direction 0; checks the south wall of block 385; plays a sound (ID 80); plays a sound (ID 69) at block 449 |
+| block 386 (x 2, y 12) | `0x04B6` | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets all four walls of block 386 to type 36; creates item type 9 and returns its handle; launches a projectile from block 354 in direction 2; launches a projectile from block 385 in direction 1; launches a projectile from block 418 in direction 0; checks the south wall of block 386; plays a sound (ID 80); plays a sound (ID 69) at block 354 … |
+| block 387 (x 3, y 12) | `0x0345` | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets all four walls of block 387 to type 36; creates item type 9 and returns its handle; launches a projectile from block 385 in direction 1; launches a projectile from block 355 in direction 2; launches a projectile from block 419 in direction 0; checks the south wall of block 387; plays a sound (ID 80); plays a sound (ID 69) at block 385 … |
+| block 391 (x 7, y 12) | `0x025B` | wall clicked | sets the east wall of block 391 to type 68; plays chat/dialogue text ID 0x0003 |
+| block 397 (x 13, y 12) | `0x0331` | wall clicked | sets all four walls of block 495 to type 0; sets all four walls of block 495 to type 38; removes monsters from block 495; drops the party through a pit; deals damage to the party (amount ?); moves the party to level 18, block 495, facing ?; moves items from block 495 to level 18, block 495; sets game flag 46 … |
+| block 401 (x 17, y 12) | `0x0327` | party arrives (second path), item put down | drops the party through a pit; deals damage to the party (amount ?); moves the party to level 18, block 401, facing ?; removes monsters from block 401; sets game flag 46; moves items from block 401 to level 18, block 401; checks the north wall of block 401 |
+| block 416 (x 0, y 13) | `0x043F` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 417 (x 1, y 13) | `0x0422` | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets all four walls of block 417 to type 36; creates item type 9 and returns its handle; launches a projectile from block 449 in direction 0; launches a projectile from block 419 in direction 3; checks the south wall of block 417; plays a sound (ID 80); plays a sound (ID 69) at block 449; plays a sound (ID 69) at block 419 |
+| block 418 (x 2, y 13) | `0x044D` | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets all four walls of block 418 to type 36; creates item type 9 and returns its handle; launches a projectile from block 354 in direction 2; launches a projectile from block 417 in direction 1; launches a projectile from block 419 in direction 3; checks the south wall of block 418; plays a sound (ID 80); plays a sound (ID 69) at block 354 … |
+| block 419 (x 3, y 13) | `0x0492` | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x10 (no engine caller found) | sets all four walls of block 419 to type 36; creates item type 9 and returns its handle; launches a projectile from block 417 in direction 1; launches a projectile from block 355 in direction 2; checks the south wall of block 419; plays a sound (ID 80); plays a sound (ID 69) at block 417; plays a sound (ID 69) at block 355 |
+| block 420 (x 4, y 13) | `0x04D9` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 430 (x 14, y 13) | `0x031D` | party arrives (second path), item put down | drops the party through a pit; deals damage to the party (amount ?); moves the party to level 18, block 430, facing ?; removes monsters from block 430; sets game flag 46; moves items from block 430 to level 18, block 430; checks the north wall of block 430 |
+| block 431 (x 15, y 13) | `0x0313` | party arrives (second path), item put down | drops the party through a pit; deals damage to the party (amount ?); moves the party to level 18, block 431, facing ?; removes monsters from block 431; sets game flag 46; moves items from block 431 to level 18, block 431; checks the north wall of block 431 |
+| block 433 (x 17, y 13) | `0x0309` | party arrives (second path), item put down | drops the party through a pit; deals damage to the party (amount ?); moves the party to level 18, block 433, facing ?; removes monsters from block 433; sets game flag 46; moves items from block 433 to level 18, block 433; checks the north wall of block 433 |
+| block 450 (x 2, y 14) | `0x0470` | wall clicked, item taken | plays chat/dialogue text ID 0x0004; sets game flag 339 |
+| block 451 (x 3, y 14) | `0x04AF` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 461 (x 13, y 14) | `0x02BE` | wall clicked | plays chat/dialogue text ID 0x0003 |
+| block 465 (x 17, y 14) | `0x02FF` | party arrives (second path), item put down | drops the party through a pit; deals damage to the party (amount ?); moves the party to level 18, block 465, facing ?; removes monsters from block 465; sets game flag 46; moves items from block 465 to level 18, block 465; checks the north wall of block 465 |
+| block 481 (x 1, y 15) | `0x0446` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 494 (x 14, y 15) | `0x07C9` | party arrives (second path) | operates the door switch at block 493 with action -1; checks the north wall of block 526 |
+| block 495 (x 15, y 15) | `0x02E2` | party arrives (second path), item put down | drops the party through a pit; deals damage to the party (amount ?); moves the party to level 18, block 495, facing ?; removes monsters from block 495; sets game flag 46; moves items from block 495 to level 18, block 495; checks the north wall of block 495 |
+| block 526 (x 14, y 16) | `0x02CA` | wall clicked | sets the north wall of block 526 to type 67; plays chat/dialogue text ID 0x0003 |
+| block 550 (x 6, y 17) | `0x0273` | wall clicked | sets the west wall of block 550 to type 64; plays chat/dialogue text ID 0x0003 |
+| block 559 (x 15, y 17) | `0x02EC` | wall clicked | sets all four walls of block 401 to type 0; sets all four walls of block 401 to type 38; removes monsters from block 401; drops the party through a pit; deals damage to the party (amount ?); moves the party to level 18, block 401, facing ?; moves items from block 401 to level 18, block 401; sets game flag 46 … |
+| block 584 (x 8, y 18) | `0x07B8` | party steps in, party arrives (second path), item put down | moves items from block 584 to level 21, block 586; plays a sound (ID 137) |
+| `0x400` level loaded | `0x01F8` | — | drops the party through a pit; clears game flag 46; sets music theme 291; sets script timer 0 to 3600 ticks; tests game flag 46 |
+| `0x401` script timer 0 | `0x0213` | — | places a monster of type slot 1 on block 515 in mode 4; places a monster of type slot 1 on block 173 in mode 4 |
 
 ## Items placed by the scripts
 

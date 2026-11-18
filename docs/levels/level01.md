@@ -92,64 +92,66 @@ Made by `tools/level_report.py` from `LEVEL1.CMZ`, `.WLL`, `.XXX`, `.INI`, `.INF
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL1.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles KEEP; loads monster sprites GUARD.SHP into slot 0; defines monster type 1; tests game flag 39 |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 1) on block 589; places a monster (slot 1) on block 525; places a monster (slot 1) on block 271; make item; give item to monster; clears game flag 108; sets game flag 108; set global var … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x001B` | — | loads wall tiles KEEP; loads monster sprites GUARD.SHP into slot 0; defines monster type 1; tests game flag 39 |
+| INI entry 1 (runs when the level loads) | `0x009F` | — | places a monster of type slot 1 on block 589 in mode 1; places a monster of type slot 1 on block 525 in mode 1; places a monster of type slot 1 on block 271 in mode 1; creates item type 75 and returns its handle; give item to monster; requests engine global change, selector 0, operands 0, 557; requests engine global change, selector 1, operands 0, 0; sets script global 5 to ? … |
 
 ### LEVEL1.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 201 (x 9, y 6) | wall clicked | a character speaks; sets game flag 90; clears game flag 90; tests game flag 39; tests game flag 90 |
-| block 202 (x 10, y 6) | wall clicked | a character speaks; sets game flag 104; clears game flag 104; tests game flag 39; tests game flag 104 |
-| block 237 (x 13, y 7) | wall clicked | a character speaks; sets game flag 92; clears game flag 92; tests game flag 39; tests game flag 92 |
-| block 238 (x 14, y 7) | wall clicked | a character speaks; sets game flag 99; clears game flag 99; tests game flag 39; tests game flag 99 |
-| block 264 (x 8, y 8) | wall clicked | a character speaks; sets game flag 91; clears game flag 91; tests game flag 39; tests game flag 91 |
-| block 269 (x 13, y 8) | party arrives (second path) | clears game flag 23; move monster; tests game flag 23 |
-| block 270 (x 14, y 8) | party arrives (second path), bits 0x10 (no engine caller found) | starts cut-scene GUARD1.TIM; starts cut-scene GUARD2.TIM; starts cut-scene GUARD6.TIM; sets game flag 23; move monster; a character speaks; starts a dialogue; tests game flag 23 … |
-| block 272 (x 16, y 8) | party arrives (second path) | sets game flag 23; move monster; tests game flag 23 |
-| block 273 (x 17, y 8) | party steps in, wall clicked | starts cut-scene KING1.TIM; starts cut-scene CONFRONT.TIM; starts cut-scene TALAMSCA.TIM; a character speaks; shows a message; sets game flag 4; starts a dialogue; set global var … |
-| block 274 (x 18, y 8) | wall clicked | starts cut-scene DAWN1.TIM; starts cut-scene WILL1.TIM; a character leaves the party; a character joins the party; starts cut-scene SPELLBKE.TIM; starts cut-scene SPELLBKF.TIM; starts cut-scene SPELLBKG.TIM; starts cut-scene NATE4.TIM … |
-| block 300 (x 12, y 9) | wall clicked | a character speaks; sets game flag 101; clears game flag 101; tests game flag 39; tests game flag 101 |
-| block 302 (x 14, y 9) | wall clicked | a character speaks; sets game flag 100; clears game flag 100; tests game flag 39; tests game flag 100 |
-| block 327 (x 7, y 10) | wall clicked | a character speaks; sets game flag 94; clears game flag 94; tests game flag 39; tests game flag 94 |
-| block 328 (x 8, y 10) | wall clicked | starts a dialogue; a character speaks; plays a sound; set global script var |
-| block 329 (x 9, y 10) | wall clicked | a character speaks; sets game flag 103; clears game flag 103; tests game flag 39; tests game flag 103 |
-| block 334 (x 14, y 10) | wall clicked | a character speaks; sets game flag 93; clears game flag 93; tests game flag 39; tests game flag 93 |
-| block 358 (x 6, y 11) | wall clicked | starts a dialogue; a character speaks; plays a sound; set global script var |
-| block 367 (x 15, y 11) | wall clicked | a character speaks; tests game flag 39 |
-| block 390 (x 6, y 12) | wall clicked | a character speaks; sets game flag 95; clears game flag 95; tests game flag 39; tests game flag 95 |
-| block 393 (x 9, y 12) | wall clicked | sets the west wall of block 393 to type 58; starts cut-scene AUTOMAP.TIM; sets game flag 252; a character speaks; starts a dialogue; checks a wall of block 393; set global script var |
-| block 394 (x 10, y 12) | wall clicked | a character speaks |
-| block 395 (x 11, y 12) | wall clicked | a character speaks; tests game flag 39 |
-| block 397 (x 13, y 12) | wall clicked | deals damage; a character speaks; sets game flag 107; tests game flag 107 |
-| block 400 (x 16, y 12) | party steps in, wall clicked | starts cut-scene DRVICTOR.TIM; starts cut-scene VICTOR1.TIM; starts cut-scene VICTOR2.TIM; starts cut-scene VICTOR3.TIM; a character speaks; shows a message; sets game flag 12; starts a dialogue … |
-| block 401 (x 17, y 12) | wall clicked | gives ? crown(s); takes 125 crown(s); gives item 81 (Long sword); takes 40 crown(s); gives item 90 (Mace); takes 60 crown(s); gives item 93 (Rapier); takes 10 crown(s) … |
-| block 423 (x 7, y 13) | wall clicked | starts a dialogue; a character speaks; plays a sound; set global script var |
-| block 424 (x 8, y 13) | wall clicked | a character speaks; sets game flag 96; clears game flag 96; tests game flag 39; tests game flag 96 |
-| block 425 (x 9, y 13) | wall clicked | a character speaks; sets game flag 11; starts a dialogue; tests game flag 11; set global var; tests game flag 41 |
-| block 426 (x 10, y 13) | party steps in, wall clicked | starts cut-scene DRGERIM.TIM; starts cut-scene GERIM1.TIM; starts cut-scene GERIM2.TIM; starts cut-scene GERIM3.TIM; shows a message; a character speaks; move monster; starts a dialogue … |
-| block 429 (x 13, y 13) | wall clicked | gives 1 crown(s); a character speaks; sets game flag 109; clears game flag 109; clears game flag 108; clears game flag 88; sets game flag 88; tests game flag 39 … |
-| block 431 (x 15, y 13) | wall clicked | a character speaks; sets game flag 105; clears game flag 105; tests game flag 39; tests game flag 105 |
-| block 459 (x 11, y 14) | wall clicked | a character speaks; sets game flag 102; clears game flag 102; tests game flag 39; tests game flag 102 |
-| block 464 (x 16, y 14) | party steps in, wall clicked | starts cut-scene DRNATHAN.TIM; starts cut-scene NATE1.TIM; starts cut-scene NATE2.TIM; starts cut-scene NATE3.TIM; a character speaks; shows a message; sets game flag 13; starts a dialogue … |
-| block 465 (x 17, y 14) | wall clicked | takes 20 crown(s); gives item 216 (Salve); takes 10 crown(s); gives item 218 (Ginseng); takes 5 crown(s); gives item 217 (Aloe); a character speaks; starts a dialogue … |
-| block 492 (x 12, y 15) | wall clicked | a character speaks; sets game flag 88; clears game flag 88; tests game flag 39; tests game flag 88 |
-| block 494 (x 14, y 15) | wall clicked | a character speaks; sets game flag 89; clears game flag 89; tests game flag 39; tests game flag 89 |
-| block 495 (x 15, y 15) | wall clicked | a character speaks; tests game flag 39 |
-| block 526 (x 14, y 16) | party arrives (second path) | no game action (only stack and screen bookkeeping) |
-| block 527 (x 15, y 16) | wall clicked | a character speaks; sets game flag 98; clears game flag 98; tests game flag 39; tests game flag 98 |
-| block 555 (x 11, y 17) | wall clicked | a character speaks; sets game flag 97; clears game flag 97; tests game flag 39; tests game flag 97 |
-| block 557 (x 13, y 17) | party arrives (second path), bits 0x10 (no engine caller found) | starts cut-scene GUARD6.TIM; a character speaks; move monster; sets game flag 110; tests game flag 110; tests game flag 11; tests game flag 4 |
-| block 621 (x 13, y 19) | party steps in, wall clicked | moves the party to level 2, block 106; a character speaks; shows a message; set global var; plays a sound |
-| `0x400` level loaded | — | changes a monster; move monster; starts script timer 0; starts script timer 1; tests game flag 1; set global script var; tests game flag 39; tests game flag 40 … |
-| `0x401` script timer 0 | — | toggles the west wall of block 429 between types 68 and 69 |
-| `0x402` script timer 1 | — | no game action (only stack and screen bookkeeping) |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 201 (x 9, y 6) | `0x1146` | wall clicked | plays chat/dialogue text ID 0x0031; sets game flag 90; plays chat/dialogue text ID 0x0032; clears game flag 90; tests game flag 39; tests game flag 90 |
+| block 202 (x 10, y 6) | `0x11C4` | wall clicked | plays chat/dialogue text ID 0x003f; sets game flag 104; plays chat/dialogue text ID 0x0040; clears game flag 104; tests game flag 39; tests game flag 104 |
+| block 237 (x 13, y 7) | `0x1158` | wall clicked | plays chat/dialogue text ID 0x0031; sets game flag 92; plays chat/dialogue text ID 0x0032; clears game flag 92; tests game flag 39; tests game flag 92 |
+| block 238 (x 14, y 7) | `0x1197` | wall clicked | plays chat/dialogue text ID 0x003b; sets game flag 99; plays chat/dialogue text ID 0x003c; clears game flag 99; tests game flag 39; tests game flag 99 |
+| block 264 (x 8, y 8) | `0x114F` | wall clicked | plays chat/dialogue text ID 0x0033; sets game flag 91; plays chat/dialogue text ID 0x0034; clears game flag 91; tests game flag 39; tests game flag 91 |
+| block 269 (x 13, y 8) | `0x0491` | party arrives (second path) | clears game flag 23; move monster; tests game flag 23 |
+| block 270 (x 14, y 8) | `0x04B0` | party arrives (second path), bits 0x10 (no engine caller found) | loads cut-scene GUARD1.TIM into slot 0; loads cut-scene GUARD2.TIM into slot 0; loads cut-scene GUARD6.TIM into slot 1; sets game flag 23; move monster; plays chat/dialogue text ID 0x008b; plays chat/dialogue text ID 0x008c; sets up 1 dialogue choices … |
+| block 272 (x 16, y 8) | `0x05A4` | party arrives (second path) | sets game flag 23; move monster; tests game flag 23 |
+| block 273 (x 17, y 8) | `0x05C4` | party steps in, wall clicked | loads cut-scene KING1.TIM into slot 0; loads cut-scene CONFRONT.TIM into slot 0; loads cut-scene TALAMSCA.TIM into slot 0; requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 0, operands 0, 272; plays chat/dialogue text ID 0x0050; shows text ID 0x403f; sets game flag 4 … |
+| block 274 (x 18, y 8) | `0x068B` | wall clicked | loads cut-scene DAWN1.TIM into slot 1; loads cut-scene WILL1.TIM into slot 1; a character leaves the party; a character joins the party; loads cut-scene SPELLBKE.TIM into slot 0; loads cut-scene SPELLBKF.TIM into slot 0; loads cut-scene SPELLBKG.TIM into slot 0; loads cut-scene NATE4.TIM into slot 1 … |
+| block 300 (x 12, y 9) | `0x11A9` | wall clicked | plays chat/dialogue text ID 0x0039; sets game flag 101; plays chat/dialogue text ID 0x003a; clears game flag 101; tests game flag 39; tests game flag 101 |
+| block 302 (x 14, y 9) | `0x11A0` | wall clicked | plays chat/dialogue text ID 0x003b; sets game flag 100; plays chat/dialogue text ID 0x003c; clears game flag 100; tests game flag 39; tests game flag 100 |
+| block 327 (x 7, y 10) | `0x116A` | wall clicked | plays chat/dialogue text ID 0x0031; sets game flag 94; plays chat/dialogue text ID 0x0032; clears game flag 94; tests game flag 39; tests game flag 94 |
+| block 328 (x 8, y 10) | `0x12A8` | wall clicked | starts a dialogue sequence in mode 0; plays chat/dialogue text ID ?; sets up 1 dialogue choices; sets script global 6 to ?; plays a sound (ID 105) |
+| block 329 (x 9, y 10) | `0x11BB` | wall clicked | plays chat/dialogue text ID 0x003d; sets game flag 103; plays chat/dialogue text ID 0x003e; clears game flag 103; tests game flag 39; tests game flag 103 |
+| block 334 (x 14, y 10) | `0x1161` | wall clicked | plays chat/dialogue text ID 0x0033; sets game flag 93; plays chat/dialogue text ID 0x0034; clears game flag 93; tests game flag 39; tests game flag 93 |
+| block 358 (x 6, y 11) | `0x12B6` | wall clicked | starts a dialogue sequence in mode 0; plays chat/dialogue text ID ?; sets up 1 dialogue choices; sets script global 7 to ?; plays a sound (ID 105) |
+| block 367 (x 15, y 11) | `0x11EF` | wall clicked | plays chat/dialogue text ID 0x0044; tests game flag 39 |
+| block 390 (x 6, y 12) | `0x1173` | wall clicked | plays chat/dialogue text ID 0x0033; sets game flag 95; plays chat/dialogue text ID 0x0034; clears game flag 95; tests game flag 39; tests game flag 95 |
+| block 393 (x 9, y 12) | `0x1231` | wall clicked | sets the west wall of block 393 to type 58; loads cut-scene AUTOMAP.TIM into slot 1; sets game flag 252; plays chat/dialogue text ID 0x004a; plays chat/dialogue text ID 0x0051; starts a dialogue sequence in mode 0; plays chat/dialogue text ID ?; sets up 1 dialogue choices … |
+| block 394 (x 10, y 12) | `0x1227` | wall clicked | plays chat/dialogue text ID 0x004d |
+| block 395 (x 11, y 12) | `0x11E8` | wall clicked | plays chat/dialogue text ID 0x0045; tests game flag 39 |
+| block 397 (x 13, y 12) | `0x11FD` | wall clicked | deals damage to target 0 (amount 1); plays chat/dialogue text ID 0x002f; sets game flag 107; plays chat/dialogue text ID 0x0030; tests game flag 107 |
+| block 400 (x 16, y 12) | `0x0B40` | party steps in, wall clicked | loads cut-scene DRVICTOR.TIM into slot 0; loads cut-scene VICTOR1.TIM into slot 0; loads cut-scene VICTOR2.TIM into slot 0; loads cut-scene VICTOR3.TIM into slot 1; requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 0, operands 0, 399; plays chat/dialogue text ID 0x0050; requests engine global change, selector 0, operands 1, 399 … |
+| block 401 (x 17, y 12) | `0x0C48` | wall clicked | gives ? crown(s); deletes the held item; takes 125 crown(s); puts item 81 (Long sword) on an empty cursor; takes 40 crown(s); puts item 90 (Mace) on an empty cursor; takes 60 crown(s); puts item 93 (Rapier) on an empty cursor … |
+| block 423 (x 7, y 13) | `0x12C4` | wall clicked | starts a dialogue sequence in mode 0; plays chat/dialogue text ID ?; sets up 1 dialogue choices; sets script global 8 to ?; plays a sound (ID 105) |
+| block 424 (x 8, y 13) | `0x117C` | wall clicked | plays chat/dialogue text ID 0x0031; sets game flag 96; plays chat/dialogue text ID 0x0032; clears game flag 96; tests game flag 39; tests game flag 96 |
+| block 425 (x 9, y 13) | `0x0A79` | wall clicked | plays chat/dialogue text ID 0x0089; plays chat/dialogue text ID 0x0012; sets game flag 11; sets up 1 dialogue choices; requests engine global change, selector 0, operands 0, 427; plays music track 254; plays music track 250; plays chat/dialogue text ID 0x0054 … |
+| block 426 (x 10, y 13) | `0x093E` | party steps in, wall clicked | loads cut-scene DRGERIM.TIM into slot 0; loads cut-scene GERIM1.TIM into slot 0; loads cut-scene GERIM2.TIM into slot 0; loads cut-scene GERIM3.TIM into slot 1; requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 0, operands 0, 427; shows text ID 0x403f; plays chat/dialogue text ID 0x0050 … |
+| block 429 (x 13, y 13) | `0x111D` | wall clicked | gives 1 crown(s); plays chat/dialogue text ID 0x002c; sets game flag 109; plays chat/dialogue text ID 0x002d; clears game flag 109; plays chat/dialogue text ID 0x002e; clears game flag 108; plays chat/dialogue text ID 0x0080 … |
+| block 431 (x 15, y 13) | `0x11CD` | wall clicked | plays chat/dialogue text ID 0x0041; sets game flag 105; plays chat/dialogue text ID 0x0042; clears game flag 105; tests game flag 39; tests game flag 105 |
+| block 459 (x 11, y 14) | `0x11B2` | wall clicked | plays chat/dialogue text ID 0x0035; sets game flag 102; plays chat/dialogue text ID 0x0036; clears game flag 102; tests game flag 39; tests game flag 102 |
+| block 464 (x 16, y 14) | `0x0E95` | party steps in, wall clicked | loads cut-scene DRNATHAN.TIM into slot 0; loads cut-scene NATE1.TIM into slot 0; loads cut-scene NATE2.TIM into slot 0; loads cut-scene NATE3.TIM into slot 1; requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 0, operands 0, 463; plays chat/dialogue text ID 0x0050; requests engine global change, selector 0, operands 1, 463 … |
+| block 465 (x 17, y 14) | `0x0F84` | wall clicked | takes 20 crown(s); puts item 216 (Salve) on an empty cursor; takes 10 crown(s); puts item 218 (Ginseng) on an empty cursor; takes 5 crown(s); puts item 217 (Aloe) on an empty cursor; plays chat/dialogue text ID 0x001f; sets up 1 dialogue choices … |
+| block 492 (x 12, y 15) | `0x11D6` | wall clicked | plays chat/dialogue text ID 0x0052; sets game flag 88; plays chat/dialogue text ID 0x0053; clears game flag 88; tests game flag 39; tests game flag 88 |
+| block 494 (x 14, y 15) | `0x11DF` | wall clicked | plays chat/dialogue text ID 0x0052; sets game flag 89; plays chat/dialogue text ID 0x0053; clears game flag 89; tests game flag 39; tests game flag 89 |
+| block 495 (x 15, y 15) | `0x11F6` | wall clicked | plays chat/dialogue text ID 0x0043; tests game flag 39 |
+| block 526 (x 14, y 16) | `0x048F` | party arrives (second path) | no action summarized |
+| block 527 (x 15, y 16) | `0x118E` | wall clicked | plays chat/dialogue text ID 0x0031; sets game flag 98; plays chat/dialogue text ID 0x0032; clears game flag 98; tests game flag 39; tests game flag 98 |
+| block 555 (x 11, y 17) | `0x1185` | wall clicked | plays chat/dialogue text ID 0x0033; sets game flag 97; plays chat/dialogue text ID 0x0034; clears game flag 97; tests game flag 39; tests game flag 97 |
+| block 557 (x 13, y 17) | `0x040B` | party arrives (second path), bits 0x10 (no engine caller found) | loads cut-scene GUARD6.TIM into slot 1; plays chat/dialogue text ID 0x0000; move monster; sets game flag 110; plays chat/dialogue text ID 0x0001; plays chat/dialogue text ID 0x004b; tests game flag 110; tests game flag 11 … |
+| block 621 (x 13, y 19) | `0x12D2` | party steps in, wall clicked | moves the party to level 2, block 106, facing 2; requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 0, operands 0, 589; plays chat/dialogue text ID 0x0050; shows text ID 0x403f; plays a sound (ID 109) |
+| `0x400` level loaded | `0x03AD` | — | sets script global 0 to 0; sets script global 2 to 0; sets script global 1 to 0; sets monster 0 block to 557; sets monster 0 facing to 2; move monster; sets script timer 0 to 15 ticks; sets script timer 1 to 60 ticks … |
+| `0x401` script timer 0 | `0x0400` | — | toggles all four walls of block 429 between types 68 and 69 |
+| `0x402` script timer 1 | `0x0409` | — | no action summarized |
 
 ## Items placed by the scripts
 

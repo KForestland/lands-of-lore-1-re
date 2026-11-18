@@ -125,62 +125,64 @@ Made by `tools/level_report.py` from `LEVEL22.CMZ`, `.WLL`, `.XXX`, `.INI`, `.IN
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL22.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles YVEL1; loads wall tiles YVEL2; loads monster sprites GRTORC.SHP into slot 0; loads monster sprites CABAL.SHP into slot 1; defines monster type 1; defines monster type 2; tests game flag 357 |
-| INI entry 1 (runs when the level loads) | — | places item 154 (Hale leather jerkin) on block 378; places item 76 (Halberd "Sever") on block 133; places item 77 (Halberd "Widow") on block 166; places item 190 (Speckled Key) on block 730; places item 237 (Hand of Fate scroll) on block 730; places item 191 (Jade Key) on block 297; places item 156 (Plate mail) on block 264; places item 140 (Great helm) on block 298 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x003E` | — | loads wall tiles YVEL1; loads wall tiles YVEL2; loads monster sprites GRTORC.SHP into slot 0; loads monster sprites CABAL.SHP into slot 1; defines monster type 1; defines monster type 2; tests game flag 357 |
+| INI entry 1 (runs when the level loads) | `0x0108` | — | places item 154 (Hale leather jerkin) on block 378; places item 76 (Halberd "Sever") on block 133; places item 77 (Halberd "Widow") on block 166; places item 190 (Speckled Key) on block 730; places item 237 (Hand of Fate scroll) on block 730; places item 191 (Jade Key) on block 297; places item 156 (Plate mail) on block 264; places item 140 (Great helm) on block 298 … |
 
 ### LEVEL22.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 27 (x 27, y 0) | party steps in, party arrives (second path), item put down | places item 139 (Whisper Cloak) on block 150; gives item 139 (Whisper Cloak); takes 1000 crown(s); sets the east wall of block 151 to type 1; moves objects from block 27 to block 977; sets game flag 378; a character speaks; place inventory item in hand … |
-| block 59 (x 27, y 1) | wall clicked | sets the west wall of block 59 to type 0; plays a sound |
-| block 113 (x 17, y 3) | wall clicked | clears game flag 358; clears game flag 357; sets game flag 316; place inventory item in hand; a character speaks; checks a wall of block 145; tests game flag 352; set global var … |
-| block 122 (x 26, y 3) | party steps in, party arrives (second path) | loads wall tiles YVEL1; shows a message; clears game flag 357; set global var |
-| block 131 (x 3, y 4) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 135 (x 7, y 4) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 137 (x 9, y 4) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 142 (x 14, y 4) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 145 (x 17, y 4) | party steps in, wall clicked | sets the north wall of block 145 to type 1; sets the north wall of block 145 to type 2; sets the north wall of block 145 to type 3; sets the north wall of block 145 to type 4; sets the north wall of block 145 to type 5; sets the north wall of block 43 to type 0; sets the north wall of block 145 to type 6; places a monster (slot 1) on block 92 … |
-| block 151 (x 23, y 4) | party steps in, wall clicked | sets the east wall of block 151 to type 0; sets the east wall of block 151 to type 1; sets game flag 379; plays a sound; set global var; checks a wall of block 145; tests game flag 377; tests game flag 379 … |
-| block 152 (x 24, y 4) | wall clicked | loads wall tiles YVEL2; sets the east wall of block 151 to type 1; clears game flag 358; clears game flag 357; sets game flag 357; tests game flag 352; set global var; checks a wall of block 145 … |
-| block 167 (x 7, y 5) | wall clicked | a character speaks; checks a wall of block 135 |
-| block 232 (x 8, y 7) | wall clicked | a character speaks; checks a wall of block 233 |
-| block 233 (x 9, y 7) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 241 (x 17, y 7) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 259 (x 3, y 8) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 303 (x 15, y 9) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 355 (x 3, y 11) | party steps in, wall clicked | a character speaks; sets game flag 367; tests game flag 352; set global var; plays a sound; tests game flag 372; tests game flag 373; tests game flag 374 … |
-| block 376 (x 24, y 11) | wall clicked | places item 214 (Earth Vial) on block 440; gives item 214 (Earth Vial); sets the north wall of block 416 to type 83; sets the north wall of block 416 to type 0; takes 500 crown(s); takes 50 crown(s); takes 20 crown(s); gives item 216 (Salve) … |
-| block 387 (x 3, y 12) | wall clicked | sets the north wall of block 416 to type 80; sets the north wall of block 416 to type 0; gives ? crown(s); sets the south wall of block 387 to type ?; takes 225 crown(s); gives item 68 (Peregrin great bow); takes 300 crown(s); gives item 41 (Crossbow "Swift") … |
-| block 396 (x 12, y 12) | wall clicked | gives item 161 (Silent sandals); gives item 262 (Bezel Cup) |
-| block 408 (x 24, y 12) | party steps in, wall clicked | a character speaks; sets game flag 363; clears game flag 358; tests game flag 352; set global var; plays a sound; tests game flag 364; tests game flag 365 … |
-| block 425 (x 9, y 13) | party steps in, wall clicked | no game action (only stack and screen bookkeeping) |
-| block 428 (x 12, y 13) | bits 0x400 (no engine caller found) | no game action (only stack and screen bookkeeping) |
-| block 459 (x 11, y 14) | party steps in, wall clicked | no game action (only stack and screen bookkeeping) |
-| block 516 (x 4, y 16) | wall clicked | a character speaks; checks a wall of block 548 |
-| block 521 (x 9, y 16) | party steps in, wall clicked | no game action (only stack and screen bookkeeping) |
-| block 524 (x 12, y 16) | bits 0x400 (no engine caller found) | no game action (only stack and screen bookkeeping) |
-| block 548 (x 4, y 17) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 554 (x 10, y 17) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 556 (x 12, y 17) | wall clicked | gives item 248 (Oil Flask); gives 10 crown(s); gives item 100 (Granite rock); gives item 277 (Bracers) |
-| block 568 (x 24, y 17) | party steps in, wall clicked | takes 100 crown(s); gives ? crown(s); heals; takes 50 crown(s); sets the north wall of block 416 to type 83; sets the north wall of block 416 to type 0; sets game flag 585; remove character effects … |
-| block 643 (x 3, y 20) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 657 (x 17, y 20) | party steps in, wall clicked | a character speaks; sets game flag 366; tests game flag 352; checks a wall of block 145; set global var; plays a sound; tests game flag 368; tests game flag 369 … |
-| block 658 (x 18, y 20) | wall clicked | sets the north wall of block 416 to type 86; sets the north wall of block 416 to type 0; gives ? crown(s); takes 325 crown(s); gives item 57 (Great axe "Brimstone"); takes 550 crown(s); gives item 74 (Great sword "Justice"); takes 150 crown(s) … |
-| block 697 (x 25, y 21) | party steps in, wall clicked | sets the west wall of block 697 to type 37; a character speaks; sets game flag 354; sets game flag 355; sets game flag 585; tests game flag 354; plays a sound; tests game flag 355 … |
-| block 793 (x 25, y 24) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 907 (x 11, y 28) | party steps in, wall clicked | no game action (only stack and screen bookkeeping) |
-| block 913 (x 17, y 28) | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
-| block 1003 (x 11, y 31) | party steps in, wall clicked | moves the party to level 24, block 674; shows a message; plays a sound; set global var |
-| `0x400` level loaded | — | starts script timer 0; tests game flag 352 |
-| `0x401` script timer 0 | — | tests game flag 352 |
-| `0x404` a monster died | — | sets the north wall of block 43 to type ?; sets the south wall of block 145 to type 46; sets the north wall of block 145 to type 7; places a monster (slot ?) on block ?; places a monster (slot 1) on block 76; places a monster (slot 2) on block 52; places a monster (slot 1) on block 217; places a monster (slot 2) on block 474 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 27 (x 27, y 0) | `0x1B3F` | party steps in, party arrives (second path), item put down | places item 139 (Whisper Cloak) on block 150; gives item 139 (Whisper Cloak) if inventory placement succeeds; puts item 139 (Whisper Cloak) on an empty cursor; takes 1000 crown(s); sets the east wall of block 151 to type 1; moves items from block 27 to level 23, block 977; sets game flag 378; plays chat/dialogue text ID 0x0080 … |
+| block 59 (x 27, y 1) | `0x1B35` | wall clicked | sets all four walls of block 59 to type 0; plays a sound (ID 38) |
+| block 113 (x 17, y 3) | `0x188C` | wall clicked | requests engine global change, selector 0, operands 0, 177; clears game flag 358; clears game flag 357; plays music track ?; sets game flag 316; place inventory item in hand; plays chat/dialogue text ID 0x004f; checks the north wall of block 145 … |
+| block 122 (x 26, y 3) | `0x20EB` | party steps in, party arrives (second path) | loads wall tiles YVEL1; shows text ID 0x403f; requests engine global change, selector 0, operands 0, 123; requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 10, operands 0, 2; requests engine global change, selector 0, operands 0, 151; requests engine global change, selector 1, operands 0, 1; clears game flag 357 … |
+| block 131 (x 3, y 4) | `0x1AC2` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 135 (x 7, y 4) | `0x1B0D` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 137 (x 9, y 4) | `0x1ABA` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 142 (x 14, y 4) | `0x1B1D` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 145 (x 17, y 4) | `0x15BB` | party steps in, wall clicked | sets the north wall of block 145 to type 1; sets the north wall of block 145 to type 2; sets the north wall of block 145 to type 3; sets the north wall of block 145 to type 4; sets the north wall of block 145 to type 5; sets the north wall of block 43 to type 0; sets the north wall of block 145 to type 6; places a monster of type slot 1 on block 92 in mode 3 … |
+| block 151 (x 23, y 4) | `0x208A` | party steps in, wall clicked | sets the east wall of block 151 to type 0; sets the east wall of block 151 to type 1; requests engine global change, selector 0, operands 0, 151; plays music track 327; plays music track 299; sets game flag 379; plays a sound (ID 104); checks the north wall of block 145 … |
+| block 152 (x 24, y 4) | `0x213F` | wall clicked | loads wall tiles YVEL2; sets the east wall of block 151 to type 1; requests engine global change, selector 0, operands 0, 150; clears game flag 358; clears game flag 357; plays music track ?; requests engine global change, selector 0, operands 0, 123; sets game flag 357 … |
+| block 167 (x 7, y 5) | `0x1AF0` | wall clicked | plays chat/dialogue text ID 0x0093; plays chat/dialogue text ID 0x0091; checks the east wall of block 135 |
+| block 232 (x 8, y 7) | `0x1A94` | wall clicked | plays chat/dialogue text ID 0x0093; plays chat/dialogue text ID 0x0091; checks the north wall of block 233 |
+| block 233 (x 9, y 7) | `0x1AB2` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 241 (x 17, y 7) | `0x1B25` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 259 (x 3, y 8) | `0x1A8C` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 303 (x 15, y 9) | `0x117F` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 355 (x 3, y 11) | `0x123A` | party steps in, wall clicked | requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 0, operands 0, 355; plays chat/dialogue text ID 0x0094; plays music track 283; sets game flag 367; plays chat/dialogue text ID 0x0023; plays chat/dialogue text ID 0x0025; tests game flag 352 … |
+| block 376 (x 24, y 11) | `0x0C0C` | wall clicked | places item 214 (Earth Vial) on block 440; gives item 214 (Earth Vial) if inventory placement succeeds; puts item 214 (Earth Vial) on an empty cursor; sets the north wall of block 416 to type 83; sets the north wall of block 416 to type 0; takes 500 crown(s); takes 50 crown(s); takes 20 crown(s) … |
+| block 387 (x 3, y 12) | `0x12C3` | wall clicked | sets the north wall of block 416 to type 80; sets the north wall of block 416 to type 0; deletes the held item; gives ? crown(s); sets the south wall of block 387 to type ?; takes 225 crown(s); gives item 68 (Peregrin great bow) if inventory placement succeeds; puts item 68 (Peregrin great bow) on an empty cursor … |
+| block 396 (x 12, y 12) | `0x10FB` | wall clicked | puts item 161 (Silent sandals) on an empty cursor; puts item 262 (Bezel Cup) on an empty cursor |
+| block 408 (x 24, y 12) | `0x0AF3` | party steps in, wall clicked | requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 0, operands 0, 408; plays chat/dialogue text ID 0x0094; plays music track 298; sets game flag 363; plays chat/dialogue text ID 0x0001; plays chat/dialogue text ID 0x0003; plays chat/dialogue text ID 0x000b … |
+| block 425 (x 9, y 13) | `0x10F7` | party steps in, wall clicked | no action summarized |
+| block 428 (x 12, y 13) | `0x1123` | bits 0x400 (no engine caller found) | no action summarized |
+| block 459 (x 11, y 14) | `0x10F9` | party steps in, wall clicked | no action summarized |
+| block 516 (x 4, y 16) | `0x1ACA` | wall clicked | plays chat/dialogue text ID 0x0093; plays chat/dialogue text ID 0x0091; checks the east wall of block 548 |
+| block 521 (x 9, y 16) | `0x10F5` | party steps in, wall clicked | no action summarized |
+| block 524 (x 12, y 16) | `0x116D` | bits 0x400 (no engine caller found) | no action summarized |
+| block 548 (x 4, y 17) | `0x1AE8` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 554 (x 10, y 17) | `0x10ED` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 556 (x 12, y 17) | `0x1133` | wall clicked | puts item 248 (Oil Flask) on an empty cursor; gives 10 crown(s); puts item 100 (Granite rock) on an empty cursor; puts item 277 (Bracers) on an empty cursor |
+| block 568 (x 24, y 17) | `0x096C` | party steps in, wall clicked | takes 100 crown(s); gives ? crown(s); heals character ? with amount or spell level ?; takes 50 crown(s); sets the north wall of block 416 to type 83; sets the north wall of block 416 to type 0; heals character 0 with amount or spell level ?; heals character 1 with amount or spell level ? … |
+| block 643 (x 3, y 20) | `0x1B15` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 657 (x 17, y 20) | `0x0E90` | party steps in, wall clicked | requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 0, operands 0, 657; plays chat/dialogue text ID 0x0094; plays music track 255; sets game flag 366; plays chat/dialogue text ID 0x0018; tests game flag 352; checks the north wall of block 145 … |
+| block 658 (x 18, y 20) | `0x0F5D` | wall clicked | sets the north wall of block 416 to type 86; sets the north wall of block 416 to type 0; deletes the held item; gives ? crown(s); takes 325 crown(s); gives item 57 (Great axe "Brimstone") if inventory placement succeeds; puts item 57 (Great axe "Brimstone") on an empty cursor; takes 550 crown(s) … |
+| block 697 (x 25, y 21) | `0x1187` | party steps in, wall clicked | sets the west wall of block 697 to type 37; plays chat/dialogue text ID 0x001f; sets game flag 354; plays chat/dialogue text ID 0x0020; sets game flag 355; sets game flag 585; plays chat/dialogue text ID 0x0021; tests game flag 354 … |
+| block 793 (x 25, y 24) | `0x1B2D` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 907 (x 11, y 28) | `0x0962` | party steps in, wall clicked | no action summarized |
+| block 913 (x 17, y 28) | `0x0964` | party steps in, wall clicked | sets game flag 585; tests game flag 357 |
+| block 1003 (x 11, y 31) | `0x0927` | party steps in, wall clicked | moves the party to level 24, block 674, facing 2; shows text ID 0x403f; requests engine global change, selector 0, operands 0, 971; requests engine global change, selector 10, operands 0, 0; plays a sound (ID 109) |
+| `0x400` level loaded | `0x0719` | — | sets script timer 0 to 1800 ticks; sets music theme ?; tests game flag 352 |
+| `0x401` script timer 0 | `0x0923` | — | tests game flag 352 |
+| `0x404` a monster died | `0x0737` | — | sets the north wall of block 43 to type ?; sets the south wall of block 145 to type 46; sets the north wall of block 145 to type 7; places a monster of type slot ? on block ? in mode ?; places a monster of type slot 1 on block 76 in mode 4; places a monster of type slot 2 on block 52 in mode 4; places a monster of type slot 1 on block 217 in mode 4; places a monster of type slot 2 on block 474 in mode 4 … |
 
 ## Items placed by the scripts
 

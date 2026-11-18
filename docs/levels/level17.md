@@ -88,63 +88,65 @@ Made by `tools/level_report.py` from `LEVEL17.CMZ`, `.WLL`, `.XXX`, `.INI`, `.IN
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL17.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles FOREST1; loads monster sprites HORNET.SHP into slot 0; loads monster sprites MOLDER.SHP into slot 1; defines monster type 1; defines monster type 2 |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 2) on block 581; places a monster (slot 2) on block 420; places a monster (slot 2) on block 392; places a monster (slot 2) on block 519; places a monster (slot 2) on block 135; places a monster (slot 2) on block 501; places a monster (slot 2) on block 567; places a monster (slot 2) on block 186 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x0084` | — | loads wall tiles FOREST1; loads monster sprites HORNET.SHP into slot 0; loads monster sprites MOLDER.SHP into slot 1; defines monster type 1; defines monster type 2 |
+| INI entry 1 (runs when the level loads) | `0x012E` | — | places a monster of type slot 2 on block 581 in mode 3; places a monster of type slot 2 on block 420 in mode 3; places a monster of type slot 2 on block 392 in mode 3; places a monster of type slot 2 on block 519 in mode 3; places a monster of type slot 2 on block 135 in mode 3; places a monster of type slot 2 on block 501 in mode 3; places a monster of type slot 2 on block 567 in mode 3; places a monster of type slot 2 on block 186 in mode 3 … |
 
 ### LEVEL17.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 78 (x 14, y 2) | party steps in, party arrives (second path), item put down | moves objects from block 78 to block 910 |
-| block 133 (x 5, y 4) | wall clicked | tests game flag 506 |
-| block 187 (x 27, y 5) | bits 0x400 (no engine caller found) | deals damage; starts cut-scene ?.TIM; sets the west wall of block 240 to type ?; sets the south wall of block 240 to type 0; starts cut-scene UNBAR1.TIM; starts cut-scene UNBAR2.TIM; sets the south wall of block 240 to type 47; sets the west wall of block 240 to type 0 … |
-| block 188 (x 28, y 5) | wall clicked | deals damage; checks a wall of block 995 |
-| block 201 (x 9, y 6) | wall clicked | tests game flag 534 |
-| block 228 (x 4, y 7) | wall clicked | tests game flag 512 |
-| block 240 (x 16, y 7) | party steps in, wall clicked | shows a message; checks a wall of block 240; tests game flag 325; set global var |
-| block 256 (x 0, y 8) | wall clicked | tests game flag 535 |
-| block 260 (x 4, y 8) | wall clicked | tests game flag 538 |
-| block 272 (x 16, y 8) | party arrives (second path), bits 0x410 (no engine caller found) | starts cut-scene HAG_S.TIM; starts cut-scene BARRIER.TIM; sets the south wall of block 240 to type 47; sets the west wall of block 240 to type 0; sets game flag 325; starts a dialogue; a character speaks; checks a wall of block 240 … |
-| block 282 (x 26, y 8) | wall clicked | tests game flag 508 |
-| block 298 (x 10, y 9) | wall clicked | tests game flag 533 |
-| block 319 (x 31, y 9) | wall clicked | tests game flag 514 |
-| block 326 (x 6, y 10) | wall clicked | deals damage; checks a wall of block 992 |
-| block 346 (x 26, y 10) | wall clicked | tests game flag 515 |
-| block 356 (x 4, y 11) | wall clicked | tests game flag 507 |
-| block 358 (x 6, y 11) | bits 0x400 (no engine caller found) | deals damage; checks a wall of block 992 |
-| block 372 (x 20, y 11) | wall clicked | tests game flag 511 |
-| block 412 (x 28, y 12) | wall clicked | gives item 213 (Honey); delete hand item; a character speaks |
-| block 444 (x 28, y 13) | fireball passes | sets the south wall of block 412 to type 79 |
-| block 462 (x 14, y 14) | wall clicked | gives item 213 (Honey); delete hand item; a character speaks |
-| block 463 (x 15, y 14) | fireball passes | sets the west wall of block 462 to type 79 |
-| block 480 (x 0, y 15) | wall clicked | tests game flag 537 |
-| block 482 (x 2, y 15) | wall clicked | tests game flag 518 |
-| block 517 (x 5, y 16) | wall clicked | sets the south wall of block 993 to type 0; checks a wall of block 993 |
-| block 549 (x 5, y 17) | bits 0x400 (no engine caller found) | sets the south wall of block 993 to type 0; checks a wall of block 993 |
-| block 557 (x 13, y 17) | wall clicked | tests game flag 536 |
-| block 568 (x 24, y 17) | bits 0x400 (no engine caller found) | no game action (only stack and screen bookkeeping) |
-| block 569 (x 25, y 17) | wall clicked | no game action (only stack and screen bookkeeping) |
-| block 586 (x 10, y 18) | wall clicked | gives item 213 (Honey); delete hand item; a character speaks |
-| block 587 (x 11, y 18) | fireball passes | sets the east wall of block 586 to type 79 |
-| block 615 (x 7, y 19) | wall clicked | tests game flag 532 |
-| block 627 (x 19, y 19) | wall clicked | tests game flag 513 |
-| block 631 (x 23, y 19) | wall clicked | tests game flag 510 |
-| block 679 (x 7, y 21) | wall clicked | tests game flag 509 |
-| block 704 (x 0, y 22) | party steps in, party arrives (second path) | moves objects from block 704 to block 734 |
-| block 705 (x 1, y 22) | party arrives (second path), bits 0x10 (no engine caller found) | sets game flag 318; a character speaks; tests game flag 318 |
-| block 728 (x 24, y 22) | party steps in | no game action (only stack and screen bookkeeping) |
-| block 745 (x 9, y 23) | wall clicked | tests game flag 516 |
-| block 748 (x 12, y 23) | wall clicked | tests game flag 517 |
-| block 760 (x 24, y 23) | party steps in, party arrives (second path), bits 0x4000 (no engine caller found) | sets game flag 319; a character speaks; set global var; tests game flag 319 |
-| block 792 (x 24, y 24) | party steps in, party arrives (second path), wall clicked | moves objects from block ? to block 124 |
-| `0x400` level loaded | — | starts script timer 0 |
-| `0x401` script timer 0 | — | places a monster (slot 1) on block 460; places a monster (slot 1) on block 461; places a monster (slot 1) on block 587; places a monster (slot 1) on block 588; places a monster (slot 1) on block 444; places a monster (slot 1) on block 476; checks a wall of block 462; checks a wall of block 586 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 78 (x 14, y 2) | `0x0592` | party steps in, party arrives (second path), item put down | moves items from block 78 to level 24, block 910 |
+| block 133 (x 5, y 4) | `0x0836` | wall clicked | tests game flag 506 |
+| block 187 (x 27, y 5) | `0x0646` | bits 0x400 (no engine caller found) | deals damage to the party (amount ?); loads cut-scene ?.TIM into slot ?; sets the west wall of block 240 to type ?; sets the south wall of block 240 to type 0; loads cut-scene UNBAR1.TIM into slot 1; loads cut-scene UNBAR2.TIM into slot 2; sets the south wall of block 240 to type 47; sets all four walls of block 240 to type 0 … |
+| block 188 (x 28, y 5) | `0x0642` | wall clicked | deals damage to the party (amount ?); checks the south wall of block 995 |
+| block 201 (x 9, y 6) | `0x08FD` | wall clicked | tests game flag 534 |
+| block 228 (x 4, y 7) | `0x0878` | wall clicked | tests game flag 512 |
+| block 240 (x 16, y 7) | `0x071C` | party steps in, wall clicked | requests engine global change, selector 10, operands 0, 0; shows text ID 0x403f; requests engine global change, selector 0, operands 0, 272; checks the south wall of block 240; tests game flag 325 |
+| block 256 (x 0, y 8) | `0x090F` | wall clicked | tests game flag 535 |
+| block 260 (x 4, y 8) | `0x0945` | wall clicked | tests game flag 538 |
+| block 272 (x 16, y 8) | `0x0744` | party arrives (second path), bits 0x410 (no engine caller found) | loads cut-scene HAG_S.TIM into slot 0; loads cut-scene BARRIER.TIM into slot 0; sets the south wall of block 240 to type 47; sets the west wall of block 240 to type 0; sets game flag 325; plays music track 287; starts a dialogue sequence in mode 0; plays music track 286 … |
+| block 282 (x 26, y 8) | `0x084C` | wall clicked | tests game flag 508 |
+| block 298 (x 10, y 9) | `0x08EB` | wall clicked | tests game flag 533 |
+| block 319 (x 31, y 9) | `0x0895` | wall clicked | tests game flag 514 |
+| block 326 (x 6, y 10) | `0x062A` | wall clicked | deals damage to the party (amount ?); checks the south wall of block 992 |
+| block 346 (x 26, y 10) | `0x08A0` | wall clicked | tests game flag 515 |
+| block 356 (x 4, y 11) | `0x0841` | wall clicked | tests game flag 507 |
+| block 358 (x 6, y 11) | `0x062E` | bits 0x400 (no engine caller found) | deals damage to the party (amount ?); checks the south wall of block 992 |
+| block 372 (x 20, y 11) | `0x086D` | wall clicked | tests game flag 511 |
+| block 412 (x 28, y 12) | `0x0992` | wall clicked | deletes the held item; puts item 213 (Honey) on an empty cursor; plays chat/dialogue text ID 0x0015; plays chat/dialogue text ID 0x0014 |
+| block 444 (x 28, y 13) | `0x0981` | fireball passes | sets the south wall of block 412 to type 79 |
+| block 462 (x 14, y 14) | `0x0968` | wall clicked | deletes the held item; puts item 213 (Honey) on an empty cursor; plays chat/dialogue text ID 0x0015; plays chat/dialogue text ID 0x0014 |
+| block 463 (x 15, y 14) | `0x0957` | fireball passes | sets the west wall of block 462 to type 79 |
+| block 480 (x 0, y 15) | `0x0933` | wall clicked | tests game flag 537 |
+| block 482 (x 2, y 15) | `0x08CB` | wall clicked | tests game flag 518 |
+| block 517 (x 5, y 16) | `0x0632` | wall clicked | sets the south wall of block 993 to type 0; checks the south wall of block 993 |
+| block 549 (x 5, y 17) | `0x0636` | bits 0x400 (no engine caller found) | sets the south wall of block 993 to type 0; checks the south wall of block 993 |
+| block 557 (x 13, y 17) | `0x0921` | wall clicked | tests game flag 536 |
+| block 568 (x 24, y 17) | `0x063E` | bits 0x400 (no engine caller found) | no action summarized |
+| block 569 (x 25, y 17) | `0x063A` | wall clicked | no action summarized |
+| block 586 (x 10, y 18) | `0x097D` | wall clicked | deletes the held item; puts item 213 (Honey) on an empty cursor; plays chat/dialogue text ID 0x0015; plays chat/dialogue text ID 0x0014 |
+| block 587 (x 11, y 18) | `0x096C` | fireball passes | sets the east wall of block 586 to type 79 |
+| block 615 (x 7, y 19) | `0x08DB` | wall clicked | tests game flag 532 |
+| block 627 (x 19, y 19) | `0x088A` | wall clicked | tests game flag 513 |
+| block 631 (x 23, y 19) | `0x0862` | wall clicked | tests game flag 510 |
+| block 679 (x 7, y 21) | `0x0857` | wall clicked | tests game flag 509 |
+| block 704 (x 0, y 22) | `0x059D` | party steps in, party arrives (second path) | moves items from block 704 to level 11, block 734 |
+| block 705 (x 1, y 22) | `0x0620` | party arrives (second path), bits 0x10 (no engine caller found) | sets game flag 318; plays chat/dialogue text ID 0x0000; tests game flag 318 |
+| block 728 (x 24, y 22) | `0x05AA` | party steps in | no action summarized |
+| block 745 (x 9, y 23) | `0x08AB` | wall clicked | tests game flag 516 |
+| block 748 (x 12, y 23) | `0x08BB` | wall clicked | tests game flag 517 |
+| block 760 (x 24, y 23) | `0x05AF` | party steps in, party arrives (second path), bits 0x4000 (no engine caller found) | requests engine global change, selector 10, operands 0, 2; sets game flag 319; plays chat/dialogue text ID 0x0001; tests game flag 319 |
+| block 792 (x 24, y 24) | `0x05EA` | party steps in, party arrives (second path), wall clicked | moves items from block ? to level 12, block 124 |
+| `0x400` level loaded | `0x04EC` | — | sets music theme 329; sets script timer 0 to 3600 ticks |
+| `0x401` script timer 0 | `0x04F8` | — | places a monster of type slot 1 on block 460 in mode 4; places a monster of type slot 1 on block 461 in mode 4; places a monster of type slot 1 on block 587 in mode 4; places a monster of type slot 1 on block 588 in mode 4; places a monster of type slot 1 on block 444 in mode 4; places a monster of type slot 1 on block 476 in mode 4; checks the west wall of block 462; checks the east wall of block 586 … |
 
 ## Items placed by the scripts
 

@@ -77,55 +77,57 @@ Made by `tools/level_report.py` from `LEVEL2.CMZ`, `.WLL`, `.XXX`, `.INI`, `.INF
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL2.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles FOREST1; loads monster sprites BOAR.SHP into slot 0; loads monster sprites ORC.SHP into slot 1; defines monster type 3; loads monster sprites THUG.SHP into slot 1; defines monster type 1; defines monster type 4; defines monster type 2 … |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 1) on block 228; places a monster (slot 1) on block 165; places a monster (slot 1) on block 97; places a monster (slot 2) on block 69; places item 121 (Stick) on block 69; places item 99 (Rock) on block 172; places item 99 (Rock) on block 228; places item 43 (Weathered dagger) on block 136 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x0026` | — | loads wall tiles FOREST1; loads monster sprites BOAR.SHP into slot 0; loads monster sprites ORC.SHP into slot 1; defines monster type 3; loads monster sprites THUG.SHP into slot 1; defines monster type 1; defines monster type 4; defines monster type 2 … |
+| INI entry 1 (runs when the level loads) | `0x0145` | — | places a monster of type slot 1 on block 228 in mode 2; places a monster of type slot 1 on block 165 in mode 2; places a monster of type slot 1 on block 97 in mode 2; places a monster of type slot 2 on block 69 in mode 3; places item 121 (Stick) on block 69; places item 99 (Rock) on block 172; places item 99 (Rock) on block 228; places item 43 (Weathered dagger) on block 136 … |
 
 ### LEVEL2.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 13 (x 13, y 0) | party steps in, party arrives (second path), wall clicked, item put down | moves the party to level 6, block 449; moves objects from block 13 to block 449; set global var |
-| block 45 (x 13, y 1) | party arrives (second path), bits 0x10 (no engine caller found) | sets the south wall of block 13 to type 63; starts a dialogue; a character speaks; sets game flag 136; tests game flag 67; tests game flag 41; tests game flag 136; plays a sound |
-| block 70 (x 6, y 2) | wall clicked | a character speaks |
-| block 71 (x 7, y 2) | wall clicked | a character speaks; tests game flag 191 |
-| block 74 (x 10, y 2) | party steps in, wall clicked | a character speaks; shows a message; set global var; tests game flag 41; tests game flag 67 |
-| block 76 (x 12, y 2) | wall clicked | a character speaks |
-| block 77 (x 13, y 2) | item taken | no game action (only stack and screen bookkeeping) |
-| block 96 (x 0, y 3) | party steps in, party arrives (second path), wall clicked, item put down | moves the party to level 5, block 260; moves objects from block 96 to block 260; shows a message; set global var |
-| block 98 (x 2, y 3) | party steps in | shows a message; tests game flag 35; set global var |
-| block 99 (x 3, y 3) | party steps in, bits 0x4000 (no engine caller found) | moves the party to level 5, block 260; places a monster (slot 1) on block 97; a character speaks; starts a dialogue; sets game flag 35; sets game flag 38; suspend monster; changes a monster … |
-| block 104 (x 8, y 3) | wall clicked | a character speaks |
-| block 106 (x 10, y 3) | party steps in, party arrives (second path), party leaves, bits 0x4000 (no engine caller found) | a character speaks; set global var; tests game flag 67; tests game flag 41 |
-| block 109 (x 13, y 3) | item taken | no game action (only stack and screen bookkeeping) |
-| block 132 (x 4, y 4) | wall clicked | a character speaks |
-| block 136 (x 8, y 4) | item taken | clears game flag 187; tests game flag 187 |
-| block 138 (x 10, y 4) | party arrives (second path) | starts a dialogue; a character speaks; sets game flag 134; tests game flag 67; tests game flag 41; tests game flag 134 |
-| block 141 (x 13, y 4) | party arrives (second path) | starts cut-scene TIM1.TIM; sets game flag 14; sets game flag 35; sets game flag 38; suspend monster; sets game flag 70; starts a dialogue; a character speaks … |
-| block 166 (x 6, y 5) | party arrives (second path), bits 0x10 (no engine caller found) | suspend monster; sets game flag 14; changes a monster; starts a dialogue; tests game flag 14 |
-| block 170 (x 10, y 5) | party arrives (second path) | starts a dialogue; a character speaks; sets game flag 135; tests game flag 67; tests game flag 41; tests game flag 135 |
-| block 176 (x 16, y 5) | wall clicked | a character speaks |
-| block 193 (x 1, y 6) | wall clicked | a character speaks |
-| block 227 (x 3, y 7) | party arrives (second path), bits 0x10 (no engine caller found) | suspend monster; sets game flag 14; changes a monster; starts a dialogue; tests game flag 14 |
-| block 232 (x 8, y 7) | party arrives (second path), bits 0x10 (no engine caller found) | starts cut-scene SCOTIA1.TIM; sets game flag 15; tests game flag 15; tests game flag 67 |
-| block 239 (x 15, y 7) | wall clicked | a character speaks; tests game flag 190 |
-| block 260 (x 4, y 8) | party arrives (second path), bits 0x10 (no engine caller found) | suspend monster; sets game flag 14; changes a monster; starts a dialogue; tests game flag 14 |
-| block 261 (x 5, y 8) | wall clicked | gives 3 crown(s); a character speaks; clears game flag 188; tests game flag 188 |
-| block 264 (x 8, y 8) | party arrives (second path) | shows a message; tests game flag 15; set global var |
-| block 268 (x 12, y 8) | party arrives (second path) | starts cut-scene VICTOR7.TIM; starts cut-scene VICTOR6.TIM; starts cut-scene VICTOR5.TIM; places item 81 (Long sword) on block 301; gives item 81 (Long sword); places item 241 (Riddle Scroll) on block 301; moves the party to level 10, block 713; starts a dialogue … |
-| block 270 (x 14, y 8) | wall clicked | a character speaks |
-| block 300 (x 12, y 9) | party steps in, party arrives (second path), party leaves, wall clicked, bits 0x4000 (no engine caller found) | starts cut-scene VICTOR6.TIM; starts cut-scene VICTOR7.TIM; starts cut-scene VICTOR5.TIM; places item 81 (Long sword) on block 301; gives item 81 (Long sword); places item 241 (Riddle Scroll) on block 301; moves the party to level 10, block 713; starts a dialogue … |
-| block 301 (x 13, y 9) | party steps in, wall clicked | starts cut-scene VICTOR5.TIM; places item 81 (Long sword) on block 301; gives item 81 (Long sword); places item 241 (Riddle Scroll) on block 301; moves the party to level 10, block 713; starts cut-scene VICTOR7.TIM; starts cut-scene VICTOR6.TIM; moves objects from block 301 to block 713 … |
-| block 328 (x 8, y 10) | party steps in, party arrives (second path), party leaves, bits 0x4000 (no engine caller found) | set global var; tests game flag 67 |
-| block 360 (x 8, y 11) | party steps in, wall clicked | starts cut-scene LYNN1.TIM; starts cut-scene LYNN2.TIM; starts cut-scene LYNN3.TIM; a character speaks; shows a message; sets game flag 24; tests game flag 67; set global var … |
-| block 392 (x 8, y 12) | wall clicked | starts cut-scene BOAT.TIM; moves the party to level 3, block 526; sets game flag 25; delete hand item; a character speaks; starts a dialogue; tests game flag 41; tests game flag 67 … |
-| `0x400` level loaded | — | places a monster (slot 3) on block 109; suspend monster; make item; give item to monster; sets game flag 44; starts script timer 0; tests game flag 67; tests game flag 44 |
-| `0x401` script timer 0 | — | places a monster (slot 2) on block 136 |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 13 (x 13, y 0) | `0x08BE` | party steps in, party arrives (second path), wall clicked, item put down | moves the party to level 6, block 449, facing 0; moves items from block 13 to level 6, block 449; requests engine global change, selector 10, operands 0, 2 |
+| block 45 (x 13, y 1) | `0x049E` | party arrives (second path), bits 0x10 (no engine caller found) | sets the south wall of block 13 to type 63; starts a dialogue sequence in mode 0; plays chat/dialogue text ID 0x0059; sets up 1 dialogue choices; reads the dialogue result; plays chat/dialogue text ID 0x0061; sets game flag 136; tests game flag 67 … |
+| block 70 (x 6, y 2) | `0x0DCF` | wall clicked | plays chat/dialogue text ID 0x001c |
+| block 71 (x 7, y 2) | `0x0DE9` | wall clicked | plays chat/dialogue text ID 0x003b; tests game flag 191 |
+| block 74 (x 10, y 2) | `0x0507` | party steps in, wall clicked | requests engine global change, selector 10, operands 0, 0; plays chat/dialogue text ID 0x0055; plays chat/dialogue text ID 0x0000; plays chat/dialogue text ID 0x005f; plays chat/dialogue text ID 0x005e; shows text ID 0x403f; requests engine global change, selector 0, operands 0, 106; tests game flag 41 … |
+| block 76 (x 12, y 2) | `0x0DAC` | wall clicked | plays chat/dialogue text ID 0x0039 |
+| block 77 (x 13, y 2) | `0x0414` | item taken | no action summarized |
+| block 96 (x 0, y 3) | `0x0D5D` | party steps in, party arrives (second path), wall clicked, item put down | moves the party to level 5, block 260, facing 3; moves items from block 96 to level 5, block 260; requests engine global change, selector 0, operands 0, 97; shows text ID 0x403f; requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 10, operands 0, 2 |
+| block 98 (x 2, y 3) | `0x0D3D` | party steps in | requests engine global change, selector 0, operands 0, 99; requests engine global change, selector 10, operands 0, 0; shows text ID 0x403f; tests game flag 35 |
+| block 99 (x 3, y 3) | `0x0BF3` | party steps in, bits 0x4000 (no engine caller found) | moves the party to level 5, block 260, facing 3; places a monster of type slot 1 on block 97 in mode 7; requests engine global change, selector 10, operands 0, 0; plays chat/dialogue text ID 0x0038; sets up 3 dialogue choices; reads the dialogue result; requests engine global change, selector 1, operands 0, 2; sets game flag 35 … |
+| block 104 (x 8, y 3) | `0x0DC8` | wall clicked | plays chat/dialogue text ID 0x0028 |
+| block 106 (x 10, y 3) | `0x0560` | party steps in, party arrives (second path), party leaves, bits 0x4000 (no engine caller found) | requests engine global change, selector 10, operands 0, 2; plays chat/dialogue text ID 0x002c; plays chat/dialogue text ID 0x0053; requests engine global change, selector 10, operands 0, 0; tests game flag 67; tests game flag 41 |
+| block 109 (x 13, y 3) | `0x0418` | item taken | no action summarized |
+| block 132 (x 4, y 4) | `0x0DD6` | wall clicked | plays chat/dialogue text ID 0x0029 |
+| block 136 (x 8, y 4) | `0x083E` | item taken | clears game flag 187; tests game flag 187 |
+| block 138 (x 10, y 4) | `0x041C` | party arrives (second path) | starts a dialogue sequence in mode 0; plays chat/dialogue text ID 0x0055; sets up 1 dialogue choices; reads the dialogue result; plays chat/dialogue text ID 0x0065; plays chat/dialogue text ID 0x0057; sets game flag 134; tests game flag 67 … |
+| block 141 (x 13, y 4) | `0x0DF5` | party arrives (second path) | loads cut-scene TIM1.TIM into slot 0; sets game flag 14; sets game flag 35; sets game flag 38; suspend monster; sets game flag 70; plays music track 270; starts a dialogue sequence in mode 0 … |
+| block 166 (x 6, y 5) | `0x0834` | party arrives (second path), bits 0x10 (no engine caller found) | suspend monster; sets game flag 14; sets monster 1 facing to 1; plays music track 265; starts a dialogue sequence in mode 0; plays music track ?; tests game flag 14 |
+| block 170 (x 10, y 5) | `0x0468` | party arrives (second path) | starts a dialogue sequence in mode 0; plays chat/dialogue text ID 0x0058; sets up 1 dialogue choices; reads the dialogue result; sets game flag 135; tests game flag 67; tests game flag 41; tests game flag 135 |
+| block 176 (x 16, y 5) | `0x0DB3` | wall clicked | plays chat/dialogue text ID 0x0039 |
+| block 193 (x 1, y 6) | `0x0DBA` | wall clicked | plays chat/dialogue text ID 0x0039 |
+| block 227 (x 3, y 7) | `0x05E4` | party arrives (second path), bits 0x10 (no engine caller found) | suspend monster; sets game flag 14; sets monster 0 facing to 3; plays music track 265; starts a dialogue sequence in mode 0; plays music track ?; tests game flag 14 |
+| block 232 (x 8, y 7) | `0x0870` | party arrives (second path), bits 0x10 (no engine caller found) | loads cut-scene SCOTIA1.TIM into slot 0; sets game flag 15; plays music track 263; plays music track ?; tests game flag 15; tests game flag 67 |
+| block 239 (x 15, y 7) | `0x0DDD` | wall clicked | plays chat/dialogue text ID 0x003b; tests game flag 190 |
+| block 260 (x 4, y 8) | `0x05DA` | party arrives (second path), bits 0x10 (no engine caller found) | suspend monster; sets game flag 14; sets monster 0 facing to 2; plays music track 265; starts a dialogue sequence in mode 0; plays music track ?; tests game flag 14 |
+| block 261 (x 5, y 8) | `0x0854` | wall clicked | gives 3 crown(s); plays chat/dialogue text ID 0x001d; clears game flag 188; plays chat/dialogue text ID 0x001c; tests game flag 188 |
+| block 264 (x 8, y 8) | `0x08A4` | party arrives (second path) | requests engine global change, selector 0, operands 0, 232; shows text ID 0x403f; tests game flag 15 |
+| block 268 (x 12, y 8) | `0x08EC` | party arrives (second path) | loads cut-scene VICTOR7.TIM into slot 0; loads cut-scene VICTOR6.TIM into slot 0; loads cut-scene VICTOR5.TIM into slot 0; places item 81 (Long sword) on block 301; gives item 81 (Long sword) if inventory placement succeeds; puts item 81 (Long sword) on an empty cursor; places item 241 (Riddle Scroll) on block 301; moves the party to level 10, block 713, facing 0 … |
+| block 270 (x 14, y 8) | `0x0DC1` | wall clicked | plays chat/dialogue text ID 0x0028 |
+| block 300 (x 12, y 9) | `0x0AD9` | party steps in, party arrives (second path), party leaves, wall clicked, bits 0x4000 (no engine caller found) | loads cut-scene VICTOR6.TIM into slot 0; loads cut-scene VICTOR7.TIM into slot 0; loads cut-scene VICTOR5.TIM into slot 0; places item 81 (Long sword) on block 301; gives item 81 (Long sword) if inventory placement succeeds; puts item 81 (Long sword) on an empty cursor; places item 241 (Riddle Scroll) on block 301; moves the party to level 10, block 713, facing 0 … |
+| block 301 (x 13, y 9) | `0x0BA9` | party steps in, wall clicked | loads cut-scene VICTOR5.TIM into slot 0; places item 81 (Long sword) on block 301; gives item 81 (Long sword) if inventory placement succeeds; puts item 81 (Long sword) on an empty cursor; places item 241 (Riddle Scroll) on block 301; moves the party to level 10, block 713, facing 0; loads cut-scene VICTOR7.TIM into slot 0; loads cut-scene VICTOR6.TIM into slot 0 … |
+| block 328 (x 8, y 10) | `0x05EE` | party steps in, party arrives (second path), party leaves, bits 0x4000 (no engine caller found) | requests engine global change, selector 10, operands 0, 2; requests engine global change, selector 10, operands 0, 0; tests game flag 67 |
+| block 360 (x 8, y 11) | `0x063B` | party steps in, wall clicked | loads cut-scene LYNN1.TIM into slot 0; loads cut-scene LYNN2.TIM into slot 0; loads cut-scene LYNN3.TIM into slot 1; plays chat/dialogue text ID 0x005c; shows text ID 0x403f; requests engine global change, selector 0, operands 0, 328; requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 0, operands 0, 360 … |
+| block 392 (x 8, y 12) | `0x06A4` | wall clicked | deletes the held item; loads cut-scene BOAT.TIM into slot 0; moves the party to level 3, block 526, facing 2; sets game flag 25; plays chat/dialogue text ID 0x0012; plays music track 257; plays chat/dialogue text ID 0x0015; plays chat/dialogue text ID 0x0014 … |
+| `0x400` level loaded | `0x037D` | — | places a monster of type slot 3 on block 109 in mode 3; suspend monster; creates item type ? and returns its handle; give item to monster; creates item type 216 and returns its handle; creates item type 243 and returns its handle; sets game flag 44; sets script timer 0 to 14400 ticks … |
+| `0x401` script timer 0 | `0x03FD` | — | places a monster of type slot 2 on block 136 in mode 7 |
 
 ## Items placed by the scripts
 

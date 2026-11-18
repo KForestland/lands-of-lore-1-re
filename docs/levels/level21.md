@@ -83,53 +83,55 @@ Made by `tools/level_report.py` from `LEVEL21.CMZ`, `.WLL`, `.XXX`, `.INI`, `.IN
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL21.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles TOWER1; loads monster sprites APARITIN.SHP into slot 0; loads monster sprites WRAITH.SHP into slot 1; defines monster type 1; defines monster type 2 |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 2) on block 487; places a monster (slot 1) on block 583; places a monster (slot 2) on block 361; places a monster (slot 2) on block 425; places a monster (slot 1) on block 297; places a monster (slot 2) on block 395; places a monster (slot 2) on block 208; places a monster (slot 2) on block 385 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x002F` | — | loads wall tiles TOWER1; loads monster sprites APARITIN.SHP into slot 0; loads monster sprites WRAITH.SHP into slot 1; defines monster type 1; defines monster type 2 |
+| INI entry 1 (runs when the level loads) | `0x00F4` | — | places a monster of type slot 2 on block 487 in mode 3; places a monster of type slot 1 on block 583 in mode 3; places a monster of type slot 2 on block 361 in mode 3; places a monster of type slot 2 on block 425 in mode 3; places a monster of type slot 1 on block 297 in mode 3; places a monster of type slot 2 on block 395 in mode 3; places a monster of type slot 2 on block 208 in mode 3; places a monster of type slot 2 on block 385 in mode 3 … |
 
 ### LEVEL21.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 103 (x 7, y 3) | wall clicked | sets the north wall of block 103 to type 67; a character speaks |
-| block 107 (x 11, y 3) | wall clicked | a character speaks |
-| block 144 (x 16, y 4) | wall clicked | checks a wall of block 144 |
-| block 176 (x 16, y 5) | bits 0x400 (no engine caller found) | checks a wall of block 144 |
-| block 197 (x 5, y 6) | wall clicked, thrown item hits | toggles the east wall of block 197 between types 27 and 26; sets the west wall of block 199 to type 0; sets the west wall of block 199 to type 38; moves objects from block 199 to block 199; plays a sound; checks a wall of block 197; checks a wall of block 201; checks a wall of block 199 |
-| block 199 (x 7, y 6) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 20, block 199; sets game flag 46; moves objects from block 199 to block 199; checks a wall of block 199 |
-| block 201 (x 9, y 6) | wall clicked | sets the west wall of block 199 to type 0; sets the west wall of block 199 to type 38; moves objects from block 199 to block 199; plays a sound; checks a wall of block 197; checks a wall of block 201; checks a wall of block 199 |
-| block 209 (x 17, y 6) | bits 0x400 (no engine caller found) | checks a wall of block 210 |
-| block 210 (x 18, y 6) | wall clicked | checks a wall of block 210 |
-| block 239 (x 15, y 7) | wall clicked | sets game flag 361; block door; tests game flag 361; plays a sound |
-| block 259 (x 3, y 8) | bits 0x400 (no engine caller found) | gives 8 crown(s); a character speaks |
-| block 263 (x 7, y 8) | wall clicked | sets the south wall of block 263 to type ?; checks a wall of block 263; plays a sound; checks a wall of block 1000 |
-| block 291 (x 3, y 9) | wall clicked | gives 8 crown(s); a character speaks |
-| block 298 (x 10, y 9) | party arrives (second path) | sets the west wall of block 298 to type 40 |
-| block 301 (x 13, y 9) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 301 to type 36; checks a wall of block 301; plays a sound; checks a wall of block 304 |
-| block 304 (x 16, y 9) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 304 to type 36; checks a wall of block 304; plays a sound; checks a wall of block 301 |
-| block 321 (x 1, y 10) | party arrives (second path) | changes a monster; sets game flag 335; tests game flag 335 |
-| block 356 (x 4, y 11) | wall clicked | toggles the west wall of block 358 between types 0 and 75; plays a sound |
-| block 385 (x 1, y 12) | item put down | changes a monster; sets game flag 335; tests game flag 335 |
-| block 396 (x 12, y 12) | wall clicked | gives item 233 (Wand of Lightning) |
-| block 397 (x 13, y 12) | bits 0x400 (no engine caller found) | gives item 233 (Wand of Lightning) |
-| block 417 (x 1, y 13) | bits 0x400 (no engine caller found) | sets the south wall of block 995 to type 0; checks a wall of block 995 |
-| block 427 (x 11, y 13) | bits 0x400 (no engine caller found) | gives item 83 (Long sword "Protector") |
-| block 449 (x 1, y 14) | wall clicked | sets the south wall of block 995 to type 0; checks a wall of block 995 |
-| block 455 (x 7, y 14) | wall clicked | sets the north wall of block 455 to type ?; checks a wall of block 455; plays a sound; checks a wall of block 999 |
-| block 459 (x 11, y 14) | wall clicked | gives item 83 (Long sword "Protector") |
-| block 485 (x 5, y 15) | wall clicked | gives item 48 (Dagger "Fang") |
-| block 486 (x 6, y 15) | bits 0x400 (no engine caller found) | gives item 48 (Dagger "Fang") |
-| block 524 (x 12, y 16) | wall clicked | sets the south wall of block 524 to type 68; a character speaks |
-| block 585 (x 9, y 18) | party steps in, party arrives (second path), item put down | moves objects from block 585 to block 992 |
-| block 590 (x 14, y 18) | wall clicked | toggles the west wall of block 591 between types 30 and 76; plays a sound |
-| `0x400` level loaded | — | a character speaks; sets game flag 360; clears game flag 343; starts script timer 0; starts script timer 1; tests game flag 360 |
-| `0x401` script timer 0 | — | places a monster (slot 2) on block 100; places a monster (slot 1) on block 273; places a monster (slot 1) on block 324; clears game flag 130; sets game flag 130; tests game flag 130 |
-| `0x402` script timer 1 | — | places a monster (slot 2) on block 261 |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 103 (x 7, y 3) | `0x07D6` | wall clicked | sets the north wall of block 103 to type 67; plays chat/dialogue text ID 0x000d |
+| block 107 (x 11, y 3) | `0x07EA` | wall clicked | plays chat/dialogue text ID 0x000d |
+| block 144 (x 16, y 4) | `0x0815` | wall clicked | checks the south wall of block 144 |
+| block 176 (x 16, y 5) | `0x0819` | bits 0x400 (no engine caller found) | checks the south wall of block 144 |
+| block 197 (x 5, y 6) | `0x07AB` | wall clicked, thrown item hits | toggles the east wall of block 197 between types 27 and 26; sets all four walls of block 199 to type 0; sets all four walls of block 199 to type 38; removes monsters from block 199; moves items from block 199 to level 20, block 199; plays a sound (ID 79); checks the east wall of block 197; checks the west wall of block 201 … |
+| block 199 (x 7, y 6) | `0x0904` | party arrives (second path), item put down | drops the party through a pit; deals damage to the party (amount ?); moves the party to level 20, block 199, facing ?; removes monsters from block 199; sets game flag 46; moves items from block 199 to level 20, block 199; checks the north wall of block 199 |
+| block 201 (x 9, y 6) | `0x07B9` | wall clicked | sets all four walls of block 199 to type 0; sets all four walls of block 199 to type 38; removes monsters from block 199; moves items from block 199 to level 20, block 199; plays a sound (ID 79); checks the east wall of block 197; checks the west wall of block 201; plays a sound (ID 38) … |
+| block 209 (x 17, y 6) | `0x0821` | bits 0x400 (no engine caller found) | checks the west wall of block 210 |
+| block 210 (x 18, y 6) | `0x081D` | wall clicked | checks the west wall of block 210 |
+| block 239 (x 15, y 7) | `0x088B` | wall clicked | sets game flag 361; block door; tests game flag 361; plays a sound (ID 158); plays a sound (ID 116) |
+| block 259 (x 3, y 8) | `0x0809` | bits 0x400 (no engine caller found) | gives 8 crown(s); plays chat/dialogue text ID 0x000f |
+| block 263 (x 7, y 8) | `0x0839` | wall clicked | sets the south wall of block 263 to type ?; checks the south wall of block 263; plays a sound (ID 31); checks the north wall of block 1000 |
+| block 291 (x 3, y 9) | `0x0805` | wall clicked | gives 8 crown(s); plays chat/dialogue text ID 0x000f |
+| block 298 (x 10, y 9) | `0x0845` | party arrives (second path) | sets all four walls of block 298 to type 40 |
+| block 301 (x 13, y 9) | `0x093B` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 301 to type 36; checks the south wall of block 301; plays a sound (ID 80); checks the north wall of block 301; checks the north wall of block 304 |
+| block 304 (x 16, y 9) | `0x094D` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 304 to type 36; checks the south wall of block 304; plays a sound (ID 80); checks the north wall of block 301; checks the north wall of block 304 |
+| block 321 (x 1, y 10) | `0x084D` | party arrives (second path) | sets monster 16 mode to 7; sets monster 17 mode to 7; sets monster 18 mode to 7; sets game flag 335; tests game flag 335 |
+| block 356 (x 4, y 11) | `0x079C` | wall clicked | toggles the west wall of block 358 between types 0 and 75; plays a sound (ID 79); plays a sound (ID 38) |
+| block 385 (x 1, y 12) | `0x086C` | item put down | sets monster 16 mode to 7; sets monster 17 mode to 7; sets monster 18 mode to 7; sets game flag 335; tests game flag 335 |
+| block 396 (x 12, y 12) | `0x0825` | wall clicked | puts item 233 (Wand of Lightning) on an empty cursor |
+| block 397 (x 13, y 12) | `0x0829` | bits 0x400 (no engine caller found) | puts item 233 (Wand of Lightning) on an empty cursor |
+| block 417 (x 1, y 13) | `0x0811` | bits 0x400 (no engine caller found) | sets the south wall of block 995 to type 0; checks the south wall of block 995 |
+| block 427 (x 11, y 13) | `0x0801` | bits 0x400 (no engine caller found) | puts item 83 (Long sword "Protector") on an empty cursor |
+| block 449 (x 1, y 14) | `0x080D` | wall clicked | sets the south wall of block 995 to type 0; checks the south wall of block 995 |
+| block 455 (x 7, y 14) | `0x082D` | wall clicked | sets the north wall of block 455 to type ?; checks the north wall of block 455; plays a sound (ID 31); checks the north wall of block 999 |
+| block 459 (x 11, y 14) | `0x07FD` | wall clicked | puts item 83 (Long sword "Protector") on an empty cursor |
+| block 485 (x 5, y 15) | `0x07F5` | wall clicked | puts item 48 (Dagger "Fang") on an empty cursor |
+| block 486 (x 6, y 15) | `0x07F9` | bits 0x400 (no engine caller found) | puts item 48 (Dagger "Fang") on an empty cursor |
+| block 524 (x 12, y 16) | `0x07C0` | wall clicked | sets the south wall of block 524 to type 68; plays chat/dialogue text ID 0x000d |
+| block 585 (x 9, y 18) | `0x0780` | party steps in, party arrives (second path), item put down | moves items from block 585 to level 21, block 992 |
+| block 590 (x 14, y 18) | `0x078D` | wall clicked | toggles the west wall of block 591 between types 30 and 76; plays a sound (ID 79); plays a sound (ID 38) |
+| `0x400` level loaded | `0x069C` | — | plays music track 292; plays chat/dialogue text ID 0x0001; plays chat/dialogue text ID 0x0002; sets game flag 360; sets music theme 291; clears game flag 343; sets script timer 0 to 3600 ticks; sets script timer 1 to 5400 ticks … |
+| `0x401` script timer 0 | `0x0710` | — | places a monster of type slot 2 on block 100 in mode 4; places a monster of type slot 1 on block 273 in mode 4; places a monster of type slot 1 on block 324 in mode 4; clears game flag 130; sets game flag 130; tests game flag 130 |
+| `0x402` script timer 1 | `0x0769` | — | places a monster of type slot 2 on block 261 in mode 4 |
 
 ## Items placed by the scripts
 

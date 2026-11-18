@@ -197,63 +197,65 @@ Made by `tools/level_report.py` from `LEVEL4.CMZ`, `.WLL`, `.XXX`, `.INI`, `.INF
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL4.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles MANOR; loads monster sprites ORC.SHP into slot 0; loads monster sprites ORCLDR.SHP into slot 1; defines monster type 1; defines monster type 2 |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 1) on block 33; places a monster (slot 1) on block 196; places a monster (slot 1) on block 137; places a monster (slot 1) on block 68; places a monster (slot 1) on block 236; places a monster (slot 1) on block 34; places a monster (slot 1) on block 228; places a monster (slot 1) on block 133 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x0070` | — | loads wall tiles MANOR; loads monster sprites ORC.SHP into slot 0; loads monster sprites ORCLDR.SHP into slot 1; defines monster type 1; defines monster type 2 |
+| INI entry 1 (runs when the level loads) | `0x0130` | — | places a monster of type slot 1 on block 33 in mode 7; places a monster of type slot 1 on block 196 in mode 7; places a monster of type slot 1 on block 137 in mode 7; places a monster of type slot 1 on block 68 in mode 7; places a monster of type slot 1 on block 236 in mode 7; places a monster of type slot 1 on block 34 in mode 7; places a monster of type slot 1 on block 228 in mode 7; places a monster of type slot 1 on block 133 in mode 7 … |
 
 ### LEVEL4.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 1 (x 1, y 0) | wall clicked | a character speaks |
-| block 2 (x 2, y 0) | wall clicked | a character speaks |
-| block 5 (x 5, y 0) | wall clicked | a character speaks |
-| block 6 (x 6, y 0) | wall clicked | gives item 240 (Burnt Scroll); a character speaks; set global script var |
-| block 9 (x 9, y 0) | wall clicked | sets the north wall of block 992 to type ?; gives 200 crown(s); a character speaks; sets game flag 254; tests game flag 254 |
-| block 11 (x 11, y 0) | wall clicked | a character speaks |
-| block 12 (x 12, y 0) | wall clicked | a character speaks |
-| block 33 (x 1, y 1) | wall clicked | a character speaks |
-| block 41 (x 9, y 1) | party arrives (second path), wall clicked, bits 0x410 (no engine caller found) | sets the north wall of block 992 to type ?; gives 200 crown(s); a character speaks; sets game flag 254; shows a message; tests game flag 254; tests game flag 29; set global var |
-| block 43 (x 11, y 1) | wall clicked | a character speaks |
-| block 44 (x 12, y 1) | wall clicked | a character speaks |
-| block 64 (x 0, y 2) | wall clicked | a character speaks |
-| block 67 (x 3, y 2) | wall clicked | a character speaks |
-| block 69 (x 5, y 2) | wall clicked | a character speaks |
-| block 72 (x 8, y 2) | wall clicked | a character speaks |
-| block 73 (x 9, y 2) | party steps in, bits 0x4000 (no engine caller found) | starts cut-scene ROLAND1.TIM; starts cut-scene ROLAND2.TIM; sets game flag 29; sets game flag 39; a character speaks; starts a dialogue; tests game flag 29; set global var |
-| block 74 (x 10, y 2) | wall clicked | sets the west wall of block 74 to type 0; plays a sound |
-| block 75 (x 11, y 2) | party arrives (second path), bits 0x10 (no engine caller found) | a character speaks; sets game flag 115; tests game flag 115 |
-| block 76 (x 12, y 2) | party arrives (second path), party leaves, bits 0x10 (no engine caller found) | sets game flag 116; a character speaks; starts a dialogue; move party; suspend monster; changes a monster; tests game flag 116 |
-| block 97 (x 1, y 3) | wall clicked | a character speaks; starts a dialogue |
-| block 101 (x 5, y 3) | wall clicked | a character speaks |
-| block 104 (x 8, y 3) | wall clicked | a character speaks; starts a dialogue |
-| block 128 (x 0, y 4) | wall clicked | a character speaks |
-| block 132 (x 4, y 4) | wall clicked | a character speaks |
-| block 139 (x 11, y 4) | wall clicked | a character speaks |
-| block 141 (x 13, y 4) | wall clicked | a character speaks |
-| block 162 (x 2, y 5) | wall clicked | a character speaks |
-| block 163 (x 3, y 5) | wall clicked | a character speaks |
-| block 164 (x 4, y 5) | wall clicked | a character speaks; starts a dialogue |
-| block 165 (x 5, y 5) | wall clicked | a character speaks |
-| block 169 (x 9, y 5) | wall clicked | a character speaks |
-| block 170 (x 10, y 5) | wall clicked | a character speaks; starts a dialogue |
-| block 195 (x 3, y 6) | wall clicked | a character speaks |
-| block 197 (x 5, y 6) | wall clicked | a character speaks |
-| block 199 (x 7, y 6) | party steps in, party arrives (second path), item put down | moves the party to level 3, block 804; moves objects from block 199 to block 804; shows a message; set global var |
-| block 205 (x 13, y 6) | wall clicked | a character speaks |
-| block 224 (x 0, y 7) | wall clicked | a character speaks |
-| block 233 (x 9, y 7) | wall clicked | a character speaks |
-| block 237 (x 13, y 7) | wall clicked | a character speaks |
-| block 257 (x 1, y 8) | wall clicked | a character speaks |
-| block 259 (x 3, y 8) | wall clicked | sets the north wall of block 260 to type 64; sets the north wall of block 260 to type 61; checks a wall of block 259 |
-| block 267 (x 11, y 8) | wall clicked | a character speaks |
-| `0x400` level loaded | — | starts script timer 0 |
-| `0x401` script timer 0 | — | toggles the south wall of block 97 between types 59 and 78; toggles the south wall of block 164 between types 59 and 78; toggles the south wall of block 104 between types 59 and 78; toggles the south wall of block 170 between types 59 and 78 |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 1 (x 1, y 0) | `0x05CD` | wall clicked | plays chat/dialogue text ID 0x0021 |
+| block 2 (x 2, y 0) | `0x05A2` | wall clicked | plays chat/dialogue text ID 0x0020 |
+| block 5 (x 5, y 0) | `0x0613` | wall clicked | plays chat/dialogue text ID 0x0024 |
+| block 6 (x 6, y 0) | `0x050A` | wall clicked | puts item 240 (Burnt Scroll) on an empty cursor; plays chat/dialogue text ID ?; sets script global 9 to ?; plays chat/dialogue text ID 0x0015 |
+| block 9 (x 9, y 0) | `0x031B` | wall clicked | sets the north wall of block 992 to type ?; gives 200 crown(s); plays chat/dialogue text ID 0x0032; sets game flag 254; plays chat/dialogue text ID 0x0028; tests game flag 254 |
+| block 11 (x 11, y 0) | `0x05E2` | wall clicked | plays chat/dialogue text ID 0x0021 |
+| block 12 (x 12, y 0) | `0x055C` | wall clicked | plays chat/dialogue text ID 0x001a |
+| block 33 (x 1, y 1) | `0x0571` | wall clicked | plays chat/dialogue text ID 0x001d |
+| block 41 (x 9, y 1) | `0x031F` | party arrives (second path), wall clicked, bits 0x410 (no engine caller found) | sets the north wall of block 992 to type ?; gives 200 crown(s); plays chat/dialogue text ID 0x0032; sets game flag 254; plays chat/dialogue text ID 0x0028; plays chat/dialogue text ID 0x001d; shows text ID 0x403f; requests engine global change, selector 0, operands 0, 73 … |
+| block 43 (x 11, y 1) | `0x058D` | wall clicked | plays chat/dialogue text ID 0x001d |
+| block 44 (x 12, y 1) | `0x059B` | wall clicked | plays chat/dialogue text ID 0x001d |
+| block 64 (x 0, y 2) | `0x054E` | wall clicked | plays chat/dialogue text ID 0x001a |
+| block 67 (x 3, y 2) | `0x05C1` | wall clicked | plays chat/dialogue text ID 0x0025; plays chat/dialogue text ID 0x0027 |
+| block 69 (x 5, y 2) | `0x0586` | wall clicked | plays chat/dialogue text ID 0x001d |
+| block 72 (x 8, y 2) | `0x061A` | wall clicked | plays chat/dialogue text ID 0x0024 |
+| block 73 (x 9, y 2) | `0x0351` | party steps in, bits 0x4000 (no engine caller found) | loads cut-scene ROLAND1.TIM into slot 0; loads cut-scene ROLAND2.TIM into slot 0; sets game flag 29; sets game flag 39; plays music track 270; plays chat/dialogue text ID 0x0000; sets up 1 dialogue choices; reads the dialogue result … |
+| block 74 (x 10, y 2) | `0x02E8` | wall clicked | sets all four walls of block 74 to type 0; plays a sound (ID 38) |
+| block 75 (x 11, y 2) | `0x02F2` | party arrives (second path), bits 0x10 (no engine caller found) | plays chat/dialogue text ID 0x000b; plays chat/dialogue text ID 0x000c; sets game flag 115; tests game flag 115 |
+| block 76 (x 12, y 2) | `0x03EF` | party arrives (second path), party leaves, bits 0x10 (no engine caller found) | sets game flag 116; plays chat/dialogue text ID 0x000d; sets up 3 dialogue choices; reads the dialogue result; move party; plays chat/dialogue text ID 0x0011; sets up 1 dialogue choices; plays chat/dialogue text ID 0x0031 … |
+| block 97 (x 1, y 3) | `0x0659` | wall clicked | plays chat/dialogue text ID 0x0027; plays chat/dialogue text ID 0x0022; sets up 1 dialogue choices; plays chat/dialogue text ID 0x0023 |
+| block 101 (x 5, y 3) | `0x05DB` | wall clicked | plays chat/dialogue text ID 0x0021 |
+| block 104 (x 8, y 3) | `0x05B7` | wall clicked | plays chat/dialogue text ID 0x0022; sets up 1 dialogue choices; plays chat/dialogue text ID 0x0023 |
+| block 128 (x 0, y 4) | `0x060C` | wall clicked | plays chat/dialogue text ID 0x001c |
+| block 132 (x 4, y 4) | `0x057F` | wall clicked | plays chat/dialogue text ID 0x001d |
+| block 139 (x 11, y 4) | `0x0594` | wall clicked | plays chat/dialogue text ID 0x001d |
+| block 141 (x 13, y 4) | `0x056A` | wall clicked | plays chat/dialogue text ID 0x001a |
+| block 162 (x 2, y 5) | `0x05A9` | wall clicked | plays chat/dialogue text ID 0x0026 |
+| block 163 (x 3, y 5) | `0x05D4` | wall clicked | plays chat/dialogue text ID 0x0021 |
+| block 164 (x 4, y 5) | `0x062D` | wall clicked | plays chat/dialogue text ID 0x0021; plays chat/dialogue text ID 0x0022; sets up 1 dialogue choices; plays chat/dialogue text ID 0x0023 |
+| block 165 (x 5, y 5) | `0x05B0` | wall clicked | plays chat/dialogue text ID 0x0025 |
+| block 169 (x 9, y 5) | `0x05F7` | wall clicked | plays chat/dialogue text ID 0x0027 |
+| block 170 (x 10, y 5) | `0x0643` | wall clicked | plays chat/dialogue text ID 0x0021; plays chat/dialogue text ID 0x0022; sets up 1 dialogue choices; plays chat/dialogue text ID 0x0023 |
+| block 195 (x 3, y 6) | `0x0578` | wall clicked | plays chat/dialogue text ID 0x001d |
+| block 197 (x 5, y 6) | `0x05F0` | wall clicked | plays chat/dialogue text ID 0x0027 |
+| block 199 (x 7, y 6) | `0x0297` | party steps in, party arrives (second path), item put down | moves the party to level 3, block 804, facing 2; moves items from block 199 to level 3, block 804; requests engine global change, selector 10, operands 0, 0; shows text ID 0x403f; requests engine global change, selector 0, operands 0, 167; requests engine global change, selector 10, operands 0, 2 |
+| block 205 (x 13, y 6) | `0x05FE` | wall clicked | plays chat/dialogue text ID 0x0027 |
+| block 224 (x 0, y 7) | `0x0621` | wall clicked | plays chat/dialogue text ID 0x0021; plays chat/dialogue text ID 0x001c |
+| block 233 (x 9, y 7) | `0x0605` | wall clicked | plays chat/dialogue text ID 0x001f |
+| block 237 (x 13, y 7) | `0x05E9` | wall clicked | plays chat/dialogue text ID 0x0021 |
+| block 257 (x 1, y 8) | `0x0555` | wall clicked | plays chat/dialogue text ID 0x001a |
+| block 259 (x 3, y 8) | `0x04F1` | wall clicked | sets the north wall of block 260 to type 64; sets the north wall of block 260 to type 61; checks the north wall of block 259 |
+| block 267 (x 11, y 8) | `0x0563` | wall clicked | plays chat/dialogue text ID 0x001a |
+| `0x400` level loaded | `0x0271` | — | sets script timer 0 to 15 ticks; sets music theme 269 |
+| `0x401` script timer 0 | `0x027B` | — | toggles the south wall of block 97 between types 59 and 78; toggles the south wall of block 164 between types 59 and 78; toggles the south wall of block 104 between types 59 and 78; toggles the south wall of block 170 between types 59 and 78 |
 
 ## Items placed by the scripts
 

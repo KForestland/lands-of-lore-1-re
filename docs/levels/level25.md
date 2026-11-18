@@ -31,23 +31,25 @@ Made by `tools/level_report.py` from `LEVEL25.CMZ`, `.WLL`, `.XXX`, `.INI`, `.IN
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL25.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles CAVE1; loads monster sprites CABAL.SHP into slot 0; loads monster sprites NECROSAP.SHP into slot 1; defines monster type 1; defines monster type 2 |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 1) on block 943; places a monster (slot 1) on block 946; places a monster (slot 1) on block 843; places a monster (slot 1) on block 846; places a monster (slot 1) on block 819; places a monster (slot 1) on block 866; places a monster (slot 1) on block 898; places a monster (slot 2) on block 673 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x003E` | — | loads wall tiles CAVE1; loads monster sprites CABAL.SHP into slot 0; loads monster sprites NECROSAP.SHP into slot 1; defines monster type 1; defines monster type 2 |
+| INI entry 1 (runs when the level loads) | `0x00EA` | — | places a monster of type slot 1 on block 943 in mode 4; places a monster of type slot 1 on block 946 in mode 3; places a monster of type slot 1 on block 843 in mode 3; places a monster of type slot 1 on block 846 in mode 3; places a monster of type slot 1 on block 819 in mode 3; places a monster of type slot 1 on block 866 in mode 3; places a monster of type slot 1 on block 898 in mode 3; places a monster of type slot 2 on block 673 in mode 3 … |
 
 ### LEVEL25.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 325 (x 5, y 10) | party steps in, party arrives (second path), item put down | moves objects from block 325 to block 293 |
-| block 771 (x 3, y 24) | party steps in, party arrives (second path), item put down | moves objects from block 771 to block 801; plays a sound |
-| `0x400` level loaded | — | drops the party through a pit; clears game flag 46; starts script timer 0; tests game flag 46 |
-| `0x401` script timer 0 | — | places a monster (slot 1) on block 896; places a monster (slot 1) on block 672; places a monster (slot 1) on block 196 |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 325 (x 5, y 10) | `0x00C9` | party steps in, party arrives (second path), item put down | moves items from block 325 to level 23, block 293 |
+| block 771 (x 3, y 24) | `0x00D7` | party steps in, party arrives (second path), item put down | removes monsters from block 771; moves items from block 771 to level 23, block 801; plays a sound (ID 73) |
+| `0x400` level loaded | `0x0071` | — | drops the party through a pit; clears game flag 46; sets music theme 268; sets script timer 0 to 10800 ticks; tests game flag 46 |
+| `0x401` script timer 0 | `0x008D` | — | places a monster of type slot 1 on block 896 in mode 4; places a monster of type slot 1 on block 672 in mode 4; places a monster of type slot 1 on block 196 in mode 4 |
 
 ## Items placed by the scripts
 

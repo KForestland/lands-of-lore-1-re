@@ -87,39 +87,41 @@ Made by `tools/level_report.py` from `LEVEL3.CMZ`, `.WLL`, `.XXX`, `.INI`, `.INF
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL3.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles FOREST1; loads monster sprites ORC.SHP into slot 0; loads monster sprites LIZARD.SHP into slot 1; defines monster type 1; defines monster type 2 |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 2) on block 752; places a monster (slot 2) on block 817; places a monster (slot 2) on block 581; places a monster (slot 1) on block 544; places a monster (slot 1) on block 610; places a monster (slot 1) on block 676; places a monster (slot 1) on block 770; places item 99 (Rock) on block 551 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x005E` | — | loads wall tiles FOREST1; loads monster sprites ORC.SHP into slot 0; loads monster sprites LIZARD.SHP into slot 1; defines monster type 1; defines monster type 2 |
+| INI entry 1 (runs when the level loads) | `0x0109` | — | places a monster of type slot 2 on block 752 in mode 3; places a monster of type slot 2 on block 817 in mode 3; places a monster of type slot 2 on block 581 in mode 4; places a monster of type slot 1 on block 544 in mode 3; places a monster of type slot 1 on block 610 in mode 3; places a monster of type slot 1 on block 676 in mode 3; places a monster of type slot 1 on block 770 in mode 3; places item 99 (Rock) on block 551 … |
 
 ### LEVEL3.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 462 (x 14, y 14) | wall clicked | a character speaks; sets game flag 193; starts a dialogue; set global var; tests game flag 193 |
-| block 494 (x 14, y 15) | party steps in, wall clicked | starts cut-scene THOMGOG3.TIM; gives ? crown(s); starts cut-scene BOAT.TIM; moves the party to level 2, block 328; a character speaks; shows a message; set global var; tests game flag 27 … |
-| block 513 (x 1, y 16) | wall clicked | tests game flag 481 |
-| block 520 (x 8, y 16) | wall clicked | tests game flag 480 |
-| block 526 (x 14, y 16) | party steps in, party arrives (second path), party leaves, bits 0x4000 (no engine caller found) | set global var |
-| block 586 (x 10, y 18) | wall clicked | tests game flag 477 |
-| block 642 (x 2, y 20) | wall clicked | tests game flag 478 |
-| block 648 (x 8, y 20) | wall clicked | tests game flag 476 |
-| block 688 (x 16, y 21) | party steps in, party arrives (second path), party leaves, bits 0x4000 (no engine caller found) | set global var |
-| block 689 (x 17, y 21) | party steps in, wall clicked | sets game flag 192; a character speaks; shows a message; set global var; tests game flag 16 |
-| block 690 (x 18, y 21) | wall clicked | starts cut-scene COMPASSE.TIM; starts cut-scene COMPASSF.TIM; starts cut-scene COMPASSG.TIM; a character joins the party; starts cut-scene INN1.TIM; starts cut-scene TYRUS1.TIM; starts cut-scene TYRUS2.TIM; starts cut-scene INN3.TIM … |
-| block 712 (x 8, y 22) | party steps in, party arrives (second path), party leaves, bits 0x4000 (no engine caller found) | clears game flag 7; sets game flag 7; set global var; tests game flag 7 |
-| block 718 (x 14, y 22) | wall clicked | tests game flag 479 |
-| block 744 (x 8, y 23) | party steps in, wall clicked | sets game flag 27; a character speaks; shows a message; plays a sound; set global var; tests game flag 27 |
-| block 771 (x 3, y 24) | wall clicked | tests game flag 475 |
-| block 772 (x 4, y 24) | party steps in, wall clicked | moves the party to level 4, block 167; a character speaks; clears game flag 7; shows a message; set global var |
-| block 776 (x 8, y 24) | wall clicked | starts cut-scene BUCK12.TIM; starts cut-scene BUCKBUY.TIM; gives ? crown(s); starts cut-scene BUCK15.TIM; starts cut-scene BUCK02.TIM; takes 20 crown(s); gives item 216 (Salve); takes 100 crown(s) … |
-| block 804 (x 4, y 25) | party steps in, party arrives (second path), party leaves, bits 0x4000 (no engine caller found) | clears game flag 7; sets game flag 7; a character speaks; sets game flag 37; set global var; tests game flag 7; tests game flag 37; tests game flag 16 |
-| `0x400` level loaded | — | starts script timer 0 |
-| `0x401` script timer 0 | — | no game action (only stack and screen bookkeeping) |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 462 (x 14, y 14) | `0x061E` | wall clicked | requests engine global change, selector 1, operands 0, 2; requests engine global change, selector 0, operands 0, 526; requests engine global change, selector 8, operands 0, ?; requests engine global change, selector 10, operands 0, 0; plays music track 261; plays chat/dialogue text ID 0x003c; sets game flag 193; plays chat/dialogue text ID 0x003d … |
+| block 494 (x 14, y 15) | `0x05DF` | party steps in, wall clicked | loads cut-scene THOMGOG3.TIM into slot 1; gives ? crown(s); loads cut-scene BOAT.TIM into slot 0; moves the party to level 2, block 328, facing 0; requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 0, operands 0, 494; plays music track 266; plays chat/dialogue text ID 0x003a … |
+| block 513 (x 1, y 16) | `0x1000` | wall clicked | tests game flag 481 |
+| block 520 (x 8, y 16) | `0x0FF5` | wall clicked | tests game flag 480 |
+| block 526 (x 14, y 16) | `0x05A5` | party steps in, party arrives (second path), party leaves, bits 0x4000 (no engine caller found) | requests engine global change, selector 10, operands 0, 2; requests engine global change, selector 8, operands 0, ?; requests engine global change, selector 10, operands 0, 0 |
+| block 586 (x 10, y 18) | `0x0FCE` | wall clicked | tests game flag 477 |
+| block 642 (x 2, y 20) | `0x0FE0` | wall clicked | tests game flag 478 |
+| block 648 (x 8, y 20) | `0x0FC3` | wall clicked | tests game flag 476 |
+| block 688 (x 16, y 21) | `0x0709` | party steps in, party arrives (second path), party leaves, bits 0x4000 (no engine caller found) | requests engine global change, selector 10, operands 0, 2; requests engine global change, selector 8, operands 0, ?; requests engine global change, selector 10, operands 0, 0 |
+| block 689 (x 17, y 21) | `0x0743` | party steps in, wall clicked | sets game flag 192; requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 0, operands 0, 689; plays music track 267; plays chat/dialogue text ID 0x0001; plays chat/dialogue text ID 0x0000; shows text ID 0x403f; requests engine global change, selector 0, operands 0, 688 … |
+| block 690 (x 18, y 21) | `0x0787` | wall clicked | loads cut-scene COMPASSE.TIM into slot 0; loads cut-scene COMPASSF.TIM into slot 0; loads cut-scene COMPASSG.TIM into slot 0; a character joins the party; loads cut-scene INN1.TIM into slot 0; loads cut-scene TYRUS1.TIM into slot 1; loads cut-scene TYRUS2.TIM into slot 1; loads cut-scene INN3.TIM into slot 0 … |
+| block 712 (x 8, y 22) | `0x0C8B` | party steps in, party arrives (second path), party leaves, bits 0x4000 (no engine caller found) | requests engine global change, selector 10, operands 0, 2; requests engine global change, selector 8, operands 0, ?; requests engine global change, selector 10, operands 0, 0; clears game flag 7; sets game flag 7; tests game flag 7 |
+| block 718 (x 14, y 22) | `0x0FEB` | wall clicked | tests game flag 479 |
+| block 744 (x 8, y 23) | `0x0CDC` | party steps in, wall clicked | requests engine global change, selector 0, operands 0, 712; requests engine global change, selector 0, operands 0, 744; plays music track 259; sets game flag 27; plays chat/dialogue text ID 0x0023; plays chat/dialogue text ID 0x0022; plays chat/dialogue text ID 0x0024; plays chat/dialogue text ID 0x0021 … |
+| block 771 (x 3, y 24) | `0x0FB8` | wall clicked | tests game flag 475 |
+| block 772 (x 4, y 24) | `0x0C32` | party steps in, wall clicked | moves the party to level 4, block 167, facing 0; requests engine global change, selector 10, operands 0, 0; requests engine global change, selector 8, operands 0, ?; clears game flag 7; shows text ID 0x403f; requests engine global change, selector 0, operands 0, 804; plays chat/dialogue text ID 0x0037; checks speech playback |
+| block 776 (x 8, y 24) | `0x0D95` | wall clicked | loads cut-scene BUCK12.TIM into slot 0; loads cut-scene BUCKBUY.TIM into slot 2; deletes the held item; gives ? crown(s); loads cut-scene BUCK15.TIM into slot 0; loads cut-scene BUCK02.TIM into slot 0; takes 20 crown(s); puts item 216 (Salve) on an empty cursor … |
+| block 804 (x 4, y 25) | `0x0BAB` | party steps in, party arrives (second path), party leaves, bits 0x4000 (no engine caller found) | requests engine global change, selector 10, operands 0, 2; requests engine global change, selector 8, operands 0, ?; requests engine global change, selector 10, operands 0, 0; plays music track 261; clears game flag 7; plays music track 260; sets game flag 7; plays chat/dialogue text ID 0x0035 … |
+| `0x400` level loaded | `0x0595` | — | sets script timer 0 to 7200 ticks; sets music theme 261 |
+| `0x401` script timer 0 | `0x05A3` | — | no action summarized |
 
 ## Items placed by the scripts
 

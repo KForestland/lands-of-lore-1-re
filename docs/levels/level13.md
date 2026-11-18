@@ -54,44 +54,46 @@ Made by `tools/level_report.py` from `LEVEL13.CMZ`, `.WLL`, `.XXX`, `.INI`, `.IN
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL13.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles MINE1; loads monster sprites GIMLET.SHP into slot 0; loads monster sprites IRONGRZR.SHP into slot 1; defines monster type 1; defines monster type 2 |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 2) on block 147; places a monster (slot 2) on block 107; places a monster (slot 2) on block 485; places a monster (slot 2) on block 456; places a monster (slot 2) on block 493; places a monster (slot 1) on block 497; places item 99 (Rock) on block 293; places item 92 (Mace "Puma") on block 369 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x0030` | — | loads wall tiles MINE1; loads monster sprites GIMLET.SHP into slot 0; loads monster sprites IRONGRZR.SHP into slot 1; defines monster type 1; defines monster type 2 |
+| INI entry 1 (runs when the level loads) | `0x00E5` | — | places a monster of type slot 2 on block 147 in mode 4; places a monster of type slot 2 on block 107 in mode 4; places a monster of type slot 2 on block 485 in mode 3; places a monster of type slot 2 on block 456 in mode 3; places a monster of type slot 2 on block 493 in mode 3; places a monster of type slot 1 on block 497 in mode 4; places item 99 (Rock) on block 293; places item 92 (Mace "Puma") on block 369 … |
 
 ### LEVEL13.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 52 (x 20, y 1) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 14, block 180; moves objects from block 52 to block 14; sets game flag 46; checks a wall of block 52 |
-| block 53 (x 21, y 1) | party arrives (second path) | sets the west wall of block 52 to type 0 |
-| block 81 (x 17, y 2) | wall clicked | a character speaks |
-| block 83 (x 19, y 2) | wall clicked | sets the west wall of block 52 to type 38; sets the west wall of block 116 to type 0; operates the door at block 116; places a monster (slot 1) on block 116; sets the west wall of block 116 to type 44; places a monster (slot 2) on block 116; sets the west wall of block 52 to type 0; moves objects from block 52 to block 52 … |
-| block 116 (x 20, y 3) | party steps in, party arrives (second path), item put down | moves objects from block 116 to block 246; move party; moves objects from block 116 to block 332; checks a wall of block 116; checks a wall of block 21; checks a wall of block 85; plays a sound |
-| block 143 (x 15, y 4) | party steps in, party arrives (second path), item put down | moves objects from block 143 to block 207 |
-| block 227 (x 3, y 7) | party steps in, party arrives (second path), item put down | moves objects from block 227 to block 323 |
-| block 282 (x 26, y 8) | item put down | sets the west wall of block 314 to type 0; sets the west wall of block 316 to type 0; checks a wall of block 314; plays a sound |
-| block 293 (x 5, y 9) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 340 to type 0; sets the west wall of block 372 to type 1; sets the west wall of block 340 to type 1; sets the west wall of block 372 to type 0; checks a wall of block 372; plays a sound |
-| block 294 (x 6, y 9) | wall clicked | a character speaks |
-| block 313 (x 25, y 9) | wall clicked | sets the west wall of block 314 to type 0; sets the west wall of block 314 to type 38; drops the party through a pit; deals damage; moves the party to level 14, block 442; moves objects from block 314 to block 442; sets game flag 46; plays a sound … |
-| block 314 (x 26, y 9) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 14, block 442; moves objects from block 314 to block 14; sets game flag 46; checks a wall of block 314 |
-| block 316 (x 28, y 9) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 14, block 444; moves objects from block 316 to block 14; sets game flag 46; checks a wall of block 316 |
-| block 324 (x 4, y 10) | wall clicked | a character speaks |
-| block 343 (x 23, y 10) | wall clicked | sets the west wall of block 375 to type 0; a character speaks; delete hand item; checks a wall of block 375; plays a sound |
-| block 349 (x 29, y 10) | wall clicked | sets the west wall of block 316 to type 0; sets the west wall of block 316 to type 38; drops the party through a pit; deals damage; moves the party to level 14, block 444; sets the west wall of block 349 to type 32; moves objects from block 316 to block 444; sets game flag 46 … |
-| block 355 (x 3, y 11) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 14, block 483; moves objects from block 355 to block 14; sets game flag 46; checks a wall of block 355 |
-| block 356 (x 4, y 11) | wall clicked | sets the west wall of block 355 to type 0; sets the west wall of block 355 to type 38; drops the party through a pit; deals damage; moves the party to level 14, block 483; moves objects from block 355 to block 483; sets game flag 46; plays a sound … |
-| block 378 (x 26, y 11) | item taken | sets the west wall of block 314 to type 38; moves objects from block 314 to block 14; checks a wall of block 314; plays a sound |
-| block 400 (x 16, y 12) | wall clicked | a character speaks |
-| block 528 (x 16, y 16) | bits 0x400 (no engine caller found) | gives item 154 (Hale leather jerkin) |
-| block 560 (x 16, y 17) | wall clicked | gives item 154 (Hale leather jerkin) |
-| `0x400` level loaded | — | starts script timer 0; starts script timer 1 |
-| `0x401` script timer 0 | — | places a monster (slot 1) on block 101; places a monster (slot 1) on block 246 |
-| `0x402` script timer 1 | — | places a monster (slot 2) on block 338; checks a wall of block 372 |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 52 (x 20, y 1) | `0x03C6` | party arrives (second path), item put down | removes monsters from block 52; drops the party through a pit; deals damage to the party (amount ?); moves the party to level 14, block 180, facing ?; moves items from block 52 to level 180, block 14; sets game flag 46; checks the north wall of block 52 |
+| block 53 (x 21, y 1) | `0x0443` | party arrives (second path) | sets all four walls of block 52 to type 0 |
+| block 81 (x 17, y 2) | `0x03BC` | wall clicked | plays chat/dialogue text ID -0x001 |
+| block 83 (x 19, y 2) | `0x03CF` | wall clicked | sets all four walls of block 52 to type 38; removes monsters from block 52; sets all four walls of block 116 to type 0; places a monster of type slot 1 on block 116 in mode 4; sets all four walls of block 116 to type 44; places a monster of type slot 2 on block 116 in mode 4; sets all four walls of block 52 to type 0; moves items from block 52 to level 13, block 52 … |
+| block 116 (x 20, y 3) | `0x044A` | party steps in, party arrives (second path), item put down | removes monsters from block 116; moves items from block 116 to level 12, block 246; move party; moves items from block 116 to level 14, block 332; checks the north wall of block 116; checks the south wall of block 21; checks the north wall of block 85; plays a sound (ID 73) |
+| block 143 (x 15, y 4) | `0x03B0` | party steps in, party arrives (second path), item put down | moves items from block 143 to level 12, block 207 |
+| block 227 (x 3, y 7) | `0x049D` | party steps in, party arrives (second path), item put down | moves items from block 227 to level 14, block 323 |
+| block 282 (x 26, y 8) | `0x05A3` | item put down | sets all four walls of block 314 to type 0; sets all four walls of block 316 to type 0; checks the north wall of block 314; plays a sound (ID 37) |
+| block 293 (x 5, y 9) | `0x04C9` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 340 to type 0; sets all four walls of block 372 to type 1; sets all four walls of block 340 to type 1; sets all four walls of block 372 to type 0; checks the north wall of block 372; plays a sound (ID 38) |
+| block 294 (x 6, y 9) | `0x05F6` | wall clicked | plays chat/dialogue text ID 0x0002 |
+| block 313 (x 25, y 9) | `0x0566` | wall clicked | sets all four walls of block 314 to type 0; sets all four walls of block 314 to type 38; removes monsters from block 314; drops the party through a pit; deals damage to the party (amount ?); moves the party to level 14, block 442, facing ?; moves items from block 314 to level 14, block 442; sets game flag 46 … |
+| block 314 (x 26, y 9) | `0x0570` | party arrives (second path), item put down | removes monsters from block 314; drops the party through a pit; deals damage to the party (amount ?); moves the party to level 14, block 442, facing ?; moves items from block 314 to level 442, block 14; sets game flag 46; checks the north wall of block 314 |
+| block 316 (x 28, y 9) | `0x05C8` | party arrives (second path), item put down | removes monsters from block 316; drops the party through a pit; deals damage to the party (amount ?); moves the party to level 14, block 444, facing ?; moves items from block 316 to level 444, block 14; sets game flag 46; checks the north wall of block 316 |
+| block 324 (x 4, y 10) | `0x04AA` | wall clicked | plays chat/dialogue text ID -0x001 |
+| block 343 (x 23, y 10) | `0x0517` | wall clicked | sets all four walls of block 375 to type 0; deletes the held item; plays chat/dialogue text ID 0x0005; plays chat/dialogue text ID 0x0006; plays chat/dialogue text ID 0x4065; plays chat/dialogue text ID 0x0007; checks the east wall of block 375; plays a sound (ID 38) … |
+| block 349 (x 29, y 10) | `0x05D2` | wall clicked | sets all four walls of block 316 to type 0; sets all four walls of block 316 to type 38; removes monsters from block 316; drops the party through a pit; deals damage to the party (amount ?); moves the party to level 14, block 444, facing ?; sets the west wall of block 349 to type 32; moves items from block 316 to level 14, block 444 … |
+| block 355 (x 3, y 11) | `0x04B5` | party arrives (second path), item put down | removes monsters from block 355; drops the party through a pit; deals damage to the party (amount ?); moves the party to level 14, block 483, facing ?; moves items from block 355 to level 483, block 14; sets game flag 46; checks the north wall of block 355 |
+| block 356 (x 4, y 11) | `0x04BF` | wall clicked | sets all four walls of block 355 to type 0; sets all four walls of block 355 to type 38; removes monsters from block 355; drops the party through a pit; deals damage to the party (amount ?); moves the party to level 14, block 483, facing ?; moves items from block 355 to level 14, block 483; sets game flag 46 … |
+| block 378 (x 26, y 11) | `0x057A` | item taken | sets all four walls of block 314 to type 38; moves items from block 314 to level 442, block 14; checks the north wall of block 314; plays a sound (ID 37) |
+| block 400 (x 16, y 12) | `0x0510` | wall clicked | plays chat/dialogue text ID 0x0001 |
+| block 528 (x 16, y 16) | `0x0601` | bits 0x400 (no engine caller found) | puts item 154 (Hale leather jerkin) on an empty cursor |
+| block 560 (x 16, y 17) | `0x05FD` | wall clicked | puts item 154 (Hale leather jerkin) on an empty cursor |
+| `0x400` level loaded | `0x035B` | — | sets music theme 288; sets script timer 0 to 3600 ticks; sets script timer 1 to 5400 ticks |
+| `0x401` script timer 0 | `0x0371` | — | places a monster of type slot 1 on block 101 in mode 4; places a monster of type slot 1 on block 246 in mode 4 |
+| `0x402` script timer 1 | `0x039B` | — | places a monster of type slot 2 on block 338 in mode 4; checks the north wall of block 372 |
 
 ## Items placed by the scripts
 

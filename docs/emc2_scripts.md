@@ -84,7 +84,7 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 
 | ID | Function | Arguments | Effect | CD calls | Floppy calls | CD handler | Floppy handler | Source |
 | --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
-| 00 | setWallType | block, side, wall ID | Sets wall type and may remove monsters if the new wall has flag 4. | 907 | 890 | `0x1345F` | `0x17E22` | LoL:2689, LoL:95–103 |
+| 00 | setWallType | block, side, wall ID | Sets wall type and may remove monsters if the new wall has flag 4. Side −1 sets all four walls (native CD loop `0x16C09–0x16C22`, [tutorial](tutorial-one-event.md)). | 907 | 890 | `0x1345F` | `0x17E22` | LoL:2689, LoL:95–103 |
 | 01 | getWallType | block, side | Reads wall type as a signed byte, masking side to 0–3. | 612 | 610 | `0x134BD` | `0x17E80` | LoL:2690, LoL:105–108 |
 | 02 | drawScene | draw mode | Draws the dungeon scene. | 80 | 81 | `0x1352B` | `0x17EEE` | LoL:2691, LoL:110–114 |
 | 03 | rollDice | count, sides | Rolls dice and returns the sum. | 439 | 437 | `0x13433` | `0x17DF6` | LoL:2692, LoL:116–119 |
@@ -136,7 +136,7 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | 31 | triggerDoorSwitch | block, switch action | Processes a door switch. | 111 | 111 | `0x14374` | `0x18D0A` | LoL:2762, LoL:742–746 |
 | 32 | checkEquippedItemScriptFlags | — | Tests whether any of the first four equipment slots of active characters refer to item script entry 0 or 2. | 2 | 2 | `0x143C7` | `0x18D5D` | LoL:2763, LoL:748–760 |
 | 33 | setDoorState | block, state | Sets or clears block flag 0x20, clearing 0x10 when setting it. | 15 | 15 | `0x1651B` | `0x1AE1D` | LoL:2764, LoL:762–769 |
-| 34 | updateBlockAnimations | block, side, wall A, wall B | Toggles wall type between A and B. | 55 | 55 | `0x14443` | `0x18DD9` | LoL:2767, LoL:771–777 |
+| 34 | updateBlockAnimations | block, side, wall A, wall B | Toggles wall type between A and B. Side −1 for all four walls follows ScummVM `setWallType` (scene_lol.cpp:1241–1249); **UNCONFIRMED** for DOS. | 55 | 55 | `0x14443` | `0x18DD9` | LoL:2767, LoL:771–777 |
 | 35 | assignLevelDecorationShape | wall/decoration index | Assigns level decoration shapes. | 14 | 14 | `0x30B94` | `0x3719F` | LoL:2768, LoL:779–782 |
 | 36 | resetBlockShapeAssignment | replacement byte | Resets two groups of five wall-to-shape mappings. | 14 | 14 | `0x30B8F` | `0x3719A` | LoL:2769, LoL:784–790 |
 | 37 | copyRegion | source X, source Y, destination X, destination Y, width, height, source page, destination page | Copies a screen region and updates the visible screen for page 0. | 203 | 201 | `0x14506` | `0x18E9C` | LoL:2770, LoL:792–799 |

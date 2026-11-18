@@ -63,55 +63,57 @@ Made by `tools/level_report.py` from `LEVEL16.CMZ`, `.WLL`, `.XXX`, `.INI`, `.IN
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL16.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles MINE1; operates the door at block 174; operates the door at block 207; operates the door at block 238; operates the door at block 141; loads monster sprites ROCKLING.SHP into slot 0; loads monster sprites TREZ.SHP into slot 1; defines monster type 1 … |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 2) on block 72; places a monster (slot 2) on block 110; places a monster (slot 1) on block 226; places a monster (slot 1) on block 271; places item 248 (Oil Flask) on block 611; places item 262 (Bezel Cup) on block 611; places item 176 (Mine key 4) on block 611; places item 33 (Axe "Vixen") on block 611 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x002B` | — | loads wall tiles MINE1; loads monster sprites ROCKLING.SHP into slot 0; loads monster sprites TREZ.SHP into slot 1; defines monster type 1; defines monster type 2; sets door state bit 0x20 on block 174; sets door state bit 0x20 on block 207; sets door state bit 0x20 on block 238 … |
+| INI entry 1 (runs when the level loads) | `0x0101` | — | places a monster of type slot 2 on block 72 in mode 3; places a monster of type slot 2 on block 110 in mode 3; places a monster of type slot 1 on block 226 in mode 3; places a monster of type slot 1 on block 271 in mode 3; places item 248 (Oil Flask) on block 611; places item 262 (Bezel Cup) on block 611; places item 176 (Mine key 4) on block 611; places item 33 (Axe "Vixen") on block 611 … |
 
 ### LEVEL16.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 64 (x 0, y 2) | wall clicked | gives item 210 (Rusty key); sets game flag 226; sets game flag 227; a character speaks; tests game flag 226; tests game flag 227 |
-| block 135 (x 7, y 4) | wall clicked | a character speaks |
-| block 136 (x 8, y 4) | bits 0x400 (no engine caller found) | sets the east wall of block 0 to type ?; sets the west wall of block 135 to type 0; make item; place move level item; checks a wall of block 135; plays a sound; checks a wall of block 0 |
-| block 137 (x 9, y 4) | wall clicked | no game action (only stack and screen bookkeeping) |
-| block 139 (x 11, y 4) | wall clicked | no game action (only stack and screen bookkeeping) |
-| block 141 (x 13, y 4) | party steps in, party arrives (second path), item put down | moves objects from block 141 to block 292; plays a sound |
-| block 145 (x 17, y 4) | wall clicked | gives item 258 (Note); gives item 253 (Gear); sets game flag 224; sets game flag 225; a character speaks; tests game flag 224; tests game flag 225 |
-| block 170 (x 10, y 5) | party arrives (second path), bits 0x10 (no engine caller found) | sets the west wall of block 0 to type 1; sets the west wall of block 0 to type 0; character surprise feedback; move party; checks a wall of block 0; checks a wall of block 201; checks a wall of block 137; checks a wall of block 139 … |
-| block 174 (x 14, y 5) | party steps in, party arrives (second path), item put down | moves objects from block 174 to block 246; plays a sound |
-| block 196 (x 4, y 6) | wall clicked | a character speaks |
-| block 197 (x 5, y 6) | bits 0x400 (no engine caller found) | sets the south wall of block 0 to type ?; sets the west wall of block 196 to type 0; make item; place move level item; checks a wall of block 196; plays a sound; checks a wall of block 0 |
-| block 198 (x 6, y 6) | party arrives (second path) | sets the west wall of block 196 to type 79; sets game flag 228; tests game flag 228; plays a sound |
-| block 201 (x 9, y 6) | wall clicked | no game action (only stack and screen bookkeeping) |
-| block 203 (x 11, y 6) | wall clicked | no game action (only stack and screen bookkeeping) |
-| block 207 (x 15, y 6) | party steps in, party arrives (second path), item put down | moves objects from block 207 to block 206; plays a sound |
-| block 236 (x 12, y 7) | wall clicked | operates the door at block 205; a character speaks; delete hand item; checks a wall of block 205; plays a sound |
-| block 238 (x 14, y 7) | party steps in, party arrives (second path), item put down | moves objects from block 238 to block 332; plays a sound |
-| block 259 (x 3, y 8) | party steps in, party arrives (second path), item put down | moves objects from block 259 to block 262; checks a wall of block 259; plays a sound |
-| block 260 (x 4, y 8) | wall clicked | operates the door at block 259; sets the west wall of block 259 to type 0; sets the west wall of block 259 to type 44; checks a wall of block 259 |
-| block 261 (x 5, y 8) | wall clicked | sets/clears game flag 219; tests game flag 219 |
-| block 263 (x 7, y 8) | party arrives (second path) | sets the north wall of block 0 to type ?; make item; play environmental sfx; launches a projectile; tests game flag 219; checks a wall of block 0 |
-| block 264 (x 8, y 8) | party arrives (second path) | sets the north wall of block 0 to type ?; make item; play environmental sfx; launches a projectile; tests game flag 219; checks a wall of block 0 |
-| block 266 (x 10, y 8) | wall clicked | a character speaks |
-| block 293 (x 5, y 9) | party steps in, party arrives (second path), item put down | moves objects from block 293 to block 329 |
-| block 295 (x 7, y 9) | wall clicked | sets the west wall of block 295 to type 0; plays a sound |
-| block 358 (x 6, y 11) | wall clicked | operates the door at block 359; a character speaks; delete hand item; sets game flag 220; tests game flag 220; plays a sound; tests game flag 221 |
-| block 360 (x 8, y 11) | wall clicked | operates the door at block 359; a character speaks; delete hand item; sets game flag 221; tests game flag 221; plays a sound; tests game flag 220; tests game flag 231 |
-| block 418 (x 2, y 13) | wall clicked | a character speaks |
-| block 419 (x 3, y 13) | party arrives (second path), bits 0x10 (no engine caller found) | sets the west wall of block 0 to type 1; sets the west wall of block 0 to type 0; character surprise feedback; move party; checks a wall of block 0 |
-| block 422 (x 6, y 13) | party arrives (second path) | sets game flag 223; tests game flag 223 |
-| block 517 (x 5, y 16) | wall clicked | places item 264 (Vaelan's Cube) on block 611; a character joins the party; gives item 200 (Paulson's Key); sets game flag 230; a character speaks; sets game flag 315; sets game flag 231; tests game flag 230 … |
-| block 547 (x 3, y 17) | party arrives (second path), bits 0x10 (no engine caller found) | sets the north wall of block 579 to type 42; starts a dialogue; a character speaks; sets game flag 551; checks a wall of block 579; tests game flag 551 |
-| block 549 (x 5, y 17) | party steps in, bits 0x4000 (no engine caller found) | a character speaks; tests game flag 230; plays a sound; tests game flag 231 |
-| block 579 (x 3, y 18) | wall clicked | sets the west wall of block 579 to type 0; plays a sound |
-| `0x400` level loaded | — | sets the west wall of block 0 to type 0; starts script timer 0 |
-| `0x401` script timer 0 | — | make item; play environmental sfx; launches a projectile; tests game flag 223 |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 64 (x 0, y 2) | `0x0474` | wall clicked | puts item 210 (Rusty key) on an empty cursor; sets game flag 226; plays music track 316; plays music track 317; plays music track 273; sets game flag 227; plays chat/dialogue text ID 0x0001; tests game flag 226 … |
+| block 135 (x 7, y 4) | `0x040A` | wall clicked | plays chat/dialogue text ID 0x0012 |
+| block 136 (x 8, y 4) | `0x0411` | bits 0x400 (no engine caller found) | places or moves item handle ? to level 16, block 136; sets the east wall of block 0 to type ?; sets all four walls of block 135 to type 0; creates item type 99 and returns its handle; checks the north wall of block 135; plays a sound (ID 135); checks the east wall of block 0; plays a sound (ID 134) |
+| block 137 (x 9, y 4) | `0x0380` | wall clicked | no action summarized |
+| block 139 (x 11, y 4) | `0x0382` | wall clicked | no action summarized |
+| block 141 (x 13, y 4) | `0x0586` | party steps in, party arrives (second path), item put down | removes monsters from block 141; moves items from block 141 to level 16, block 292; plays a sound (ID 73) |
+| block 145 (x 17, y 4) | `0x04F9` | wall clicked | puts item 258 (Note) on an empty cursor; puts item 253 (Gear) on an empty cursor; sets game flag 224; sets game flag 225; plays chat/dialogue text ID 0x0002; tests game flag 224; tests game flag 225 |
+| block 170 (x 10, y 5) | `0x0319` | party arrives (second path), bits 0x10 (no engine caller found) | sets the west wall of block 0 to type 1; sets the west wall of block 0 to type 0; character surprise feedback; move party; checks the west wall of block 0; checks the east wall of block 201; checks the south wall of block 137; checks the west wall of block 139 … |
+| block 174 (x 14, y 5) | `0x0592` | party steps in, party arrives (second path), item put down | removes monsters from block 174; moves items from block 174 to level 12, block 246; plays a sound (ID 73) |
+| block 196 (x 4, y 6) | `0x03A0` | wall clicked | plays chat/dialogue text ID 0x0012 |
+| block 197 (x 5, y 6) | `0x03A7` | bits 0x400 (no engine caller found) | places or moves item handle ? to level 16, block 197; sets the south wall of block 0 to type ?; sets all four walls of block 196 to type 0; creates item type 99 and returns its handle; checks the north wall of block 196; plays a sound (ID 135); checks the south wall of block 0; plays a sound (ID 134) |
+| block 198 (x 6, y 6) | `0x0386` | party arrives (second path) | sets all four walls of block 196 to type 79; sets game flag 228; tests game flag 228; plays a sound (ID 134) |
+| block 201 (x 9, y 6) | `0x0317` | wall clicked | no action summarized |
+| block 203 (x 11, y 6) | `0x0384` | wall clicked | no action summarized |
+| block 207 (x 15, y 6) | `0x057A` | party steps in, party arrives (second path), item put down | removes monsters from block 207; moves items from block 207 to level 16, block 206; plays a sound (ID 73) |
+| block 236 (x 12, y 7) | `0x0530` | wall clicked | deletes the held item; operates the door switch at block 205 with action 1; plays chat/dialogue text ID 0x0013; plays chat/dialogue text ID 0x4065; plays chat/dialogue text ID 0x0014; checks the west wall of block 205; plays a sound (ID 41); plays a sound (ID 40) |
+| block 238 (x 14, y 7) | `0x059D` | party steps in, party arrives (second path), item put down | removes monsters from block 238; moves items from block 238 to level 14, block 332; plays a sound (ID 73) |
+| block 259 (x 3, y 8) | `0x02E6` | party steps in, party arrives (second path), item put down | removes monsters from block 259; moves items from block 259 to level 16, block 262; checks the north wall of block 259; plays a sound (ID 73) |
+| block 260 (x 4, y 8) | `0x02C3` | wall clicked | sets all four walls of block 259 to type 0; sets all four walls of block 259 to type 44; clears door state bit 0x20 on block 259; sets door state bit 0x20 on block 259; checks the north wall of block 259 |
+| block 261 (x 5, y 8) | `0x02FB` | wall clicked | sets/clears game flag 219; tests game flag 219 |
+| block 263 (x 7, y 8) | `0x0308` | party arrives (second path) | sets the north wall of block 0 to type ?; creates item type 9 and returns its handle; creates item type 10 and returns its handle; creates item type 1 and returns its handle; launches a projectile from block 265 in direction 3; tests game flag 219; checks the north wall of block 0; plays a sound (ID 69) at block 265 … |
+| block 264 (x 8, y 8) | `0x030C` | party arrives (second path) | sets the north wall of block 0 to type ?; creates item type 9 and returns its handle; creates item type 10 and returns its handle; creates item type 1 and returns its handle; launches a projectile from block 265 in direction 3; tests game flag 219; checks the north wall of block 0; plays a sound (ID 69) at block 265 … |
+| block 266 (x 10, y 8) | `0x0310` | wall clicked | plays chat/dialogue text ID 0x0015 |
+| block 293 (x 5, y 9) | `0x02B6` | party steps in, party arrives (second path), item put down | moves items from block 293 to level 15, block 329 |
+| block 295 (x 7, y 9) | `0x05A9` | wall clicked | sets all four walls of block 295 to type 0; plays a sound (ID 38) |
+| block 358 (x 6, y 11) | `0x05B4` | wall clicked | deletes the held item; operates the door switch at block 359 with action 1; plays chat/dialogue text ID 0x0013; plays chat/dialogue text ID 0x4065; sets game flag 220; plays chat/dialogue text ID 0x000d; plays chat/dialogue text ID 0x000e; plays chat/dialogue text ID 0x0014 … |
+| block 360 (x 8, y 11) | `0x05FD` | wall clicked | deletes the held item; operates the door switch at block 359 with action 1; plays chat/dialogue text ID 0x0013; plays chat/dialogue text ID 0x4065; sets game flag 221; plays chat/dialogue text ID 0x000d; plays chat/dialogue text ID 0x000e; plays chat/dialogue text ID 0x0014 … |
+| block 418 (x 2, y 13) | `0x08A7` | wall clicked | plays chat/dialogue text ID 0x0015 |
+| block 419 (x 3, y 13) | `0x08AE` | party arrives (second path), bits 0x10 (no engine caller found) | sets the west wall of block 0 to type 1; sets the west wall of block 0 to type 0; character surprise feedback; move party; checks the west wall of block 0 |
+| block 422 (x 6, y 13) | `0x0897` | party arrives (second path) | sets game flag 223; tests game flag 223 |
+| block 517 (x 5, y 16) | `0x0726` | wall clicked | places item 264 (Vaelan's Cube) on block 611; a character joins the party; puts item 200 (Paulson's Key) on an empty cursor; sets game flag 230; plays chat/dialogue text ID 0x000a; requests engine global change, selector 0, operands 0, 549; requests engine global change, selector 1, operands 0, 3; plays chat/dialogue text ID 0x0007 … |
+| block 547 (x 3, y 17) | `0x08CB` | party arrives (second path), bits 0x10 (no engine caller found) | sets the north wall of block 579 to type 42; starts a dialogue sequence in mode 0; plays chat/dialogue text ID 0x0016; sets up 1 dialogue choices; reads the dialogue result; sets game flag 551; plays chat/dialogue text ID 0x0017; checks the north wall of block 579 … |
+| block 549 (x 5, y 17) | `0x065B` | party steps in, bits 0x4000 (no engine caller found) | plays chat/dialogue text ID 0x0004; tests game flag 230; plays a sound (ID 128); tests game flag 231 |
+| block 579 (x 3, y 18) | `0x092D` | wall clicked | sets all four walls of block 579 to type 0; plays a sound (ID 38) |
+| `0x400` level loaded | `0x027D` | — | sets the west wall of block 0 to type 0; sets music theme 273; sets script timer 0 to 300 ticks |
+| `0x401` script timer 0 | `0x028E` | — | creates item type 9 and returns its handle; launches a projectile from block 419 in direction 1; tests game flag 223; plays a sound (ID 69) at block 419 |
 
 ## Items placed by the scripts
 

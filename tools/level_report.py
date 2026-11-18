@@ -21,9 +21,10 @@ engines/kyra/engine/sprites_lol.cpp:203). The word before the entry's code is
 an event mask; the entry runs only if it shares a bit with the event.
 
   level_report.py --level 1            # print the sheet for level 1
-  level_report.py --out-dir docs/levels  # write all 29 sheets and an index
+  level_report.py --out DIR           # write all 29 sheets and an index
   level_report.py --check              # build all 29; every entry and call decodes
 """
+import argparse
 import os
 import re
 import struct
@@ -139,7 +140,15 @@ def item_names(data_dir):
     return names, lands
 
 
-def describe(calls, text, items, monsters_shapes):
+def wall_target(side, block):
+    if side == -1:
+        return f"all four walls of block {block}"
+    if side is not None and 0 <= side < len(SIDES):
+        return f"the {SIDES[side]} wall of block {block}"
+    return f"wall side {'?' if side is None else side} of block {block}"
+
+
+def describe(calls, text, items):
     """One plain line from the calls of an entry."""
     phrases = []
 
@@ -149,73 +158,127 @@ def describe(calls, text, items, monsters_shapes):
 
     def v(x, fmt="{}"):
         return fmt.format(x) if x is not None else "?"
+
+    def stem(index):
+        return text[index][1].decode("latin-1") if index is not None and 0 <= index < len(text) else "?"
+
     for fn, a in calls:
         g = lambda i: a[i] if i < len(a) else None
         if fn == 0x00:
-            add(f"sets the {SIDES[g(1) & 3] if g(1) is not None else '?'} wall of block {v(g(0))} to type {v(g(2))}")
+            add(f"sets {wall_target(g(1), v(g(0)))} to type {v(g(2))}")
         elif fn == 0x01:
-            add(f"checks a wall of block {v(g(0))}")
+            side = g(1) & 3 if g(1) is not None else None
+            add(f"checks {wall_target(side, v(g(0)))}")
         elif fn == 0x07:
             add(("sets" if g(1) else "clears" if g(1) == 0 else "sets/clears") + f" game flag {v(g(0))}")
         elif fn == 0x08:
             add(f"tests game flag {v(g(0))}")
+        elif fn == 0x0C:
+            add("deletes the held item")
+        elif fn == 0x0F:
+            add(f"creates item type {v(g(0))} and returns its handle")
+        elif fn == 0x10:
+            add(f"places or moves item handle {v(g(0))} to level {v(g(1))}, block {v(g(2))}")
         elif fn == 0x11:
             add(f"places item {v(g(0))} ({items.get(g(0), '?')}) on block {v(g(4))}")
+        elif fn == 0x1E:
+            add(f"sets music theme {v(g(0))}")
+        elif fn == 0x2E:
+            add(f"sets script global {v(g(0))} to {v(g(1))}")
+        elif fn == 0x30:
+            add(f"requests engine global change, selector {v(g(0))}, operands {v(g(1))}, {v(g(2))}")
         elif fn == 0x38:
-            add(f"places a monster (slot {v(g(4))}) on block {v(g(0))}")
+            add(f"places a monster of type slot {v(g(4))} on block {v(g(0))} in mode {v(g(6))}")
         elif fn == 0x3C:
-            add(f"moves the party to level {v(g(0))}, block {v(g(1))}")
-        elif fn in (0x31, 0x33):
-            add(f"operates the door at block {v(g(0))}")
+            add(f"moves the party to level {v(g(0))}, block {v(g(1))}, facing {v(g(2))}")
+        elif fn == 0x31:
+            add(f"operates the door switch at block {v(g(0))} with action {v(g(1))}")
+        elif fn == 0x33:
+            verb = "sets" if g(1) else "clears" if g(1) == 0 else "sets/clears"
+            add(f"{verb} door state bit 0x20 on block {v(g(0))}")
         elif fn == 0x34:
-            add(f"toggles the {SIDES[g(1) & 3] if g(1) is not None else '?'} wall of block {v(g(0))} between types {v(g(2))} and {v(g(3))}")
+            add(f"toggles {wall_target(g(1), v(g(0)))} between types {v(g(2))} and {v(g(3))}")
         elif fn == 0x4E:
-            add(f"starts cut-scene {text[g(1)][1].decode('latin-1') if g(1) is not None and g(1) < len(text) else '?'}.TIM")
+            add(f"loads cut-scene {stem(g(1))}.TIM into slot {v(g(0))}")
         elif fn == 0x57:
-            add("plays a sound")
-        elif fn in (0x6F, 0x82, 0x79):
-            add("shows a message")
-        elif fn in (0x5E, 0x7A, 0xBB):
-            add("a character speaks")
-        elif fn in (0x45, 0x58, 0x8C):
-            add("starts a dialogue")
+            add(f"plays a sound (ID {v(g(0))})")
+        elif fn == 0x60:
+            where = "the party's block" if g(1) == -1 else f"block {v(g(1))}"
+            add(f"plays a sound (ID {v(g(0))}) at {where}")
+        elif fn == 0x64:
+            add(f"plays music track {v(g(0))}")
+        elif fn in (0x6F, 0x79, 0x82):
+            add(f"shows text ID {v(g({0x6F: 1, 0x79: 0, 0x82: 2}[fn]), '{:#06x}')}")
+        elif fn in (0x5E, 0x7A):
+            add(f"plays chat/dialogue text ID {v(g(2 if fn == 0x5E else 0), '{:#06x}')}")
+        elif fn == 0xBB:
+            controls = {-1: "stops speech", -2: "checks speech playback"}
+            add(controls.get(g(0), f"plays speech track {v(g(0))} for character {v(g(1))}"))
+        elif fn == 0x45:
+            add(f"sets up {v(g(0))} dialogue choices")
+        elif fn == 0x58:
+            add("reads the dialogue result")
+        elif fn == 0x8C:
+            add(f"starts a dialogue sequence in mode {v(g(0))}")
         elif fn == 0x46:
             add(("gives" if (g(0) or 0) >= 0 else "takes") + f" {v(abs(g(0)) if g(0) is not None else None)} crown(s)")
         elif fn == 0x4B:
             add(("a character joins" if (g(0) or 0) >= 0 else "a character leaves") + " the party")
-        elif fn in (0x49, 0x4C):
-            add(f"gives item {v(g(0))} ({items.get(g(0), '?')})")
+        elif fn == 0x49:
+            add(f"puts item {v(g(0))} ({items.get(g(0), '?')}) on an empty cursor")
+        elif fn == 0x4C:
+            add(f"gives item {v(g(0))} ({items.get(g(0), '?')}) if inventory placement succeeds")
         elif fn == 0x41:
-            add("deals damage")
+            target = "the party" if g(0) == -1 else f"target {v(g(0))}"
+            add(f"deals damage to {target} (amount {v(g(1))})")
         elif fn == 0x61:
-            add("heals")
+            add(f"heals character {v(g(0))} with amount or spell level {v(g(1))}")
         elif fn == 0x48:
-            add(f"starts script timer {v(g(0))}")
+            if g(1) == 0:
+                add(f"disables script timer {v(g(0))}")
+            else:
+                add(f"sets script timer {v(g(0))} to {v(g(1))} ticks")
         elif fn == 0x75:
-            add(f"moves objects from block {v(g(0))} to block {v(g(1))}")
+            if g(3) != 0:
+                prefix = "removes" if g(3) is not None else "may remove"
+                add(f"{prefix} monsters from block {v(g(0))}")
+            if g(5) != 0:
+                prefix = "moves" if g(5) is not None else "may move"
+                add(f"{prefix} items from block {v(g(0))} to level {v(g(2))}, block {v(g(1))}")
+            if g(4) and g(5) != 0:
+                add("requests the item-placement event on the current level")
         elif fn == 0x3F:
             add(f"defines monster type {v(g(0))}")
         elif fn == 0x0B:
-            add(f"loads monster sprites {text[g(0)][1].decode('latin-1') if g(0) is not None and g(0) < len(text) else '?'} into slot {v(g(1))}")
+            add(f"loads monster sprites {stem(g(0))} into slot {v(g(1))}")
         elif fn == 0x09:
-            add(f"loads wall tiles {text[g(0)][1].decode('latin-1') if g(0) is not None and g(0) < len(text) else '?'}")
+            add(f"loads wall tiles {stem(g(0))}")
         elif fn == 0xAE:
             add("drops the party through a pit")
         elif fn == 0x72:
-            add("launches a projectile")
+            add(f"launches a projectile from block {v(g(2))} in direction {v(g(6))}")
         elif fn == 0x5B:
-            add("changes a monster")
+            if g(0) == -1:
+                continue
+            monster = v(g(0) & 0x7FFF if g(0) is not None else None)
+            fields = {0: "mode", 1: "HP", 2: "block", 3: "facing"}
+            if g(1) in fields:
+                add(f"sets monster {monster} {fields[g(1)]} to {v(g(2))}")
+            elif g(1) == 6:
+                add(f"sets monster {monster} flag bits {v(g(2), '{:#x}')}")
+            else:
+                add(f"requests monster {monster} change, selector {v(g(1))}, value {v(g(2))}")
         else:
             name = E.FUNCTIONS[fn] if fn < len(E.FUNCTIONS) and E.FUNCTIONS[fn] else f"function {fn:#x}"
             if name not in QUIET:
                 add(re.sub(r"(?<!^)(?=[A-Z])", " ", name).lower())
     # game-changing actions first, checks and sounds last; the code order is kept within each rank
-    rank = lambda t: (0 if t.startswith(("loads wall", "moves the party", "places", "starts cut", "sets the", "toggles",
+    rank = lambda t: (0 if t.startswith(("loads wall", "moves the party", "places", "loads cut", "sets the", "sets all", "toggles",
                                           "operates", "gives", "takes", "a character joins", "a character leaves",
-                                          "drops the party", "deals", "heals")) else
+                                          "drops the party", "deals", "heals", "puts item", "deletes", "removes monsters")) else
                       2 if t.startswith(("tests", "checks", "plays a sound", "set global", "set ")) else 1)
     phrases = sorted(phrases, key=rank)
-    return "; ".join(phrases[:8]) + (" …" if len(phrases) > 8 else "") if phrases else "no game action (only stack and screen bookkeeping)"
+    return "; ".join(phrases[:8]) + (" …" if len(phrases) > 8 else "") if phrases else "no action summarized"
 
 
 # functions left out of the one-line descriptions (screen and input housekeeping)
@@ -332,17 +395,23 @@ def render(r):
     names = r["items"]
     placed_items, placed_mon, text_ids = [], [], set()
     o += ["", "## Script entry points", "",
-          "Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). "
-          "The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).", ""]
+          "**CONFIRMED.** The DATA word is the ORDR target in the named original script. "
+          "Its event mask identifies when the engine can run it ([event sources](README.md#events)).",
+          "",
+          "Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. "
+          "`?` marks an argument the walk could not recover. `…` marks additional actions. "
+          "The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets "
+          "and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.", ""]
     for ext in ("INI", "INF"):
         if ext not in r["scripts"]:
             continue
         s, ent = r["scripts"][ext]
         text = s.strings
-        o += [f"### LEVEL{lv}.{ext}", "", "| Entry | Events | What it does |", "|---|---|---|"]
+        words = {entry: word for word, entries in s.entries.items() for entry in entries}
+        o += [f"### LEVEL{lv}.{ext}", "", "| Entry | DATA word | Events | What it can do |", "|---|---:|---|---|"]
         for e in sorted(ent):
             mask, calls = ent[e]
-            o.append(f"| {entry_label(e, ext)} | {events(mask, e, ext)} | {describe(calls, text, names, None)} |")
+            o.append(f"| {entry_label(e, ext)} | `0x{words[e]:04X}` | {events(mask, e, ext)} | {describe(calls, text, names)} |")
             for fn, a in calls:
                 if fn == 0x11 and a:
                     placed_items.append((ext, e, a))
@@ -426,9 +495,9 @@ EDITION = "CD edition"
 
 def main():
     global EDITION
-    ap = L.tool_args(__doc__)
+    ap = L.tool_args(__doc__, out_help="write all 29 sheets and an index to this folder")
     ap.add_argument("--level", type=int)
-    ap.add_argument("--out-dir")
+    ap.add_argument("--out-dir", dest="out", help=argparse.SUPPRESS)
     a = ap.parse_args()
     EDITION = "CD edition" if any(os.path.isfile(os.path.join(a.data, n)) for n in ("L01.PAK", "l01.pak")) else "floppy edition"
     items, lands = item_names(a.data)
@@ -444,18 +513,18 @@ def main():
         print(f"CHECK level_report: {len(stats)} levels; {tot['entries']} script entries, {tot['items']} item "
               f"placements, {tot['monsters']} monster placements, {tot['text_ids']} text ids; every script decodes")
         return 0 if len(stats) == len(levels) else 1
-    if a.out_dir:
-        os.makedirs(a.out_dir, exist_ok=True)
+    if a.out:
+        os.makedirs(a.out, exist_ok=True)
         rows = []
         for lv, text in pages.items():
-            with open(os.path.join(a.out_dir, f"level{lv:02d}.md"), "w") as f:
+            with open(os.path.join(a.out, f"level{lv:02d}.md"), "w") as f:
                 f.write(text)
             s = stats[lv]
             rows.append(f"| [{lv}](level{lv:02d}.md) | {s['entries']} | {s['items']} | {s['monsters']} | {s['text_ids']} |")
         if not a.level:
-            with open(os.path.join(a.out_dir, "README.md"), "w") as f:
+            with open(os.path.join(a.out, "README.md"), "w") as f:
                 f.write(INDEX + "| Level | Script entries | Items placed | Monsters placed | Text ids |\n|---|---|---|---|---|\n" + "\n".join(rows) + "\n")
-        print(f"wrote {len(pages)} sheets to {a.out_dir}")
+        print(f"wrote {len(pages)} sheets to {a.out}")
         return 0
     for text in pages.values():
         print(text)

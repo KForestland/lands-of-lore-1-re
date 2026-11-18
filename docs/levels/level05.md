@@ -34,31 +34,33 @@ Made by `tools/level_report.py` from `LEVEL5.CMZ`, `.WLL`, `.XXX`, `.INI`, `.INF
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL5.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles CAVE1; loads monster sprites THUG.SHP into slot 0; defines monster type 1 |
-| INI entry 1 (runs when the level loads) | — | places item 99 (Rock) on block 195; places item 99 (Rock) on block 102; places item 243 (Coin Purse) on block 193; places item 243 (Coin Purse) on block 136; places item 43 (Weathered dagger) on block 131; places item 137 (Torn shirt) on block 131; places item 247 (Broken glass) on block 39; places item 247 (Broken glass) on block 135 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x0000` | — | loads wall tiles CAVE1; loads monster sprites THUG.SHP into slot 0; defines monster type 1 |
+| INI entry 1 (runs when the level loads) | `0x0060` | — | places item 99 (Rock) on block 195; places item 99 (Rock) on block 102; places item 243 (Coin Purse) on block 193; places item 243 (Coin Purse) on block 136; places item 43 (Weathered dagger) on block 131; places item 137 (Torn shirt) on block 131; places item 247 (Broken glass) on block 39; places item 247 (Broken glass) on block 135 … |
 
 ### LEVEL5.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 3 (x 3, y 0) | wall clicked | sets the south wall of block 3 to type 43; sets the east wall of block 34 to type 33; sets the south wall of block 3 to type 42; sets the east wall of block 34 to type 2; tests game flag 47; checks a wall of block 3; plays a sound |
-| block 32 (x 0, y 1) | wall clicked | no game action (only stack and screen bookkeeping) |
-| block 33 (x 1, y 1) | bits 0x400 (no engine caller found) | no game action (only stack and screen bookkeeping) |
-| block 34 (x 2, y 1) | wall clicked | sets the west wall of block 34 to type 0; sets game flag 47; plays a sound |
-| block 36 (x 4, y 1) | party arrives (second path), party leaves (second path) | sets the north wall of block 993 to type ?; sets the west wall of block 34 to type 0; sets the east wall of block 34 to type ?; tests game flag 47; plays a sound; checks a wall of block 34; checks a wall of block 993 |
-| block 67 (x 3, y 2) | wall clicked | sets the north wall of block 67 to type 43; sets the south wall of block 3 to type 42; sets the north wall of block 67 to type 42; sets the south wall of block 3 to type 1; sets the east wall of block 34 to type 2; tests game flag 47; checks a wall of block 67; plays a sound |
-| block 100 (x 4, y 3) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 69 to type 0; places a monster (slot 1) on block 259; places a monster (slot 1) on block 260; sets the west wall of block 69 to type 1; sets game flag 119; checks a wall of block 69; plays a sound; tests game flag 38 … |
-| block 102 (x 6, y 3) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 69 to type 0; places a monster (slot 1) on block 259; places a monster (slot 1) on block 260; sets the west wall of block 69 to type 1; sets game flag 119; checks a wall of block 69; plays a sound; tests game flag 38 … |
-| block 132 (x 4, y 4) | wall clicked | sets the north wall of block 165 to type 1; sets the east wall of block 132 to type 29; sets the north wall of block 165 to type 45; sets the east wall of block 132 to type 30; checks a wall of block 132; plays a sound |
-| block 162 (x 2, y 5) | wall clicked | sets the west wall of block 161 to type 0; sets the west wall of block 161 to type 2; plays a sound; checks a wall of block 162 |
-| block 261 (x 5, y 8) | party steps in, party arrives (second path), item put down | moves the party to level 2, block 97; shows a message; moves objects from block 261 to block 97; set global var |
-| `0x400` level loaded | — | no game action (only stack and screen bookkeeping) |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 3 (x 3, y 0) | `0x03AF` | wall clicked | sets the south wall of block 3 to type 43; sets the east wall of block 34 to type 33; sets the south wall of block 3 to type 42; sets the east wall of block 34 to type 2; tests game flag 47; checks the south wall of block 3; plays a sound (ID 38) |
+| block 32 (x 0, y 1) | `0x03E8` | wall clicked | no action summarized |
+| block 33 (x 1, y 1) | `0x03EC` | bits 0x400 (no engine caller found) | no action summarized |
+| block 34 (x 2, y 1) | `0x03DA` | wall clicked | sets all four walls of block 34 to type 0; sets game flag 47; plays a sound (ID 38) |
+| block 36 (x 4, y 1) | `0x0353` | party arrives (second path), party leaves (second path) | sets the north wall of block 993 to type ?; sets all four walls of block 34 to type 0; sets the east wall of block 34 to type ?; tests game flag 47; plays a sound (ID 38); checks the east wall of block 34; checks the north wall of block 993 |
+| block 67 (x 3, y 2) | `0x037F` | wall clicked | sets the north wall of block 67 to type 43; sets the south wall of block 3 to type 42; sets the north wall of block 67 to type 42; sets the south wall of block 3 to type 1; sets the east wall of block 34 to type 2; tests game flag 47; checks the north wall of block 67; plays a sound (ID 38) |
+| block 100 (x 4, y 3) | `0x034B` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 69 to type 0; places a monster of type slot 1 on block 259 in mode 4; places a monster of type slot 1 on block 260 in mode 4; sets all four walls of block 69 to type 1; sets game flag 119; checks the south wall of block 69; plays a sound (ID 38); tests game flag 38 … |
+| block 102 (x 6, y 3) | `0x034F` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 69 to type 0; places a monster of type slot 1 on block 259 in mode 4; places a monster of type slot 1 on block 260 in mode 4; sets all four walls of block 69 to type 1; sets game flag 119; checks the south wall of block 69; plays a sound (ID 38); tests game flag 38 … |
+| block 132 (x 4, y 4) | `0x0301` | wall clicked | sets the north wall of block 165 to type 1; sets the east wall of block 132 to type 29; sets the north wall of block 165 to type 45; sets the east wall of block 132 to type 30; checks the east wall of block 132; plays a sound (ID 38) |
+| block 162 (x 2, y 5) | `0x032F` | wall clicked | sets all four walls of block 161 to type 0; sets all four walls of block 161 to type 2; plays a sound (ID 38); checks the south wall of block 162 |
+| block 261 (x 5, y 8) | `0x02AF` | party steps in, party arrives (second path), item put down | moves the party to level 2, block 97, facing 1; requests engine global change, selector 10, operands 0, 0; shows text ID 0x403f; requests engine global change, selector 0, operands 0, 260; requests engine global change, selector 10, operands 0, 2; moves items from block 261 to level 2, block 97 |
+| `0x400` level loaded | `0x02A9` | — | sets music theme 268 |
 
 ## Items placed by the scripts
 

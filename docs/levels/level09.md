@@ -62,46 +62,48 @@ Made by `tools/level_report.py` from `LEVEL9.CMZ`, `.WLL`, `.XXX`, `.INI`, `.INF
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL9.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles CAVE1; loads monster sprites MORIBUND.SHP into slot 0; loads monster sprites FLSPIDER.SHP into slot 1; defines monster type 2; defines monster type 1 |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 1) on block 379; places a monster (slot 1) on block 435; places a monster (slot 1) on block 441; places item 99 (Rock) on block 309; places item 99 (Rock) on block 436; places item 243 (Coin Purse) on block 219; sets the west wall of block 992 to type -1; sets the east wall of block 992 to type 0 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x0000` | — | loads wall tiles CAVE1; loads monster sprites MORIBUND.SHP into slot 0; loads monster sprites FLSPIDER.SHP into slot 1; defines monster type 2; defines monster type 1 |
+| INI entry 1 (runs when the level loads) | `0x00B5` | — | places a monster of type slot 1 on block 379 in mode 3; places a monster of type slot 1 on block 435 in mode 3; places a monster of type slot 1 on block 441 in mode 3; places item 99 (Rock) on block 309; places item 99 (Rock) on block 436; places item 243 (Coin Purse) on block 219; sets the west wall of block 992 to type -1; sets the east wall of block 992 to type 0 … |
 
 ### LEVEL9.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 152 (x 24, y 4) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 152 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 152; plays a sound |
-| block 157 (x 29, y 4) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 157 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 157; plays a sound |
-| block 179 (x 19, y 5) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 179 to type 36; make item; play environmental sfx; launches a projectile; sets game flag 42; starts script timer 1; checks a wall of block 179; plays a sound |
-| block 218 (x 26, y 6) | party steps in, party arrives (second path), item put down | moves objects from block 218 to block 219 |
-| block 219 (x 27, y 6) | wall clicked | sets the east wall of block 219 to type 45; checks a wall of block 219 |
-| block 246 (x 22, y 7) | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x400 (no engine caller found) | sets the north wall of block 278 to type 63; sets the west wall of block 246 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 278; plays a sound; checks a wall of block 246 |
-| block 247 (x 23, y 7) | fireball passes | no game action (only stack and screen bookkeeping) |
-| block 248 (x 24, y 7) | wall clicked | a character speaks |
-| block 310 (x 22, y 9) | bits 0x400 (no engine caller found) | sets the south wall of block 278 to type 63; checks a wall of block 278; plays a sound |
-| block 373 (x 21, y 11) | wall clicked | a character speaks; clears game flag 43; checks a wall of block 993; checks a wall of block 440; plays a sound; checks a wall of block 373 |
-| block 374 (x 22, y 11) | bits 0x400 (no engine caller found) | a character speaks; checks a wall of block 993; checks a wall of block 440 |
-| block 378 (x 26, y 11) | party arrives (second path) | make item; play environmental sfx; launches a projectile |
-| block 382 (x 30, y 11) | wall clicked | a character speaks |
-| block 404 (x 20, y 12) | party arrives (second path), party leaves (second path), item put down, item taken | make item; play environmental sfx; launches a projectile; sets game flag 43; starts script timer 1; checks a wall of block 373 |
-| block 412 (x 28, y 12) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 412 to type 36; make item; play environmental sfx; launches a projectile; checks a wall of block 412; plays a sound |
-| block 434 (x 18, y 13) | wall clicked | a character speaks |
-| block 436 (x 20, y 13) | party arrives (second path), bits 0x400 (no engine caller found) | sets the north wall of block 468 to type 63; a character speaks; checks a wall of block 468; plays a sound |
-| block 440 (x 24, y 13) | wall clicked | a character speaks |
-| block 499 (x 19, y 15) | bits 0x400 (no engine caller found) | a character speaks; checks a wall of block 992; checks a wall of block 531 |
-| block 500 (x 20, y 15) | bits 0x400 (no engine caller found) | sets the south wall of block 468 to type 63; checks a wall of block 468; plays a sound |
-| block 503 (x 23, y 15) | party arrives (second path), wall clicked | sets the west wall of block 503 to type 0; make item; play environmental sfx; launches a projectile |
-| block 504 (x 24, y 15) | party arrives (second path) | sets game flag 159; a character speaks; checks a wall of block 503; tests game flag 159 |
-| block 509 (x 29, y 15) | party steps in, party arrives (second path), item put down | moves objects from block 509 to block 541 |
-| block 531 (x 19, y 16) | wall clicked | a character speaks; checks a wall of block 992; checks a wall of block 531 |
-| `0x400` level loaded | — | starts script timer 0; starts script timer 1 |
-| `0x401` script timer 0 | — | places a monster (slot 2) on block 280 |
-| `0x402` script timer 1 | — | make item; play environmental sfx; launches a projectile; starts script timer 1; tests game flag 42; tests game flag 43; checks a wall of block 373 |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 152 (x 24, y 4) | `0x065B` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 152 to type 36; creates item type 9 and returns its handle; launches a projectile from block 157 in direction 3; checks the south wall of block 152; plays a sound (ID 80); plays a sound (ID 69) at block 157 |
+| block 157 (x 29, y 4) | `0x0684` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 157 to type 36; creates item type 9 and returns its handle; launches a projectile from block 253 in direction 0; checks the south wall of block 157; plays a sound (ID 80); plays a sound (ID 69) at block 253 |
+| block 179 (x 19, y 5) | `0x051A` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 179 to type 36; creates item type 9 and returns its handle; launches a projectile from block 115 in direction 2; sets game flag 42; sets script timer 1 to 120 ticks; checks the south wall of block 179; plays a sound (ID 80); plays a sound (ID 69) at block 115 |
+| block 218 (x 26, y 6) | `0x06AD` | party steps in, party arrives (second path), item put down | moves items from block 218 to level 8, block 219 |
+| block 219 (x 27, y 6) | `0x06BA` | wall clicked | sets the east wall of block 219 to type 45; checks the east wall of block 219 |
+| block 246 (x 22, y 7) | `0x054B` | party arrives (second path), party leaves (second path), item put down, item taken, bits 0x400 (no engine caller found) | sets the north wall of block 278 to type 63; sets all four walls of block 246 to type 36; creates item type 9 and returns its handle; launches a projectile from block 243 in direction 1; checks the north wall of block 278; plays a sound (ID 135); checks the south wall of block 246; plays a sound (ID 80) … |
+| block 247 (x 23, y 7) | `0x05BE` | fireball passes | no action summarized |
+| block 248 (x 24, y 7) | `0x06D8` | wall clicked | plays chat/dialogue text ID 0x0009 |
+| block 310 (x 22, y 9) | `0x059A` | bits 0x400 (no engine caller found) | sets the south wall of block 278 to type 63; checks the south wall of block 278; plays a sound (ID 135) |
+| block 373 (x 21, y 11) | `0x04F3` | wall clicked | plays chat/dialogue text ID 0x0002; clears game flag 43; checks the south wall of block 993; checks the west wall of block 440; plays a sound (ID 79); checks the south wall of block 373 |
+| block 374 (x 22, y 11) | `0x050E` | bits 0x400 (no engine caller found) | plays chat/dialogue text ID 0x0002; checks the south wall of block 993; checks the west wall of block 440 |
+| block 378 (x 26, y 11) | `0x044F` | party arrives (second path) | creates item type 9 and returns its handle; launches a projectile from block 284 in direction 2; plays a sound (ID 69) at block 284 |
+| block 382 (x 30, y 11) | `0x06DE` | wall clicked | plays chat/dialogue text ID 0x0009 |
+| block 404 (x 20, y 12) | `0x05C0` | party arrives (second path), party leaves (second path), item put down, item taken | creates item type 9 and returns its handle; launches a projectile from block 340 in direction 2; sets game flag 43; sets script timer 1 to 120 ticks; checks the south wall of block 373; plays a sound (ID 69) at block 340 |
+| block 412 (x 28, y 12) | `0x046D` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 412 to type 36; creates item type 9 and returns its handle; launches a projectile from block 506 in direction 0; checks the south wall of block 412; plays a sound (ID 80); plays a sound (ID 69) at block 506 |
+| block 434 (x 18, y 13) | `0x06D2` | wall clicked | plays chat/dialogue text ID 0x0009 |
+| block 436 (x 20, y 13) | `0x05F2` | party arrives (second path), bits 0x400 (no engine caller found) | sets the north wall of block 468 to type 63; plays chat/dialogue text ID 0x0005; checks the north wall of block 468; plays a sound (ID 135) |
+| block 440 (x 24, y 13) | `0x06CC` | wall clicked | plays chat/dialogue text ID 0x0009 |
+| block 499 (x 19, y 15) | `0x0516` | bits 0x400 (no engine caller found) | plays chat/dialogue text ID 0x0004; checks the south wall of block 992; checks the north wall of block 531 |
+| block 500 (x 20, y 15) | `0x0632` | bits 0x400 (no engine caller found) | sets the south wall of block 468 to type 63; checks the south wall of block 468; plays a sound (ID 135) |
+| block 503 (x 23, y 15) | `0x04C9` | party arrives (second path), wall clicked | sets all four walls of block 503 to type 0; creates item type 9 and returns its handle; launches a projectile from block 499 in direction 1; plays a sound (ID 69) at block 499 |
+| block 504 (x 24, y 15) | `0x0496` | party arrives (second path) | sets game flag 159; plays chat/dialogue text ID 0x0000; plays chat/dialogue text ID 0x0001; checks the east wall of block 503; tests game flag 159 |
+| block 509 (x 29, y 15) | `0x0442` | party steps in, party arrives (second path), item put down | moves items from block 509 to level 8, block 541 |
+| block 531 (x 19, y 16) | `0x0512` | wall clicked | plays chat/dialogue text ID 0x0004; checks the south wall of block 992; checks the north wall of block 531 |
+| `0x400` level loaded | `0x03AF` | — | sets script timer 0 to 3600 ticks; sets music theme 273; sets script timer 1 to 120 ticks |
+| `0x401` script timer 0 | `0x03C1` | — | places a monster of type slot 2 on block 280 in mode 4 |
+| `0x402` script timer 1 | `0x03EA` | — | creates item type 9 and returns its handle; launches a projectile from block 115 in direction 2; launches a projectile from block 340 in direction 2; disables script timer 1; tests game flag 42; plays a sound (ID 69) at block 115; tests game flag 43; checks the south wall of block 373 … |
 
 ## Items placed by the scripts
 

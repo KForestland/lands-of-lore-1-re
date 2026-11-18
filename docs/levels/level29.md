@@ -188,117 +188,119 @@ Made by `tools/level_report.py` from `LEVEL29.CMZ`, `.WLL`, `.XXX`, `.INI`, `.IN
 
 ## Script entry points
 
-Each row is one entry of the level's scripts. Events: when the engine runs it ([README](README.md#events)). The description lists the game actions the entry's code calls, actions that change the game first, then checks (constant arguments only; `?` = computed at run time; `…` = more than eight).
+**CONFIRMED.** The DATA word is the ORDR target in the named original script. Its event mask identifies when the engine can run it ([event sources](README.md#events)).
+
+Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. `?` marks an argument the walk could not recover. `…` marks additional actions. The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.
 
 ### LEVEL29.INI
 
-| Entry | Events | What it does |
-|---|---|---|
-| INI entry 0 (runs when the level loads) | — | loads wall tiles CIMMERIA; loads monster sprites TOAD.SHP into slot 0; defines monster type 1; loads monster sprites SCO_TOAD.SHP into slot 0; loads monster sprites TOAD.SHP into slot 1; defines monster type 2; loads monster sprites TOADSERP.SHP into slot 0; loads monster sprites VIPER.SHP into slot 1 … |
-| INI entry 1 (runs when the level loads) | — | places a monster (slot 1) on block 2; places a monster (slot 1) on block 247; places a monster (slot 1) on block 257; places a monster (slot 1) on block 78; places a monster (slot 1) on block 123; places a monster (slot 1) on block 94; places a monster (slot 1) on block 4; places item 202 (Death Key) on block 211 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| INI entry 0 (runs when the level loads) | `0x0000` | — | loads wall tiles CIMMERIA; loads monster sprites TOAD.SHP into slot 0; defines monster type 1; loads monster sprites SCO_TOAD.SHP into slot 0; loads monster sprites TOAD.SHP into slot 1; defines monster type 2; loads monster sprites TOADSERP.SHP into slot 0; loads monster sprites VIPER.SHP into slot 1 … |
+| INI entry 1 (runs when the level loads) | `0x02A7` | — | places a monster of type slot 1 on block 2 in mode 7; places a monster of type slot 1 on block 247 in mode 2; places a monster of type slot 1 on block 257 in mode 2; places a monster of type slot 1 on block 78 in mode 2; places a monster of type slot 1 on block 123 in mode 2; places a monster of type slot 1 on block 94 in mode 2; places a monster of type slot 1 on block 4 in mode 7; places item 202 (Death Key) on block 211 … |
 
 ### LEVEL29.INF
 
-| Entry | Events | What it does |
-|---|---|---|
-| block 76 (x 12, y 2) | party arrives (second path) | changes a monster |
-| block 80 (x 16, y 2) | party arrives (second path) | changes a monster |
-| block 89 (x 25, y 2) | party arrives (second path) | changes a monster |
-| block 152 (x 24, y 4) | party arrives (second path) | changes a monster |
-| block 172 (x 12, y 5) | bits 0x400 (no engine caller found) | no game action (only stack and screen bookkeeping) |
-| block 187 (x 27, y 5) | party arrives (second path) | changes a monster |
-| block 190 (x 30, y 5) | party arrives (second path) | changes a monster |
-| block 195 (x 3, y 6) | party arrives (second path) | changes a monster |
-| block 204 (x 12, y 6) | wall clicked | gives item 182 (Silver Key); gives item 216 (Salve); gives 25 crown(s); sets game flag 470; checks a wall of block 64; tests game flag 470 |
-| block 217 (x 25, y 6) | bits 0x400 (no engine caller found) | sets game flag 469; checks a wall of block 32; tests game flag 469 |
-| block 229 (x 5, y 7) | party arrives (second path) | changes a monster |
-| block 245 (x 21, y 7) | party arrives (second path) | changes a monster |
-| block 249 (x 25, y 7) | wall clicked | gives item 78 (Halberd "Death's Hand"); gives item 160 (Aegis plate mail); gives 200 crown(s); sets game flag 469; checks a wall of block 32; tests game flag 469 |
-| block 250 (x 26, y 7) | wall clicked | sets the west wall of block 252 to type 0; checks a wall of block 252; plays a sound |
-| block 299 (x 11, y 9) | wall clicked | sets the west wall of block 268 to type 0; checks a wall of block 268; plays a sound |
-| block 300 (x 12, y 9) | party arrives (second path) | sets the west wall of block 268 to type 1; sets the west wall of block 301 to type 1; plays a sound |
-| block 309 (x 21, y 9) | wall clicked | toggles the west wall of block 373 between types 0 and 1; play environmental sfx |
-| block 311 (x 23, y 9) | party arrives (second path) | changes a monster |
-| block 322 (x 2, y 10) | party arrives (second path) | changes a monster |
-| block 332 (x 12, y 10) | wall clicked | sets the west wall of block 301 to type 0; checks a wall of block 301; plays a sound |
-| block 398 (x 14, y 12) | wall clicked | sets the west wall of block 398 to type 0; plays a sound |
-| block 445 (x 29, y 13) | wall clicked | gives item 218 (Ginseng); gives item 146 (Helm "Talamar"); gives 100 crown(s); sets game flag 471; checks a wall of block 96; tests game flag 471 |
-| block 472 (x 24, y 14) | party arrives (second path), wall clicked | deals damage; move party |
-| block 477 (x 29, y 14) | bits 0x400 (no engine caller found) | no game action (only stack and screen bookkeeping) |
-| block 490 (x 10, y 15) | party arrives (second path) | places a monster (slot 1) on block 489; sets game flag 454; a character speaks; loads monster sprites SCO_TOAD.SHP into slot 0; loads monster sprites TOAD.SHP into slot 1; defines monster type 1; defines monster type 2; sets game flag 576 … |
-| block 496 (x 16, y 15) | monster leaves | sets the west wall of block 497 to type 0; plays a sound |
-| block 517 (x 5, y 16) | wall clicked | a character speaks |
-| block 534 (x 22, y 16) | party arrives (second path), party leaves (second path) | sets the west wall of block 534 to type 28; sets the west wall of block 566 to type 2; checks a wall of block 534; plays a sound; checks a wall of block 566 |
-| block 559 (x 15, y 17) | party arrives (second path) | operates the door at block 591; clears game flag 463; clears game flag 464; checks a wall of block 591 |
-| block 590 (x 14, y 18) | wall clicked | a character speaks; sets game flag 472 |
-| block 591 (x 15, y 18) | wall clicked | sets the north wall of block 591 to type 8; sets the south wall of block 591 to type 3; sets the east wall of block 591 to type 0; sets the west wall of block 591 to type 0; block door; checks a wall of block 591; plays a sound; tests game flag 472 … |
-| block 592 (x 16, y 18) | wall clicked | a character speaks; sets game flag 473 |
-| block 598 (x 22, y 18) | party arrives (second path) | character surprise feedback; move party |
-| block 609 (x 1, y 19) | party arrives (second path) | make item; play environmental sfx; launches a projectile |
-| block 617 (x 9, y 19) | wall clicked | gives item 27 (Arbalest "Eternity"); gives item 159 (Bastion plate mail); gives 500 crown(s); sets game flag 468; checks a wall of block 0; tests game flag 468 |
-| block 618 (x 10, y 19) | bits 0x400 (no engine caller found) | sets game flag 468; checks a wall of block 0; tests game flag 468 |
-| block 628 (x 20, y 19) | party arrives (second path), wall clicked | deals damage; move party |
-| block 645 (x 5, y 20) | party arrives (second path) | make item; play environmental sfx; launches a projectile |
-| block 648 (x 8, y 20) | wall clicked | a character speaks |
-| block 665 (x 25, y 20) | party arrives (second path), wall clicked | deals damage; move party |
-| block 689 (x 17, y 21) | party steps in, party arrives (second path), item put down | moves objects from block 680 to block 625 |
-| block 709 (x 5, y 22) | party arrives (second path) | make item; play environmental sfx; launches a projectile |
-| block 728 (x 24, y 22) | wall clicked | sets the west wall of block 728 to type 0; places a monster (slot 1) on block 728; suspend monster |
-| block 737 (x 1, y 23) | wall clicked | a character speaks |
-| block 744 (x 8, y 23) | wall clicked | sets the west wall of block 744 to type 0; places a monster (slot 1) on block 744; suspend monster |
-| block 753 (x 17, y 23) | party arrives (second path) | sets the west wall of block 721 to type 1; starts a dialogue; a character speaks; checks a wall of block 721; plays a sound |
-| block 807 (x 7, y 25) | wall clicked | a character speaks |
-| block 815 (x 15, y 25) | wall clicked | a character speaks |
-| block 833 (x 1, y 26) | wall clicked | a character speaks |
-| block 834 (x 2, y 26) | item put down, item taken | sets the north wall of block 995 to type 31; sets the north wall of block 995 to type 1; clears game flag 460; sets game flag 460; play environmental sfx; tests game flag 459; tests game flag 460; tests game flag 462 … |
-| block 836 (x 4, y 26) | item put down, item taken | sets the north wall of block 995 to type 31; sets the north wall of block 995 to type 1; clears game flag 459; sets game flag 459; play environmental sfx; tests game flag 459; tests game flag 460; tests game flag 462 … |
-| block 837 (x 5, y 26) | wall clicked | a character speaks |
-| block 840 (x 8, y 26) | party arrives (second path) | sets game flag 464 |
-| block 841 (x 9, y 26) | party arrives (second path) | sets game flag 464 |
-| block 842 (x 10, y 26) | party arrives (second path) | sets game flag 464 |
-| block 844 (x 12, y 26) | party arrives (second path) | sets game flag 464 |
-| block 845 (x 13, y 26) | party arrives (second path) | sets game flag 464 |
-| block 846 (x 14, y 26) | party arrives (second path) | sets game flag 464 |
-| block 848 (x 16, y 26) | party arrives (second path) | sets game flag 463 |
-| block 849 (x 17, y 26) | party arrives (second path) | sets game flag 463 |
-| block 851 (x 19, y 26) | wall clicked | toggles the north wall of block 915 between types 31 and 1; plays a sound |
-| block 853 (x 21, y 26) | party arrives (second path) | sets game flag 463 |
-| block 854 (x 22, y 26) | party arrives (second path) | sets game flag 463 |
-| block 867 (x 3, y 27) | party arrives (second path), party leaves (second path), item put down, item taken | sets the west wall of block 867 to type 28; operates the door at block 803; checks a wall of block 867; plays a sound |
-| block 871 (x 7, y 27) | wall clicked | toggles the west wall of block 874 between types 31 and 1; sets game flag 466; checks a wall of block 874; plays a sound |
-| block 873 (x 9, y 27) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 28, block 873; sets game flag 46; moves objects from block 873 to block 873; checks a wall of block 873 |
-| block 876 (x 12, y 27) | wall clicked | toggles the west wall of block 879 between types 31 and 1; sets game flag 467; checks a wall of block 879; plays a sound |
-| block 878 (x 14, y 27) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 28, block 878; sets game flag 46; moves objects from block 878 to block 878; checks a wall of block 878 |
-| block 888 (x 24, y 27) | wall clicked, thrown item hits | toggles the east wall of block 888 between types 40 and 41; sets/clears game flag 465; tests game flag 465 |
-| block 889 (x 25, y 27) | party arrives (second path), item put down | drops the party through a pit; deals damage; moves the party to level 28, block 889; sets game flag 46; moves objects from block 889 to block 889; checks a wall of block 889 |
-| block 897 (x 1, y 28) | wall clicked | a character speaks |
-| block 898 (x 2, y 28) | item put down, item taken | sets the north wall of block 995 to type 31; sets the north wall of block 995 to type 1; clears game flag 461; sets game flag 461; play environmental sfx; tests game flag 459; tests game flag 460; tests game flag 462 … |
-| block 900 (x 4, y 28) | item put down, item taken | sets the north wall of block 995 to type 31; sets the north wall of block 995 to type 1; clears game flag 462; sets game flag 462; play environmental sfx; tests game flag 459; tests game flag 460; tests game flag 462 … |
-| block 901 (x 5, y 28) | wall clicked | a character speaks |
-| block 904 (x 8, y 28) | party arrives (second path) | sets game flag 464 |
-| block 905 (x 9, y 28) | party arrives (second path) | sets game flag 464 |
-| block 906 (x 10, y 28) | party arrives (second path) | sets game flag 464 |
-| block 908 (x 12, y 28) | party arrives (second path) | sets game flag 464 |
-| block 909 (x 13, y 28) | party arrives (second path) | sets game flag 464 |
-| block 910 (x 14, y 28) | party arrives (second path) | sets game flag 464 |
-| block 912 (x 16, y 28) | party arrives (second path) | sets game flag 463 |
-| block 913 (x 17, y 28) | party arrives (second path) | sets game flag 463 |
-| block 917 (x 21, y 28) | party arrives (second path) | sets game flag 463 |
-| block 918 (x 22, y 28) | party arrives (second path) | sets game flag 463 |
-| block 920 (x 24, y 28) | wall clicked | sets the west wall of block 920 to type 0; sets the west wall of block 919 to type 1; sets the west wall of block 957 to type 0; plays a sound |
-| block 921 (x 25, y 28) | wall clicked | sets the west wall of block 921 to type 0; sets the west wall of block 920 to type 1; sets the east wall of block 920 to type 53; plays a sound |
-| block 926 (x 30, y 28) | wall clicked | a character speaks |
-| block 935 (x 7, y 29) | wall clicked | a character speaks |
-| block 943 (x 15, y 29) | wall clicked | a character speaks |
-| block 987 (x 27, y 30) | wall clicked | sets the north wall of block 1021 to type 31; checks a wall of block 987; plays a sound |
-| block 989 (x 29, y 30) | party arrives (second path) | sets the west wall of block 957 to type 1; sets the west wall of block 957 to type 0; checks a wall of block 1021; checks a wall of block 957; plays a sound |
-| block 991 (x 31, y 30) | wall clicked | sets the north wall of block 1021 to type 1; checks a wall of block 1021; plays a sound |
-| block 995 (x 3, y 31) | item taken | operates the door at block 803 |
-| `0x400` level loaded | — | starts script timer 0; starts script timer 1; starts script timer 2 |
-| `0x401` script timer 0 | — | deals damage; make item; play environmental sfx; launches a projectile; tests game flag 464; tests game flag 466; tests game flag 467; tests game flag 463 … |
-| `0x402` script timer 1 | — | update block animations2; set global script var; plays a sound |
-| `0x403` script timer 2 | — | update block animations2; starts script timer 2; checks a wall of block 588; checks a wall of block 590; checks a wall of block 458; checks a wall of block 397; checks a wall of block 522; checks a wall of block 376 … |
-| `0x404` a monster died | — | places a monster (slot 2) on block ?; places a monster (slot 1) on block ?; a character speaks; play end sequence; suspend monster; release monster shapes; loads monster sprites TOADSERP.SHP into slot 0; loads monster sprites VIPER.SHP into slot 1 … |
+| Entry | DATA word | Events | What it can do |
+|---|---:|---|---|
+| block 76 (x 12, y 2) | `0x0E37` | party arrives (second path) | sets monster ? mode to 7 |
+| block 80 (x 16, y 2) | `0x0E44` | party arrives (second path) | sets monster ? mode to 7 |
+| block 89 (x 25, y 2) | `0x0E51` | party arrives (second path) | sets monster ? mode to 7 |
+| block 152 (x 24, y 4) | `0x0DFF` | party arrives (second path) | sets monster ? mode to 7 |
+| block 172 (x 12, y 5) | `0x0F20` | bits 0x400 (no engine caller found) | no action summarized |
+| block 187 (x 27, y 5) | `0x0E5E` | party arrives (second path) | sets monster ? mode to 7 |
+| block 190 (x 30, y 5) | `0x0F6B` | party arrives (second path) | sets monster ? mode to 7 |
+| block 195 (x 3, y 6) | `0x0E0D` | party arrives (second path) | sets monster ? mode to 7 |
+| block 204 (x 12, y 6) | `0x0ED9` | wall clicked | puts item 182 (Silver Key) on an empty cursor; puts item 216 (Salve) on an empty cursor; gives 25 crown(s); sets game flag 470; checks the south wall of block 64; tests game flag 470 |
+| block 217 (x 25, y 6) | `0x0EB2` | bits 0x400 (no engine caller found) | sets game flag 469; checks the south wall of block 32; tests game flag 469 |
+| block 229 (x 5, y 7) | `0x0E1B` | party arrives (second path) | sets monster ? mode to 7 |
+| block 245 (x 21, y 7) | `0x0DE3` | party arrives (second path) | sets monster ? mode to 7 |
+| block 249 (x 25, y 7) | `0x0E6B` | wall clicked | puts item 78 (Halberd "Death's Hand") on an empty cursor; puts item 160 (Aegis plate mail) on an empty cursor; gives 200 crown(s); sets game flag 469; checks the south wall of block 32; tests game flag 469 |
+| block 250 (x 26, y 7) | `0x0FB3` | wall clicked | sets all four walls of block 252 to type 0; checks the north wall of block 252; plays a sound (ID 38) |
+| block 299 (x 11, y 9) | `0x0F89` | wall clicked | sets all four walls of block 268 to type 0; checks the north wall of block 268; plays a sound (ID 38) |
+| block 300 (x 12, y 9) | `0x0F78` | party arrives (second path) | sets all four walls of block 268 to type 1; sets all four walls of block 301 to type 1; plays a sound (ID 38) |
+| block 309 (x 21, y 9) | `0x0DD5` | wall clicked | toggles all four walls of block 373 between types 0 and 1; plays a sound (ID 38) at block 373 |
+| block 311 (x 23, y 9) | `0x0DF1` | party arrives (second path) | sets monster ? mode to 7 |
+| block 322 (x 2, y 10) | `0x0E29` | party arrives (second path) | sets monster ? mode to 7 |
+| block 332 (x 12, y 10) | `0x0F9E` | wall clicked | sets all four walls of block 301 to type 0; checks the north wall of block 301; plays a sound (ID 38) |
+| block 398 (x 14, y 12) | `0x0FC8` | wall clicked | sets all four walls of block 398 to type 0; plays a sound (ID 38) |
+| block 445 (x 29, y 13) | `0x0F22` | wall clicked | puts item 218 (Ginseng) on an empty cursor; puts item 146 (Helm "Talamar") on an empty cursor; gives 100 crown(s); sets game flag 471; checks the south wall of block 96; tests game flag 471 |
+| block 472 (x 24, y 14) | `0x1136` | party arrives (second path), wall clicked | deals damage to the party (amount ?); move party |
+| block 477 (x 29, y 14) | `0x0F69` | bits 0x400 (no engine caller found) | no action summarized |
+| block 490 (x 10, y 15) | `0x100F` | party arrives (second path) | places a monster of type slot 1 on block 489 in mode 12; sets game flag 454; plays music track 304; plays chat/dialogue text ID 0x0006; requests engine global change, selector 10, operands 0, 0; loads monster sprites SCO_TOAD.SHP into slot 0; loads monster sprites TOAD.SHP into slot 1; defines monster type 1 … |
+| block 496 (x 16, y 15) | `0x0FD3` | monster leaves | sets all four walls of block 497 to type 0; plays a sound (ID 38) |
+| block 517 (x 5, y 16) | `0x0C8F` | wall clicked | plays chat/dialogue text ID 0x0013 |
+| block 534 (x 22, y 16) | `0x0CC1` | party arrives (second path), party leaves (second path) | sets all four walls of block 534 to type 28; sets all four walls of block 566 to type 2; checks the south wall of block 534; plays a sound (ID 80); checks the north wall of block 566; plays a sound (ID 38) |
+| block 559 (x 15, y 17) | `0x0D7E` | party arrives (second path) | operates the door switch at block 591 with action -1; clears game flag 463; clears game flag 464; checks the north wall of block 591 |
+| block 590 (x 14, y 18) | `0x0D4E` | wall clicked | plays chat/dialogue text ID 0x0012; sets game flag 472 |
+| block 591 (x 15, y 18) | `0x0D99` | wall clicked | sets the north wall of block 591 to type 8; sets the south wall of block 591 to type 3; sets the east wall of block 591 to type 0; sets the west wall of block 591 to type 0; block door; checks the south wall of block 591; plays a sound (ID 38); tests game flag 472 … |
+| block 592 (x 16, y 18) | `0x0D66` | wall clicked | plays chat/dialogue text ID 0x0012; sets game flag 473 |
+| block 598 (x 22, y 18) | `0x0CB5` | party arrives (second path) | character surprise feedback; move party |
+| block 609 (x 1, y 19) | `0x0C96` | party arrives (second path) | creates item type 10 and returns its handle; launches a projectile from block 705 in direction 0; plays a sound (ID 18) at block 705 |
+| block 617 (x 9, y 19) | `0x0CE2` | wall clicked | puts item 27 (Arbalest "Eternity") on an empty cursor; puts item 159 (Bastion plate mail) on an empty cursor; gives 500 crown(s); sets game flag 468; checks the south wall of block 0; tests game flag 468 |
+| block 618 (x 10, y 19) | `0x0D28` | bits 0x400 (no engine caller found) | sets game flag 468; checks the south wall of block 0; tests game flag 468 |
+| block 628 (x 20, y 19) | `0x1128` | party arrives (second path), wall clicked | deals damage to the party (amount ?); move party |
+| block 645 (x 5, y 20) | `0x0C69` | party arrives (second path) | creates item type 9 and returns its handle; launches a projectile from block 647 in direction 3; plays a sound (ID 69) at block 647 |
+| block 648 (x 8, y 20) | `0x0C88` | wall clicked | plays chat/dialogue text ID 0x0013 |
+| block 665 (x 25, y 20) | `0x112F` | party arrives (second path), wall clicked | deals damage to the party (amount ?); move party |
+| block 689 (x 17, y 21) | `0x0912` | party steps in, party arrives (second path), item put down | moves items from block 680 to level 28, block 625 |
+| block 709 (x 5, y 22) | `0x0C2F` | party arrives (second path) | creates item type 11 and returns its handle; launches a projectile from block 549 in direction 2; plays a sound (ID 133) at block 549 |
+| block 728 (x 24, y 22) | `0x0FF5` | wall clicked | sets all four walls of block 728 to type 0; places a monster of type slot 1 on block 728 in mode 7; suspend monster |
+| block 737 (x 1, y 23) | `0x0FEE` | wall clicked | plays chat/dialogue text ID 0x0013 |
+| block 744 (x 8, y 23) | `0x0C4F` | wall clicked | sets all four walls of block 744 to type 0; places a monster of type slot 1 on block 744 in mode 7; suspend monster |
+| block 753 (x 17, y 23) | `0x091F` | party arrives (second path) | sets all four walls of block 721 to type 1; starts a dialogue sequence in mode 0; plays chat/dialogue text ID 0x0014; sets up 1 dialogue choices; reads the dialogue result; checks the north wall of block 721; plays a sound (ID 38) |
+| block 807 (x 7, y 25) | `0x0A57` | wall clicked | plays chat/dialogue text ID 0x0013 |
+| block 815 (x 15, y 25) | `0x0952` | wall clicked | plays chat/dialogue text ID 0x0013 |
+| block 833 (x 1, y 26) | `0x0B1F` | wall clicked | plays chat/dialogue text ID 0x0001 |
+| block 834 (x 2, y 26) | `0x0B3B` | item put down, item taken | sets the north wall of block 995 to type 31; sets the north wall of block 995 to type 1; clears game flag 460; sets game flag 460; tests game flag 459; tests game flag 460; tests game flag 462; tests game flag 461 … |
+| block 836 (x 4, y 26) | `0x0BA0` | item put down, item taken | sets the north wall of block 995 to type 31; sets the north wall of block 995 to type 1; clears game flag 459; sets game flag 459; tests game flag 459; tests game flag 460; tests game flag 462; tests game flag 461 … |
+| block 837 (x 5, y 26) | `0x0B2D` | wall clicked | plays chat/dialogue text ID 0x0003 |
+| block 840 (x 8, y 26) | `0x0A65` | party arrives (second path) | sets game flag 464 |
+| block 841 (x 9, y 26) | `0x0A6C` | party arrives (second path) | sets game flag 464 |
+| block 842 (x 10, y 26) | `0x0A73` | party arrives (second path) | sets game flag 464 |
+| block 844 (x 12, y 26) | `0x0A7A` | party arrives (second path) | sets game flag 464 |
+| block 845 (x 13, y 26) | `0x0A81` | party arrives (second path) | sets game flag 464 |
+| block 846 (x 14, y 26) | `0x0A88` | party arrives (second path) | sets game flag 464 |
+| block 848 (x 16, y 26) | `0x0960` | party arrives (second path) | sets game flag 463 |
+| block 849 (x 17, y 26) | `0x0967` | party arrives (second path) | sets game flag 463 |
+| block 851 (x 19, y 26) | `0x0B13` | wall clicked | toggles the north wall of block 915 between types 31 and 1; plays a sound (ID 38) |
+| block 853 (x 21, y 26) | `0x096E` | party arrives (second path) | sets game flag 463 |
+| block 854 (x 22, y 26) | `0x0975` | party arrives (second path) | sets game flag 463 |
+| block 867 (x 3, y 27) | `0x0C02` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 867 to type 28; operates the door switch at block 803 with action -1; checks the south wall of block 867; plays a sound (ID 80) |
+| block 871 (x 7, y 27) | `0x0AB9` | wall clicked | toggles the west wall of block 874 between types 31 and 1; sets game flag 466; checks the west wall of block 874; plays a sound (ID 38) |
+| block 873 (x 9, y 27) | `0x0ADC` | party arrives (second path), item put down | drops the party through a pit; deals damage to the party (amount ?); moves the party to level 28, block 873, facing ?; removes monsters from block 873; sets game flag 46; moves items from block 873 to level 28, block 873; checks the north wall of block 873 |
+| block 876 (x 12, y 27) | `0x0AE6` | wall clicked | toggles the west wall of block 879 between types 31 and 1; sets game flag 467; checks the west wall of block 879; plays a sound (ID 38) |
+| block 878 (x 14, y 27) | `0x0B09` | party arrives (second path), item put down | drops the party through a pit; deals damage to the party (amount ?); moves the party to level 28, block 878, facing ?; removes monsters from block 878; sets game flag 46; moves items from block 878 to level 28, block 878; checks the north wall of block 878 |
+| block 888 (x 24, y 27) | `0x0998` | wall clicked, thrown item hits | toggles the east wall of block 888 between types 40 and 41; sets/clears game flag 465; tests game flag 465 |
+| block 889 (x 25, y 27) | `0x09B2` | party arrives (second path), item put down | drops the party through a pit; deals damage to the party (amount ?); moves the party to level 28, block 889, facing ?; removes monsters from block 889; sets game flag 46; moves items from block 889 to level 28, block 889; checks the north wall of block 889 |
+| block 897 (x 1, y 28) | `0x0B26` | wall clicked | plays chat/dialogue text ID 0x0002 |
+| block 898 (x 2, y 28) | `0x0B6A` | item put down, item taken | sets the north wall of block 995 to type 31; sets the north wall of block 995 to type 1; clears game flag 461; sets game flag 461; tests game flag 459; tests game flag 460; tests game flag 462; tests game flag 461 … |
+| block 900 (x 4, y 28) | `0x0BCF` | item put down, item taken | sets the north wall of block 995 to type 31; sets the north wall of block 995 to type 1; clears game flag 462; sets game flag 462; tests game flag 459; tests game flag 460; tests game flag 462; tests game flag 461 … |
+| block 901 (x 5, y 28) | `0x0B34` | wall clicked | plays chat/dialogue text ID 0x0004 |
+| block 904 (x 8, y 28) | `0x0A8F` | party arrives (second path) | sets game flag 464 |
+| block 905 (x 9, y 28) | `0x0A96` | party arrives (second path) | sets game flag 464 |
+| block 906 (x 10, y 28) | `0x0A9D` | party arrives (second path) | sets game flag 464 |
+| block 908 (x 12, y 28) | `0x0AA4` | party arrives (second path) | sets game flag 464 |
+| block 909 (x 13, y 28) | `0x0AAB` | party arrives (second path) | sets game flag 464 |
+| block 910 (x 14, y 28) | `0x0AB2` | party arrives (second path) | sets game flag 464 |
+| block 912 (x 16, y 28) | `0x097C` | party arrives (second path) | sets game flag 463 |
+| block 913 (x 17, y 28) | `0x0983` | party arrives (second path) | sets game flag 463 |
+| block 917 (x 21, y 28) | `0x098A` | party arrives (second path) | sets game flag 463 |
+| block 918 (x 22, y 28) | `0x0991` | party arrives (second path) | sets game flag 463 |
+| block 920 (x 24, y 28) | `0x0A40` | wall clicked | sets all four walls of block 920 to type 0; sets all four walls of block 919 to type 1; sets all four walls of block 957 to type 0; plays a sound (ID 38) |
+| block 921 (x 25, y 28) | `0x0A29` | wall clicked | sets all four walls of block 921 to type 0; sets all four walls of block 920 to type 1; sets the east wall of block 920 to type 53; plays a sound (ID 38) |
+| block 926 (x 30, y 28) | `0x09BC` | wall clicked | plays chat/dialogue text ID 0x0000 |
+| block 935 (x 7, y 29) | `0x0A5E` | wall clicked | plays chat/dialogue text ID 0x0013 |
+| block 943 (x 15, y 29) | `0x0959` | wall clicked | plays chat/dialogue text ID 0x0013 |
+| block 987 (x 27, y 30) | `0x09C3` | wall clicked | sets the north wall of block 1021 to type 31; checks the east wall of block 987; plays a sound (ID 38) |
+| block 989 (x 29, y 30) | `0x09F6` | party arrives (second path) | sets all four walls of block 957 to type 1; sets all four walls of block 957 to type 0; checks the north wall of block 1021; checks the north wall of block 957; plays a sound (ID 38) |
+| block 991 (x 31, y 30) | `0x09D8` | wall clicked | sets the north wall of block 1021 to type 1; checks the north wall of block 1021; plays a sound (ID 38) |
+| block 995 (x 3, y 31) | `0x0C1F` | item taken | operates the door switch at block 803 with action 1 |
+| `0x400` level loaded | `0x06C3` | — | sets music theme 306; sets script timer 0 to 60 ticks; sets script timer 1 to 5 ticks; sets script timer 2 to 9 ticks |
+| `0x401` script timer 0 | `0x06D5` | — | deals damage to the party (amount 7); creates item type 11 and returns its handle; launches a projectile from block 808 in direction 1; launches a projectile from block 936 in direction 1; creates item type 10 and returns its handle; launches a projectile from block 816 in direction 1; launches a projectile from block 944 in direction 1; creates item type 9 and returns its handle … |
+| `0x402` script timer 1 | `0x07E9` | — | sets script global 16 to ?; update block animations2; plays a sound (ID 196) |
+| `0x403` script timer 2 | `0x0825` | — | update block animations2; sets script timer 2 to ? ticks; checks the north wall of block 588; checks the north wall of block 590; checks the east wall of block 458; checks the south wall of block 397; checks the east wall of block 522; checks the west wall of block 376 … |
+| `0x404` a monster died | `0x04AE` | — | places a monster of type slot 2 on block ? in mode 7; places a monster of type slot 1 on block ? in mode 12; plays chat/dialogue text ID 0x0015; play end sequence; suspend monster; release monster shapes; loads monster sprites TOADSERP.SHP into slot 0; loads monster sprites VIPER.SHP into slot 1 … |
 
 ## Items placed by the scripts
 
