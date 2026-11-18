@@ -67,6 +67,12 @@ EMC example at CD `L08.PAK+0xCAA8` or floppy
 face 1 against zero. Its native getter is CD `MAIN.EXE+0x134F0`
 or floppy `+0x17EB3`. [Wall-flag evidence](unknowns/07_native_rules.md#follow-up-on-bit-0x40)
 
+**CONFIRMED, level-1 control.** The 52 original WLL wall IDs
+showed the same flags at `DS:531E + id` before and after movement
+and a wall click. No declared ID had bit `0x40` set. The available
+CD slot begins in level 1, so block 172 in level 8 was out of reach.
+[Addresses and original record comparison](unknowns/07_native_rules.md#follow-up-on-bit-0x40)
+
 **UNCONFIRMED.** Whether an additional indirect consumer responds
 to this bit. Load level 8, stop at that getter with block 172 and
 face 1, and follow the wall ID to its entry at CD `DS:531E + id`
@@ -90,6 +96,11 @@ from `MAIN.EXE+0x3DDEF–0x3DE52`; the floppy range is
 `+0x46F35–0x46F98`. Both ranges are in the FBOV overlay: after it
 loads, search memory for `55 8B EC 56 8B 76 0A C4 5E 06 26 C4 5F 21`
 (the selector entry, the same bytes in both editions) and break there. [Mode comparison](unknowns/07_native_rules.md#follow-up-on-modes-911)
+
+**CONFIRMED, setup result.** The installed executable reaches play
+and writes a native level-1 save (`+0x269`). No played level-23
+slot was available for this run.
+[Mode-selection evidence and next test](unknowns/07_native_rules.md#follow-up-on-modes-911)
 
 **UNCONFIRMED.** Which selector and frame that encounter presents
 on screen. Use the [level 23 sheet](levels/level23.md) to locate the

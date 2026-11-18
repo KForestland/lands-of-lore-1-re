@@ -127,6 +127,15 @@
 
 **UNCONFIRMED** The intended gameplay entry into mode 10 remains open. The native update and frame tables establish what it does once set. The search checked direct immediate accesses to mode byte +0x14 and literal mode inputs to EMC `0x5B` and `0x38` in both 60-script corpora. It found the mode-11 witnesses above, and did not resolve every computed argument. A trace of mode writes in the original, conditioned on new value 10, or a static reconstruction of the computed parameters to those two EMC handlers would settle whether the state is used in shipped gameplay.
 
+**CONFIRMED, probe setup.** The English CD launcher now reaches
+play in the documented `MAIN.EXE`. Its native starting slot has
+level 1 at `+0x269` (the current-level byte at `DS:7FE5`).
+**UNCONFIRMED.** The live level-23 frame. The available native
+slot has no level-23 start, and the CD launcher setup did not
+provide a level selector. A played level-23 slot near block 105
+can drive the original `L23.PAK+0xC2AE` case above. Record the
+selector arguments and the eventual frame for the same instance.
+
 ## WLL flags and special types
 
 **CONFIRMED** The loader skips the area word, then steps 12 bytes at a time. The six little-endian words give wall ID, VMP, shape, special type, wall flags and automap value. It stores the low bytes of the final three separately. CD `0x47350–0x47421`, floppy `0x50B33–0x50C04`. The WLL flag table in memory is CD `DS:531E` or floppy `DS:87C4`.
@@ -163,6 +172,17 @@
 **CONFIRMED** Syscall `0x5A` returns the complete zero-extended WLL byte (CD `0x134F0–0x1352A`, floppy `0x17EB3–0x17EED`). There are four calls in each 60-script corpus. One compares the whole byte to zero, so a hypothetical set bit could affect that test when all other bits are clear. The example calls ask for block 172, face 1 at CD `L08.PAK+0xCAA8` and floppy `CHAPTER2.PAK+0x23687`. The other three call sites apply masks of 0 or 7 in the adjacent instructions (CD `L01.PAK+0xD08F`, `L12.PAK+0xEEFA`, `L13.PAK+0x823C`, floppy `CHAPTER1.PAK+0x58601`, `CHAPTER4.PAK+0x17CC4, +0x18A26`).
 
 **UNCONFIRMED** A dedicated role for bit `0x40` remains open. The follow-up compared the original WLL records, the door flag writes, direct accesses to CD `DS:531E` and floppy `DS:87C4`, and the EMC queries. The direct tests inspected use masks such as collision 7, door state `0x30` and draw flag `0x80` (CD `0xC91C, 0x481AB, 0x3EA1A`, floppy `0x10138, 0x5198B, 0x47B60`). A trace of an isolated WLL copy with only bit `0x40` toggled would test for a hidden pointer-relative consumer. The known whole-byte zero test should be accounted for separately.
+
+**CONFIRMED, level-1 runtime control.** English CD 1.02 reached
+level 1 through the [installed launcher](../NEEDS_A_RUNNING_GAME.md#working-launch-for-the-english-dos-cd).
+The resident getter at `MAIN.EXE+0x134F0` matched guest linear
+`0x11710` (load segment `01A2`). With game `DS=2FCF`, the bytes
+at `DS:531E + id` for all 52 original `LEVEL1.WLL` records matched
+the shipped flags both before and after a forward/turn/click sequence.
+Those declared IDs range from 0 to 79, and every flag had bit `0x40`
+clear. For example, wall 3 stayed `0xAF` (record at `L01.PAK+0x109E9`,
+flag at record +8, `+0x109F1`). **UNCONFIRMED:** the proposed level-8
+block-172 contrast still needs a native level-8 starting state.
 
 ### Additional wall consumers in both editions
 
