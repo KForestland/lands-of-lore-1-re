@@ -4,6 +4,14 @@
 
 It contains documentation, tools and small tables of numbers. It contains no game files and no dumps of game pictures, sounds or text; the only game-derived images are five small ones: three examples in `examples/` and two level schematics in `docs/images/`.
 
+## At a glance
+
+- **What this is:** documentation of every data file and the main rules of the original 1993 DOS game (CD and floppy editions), checked against the game files and the original program.
+- **What you can do today:** read every file type with a tool (pictures, sprites, animations, sound, speech, music, fonts, text, maps, scripts, saves), draw any level, disassemble every level script, and look up how combat, magic and monsters work.
+- **Start in five minutes:** the [Quick start](#quick-start-5-minutes) below, then [Start here, by goal](docs/START_HERE.md), [How the game works](docs/HOW_THE_GAME_WORKS.md) or the [worked example](docs/tutorial-one-event.md).
+- **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md): 11 of 18 questions are answered, 5 mostly, 2 partly. Some need a [running game](docs/NEEDS_A_RUNNING_GAME.md).
+- **The three games:** [LoL1](https://github.com/KForestland/lands-of-lore-1-re) · [LoL2](https://github.com/KForestland/lands-of-lore-2-re) · [LoL3](https://github.com/KForestland/Lands-of-lore-3-re) ([what they share](docs/series-formats.md), [how the engine changed](docs/engine-evolution.md)).
+
 ![Level 12 drawn by tools/level_renderer.py --schematic](docs/images/level12_schematic.png)
 
 *Level 12 drawn from its map file alone (`tools/level_renderer.py --level 12 --schematic`): open squares light, walls dark, doors and switches orange, decorated walls marked red.*
