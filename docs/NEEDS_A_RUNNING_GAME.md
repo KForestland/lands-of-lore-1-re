@@ -182,6 +182,13 @@ runtime data-segment and slot-file offsets. [Native global layout](unknowns/17_n
 | CD | `7FE4`, `81DF`, `8202` | `0x268`, `0x463`, `0x486` |
 | floppy | `B48A`, `B685` | `0x25D`, `0x458` |
 
+**CONFIRMED, CD movement and round trip.** On two original
+loads and saves, all three watched bytes were zero. The only
+watch hits were DOS reads and writes of the global block.
+Moving from block 557 to 526 and then turning at block 526
+changed the expected fields in the new slots.
+[Watch addresses and native save bytes](unknowns/17_native_save_fields.md#cd-movement-and-save-round-trip)
+
 **UNCONFIRMED.** Any byte-specific writer or reader. Start a new
 game, arm read and write watches after initialization, change the
 active character and lamp state, enter another level, then save,
@@ -201,6 +208,11 @@ Question: [Q18 in OPEN_QUESTIONS](OPEN_QUESTIONS.md).
 256, 64 and 256, critical byte zero at initialization and final word
 155 (CD `L27.PAK+0xACB9`, floppy `CHAPTER8.PAK+0x3C940`).
 [Definition and pointer evidence](unknowns/18_native_records.md#additional-native-pointer-tests)
+
+**CONFIRMED, level-1 saved control.** The CD slot the game wrote in the probe run contains
+four active slot-1 monster rows, all with mode 1. The current level
+byte at `+0x269` is 1. No played level-27 slot was available.
+[Native row offsets and next test](unknowns/18_native_records.md#level-one-saved-control)
 
 **UNCONFIRMED.** Reads of the three modifier words and final word
 through a copied pointer, and any live write to the critical byte.

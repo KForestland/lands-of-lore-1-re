@@ -118,3 +118,21 @@ write to the critical byte beyond initialization or loading.
 Use the adjacent +0x0A read as a control to verify the address
 and active definition slot. The raw byte counts and attached
 offsets above bound the static result.
+
+### Level-one saved control
+
+**CONFIRMED.** In the CD 1.02 slot written by the game in the probe run
+(not shipped; SHA-256 prefix `746b8748466f`), the level byte at `+0x269` is 1 and the
+level-1 chunk length at `+0x1D87` is 1,529. The four occupied
+46-byte monster rows at `+0x1D98`, `+0x1DC6`, `+0x1DF4` and
+`+0x1E22` have definition slot 1 and mode 1 (row +0x20 and
++0x14 respectively). Their blocks are 589, 524, 271 and 271
+(row +5). These are the guard-level records loaded from the
+first level, whose native initialization uses slot 1.
+[Level 1 initializers](../levels/level01.md#level1ini)
+
+**UNCONFIRMED.** The definition reads and critical-byte writes
+in a level-27 fight. The original game was played to level 1
+and no played level-27 slot was available. A native level-27
+slot can drive the watches above and verify the +0x0A control
+while the same monster takes and deals damage.

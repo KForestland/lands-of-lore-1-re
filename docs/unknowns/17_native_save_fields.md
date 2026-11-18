@@ -45,4 +45,33 @@ The four-byte character and monster fields skipped by the importer are native fa
 
 **CONFIRMED** The loader restores these bytes as part of its block read and the writer copies them again. No normalization of these particular bytes appears in the surrounding save and load code (CD `MAIN.EXE+0x4898D–0x48A09, +0x48B92–0x48BBF`, floppy `+0x5204C–0x52094, +0x521ED–0x52209`).
 
-**UNCONFIRMED** The zero initialization and narrow accesses to the adjacent fields make alignment or unused space plausible. The targeted static check compared literal data addresses, direct memory operands, and accesses beginning at the preceding field. For example, the CD occurrence of word `81DF` at `MAIN.EXE+0x1EE77` straddles `add bx, di` and the next instruction, while `+0x4A8E1` is part of `mov bx, di` followed by `and bx, 0x7FFF`. Neither is a memory access. The individual meanings remain open because a pointer-relative access can avoid the literal address. The examined local DOS originals contained level sidecars and no complete LoL1 `_SAVEnnn.DAT`. To settle this, watch the five runtime addresses above after initialization, through a save/load round trip and subsequent gameplay, and distinguish block copies from any byte-specific write or consumer.
+**UNCONFIRMED** The zero initialization and narrow accesses to the adjacent fields make alignment or unused space plausible. The targeted static check compared literal data addresses, direct memory operands, and accesses beginning at the preceding field. For example, the CD occurrence of word `81DF` at `MAIN.EXE+0x1EE77` straddles `add bx, di` and the next instruction, while `+0x4A8E1` is part of `mov bx, di` followed by `and bx, 0x7FFF`. Neither is a memory access. The individual meanings remain open because a pointer-relative access can avoid the literal address. The floppy witness is a level sidecar. The CD round trip below exercises the full save and load paths.
+
+
+### CD movement and save round trip
+
+**CONFIRMED.** In English CD 1.02, the memory watch addresses
+for `DS:7FE4/81DF/8202` were linear `0x37CD4/37ECF/37EF2`
+with the program data segment `2FCF`. The three bytes were zero
+after startup. After attaching, the watchpoints returned two
+loads and two saves for each byte. All six writes came from
+INT 21h file reads and all six reads went to INT 21h file
+writes, stopped at the same DOS interrupt dispatch site. These
+are the bulk loads and saves at `MAIN.EXE+0x4898D–0x4899D`
+and `+0x48B92–0x48BA2`. Movement, turning and ordinary menu
+use between them produced no other access in this trial.
+
+| CD slot written by the game in this run (not shipped, not tracked), SHA-256 prefix | Block at `+0x254` | Facing at `+0x263` | Bytes at `+0x268/+0x463/+0x486` |
+|---|---:|---:|---|
+| `477b08b82ecd` | 557 | 0 | 0, 0, 0 |
+| `0ca8eaddc728` | 526 | 0 | 0, 0, 0 |
+| `746b8748466f` | 526 | 1 | 0, 0, 0 |
+
+The first save was taken in the initial room. The game loaded
+it, moved forward and right, and wrote the second slot. It
+then reloaded the second slot, turned right while staying on
+block 526, and wrote the third. All three slots end at
+`0x1427F` and hold level 1 at `+0x269`. **UNCONFIRMED.**
+Byte-specific access during a lamp change, a party change, a
+level transition, or other play. The three fields' general
+roles and the floppy runtime result remain open.
