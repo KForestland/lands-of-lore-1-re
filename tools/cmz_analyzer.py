@@ -23,29 +23,20 @@ import os
 import sys
 from collections import Counter
 
-sys.path.insert(0, '/home/bob')
-from lol1_decompress_lcw import decompress_lcw
+import lol1lib as L
 
-PAK_DIR = "/media/bob/Arikv/REFERENCE/game_files/lol1/DATA"
-INDEX_FILE = "/home/bob/lol1_pak_index.json"
-OUTPUT_FILE = "/home/bob/lol1_wall_type_analysis.json"
-
-
-def read_pak_entry(pak_path, offset, size):
-    with open(pak_path, 'rb') as f:
-        f.seek(offset)
-        return f.read(size)
+USAGE = """
+  cmz_analyzer.py                       # per-level summary
+  cmz_analyzer.py --out walltypes.json  # same shape as data/wall_type_analysis.json
+  cmz_analyzer.py --check               # rebuild and compare with data/wall_type_analysis.json
+"""
 
 
 def decompress_cmz(data):
+    """Bitmap header + Frame4 (lol1lib.load_bitmap, ScummVM Screen::loadBitmap)."""
     if len(data) < 12:
         return None
-    # Try relative mode first (works for CMZ)
-    compressed = b'\x00' + data[10:]
-    result = decompress_lcw(compressed)
-    if result is None:
-        result = decompress_lcw(data[10:])
-    return result
+    return L.load_bitmap(data)[2]
 
 
 def analyze_cmz_blocks(decompressed):
@@ -131,35 +122,16 @@ def analyze_cmz_blocks(decompressed):
 
 
 def main():
-    with open(INDEX_FILE, 'r') as f:
-        index = json.load(f)
+    a = L.tool_args(__doc__ + USAGE).parse_args()
+    quiet = a.check
 
     results = {}
     all_wall_types = set()
 
     for level_num in range(1, 30):
-        pak_name = f"L{level_num:02d}.PAK"
-        cmz_name = f"LEVEL{level_num}.CMZ"
-
-        if pak_name not in index["pak_files"]:
-            print(f"  SKIP: {pak_name} not in index")
+        raw = L.level_member(level_num, "CMZ", a.data)
+        if raw is None:
             continue
-
-        cmz_entry = None
-        for entry in index["pak_files"][pak_name]["entries"]:
-            if entry["name"] == cmz_name:
-                cmz_entry = entry
-                break
-
-        if cmz_entry is None:
-            continue
-
-        pak_path = os.path.join(PAK_DIR, pak_name)
-        if not os.path.exists(pak_path):
-            print(f"  SKIP: {pak_path} not on disk")
-            continue
-
-        raw = read_pak_entry(pak_path, cmz_entry["offset"], cmz_entry["size"])
         decompressed = decompress_cmz(raw)
 
         if decompressed is None:
@@ -176,12 +148,19 @@ def main():
 
         n_types = len(analysis["unique_wall_types"])
         size_ok = "OK" if analysis["size_match"] else f"MISMATCH(exp={analysis['expected_data_size']})"
-        print(f"  Level {level_num:2d}: len={analysis['len_per_block']} "
+        if not quiet: print(f"  Level {level_num:2d}: len={analysis['len_per_block']} "
               f"blocks={analysis['n_blocks_parsed']} "
               f"wall_types={n_types} "
               f"size={size_ok} "
               f"decomp={analysis['decompressed_size']}")
 
+    if quiet:
+        ref = L.repo_json("wall_type_analysis.json")
+        ok = len(results) == 29 and all(r["size_match"] for r in results.values())
+        same = ref is not None and json.loads(json.dumps(results)) == ref["per_level"]
+        print(f"CHECK cmz: {len(results)} levels, all sizes 6+1024*len: {ok}, "
+              f"matches data/wall_type_analysis.json: {same if ref else 'no file'}")
+        return 0 if ok and (same or ref is None) else 1
     print(f"\n=== SUMMARY ===")
     print(f"Levels analyzed: {len(results)}")
     print(f"Total unique wall types: {len(all_wall_types)}")
@@ -200,10 +179,9 @@ def main():
         "per_level": results
     }
 
-    with open(OUTPUT_FILE, 'w') as f:
-        json.dump(output, f, indent=2)
-    print(f"\nSaved to {OUTPUT_FILE}")
+    if a.out:
+        L.write_json(a.out, output)
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

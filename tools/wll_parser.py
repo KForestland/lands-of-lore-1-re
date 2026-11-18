@@ -26,15 +26,13 @@ import struct
 import os
 import sys
 
-PAK_DIR = "/media/bob/Arikv/REFERENCE/game_files/lol1/DATA"
-INDEX_FILE = "/home/bob/lol1_pak_index.json"
-OUTPUT_FILE = "/home/bob/lol1_wll_parsed.json"
+import lol1lib as L
 
-
-def read_pak_entry(pak_path, offset, size):
-    with open(pak_path, 'rb') as f:
-        f.seek(offset)
-        return f.read(size)
+USAGE = """
+  wll_parser.py                 # per-level summary
+  wll_parser.py --out wll.json  # full parse (same shape as data/wll_parsed.json)
+  wll_parser.py --check         # rebuild and compare with data/wll_parsed.json
+"""
 
 
 def parse_wll(data):
@@ -71,8 +69,8 @@ def parse_wll(data):
 
 
 def main():
-    with open(INDEX_FILE, 'r') as f:
-        index = json.load(f)
+    a = L.tool_args(__doc__ + USAGE).parse_args()
+    quiet = a.check
 
     all_results = {}
     # Collect cross-level stats
@@ -80,26 +78,9 @@ def main():
     wall_type_to_vmp = {}
 
     for level_num in range(1, 30):
-        pak_name = f"L{level_num:02d}.PAK"
-        wll_name = f"LEVEL{level_num}.WLL"
-
-        if pak_name not in index["pak_files"]:
+        raw = L.level_member(level_num, "WLL", a.data)
+        if raw is None:
             continue
-
-        wll_entry = None
-        for entry in index["pak_files"][pak_name]["entries"]:
-            if entry["name"] == wll_name:
-                wll_entry = entry
-                break
-
-        if wll_entry is None:
-            continue
-
-        pak_path = os.path.join(PAK_DIR, pak_name)
-        if not os.path.exists(pak_path):
-            continue
-
-        raw = read_pak_entry(pak_path, wll_entry["offset"], wll_entry["size"])
         parsed = parse_wll(raw)
 
         if parsed is None:
@@ -119,7 +100,7 @@ def main():
             else:
                 n_without += 1
 
-        print(f"  Level {level_num:2d}: shape_idx={parsed['shape_list_index']} "
+        if not quiet: print(f"  Level {level_num:2d}: shape_idx={parsed['shape_list_index']} "
               f"records={parsed['n_records']} "
               f"with_vmp={n_with_vmp} without={n_without}")
 
@@ -133,6 +114,8 @@ def main():
             level_result["wall_types"][f"0x{wt:02x}"] = rec
         all_results[f"level{level_num:02d}"] = level_result
 
+    if quiet:
+        return check(all_results)
     # Summary
     print(f"\n=== CROSS-LEVEL SUMMARY ===")
     print(f"Unique VMP map values: {sorted(vmp_map_values)}")
@@ -179,10 +162,20 @@ def main():
         "per_level": all_results
     }
 
-    with open(OUTPUT_FILE, 'w') as f:
-        json.dump(output, f, indent=2)
-    print(f"\nSaved to {OUTPUT_FILE}")
+    if a.out:
+        L.write_json(a.out, output)
+
+
+def check(per_level):
+    ref = L.repo_json("wll_parsed.json")
+    n = sum(v["n_records"] for v in per_level.values())
+    if ref is None:
+        print(f"CHECK wll: {len(per_level)} files, {n} records (no data/wll_parsed.json to compare)")
+        return 0 if len(per_level) == 29 else 1
+    same = json.loads(json.dumps(per_level)) == ref["per_level"]
+    print(f"CHECK wll: {len(per_level)} files, {n} records, matches data/wll_parsed.json: {same}")
+    return 0 if same and len(per_level) == 29 else 1
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

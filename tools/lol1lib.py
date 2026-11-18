@@ -209,3 +209,45 @@ def add_data_arg(parser):
                         help="game DATA folder (default: $LOL1_DATA or %(default)s)")
     parser.add_argument("--pak", default=None,
                         help="search only this PAK (default: all PAKs, loose files first)")
+
+
+# --------------------------------------------------------------------------
+# Shared command line for the older tools
+# --------------------------------------------------------------------------
+
+REPO_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
+
+
+def tool_args(doc, out_help="write the JSON result here (default: print a summary only)"):
+    """argparse parser with --data, --pak, --out and --check."""
+    import argparse
+    ap = argparse.ArgumentParser(description=doc, formatter_class=argparse.RawDescriptionHelpFormatter)
+    add_data_arg(ap)
+    ap.add_argument("--out", help=out_help)
+    ap.add_argument("--check", action="store_true",
+                    help="parse the whole corpus and compare with the repo's data/ JSON where one exists; one line, exit 1 on mismatch")
+    return ap
+
+
+def level_member(level, ext, data_dir=DEFAULT_DATA):
+    """Bytes of LEVELn.<ext> from Lnn.PAK, or None when absent."""
+    try:
+        return find_member(f"LEVEL{level}.{ext}", data_dir, f"L{level:02d}.PAK")[1]
+    except (FileNotFoundError, OSError):
+        return None
+
+
+def repo_json(name):
+    import json
+    p = os.path.join(REPO_DATA, name)
+    if not os.path.isfile(p):
+        return None
+    with open(p) as f:
+        return json.load(f)
+
+
+def write_json(path, obj):
+    import json
+    with open(path, "w") as f:
+        json.dump(obj, f, indent=2)
+    print("wrote", path)
