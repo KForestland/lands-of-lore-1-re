@@ -33,7 +33,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (21 checks; 
 | TLC (CD) | [tlc.md](formats/tlc.md) | `tlc_reader.py` | 29/29 CD; LS has none | — |
 | PAL / COL | [palette.md](formats/palette.md) | `cps_reader.py --pal-from` | 11/11 are 768 bytes (CD); level use of 3 PALs by script scan | Q14 |
 | FNT | [fnt.md](formats/fnt.md) | `fnt_reader.py` | CD 4, ENG 7, LS 9 | — |
-| EMC2 scripts (INF/INI) | [emc2.md](formats/emc2.md); full page `emc2_scripts.md` being added | disassembler `emc2_decompile.py` being added | CD 60/60, LS 60/60, 0 unknown opcodes or functions (independently re-checked) | Q8 |
+| EMC2 scripts (INF/INI) | [emc2.md](formats/emc2.md); full page `emc2_scripts.md` being added | disassembler `emc2_decompile.py` being added | CD 60/60, LS 60/60, 0 unknown opcodes or functions; native dispatch tables located (independently re-checked) | Q8 (downstream effect only) |
 | TIM sequences | [tim.md](formats/tim.md) | `parse_tim.py` | 139/139 `FORM…AVFS`; command use counted by two independent walkers | native effect of a few unimplemented commands |
 | ADV / DRV / TBL | [drivers.md](formats/drivers.md) | `decode_dialogue.py` (TRIG.TBL) | drivers identified (Miles Sound System code); TRIG.TBL decoded (copy-protection text) | driver internals are code, not documented |
 
@@ -49,7 +49,7 @@ The readers have been run on all three. The JSON files in `data/` describe CD `D
 
 ## Game rules and executable tables
 
-The pages `executable_tables.md` and `savegame_format.md` are being added in the same pass; their content was re-checked against the data independently.
+The pages `executable_tables.md`, `savegame_format.md` and `game_rules.md` are being added in the same pass; their content was re-checked against the data independently.
 
 | Topic | Documented | Checked on data | Open |
 |-------|-----------|-----------------|------|
@@ -57,7 +57,7 @@ The pages `executable_tables.md` and `savegame_format.md` are being added in the
 | Spells (17 x 28 bytes), experience thresholds, character defaults (9 x 130), difficulty modifiers, CD price table | `executable_tables.md` | offsets in all three executables, values equal ScummVM's tables | native meaning of a few fields |
 | Item types (285) and monster properties (79 script calls) | `executable_tables.md`, [emc2.md](formats/emc2.md) | supplied by scripts in both editions; 4 item rows differ between editions | Q18 |
 | Save file (original `_SAVEnnn.DAT`, level-state `_LEVELn.TMP`, ScummVM saves) | `savegame_format.md` | save-name and version strings and section sizes in both executables; 4 LS `_LEVELn.TMP` files; 11 ScummVM saves end where the layout predicts | Q17 |
-| Combat, magic, experience and skills, monster behaviour, light, time | — | — | Q7 |
+| Combat, magic, experience and skills, monster behaviour, light, time | `game_rules.md` | in both executables (disassembled): dice and random generator, armour reduction; per the page also hit test, damage categories, experience awards; data: spell damage tables, experience thresholds, monster mode flags. Magic effects, light, time, regeneration, most monster transitions: ScummVM only | Q7 (native check of the reference-only rules; WLL flag meanings) |
 
 ## Tools
 
@@ -82,4 +82,4 @@ All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--dat
 
 ## What "done" means here
 
-A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 10 of the 21 format rows meet that: LCW, CPS, SHP (CD and floppy; the demo was not read), WSA, VOC, TLC, FNT, text, TIM (command table), ADV/DRV/TBL (identified; the drivers are code). Eight more have a page, a reader and a passing check but one or more numbered open points: PAK, TLK, CMZ, WLL, VCN/VMP, XXX, DAT, EMC2. Three are only partly documented: XMI/C55/PCS and ADL (Q15), PAL/COL (Q14). Of the rules and tables rows, four are documented and checked; the game rules (Q7) are not written yet.
+A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 10 of the 21 format rows meet that: LCW, CPS, SHP (CD and floppy; the demo was not read), WSA, VOC, TLC, FNT, text, TIM (command table), ADV/DRV/TBL (identified; the drivers are code). Eight more have a page, a reader and a passing check but one or more numbered open points: PAK, TLK, CMZ, WLL, VCN/VMP, XXX, DAT, EMC2. Three are only partly documented: XMI/C55/PCS and ADL (Q15), PAL/COL (Q14). All five rules and tables rows are documented. Four are checked against the data; the game-rules row is checked natively for its core combat arithmetic, and the rest of it is ScummVM's version (Q7).

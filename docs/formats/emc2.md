@@ -19,5 +19,5 @@ Their content was re-checked against the data with an independent decoder (funct
 
 ## Open
 
-- [Q8](../OPEN_QUESTIONS.md): native effect and arguments of function 0x7E (called once on CD, twice on floppy; no handler in ScummVM).
-- Native handler bodies were not checked; function effects are ScummVM's (UNCONFIRMED for the original).
+- [Q8](../OPEN_QUESTIONS.md), mostly answered: the original executables keep their own function tables (192 far pointers at CD `MAIN.EXE+0x33F64`, 187 at floppy `MAIN.EXE+0x3D1EE`, entry 0x00-0xBA). Entry 0x7E points to a handler that takes no arguments, calls one engine routine and returns 1. CONFIRMED (disassembled). Its downstream effect is UNCONFIRMED.
+- Apart from 0x7E, native handler bodies were not checked; function effects are ScummVM's (UNCONFIRMED for the original).

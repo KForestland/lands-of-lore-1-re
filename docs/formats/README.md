@@ -39,6 +39,6 @@ One page per file type of *Lands of Lore: The Throne of Chaos* (Westwood, 1993, 
 | [tim.md](tim.md) | `*.TIM` | `tools/parse_tim.py` | CONFIRMED: container and command use (Q6 answered) |
 | [drivers.md](drivers.md) | `*.ADV *.DRV *.TBL` | `tools/decode_dialogue.py` (TRIG.TBL) | CONFIRMED: drivers identified (code, not documented inside); TRIG.TBL decoded (Q5 answered) |
 
-Pages being added in the same pass, not yet in this checkout: `docs/executable_tables.md` (tables inside `MAIN.EXE`: spells, characters, experience levels, difficulty, prices) and `docs/savegame_format.md` (original and ScummVM save files). See [`../STATUS.md`](../STATUS.md).
+Pages being added in the same pass, not yet in this checkout: `docs/executable_tables.md` (tables inside `MAIN.EXE`: spells, characters, experience levels, difficulty, prices), `docs/savegame_format.md` (original and ScummVM save files) and `docs/game_rules.md` (combat, magic, experience, monsters, light, time). See [`../STATUS.md`](../STATUS.md).
 
 Inventory note (CONFIRMED, `pak_reader.py --check`): the closure memo's "81 PAKs, 1163 entries" covers only the top level of the CD `DATA/` folder. The CD also has `DATA/ENG`, `DATA/FRE`, `DATA/GER`, each with 17 PAKs and 378 members (INTRO1-9, FINALE*, HISTORY, INTROVOC, a language GENERAL/STARTUP, NEW6P/NEW8P/INTRO fonts, .TXT, .DIP). `DATA/ENG/GENERAL.PAK` is not byte-identical to `DATA/GENERAL.PAK`. The 30 `NN.TLK` files hold another 4912 members.
