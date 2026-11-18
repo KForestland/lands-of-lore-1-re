@@ -21,14 +21,14 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 
 ### `check_all.py`
 
-Run every tool's `--check` (22 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (23 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;23p"
+$ python3 tools/check_all.py | sed -n "1,3p;24p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 22 CHECKS PASSED
+ALL 23 CHECKS PASSED
 ```
 
 ### `pak_reader.py`
@@ -262,9 +262,25 @@ $ python3 tools/emc2_decompile.py L01.PAK --entry LEVEL1.INI | grep -E "^; L01|T
   0033  sysCall          0x0A loadBlockProperties [arg0=TEXT[3] "LEVEL1.CMZ"]
 ```
 
+### `save_reader.py`
+
+Save files field by field: original `_SAVEnnn.DAT`, the original game's level files `_LEVELn.TMP`, and ScummVM's LoL saves. `--json out.json` writes every field. `--check` reads every such file in the game folder (and its parent) and in ScummVM's save folder (`--saves`), and checks each ends where the layout predicts; it also runs the original-save layout on blank files of the documented sizes, since no original `_SAVEnnn.DAT` has been available.
+
+```
+$ python3 tools/save_reader.py /path/to/LANDSoL/_LEVEL1.TMP
+level file; ends at 1621 as the layout predicts: True
+  difficulty 1, 15 changed wall bytes, 4 monster slots in use, 0 flying objects
+$ python3 tools/save_reader.py ~/.local/share/scummvm/saves/lol-cd.008
+ScummVM save, CD, version 21: "daraicale cave 2"; ends at 84912 as the layout predicts: True
+  Ak'shel    HP 32/32  MP 99/99  skills [1, 1, 3]  XP [57, 1, 2095]
+  Baccata    HP 22/22  MP 18/18  skills [1, 1, 3]  XP [1, 1, 4016]
+  Lora       HP 48/48  MP 5/5  skills [1, 4, 1]  XP [1, 15001, 1]
+  level 6, block 257 (x 1, y 8), facing 2, money 58, 49 game flags set, levels stored [1, 2, 3, 4, 5, 6, 7], 73 items in use
+```
+
 ### `tests/test_emc2_corpus.py`
 
-Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its 22nd check.
+Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its 23rd check.
 
 ```
 $ python3 tests/test_emc2_corpus.py

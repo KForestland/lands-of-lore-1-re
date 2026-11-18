@@ -4,6 +4,8 @@ This page documents original DOS `_SAVE%03d.DAT` files, native `_LEVELn.TMP` sid
 
 The CD addresses are file offsets in `DATA/HARDRIVE/MAIN.EXE`, identical to the member at `WESTWOOD.001+0x28C46`. The second edition is LANDSoL `MAIN.EXE`. See [Executable tables](executable_tables.md) for both images. Native multi-byte integers are little-endian. ScummVM save fields are big-endian except the compressed wrapper and individual bytes (Save:55–56,346–494).
 
+Reader: `tools/save_reader.py FILE` prints these fields for all three kinds of file (`--json` for every field).
+
 ## Native header and section boundaries
 
 **CONFIRMED** The executables contain the save filename pattern at CD `MAIN.EXE+0x32CB4` and LANDSoL `MAIN.EXE+0x38ED5`. Native serializers write fixed-length sections in this order.

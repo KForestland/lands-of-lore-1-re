@@ -4,7 +4,7 @@ You need Python 3.8+, Pillow (`pip install Pillow`) and your own copy of *Lands 
 
 ```bash
 export LOL1_DATA=/path/to/your/LOL1/DATA
-python3 tools/check_all.py        # 22 checks; the last line should read ALL 22 CHECKS PASSED
+python3 tools/check_all.py        # 23 checks; the last line should read ALL 23 CHECKS PASSED
 ```
 
 Words you do not know are in the [glossary](GLOSSARY.md).
@@ -46,7 +46,7 @@ Words you do not know are in the [glossary](GLOSSARY.md).
 
 ## I want to read or change a save game
 
-[savegame_format.md](savegame_format.md) lays out the original `_SAVEnnn.DAT` files and ScummVM's saves field by field. There is no save editor in this repository; the offsets there are what one would need.
+[savegame_format.md](savegame_format.md) lays out the original `_SAVEnnn.DAT` files and ScummVM's saves field by field. Read one with `python3 tools/save_reader.py FILE` (original `_SAVEnnn.DAT`, `_LEVELn.TMP`, or a ScummVM save; `--json` writes every field). There is no save editor; the offsets in the page are what one would need.
 
 ## I want to know which edition I have
 

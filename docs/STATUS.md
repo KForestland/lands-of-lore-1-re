@@ -9,7 +9,7 @@
 - **Checked on data**: the tool's `--check` parses every file of that kind. CD = the top-level `DATA/` folder of the CD-ROM edition with spoken dialogue (version CD1.02); ENG = its `DATA/ENG` folder; LS = LANDSoL, an English floppy-edition installation (no speech, chapter-based PAKs). Details: [formats/README.md](formats/README.md).
 - **Open**: what is not known yet, as numbered in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 
-Run every check at once: `python3 tools/check_all.py --data <DATA>` (22 checks; all pass on the CD and on the floppy edition, about 6 seconds).
+Run every check at once: `python3 tools/check_all.py --data <DATA>` (23 checks; all pass on the CD and on the floppy edition, about 6 seconds).
 
 ## File formats
 
@@ -56,12 +56,12 @@ Pages: [executable_tables.md](executable_tables.md), [savegame_format.md](savega
 | Where the executables are | [executable_tables.md](executable_tables.md) | CD: inside `WESTWOOD.001` (the CD's install archive) and loose in `DATA/HARDRIVE` (`MAIN.EXE`, `MAINW.EXE`), byte-identical; LS `MAIN.EXE` | — |
 | Spells (17 x 28 bytes), experience thresholds, character defaults (9 x 130), difficulty modifiers, CD price table | [executable_tables.md](executable_tables.md) | offsets in all three executables, values equal ScummVM's tables | native meaning of a few fields |
 | Item types (285) and monster properties (79 script calls) | [executable_tables.md](executable_tables.md), [emc2.md](formats/emc2.md) | supplied by scripts in both editions; 4 item rows differ between editions; native record layouts traced ([Q18](unknowns/18_native_records.md)) | a few field roles (Q18) |
-| Save file (original `_SAVEnnn.DAT`, level-state `_LEVELn.TMP`, ScummVM saves) | [savegame_format.md](savegame_format.md) | save-name and version strings and section sizes in both executables; 4 LS `_LEVELn.TMP` files; 11 ScummVM saves end where the layout predicts; skipped native fields traced in both executables ([Q17](unknowns/17_native_save_fields.md)) | three single bytes; no original save examined (Q17) |
+| Save file (original `_SAVEnnn.DAT`, level-state `_LEVELn.TMP`, ScummVM saves) | [savegame_format.md](savegame_format.md); reader `tools/save_reader.py` | save-name and version strings and section sizes in both executables; 4 LS `_LEVELn.TMP` files; 11 ScummVM saves end where the layout predicts; skipped native fields traced in both executables ([Q17](unknowns/17_native_save_fields.md)) | three single bytes; no original save examined (Q17) |
 | Combat, magic, experience and skills, monster behaviour, light, time | [game_rules.md](game_rules.md) | in both executables (disassembled): dice and random generator, armour reduction; per the page also hit test, damage categories, experience awards; data: spell damage tables, experience thresholds, monster mode flags. Magic effects, light, time, regeneration, most monster transitions: ScummVM only | Q7 (native check of the reference-only rules; WLL flag meanings) |
 
 ## Tools
 
-All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 22 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
+All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 23 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
 
 ## Corrections to the closure memo and the March data
 
