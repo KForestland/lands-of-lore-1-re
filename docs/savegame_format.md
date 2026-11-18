@@ -45,13 +45,15 @@ The floppy reader compares the five-byte field as a C string against `.13` at `M
 
 ## Global state
 
+[Native fields skipped during ScummVM import](unknowns/17_native_save_fields.md) gives the original options and audio fields.
+
 Offsets below are decimal relative to the start of global state, using version 21 for the ScummVM column. Field order comes from Save:107–202 and 386–430. **CONFIRMED** The serialization boundaries, native level index and mask are also anchored by CD `MAIN.EXE+0x48B02, +0x48BD8` and floppy `+0x52173, +0x52233`. Native fields that the reference skips are **UNCONFIRMED** except where noted. In ScummVM rows after the flags, `F` is the stored flag byte count.
 
 | Native | ScummVM | Type and field |
 | ---: | ---: | --- |
 | 0, 2, 4, 6 | 0, 2, 4, 6 | `u16` current block, party X, party Y, update flags |
 | 8, 9 | 8, 9 | `u8` script direction, selected spell |
-| 10 | — | A native `u16` with CD difficulty in bits 4–5. Remaining bits and the floppy field meaning are **UNCONFIRMED**. CD reader of the bits at `MAIN.EXE+0xCC86–0xCC93`; ScummVM skips both bytes (Save:114–115). |
+| 10 | — | A native `u16` options word with difficulty in bits 4–5 in both editions. See CD `MAIN.EXE+0xCC86–0xCC93` and floppy `MAIN.EXE+0x10498–0x104A5`; ScummVM skips both bytes (Save:114–115). |
 | 12, 13, 14 | 10, 11, 12 | `u8` scene default update, compass broken, drain magic |
 | 15, 17 | 13, 15 | `u16` facing, compass direction |
 | 19 | 17 | `i8` selected character |
@@ -61,16 +63,16 @@ Offsets below are decimal relative to the start of global state, using version 2
 | 118, 120, 122 | 115, 117, 119 | `i16` inventory cursor/scroll index, held item handle, last mouse region |
 | — | 121 | `u32` byte count `F` of flags, 100 in the checked version 21 files |
 | 124 | 125 | Native 40 × `u16` game-flag words, ScummVM `F` raw packed bytes. Flag ID is 16 × word index plus bit index in native saves. Save:134–159. |
-| 204 | — | 120 original bytes skipped |
+| 204 | — | 120 additional bytes from the native flag-table span, skipped |
 | 324 | 125 + F | 24 × `u16` script globals |
-| 372 | — | 152 original bytes skipped |
+| 372 | — | 152 additional bytes from the native script-global span, skipped |
 | 524, 525, 526 | 173 + F, 174 + F, 175 + F | `u8` brightness, `u8` lamp oil, `i8` lamp effect |
 | 527 | — | 1 original byte skipped |
 | 528 | 176 + F | `u16` money/credits |
 | 530 | 178 + F | 8 × `u16` secondary script globals |
 | 546 | 194 + F | Seven available-spell bytes |
 | 553 | 201 + F | `u32` level mask. Bit 0 is the level 1 snapshot. |
-| 557 | — | Six more bytes in CD only. The native loader tests several as booleans (CD `MAIN.EXE+0x489A0–0x48A1E`). Their complete meanings are **UNCONFIRMED**. |
+| 557 | — | Six more bytes in CD only. The first five are language, dialogue text, talking volume, sound volume and music volume. The last byte is **UNCONFIRMED**. See [Q17](unknowns/17_native_save_fields.md) for the native readers. |
 
 **UNCONFIRMED** Legacy ScummVM layouts have no example files checked here. The reader skips 80 bytes after characters for versions below 17, and four bytes after each item slot. Its version 14 flags comprise words 0–15, 26 and 36. Version 15 reads 40 words. Version 16 onward reads a count and a byte array (Save:104–105,134–159,189–202).
 
