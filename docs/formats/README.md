@@ -22,22 +22,22 @@ One page per file type of *Lands of Lore: The Throne of Chaos* (Westwood, 1993, 
 | [tlk.md](tlk.md) | CD speech `00.TLK`-`29.TLK` | `tools/tlk_verify.py`, `tools/voc_reader.py` | CONFIRMED (closure memo corrected); Q10 open |
 | [lcw.md](lcw.md) | Frame4 / LCW compression | `tools/lol1lib.py`, `tools/decode_frame4.py` | CONFIRMED |
 | [cps.md](cps.md) | `*.CPS` | `tools/cps_reader.py` | CONFIRMED |
-| [shp.md](shp.md) | `*.SHP` | `tools/shp_renderer.py` | CONFIRMED (closure memo corrected: no 2-byte prefix); Q1 open for other editions |
+| [shp.md](shp.md) | `*.SHP` | `tools/shp_renderer.py` | CONFIRMED on CD and floppy (closure memo corrected: no 2-byte prefix); demo unread (Q1) |
 | [wsa.md](wsa.md) | `*.WSA` | `tools/wsa_extract.py` | CONFIRMED |
 | [voc.md](voc.md) | `*.VOC` (and TLK members) | `tools/voc_reader.py` | CONFIRMED |
 | [music.md](music.md) | `*.XMI *.C55 *.ADL *.PCS` | `tools/extract_music.py` | containers only; Q15 open |
 | [text.md](text.md) | `*.ENG *.FRE *.GER` | `tools/decode_dialogue.py` | CONFIRMED |
-| [cmz.md](cmz.md) | `LEVELn.CMZ` | `tools/cmz_analyzer.py`, `tools/level_renderer.py` | CONFIRMED; Q2, Q3 (level 24's 9-byte blocks), Q11 open |
+| [cmz.md](cmz.md) | `LEVELn.CMZ` | `tools/cmz_analyzer.py`, `tools/level_renderer.py` | CONFIRMED (Q2 answered); Q3 (level 24's 9-byte blocks), Q11 open |
 | [wll.md](wll.md) | `LEVELn.WLL` | `tools/wll_parser.py` | CONFIRMED layout; meaning of flags Q7 |
-| [vcn_vmp.md](vcn_vmp.md) | `AREA.VCN`, `AREA.VMP` | `tools/vcn_vmp_reader.py`, `tools/tileset_mapper.py` | CONFIRMED; Q4, Q16 open |
+| [vcn_vmp.md](vcn_vmp.md) | `AREA.VCN`, `AREA.VMP` | `tools/vcn_vmp_reader.py`, `tools/tileset_mapper.py` | CONFIRMED (Q4 answered); Q16 open |
 | [xxx.md](xxx.md) | `LEVELn.XXX` | `tools/xxx_reader.py` | CONFIRMED; Q12 open |
 | [dat.md](dat.md) | `AREA.DAT` | `tools/dat_reader.py` | CONFIRMED; Q13 open |
 | [tlc.md](tlc.md) | CD `LEVELnn.TLC` | `tools/tlc_reader.py` | CONFIRMED (closure memo corrected) |
 | [palette.md](palette.md) | `*.PAL`, `*.COL` | `tools/cps_reader.py --pal-from` | CONFIRMED (sizes); Q14 open |
 | [fnt.md](fnt.md) | `*.FNT` | `tools/fnt_reader.py` | CONFIRMED |
 | [emc2.md](emc2.md) | `LEVELn.INF`, `LEVELn.INI`, `ITEM.INF`, `ONETIME.INF` | disassembler to be added (see page) | container CONFIRMED; Q8 open |
-| [tim.md](tim.md) | `*.TIM` | `tools/parse_tim.py` | container CONFIRMED; opcode table Q6 |
-| [drivers.md](drivers.md) | `*.ADV *.DRV *.TBL` | — | Q5 |
+| [tim.md](tim.md) | `*.TIM` | `tools/parse_tim.py` | CONFIRMED: container and command use (Q6 answered) |
+| [drivers.md](drivers.md) | `*.ADV *.DRV *.TBL` | `tools/decode_dialogue.py` (TRIG.TBL) | CONFIRMED: drivers identified (code, not documented inside); TRIG.TBL decoded (Q5 answered) |
 
 Pages being added in the same pass, not yet in this checkout: `docs/executable_tables.md` (tables inside `MAIN.EXE`: spells, characters, experience levels, difficulty, prices) and `docs/savegame_format.md` (original and ScummVM save files). See [`../STATUS.md`](../STATUS.md).
 

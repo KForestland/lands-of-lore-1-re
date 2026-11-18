@@ -19,23 +19,23 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (21 checks; 
 | TLK speech (CD) | [tlk.md](formats/tlk.md) | `tlk_verify.py`, `pak_reader.py`, `voc_reader.py` | 30 files, 4912 VOC members; names follow the engine's speech patterns | Q10 |
 | Frame4 / LCW | [lcw.md](formats/lcw.md) | `lol1lib.py`, `decode_frame4.py` | two independent ports agree on 140/140 CD files; every CPS/CMZ/VCN/VMP in CD, ENG, LS decodes to its stated size | — |
 | CPS | [cps.md](formats/cps.md) | `cps_reader.py` | CD 85/85, ENG 60/60, LS 112/112 | — |
-| SHP | [shp.md](formats/shp.md) | `shp_renderer.py` | strict decode CD 3492/3492, ENG 1269/1269, LS 3601/3601; 2-byte-prefix variant 0/197 | Q1 (other editions, byte dumps) |
+| SHP | [shp.md](formats/shp.md) | `shp_renderer.py` | strict decode CD 3492/3492, ENG 1269/1269, LS 3601/3601; 2-byte-prefix variant 0/197 | Q1 (demo only) |
 | WSA | [wsa.md](formats/wsa.md) | `wsa_extract.py`, `wsa_all_frames_extract.py` | CD 4480/4480 frames, ENG 2699/2699, LS 5227/5227 | — |
 | VOC | [voc.md](formats/voc.md) | `voc_reader.py` | CD 215 + 4912 in TLK, ENG 127, LS 277 | — |
 | XMI / C55 / PCS | [music.md](formats/music.md) | `extract_music.py` | IFF trees of all 51 IFF files among the 67 CD music files (rebuilds `data/music_inventory.json`) | Q15 |
 | ADL | [music.md](formats/music.md) | `extract_music.py` (raw only) | first bytes of the 16 CD ADL files (part of the 67) | Q15 |
 | ENG / FRE / GER text | [text.md](formats/text.md) | `decode_dialogue.py`, `extract_dialogue.py` | 90 files, 6495 strings, all bigram bytes in range (CD) | — |
-| CMZ level map | [cmz.md](formats/cmz.md) | `cmz_analyzer.py`, `level_renderer.py` | 29/29, size = 6 + 1024 x len (rebuilds the corrected `data/wall_type_analysis.json`) | Q2 (header bytes 0-3), Q3 (level 24's 9-byte blocks), Q11 (wall types missing from the WLL on levels 2, 3, 21) |
+| CMZ level map | [cmz.md](formats/cmz.md) | `cmz_analyzer.py`, `level_renderer.py` | 29/29, size = 6 + 1024 x len (rebuilds the corrected `data/wall_type_analysis.json`) | Q3 (meaning of level 24's extra 5 bytes per block), Q11 (wall types missing from the WLL on levels 2, 3, 21) |
 | WLL wall types | [wll.md](formats/wll.md) | `wll_parser.py` | 29/29, 1726 records (rebuilds `data/wll_parsed.json`) | Q7 (meaning of flag bits and special types) |
-| VCN / VMP | [vcn_vmp.md](formats/vcn_vmp.md) | `vcn_vmp_reader.py`, `tileset_mapper.py` | 13/13 sets CD and LS; 35 `loadLevelGraphics` calls mapped | Q4 (when YVEL2 is switched in on level 22), Q16 |
+| VCN / VMP | [vcn_vmp.md](formats/vcn_vmp.md) | `vcn_vmp_reader.py`, `tileset_mapper.py` | 13/13 sets CD and LS; 35 `loadLevelGraphics` calls mapped | Q16 |
 | XXX automap legend | [xxx.md](formats/xxx.md) | `xxx_reader.py` | 29 files, 73 records, CD and LS | Q12 |
 | DAT decorations | [dat.md](formats/dat.md) | `dat_reader.py` | 12/12 CD and LS | Q13 |
 | TLC (CD) | [tlc.md](formats/tlc.md) | `tlc_reader.py` | 29/29 CD; LS has none | — |
 | PAL / COL | [palette.md](formats/palette.md) | `cps_reader.py --pal-from` | 11/11 are 768 bytes (CD); level use of 3 PALs by script scan | Q14 |
 | FNT | [fnt.md](formats/fnt.md) | `fnt_reader.py` | CD 4, ENG 7, LS 9 | — |
 | EMC2 scripts (INF/INI) | [emc2.md](formats/emc2.md); full page `emc2_scripts.md` being added | disassembler `emc2_decompile.py` being added | CD 60/60, LS 60/60, 0 unknown opcodes or functions (independently re-checked) | Q8 |
-| TIM sequences | [tim.md](formats/tim.md) | `parse_tim.py` | 139/139 `FORM…AVFS` (rebuilds `data/tim_analysis.json`) | Q6 (opcode table) |
-| ADV / DRV / TBL | [drivers.md](formats/drivers.md) | — | names and sizes only | Q5 |
+| TIM sequences | [tim.md](formats/tim.md) | `parse_tim.py` | 139/139 `FORM…AVFS`; command use counted by two independent walkers | native effect of a few unimplemented commands |
+| ADV / DRV / TBL | [drivers.md](formats/drivers.md) | `decode_dialogue.py` (TRIG.TBL) | drivers identified (Miles Sound System code); TRIG.TBL decoded (copy-protection text) | driver internals are code, not documented |
 
 ## Corpus coverage
 
@@ -76,9 +76,10 @@ All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--dat
 9. WSA needs no per-file palette fix: frame offsets are relative to the frame data, which starts after the palette ([wsa.md](formats/wsa.md)).
 10. `data/wall_type_analysis.json` was built with the old LCW bug and had wrong wall counts; regenerated ([cmz.md](formats/cmz.md)).
 11. `data/tileset_mapping.json` (uint16 "tile ID" guess) replaced by the real level-to-set mapping. Level 25 draws its walls with CAVE1 and CAV_PLT3.PAL, not CATWALK ([vcn_vmp.md](formats/vcn_vmp.md)).
-12. `data/shp_inventory.json` (frame sizes up to 12,974,107 bytes) replaced; `data/shp_render_results.json` removed (it counted the old fallback decoder's output).
-13. Local machine paths removed from `data/pak_index.json` and `data/music_inventory.json`.
+12. `data/tim_analysis.json` lists opcodes 112 and 176, which are not TIM commands; superseded by the counts in [tim.md](formats/tim.md).
+13. `data/shp_inventory.json` (frame sizes up to 12,974,107 bytes) replaced; `data/shp_render_results.json` removed (it counted the old fallback decoder's output).
+14. Local machine paths removed from `data/pak_index.json` and `data/music_inventory.json`.
 
 ## What "done" means here
 
-A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 7 of the 21 format rows meet that: LCW, CPS, WSA, VOC, TLC, FNT, text. SHP will join them when Q1 confirms the header in the other editions. Eight more have a page, a reader and a passing check but one or more numbered open points: PAK, TLK, CMZ, WLL, VCN/VMP, XXX, DAT, EMC2. The remaining five are only partly documented: XMI/C55/PCS and ADL (Q15), PAL/COL (Q14), TIM (Q6), ADV/DRV/TBL (Q5). Of the rules and tables rows, four are documented and checked; the game rules (Q7) are not written yet.
+A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 10 of the 21 format rows meet that: LCW, CPS, SHP (CD and floppy; the demo was not read), WSA, VOC, TLC, FNT, text, TIM (command table), ADV/DRV/TBL (identified; the drivers are code). Eight more have a page, a reader and a passing check but one or more numbered open points: PAK, TLK, CMZ, WLL, VCN/VMP, XXX, DAT, EMC2. Three are only partly documented: XMI/C55/PCS and ADL (Q15), PAL/COL (Q14). Of the rules and tables rows, four are documented and checked; the game rules (Q7) are not written yet.

@@ -47,7 +47,7 @@ Line data (`screen.cpp:2095-2108`, `drawShapeProcessLineNoScaleUpwind`): each ro
 
 The closure memo (sections A and B.6) says shapes have a 12-byte header that starts with a 2-byte prefix. That came from the March 2026 renderer, which took the shape offsets as counted from the start of the file, not from byte 2. It therefore read each shape 2 bytes early. For shape 0 those 2 bytes are the high half of the table's end entry; for later shapes they are the last 2 bytes of the previous shape. The real header is the 10-byte one above.
 
-This agrees with ScummVM: the 2-byte prefix (`GameFlags::useAltShapeHeader`, `engines/kyra/detection.h:51`; skipped in `screen.cpp:1637-1638`) is set only for the LoL demo (`engines/kyra/detection_tables.h:63`), not for CD (`:56`) or floppy (`:58`). The demo itself was not read. Byte dumps per edition, including the demo, are [Q1](../OPEN_QUESTIONS.md).
+This agrees with ScummVM: the 2-byte prefix (`GameFlags::useAltShapeHeader`, `engines/kyra/detection.h:51`; skipped in `screen.cpp:1637-1638`) is set only for the LoL demo (`engines/kyra/detection_tables.h:63`), not for CD (`:56`) or floppy (`:58`). Independent byte dumps (three files per edition: `FOREST1.SHP` raw, `GUARD.SHP` and `ITEMICN.SHP` wrapped; shapes 0, middle and last) show the same 10-byte header on CD and floppy, at offset + 2. CONFIRMED. The demo was not read: [Q1](../OPEN_QUESTIONS.md).
 
 The closure memo's "3492/3492 frames" count was right in number, but the March 2026 tool reached it with fallbacks that accept any bytes. The strict decode above is what confirms it.
 

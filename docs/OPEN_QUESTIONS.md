@@ -1,15 +1,15 @@
 # Open questions
 
-Numbered so the format pages and [`STATUS.md`](STATUS.md) can point at them. Each is something not yet known about the original game files or rules. When one is answered, its page is updated and the entry says where.
+Numbered so the format pages and [`STATUS.md`](STATUS.md) can point at them. Each is something not yet known about the original game files or rules. When one is answered, its page is updated and the entry says so. Detailed notes for Q1-Q6 are being added as `docs/unknowns/01_shp_header.md` … `06_tim_opcodes.md`.
 
 | ID | Question | Page |
 |----|----------|------|
-| Q1 | SHP shape header in every edition: byte dumps of sample shapes from the CD, floppy and demo releases (the code says only the demo has 2 extra header bytes) | [formats/shp.md](formats/shp.md) |
-| Q2 | CMZ header bytes 0-3 (`20 00 20 00` on every level): what they are and whether anything reads them | [formats/cmz.md](formats/cmz.md) |
-| Q3 | Level 24's CMZ has 9 bytes per block instead of 4: what the extra 5 bytes hold, and why only this level | [formats/cmz.md](formats/cmz.md) |
-| Q4 | When the level 22 scripts switch between the YVEL1 and YVEL2 tile sets | [formats/vcn_vmp.md](formats/vcn_vmp.md) |
-| Q5 | The `.ADV`, `.DRV` and `.TBL` files: what each is, which program reads it, and the format as far as it is data | [formats/drivers.md](formats/drivers.md) |
-| Q6 | The full TIM opcode table: number, name, parameters, effect, how many scripts use each | [formats/tim.md](formats/tim.md) |
+| Q1 | SHP shape header in every edition. **Answered for CD and floppy** (10-byte header, byte dumps match; 2026-11-18). Still open: the demo release, which was not read | [formats/shp.md](formats/shp.md) |
+| Q2 | CMZ header bytes 0-3. **Answered:** `20 00 20 00` on all 29 levels of both editions, read by no engine code found. Calling them width and height (32 x 32) is a reading of the values, not of code | [formats/cmz.md](formats/cmz.md) |
+| Q3 | Level 24's CMZ has 9 bytes per block instead of 4: what the extra 5 bytes hold, and why only this level. Measured (nine tail patterns, identical file in both editions); meaning still open | [formats/cmz.md](formats/cmz.md) |
+| Q4 | When the level 22 scripts switch between YVEL1 and YVEL2. **Answered:** a click in a screen rectangle while block 145's north wall is type 8 loads YVEL2 and sets game flag 357; `LEVEL22.INI` reloads YVEL2 when flag 357 is set; another script path loads YVEL1 and clears the flag. Decorations stay YVEL1 | [formats/vcn_vmp.md](formats/vcn_vmp.md) |
+| Q5 | The `.ADV`, `.DRV` and `.TBL` files. **Answered:** 7 Miles Design sound drivers (code), named by `LANDS.EXE`, `MAIN.EXE`, `FINALE.EXE`; `TRIG.TBL` is the copy-protection prompt string table | [formats/drivers.md](formats/drivers.md) |
+| Q6 | The full TIM opcode table. **Answered** for the 139 CD scripts and the floppy intro/outro; a few ScummVM-unimplemented commands remain (see the page) | [formats/tim.md](formats/tim.md) |
 | Q7 | Game rules as formulas: combat, magic, experience and skills, monster behaviour, light, time; meaning of the WLL wall flags and special types | [STATUS.md](STATUS.md#game-rules-and-executable-tables), [formats/wll.md](formats/wll.md) |
 | Q8 | What script function 0x7E did in the original (called 1x on CD, 2x on floppy; ScummVM has no handler) | [formats/emc2.md](formats/emc2.md) |
 | Q9 | Which PAK wins when two PAKs hold the same member name | [formats/pak.md](formats/pak.md) |
