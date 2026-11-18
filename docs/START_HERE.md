@@ -39,7 +39,8 @@ Words you do not know are in the [glossary](GLOSSARY.md). The examples write int
 
 1. [formats/emc2.md](formats/emc2.md), then [emc2_scripts.md](emc2_scripts.md) (every opcode and all 192 script functions).
 2. Disassemble a level script: `python3 tools/emc2_decompile.py L01.PAK --entry LEVEL1.INI` (CD; on the floppy use `CHAPTER1.PAK`) (bare PAK names are looked up in `$LOL1_DATA`). Disassemble all 60 scripts as a test: `python3 tests/test_emc2_corpus.py`.
-3. Cut-scene scripts: [formats/tim.md](formats/tim.md) and [unknowns/06_tim_opcodes.md](unknowns/06_tim_opcodes.md).
+3. [Follow one wall click](tutorial-one-event.md) through its original EMC2 entry.
+4. Cut-scene scripts: [formats/tim.md](formats/tim.md) and [unknowns/06_tim_opcodes.md](unknowns/06_tim_opcodes.md).
 
 ## I want to understand the game rules
 
