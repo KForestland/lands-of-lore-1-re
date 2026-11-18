@@ -86,7 +86,7 @@ Short references `lol_dos_cd.h`, `lol_dos.h` and `lol_dos_english.h` are under `
 | 8 | Flags | `u16` |
 | 9 | `unkB` | `u16` |
 
-The table gives the script ABI checked on data and reference field widths from `script_lol.cpp:241–261` and `engines/kyra/engine/lol.h:156–167`. **UNCONFIRMED** Native memory offsets and purpose of `unkB` and `unkD`. `unkD` has no assignment in the reference syscall.
+The table gives the script ABI checked on data and reference field widths from `script_lol.cpp:241–261` and `engines/kyra/engine/lol.h:156–167`. The native 13-byte record has no extra `unkD` byte. The word at `+0B` still has an **UNCONFIRMED** purpose. See [native record layout](unknowns/18_native_records.md#item-definition) for the stores in both executables.
 
 **CONFIRMED** Four decoded rows differ between editions. Indexes 243 and 249 use shape indexes 45 and 44 on CD, 43 and 42 on LANDSoL. Indexes 263 and 264 use equipment/type 0 on CD, 5 on LANDSoL. The reference definition loader special-cases 264 (`script_lol.cpp:249–252`). For indexes 243, 249, 263 and 264 respectively, see CD `STARTUP.PAK+0x2319B, +0x23279, +0x2346F, +0x2348F` and floppy `GENERAL.PAK+0xDC9F2, +0xDCAD0, +0xDCCC6, +0xDCCE6`.
 
@@ -106,4 +106,4 @@ The table gives the script ABI checked on data and reference field widths from `
 | 35–38 | Attack chance, attack skill type, defense chance, defense skill type. | `script_lol.cpp:969–972` |
 | 39–41 | Three sound IDs. | `script_lol.cpp:974–975` |
 
-The call layout and argument counts above are **CONFIRMED** at the listed data offsets. The reference uses typed memory records in `engines/kyra/engine/lol.h:92–112`. **UNCONFIRMED** The native executable's in-memory field offsets and any duplicate copy of the script definitions inside the images.
+The call layout and argument counts above are **CONFIRMED** at the listed data offsets. The reference uses typed memory records in `engines/kyra/engine/lol.h:92–112`. The [native monster definition](unknowns/18_native_records.md#monster-definition) is 83 bytes and has its own far pointer to the fighting stats. A duplicate copy of the script definitions inside the images remains **UNCONFIRMED**.
