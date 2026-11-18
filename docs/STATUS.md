@@ -9,7 +9,7 @@
 - **Checked on data**: the tool's `--check` parses every file of that kind. CD = the top-level `DATA/` folder of the CD-ROM edition with spoken dialogue (version CD1.02); ENG = its `DATA/ENG` folder; LS = LANDSoL, an English floppy-edition installation (no speech, chapter-based PAKs). Details: [formats/README.md](formats/README.md).
 - **Open**: what is not known yet, as numbered in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 
-Run every check at once: `python3 tools/check_all.py --data <DATA>` (24 checks; all pass on the CD and on the floppy edition, about 6 seconds).
+Run every check at once: `python3 tools/check_all.py --data <DATA>` (25 checks; all pass on the CD and on the floppy edition, about 6 seconds).
 
 ## File formats
 
@@ -37,6 +37,10 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (24 checks; 
 | TIM sequences | [tim.md](formats/tim.md) | `parse_tim.py` | 139/139 `FORM…AVFS`; command use counted by two independent walkers | native effect of a few unimplemented commands |
 | ADV / DRV / TBL | [drivers.md](formats/drivers.md) | `decode_dialogue.py` (TRIG.TBL) | drivers identified (Miles Sound System code); TRIG.TBL decoded (copy-protection text) | driver internals are code, not documented |
 
+## Level sheets
+
+[`levels/`](levels/README.md) has one sheet per level, written by `tools/level_report.py` from the level's own files: 1475 script entries described, 241 item and 522 monster placements found through constant script arguments (including one level of subroutine calls), 659 text ids. Arguments computed while the game runs are shown as `?`; which player action raises event bit 1 versus 2 (and 4 versus 8) is UNCONFIRMED.
+
 ## Corpus coverage
 
 | Corpus | Containers | Members | In the March inventory |
@@ -61,7 +65,7 @@ Pages: [executable_tables.md](executable_tables.md), [savegame_format.md](savega
 
 ## Tools
 
-All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 24 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
+All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 25 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
 
 ## Corrections to the closure memo and the March data
 

@@ -21,14 +21,14 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 
 ### `check_all.py`
 
-Run every tool's `--check` (24 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (25 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;25p"
+$ python3 tools/check_all.py | sed -n "1,3p;26p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 24 CHECKS PASSED
+ALL 25 CHECKS PASSED
 ```
 
 ### `pak_reader.py`
@@ -194,6 +194,16 @@ KEEP.DAT in KEEP.PAK: 26 records
 1 {'shapeIndex': [65535, 17, 20, 21, 65535, 65535, 65535, 65535, 65535, 65535], 'scaleFlag': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'shapeX': [0, 99, 65, ...
 ```
 
+### `level_report.py`
+
+A sheet per level made from its files: graphics loaded, wall types used, clickable walls, every script entry with a one-line description, items and monsters placed, automap legend, text ids. `--out-dir docs/levels` writes all 29 and an index.
+
+```
+$ python3 tools/level_report.py --level 1 | grep -E "^- Area|^\| block 621 "
+- Area (WLL header): 0 = KEEP (decorations `KEEP.SHP` / `.DAT`).
+| block 621 (x 13, y 19) | party steps in, wall clicked | moves the party to level 2, block 106; a character speaks; shows a message; set global var; plays a sound |
+```
+
 ### `tlc_reader.py`
 
 CD transparency tables of a level.
@@ -291,7 +301,7 @@ ScummVM save, CD, version 21: "daraicale cave 2"; ends at 84912 as the layout pr
 
 ### `tests/test_emc2_corpus.py`
 
-Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its 24th check.
+Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its 25th check.
 
 ```
 $ python3 tests/test_emc2_corpus.py

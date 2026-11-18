@@ -13,6 +13,7 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 - **One page per file format** in [`docs/formats/`](docs/formats/README.md): layout, a worked example with real bytes, which part of the game reads it, and how it was checked.
 - **How the game works**: [`docs/HOW_THE_GAME_WORKS.md`](docs/HOW_THE_GAME_WORKS.md), with the details in [scripts](docs/emc2_scripts.md), [rules](docs/game_rules.md), [tables in the program](docs/executable_tables.md) and [save files](docs/savegame_format.md).
 - **Tools** in [`tools/`](tools/README.md): a reader for every format, map and sprite renderers, a script disassembler, text and sound extractors. Each has `--help`, writes only where you tell it, and has a `--check` that tests it against every file of its kind.
+- **[Level sheets](docs/levels/README.md)**: one page per level, made from its files: graphics, wall types, clickable walls, every script entry with a one-line description, items and monsters placed, automap legend.
 - **[Start here, by goal](docs/START_HERE.md)** and a **[glossary](docs/GLOSSARY.md)**.
 
 ## Quick start (5 minutes)
@@ -25,7 +26,7 @@ cd lands-of-lore-1-re
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt                 # Pillow, for PNG output
 export LOL1_DATA=/path/to/your/LOL1/DATA        # the game's DATA folder
-python3 tools/check_all.py                      # 24 checks, ends with ALL 24 CHECKS PASSED
+python3 tools/check_all.py                      # 25 checks, ends with ALL 25 CHECKS PASSED
 python3 tools/level_renderer.py --level 1 --out-dir maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
 ```
@@ -50,6 +51,7 @@ Two editions were read: the CD-ROM edition with speech (version CD1.02) and an E
 ## Repository layout
 
 - [`docs/`](docs): format pages, how the game works, status, open questions, glossary
+- [`docs/levels/`](docs/levels/README.md): one sheet per level
 - [`docs/unknowns/`](docs/unknowns): detailed notes on the numbered questions (answered and open)
 - [`tools/`](tools/README.md): readers, renderers and extractors
 - [`tests/`](tests): the script disassembler's corpus test

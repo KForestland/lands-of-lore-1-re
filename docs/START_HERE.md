@@ -4,13 +4,14 @@ You need Python 3.8+, Pillow (`pip install Pillow`) and your own copy of *Lands 
 
 ```bash
 export LOL1_DATA=/path/to/your/LOL1/DATA
-python3 tools/check_all.py        # 24 checks; the last line should read ALL 24 CHECKS PASSED
+python3 tools/check_all.py        # 25 checks; the last line should read ALL 25 CHECKS PASSED
 ```
 
 Words you do not know are in the [glossary](GLOSSARY.md).
 
 ## I want to read the level maps
 
+0. Start with the level's sheet in [levels/](levels/README.md): how the level is put together, block by block (made by `python3 tools/level_report.py --level N`).
 1. Read [formats/cmz.md](formats/cmz.md) (the 32 x 32 grid of wall types) and [formats/wll.md](formats/wll.md) (what each wall type is).
 2. Draw a map: `python3 tools/level_renderer.py --level 1 --out-dir maps/ --schematic` (a plain drawing) or without `--schematic` (with the game's wall tiles).
 3. See which tile set, decorations and palette each level uses: `python3 tools/tileset_mapper.py`.
