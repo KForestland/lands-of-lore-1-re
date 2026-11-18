@@ -135,7 +135,7 @@ def main():
         p = os.path.join(root, f)
         if ext in GAME:
             bad.append(f"{f} (game file type)")
-        elif ext == ".png" and not f.startswith(PNG_OK):
+        elif ext in (".png", ".svg") and not f.startswith(PNG_OK):
             bad.append(f"{f} (PNG outside examples/ and docs/images/)")
         elif os.path.isfile(p) and os.path.getsize(p) > SIZE_LIMIT and f not in SIZE_ALLOWED:
             bad.append(f"{f} (larger than 300 KB)")
