@@ -1,30 +1,60 @@
 # SHP sprite shapes
 
-**What:** shape files: monsters, items, decorations (`AREA.SHP`, read through the `AREA.DAT` table), portraits (`FACEnn.SHP`), GUI. A file is a table of shapes; each shape is a small header plus line-encoded pixels, optionally Frame4-compressed.
+**What:** a table of small sprites: monsters, items, doors, portraits (`FACEnn.SHP`), spell effects, GUI pieces, and the wall decorations of each area (`AREA.SHP`, used through the `AREA.DAT` table, see [dat.md](dat.md)).
 
-**Edition read:** CD (89 files in `DATA/`, 49 per language folder); LANDSoL (95).
+**Edition read:** CD `DATA/` (89 files, 3492 shapes), CD `DATA/ENG` (49 files, 1269 shapes), LANDSoL (95 files, 3601 shapes).
 
 ## File layout
+
+77 of the 89 CD files are wrapped in the CPS bitmap container ([cps.md](cps.md), Frame4); unwrap them first. The 12 area decoration files (`KEEP.SHP`, `CAVE1.SHP`, …) are stored plain, because the engine reads them piece by piece from the file (`engines/kyra/engine/scene_lol.cpp:216-233`). CONFIRMED (`tools/shp_renderer.py --out`, field `wrapped_in_bitmap_container`).
+
+After unwrapping:
 
 | Offset | Type | Meaning |
 |--------|------|---------|
 | 0 | uint16 | number of shapes n |
-| 2 | uint32 x n | shape offsets, relative to byte 2 |
+| 2 | uint32 x n | shape offsets, **counted from byte 2**: shape i starts at offset[i] + 2 |
+| 2 + 4n | uint32 | end entry (offset of the end of the last shape) |
 
-Source: `engines/kyra/engine/scene_lol.cpp:216-233` (`getLevelDecorationShapes`: seek `index*4 + 2`, read uint32, `+ 2`). CONFIRMED in code; on the data `KEEP.SHP` starts `4e 00` (78 shapes) then `3c 01 00 00 …`. CONFIRMED (byte dump, CD).
+Source: `Screen_v2::getPtrToShape` `engines/kyra/graphics/screen_v2.cpp:192-201` (`shpFile + offset + 2`); `getLevelDecorationShapes` `scene_lol.cpp:220-222` (same). CONFIRMED: `KEEP.SHP` has n = 78, the table ends at 0x13E, offset[0] = 0x13C, so shape 0 starts at 0x13E, right after the table.
 
-## Shape header — OPEN, see Grok item 1
+## Shape layout
 
-The closure memo (section A and B.6) says the LoL shape header is 12 bytes with a 2-byte prefix ("alt shape header"). ScummVM's own flags say otherwise for the full game:
+Source: `Screen::drawShape` `engines/kyra/graphics/screen.cpp:1805-1842`; the header writer `Screen::encodeShape` `:2833-2846` writes the same fields.
 
-- `GameFlags::useAltShapeHeader` "alternative shape header (uses 2 bytes more, those are unused though)" — `engines/kyra/detection.h:51`.
-- `Screen::drawShape` skips 2 bytes only when that flag is set — `engines/kyra/graphics/screen.cpp:1637-1638`; same for `getShapeSize` and friends at `:2834-2961`.
-- The flag is set only by `LOL_DEMO_FLAGS` (`engines/kyra/detection_tables.h:63`); `LOL_CD_FLAGS` (`:56`) and `LOL_FLOPPY_FLAGS` (`:58`) leave it false.
+| Offset | Type | Meaning |
+|--------|------|---------|
+| 0 | uint16 | flags: bit 0 = colour table follows; bit 1 = line data is **not** Frame4-compressed; bit 2 = a colour-count byte precedes the colour table |
+| 2 | uint8 | height |
+| 3 | uint16 | width |
+| 5 | uint8 | height again |
+| 6 | uint16 | shape size in bytes |
+| 8 | uint16 | frame size: length of the line data after decompression |
+| 10 | [uint8] | colour count (default 16), only when bit 2 |
+| … | [count bytes] | colour table, only when bit 0: pixel values are looked up in it |
+| … | | line data (Frame4 unless bit 1) |
 
-So by the code, CD and floppy shapes have **no** 2-byte prefix and only the demo has it. UNCONFIRMED on the data: Grok's item 1 (byte dumps of three shapes per edition) settles it. `tools/shp_renderer.py` renders 3492/3492 frames (memo) with its own header model; how it handles the prefix is part of that review.
+Line data (`screen.cpp:2095-2108`, `drawShapeProcessLineNoScaleUpwind`): each row is exactly `width` pixels. A nonzero byte is one pixel. A zero byte followed by n skips n transparent pixels.
 
-Remaining header fields (after any prefix), from `Screen::drawShape` `screen.cpp:1640ff`: byte 0 flags (bit 0 = compact/compressed, bit 1 = has colour table), height, width (uint16), height again, shape size, uncompressed size. UNCONFIRMED until item 1 lands.
+## Confirmed
+
+`tools/shp_renderer.py --check` decodes every shape strictly: every row fills its width exactly, the line data is exactly the frame size, and the two height bytes agree.
+
+- CD `DATA/`: 3492/3492 shapes. CD `DATA/ENG`: 1269/1269. LANDSoL: 3601/3601. CONFIRMED.
+- Negative control: with `--alt-header` (a 2-byte prefix before each header) **0 of 197** shapes decode on the CD. CONFIRMED.
+
+## Correction to the closure memo: no 2-byte prefix on CD or LANDSoL
+
+The memo (sections A and B.6) says shapes have a 12-byte header that starts with a 2-byte prefix. That came from the March renderer, which took the shape offsets as counted from the start of the file, not from byte 2. It therefore read each shape 2 bytes early. For shape 0 those 2 bytes are the high half of the table's end entry; for later shapes they are the last 2 bytes of the previous shape. The real header is the 10-byte one above.
+
+This agrees with ScummVM: the 2-byte prefix (`GameFlags::useAltShapeHeader`, `engines/kyra/detection.h:51`; skipped in `screen.cpp:1637-1638`) is set only for the LoL demo (`engines/kyra/detection_tables.h:63`), not for CD (`:56`) or floppy (`:58`). The demo itself was not read. Lead-order item 1 (Grok) settles the per-edition byte dumps independently.
+
+The memo's "3492/3492 frames" count was right in number, but the March tool reached it with fallbacks that accept any bytes. The strict decode above is what confirms it.
+
+## Colours
+
+Monster and item shapes are drawn through the scene palette plus run-time colour tables (`sprites_lol.cpp:908-980`), so a PNG made with a fixed CPS palette shows the right shapes in the wrong colours.
 
 ## Tool
 
-`tools/shp_renderer.py` (needs path edits, see STATUS).
+`tools/shp_renderer.py NAME.SHP [--out-dir pngs/] [--pal-from X.CPS]`, `--check`, `--out inventory.json`. Inventory: `data/shp_inventory.json`.

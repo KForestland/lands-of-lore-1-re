@@ -3,6 +3,8 @@
 **Date:** 2026-03-20
 **Source:** ScummVM `engines/kyra/engine/scene_lol.cpp`, `devtools/create_kyradat/resources/lol_dos.h`
 
+> **Corrections (2026-11-18), see [`STATUS.md`](STATUS.md) and [`formats/`](formats/README.md):** level 25 draws its walls with CAVE1 + CAV_PLT3.PAL (its SHP/DAT are CATWALK); YVEL2 is switched in by the level 22 scripts; the "unknown" bytes 0-3 below are the CMZ header (`20 00 20 00` on every level); VMP = 330 floor/ceiling words + 431 per wall page; the 8bpp VCN variant does not occur in LoL1; `lol1_tileset_mapping.json` is replaced by `data/tileset_mapping.json`.
+
 ## Rendering Pipeline (corrected)
 
 Previous assumption was wrong: CMZ does NOT contain uint16 "tile IDs" with a tileset byte.

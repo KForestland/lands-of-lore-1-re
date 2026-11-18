@@ -17,4 +17,4 @@ There is no mode flag: short copies are always relative, medium and long always 
 
 **Correction history:** the memo (section B.4) records the earlier decoder bug (relative/absolute mixed up), fixed in `tools/decode_frame4.py`.
 
-**Tool:** `tools/lol1lib.py: decode_frame4()` (port of the function above); `tools/decode_frame4.py` (older copy, needs its paths edited).
+**Tool:** `tools/lol1lib.py: decode_frame4()` (port of the function above); `tools/decode_frame4.py` (the March port; `--check` runs both ports on all 140 CPS, CMZ, VCN and VMP files of the CD: identical output, 140/140).

@@ -41,9 +41,33 @@ The memo's "431-entry pages, stride = 22×15 viewport + overhead" is now precise
 
 ## Open
 
-- Which script loads YVEL2 and when: Grok item 4. (`loadLevelGraphics` is called by script function `olol_loadLevelGraphics`, `engines/kyra/script/script_lol.cpp:208-212`, with the file name as a string; `scene_lol.cpp:315` names YVEL2 for the 16-colour mode.)
+- Which script loads YVEL2 and when: Grok item 4. Static scan (`tools/tileset_mapper.py`): only level 22 names YVEL2: `LEVEL22.INI` calls `loadLevelGraphics` with YVEL1, YVEL2, YVEL1 and `LEVEL22.INF` with YVEL2, YVEL1, YVEL1, YVEL2. CONFIRMED (calls on CD); when each runs is Grok's item. (`loadLevelGraphics` is called by script function `olol_loadLevelGraphics`, `engines/kyra/script/script_lol.cpp:208-212`, with the file name as a string; `scene_lol.cpp:315` names YVEL2 for the 16-colour mode.)
 - The shift table values on KEEP are 0, 16, …, 112 (CONFIRMED, `vcn_vmp_reader.py KEEP`): each tile picks one of 8 banks of 16 entries in the 128-byte colour table. What decides the bank per tile (artist choice vs. lighting) is UNCONFIRMED.
+
+## Which level uses which set
+
+The VCN/VMP set is chosen by the level script, not by the WLL area index: `loadLevelGraphics` (script function 0x09) names it. `tools/tileset_mapper.py` lists every call (35 on CD, the same count as the EMC2 function table). CONFIRMED on CD:
+
+| Levels | Set (+ override palette) |
+|--------|--------------------------|
+| 1 | KEEP |
+| 2 | FOREST1 + ALTPAL2.PAL |
+| 3, 24 | FOREST1 + ALTPAL1.PAL |
+| 10, 17 | FOREST1 |
+| 4 | MANOR |
+| 5-9 | CAVE1 |
+| 11 | SWAMP |
+| 12 | URBISH |
+| 13-16 | MINE1 |
+| 18-21 | TOWER1 |
+| 22 | YVEL1 and YVEL2 (switched by the scripts) |
+| 23 | CATWALK |
+| **25** | **CAVE1 + CAV_PLT3.PAL** (its WLL area, and so its SHP/DAT, is CATWALK) |
+| 26 | RUIN |
+| 27-29 | CIMMERIA |
+
+Correction: `docs/level_tileset_map.md` lists level 25 under CATWALK for VCN/VMP; that holds only for its decorations (SHP/DAT).
 
 ## Tool
 
-`tools/vcn_vmp_reader.py AREA [--png tiles.png]`, `--check`. Rendering of a whole level: `tools/level_renderer.py` (needs path edits).
+`tools/vcn_vmp_reader.py AREA [--png tiles.png]`, `--check`. Level maps: `tools/level_renderer.py --level N --out-dir d/` (top-down overview, `--check`). Level-to-set table: `tools/tileset_mapper.py` (`data/tileset_mapping.json`).

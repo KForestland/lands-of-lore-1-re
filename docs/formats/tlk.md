@@ -12,7 +12,7 @@ The memo (section A, "TLK: uint16 count + 8-byte entries (uint32 ID + uint32 off
 - On the data: `01.TLK` starts `f0 19 00 00 "00000.VOC\0"` — a PAK directory (first member at 0x19F0 = 6640). CONFIRMED.
 - All 30 parse as PAK: 4912 members, every one starts with `Creative Voice File`. CONFIRMED (`tools/voc_reader.py --check`: `215 in PAKs + 4912 in TLKs ... bad=none`).
 
-The memo's "Parsed + validated" for TLK came from `tools/tlk_verify.py`, whose own report already reads the files as name+offset directories ("directory size 6640 … first payload Creative Voice File"). That tool pairs each name with the *next* offset in its sample list (it prints `00000.VOC@50755`; the true start is 6640), so its sample offsets are shifted by one member. UNCONFIRMED whether that shift affects anything beyond the printed samples.
+The memo's "Parsed + validated" for TLK came from `tools/tlk_verify.py`, whose own report already reads the files as name+offset directories ("directory size 6640 … first payload Creative Voice File"). The March version of that tool paired each name with the *next* offset in its sample list (it printed `00000.VOC@50755`; the true start is 6640). It was rewritten on 2026-11-18.
 
 ## Member names
 
@@ -27,6 +27,10 @@ Built by `LoLEngine::snd_playCharacterSpeech`, `engines/kyra/sound/sound_lol.cpp
 
 Example on the data: `01.TLK` holds `00000.VOC`, `000_0.01`, `000_1.01`, `001A0.01`, … CONFIRMED (`pak_reader.py list 01.TLK`). The `NNNNN.VOC` members (59 in total) are not produced by these patterns; who plays them is UNCONFIRMED.
 
+## Confirmed
+
+`tools/tlk_verify.py --check` (CD): `30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none`. Every speech-pattern name carries its own TLK number or 00.
+
 ## Tool
 
-`tools/pak_reader.py list 01.TLK`; `tools/voc_reader.py 01.TLK:000_0.01 --wav out.wav`.
+`tools/pak_reader.py list 01.TLK`; `tools/voc_reader.py 01.TLK:000_0.01 --wav out.wav`; `tools/tlk_verify.py`.

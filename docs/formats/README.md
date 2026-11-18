@@ -17,12 +17,12 @@ Each page says what the file is, its layout, who reads it, how it was confirmed,
 | [tlk.md](tlk.md) | CD speech `00.TLK`-`29.TLK` | `tools/pak_reader.py`, `tools/voc_reader.py` | CONFIRMED (memo corrected) |
 | [lcw.md](lcw.md) | Frame4 / LCW compression | `tools/lol1lib.py` | CONFIRMED |
 | [cps.md](cps.md) | `*.CPS` | `tools/cps_reader.py` | CONFIRMED |
-| [shp.md](shp.md) | `*.SHP` | `tools/shp_renderer.py` | header per edition OPEN (Grok item 1) |
-| [wsa.md](wsa.md) | `*.WSA` | `tools/wsa_all_frames_extract.py` | header CONFIRMED |
+| [shp.md](shp.md) | `*.SHP` | `tools/shp_renderer.py` | CONFIRMED (memo corrected: no 2-byte prefix); Grok item 1 cross-check pending |
+| [wsa.md](wsa.md) | `*.WSA` | `tools/wsa_extract.py` | CONFIRMED |
 | [voc.md](voc.md) | `*.VOC` (and TLK members) | `tools/voc_reader.py` | CONFIRMED |
 | [music.md](music.md) | `*.XMI *.C55 *.ADL *.PCS` | `tools/extract_music.py` | containers only |
-| [text.md](text.md) | `*.ENG *.FRE *.GER` | `tools/decode_dialogue.py` | CONFIRMED (counts) |
-| [cmz.md](cmz.md) | `LEVELn.CMZ` | `tools/lol1lib.py`, `tools/cmz_analyzer.py` | bytes 0-3, L24 extra 5 bytes OPEN (Grok items 2, 3) |
+| [text.md](text.md) | `*.ENG *.FRE *.GER` | `tools/decode_dialogue.py` | CONFIRMED |
+| [cmz.md](cmz.md) | `LEVELn.CMZ` | `tools/cmz_analyzer.py`, `tools/level_renderer.py` | CONFIRMED; bytes 0-3, L24 extra 5 bytes OPEN (Grok items 2, 3) |
 | [wll.md](wll.md) | `LEVELn.WLL` | `tools/wll_parser.py` | CONFIRMED |
 | [vcn_vmp.md](vcn_vmp.md) | `AREA.VCN`, `AREA.VMP` | `tools/vcn_vmp_reader.py` | CONFIRMED; YVEL2 use OPEN (Grok item 4) |
 | [xxx.md](xxx.md) | `LEVELn.XXX` | `tools/xxx_reader.py` | CONFIRMED |
@@ -30,8 +30,10 @@ Each page says what the file is, its layout, who reads it, how it was confirmed,
 | [tlc.md](tlc.md) | CD `LEVELnn.TLC` | `tools/tlc_reader.py` | CONFIRMED (memo corrected) |
 | [palette.md](palette.md) | `*.PAL`, `*.COL` | `tools/cps_reader.py --pal-from` | CONFIRMED (sizes) |
 | [fnt.md](fnt.md) | `*.FNT` | `tools/fnt_reader.py` | CONFIRMED |
-| [emc2.md](emc2.md) | `LEVELn.INF`, `LEVELn.INI` | Sol item 7 | container CONFIRMED; tables OPEN (Sol item 7) |
+| [emc2.md](emc2.md) | `LEVELn.INF`, `LEVELn.INI`, `ITEM.INF`, `ONETIME.INF` | Sol's `tools/emc2_decompile.py` | CONFIRMED (Sol 7, reviewed PASS) |
 | [tim.md](tim.md) | `*.TIM` | `tools/parse_tim.py` | container CONFIRMED; opcode table OPEN (Grok item 6) |
 | [drivers.md](drivers.md) | `*.ADV *.DRV *.TBL` | — | OPEN (Grok item 5) |
+| [../executable_tables.md](../executable_tables.md) | `MAIN.EXE`, `MAINW.EXE` (CD, in `WESTWOOD.001` and `DATA/HARDRIVE`), LANDSoL `MAIN.EXE` | — | CONFIRMED offsets for spells, characters, XP, difficulty, prices (Sol 8a, reviewed PASS) |
+| [../savegame_format.md](../savegame_format.md) | `_SAVEnnn.DAT`, `_LEVELn.TMP`, ScummVM `lol-cd.nnn` | — | CONFIRMED section layout (Sol 8c, reviewed PASS) |
 
 Inventory note (CONFIRMED, `pak_reader.py --check`): the memo's "81 PAKs, 1163 entries" covers only the top level of the CD `DATA/` folder. The CD also has `DATA/ENG`, `DATA/FRE`, `DATA/GER`, each with 17 PAKs and 378 members (INTRO1-9, FINALE*, HISTORY, INTROVOC, a language GENERAL/STARTUP, NEW6P/NEW8P/INTRO fonts, .TXT, .DIP). `DATA/ENG/GENERAL.PAK` is not byte-identical to `DATA/GENERAL.PAK`. The 30 `NN.TLK` files hold another 4912 members. See [../STATUS.md](../STATUS.md).

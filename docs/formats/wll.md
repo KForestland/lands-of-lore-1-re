@@ -34,4 +34,4 @@ The meaning of each flag bit and special type is game logic, not file format: So
 
 ## Tool
 
-`tools/wll_parser.py` (needs path edits, see STATUS).
+`tools/wll_parser.py` (summary, `--out`, `--check` rebuilds `data/wll_parsed.json` exactly: 29 files, 1726 records). Wall types used by a CMZ but missing from its WLL: see [cmz.md](cmz.md#open).

@@ -29,7 +29,7 @@ CONFIRMED, `tools/pak_reader.py --check`:
 
 ## Tool
 
-`tools/pak_reader.py list|extract <PAK> [member]`, `--check`. Library: `tools/lol1lib.py: pak_entries()`. The older `tools/pak_indexer.py` builds a JSON inventory but has no `--help` and writes into a fixed path (see STATUS).
+`tools/pak_reader.py list|extract <PAK> [member]`, `--check`. Library: `tools/lol1lib.py: pak_entries()`. `tools/pak_indexer.py` rebuilds `data/pak_index.json` (`--check` matches it: 81 PAKs, 1163 members).
 
 ## Open
 

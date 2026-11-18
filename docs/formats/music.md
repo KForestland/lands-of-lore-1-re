@@ -19,4 +19,4 @@ What "C55" stands for (the memo says "Creative Music File"; the files are XMIDI 
 
 ## Tool
 
-`tools/extract_music.py` (inventory and raw extraction; needs path edits, see STATUS). No decoder to MIDI in this repo.
+`tools/extract_music.py` (inventory, `--out-dir` for raw files, `--check` rebuilds the file list and IFF trees of `data/music_inventory.json`: 67 files, no IFF parse errors). No decoder to MIDI in this repo.

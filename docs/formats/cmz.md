@@ -25,4 +25,12 @@ Source: `LoLEngine::loadBlockProperties` `engines/kyra/engine/scene_lol.cpp:242-
 
 ## Tool
 
-`tools/lol1lib.py: load_bitmap()`; `tools/cmz_analyzer.py`, `tools/level_renderer.py` (need path edits).
+`tools/lol1lib.py: load_bitmap()`; `tools/cmz_analyzer.py` (wall-type statistics, `--check`), `tools/level_renderer.py` (map PNGs, `--check`).
+
+## Correction: `data/wall_type_analysis.json`
+
+The March file was produced with the old LCW decoder (memo B.4) and had wrong wall counts on every level (headers were right). It was regenerated on 2026-11-18 with `cmz_analyzer.py`. On level 1 the solid blocks now show the expected pattern: (2,2,1,1) and (1,1,2,2) alternate 470/469 times, which is the checkerboard the floor/ceiling drawing uses (`scene_rpg.cpp:152-157`). CONFIRMED.
+
+## Open
+
+- Wall types used in the CMZ that the level's own WLL does not define: level 2 (46, 53-57, 59, 60), level 3 (58, 61, 63, 66, 67), level 21 (42). CONFIRMED on CD (`level_renderer.py --check`). ScummVM zero-fills the wall arrays once at start-up (`engines/kyra/engine/kyra_rpg.cpp:190`) and `loadLevelWallData` does not clear them, so such a wall keeps whatever an earlier level set, or 0. Whether the original behaves the same, and whether scripts replace these walls before they are seen, is UNCONFIRMED.

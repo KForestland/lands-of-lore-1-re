@@ -21,4 +21,4 @@ String count = first offset / 2, summed over the 30 files: ENG 2165, FRE 2165, G
 
 ## Tool
 
-`tools/decode_dialogue.py`, `tools/extract_dialogue.py` (need path edits, see STATUS).
+`tools/decode_dialogue.py LEVEL01.GER [--index n]` decodes straight from the game data (`--check`: 6495 strings, every bigram byte inside the tables, 1967 strings with accented characters). `tools/extract_dialogue.py --out-dir d/` writes the raw strings (`--check` matches `data/dialogue_summary.json`). The decode tables were compared with `engines/kyra/engine/util.cpp:30-48`: identical.
