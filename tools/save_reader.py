@@ -298,7 +298,7 @@ def main():
                 blank[(76 if tag[:2] == b"CD" else 65) + 520 + (563 if tag[:2] == b"CD" else 557) + i * 16 + 15] = 0x80
             if not read_original_save(bytes(blank))["size_ok"]:
                 bad.append(f"layout self-test {tag[:4].decode()}")
-        found = ", ".join(f"{v} {k}" for k, v in sorted(kinds.items())) or "no save files found"
+        found = ", ".join(f"{v} {k}{'s' if v != 1 else ''}" for k, v in sorted(kinds.items())) or "no save files found"
         print(f"CHECK save: {found}; original-save layout self-test (CD and floppy sizes); "
               f"every file ends where the layout predicts: bad={bad or 'none'}")
         return 0 if not bad else 1

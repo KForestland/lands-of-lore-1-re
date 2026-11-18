@@ -59,7 +59,7 @@ The native attack test follows the embedded stat pointer at `+14`; the monster i
 | --- | --- |
 | Item `+05,+07,+09` block/X/Y, `+0B` level, `+0C` property index, `+0E` shape/frame and flags | CD getter `+0x138F3–0x13929`; floppy `+0x182B6–0x182EC`. |
 | Item `+0E` bit 15 marks an available slot, low 13 bits can be replaced independently | CD `+0xB504–0xB517, +0x13A34–0x13A45`; floppy `+0xD66E–0xD681, +0x183F7–0x18408`. |
-| Monster `+14` mode, `+16` ID, `+17` direction, `+18` facing, `+1D` current HP, `+20` type, `+21` far pointer to definition | CD spawn code `+0x146B3–0x14769`; floppy spawn body `+0x18FB1`. Active slot 0 in original floppy `_LEVEL1.TMP` starts at `0x69`, and its pointer bytes are at `0x8A`. |
+| Monster `+14` mode, `+16` ID, `+17` direction, `+18` facing, `+1D` current HP, `+20` type, `+21` far pointer to definition | CD spawn code `+0x146B3–0x14769`; floppy spawn body `+0x18FB1`. Active slot 0 in a floppy `_LEVEL1.TMP` written by the game during play (not shipped; [save format](../savegame_format.md)) starts at `0x69`, and its pointer bytes are at `0x8A`. |
 
 ## Item price in the original scripts
 

@@ -104,7 +104,7 @@
 | 13 | Calls death handling once the death counter passes 2. | `0x12A18–0x12A23` → `0x12214–0x12284` | `0x173B7–0x173C2` → `0x16BB2–0x16C22` |
 | 14 | Clears the damage display and exits. | `0x12A25–0x12A2F` | `0x173C4–0x173CE` |
 | 15 | Used temporarily during the collision query. The existing mode is saved and restored. | `0x1145D–0x114B5` | `0x15EF9–0x15F51` |
-| 16 | An inactive slot value. | `0x12766–0x1276E` | `0x17104–0x1710C`, `_LEVEL5.TMP+0x63` |
+| 16 | An inactive slot value. | `0x12766–0x1276E` | `0x17104–0x1710C`, `_LEVEL5.TMP+0x63` (a level file the floppy game wrote during play, not shipped) |
 
 **CONFIRMED** Spawn HP is `floor(base HP × difficulty modifier 1 / 256)`, then `floor(result × (192 + 1d128) / 256)`, with a floor of 1 HP. CD skips the second multiply for type 2 on level 12. floppy always takes it. For example with normal difficulty, base HP 40 and a roll of 64, the result is 40 in either edition (CD `0x14740–0x147B2`, floppy `0x190D8–0x19139`).
 

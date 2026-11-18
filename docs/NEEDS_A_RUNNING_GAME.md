@@ -5,9 +5,10 @@ and a disposable copy of your own original CD or floppy installation.
 Check the edition by the size of `MAIN.EXE`: 356,928 bytes on the CD,
 373,872 on the floppy. Record the edition and sound configuration.
 
-To place a breakpoint, break on `BPINT 21 4B` when the launcher runs
-`MAIN.EXE`, step over it and read the child's PSP. The load segment is
-PSP + 0x10. For resident code, a file offset `F` is at
+To place a breakpoint, start the game, break into the debugger once it
+is running, and list the memory blocks with the DOSBox debugger's
+`MCBS` command: the PSP is the segment of the block owned by `MAIN`.
+The load segment is PSP + 0x10. For resident code, a file offset `F` is at
 `(load segment + (F − H) / 16) : ((F − H) mod 16)`, where the MZ header
 size `H` is 0x3800 on the CD and 0x4800 on the floppy. `DS:` values
 use the DS the debugger shows when stopped in game code. The
@@ -84,7 +85,9 @@ the executed target. A different current and saved video mode must
 reach the video helper with argument 9. Keep the recorded setup with
 the result since the callbacks can differ by installation.
 
-## Q17. Are the three isolated save bytes touched during play?
+## Q17. Are the isolated save bytes touched during play?
+
+There are three on the CD and two on the floppy (its block ends before `0x232`).
 
 Question: [Q17 in OPEN_QUESTIONS](OPEN_QUESTIONS.md).
 

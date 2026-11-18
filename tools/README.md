@@ -24,7 +24,7 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 Run every tool's `--check` (27 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;27p"
+$ python3 tools/check_all.py | sed -n "1,3p;28p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
@@ -312,7 +312,7 @@ Asset-policy guard, run by `check_all.py`: fails if git tracks any game file typ
 
 ```
 $ python3 tools/repo_guard.py --check
-CHECK repo_guard: 137 tracked files; game files, converted media, stray PNGs, files over 300 KB, machine paths, words from the local list, or commit identities: none (0); private word list: not present, skipped
+CHECK repo_guard: N tracked files; game files, converted media, stray PNGs, files over 300 KB, machine paths, words from the local list, or commit identities: none (0); private word list: not present, skipped
 ```
 
 ### `tests/test_emc2_corpus.py`
