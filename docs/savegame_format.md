@@ -51,7 +51,7 @@ Offsets below are decimal relative to the start of global state, using version 2
 | ---: | ---: | --- |
 | 0, 2, 4, 6 | 0, 2, 4, 6 | `u16` current block, party X, party Y, update flags |
 | 8, 9 | 8, 9 | `u8` script direction, selected spell |
-| 10 | — | 2 original bytes skipped |
+| 10 | — | A native `u16` with CD difficulty in bits 4–5. Remaining bits and the floppy field meaning are **UNCONFIRMED**. CD reader of the bits at `MAIN.EXE+0xCC86–0xCC93`; ScummVM skips both bytes (Save:114–115). |
 | 12, 13, 14 | 10, 11, 12 | `u8` scene default update, compass broken, drain magic |
 | 15, 17 | 13, 15 | `u16` facing, compass direction |
 | 19 | 17 | `i8` selected character |

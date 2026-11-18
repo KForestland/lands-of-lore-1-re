@@ -64,10 +64,10 @@ Short references `lol_dos_cd.h`, `lol_dos.h` and `lol_dos_english.h` are under `
 | --- | --- |
 | `00` | Name language ID |
 | `02` | MP costs, four words in rank order |
-| `0A`, `0C` | `field_a`, `field_c`, interpreted in the [magic rules](game_rules.md). |
+| `0A`, `0C` | `field_a`, `field_c`. Their native meanings remain **UNCONFIRMED**. |
 | `0E` | HP costs, four words in rank order |
 | `16`, `18` | `field_16`, `field_18`. Further native use **UNCONFIRMED**. |
-| `1A` | Spell flags. ScummVM uses low byte as effect ID and bit 8 for spell dispatch mode (`engines/kyra/engine/lol.cpp:2144–2179`). |
+| `1A` | Spell flags. ScummVM uses bit 8 to check the forward wall and tests the low byte for the Heal target click (`engines/kyra/engine/lol.cpp:2144–2175`, `engines/kyra/gui/gui_lol.cpp:1469–1476`). |
 
 ## Item types and item properties
 

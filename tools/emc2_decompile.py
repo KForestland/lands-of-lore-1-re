@@ -22,7 +22,8 @@ EVAL = ("and", "or", "==", "!=", ">", ">=", "<", "<=", "+", "-", "*", "/",
         ">>", "<<", "&", "|", "%", "^")
 
 # ScummVM engines/kyra/script/script_lol.cpp:2683–2974.
-# None represents an unimplemented dispatch slot.
+# None marks entries with no ScummVM handler. Slot 0x7E has a native handler
+# confirmed in both editions, documented in docs/emc2_scripts.md.
 FUNCTIONS = (
     'setWallType', 'getWallType', 'drawScene', 'rollDice',  # 0x00
     'moveParty', None, 'delay', 'setGameFlag',  # 0x04
@@ -55,7 +56,7 @@ FUNCTIONS = (
     'deleteLevelItem', 'calcInflictableDamagePerItem', 'distanceAttack', 'removeCharacterEffects',  # 0x70
     'checkInventoryFull', 'moveBlockObjects', None, None,  # 0x74
     'addSpellToScroll', 'playDialogueText', 'playDialogueTalkText', 'checkMonsterTypeHostility',  # 0x78
-    'setNextFunc', 'dummy1', None, 'suspendMonster',  # 0x7C
+    'setNextFunc', 'dummy1', 'updateAndServiceCallbacks', 'suspendMonster',  # 0x7C
     'setScriptTextParameter', 'triggerEventOnMouseButtonClick', 'printWindowText', 'countSpecificMonsters',  # 0x80
     'updateBlockAnimations2', 'checkPartyForItemType', 'blockDoor', 'resetTimDialogueState',  # 0x84
     'getItemOnPos', 'removeLevelItem', 'savePage5', 'restorePage5',  # 0x88
