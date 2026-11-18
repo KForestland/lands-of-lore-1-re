@@ -1,5 +1,7 @@
 # Start here, by goal
 
+[Format quick reference](QUICK_REFERENCE.md) pairs each documented game format with a command and its evidence.
+
 You need Python 3.8+, Pillow (`pip install Pillow`) and your own copy of *Lands of Lore: The Throne of Chaos* for DOS. Point the tools once at the folder holding `GENERAL.PAK` (on the CD the `DATA` folder; on the floppy the install folder). Either edition works; on the floppy, six checks (pak_index, wll, cmz, dialogue, music, tim) skip their comparison with the CD tables in `data/`:
 
 ```bash
