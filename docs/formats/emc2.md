@@ -16,7 +16,7 @@ IFF `FORM` with type `EMC2`; chunks `TEXT` (optional strings), `ORDR` (function 
 
 ## Open
 
-- [Q8](../OPEN_QUESTIONS.md), mostly answered: the original executables keep their own function tables (192 far pointers at CD `MAIN.EXE+0x33F64`, 187 at floppy `MAIN.EXE+0x3D1EE`, entries 0x00-0xBA: the floppy program simply has no functions 0xBB-0xBF, which only the CD scripts call). Entry 0x7E points to a handler that takes no arguments, calls one engine routine and returns 1. CONFIRMED (disassembled). Its downstream effect is UNCONFIRMED.
+- [Q8](../OPEN_QUESTIONS.md), answered: function 0x7E exits the game to DOS ([`../unknowns/08_native_script_exit.md`](../unknowns/08_native_script_exit.md)). Before that was known: the original executables keep their own function tables (192 far pointers at CD `MAIN.EXE+0x33F64`, 187 at floppy `MAIN.EXE+0x3D1EE`, entries 0x00-0xBA: the floppy program simply has no functions 0xBB-0xBF, which only the CD scripts call). Entry 0x7E points to a handler that takes no arguments, calls one engine routine and returns 1. CONFIRMED (disassembled). Its downstream effect is UNCONFIRMED.
 - Apart from 0x7E, native handler bodies were not checked; function effects are ScummVM's (UNCONFIRMED for the original).
 
 ## Worked example

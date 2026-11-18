@@ -67,7 +67,7 @@ Short references `lol_dos_cd.h`, `lol_dos.h` and `lol_dos_english.h` are under `
 | `0A`, `0C` | `field_a`, `field_c`. Their native meanings remain **UNCONFIRMED**. |
 | `0E` | HP costs, four words in rank order |
 | `16`, `18` | `field_16`, `field_18`. Further native use **UNCONFIRMED**. |
-| `1A` | Spell flags. ScummVM uses bit 8 to check the forward wall and tests the low byte for the Heal target click (`engines/kyra/engine/lol.cpp:2091–2122`, `engines/kyra/gui/gui_lol.cpp:1469–1476`). |
+| `1A` | **CONFIRMED** Both executables use bit 8 to check the forward wall and the low byte to index the paid-cast dispatch table (CD `MAIN.EXE+0x4FEEE–0x4FF17, +0x4FFE6–0x50018`, floppy `+0x5A1F3–0x5A21C, +0x5A2E9–0x5A31B`). ScummVM uses the low byte for the Heal target click (`engines/kyra/engine/lol.cpp:2091–2122`, `engines/kyra/gui/gui_lol.cpp:1469–1476`). |
 
 ## Item types and item properties
 

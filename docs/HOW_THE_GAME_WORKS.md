@@ -52,7 +52,7 @@ Each monster has a *mode*: waiting, walking to a place, watching, chasing, recov
 
 ## Light and time
 
-The lamp burns oil every 360 ticks of 1/60 second, and the screen darkens in steps as the oil runs low; characters regenerate every 1200 ticks ([game_rules.md](game_rules.md#light-and-time)). These timings are ScummVM's and still need a check in the original program ([Q7](OPEN_QUESTIONS.md)).
+The lamp burns oil every 360 ticks of 1/60 second, and the screen darkens in steps as the oil runs low; characters regenerate every 1200 ticks ([game_rules.md](game_rules.md#light-and-time)). These periods (360 and 1200 ticks, and the others in the game's 12-entry timer table) are confirmed in both original executables ([unknowns/07_native_rules.md](unknowns/07_native_rules.md)); how a tick converts to real time in the original is still open (Q7).
 
 ## Saving
 

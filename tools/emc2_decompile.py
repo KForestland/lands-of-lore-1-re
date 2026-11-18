@@ -57,7 +57,7 @@ FUNCTIONS = (
     'deleteLevelItem', 'calcInflictableDamagePerItem', 'distanceAttack', 'removeCharacterEffects',  # 0x70
     'checkInventoryFull', 'moveBlockObjects', None, None,  # 0x74
     'addSpellToScroll', 'playDialogueText', 'playDialogueTalkText', 'checkMonsterTypeHostility',  # 0x78
-    'setNextFunc', 'dummy1', 'updateAndServiceCallbacks', 'suspendMonster',  # 0x7C
+    'setNextFunc', 'dummy1', 'exitGame', 'suspendMonster',  # 0x7C
     'setScriptTextParameter', 'triggerEventOnMouseButtonClick', 'printWindowText', 'countSpecificMonsters',  # 0x80
     'updateBlockAnimations2', 'checkPartyForItemType', 'blockDoor', 'resetTimDialogueState',  # 0x84
     'getItemOnPos', 'removeLevelItem', 'savePage5', 'restorePage5',  # 0x88
