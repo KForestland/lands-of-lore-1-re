@@ -5,6 +5,7 @@ import argparse
 from collections import defaultdict
 from dataclasses import dataclass
 import json
+import os
 from pathlib import Path
 import struct
 import sys
@@ -303,11 +304,16 @@ def read_entry(path, offset, size):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("input", type=Path, help="Loose INF/INI script, or DOS PAK with --entry")
+    parser.add_argument("input", type=Path, help="Loose INF/INI script, or DOS PAK with --entry; "
+                        "a bare name such as L01.PAK is looked up in --data")
+    parser.add_argument("--data", type=Path, default=os.environ.get("LOL1_DATA"),
+                        help="the game's DATA folder for bare names (default: $LOL1_DATA)")
     parser.add_argument("--entry", help="INF/INI name within the PAK (case-insensitive)")
     parser.add_argument("-o", "--output", type=Path, help="Write listing here instead of stdout")
     args = parser.parse_args()
     try:
+        if not args.input.exists() and args.data and (args.data / args.input).exists():
+            args.input = args.data / args.input
         name = args.input.name
         if args.entry:
             for entry, offset, size in pak_entries(args.input):

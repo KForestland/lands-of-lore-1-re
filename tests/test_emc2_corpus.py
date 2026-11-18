@@ -2,6 +2,7 @@
 """Decompile and check every original LoL1 script in a DOS PAK corpus."""
 
 import argparse
+import os
 from collections import Counter
 from pathlib import Path
 import sys
@@ -54,9 +55,12 @@ def check_corpus(root):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("data", type=Path, nargs="+", help="One or more directories of original PAKs")
+    parser.add_argument("data", type=Path, nargs="*", help="One or more DATA folders of original PAKs (default: $LOL1_DATA)")
     args = parser.parse_args()
-    for root in args.data:
+    roots = args.data or ([Path(os.environ["LOL1_DATA"])] if os.environ.get("LOL1_DATA") else [])
+    if not roots:
+        parser.error("give a DATA folder or set $LOL1_DATA")
+    for root in roots:
         counts = check_corpus(root)
         print(f"{root}: PASS {counts['scripts']}/60 scripts, {counts['words']} DATA words, "
               f"{counts['instructions']} instructions, {counts['strings']} TEXT strings, "

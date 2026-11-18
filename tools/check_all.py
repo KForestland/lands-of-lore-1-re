@@ -19,17 +19,24 @@ def main():
     a = ap.parse_args()
     here = os.path.dirname(os.path.abspath(__file__))
     rc = 0
+    failed = []
     for r in READERS:
         p = subprocess.run([sys.executable, os.path.join(here, r + ".py"), "--check", "--data", a.data],
                            capture_output=True, text=True)
         print((p.stdout or p.stderr).strip().splitlines()[-1] if (p.stdout or p.stderr) else f"{r}: no output")
         rc |= p.returncode
+        if p.returncode:
+            failed.append(r)
     # EMC2 script corpus test (tests/test_emc2_corpus.py): every INF/INI disassembles
     test = os.path.join(here, "..", "tests", "test_emc2_corpus.py")
     p = subprocess.run([sys.executable, test, a.data], capture_output=True, text=True)
     out = (p.stdout or p.stderr).strip().splitlines()
     print("CHECK emc2: " + (out[-1].split(": ", 1)[-1] if out else "no output"))
     rc |= p.returncode
+    if p.returncode:
+        failed.append("emc2 corpus test")
+    n = len(READERS) + 1
+    print(f"ALL {n} CHECKS PASSED" if not failed else f"{len(failed)} of {n} checks FAILED: {', '.join(failed)}")
     return rc
 
 

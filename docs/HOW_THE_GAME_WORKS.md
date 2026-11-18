@@ -4,7 +4,7 @@ A short tour for a reader who has the game and wants to know how it runs: which 
 
 ## The program and its data
 
-The game program is `MAIN.EXE`. On the CD it sits inside the install archive `WESTWOOD.001` and again in `DATA/HARDRIVE`; on the floppy edition it is a loose file ([executable_tables.md](executable_tables.md)). It holds the code and a few fixed tables: the 17 spells, the 9 playable characters' starting values, the experience needed for each level, and difficulty factors.
+The game program is `MAIN.EXE`. On the CD it sits inside the install archive `WESTWOOD.001` and again in `DATA/HARDRIVE`; on the floppy edition it is a loose file ([executable_tables.md](executable_tables.md)). It holds the code and a few fixed tables: the 17 spells, the starting values of the 9 characters who can join the party (the four heroes you choose from, and five companions met during the game), the experience needed for each level, and difficulty factors.
 
 Everything else is data in PAK archives ([formats/pak.md](formats/pak.md)): pictures, sprites, animations, sounds, music, text in three languages, and one set of files per level.
 
@@ -56,4 +56,4 @@ The lamp burns oil every 360 ticks of 1/60 second, and the screen darkens in ste
 
 ## Saving
 
-An original save (`_SAVEnnn.DAT`) holds the four party members, the game state (position, inventory, game flags, money, spells), 400 item records and a 2500-byte snapshot for each of 30 levels ([savegame_format.md](savegame_format.md)).
+An original save (`_SAVEnnn.DAT`) holds the four party members, the game state (position, inventory, game flags, money, spells, options), 400 item records and 30 level snapshots of 2500 bytes each; the game has 29 levels, but the save code always writes 30 slots ([savegame_format.md](savegame_format.md)). This layout comes from the save and load code in both executables; no original save file has been examined yet ([Q17](OPEN_QUESTIONS.md)).

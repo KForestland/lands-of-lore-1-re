@@ -2,7 +2,7 @@
 
 *Lands of Lore: The Throne of Chaos* is a first-person role-playing game for DOS by Westwood Studios (1993; CD-ROM edition with speech later). This repository explains how its data files and its rules work, and gives you Python tools that read every file type from your own copy of the game.
 
-It contains documentation, tools and small tables of numbers. It contains no game files and no extracted game pictures, sounds or text dumps.
+It contains documentation, tools and small tables of numbers. It contains no game files and no dumps of game pictures, sounds or text; the only game-derived images are three small examples in `examples/`.
 
 ![Level 12 drawn by tools/level_renderer.py --schematic](docs/images/level12_schematic.png)
 
@@ -25,7 +25,7 @@ cd lands-of-lore-1-re
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt                 # Pillow, for PNG output
 export LOL1_DATA=/path/to/your/LOL1/DATA        # the game's DATA folder
-python3 tools/check_all.py                      # 22 checks, one line each
+python3 tools/check_all.py                      # 22 checks, ends with ALL 22 CHECKS PASSED
 python3 tools/level_renderer.py --level 1 --out-dir maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
 ```
@@ -50,7 +50,7 @@ Two editions were read: the CD-ROM edition with speech (version CD1.02) and an E
 ## Repository layout
 
 - [`docs/`](docs): format pages, how the game works, status, open questions, glossary
-- [`docs/unknowns/`](docs/unknowns): detailed notes on questions that were answered
+- [`docs/unknowns/`](docs/unknowns): detailed notes on the numbered questions (answered and open)
 - [`tools/`](tools/README.md): readers, renderers and extractors
 - [`tests/`](tests): the script disassembler's corpus test
 - [`data/`](data): tables produced by the tools (inventories, wall tables, counts)

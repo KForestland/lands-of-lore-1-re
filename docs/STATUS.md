@@ -1,6 +1,6 @@
 # LoL1 reverse-engineering status
 
-**As of:** 2026-11-18. This page replaces the "~99.999%" figure that the March 2026 README and the closure memo gave with what is actually documented, which tool reads it, and what was checked on the data. The closure memo ([`closure_memo.md`](closure_memo.md), 2026-03-20, written when the work was first declared finished) stays as history; section letters refer to its headings.
+**As of:** 2026-11-18. For every file format and rules topic: what is documented, which tool reads it, what was checked on the game data, and what is still open. History: the March 2026 closure memo ([`closure_memo.md`](closure_memo.md)) called the work about "99.999%" finished; this table replaces that figure, and the corrections to the memo are listed at the end.
 
 **Columns**
 
@@ -9,7 +9,7 @@
 - **Checked on data**: the tool's `--check` parses every file of that kind. CD = the top-level `DATA/` folder of the CD-ROM edition with spoken dialogue (version CD1.02); ENG = its `DATA/ENG` folder; LS = LANDSoL, an English floppy-edition installation (no speech, chapter-based PAKs). Details: [formats/README.md](formats/README.md).
 - **Open**: what is not known yet, as numbered in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 
-Run every check at once: `python3 tools/check_all.py --data <DATA>` (21 checks; all pass on CD, about 6 seconds).
+Run every check at once: `python3 tools/check_all.py --data <DATA>` (22 checks; all pass on the CD and on the floppy edition, about 6 seconds).
 
 ## File formats
 
@@ -61,7 +61,7 @@ Pages: [executable_tables.md](executable_tables.md), [savegame_format.md](savega
 
 ## Tools
 
-All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 21 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
+All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 22 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
 
 ## Corrections to the closure memo and the March data
 
@@ -82,4 +82,6 @@ All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--dat
 
 ## What "done" means here
 
-A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 10 of the 21 format rows meet that: LCW, CPS, SHP (CD and floppy; the demo was not read), WSA, VOC, TLC, FNT, text, TIM (command table), ADV/DRV/TBL (identified; the drivers are code). Eight more have a page, a reader and a passing check but one or more numbered open points: PAK, TLK, CMZ, WLL, VCN/VMP, XXX, DAT, EMC2. Three are only partly documented: XMI/C55/PCS and ADL (Q15), PAL/COL (Q14). All five rules and tables rows are documented. Four are checked against the data; the game-rules row is checked natively for its core combat arithmetic, and the rest of it is ScummVM's version (Q7).
+A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 7 of the 21 format rows meet that: LCW, CPS, WSA, VOC, TLC, FNT, text. Eleven more have a page, a reader and a passing check but one or more open points: PAK, TLK, SHP (demo edition unread), CMZ, WLL, VCN/VMP, XXX, DAT, EMC2, TIM (a few commands ScummVM leaves unimplemented), ADV/DRV/TBL (the drivers are program code, not documented inside). Three are only partly documented: XMI/C55/PCS and ADL (Q15), PAL/COL (Q14). All five rules and tables rows are documented. Four are checked against the data; the game-rules row is checked in the original program for its core combat arithmetic, and the rest of it is ScummVM's version so far (Q7).
+
+"Checked independently" in this page means a second program, written separately from the one that produced the claim, gave the same result on the same files (for example two separate Frame4 decoders, or two separate TIM walkers).

@@ -6,30 +6,30 @@ Thanks for contributing to the public *Lands of Lore I* reverse-engineering repo
 
 Good contributions for this repo:
 
-- clarity improvements to promoted docs
-- public-safe tooling cleanup
+- clearer wording in the documentation
+- tool fixes and new readers (no game data in the repository)
 - evidence-backed corrections
-- output examples that improve reviewability
-- small structured data improvements that match promoted docs
+- answers to the numbered open questions in `docs/OPEN_QUESTIONS.md`
+- small data-table improvements that match the documentation
 
 Out of scope:
 
 - retail game files
 - full extracted asset dumps
 - speculative claims presented as settled truth
-- private scratch notes or unpublished ledgers
+- private working notes
 
 ## Working Rules
 
 - Prefer technically honest wording over maximal wording.
 - Keep extraction facts, interpretation, and edition comparison clearly separated.
-- Update promoted docs and tool docs before adding scattered notes elsewhere.
+- Update the format page and `tools/README.md` with any change; mark claims CONFIRMED or UNCONFIRMED and cite the evidence.
 
 ## Repo Shape
 
-- `docs/` holds promoted writeups and closure material.
-- `examples/` holds public-safe screenshots and example outputs.
-- `tools/` holds public-safe extraction and analysis helpers.
+- `docs/` holds the format pages, the rules and script pages, status and open questions.
+- `examples/` holds three small example images.
+- `tools/` holds the readers and extractors; each needs `--data` and has `--check`.
 - `data/` holds structured inventories and parsed outputs.
 
 ## Pull Requests

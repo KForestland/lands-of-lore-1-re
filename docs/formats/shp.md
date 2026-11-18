@@ -53,7 +53,7 @@ The closure memo's "3492/3492 frames" count was right in number, but the March 2
 
 ## Colours
 
-Monster and item shapes are drawn through the scene palette plus run-time colour tables (`sprites_lol.cpp:908-980`), so a PNG made with a fixed CPS palette shows the right shapes in the wrong colours.
+Monster and item shapes are drawn through the scene palette plus run-time colour tables (`sprites_lol.cpp:908-980`), so a PNG made with a fixed CPS palette shows the right shapes in the wrong colours. No single palette file gives the in-game colours; `--pal-from` a level's palette (e.g. `ALTPAL1.PAL`) only gets closer.
 
 
 ## Worked example

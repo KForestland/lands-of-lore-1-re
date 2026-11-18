@@ -4,7 +4,7 @@ You need Python 3.8+, Pillow (`pip install Pillow`) and your own copy of *Lands 
 
 ```bash
 export LOL1_DATA=/path/to/your/LOL1/DATA
-python3 tools/check_all.py        # 22 checks, one line each; all should pass on the CD edition
+python3 tools/check_all.py        # 22 checks; the last line should read ALL 22 CHECKS PASSED
 ```
 
 Words you do not know are in the [glossary](GLOSSARY.md).
@@ -14,7 +14,7 @@ Words you do not know are in the [glossary](GLOSSARY.md).
 1. Read [formats/cmz.md](formats/cmz.md) (the 32 x 32 grid of wall types) and [formats/wll.md](formats/wll.md) (what each wall type is).
 2. Draw a map: `python3 tools/level_renderer.py --level 1 --out-dir maps/ --schematic` (a plain drawing) or without `--schematic` (with the game's wall tiles).
 3. See which tile set, decorations and palette each level uses: `python3 tools/tileset_mapper.py`.
-4. Named places on the automap: [formats/xxx.md](formats/xxx.md), `python3 tools/xxx_reader.py LEVEL1.XXX`.
+4. Named places on the automap: [formats/xxx.md](formats/xxx.md), `python3 tools/xxx_reader.py LEVEL1.XXX` (prints each place's name, e.g. FOUNTAIN).
 
 ## I want to look at pictures, sprites and animations
 
@@ -37,7 +37,7 @@ Words you do not know are in the [glossary](GLOSSARY.md).
 ## I want to understand the scripts
 
 1. [formats/emc2.md](formats/emc2.md), then [emc2_scripts.md](emc2_scripts.md) (every opcode and all 192 script functions).
-2. Disassemble a level script: `python3 tools/emc2_decompile.py $LOL1_DATA/L01.PAK --entry LEVEL1.INI`.
+2. Disassemble a level script: `python3 tools/emc2_decompile.py L01.PAK --entry LEVEL1.INI` (bare PAK names are looked up in `$LOL1_DATA`). Disassemble all 60 scripts as a test: `python3 tests/test_emc2_corpus.py`.
 3. Cut-scene scripts: [formats/tim.md](formats/tim.md) and [unknowns/06_tim_opcodes.md](unknowns/06_tim_opcodes.md).
 
 ## I want to understand the game rules

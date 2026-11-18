@@ -21,13 +21,14 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 
 ### `check_all.py`
 
-Run every tool's `--check` (22 checks) and print one line each; exit 0 when all pass.
+Run every tool's `--check` (22 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py
+$ python3 tools/check_all.py | sed -n "1,3p;23p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
+ALL 22 CHECKS PASSED
 ```
 
 ### `pak_reader.py`
@@ -44,7 +45,7 @@ $ python3 tools/pak_reader.py list GENERAL.PAK
 
 ### `pak_indexer.py`
 
-Index every PAK member (rebuilds `data/pak_index.json` with `--out`); `--survey --out f.json` lists every file under the game folder.
+Index every PAK member (rebuilds `data/pak_index.json` with `--out`). `--survey --out f.json` is a different mode: it lists every loose file under the game folder (not only PAK members), grouped by extension, with a few header bytes per type.
 
 ```
 $ python3 tools/pak_indexer.py
@@ -174,13 +175,13 @@ wrote maps/level01_schematic.png
 
 ### `xxx_reader.py`
 
-Automap legend records of a level.
+Automap legend records of a level, with the legend text (`--lang ENG|FRE|GER`).
 
 ```
 $ python3 tools/xxx_reader.py LEVEL1.XXX
-0 shape_x=13 shape_y=13 shape=0x0001 label_x=13 label_y=14 string_id=0x41d0
-1 shape_x=18 shape_y=8 shape=0x0004 label_x=16 label_y=8 string_id=0x41d1
-2 shape_x=9 shape_y=13 shape=0x0002 label_x=10 label_y=13 string_id=0x41d2
+0 symbol_x=13 symbol_y=13 symbol=0x0001 reveal_x=13 reveal_y=14 string_id=0x41d0  "FOUNTAIN"
+1 symbol_x=18 symbol_y=8 symbol=0x0004 reveal_x=16 reveal_y=8 string_id=0x41d1  "THRONE ROOM"
+2 symbol_x=9 symbol_y=13 symbol=0x0002 reveal_x=10 reveal_y=13 string_id=0x41d2  "GERON'S OFFICE"
 ```
 
 ### `dat_reader.py`
@@ -251,22 +252,21 @@ Parsed 139/139 TIM files
 
 ### `emc2_decompile.py`
 
-Disassemble a level or item script (EMC2) to a readable listing. Takes a loose `.INF`/`.INI` file, or a PAK with `--entry`. The corpus test is `tests/test_emc2_corpus.py`.
+Disassemble a level or item script (EMC2) to a readable listing. Takes a loose `.INF`/`.INI` file, or a PAK with `--entry`; a bare PAK name is looked up in `--data`/`$LOL1_DATA`. The run below picks a few lines of the listing.
 
 ```
-$ python3 tools/emc2_decompile.py $LOL1_DATA/L01.PAK --entry LEVEL1.INI
+$ python3 tools/emc2_decompile.py L01.PAK --entry LEVEL1.INI | grep -E "^; L01|TEXT\[0\]|loadLevelGraphics|loadBlockProperties"
 ; L01.PAK/LEVEL1.INI (PAK+0xF225) | 260 DATA words | 10 TEXT strings
-; ORDR payload at file+0x14 (4 bytes)
-; TEXT payload at file+0x20 (109 bytes)
-; DATA payload at file+0x96 (520 bytes)
 ; TEXT[0] +0x0014 "KEEP"
-; TEXT[1] +0x0019 "LEVEL01"
-; TEXT[2] +0x0021 "KEEPDOOR.SHP"
-; TEXT[3] +0x002E "LEVEL1.CMZ"
-; TEXT[4] +0x0039 "GUARD.SHP"
-; TEXT[5] +0x0043 "KEEP.DAT"
-; TEXT[6] +0x004C "KEEP.SHP"
-; TEXT[7] +0x0055 "ORCLDR1"
-; TEXT[8] +0x005D "SWING1"
-; TEXT[9] +0x0064 "MALEOOF2"
+  0026  sysCall          0x09 loadLevelGraphics [arg0=TEXT[0] "KEEP"]
+  0033  sysCall          0x0A loadBlockProperties [arg0=TEXT[3] "LEVEL1.CMZ"]
+```
+
+### `tests/test_emc2_corpus.py`
+
+Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its 22nd check.
+
+```
+$ python3 tests/test_emc2_corpus.py
+/path/to/DATA: PASS 60/60 scripts, 124298 DATA words, 109845 instructions, 756 TEXT strings, 0 unknown opcodes/functions
 ```

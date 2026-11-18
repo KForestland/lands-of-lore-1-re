@@ -1,4 +1,4 @@
-> **History (March 2026).** This memo is kept unchanged as a record of the first pass. It mentions the author's working folders and internal project names, and several of its statements were later corrected: see [`STATUS.md`](STATUS.md) and the pages in [`formats/`](formats/README.md).
+> **History (March 2026).** This memo is kept as a record of the first pass; only its machine paths were reduced to file names. Its wording comes from the project's way of working at the time: a *lane* was one line of work, and *Codex* was a second AI assistant used for checking. Several of its statements were later corrected: see [`STATUS.md`](STATUS.md) and the pages in [`formats/`](formats/README.md); today's tools are in [`../tools/`](../tools/README.md).
 
 # LoL1 Lane — Final Closure Memo
 
@@ -177,46 +177,46 @@ CMZ block → walls[4] uint8 wall type IDs
 
 | Artifact | Path |
 |----------|------|
-| This memo | `/home/bob/lol1_closure_memo_2026-03-20.md` |
-| Publication manifest | `/home/bob/lol1_publication_manifest.md` |
-| Corrected LCW decoder | `/home/bob/lol1_decode_frame4.py` |
-| SHP frame renderer | `/home/bob/lol1_shp_renderer.py` |
-| Level renderer | `/home/bob/lol1_vcn_extractor.py` |
-| WLL parser | `/home/bob/lol1_wll_vmp_mapper.py` |
-| Wall type analysis | `/home/bob/lol1_cmz_walltype_analysis.py` |
-| Dialogue extractor | `/home/bob/lol1_extract_dialogue.py` |
-| Dialogue decoder | `/home/bob/decode_lol1_dialogue.py` |
-| Music extractor | `/home/bob/lol1_extract_music.py` |
-| WSA extractor | `/home/bob/lol1_wsa_extract.py` |
-| WSA multi-frame extractor | `/home/bob/lol1_wsa_all_frames_extract.py` |
-| WSA palette fix | `/home/bob/lol1_wsa_fix.py` |
-| EMC2 decompiler | `/home/bob/lol1_emc2_decompiler.py` |
-| TIM parser | `/home/bob/lol1_parse_tim.py` |
-| Font extractor | `/home/bob/lol1_fonts/extract_fonts.py` |
-| Level→tileset map | `/home/bob/lol1_level_tileset_map.md` |
-| PAK index (1163 entries) | `/home/bob/lol1_pak_index.json` |
-| WLL parsed data | `/home/bob/lol1_wll_parsed.json` |
-| SHP inventory | `/home/bob/lol1_shp_inventory.json` |
-| SHP render results | `/home/bob/lol1_shp_render_results.json` |
-| WSA inventory | `/home/bob/lol1_wsa_inventory.json` |
-| Music inventory | `/home/bob/lol1_music_inventory.json` |
-| Dialogue summary | `/home/bob/lol1_dialogue_summary.json` |
-| TIM analysis | `/home/bob/lol1_tim_analysis.json` |
-| Font metadata | `/home/bob/lol1_fonts/font_info.json` |
-| LANDSoL comparison | `/home/bob/lol1_landsol_comparison_2026-03-18.md` |
-| CPS images (85 PNG) | `/home/bob/lol1_cps_complete/` |
-| SHP frames (3492 PNG) | `/home/bob/lol1_shp_rendered/` |
-| WSA first frames (241 PNG) | `/home/bob/lol1_wsa_frames/` |
-| WSA full sequences (4480 PNG) | `/home/bob/lol1_wsa_all_frames/` |
-| Decompiled scripts (60 ASM) | `/home/bob/lol1_scripts_decompiled/` |
-| Level maps (29 PNG) | `/home/bob/lol1_levels_rendered/` |
-| VOC audio (215 WAV) | `/home/bob/lol1_audio_complete/` |
-| Music files (67) | `/home/bob/lol1_music/` |
-| Dialogue raw (90 JSON) | `/home/bob/lol1_dialogue/` |
-| Dialogue decoded (90 JSON) | `/home/bob/lol1_dialogue_decoded/` |
-| Font atlases (4 PNG) | `/home/bob/lol1_fonts/` |
-| Reference corpus | `/media/bob/Arikv/REFERENCE/game_files/lol1/DATA/` |
-| LANDSoL build | `/media/bob/Arikv/new files or things/LANDSoL/` |
+| This memo | `lol1_closure_memo_2026-03-20.md` (author's working copy, not in this repository) |
+| Publication manifest | `lol1_publication_manifest.md` (author's working copy, not in this repository) |
+| Corrected LCW decoder | `lol1_decode_frame4.py` (author's working copy, not in this repository) |
+| SHP frame renderer | `lol1_shp_renderer.py` (author's working copy, not in this repository) |
+| Level renderer | `lol1_vcn_extractor.py` (author's working copy, not in this repository) |
+| WLL parser | `lol1_wll_vmp_mapper.py` (author's working copy, not in this repository) |
+| Wall type analysis | `lol1_cmz_walltype_analysis.py` (author's working copy, not in this repository) |
+| Dialogue extractor | `lol1_extract_dialogue.py` (author's working copy, not in this repository) |
+| Dialogue decoder | `decode_lol1_dialogue.py` (author's working copy, not in this repository) |
+| Music extractor | `lol1_extract_music.py` (author's working copy, not in this repository) |
+| WSA extractor | `lol1_wsa_extract.py` (author's working copy, not in this repository) |
+| WSA multi-frame extractor | `lol1_wsa_all_frames_extract.py` (author's working copy, not in this repository) |
+| WSA palette fix | `lol1_wsa_fix.py` (author's working copy, not in this repository) |
+| EMC2 decompiler | `lol1_emc2_decompiler.py` (author's working copy, not in this repository) |
+| TIM parser | `lol1_parse_tim.py` (author's working copy, not in this repository) |
+| Font extractor | `lol1_fonts/extract_fonts.py` (author's working copy, not in this repository) |
+| Level→tileset map | `lol1_level_tileset_map.md` (author's working copy, not in this repository) |
+| PAK index (1163 entries) | `lol1_pak_index.json` (author's working copy, not in this repository) |
+| WLL parsed data | `lol1_wll_parsed.json` (author's working copy, not in this repository) |
+| SHP inventory | `lol1_shp_inventory.json` (author's working copy, not in this repository) |
+| SHP render results | `lol1_shp_render_results.json` (author's working copy, not in this repository) |
+| WSA inventory | `lol1_wsa_inventory.json` (author's working copy, not in this repository) |
+| Music inventory | `lol1_music_inventory.json` (author's working copy, not in this repository) |
+| Dialogue summary | `lol1_dialogue_summary.json` (author's working copy, not in this repository) |
+| TIM analysis | `lol1_tim_analysis.json` (author's working copy, not in this repository) |
+| Font metadata | `lol1_fonts/font_info.json` (author's working copy, not in this repository) |
+| LANDSoL comparison | `lol1_landsol_comparison_2026-03-18.md` (author's working copy, not in this repository) |
+| CPS images (85 PNG) | `lol1_cps_complete/` (author's working copy, not in this repository) |
+| SHP frames (3492 PNG) | `lol1_shp_rendered/` (author's working copy, not in this repository) |
+| WSA first frames (241 PNG) | `lol1_wsa_frames/` (author's working copy, not in this repository) |
+| WSA full sequences (4480 PNG) | `lol1_wsa_all_frames/` (author's working copy, not in this repository) |
+| Decompiled scripts (60 ASM) | `lol1_scripts_decompiled/` (author's working copy, not in this repository) |
+| Level maps (29 PNG) | `lol1_levels_rendered/` (author's working copy, not in this repository) |
+| VOC audio (215 WAV) | `lol1_audio_complete/` (author's working copy, not in this repository) |
+| Music files (67) | `lol1_music/` (author's working copy, not in this repository) |
+| Dialogue raw (90 JSON) | `lol1_dialogue/` (author's working copy, not in this repository) |
+| Dialogue decoded (90 JSON) | `lol1_dialogue_decoded/` (author's working copy, not in this repository) |
+| Font atlases (4 PNG) | `lol1_fonts/` (author's working copy, not in this repository) |
+| Reference corpus | the CD edition's `DATA/` folder |
+| LANDSoL build | the floppy (LANDSoL) installation folder |
 
 ---
 

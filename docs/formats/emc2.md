@@ -16,7 +16,7 @@ IFF `FORM` with type `EMC2`; chunks `TEXT` (optional strings), `ORDR` (function 
 
 ## Open
 
-- [Q8](../OPEN_QUESTIONS.md), mostly answered: the original executables keep their own function tables (192 far pointers at CD `MAIN.EXE+0x33F64`, 187 at floppy `MAIN.EXE+0x3D1EE`, entry 0x00-0xBA). Entry 0x7E points to a handler that takes no arguments, calls one engine routine and returns 1. CONFIRMED (disassembled). Its downstream effect is UNCONFIRMED.
+- [Q8](../OPEN_QUESTIONS.md), mostly answered: the original executables keep their own function tables (192 far pointers at CD `MAIN.EXE+0x33F64`, 187 at floppy `MAIN.EXE+0x3D1EE`, entries 0x00-0xBA: the floppy program simply has no functions 0xBB-0xBF, which only the CD scripts call). Entry 0x7E points to a handler that takes no arguments, calls one engine routine and returns 1. CONFIRMED (disassembled). Its downstream effect is UNCONFIRMED.
 - Apart from 0x7E, native handler bodies were not checked; function effects are ScummVM's (UNCONFIRMED for the original).
 
 ## Worked example
@@ -30,7 +30,7 @@ CD `LEVEL1.INI` (670 bytes) starts:
 | Bytes | Meaning |
 |-------|---------|
 | `FORM`, `00 00 02 9e`, `EMC2` | IFF form; the length 0x29E = 670 is the whole member, including these 8 bytes |
-| `ORDR`, `00 00 00 04`, `00 1b 00 9f` | two entry points (big-endian): functions start after the header words at DATA word 0x1B and 0x9F |
+| `ORDR`, `00 00 00 04`, `00 1b 00 9f` | two entry points (big-endian): each points at a header word (DATA word 0x1B and 0x9F); the function's code starts on the next word (0x1C and 0xA0) |
 | `TEXT`, `00 00 00 6d`, `00 14 00 19 …` | 109 bytes of strings; string 0 at 0x14 is `KEEP`, string 1 at 0x19 is `LEVEL01` |
 
 `tools/emc2_decompile.py L01.PAK --entry LEVEL1.INI` lists the code; for example word 0x26 is `sysCall 0x09 loadLevelGraphics [arg0=TEXT[0] "KEEP"]`.

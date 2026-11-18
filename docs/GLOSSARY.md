@@ -10,6 +10,8 @@ Words used across these pages, in plain terms. Format names link to their page.
 | Floppy edition, LANDSoL | The English floppy release, without speech, data split into `CHAPTER1.PAK` … `CHAPTER8.PAK`. "LANDSoL" is the name of the folder the copy was read from. |
 | ScummVM | Open-source program that runs many classic games, including this one, by reimplementing their engines. Its *Kyra* engine (named after Westwood's *Legend of Kyrandia*) runs Lands of Lore. Its source code is the main written reference used here; citations point at upstream commit `3b4db303`. |
 | Closure memo | `docs/closure_memo.md`, a March 2026 summary written when this work was first called finished. Kept as history; the format pages correct it. |
+| Native | In or from the original DOS program (`MAIN.EXE`), as opposed to ScummVM's reimplementation. "Checked natively" means the instructions in the original program were read (disassembled). |
+| Checked independently | A second program, written separately, gave the same result on the same files. |
 | CONFIRMED / UNCONFIRMED | CONFIRMED: checked on the game files (or in the original program code). UNCONFIRMED: taken from ScummVM or reasoning, not yet checked. |
 | Q1 … Q18 | Numbered open questions, see [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md). |
 
