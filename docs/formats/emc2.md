@@ -2,7 +2,7 @@
 
 **What:** compiled level scripts. `LEVELn.INI` runs once when the level is loaded (`engines/kyra/engine/scene_lol.cpp:69`); `LEVELn.INF` holds the level's event functions (`:78`).
 
-**Edition read:** CD (31 INF, 29 INI). LANDSoL: same counts.
+**Edition read:** CD (31 INF, 29 INI). floppy: same counts.
 
 ## Container
 

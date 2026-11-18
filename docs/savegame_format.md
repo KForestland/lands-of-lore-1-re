@@ -1,16 +1,16 @@
 # LoL1 save-game format
 
-This page documents original DOS `_SAVE%03d.DAT` files, native `_LEVELn.TMP` sidecars and ScummVM `WWSV` saves. **CONFIRMED** labels observations from the original executables, original sidecars or actual ScummVM saves. **UNCONFIRMED** labels fields whose meaning or exact original bytes remain unverified. ScummVM line numbers refer to revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801a3`. `Save` and `Header` mean `engines/kyra/gui/saveload_lol.cpp` and `engines/kyra/gui/saveload.cpp`, respectively.
+This page documents original DOS `_SAVE%03d.DAT` files, native `_LEVELn.TMP` sidecars and ScummVM `WWSV` saves. **CONFIRMED** labels observations from the original executables, original sidecars or actual ScummVM saves. The four `_LEVELn.TMP` witnesses were written by the original floppy program while one installation was played (one is dated 2006, the others 2004); they are not shipped, and a fresh install has none. The ScummVM saves are the maintainer's own. **UNCONFIRMED** labels fields whose meaning or exact original bytes remain unverified. ScummVM line numbers refer to revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801a3`. `Save` and `Header` mean `engines/kyra/gui/saveload_lol.cpp` and `engines/kyra/gui/saveload.cpp`, respectively.
 
-The CD addresses are file offsets in `DATA/HARDRIVE/MAIN.EXE`, identical to the member at `WESTWOOD.001+0x28C46`. The second edition is LANDSoL `MAIN.EXE`. See [Executable tables](executable_tables.md) for both images. Native multi-byte integers are little-endian. ScummVM save fields are big-endian except the compressed wrapper and individual bytes (Save:55–56,346–494).
+The CD addresses are file offsets in `DATA/HARDRIVE/MAIN.EXE`, identical to the member at `WESTWOOD.001+0x28C46`. The second edition is the floppy `MAIN.EXE`. See [Executable tables](executable_tables.md) for both images. Native multi-byte integers are little-endian. ScummVM save fields are big-endian except the compressed wrapper and individual bytes (Save:55–56,346–494).
 
 Reader: `tools/save_reader.py FILE` prints these fields for all three kinds of file (`--json` for every field).
 
 ## Native header and section boundaries
 
-**CONFIRMED** The executables contain the save filename pattern at CD `MAIN.EXE+0x32CB4` and LANDSoL `MAIN.EXE+0x38ED5`. Native serializers write fixed-length sections in this order.
+**CONFIRMED** The executables contain the save filename pattern at CD `MAIN.EXE+0x32CB4` and floppy `MAIN.EXE+0x38ED5`. Native serializers write fixed-length sections in this order.
 
-| Section | CD 1.02, file offset | LANDSoL floppy, file offset | Native writer evidence |
+| Section | CD 1.02, file offset | floppy, file offset | Native writer evidence |
 | --- | --- | --- | --- |
 | Description | `0x0000`, 60 bytes | `0x0000`, 60 bytes | CD `+0x48B4D–0x48B59`; floppy `+0x521B8–0x521C4`. |
 | Format tag | `0x003C`, 5 bytes `CD04\0` | `0x003C`, 5 bytes `.13\0_` | CD writes 5 bytes from `+0x32A3A` at `+0x48B5D–0x48B6A`. Floppy writes 5 from `+0x3891D` at `+0x521C8–0x521D5`. Floppy's fifth byte comes from the following literal. |
@@ -95,7 +95,7 @@ The **CONFIRMED** block boundaries above give 400 packed 16-byte item records in
 
 **CONFIRMED** The original save writer iterates 30 slots. For a set mask bit, it stores a `u32 LE` sidecar length followed by `0x9C0` sidecar buffer bytes. For a clear bit it writes `0x9C4` bytes from that buffer, and the reader seeks past the whole slot. Each slot is always 2500 bytes. CD `MAIN.EXE+0x48BC7–0x48C49` and `+0x48A70–0x48AEC`; floppy `+0x52222–0x522A4` and `+0x520E1–0x5215D`. The ScummVM original-save path reads up to 29 levels using the same slot stride (Save:210–245,309–313).
 
-**CONFIRMED** Four LANDSoL sidecars have this little-endian layout. In a used original save slot, start the sidecar layout at slot offset `+0x04`. Bytes left after the length-delimited sidecar in that slot have **UNCONFIRMED** contents and are not part of its payload.
+**CONFIRMED** Four floppy sidecars have this little-endian layout. In a used original save slot, start the sidecar layout at slot offset `+0x04`. Bytes left after the length-delimited sidecar in that slot have **UNCONFIRMED** contents and are not part of its payload.
 
 | Sidecar section | Layout | Witness and source |
 | --- | --- | --- |

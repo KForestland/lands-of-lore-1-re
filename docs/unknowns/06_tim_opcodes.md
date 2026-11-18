@@ -14,7 +14,7 @@ CONFIRMED. The base table is `TIMInterpreter` (`script_tim.cpp:40-80`). `showInt
 
 The running game constructs `TIMInterpreter_LoL` (`engines/kyra/engine/lol.cpp:563`). Its table is `script_tim.cpp:853-892`. `olol_loadTimScript` (`script_lol.cpp:1110-1115`) appends `.TIM` and loads with `_timIngameOpcodes`.
 
-The 139 counts are the CD set: 139 `.TIM` names. LANDSoL has 147. CD-only names: `BUCKBUY`, `COMPASSE`, `COMPASSF`, `COMPASSG`, `SPELLBKE`, `SPELLBKF`, `SPELLBKG`, `TYRUS1` through `TYRUS5`, `YFLETCH2`. LANDSoL-only names include `LOLINTRO.TIM` (`INTRO.PAK`, 14086 bytes) and `LOLFINAL.TIM` (`FINALE2.PAK`, 5040 bytes). Intro and outro counts are those two LANDSoL files and are not part of the 139. CONFIRMED.
+The 139 counts are the CD set: 139 `.TIM` names. floppy has 147. CD-only names: `BUCKBUY`, `COMPASSE`, `COMPASSF`, `COMPASSG`, `SPELLBKE`, `SPELLBKF`, `SPELLBKG`, `TYRUS1` through `TYRUS5`, `YFLETCH2`. floppy-only names include `LOLINTRO.TIM` (`INTRO.PAK`, 14086 bytes) and `LOLFINAL.TIM` (`FINALE2.PAK`, 5040 bytes). Intro and outro counts are those two floppy files and are not part of the 139. CONFIRMED.
 
 The walk takes an entry when the instruction at that word has length 3..32, opcode-word high byte 1, and opcode at most 0x1E. It stops a function at the first word that fails, and does not count that word. Across the 139 CD files the stop count is 0. CONFIRMED.
 
@@ -54,7 +54,7 @@ The LoL column is `script_tim.cpp:853-892`. Where it matches the base table, the
 | 0x1B | `cmd_stopFuncNow` | 1: function | Stops that function now (`script_tim.cpp:835-838`). | 0 | 0 |
 | 0x1C | `cmd_processDialogue` | 0 in the stream | Not encoded in any of the 139. `exec` calls command 28 when `procFunc` is set (`script_tim.cpp:217-218`). `cmd_dialogueBox` returns -3, which sets `procFunc` (`script_tim.cpp:245-247` and `:1103`). The body is `script_tim.cpp:1063-1080`. | 0 | 0 |
 | 0x1D | `cmd_dialogueBox` | 4: function, three string ids | A string id of 0xFFFF is an empty button (`script_tim.cpp:1083-1103`). Returns -3. | 113 | 56 |
-| 0x1E | `cmd_return(n1)` | 0 | Returns -1 (`script_tim.h:258`), which ends `exec`. Unused in the 139 and in both LANDSoL intro and outro. Stopping is opcode 0x01. | 0 | 0 |
+| 0x1E | `cmd_return(n1)` | 0 | Returns -1 (`script_tim.h:258`), which ends `exec`. Unused in the 139 and in both floppy intro and outro. Stopping is opcode 0x01. | 0 | 0 |
 
 `cmd_execOpcode` rejects `opcode > list.size()` (`script_tim.cpp:814`), so an index equal to the list size passes the comparison and is then out of range. Valid indexes are 0 through size-1. No counted script uses an index past the last registered opcode. CONFIRMED.
 
@@ -96,7 +96,7 @@ The single nested opcode 0x02 is in `VICTOR4.TIM`, the same file as the two comm
 
 `tlol_characterChat` reads three words. Two calls encode a fourth. `tlol_playDialogueTalkText` reads one word and passes a count of 1. Ten calls encode a second. Whether those extra words are read by the callee is UNCONFIRMED.
 
-## Intro opcodes, LANDSoL LOLINTRO.TIM only
+## Intro opcodes, floppy LOLINTRO.TIM only
 
 Four function entries, stop count 0. Nested list is `script_lol.cpp:2978-2991`.
 
@@ -113,7 +113,7 @@ Commands: 0x01 x3 (0 params), 0x02 x14 (6), 0x03 x16 (1), 0x06 x1022 (2), 0x08 x
 | 0x06 | unimplemented | 0 | 0 | |
 | 0x07 | unimplemented | 0 | 0 | |
 
-## Outro opcodes, LANDSoL LOLFINAL.TIM only
+## Outro opcodes, floppy LOLFINAL.TIM only
 
 Four function entries, stop count 0. Nested list is `script_lol.cpp:2993-3018`. `load` sets `isLoLOutro` for this filename (`script_tim.cpp:178`).
 

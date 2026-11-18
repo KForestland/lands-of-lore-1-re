@@ -2,7 +2,7 @@
 
 **What:** small scripts that run cut-ins and talking scenes: they start WSA animations, show dialogue, play sound, loop.
 
-**Edition read:** CD (139 in `DATA/`, 6 per language folder), LANDSoL (147).
+**Edition read:** CD (139 in `DATA/`, 6 per language folder), floppy (147).
 
 ## Container
 

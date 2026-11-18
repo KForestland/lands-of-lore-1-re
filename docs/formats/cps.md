@@ -2,7 +2,7 @@
 
 **What:** 320x200 8-bit images (title screens, backgrounds, parchment, portraits sheet). Loaded with `Screen::loadBitmap`, which also loads CMZ, VCN and VMP.
 
-**Edition read:** CD `DATA/` (85 files), CD `DATA/ENG` (60), LANDSoL (112).
+**Edition read:** CD `DATA/` (85 files), CD `DATA/ENG` (60), floppy (112).
 
 ## Layout
 
@@ -23,7 +23,7 @@ Source: `engines/kyra/graphics/screen.cpp:3355-3401` (`Screen::loadBitmap`).
 CONFIRMED, `tools/cps_reader.py --check`:
 - CD: `85 files, comp types {4: 85}, 85 with palette, size_field+2==file size and full decode: 85/85`.
 - CD ENG folder: `60 files, comp types {4: 60}, 60 with palette … 60/60`.
-- LANDSoL: `112 files, comp types {4: 112}, 112 with palette … 112/112`.
+- floppy: `112 files, comp types {4: 112}, 112 with palette … 112/112`.
 
 Only type 4 occurs in LoL1. Types 1 and 3 are handled by the engine for other games (UNCONFIRMED for LoL1, never seen).
 

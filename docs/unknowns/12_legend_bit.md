@@ -41,7 +41,7 @@ CD `LEVEL1.XXX` record 0, 12 bytes:
 | `0d 00`, `0e 00` | draw the line once square x 13, y 14 is explored |
 | `d0 41` | string id `0x41D0` |
 
-`0x41D0` is `0x4000 | 0x01D0`. Bit `0x8000` is 0. Bit `0x4000` selects the `LANDS` file. The low 14 bits are `0x1D0`, decimal 464. `getTableEntry` reads the little-endian uint16 at byte `464 * 2` and decodes from there. In the CD `STARTUP.PAK` copy of `LANDS.ENG` (10059 bytes, 735 strings) that text is `FOUNTAIN`. The LANDSoL `GENERAL.PAK` copy is 9924 bytes and is not the same file; index 464 still decodes to `FOUNTAIN`. Record 1 is `0x41D1`, index 465, `THRONE ROOM`. The built-in id `0x4207` is index `0x207`, which decodes to `Niche`.
+`0x41D0` is `0x4000 | 0x01D0`. Bit `0x8000` is 0. Bit `0x4000` selects the `LANDS` file. The low 14 bits are `0x1D0`, decimal 464. `getTableEntry` reads the little-endian uint16 at byte `464 * 2` and decodes from there. In the CD `STARTUP.PAK` copy of `LANDS.ENG` (10059 bytes, 735 strings) that text is `FOUNTAIN`. The floppy `GENERAL.PAK` copy is 9924 bytes and is not the same file; index 464 still decodes to `FOUNTAIN`. Record 1 is `0x41D1`, index 465, `THRONE ROOM`. The built-in id `0x4207` is index `0x207`, which decodes to `Niche`.
 
 ## What was not traced
 

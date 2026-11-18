@@ -13,7 +13,7 @@
 | `0xFE` + uint16 n + byte v | write `v` n times |
 | `0xFF` + uint16 n + uint16 o | copy n bytes from absolute offset `o` |
 
-There is no mode flag: short copies are always relative, medium and long always absolute. CONFIRMED in code (lines above) and on data: every CPS, CMZ, VCN and VMP in the CD and LANDSoL corpora decodes to exactly the size in its header (`cps_reader.py --check` 85/85 CD, 60/60 ENG, 112/112 LANDSoL; `vcn_vmp_reader.py --check` 13/13 both; CMZ 29/29 with `lol1lib.load_bitmap`).
+There is no mode flag: short copies are always relative, medium and long always absolute. CONFIRMED in code (lines above) and on data: every CPS, CMZ, VCN and VMP in the CD and floppy corpora decodes to exactly the size in its header (`cps_reader.py --check` 85/85 CD, 60/60 ENG, 112/112 floppy; `vcn_vmp_reader.py --check` 13/13 both; CMZ 29/29 with `lol1lib.load_bitmap`).
 
 **Correction history:** the closure memo (section B.4) records the earlier decoder bug (relative/absolute mixed up), fixed in `tools/decode_frame4.py`.
 

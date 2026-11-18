@@ -4,7 +4,7 @@ YVEL2 is a second tileset for level 22. Level scripts load it by syscall 9, `olo
 
 ## The files
 
-CONFIRMED. Both editions contain `YVEL2.VCN` (32680 bytes) and `YVEL2.VMP` (3412 bytes). CD stores them in `YVEL.PAK`. LANDSoL stores them in `CHAPTER6.PAK`. Each file is byte-identical across the editions. There is no `YVEL2.SHP` and no `YVEL2.DAT` in the CD tree.
+CONFIRMED. Both editions contain `YVEL2.VCN` (32680 bytes) and `YVEL2.VMP` (3412 bytes). CD stores them in `YVEL.PAK`. floppy stores them in `CHAPTER6.PAK`. Each file is byte-identical across the editions. There is no `YVEL2.SHP` and no `YVEL2.DAT` in the CD tree.
 
 `YVEL1.VCN` is 33532 bytes and `YVEL1.VMP` is 3369 bytes, also byte-identical across the editions, in the same PAKs.
 
@@ -35,7 +35,7 @@ Strings cited below come from the script's TEXT chunk.
 
 ## LEVEL22.INI, both editions
 
-The two INI files are byte-identical, 1364 bytes, CD `L22.PAK` and LANDSoL `CHAPTER6.PAK`. DATA starts at file offset 186. TEXT starts at file offset 24. CONFIRMED.
+The two INI files are byte-identical, 1364 bytes, CD `L22.PAK` and floppy `CHAPTER6.PAK`. DATA starts at file offset 186. TEXT starts at file offset 24. CONFIRMED.
 
 | String | TEXT offset | File offset | Bytes |
 | --- | --- | --- | --- |
@@ -72,9 +72,9 @@ Word 8550 (file 19674) pushes 0, word 8551 pushes 145, word 8553 is syscall 1, s
 
 Flag 357 is therefore the flag the INI tests to decide whether to restore YVEL2. The click path sets it. The register-0 path that loads YVEL1 resets it.
 
-## LEVEL22.INF, LANDSoL
+## LEVEL22.INF, floppy
 
-LANDSoL `LEVEL22.INF` in `CHAPTER6.PAK` is 19894 bytes. DATA starts at file offset 2562. TEXT starts at file offset 2078. String 4 `YVEL2` is TEXT offset 124, file offset 2210. String 5 `YVEL1` is TEXT offset 130, file offset 2216. CONFIRMED. The file is not byte-identical to the CD INF. The same four syscall-9 words are 1320, 1331, 8221, and 8326.
+floppy `LEVEL22.INF` in `CHAPTER6.PAK` is 19894 bytes. DATA starts at file offset 2562. TEXT starts at file offset 2078. String 4 `YVEL2` is TEXT offset 124, file offset 2210. String 5 `YVEL1` is TEXT offset 130, file offset 2216. CONFIRMED. The file is not byte-identical to the CD INF. The same four syscall-9 words are 1320, 1331, 8221, and 8326.
 
 The BP-1 site matches. Word 1305 pushes 357, word 1307 is syscall 7, word 1309 pushes BP-1, word 1310 is ifNotJmp to word 1323. Word 1320 (file 5202) is syscall 9 with string 4. Word 1322 jumps to word 1333. Word 1331 (file 5224) is syscall 9 with string 5. CONFIRMED.
 

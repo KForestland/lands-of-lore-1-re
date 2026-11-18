@@ -2,7 +2,7 @@
 
 **What:** Westwood DOS bitmap fonts.
 
-**Edition read:** CD `DATA/` (4: FONT6P, FONT9P in STARTUP.PAK; FONT6PN, FONT9PN in GENERAL.PAK), CD `DATA/ENG` (7, adds NEW6P, NEW8P, INTRO), LANDSoL (9).
+**Edition read:** CD `DATA/` (4: FONT6P, FONT9P in STARTUP.PAK; FONT6PN, FONT9PN in GENERAL.PAK), CD `DATA/ENG` (7, adds NEW6P, NEW8P, INTRO), floppy (9).
 
 ## Layout
 
@@ -29,7 +29,7 @@ Use: FONT9P/FONT6P are the normal fonts (`engines/kyra/engine/lol.cpp:596-597`, 
 `tools/fnt_reader.py --check`:
 - CD: `FONT6PN 226 glyphs 172 drawn h6; FONT9PN 226/172 h9; FONT6P 226/172 h6; FONT9P 226/172 h9, bad=none` (size field = file size, every glyph inside the file and inside the font height).
 - CD ENG: adds `INTRO.FNT 174 glyphs 170 drawn h19; NEW6P.FNT 226/172 h8; NEW8P.FNT 226/172 h11`.
-- LANDSoL: FONT6P, FONT9P, FONT9PN have **128 glyphs** (all drawn); FONT6PN 226. Edition difference CONFIRMED.
+- floppy: FONT6P, FONT9P, FONT9PN have **128 glyphs** (all drawn); FONT6PN 226. Edition difference CONFIRMED.
 
 The memo's "226 glyphs per font, 172 with bitmaps" holds for the CD fonts only.
 

@@ -1,8 +1,8 @@
-# SHP header, CD and LANDSoL
+# SHP header, CD and floppy
 
 The retail shape header is 10 bytes. Both trees use it. The 2-byte prefix in `docs/closure_memo.md` is the demo alt-header flag, and neither tree here contains a demo disc.
 
-Sources read: the CD `DATA` tree and the LANDSoL tree. PAK names below are the archive that held the file. A later PAK does not replace an earlier file of the same name.
+Sources read: the CD `DATA` tree and the floppy tree. PAK names below are the archive that held the file. A later PAK does not replace an earlier file of the same name.
 
 ## What the engine reads
 
@@ -57,7 +57,7 @@ The stored uint32 for shape 0 is 372. `getPtrToShape` adds 2, which lands on fil
 | 69 | 14137 | `01 00 14 14 00 14 52 01 77 01` | 1, 20, 20, 20, 338, 375 |
 | 137 | 27929 | `01 00 14 14 00 14 30 01 3c 01` | 1, 20, 20, 20, 304, 316 |
 
-## Three shapes, LANDSoL
+## Three shapes, floppy
 
 `FOREST1.SHP` in `CHAPTER1.PAK` is byte-identical to the CD file, including the three headers above. CONFIRMED.
 
@@ -69,10 +69,10 @@ The stored uint32 for shape 0 is 372. `getPtrToShape` adds 2, which lands on fil
 
 A shape counted as the 10-byte header when flags were at most 7, both height bytes matched, height was 1..200, width was 1..320, and the size at byte 6 fit in the table. The alt test was the same check two bytes later, and only when the first check failed.
 
-CONFIRMED. CD: 89 `.SHP` names, 3492 shapes, 3492 pass at `stored + 2`, 0 pass only at `stored + 4`. LANDSoL, first copy of each name: 90 names, 3487 shapes, 3487 pass at `stored + 2`, 0 pass only at `stored + 4`.
+CONFIRMED. CD: 89 `.SHP` names, 3492 shapes, 3492 pass at `stored + 2`, 0 pass only at `stored + 4`. floppy, first copy of each name: 90 names, 3487 shapes, 3487 pass at `stored + 2`, 0 pass only at `stored + 4`.
 
-The five-shape gap is two files. CD `GAMESHP.SHP` in `STARTUP.PAK` has count 89. LANDSoL `GAMESHP.SHP` in `GENERAL.PAK` has count 83. LANDSoL also has `DOOR.SHP` in `FINALE1.PAK`, count 1, which the CD tree does not have. 3492 - 6 + 1 = 3487. CONFIRMED.
+The five-shape gap is two files. CD `GAMESHP.SHP` in `STARTUP.PAK` has count 89. floppy `GAMESHP.SHP` in `GENERAL.PAK` has count 83. floppy also has `DOOR.SHP` in `FINALE1.PAK`, count 1, which the CD tree does not have. 3492 - 6 + 1 = 3487. CONFIRMED.
 
-LANDSoL stores a second copy of five names. Summing every `.SHP` member, including those copies, is 3601 shapes, and all 3601 pass the 10-byte check. The extra 114 are `FACE01.SHP` 28, `FACE05.SHP` 28, `FACE08.SHP` 28, `FACE09.SHP` 28 (each in `GENERAL.PAK` and again in `INTRO.PAK`), and `ITEMICN.SHP` in `INTRO.PAK` with count 2. CONFIRMED. The unique-name count and the every-member count are both 10-byte headers.
+floppy stores a second copy of five names. Summing every `.SHP` member, including those copies, is 3601 shapes, and all 3601 pass the 10-byte check. The extra 114 are `FACE01.SHP` 28, `FACE05.SHP` 28, `FACE08.SHP` 28, `FACE09.SHP` 28 (each in `GENERAL.PAK` and again in `INTRO.PAK`), and `ITEMICN.SHP` in `INTRO.PAK` with count 2. CONFIRMED. The unique-name count and the every-member count are both 10-byte headers.
 
 Flag values other than bit 0 are not fully specified here. `GUARD` shape 0 has flags 5, so bit 2 is set in that word. What bit 2 means is UNCONFIRMED.

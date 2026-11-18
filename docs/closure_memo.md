@@ -120,8 +120,8 @@ CMZ block → walls[4] uint8 wall type IDs
 
 ### Edition Comparison
 - **Reference corpus**: 81 PAKs, per-level layout, multi-language (ENG/FRE/GER)
-- **LANDSoL**: chapter-based (CHAPTER1–8.PAK), English-focused
-- 1213 entries | 1040 shared | 877 same-size | 176 different-size | 159 LANDSoL-only | 123 old-only
+- **floppy**: chapter-based (CHAPTER1–8.PAK), English-focused
+- 1213 entries | 1040 shared | 877 same-size | 176 different-size | 159 floppy-only | 123 old-only
 - GENERAL.PAK differs materially; VOC.PAK and DRIVERS.PAK are stable
 
 ### Palettes
@@ -203,7 +203,7 @@ CMZ block → walls[4] uint8 wall type IDs
 | Dialogue summary | `lol1_dialogue_summary.json` (author's working copy, not in this repository) |
 | TIM analysis | `lol1_tim_analysis.json` (author's working copy, not in this repository) |
 | Font metadata | `lol1_fonts/font_info.json` (author's working copy, not in this repository) |
-| LANDSoL comparison | `lol1_landsol_comparison_2026-03-18.md` (author's working copy, not in this repository) |
+| floppy comparison | `lol1_landsol_comparison_2026-03-18.md` (author's working copy, not in this repository) |
 | CPS images (85 PNG) | `lol1_cps_complete/` (author's working copy, not in this repository) |
 | SHP frames (3492 PNG) | `lol1_shp_rendered/` (author's working copy, not in this repository) |
 | WSA first frames (241 PNG) | `lol1_wsa_frames/` (author's working copy, not in this repository) |
@@ -216,7 +216,7 @@ CMZ block → walls[4] uint8 wall type IDs
 | Dialogue decoded (90 JSON) | `lol1_dialogue_decoded/` (author's working copy, not in this repository) |
 | Font atlases (4 PNG) | `lol1_fonts/` (author's working copy, not in this repository) |
 | Reference corpus | the CD edition's `DATA/` folder |
-| LANDSoL build | the floppy (LANDSoL) installation folder |
+| floppy build | the floppy installation folder |
 
 ---
 

@@ -15,7 +15,7 @@ gzip wrapper). Field names follow the documentation.
   save_reader.py FILE --json out.json   # every field
   save_reader.py --check [--data DIR] [--saves DIR]
       parses every _SAVE*.DAT and _LEVEL*.TMP in the game folder (and its parent)
-      and every ScummVM LoL save in --saves (default: ScummVM's Linux save folder),
+      and every ScummVM LoL save in --saves (only when given),
       and checks that each file ends exactly where the layout says.
 """
 import argparse
@@ -271,7 +271,8 @@ def main():
     ap.add_argument("--json", help="write every field as JSON")
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--data", default=L.DEFAULT_DATA, help="game DATA folder searched for _SAVE*.DAT and _LEVEL*.TMP (with --check)")
-    ap.add_argument("--saves", default=default_save_dir(), help="ScummVM save folder (with --check; default %(default)s)")
+    ap.add_argument("--saves", default=None,
+                    help=f"a ScummVM save folder to include in --check (not read unless given; on Linux usually {default_save_dir()})")
     a = ap.parse_args()
     if a.check:
         files = []

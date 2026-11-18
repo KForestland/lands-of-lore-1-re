@@ -305,7 +305,7 @@ def events(mask, e, ext="INF"):
 def render(r):
     lv = r["level"]
     o = [f"# Level {lv}", "",
-         f"Made by `tools/level_report.py` from `LEVEL{lv}.CMZ`, `.WLL`, `.XXX`, `.INI`, `.INF` (CD edition). "
+         f"Made by `tools/level_report.py` from `LEVEL{lv}.CMZ`, `.WLL`, `.XXX`, `.INI`, `.INF` ({EDITION}). "
          "How to read it: [README](README.md). Formats: [cmz](../formats/cmz.md), [wll](../formats/wll.md), "
          "[emc2](../formats/emc2.md), [xxx](../formats/xxx.md).", ""]
     g = r["gfx"]["loadLevelGraphics"]
@@ -421,11 +421,16 @@ The difference between bits 1 and 2 (and 4 and 8) is the movement path that rais
 """
 
 
+EDITION = "CD edition"
+
+
 def main():
+    global EDITION
     ap = L.tool_args(__doc__)
     ap.add_argument("--level", type=int)
     ap.add_argument("--out-dir")
     a = ap.parse_args()
+    EDITION = "CD edition" if any(os.path.isfile(os.path.join(a.data, n)) for n in ("L01.PAK", "l01.pak")) else "floppy edition"
     items, lands = item_names(a.data)
     levels = [a.level] if a.level else list(range(1, 30))
     stats = {}

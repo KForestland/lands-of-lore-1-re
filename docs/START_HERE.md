@@ -1,6 +1,6 @@
 # Start here, by goal
 
-You need Python 3.8+, Pillow (`pip install Pillow`) and your own copy of *Lands of Lore: The Throne of Chaos* for DOS. Point the tools at its `DATA` folder once:
+You need Python 3.8+, Pillow (`pip install Pillow`) and your own copy of *Lands of Lore: The Throne of Chaos* for DOS. Point the tools once at the folder holding `GENERAL.PAK` (on the CD the `DATA` folder; on the floppy the install folder). Either edition works; on the floppy, four checks skip their comparison with the CD tables in `data/`:
 
 ```bash
 export LOL1_DATA=/path/to/your/LOL1/DATA
@@ -38,7 +38,7 @@ Words you do not know are in the [glossary](GLOSSARY.md).
 ## I want to understand the scripts
 
 1. [formats/emc2.md](formats/emc2.md), then [emc2_scripts.md](emc2_scripts.md) (every opcode and all 192 script functions).
-2. Disassemble a level script: `python3 tools/emc2_decompile.py L01.PAK --entry LEVEL1.INI` (bare PAK names are looked up in `$LOL1_DATA`). Disassemble all 60 scripts as a test: `python3 tests/test_emc2_corpus.py`.
+2. Disassemble a level script: `python3 tools/emc2_decompile.py L01.PAK --entry LEVEL1.INI` (CD; on the floppy use `CHAPTER1.PAK`) (bare PAK names are looked up in `$LOL1_DATA`). Disassemble all 60 scripts as a test: `python3 tests/test_emc2_corpus.py`.
 3. Cut-scene scripts: [formats/tim.md](formats/tim.md) and [unknowns/06_tim_opcodes.md](unknowns/06_tim_opcodes.md).
 
 ## I want to understand the game rules

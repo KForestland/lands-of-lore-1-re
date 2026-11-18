@@ -2,7 +2,7 @@
 
 **What:** Creative Voice File, 8-bit unsigned mono PCM. Sound effects (`VOC.PAK`, level PAKs), intro speech (`INTROVOC.PAK`), and every CD speech sample inside `NN.TLK` ([tlk.md](tlk.md)).
 
-**Edition read:** CD (`DATA/`, `DATA/ENG`), LANDSoL.
+**Edition read:** CD (`DATA/`, `DATA/ENG`), floppy.
 
 ## Layout
 
@@ -23,7 +23,7 @@ Block type 1 = sound data: uint8 rate divisor, uint8 codec (0 = 8-bit PCM), samp
 CONFIRMED, `tools/voc_reader.py --check`:
 - CD `DATA/`: `215 in PAKs + 4912 in TLKs, block types {1: 11349}, rates {22050: 4908, 11025: 206, 5494: 10, 8196: 1, 11904: 1, 8000: 1}, bad=none`.
 - CD `DATA/ENG`: `127 in PAKs, block types {1: 418}, rates {22050: 118, 11025: 7, 11904: 1, 16129: 1}`.
-- LANDSoL: `277 in PAKs, block types {1: 277}, rates {11025: 194, 22050: 68, 5494: 10, …}`.
+- floppy: `277 in PAKs, block types {1: 277}, rates {11025: 194, 22050: 68, 5494: 10, …}`.
 
 Only block type 1 occurs; every file passes the header check value.
 

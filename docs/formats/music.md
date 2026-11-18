@@ -2,7 +2,7 @@
 
 **What:** one music track set per area/scene, in four driver flavours: XMI (MIDI / MT-32), C55 (meaning OPEN), ADL (AdLib), PCS (PC speaker).
 
-**Edition read:** CD `DATA/` (18 XMI, 17 C55, 16 ADL, 16 PCS), LANDSoL (20, 19, 18, 18).
+**Edition read:** CD `DATA/` (18 XMI, 17 C55, 16 ADL, 16 PCS), floppy (20, 19, 18, 18).
 
 ## Containers
 
@@ -39,7 +39,7 @@ First 40 bytes of CD `LORESFX.XMI`:
 | `CAT `, `00 00 10 72`, `XMID` | a catalogue of 4210 bytes holding the sequences |
 | `FORM` … | the first sequence (`FORM XMID`, then its `EVNT` events) |
 
-ADL files have no IFF header; CD `LORESFX.ADL` starts `00 00 01 00 ff ff ff ff …`, not documented field by field ([Q15](../OPEN_QUESTIONS.md)).
+ADL files have no IFF header; CD `LORESFX.ADL` starts `00 00 01 00 ff ff ff ff …`; the layout is documented field by field in [Q15](../unknowns/15_adl_and_c55.md).
 
 ## Tool
 

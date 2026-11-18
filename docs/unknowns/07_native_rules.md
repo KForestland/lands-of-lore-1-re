@@ -1,16 +1,16 @@
 # Q7 — Spell effects, timers, monster updates and walls in native DOS
 
-**CONFIRMED** offsets name physical bytes in the original `MAIN.EXE` for CD and LANDSoL. Spell routines in the Borland overlays are file offsets into their resolved bodies. The MZ image ends at the `FBOV` header (CD `0x3CC40`, floppy `0x45DA0`). Its +8 field points to the segment directory. Overlay far-call segment words index bytes in that directory, whose entries are eight bytes with the load segment first. A resident overlay stub begins with `CD 3F 00 00`, its +4 dword gives the body offset relative to `FBOV+16`, and its five-byte entries from +0x20 give body entry offsets in their +2 words. This is how the cast calls below were followed into both files.
+**CONFIRMED** offsets name physical bytes in the original `MAIN.EXE` for CD and floppy. Spell routines in the Borland overlays are file offsets into their resolved bodies. The MZ image ends at the `FBOV` header (CD `0x3CC40`, floppy `0x45DA0`). Its +8 field points to the segment directory. Overlay far-call segment words index bytes in that directory, whose entries are eight bytes with the load segment first. A resident overlay stub begins with `CD 3F 00 00`, its +4 dword gives the body offset relative to `FBOV+16`, and its five-byte entries from +0x20 give body entry offsets in their +2 words. This is how the cast calls below were followed into both files.
 
 ## Casting
 
 **CONFIRMED** An ordinary cast requires MP ≥ the rank cost and HP > the rank cost, then subtracts both. If property `0x100` is set, a forward wall with flag `0x01` blocks the cast. Paid casts index the far pointers with the **low byte of the spell record's property word**. CD `0x4FE9D–0x5002A`, floppy `0x5A1A2–0x5A32D`.
 
-**CONFIRMED** The direct effect path skips the cost check. CD accepts any negative caster, computes character slot `−caster − 1`, and dispatches by the supplied effect ID. LANDSoL checks specifically for caster −1 and passes slot 0. CD `0x4FF33–0x4FF54`, floppy `0x5A238–0x5A257`. The 17 far-pointer entries start at CD `0x32EF4` and floppy `0x39604`. Slot 7 (Vortex) is zero in each, as are slots 10, 11 and 13–15. The paid spell record at index 9 has low byte 8, whereas a direct request for ID 9 selects Swarm. CD `0x2B6DC` and `0x32F14–0x32F1B`, floppy `0x2CF7C` and `0x39624–0x3962B`. The use of other fields in the index-9 record remains **UNCONFIRMED** beyond the cost and dispatch reads. ScummVM dispatches by the supplied spell index in `engines/kyra/engine/lol.cpp:2093–2124`.
+**CONFIRMED** The direct effect path skips the cost check. CD accepts any negative caster, computes character slot `−caster − 1`, and dispatches by the supplied effect ID. floppy checks specifically for caster −1 and passes slot 0. CD `0x4FF33–0x4FF54`, floppy `0x5A238–0x5A257`. The 17 far-pointer entries start at CD `0x32EF4` and floppy `0x39604`. Slot 7 (Vortex) is zero in each, as are slots 10, 11 and 13–15. The paid spell record at index 9 has low byte 8, whereas a direct request for ID 9 selects Swarm. CD `0x2B6DC` and `0x32F14–0x32F1B`, floppy `0x2CF7C` and `0x39624–0x3962B`. The use of other fields in the index-9 record remains **UNCONFIRMED** beyond the cost and dispatch reads. ScummVM dispatches by the supplied spell index in `engines/kyra/engine/lol.cpp:2093–2124`.
 
 **CONFIRMED** The MP costs below come from the 28-byte records at CD `0x2B5E0` and floppy `0x2CE80`. The four HP costs are zero in each listed row. All spell effects below were traced in both executables. Damage inputs are the arguments to the resistance helper, in rank order. A category selector of `0x80` picks resistance category 7. “Roll” in the table uses the native dice helper and “hit code” refers to the input to damage calculation. CD `0xAFD8–0xB052`, floppy `0xAEFA–0xAF74`.
 
-| Direct ID | MP I–IV | Effect and formula | CD | LANDSoL |
+| Direct ID | MP I–IV | Effect and formula | CD | floppy |
 | --- | --- | --- | --- | --- |
 | 0 Spark | 5 / 10 / 15 / 25 | Scan up to four blocks forward and use one target in the selected block. Inputs 7 / 15 / 25 / 60, category 5, hit code 2. | `0x4F15B–0x4F19C`, `0x4FBF0–0x4FC2F` | `0x594CB–0x5950C`, `0x59F10–0x59F4F` |
 | 1 Heal | 5 / 10 / 25 / 60 | I–III select a character and IV uses all active slots. Cap missing HP at 25 / 45 / 10000 / 10000. III, IV and the above-IV custom amount branch also cure poison. For each healing step, keep the low eight bits of the accumulator, add `(capped missing HP × 256) / 16`, then restore the integer part with a one-point floor and max-HP cap. The healing setter allows a zero-HP target when called with this spell's flag. | `0x4FDF0–0x4FE9C`, `0x43983–0x43ACD`, `0x43BD1–0x43C12`, `0xB34F–0xB39F` | `0x5A0F5–0x5A1A1`, `0x4CD09–0x4CE57`, `0x4CF61–0x4CFA2`, `0xB271–0xB2C1` |
@@ -29,19 +29,19 @@
 
 ### Vortex's item and native call sites
 
-**CONFIRMED** In both editions `ONETIME.INF` configures item type 239 with item script entry 14 and item might 7. Those operands are at CD `STARTUP.PAK+0x230E9–0x230F9` and LANDSoL `GENERAL.PAK+0xDC940–0xDC950`. Item entry 14 reads the type's might field with `getItemPara` selector 11 and gives it to `addSpellToScroll` as the spell ID. The add call is at CD `STARTUP.PAK+0x117E9` and LANDSoL `GENERAL.PAK+0xDA22C`. The native add routines store the supplied ID in the available-spell array (CD `MAIN.EXE+0x4FAC7–0x4FB32`, LANDSoL `+0x59DFD–0x59E61`). Upstream `engines/kyra/script/script_lol.cpp:314–315,1580–1584`, `engines/kyra/engine/lol.cpp:3173–3193`.
+**CONFIRMED** In both editions `ONETIME.INF` configures item type 239 with item script entry 14 and item might 7. Those operands are at CD `STARTUP.PAK+0x230E9–0x230F9` and floppy `GENERAL.PAK+0xDC940–0xDC950`. Item entry 14 reads the type's might field with `getItemPara` selector 11 and gives it to `addSpellToScroll` as the spell ID. The add call is at CD `STARTUP.PAK+0x117E9` and floppy `GENERAL.PAK+0xDA22C`. The native add routines store the supplied ID in the available-spell array (CD `MAIN.EXE+0x4FAC7–0x4FB32`, floppy `+0x59DFD–0x59E61`). Upstream `engines/kyra/script/script_lol.cpp:314–315,1580–1584`, `engines/kyra/engine/lol.cpp:3173–3193`.
 
-**CONFIRMED** The menu reads the selected spell ID from that array, passes it with the caster and rank, and calls the cast routine at CD `MAIN.EXE+0x1092E` or LANDSoL `+0x1526D`. Vortex's 28-byte spell record starts at CD `+0x2B6A4` or floppy `+0x2CF44`. The last two bytes `07 01` select effect slot 7 on the paid path and impose the forward-wall test. The four MP costs are 3, 6, 12 and 24. All four HP costs are zero. Upstream menu reference `engines/kyra/gui/gui_lol.cpp:1092–1115`.
+**CONFIRMED** The menu reads the selected spell ID from that array, passes it with the caster and rank, and calls the cast routine at CD `MAIN.EXE+0x1092E` or floppy `+0x1526D`. Vortex's 28-byte spell record starts at CD `+0x2B6A4` or floppy `+0x2CF44`. The last two bytes `07 01` select effect slot 7 on the paid path and impose the forward-wall test. The four MP costs are 3, 6, 12 and 24. All four HP costs are zero. Upstream menu reference `engines/kyra/gui/gui_lol.cpp:1092–1115`.
 
-| Casting step for Vortex | CD `MAIN.EXE` | LANDSoL `MAIN.EXE` |
+| Casting step for Vortex | CD `MAIN.EXE` | floppy `MAIN.EXE` |
 | --- | --- | --- |
 | Cost paid on an accepted ordinary cast | `0x4FF57–0x4FFE4` | `0x5A25A–0x5A2E7` |
 | Test both words of effect slot 7, containing `00 00 00 00` | `0x4FFF8–0x50000`, slot `0x32F10` | `0x5A2FB–0x5A303`, slot `0x39620` |
 | Skip the indirect call and return 1 | Skips `0x50018`, returns at `0x50024–0x5002A` | Skips `0x5A31B`, returns at `0x5A327–0x5A32D` |
 
-**CONFIRMED** An accepted ordinary Vortex cast spends MP and runs no spell effect. The separate no-cost path uses the supplied effect ID directly at CD `0x4FF4D` and LANDSoL `0x5A250`. Its indirect call lacks the paid path's zero-pointer guard. EMC `0xAD` reaches the cast routine at CD `0x16353` and floppy `0x1AC43`. The five `0xAD` calls per edition are in `ITEM.INF`. Four of them pass `-1 - caster` and take the no-cost path; one (CD `STARTUP.PAK+0x11CBB`) passes the caster itself and takes the paid path. None of the five can supply ID 7. Their fixed effects are 4 and 12, and the other three use item attributes. In the startup definitions, the item handlers feeding those three calls supply 3, 5, 6, 9 (entry 20), 4, 5, 9, 16 (entry 24), and 8 (entry 29). For example, entry 20's getter and cast are CD `STARTUP.PAK+0x11A97–0x11AFD` and LANDSoL `GENERAL.PAK+0xDA49E–0xDA4EE`. The corresponding startup definitions span CD `STARTUP.PAK+0x22FD1–0x2302D, +0x234AF–0x23525` and LANDSoL `GENERAL.PAK+0xDC828–0xDC884, +0xDCD06–0xDCD7C`.
+**CONFIRMED** An accepted ordinary Vortex cast spends MP and runs no spell effect. The separate no-cost path uses the supplied effect ID directly at CD `0x4FF4D` and floppy `0x5A250`. Its indirect call lacks the paid path's zero-pointer guard. EMC `0xAD` reaches the cast routine at CD `0x16353` and floppy `0x1AC43`. The five `0xAD` calls per edition are in `ITEM.INF`. Four of them pass `-1 - caster` and take the no-cost path; one (CD `STARTUP.PAK+0x11CBB`) passes the caster itself and takes the paid path. None of the five can supply ID 7. Their fixed effects are 4 and 12, and the other three use item attributes. In the startup definitions, the item handlers feeding those three calls supply 3, 5, 6, 9 (entry 20), 4, 5, 9, 16 (entry 24), and 8 (entry 29). For example, entry 20's getter and cast are CD `STARTUP.PAK+0x11A97–0x11AFD` and floppy `GENERAL.PAK+0xDA49E–0xDA4EE`. The corresponding startup definitions span CD `STARTUP.PAK+0x22FD1–0x2302D, +0x234AF–0x23525` and floppy `GENERAL.PAK+0xDC828–0xDC884, +0xDCD06–0xDCD7C`.
 
-**UNCONFIRMED** An ordinary shipped-play route that awards item 239 remains open. The definition and its reading path are present. The corpus check tested literal uses of 239 in the level scripts and found it as a block or rectangle operand, e.g. in CD `L01.PAK+0xD5D7` and LANDSoL `CHAPTER1.PAK+0x58B4D`. To verify reachability, trace native item grants and placements filtered by type 239, including the shop and any computed script arguments.
+**UNCONFIRMED** An ordinary shipped-play route that awards item 239 remains open. The definition and its reading path are present. The corpus check tested literal uses of 239 in the level scripts and found it as a block or rectangle operand, e.g. in CD `L01.PAK+0xD5D7` and floppy `CHAPTER1.PAK+0x58B4D`. To verify reachability, trace native item grants and placements filtered by type 239, including the shop and any computed script arguments.
 
 ## Lamp, regeneration and the clock
 
@@ -53,7 +53,7 @@
 
 **CONFIRMED** The original timer arrays start at CD `0x33D68` and floppy `0x3CFF0`. Each 19-byte entry has a far callback at +0, period at +4, initial timing state at +8, callback argument at +12, far clock pointer at +14, and an enable byte at +18. The two monster entries share a callback, start with state 0 and 3, and have arguments 0 and 1.
 
-| Slots | Work | Period in game ticks | CD callback | LANDSoL callback |
+| Slots | Work | Period in game ticks | CD callback | floppy callback |
 | --- | --- | ---: | --- | --- |
 | 0 | Doors | 15 | `0xF40A` | `0x13DF8` |
 | 1, 2 | Even and odd monster slots | 6 | `0xF3CA` | `0x13DB8` |
@@ -69,26 +69,26 @@
 
 ### Native tick duration and pause
 
-**CONFIRMED** Both DOS sound-driver initializers register the game-clock callback at frequency 60. CD `MAIN.EXE+0x52458–0x5247E` passes offset 2 with overlay segment index `0x458`. That index selects segment `0x2318` from the directory at `0x2FC50`, giving callback file offset `0x26982`. LANDSoL `+0x57E0C–0x57E32` passes offset `0xC` with index `0x2F0`. Its directory at `0x36500` gives segment `0x24B8` and callback `0x2938C`. Frequency 60 is the literal `0x3C` in each registration path.
+**CONFIRMED** Both DOS sound-driver initializers register the game-clock callback at frequency 60. CD `MAIN.EXE+0x52458–0x5247E` passes offset 2 with overlay segment index `0x458`. That index selects segment `0x2318` from the directory at `0x2FC50`, giving callback file offset `0x26982`. floppy `+0x57E0C–0x57E32` passes offset `0xC` with index `0x2F0`. Its directory at `0x36500` gives segment `0x24B8` and callback `0x2938C`. Frequency 60 is the literal `0x3C` in each registration path.
 
 **CONFIRMED** The driver derives the logical period as integer `1,000,000 / frequency` microseconds, so 60 gives `16,666 μs`. It chooses the shortest registered period for the hardware clock. When that period is `16,666`, the integer PIT divisor is `floor(16666 × 10000 / 8380) = 19887` (`0x4DAF`). The timer setup writes `0x36` to port `0x43` and then the divisor's low and high bytes to port `0x40`. Other registrations can change the hardware interrupt period. The interrupt routine adds the current timer period to each enabled slot's accumulator. When it reaches the slot's period, the routine subtracts that period and calls its registered handler.
 
-| Native evidence | CD `MAIN.EXE` | LANDSoL `MAIN.EXE` |
+| Native evidence | CD `MAIN.EXE` | floppy `MAIN.EXE` |
 | --- | --- | --- |
 | Integer frequency-to-period conversion and slot write | `0x5679B–0x56853` | `0x26E73–0x26EB2, 0x26CE9–0x26D3C` |
 | Pick shortest period | `0x566CA–0x56749` | `0x26A2A–0x26ABD` |
 | Convert to divisor and write PIT ports | `0x56654–0x5667C, 0x564D2–0x564F3` | `0x269B6–0x269DE, 0x2698D–0x269B5` |
 | Install the IRQ 0 vector and schedule enabled callbacks | `0x56947–0x5698D, 0x1F2FD–0x1F3A0` | `0x2690D–0x26953, 0x26827–0x26893` |
-| Advance the game clock counters (CD: counters whose bit is set in `DS:3848` count down, initially `DS:3850`; `DS:384C` and `DS:3858` increment. LANDSoL: `DS:6F18` counts down) | `0x26982–0x269C7` | `0x2938C–0x293D5` |
+| Advance the game clock counters (CD: counters whose bit is set in `DS:3848` count down, initially `DS:3850`; `DS:384C` and `DS:3858` increment. floppy: `DS:6F18` counts down) | `0x26982–0x269C7` | `0x2938C–0x293D5` |
 | Pause and resume the gameplay clock with argument 2 | `0x4C5B3–0x4C5D4, 0x269C8–0x26A49` | `0x5521A–0x55249, 0x24F85–0x24FEC` |
 
-**CONFIRMED** At the nominal 60 ticks per second, 360 ticks of an enabled clock is about 6 seconds, and 1200 is about 20 seconds. The gameplay timer table uses the gated counter, CD `DS:3858` (enable bit 3 of `DS:384A`) or LANDSoL `DS:6F14` (enable bit 1 of `DS:6F1C`). The delay clock is `DS:384C` or `DS:6F0C` and keeps advancing when those gameplay bits are cleared. The CD data image initializes its delay clock's enable bit 0 at `MAIN.EXE+0x3531A`. LANDSoL advances the delay clock unconditionally in the callback. The script pause and resume entry points are `0x9A` and `0x9B` (CD wrappers `0x4D4E0–0x4D4F7`, floppy `0x56078–0x5608F`). ScummVM's DOS engine represents its interval as an integer `16 ms` (`engines/kyra/engine/kyra_v1.cpp:46–50,715–732`).
+**CONFIRMED** At the nominal 60 ticks per second, 360 ticks of an enabled clock is about 6 seconds, and 1200 is about 20 seconds. The gameplay timer table uses the gated counter, CD `DS:3858` (enable bit 3 of `DS:384A`) or floppy `DS:6F14` (enable bit 1 of `DS:6F1C`). The delay clock is `DS:384C` or `DS:6F0C` and keeps advancing when those gameplay bits are cleared. The CD data image initializes its delay clock's enable bit 0 at `MAIN.EXE+0x3531A`. floppy advances the delay clock unconditionally in the callback. The script pause and resume entry points are `0x9A` and `0x9B` (CD wrappers `0x4D4E0–0x4D4F7`, floppy `0x56078–0x5608F`). ScummVM's DOS engine represents its interval as an integer `16 ms` (`engines/kyra/engine/kyra_v1.cpp:46–50,715–732`).
 
 ## Monster transitions
 
 **CONFIRMED** The update returns for modes above 14. Mode flags 0–14 are `1,0,1,3,3,0,0,3,4,1,0,0,4,0,0` (CD `0x33F53`, floppy `0x3D1DD`). Increment the speed counter and compare the old value with the definition's wait byte. Flag 4 bypasses that wait. On update, reset the counter, regenerate `1d8` up to base HP if property flag `0x40` is set, and copy the party location to the destination if runtime flag 8 is set. A successful visibility check for mode flag 2 or a recent hit for mode flag 1 switches to mode 7 before dispatch. CD `0x1275F–0x12874`, floppy `0x170FD–0x17213`.
 
-| Mode | CONFIRMED native path | CD | LANDSoL |
+| Mode | CONFIRMED native path | CD | floppy |
 | --- | --- | --- | --- |
 | 0, 1 | Shared branch checks the recent-hit flag and visits mode-1 monsters before moving toward the assigned destination. | `0x128B7` → `0x121BC` | `0x17256` → `0x16B5A` |
 | 2 | Moves or changes direction toward the assigned destination. | `0x128C2` → `0x1215F` | `0x17261` → `0x16AFD` |
@@ -106,17 +106,17 @@
 | 15 | Used temporarily during the collision query. The existing mode is saved and restored. | `0x1145D–0x114B5` | `0x15EF9–0x15F51` |
 | 16 | An inactive slot value. | `0x12766–0x1276E` | `0x17104–0x1710C`, `_LEVEL5.TMP+0x63` |
 
-**CONFIRMED** Spawn HP is `floor(base HP × difficulty modifier 1 / 256)`, then `floor(result × (192 + 1d128) / 256)`, with a floor of 1 HP. CD skips the second multiply for type 2 on level 12. LANDSoL always takes it. For example with normal difficulty, base HP 40 and a roll of 64, the result is 40 in either edition (CD `0x14740–0x147B2`, floppy `0x190D8–0x19139`).
+**CONFIRMED** Spawn HP is `floor(base HP × difficulty modifier 1 / 256)`, then `floor(result × (192 + 1d128) / 256)`, with a floor of 1 HP. CD skips the second multiply for type 2 on level 12. floppy always takes it. For example with normal difficulty, base HP 40 and a roll of 64, the result is 40 in either edition (CD `0x14740–0x147B2`, floppy `0x190D8–0x19139`).
 
 ### Follow-up on modes 9–11
 
-**CONFIRMED** In the walk helper, runtime flag 8 reverses the intended eight-way direction by XORing it with 4 before the movement search. This is the flag cleared by mode 9 on its return to mode 7 (CD `MAIN.EXE+0x1151F–0x1152F, +0x129E6–0x12A17`, LANDSoL `+0x15FBB–0x15FCB, +0x17385–0x173B6`). Upstream `engines/kyra/engine/sprites_lol.cpp:1123–1129,1336–1344`.
+**CONFIRMED** In the walk helper, runtime flag 8 reverses the intended eight-way direction by XORing it with 4 before the movement search. This is the flag cleared by mode 9 on its return to mode 7 (CD `MAIN.EXE+0x1151F–0x1152F, +0x129E6–0x12A17`, floppy `+0x15FBB–0x15FCB, +0x17385–0x173B6`). Upstream `engines/kyra/engine/sprites_lol.cpp:1123–1129,1336–1344`.
 
-**CONFIRMED** Modes 10 and 11 have the same update-table target, the shared cleanup at CD `0x12A30` and LANDSoL `0x173CF`. The mode-10 and mode-11 table words are identical at CD `0x12A7F–0x12A82` and floppy `0x1741E–0x17421`. The earlier update code runs its one-in-four shift update for mode 10 and skips it for modes 11 and 14 (CD `0x12830–0x12860`, floppy `0x171CE–0x171FF`).
+**CONFIRMED** Modes 10 and 11 have the same update-table target, the shared cleanup at CD `0x12A30` and floppy `0x173CF`. The mode-10 and mode-11 table words are identical at CD `0x12A7F–0x12A82` and floppy `0x1741E–0x17421`. The earlier update code runs its one-in-four shift update for mode 10 and skips it for modes 11 and 14 (CD `0x12830–0x12860`, floppy `0x171CE–0x171FF`).
 
-**CONFIRMED** The native renderer resolves the animation type from the monster's shape bank, then calls one of four frame selectors (CD `0x3DDEF–0x3DE52`, LANDSoL `0x46F35–0x46F98`). The selected frame is an index within the shape bank. This is how the two modes differ in the four selectors.
+**CONFIRMED** The native renderer resolves the animation type from the monster's shape bank, then calls one of four frame selectors (CD `0x3DDEF–0x3DE52`, floppy `0x46F35–0x46F98`). The selected frame is an index within the shape bank. This is how the two modes differ in the four selectors.
 
-| Animation type | Mode 10 result | Mode 11 result | CD / LANDSoL selector |
+| Animation type | Mode 10 result | Mode 11 result | CD / floppy selector |
 | --- | --- | --- | --- |
 | 0 | Uses the ordinary subframe. Direction flags are added when set. With no direction offset a pending damage display takes frame 12. | Direction offset and damage result take precedence as in mode 10. Otherwise uses fixed frame 14. | `0x3DC34–0x3DCD1` / `0x46D88–0x46E25`. Jump table at `0x3DCD2` / `0x46E26`. |
 | 1 | Uses the HP band index 0, 4 or 8. CD calculates the thresholds from difficulty-adjusted base HP. Floppy uses raw base HP. | Fixed frame 12. | `0x3DCE4–0x3DD74` / `0x46E38–0x46EBA` |
@@ -131,7 +131,7 @@
 
 **CONFIRMED** The loader skips the area word, then steps 12 bytes at a time. The six little-endian words give wall ID, VMP, shape, special type, wall flags and automap value. It stores the low bytes of the final three separately. CD `0x47350–0x47421`, floppy `0x50B33–0x50C04`. The WLL flag table in memory is CD `DS:531E` or floppy `DS:87C4`.
 
-| Bit | Native use | CD | LANDSoL |
+| Bit | Native use | CD | floppy |
 | --- | --- | --- | --- |
 | `0x01` | Blocks ordinary party movement and the gated cast path. The door toggle also uses it to determine whether to attempt closing or opening. | `0xD6B4`, `0x17A4D`, `0x4FEFF–0x4FF1D` | `0x10E3A`, `0x1C078`, `0x5A202–0x5A222` |
 | `0x02` | Blocks ranged monster targeting and thrown items. | `0x124CF`, `0x1040B` | `0x16E6D`, `0x14D69` |
@@ -144,7 +144,7 @@
 
 **CONFIRMED** The click handler reads the forward wall's special byte. A zero byte skips dispatch. Nonzero values index a far-pointer table. CD `0x1797A–0x179D7`, table at `0x342FC`; floppy `0x1BFA5–0x1C002`, table at `0x3D558`.
 
-| Type | Native click behavior | CD handler | LANDSoL handler |
+| Type | Native click behavior | CD handler | floppy handler |
 | --- | --- | --- | --- |
 | 0 | No callback. | `0x179AA–0x179B0` | `0x1BFD5–0x1BFDB` |
 | 1 | Hit-test the wall shape and run event `0x40` on a hit. | `0x17754` | `0x1BD87` |
@@ -158,8 +158,8 @@
 
 ### Follow-up on bit 0x40
 
-**CONFIRMED** The 29 tables in each edition have combined low-byte mask `0xBF` across all 1726 records. The native door-shape loader modifies those bytes with only `OR 0x07`, `AND 0xF8` and `AND 0xFD`. These operations preserve bit `0x40`. Compare CD `MAIN.EXE+0x477B7–0x47826`, LANDSoL `+0x50F96–0x51005`, and upstream `engines/kyra/script/script_lol.cpp:465–493`.
+**CONFIRMED** The 29 tables in each edition have combined low-byte mask `0xBF` across all 1726 records. The native door-shape loader modifies those bytes with only `OR 0x07`, `AND 0xF8` and `AND 0xFD`. These operations preserve bit `0x40`. Compare CD `MAIN.EXE+0x477B7–0x47826`, floppy `+0x50F96–0x51005`, and upstream `engines/kyra/script/script_lol.cpp:465–493`.
 
-**CONFIRMED** Syscall `0x5A` returns the complete zero-extended WLL byte (CD `0x134F0–0x1352A`, LANDSoL `0x17EB3–0x17EED`). There are four calls in each 60-script corpus. One compares the whole byte to zero, so a hypothetical set bit could affect that test when all other bits are clear. The example calls ask for block 172, face 1 at CD `L08.PAK+0xCAA8` and LANDSoL `CHAPTER2.PAK+0x23687`. The other three call sites apply masks of 0 or 7 in the adjacent instructions (CD `L01.PAK+0xD08F`, `L12.PAK+0xEEFA`, `L13.PAK+0x823C`, LANDSoL `CHAPTER1.PAK+0x58601`, `CHAPTER4.PAK+0x17CC4, +0x18A26`).
+**CONFIRMED** Syscall `0x5A` returns the complete zero-extended WLL byte (CD `0x134F0–0x1352A`, floppy `0x17EB3–0x17EED`). There are four calls in each 60-script corpus. One compares the whole byte to zero, so a hypothetical set bit could affect that test when all other bits are clear. The example calls ask for block 172, face 1 at CD `L08.PAK+0xCAA8` and floppy `CHAPTER2.PAK+0x23687`. The other three call sites apply masks of 0 or 7 in the adjacent instructions (CD `L01.PAK+0xD08F`, `L12.PAK+0xEEFA`, `L13.PAK+0x823C`, floppy `CHAPTER1.PAK+0x58601`, `CHAPTER4.PAK+0x17CC4, +0x18A26`).
 
 **UNCONFIRMED** A dedicated role for bit `0x40` remains open. The follow-up compared the original WLL records, the door flag writes, direct accesses to CD `DS:531E` and floppy `DS:87C4`, and the EMC queries. The direct tests inspected use masks such as collision 7, door state `0x30` and draw flag `0x80` (CD `0xC91C, 0x481AB, 0x3EA1A`, floppy `0x10138, 0x5198B, 0x47B60`). A trace of an isolated WLL copy with only bit `0x40` toggled would test for a hidden pointer-relative consumer. The known whole-byte zero test should be accounted for separately.

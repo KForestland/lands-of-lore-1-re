@@ -1,6 +1,6 @@
 # ADV, DRV, TBL
 
-**Edition read:** CD and LANDSoL.
+**Edition read:** CD and floppy.
 
 ## Sound drivers: `DRIVERS.PAK`
 

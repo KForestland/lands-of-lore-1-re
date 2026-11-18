@@ -285,27 +285,25 @@ $ python3 tools/emc2_decompile.py L01.PAK --entry LEVEL1.INI | grep -E "^; L01|T
 
 ### `save_reader.py`
 
-Save files field by field: original `_SAVEnnn.DAT`, the original game's level files `_LEVELn.TMP`, and ScummVM's LoL saves. `--json out.json` writes every field. `--check` reads every such file in the game folder (and its parent) and in ScummVM's save folder (`--saves`), and checks each ends where the layout predicts; it also runs the original-save layout on blank files of the documented sizes, since no original `_SAVEnnn.DAT` has been available.
+Save files field by field: original `_SAVEnnn.DAT`, the original game's level files `_LEVELn.TMP`, and ScummVM's LoL saves. `--json out.json` writes every field. `--check` reads every such file in the game folder (and its parent) and, when you pass `--saves DIR`, in that ScummVM save folder, and checks each ends where the layout predicts; it also runs the original-save layout on blank files of the documented sizes, since no original `_SAVEnnn.DAT` has been available.
 
 ```
-$ python3 tools/save_reader.py /path/to/LANDSoL/_LEVEL1.TMP
+$ python3 tools/save_reader.py /path/to/floppy/_LEVEL1.TMP     # a file the game wrote while you played
 level file; ends at 1621 as the layout predicts: True
   difficulty 1, 15 changed wall bytes, 4 monster slots in use, 0 flying objects
-$ python3 tools/save_reader.py ~/.local/share/scummvm/saves/lol-cd.008
-ScummVM save, CD, version 21: "daraicale cave 2"; ends at 84912 as the layout predicts: True
-  Ak'shel    HP 32/32  MP 99/99  skills [1, 1, 3]  XP [57, 1, 2095]
-  Baccata    HP 22/22  MP 18/18  skills [1, 1, 3]  XP [1, 1, 4016]
-  Lora       HP 48/48  MP 5/5  skills [1, 4, 1]  XP [1, 15001, 1]
-  level 6, block 257 (x 1, y 8), facing 2, money 58, 49 game flags set, levels stored [1, 2, 3, 4, 5, 6, 7], 73 items in use
+$ python3 tools/save_reader.py /path/to/scummvm/saves/lol-cd.NNN
+ScummVM save, CD, version 21: "<save name>"; ends at <size> as the layout predicts: True
+  <one line per character: name, HP, MP, skills, XP>
+  level <n>, block <b> (x, y), facing <f>, money <m>, <k> game flags set, levels stored [...], <i> items in use
 ```
 
 ### `repo_guard.py`
 
-Asset-policy guard, run by `check_all.py`: fails if git tracks any game file type (`.PAK`, `.CPS`, `.SHP`, `.XMI`, …), converted media (`.MID`, `.WAV`, …), a PNG outside `examples/` and `docs/images/`, or a file over 1 MiB. Needs no game data.
+Asset-policy guard, run by `check_all.py`: fails if git tracks any game file type (`.PAK`, `.CPS`, `.SHP`, `.XMI`, …), converted media (`.MID`, `.WAV`, …), a PNG outside `examples/` and `docs/images/`, a file over 300 KB (except the tables it lists by name), a machine path, or a word from an optional local word list (`.git/info/private_words`, never tracked). `--release` also checks every commit's author and committer address. Needs no game data.
 
 ```
 $ python3 tools/repo_guard.py --check
-CHECK repo_guard: 126 tracked files; game files, converted media, stray PNGs or files over 1 MiB: none (0)
+CHECK repo_guard: 137 tracked files; game files, converted media, stray PNGs, files over 300 KB, machine paths, words from the local list, or commit identities: none (0); private word list: not present, skipped
 ```
 
 ### `tests/test_emc2_corpus.py`

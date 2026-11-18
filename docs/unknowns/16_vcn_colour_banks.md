@@ -2,7 +2,7 @@
 
 **CONFIRMED** The bank is part of the VCN tileset. Each tile index has one stored shift byte. On the DOS VGA path, the renderer looks up the byte by the actual tile ID and ORs it with each of the tile's 4-bit pixel values. The result indexes a 128-entry table of VGA palette indices. The shift bytes are independent of the current lamp, brightness and replacement RGB palette.
 
-| Step | CD `MAIN.EXE` | LANDSoL `MAIN.EXE` |
+| Step | CD `MAIN.EXE` | floppy `MAIN.EXE` |
 | --- | --- | --- |
 | Read tile count, skip the 2-byte header, copy exactly that many shift bytes, then advance to the colour table | `0x46561–0x465EC` | `0x4FD22–0x4FDAD` |
 | Copy 64 words from the colour table into the drawing code's data | `0x1E80C–0x1E828` | `0x1F245–0x1F260` |
@@ -16,7 +16,7 @@
 
 ## Worked example
 
-**CONFIRMED** A read of all 13 VCN members in each edition yields 18,979 shift bytes per edition. The complete set of values is `00 10 20 30 40 50 60 70`. Dividing the stored byte by 16 gives the bank index, 0 through 7. For example, the compressed CD witnesses are `KEEP.PAK+0x9675` (VCN) and `+0xF8F4` (VMP). The corresponding LANDSoL witnesses are `CHAPTER1.PAK+0xEEFB9` and `+0xFC6B4`. Their decompressed bytes agree on the following calculation.
+**CONFIRMED** A read of all 13 VCN members in each edition yields 18,979 shift bytes per edition. The complete set of values is `00 10 20 30 40 50 60 70`. Dividing the stored byte by 16 gives the bank index, 0 through 7. For example, the compressed CD witnesses are `KEEP.PAK+0x9675` (VCN) and `+0xF8F4` (VMP). The corresponding floppy witnesses are `CHAPTER1.PAK+0xEEFB9` and `+0xFC6B4`. Their decompressed bytes agree on the following calculation.
 
 - VMP word 330 at decoded offset `0x296` is `FA 00`, selecting wall tile 250.
 - The shift at decoded VCN offset `2 + 250 = 0xFC` is `0x30`, bank 3. The first pixel byte at `514 + 1282 + 32 × 250 = 0x2644` is `0x33`.
@@ -27,7 +27,7 @@
 
 ## Shift values in KEEP.VCN
 
-**CONFIRMED** CD and LANDSoL `KEEP.VCN` decompress to the same 42820-byte image: tile count 1282 (`02 05`), then the 1282-byte shift table. The only values in the table are the eight multiples of 16:
+**CONFIRMED** CD and floppy `KEEP.VCN` decompress to the same 42820-byte image: tile count 1282 (`02 05`), then the 1282-byte shift table. The only values in the table are the eight multiples of 16:
 
 | Shift byte | Bank | Tiles |
 | --- | --- | --- |

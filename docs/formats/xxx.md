@@ -2,7 +2,7 @@
 
 **What:** `LEVELn.XXX`: the legend lines and symbols the automap shows for a level.
 
-**Edition read:** CD (29 files, 73 records), LANDSoL (29, 73).
+**Edition read:** CD (29 files, 73 records), floppy (29, 73).
 
 ## Layout
 

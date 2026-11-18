@@ -2,7 +2,7 @@
 
 **What:** per level, what each wall-type number means: which VMP wall layout, which decoration, special type, flags, automap symbol.
 
-**Edition read:** CD (29). LANDSoL (29, count only).
+**Edition read:** CD (29). floppy (29, count only).
 
 ## Layout
 

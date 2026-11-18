@@ -2,7 +2,7 @@
 
 **What:** raw VGA palettes: 256 colours x 3 bytes, 6-bit RGB (0..63), no header.
 
-**Edition read:** CD `DATA/` (6 PAL, 5 COL), LANDSoL (11 PAL, 5 COL).
+**Edition read:** CD `DATA/` (6 PAL, 5 COL), floppy (11 PAL, 5 COL).
 
 | File | Size (CD) | Loaded by |
 |------|-----------|-----------|

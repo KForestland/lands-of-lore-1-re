@@ -4,7 +4,7 @@
 
 ## Evidence
 
-The CD edition is its `DATA` directory. The second edition is LANDSoL, an English floppy installation (see [formats/README.md](formats/README.md)). ScummVM line numbers refer to upstream revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801a3`. Short source references in this page resolve under `engines/kyra/`: `VM` = `script/script.cpp`, `LoL` = `script/script_lol.cpp`, `ABI` = `script/script.h`, `V1` = `script/script_v1.cpp`. **CONFIRMED** marks checks on the original data. **UNCONFIRMED** marks an effect inferred from the ScummVM implementation without a check in the original executable. Corpus locations are in the last table.
+The CD edition is its `DATA` directory. The second edition is an English floppy installation ("LANDSoL" in some file names) (see [formats/README.md](formats/README.md)). ScummVM line numbers refer to upstream revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801a3`. Short source references in this page resolve under `engines/kyra/`: `VM` = `script/script.cpp`, `LoL` = `script/script_lol.cpp`, `ABI` = `script/script.h`, `V1` = `script/script_v1.cpp`. **CONFIRMED** marks checks on the original data. **UNCONFIRMED** marks an effect inferred from the ScummVM implementation without a check in the original executable. Corpus locations are in the last table.
 
 ## Container and entry points
 
@@ -12,9 +12,9 @@ All integer fields here are big-endian. File offsets are relative to the INF or 
 
 | Offset or chunk | Layout | Evidence |
 | --- | --- | --- |
-| `0x00` | Four-byte `FORM` tag. | **CONFIRMED** CD and LANDSoL `LEVEL1.INI+0x00`. |
-| `0x04` | `u32` length. The original files in both corpora store the full member size, including the first eight bytes. | **CONFIRMED** CD and LANDSoL `LEVEL1.INI+0x04`, value `0x29E` for a 670-byte member. Same convention across the corpus. |
-| `0x08` | Four-byte `EMC2` form type. | **CONFIRMED** CD and LANDSoL `LEVEL1.INI+0x08`. |
+| `0x00` | Four-byte `FORM` tag. | **CONFIRMED** CD and floppy `LEVEL1.INI+0x00`. |
+| `0x04` | `u32` length. The original files in both corpora store the full member size, including the first eight bytes. | **CONFIRMED** CD and floppy `LEVEL1.INI+0x04`, value `0x29E` for a 670-byte member. Same convention across the corpus. |
+| `0x08` | Four-byte `EMC2` form type. | **CONFIRMED** CD and floppy `LEVEL1.INI+0x08`. |
 | `0x0C` onward | Chunks have a four-byte tag, a `u32` payload size, payload bytes and one pad byte after an odd-sized payload. | **CONFIRMED** both editions' `LEVEL1.INI`, where the 109-byte TEXT payload starts at `0x20`, pad is at `0x8D` and next header starts at `0x8E`. ScummVM `common/formats/iff_container.cpp:52–75` drives reading. |
 | `ORDR` | Array of `u16` DATA **word indexes**, indexed by the external entry number. `0xFFFF` is absent. An active entry points to a header word, and execution begins at the following word. In level INF scripts ScummVM tests the header against the caller's event flags. | **CONFIRMED** both editions' `LEVEL1.INI+0x14` points to words `0x1B` and `0x9F`, with code at `0x1C` and `0xA0`. The level mask test is documented by VM:156–178 and LoL:68–89. |
 | `TEXT` | Optional. Array of `u16` **byte offsets relative to this payload**, then NUL-terminated byte strings. The first offset equals twice the number of entries in both English corpora. Index 0 reads the first pointer at offset 0. | **CONFIRMED** both editions' `LEVEL1.INI+0x20`. The first pointer `0x0014` leads to `KEEP` at script offset `0x34`. ABI:68 implements lookup as `TEXT[BE16(TEXT + 2 × index)]`. |
@@ -27,7 +27,7 @@ A listing prints DATA word addresses in hex and string indexes in decimal. To lo
 ```sh
 python3 tools/emc2_decompile.py /path/to/LEVEL1.INI
 python3 tools/emc2_decompile.py /path/to/DATA/L01.PAK --entry LEVEL1.INI
-python3 tests/test_emc2_corpus.py /path/to/CD/DATA /path/to/LANDSoL
+python3 tests/test_emc2_corpus.py /path/to/CD/DATA /path/to/floppy
 ```
 
 ## Instruction encoding and opcodes
@@ -80,7 +80,7 @@ Effects below describe the ScummVM implementation (**UNCONFIRMED** native behavi
 
 Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` for a string-table index and `lang ID` for a separate localized text identifier. Arguments can be read conditionally. Columns CD and Floppy count static call sites (**CONFIRMED**, corpus locations below). Unless a row cites native behavior, the names, arguments and effects describe the ScummVM implementation (**UNCONFIRMED** native semantics). A vacant ScummVM slot returns 0 in that interpreter (LoL:2683–2974, ABI:63–69, VM:309–321).
 
-**CONFIRMED** Native tables are arrays of relocated 16:16 pointers with the offset word first. CD `MAIN.EXE+0x33F64` and `MAINW.EXE+0x33A08` have 192 entries. LANDSoL `MAIN.EXE+0x3D1EE` has 187 entries, ending at ID 0xBA. All segment words are MZ relocation targets. Table ends are the first following addresses without a segment relocation at this stride. The native handler columns give file offsets in the two `MAIN.EXE` files. They include entry stubs for overlay code. Resolve a table entry using image header bytes plus pointer segment × 16 plus pointer offset. The original stack accessor is visible in the CD and floppy 0x40 wrappers at `+0x148FC` and `+0x19283`. See [Executable tables](executable_tables.md#locating-the-executables) for the CD archive coordinates.
+**CONFIRMED** Native tables are arrays of relocated 16:16 pointers with the offset word first. CD `MAIN.EXE+0x33F64` and `MAINW.EXE+0x33A08` have 192 entries. floppy `MAIN.EXE+0x3D1EE` has 187 entries, ending at ID 0xBA. All segment words are MZ relocation targets. Table ends are the first following addresses without a segment relocation at this stride. The native handler columns give file offsets in the two `MAIN.EXE` files. They include entry stubs for overlay code. Resolve a table entry using image header bytes plus pointer segment × 16 plus pointer offset. The original stack accessor is visible in the CD and floppy 0x40 wrappers at `+0x148FC` and `+0x19283`. See [Executable tables](executable_tables.md#locating-the-executables) for the CD archive coordinates.
 
 | ID | Function | Arguments | Effect | CD calls | Floppy calls | CD handler | Floppy handler | Source |
 | --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
@@ -209,7 +209,7 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | 7A | playDialogueTalkText | speech/lang ID, formatting arguments | Plays speech and prints dialogue if speech fails or text is enabled. | 60 | 61 | `0x158C9` | `0x1A204` | LoL:2871, LoL:1592–1602 |
 | 7B | checkMonsterTypeHostility | type or −1 | Checks the first matching monster. Returns 0 for mode 1, otherwise 1. | 8 | 8 | `0x1592C` | `0x1A239` | LoL:2872, LoL:1604–1612 |
 | 7C | setNextFunc | entry number | Sets the next script function. | 5 | 5 | `0x1598A` | `0x1A297` | LoL:2875, LoL:1614–1618 |
-| 7D | dummy1 | LANDSoL uses two arguments | **CONFIRMED** CD returns 1. LANDSoL passes both arguments to a native comparison routine and returns its result, which guards 0x7E. | 1 | 2 | `0x30F90` | `0x37575` | CD `MAIN.EXE+0x4E3E0–0x4E3E7`; floppy `+0x57071–0x5709B`; LoL:2876, LoL:1620–1622 |
+| 7D | dummy1 | floppy uses two arguments | **CONFIRMED** CD returns 1. floppy passes both arguments to a native comparison routine and returns its result, which guards 0x7E. | 1 | 2 | `0x30F90` | `0x37575` | CD `MAIN.EXE+0x4E3E0–0x4E3E7`; floppy `+0x57071–0x5709B`; LoL:2876, LoL:1620–1622 |
 | 7E | exitGame | — | **CONFIRMED** Prepare game shutdown and terminate to DOS with status 0. ScummVM leaves the slot unimplemented. | 1 | 2 | `0x159A4` | `0x1A2B1` | CD `MAIN.EXE+0xC846–0xC857, +0x396B–0x3973`; floppy `+0x10062–0x10073, +0x496B–0x4973`; LoL:2877. [Native exit and script branch](unknowns/08_native_script_exit.md) |
 | 7F | suspendMonster | monster | Sets mode 14 and removes its placement. | 26 | 24 | `0x159B1` | `0x1A2BE` | LoL:2878, LoL:1624–1631 |
 | 80 | setScriptTextParameter | value | Sets the script text formatting parameter. | 0 | 1 | `0x15A0D` | `0x1A31A` | LoL:2881, LoL:1633–1637 |
@@ -280,14 +280,14 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 ## Edition differences and verification
 
 - **CONFIRMED** Both editions have the same 60 script names. CD and floppy share 24 byte-identical files, all INI. Read the test results and PAK offsets below to reproduce the comparison.
-- **CONFIRMED** Call IDs found only in the CD script corpus are 0xBA–0xBE. The two 0xBA calls are at `L21.PAK+0x4ED8` and `+0x4F7A`. LANDSoL retains an unused 0xBA dispatch slot that returns zero (`MAIN.EXE+0x17DEF`). Other examples are `L03.PAK+0x4CA6` (0xBB) and `L01.PAK+0xD2A3`, `+0xD255`, `+0xDA6B` (0xBC, 0xBD, 0xBE). Floppy-only 0x80 appears at `CHAPTER1.PAK+0x5E047`. The call-site totals above describe these particular corpora.
+- **CONFIRMED** Call IDs found only in the CD script corpus are 0xBA–0xBE. The two 0xBA calls are at `L21.PAK+0x4ED8` and `+0x4F7A`. floppy retains an unused 0xBA dispatch slot that returns zero (`MAIN.EXE+0x17DEF`). Other examples are `L03.PAK+0x4CA6` (0xBB) and `L01.PAK+0xD2A3`, `+0xD255`, `+0xDA6B` (0xBC, 0xBD, 0xBE). Floppy-only 0x80 appears at `CHAPTER1.PAK+0x5E047`. The call-site totals above describe these particular corpora.
 - **CONFIRMED** Dispatch slot 0x7E is called once on CD at `L02.PAK+0xF40D` and twice on floppy at `CHAPTER1.PAK+0x5B351` and `CHAPTER5.PAK+0x2C68C`. Both native handlers take zero stack arguments, perform cleanup, then terminate to DOS with status 0. See [the native exit trace](unknowns/08_native_script_exit.md). ScummVM leaves it unimplemented (LoL:2877, VM:309–321).
 - **CONFIRMED** All 60 members per edition decompile with zero invalid opcode numbers, out-of-range function IDs, or invalid branch targets using the input members below. DATA word totals include ORDR headers and operand words. Counts are static, including instructions outside the external entry points.
 
 | Edition | Files | DATA words | Instructions | TEXT indexes | Files with TEXT |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Reference CD | 60 | 124,298 | 109,845 | 756 | 54 |
-| LANDSoL floppy | 60 | 120,706 | 106,782 | 746 | 54 |
+| floppy | 60 | 120,706 | 106,782 | 746 | 54 |
 
 **CONFIRMED** VM opcodes 0x01, 0x12 have no static occurrence in either edition. The function table uses the full dispatch numbering, including slots the scripts never call. VM:29–55 and LoL:2683–2974.
 
@@ -295,7 +295,7 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 
 **CONFIRMED** These are PAK member start byte offsets. For level rows the same PAK contains the INF and INI. The final two rows use one entry per edition.
 
-| Script base | CD PAK | CD INF | CD INI | LANDSoL PAK | Floppy INF | Floppy INI |
+| Script base | CD PAK | CD INF | CD INI | floppy PAK | Floppy INF | Floppy INI |
 | --- | --- | --- | --- | --- | --- | --- |
 | LEVEL1 | `L01.PAK` | `0xC259` | `0xF225` | `CHAPTER1.PAK` | `0x577BD` | `0x619C5` |
 | LEVEL2 | `L02.PAK` | `0xE735` | `0x10D77` | `CHAPTER1.PAK` | `0x5A679` | `0x61C63` |

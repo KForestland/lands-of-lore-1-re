@@ -3,7 +3,7 @@
 
 Rewritten 2026-11-18 as a batch front end for wsa_extract.py, which holds
 the ScummVM-exact decoder (docs/formats/wsa.md). The March version only took
-the top-20 files from a private inventory and needed a palette fix for
+the top-20 files from an earlier inventory and needed a palette fix for
 ESCAPE.WSA and CHANDELR.WSA; with the offsets read as ScummVM does
 (relative to the start of frame data, after the palette) no fix is needed.
 

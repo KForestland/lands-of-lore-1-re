@@ -1,6 +1,6 @@
 # Q11. Wall types the level file never defines
 
-Levels 2, 3 and 21 name wall types in the map that their own wall file does not define. The wall-property tables are not cleared by the level's wall loader (ScummVM, and the LANDSoL loader body; its callers were not checked), so those types keep whatever row was written last. The level scripts do not assign these type numbers.
+Levels 2, 3 and 21 name wall types in the map that their own wall file does not define. The wall-property tables are not cleared by the level's wall loader (ScummVM, and the floppy loader body; its callers were not checked), so those types keep whatever row was written last. The level scripts do not assign these type numbers.
 
 ## The missing types
 
@@ -45,17 +45,17 @@ Level 21. Wall file 794 bytes, area index 7, 66 records, 64 distinct ids. One bl
 
 Level 24's wall file defines every wall byte in its map, including 56, 57, 58 and 63. The note that types 46 and 53-57 are undefined belongs to level 2, not to level 24. Level 1 has no missing types.
 
-LANDSoL level 29 has one extra undefined face that the CD map does not. Block 876 (x 12, y 27), east wall, type 57. The wall files are byte-identical (1094 bytes, area 11). The maps are not (CD 765 bytes, LANDSoL 767). CONFIRMED as a difference between the editions. It is outside the three levels in the question.
+floppy level 29 has one extra undefined face that the CD map does not. Block 876 (x 12, y 27), east wall, type 57. The wall files are byte-identical (1094 bytes, area 11). The maps are not (CD 765 bytes, floppy 767). CONFIRMED as a difference between the editions. It is outside the three levels in the question.
 
 ## The property row is left in place
 
 CONFIRMED for ScummVM. Five property arrays are allocated once and filled with 0: four in `engines/kyra/engine/kyra_rpg.cpp:190-193`, and the automap array (80 entries) in `engines/kyra/engine/lol.cpp:442`. `loadLevelWallData` writes one row per record and does not clear the arrays first (`scene_lol.cpp:153-172`). A type the new file does not mention keeps the previous level's row, or 0 if no level has written it.
 
-CONFIRMED for the LANDSoL loader's body. `MAIN.EXE` (373872 bytes) reads the 12-byte records at file `0x50b33-0x50c04`. That span contains no `rep stos`. The CD `MAIN.EXE` (356928 bytes) has the same `level%00d.wll` format string. Its loader body was not opened. The wall files of these levels are byte-identical, so the rows the CD program would read are the same bytes.
+CONFIRMED for the floppy loader's body. `MAIN.EXE` (373872 bytes) reads the 12-byte records at file `0x50b33-0x50c04`. That span contains no `rep stos`. The CD `MAIN.EXE` (356928 bytes) has the same `level%00d.wll` format string. Its loader body was not opened. The wall files of these levels are byte-identical, so the rows the CD program would read are the same bytes.
 
 The row is not the same number on every level that defines the id. Worked example, type 60, the four walls of level 2 block 526. Level 2 has no record. Level 1 does. Its 12 bytes are `3c 00 06 00 03 00 04 00 06 00 0d 00`: type 60, VMP page 6, shape 3, special 4, flags 6, automap 0x0D (record order id, VMP, shape, special, flags, automap: `scene_lol.cpp:156-171`). If level 1 was the last level that wrote type 60, those are the bytes the drawer still holds. No later file in a level-1-then-level-2 load replaces them.
 
-Who already has a row (CD wall files; LANDSoL matches on levels 1, 2 and 24):
+Who already has a row (CD wall files; floppy matches on levels 1, 2 and 24):
 
 | Type | Defined on level 1 | Defined on level 2 | Also defined on |
 | --- | --- | --- | --- |
@@ -84,7 +84,7 @@ Level 2 stores two records each for types 1 and 2. Record index 1 is type 1 with
 
 CONFIRMED for the immediates in the script. System call 0 is `olol_setWallType` (`engines/kyra/script/script_lol.cpp:95-102`, opcode 0 at `script_lol.cpp:2689`). It calls `setWallType` (`scene_lol.cpp:1240-1254`), which writes the wall byte and does not write a property row. Arguments are last-push-first: block, wall, new type.
 
-Level 2 and level 3 init scripts, and level 3's map script, contain no system-call-0 word. Level 2's map script (CD 9794 bytes) has one, at file offset 4960: push 63, push 2, push 13, system call 0. LANDSoL's copy (9628 bytes) has the same four words at file offset 5012. A walk from every function entry, following jumps, does not reach it, and no jump operand in the file points at it. The next function entry begins at data word 1287, after this word. Type 63 is defined in level 2's wall file, so the call would not paint a missing id even if something did reach it.
+Level 2 and level 3 init scripts, and level 3's map script, contain no system-call-0 word. Level 2's map script (CD 9794 bytes) has one, at file offset 4960: push 63, push 2, push 13, system call 0. floppy's copy (9628 bytes) has the same four words at file offset 5012. A walk from every function entry, following jumps, does not reach it, and no jump operand in the file points at it. The next function entry begins at data word 1287, after this word. Type 63 is defined in level 2's wall file, so the call would not paint a missing id even if something did reach it.
 
 Level 21's map script has 40 words that are system call 0 (34 of them reached from the function table, 6 not). The init script has 10, none of them reached by that walk. The type immediate on those words is never 42. The reached calls recover the immediates 0, 1, 28, 29, 32, 33, 34, 35, 36, 38, 40, 57, 71, 77, 79, -1 and -2. Four reached calls pass the type in a register, so the number is not in the instruction. The six unreached map-script sites push types 0, 67, 68 or 74. The ten init-script sites push -1, 0 or 28. None of those is 42, and 67, 68 and 74 are ids level 21 does define.
 

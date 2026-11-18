@@ -2,7 +2,7 @@
 
 **What:** one speech archive per level: `00.TLK` … `29.TLK` in the CD `DATA/` folder. Each member is a Creative Voice (VOC) sample.
 
-**Edition read:** CD. LANDSoL (the floppy edition, see [README](README.md)) has no TLK files: it has no speech.
+**Edition read:** CD. floppy (the floppy edition, see [README](README.md)) has no TLK files: it has no speech.
 
 ## Correction to the closure memo
 

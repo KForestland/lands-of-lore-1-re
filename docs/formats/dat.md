@@ -2,7 +2,7 @@
 
 **What:** `AREA.DAT` (KEEP.DAT, CAVE1.DAT, …): how each wall decoration is drawn at each visible position, as shape indexes into the matching `AREA.SHP`.
 
-**Edition read:** CD (12), LANDSoL (12).
+**Edition read:** CD (12), floppy (12).
 
 ## Layout
 
@@ -19,11 +19,11 @@ uint16 count, then count x 72-byte `LevelDecorationProperty`:
 | 70 | uint8 | next: another record drawn with this one (0 = none) |
 | 71 | uint8 | flags |
 
-The ten slots are the views at the ten scene positions where a decoration can be seen (UNCONFIRMED: the slot-to-position order is in the drawing code, `scene_lol.cpp:1418-1470`, not traced here; [Q13](../OPEN_QUESTIONS.md)).
+The ten slots are the views at the ten scene positions where a decoration can be seen (the slot-to-position order is traced in both executables: [Q13 answered](../unknowns/13_decoration_positions.md)).
 
 ## Confirmed
 
-`tools/dat_reader.py --check` (CD): `12 files, size == 2+72*count, shape indexes < shapes in the area SHP, next < count: 12/12; CATWALK.DAT:68 CAVE1.DAT:78 CIMMERIA.DAT:114 FOREST1.DAT:43 KEEP.DAT:26 MANOR.DAT:31 MINE1.DAT:82 RUIN.DAT:33 SWAMP.DAT:40 TOWER1.DAT:66 URBISH.DAT:68 YVEL1.DAT:32`. LANDSoL: same 12 counts.
+`tools/dat_reader.py --check` (CD): `12 files, size == 2+72*count, shape indexes < shapes in the area SHP, next < count: 12/12; CATWALK.DAT:68 CAVE1.DAT:78 CIMMERIA.DAT:114 FOREST1.DAT:43 KEEP.DAT:26 MANOR.DAT:31 MINE1.DAT:82 RUIN.DAT:33 SWAMP.DAT:40 TOWER1.DAT:66 URBISH.DAT:68 YVEL1.DAT:32`. floppy: same 12 counts.
 
 There is no YVEL2.DAT; Level 22, the only level that uses YVEL2, takes its decorations from YVEL1.DAT via its WLL area (index 8). The level 22 scripts load only `YVEL1.SHP`/`YVEL1.DAT`, on both the YVEL1 and the YVEL2 path, so decorations do not change with the tile set. CONFIRMED.
 

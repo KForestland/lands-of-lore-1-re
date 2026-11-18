@@ -20,7 +20,7 @@ Words used across these pages, in plain terms. Format names link to their page.
 | Term | Meaning |
 |------|---------|
 | [PAK](formats/pak.md) | Archive holding many files. Almost all game data lives in PAKs. |
-| [TLK](formats/tlk.md) | CD speech archive, one per level (`01.TLK` …); a PAK of VOC sound files. |
+| [TLK](formats/tlk.md) | CD speech archive: 30 files, `00.TLK` … `29.TLK`; a PAK of VOC sound files. |
 | Member | One file inside a PAK. |
 | [Frame4 / LCW](formats/lcw.md) | The compression used by Westwood games of the time ("format 80"). |
 | Bitmap container | The 10-byte header plus optional palette used by CPS files and also by CMZ, VCN, VMP and most SHP files ([cps.md](formats/cps.md)). |
@@ -36,7 +36,7 @@ Words used across these pages, in plain terms. Format names link to their page.
 | [SHP](formats/shp.md) | A set of sprites (monsters, items, wall decorations, portraits). Each one is a *shape*. |
 | [WSA](formats/wsa.md) | An animation: a first picture and then the differences (*deltas*) to each next frame. |
 | [VOC](formats/voc.md) | A sound sample (Creative Voice File). |
-| [XMI, C55, ADL, PCS](formats/music.md) | Music for different sound devices: XMI for MIDI/MT-32, ADL for AdLib, PCS for the PC speaker; what C55 stands for is open (Q15). |
+| [XMI, C55, ADL, PCS](formats/music.md) | Music for different sound devices: XMI for MIDI/MT-32, C55 the XMIDI set for General MIDI / Roland GS, ADL for AdLib, PCS for the PC speaker; what C55 stands for is open (Q15). |
 | [PAL, COL](formats/palette.md) | A palette: 256 colours, 3 bytes each, on the VGA 0-63 scale. |
 | [FNT](formats/fnt.md) | A bitmap font. |
 | [TLC](formats/tlc.md) | CD-only tables for drawing see-through colours. |
@@ -45,7 +45,7 @@ Words used across these pages, in plain terms. Format names link to their page.
 
 | Term | Meaning |
 |------|---------|
-| Level | One map, numbered 1-29. Its files sit in `Lnn.PAK`: `LEVELn.CMZ`, `.WLL`, `.INF`, `.INI`, `.XXX`, `LEVELnn.TLC`, text. |
+| Level | One map, numbered 1-29. Its files sit in `Lnn.PAK` on the CD (`CHAPTERn.PAK` on the floppy): `LEVELn.CMZ`, `.WLL`, `.INF`, `.INI`, `.XXX`, `LEVELnn.TLC`, text. |
 | Block, square | One cell of a level's 32 x 32 grid. Block number = x + y x 32. |
 | [CMZ](formats/cmz.md) | A level's map: for every block, four *wall types* (north, east, south, west). |
 | Wall type | A number 0-255 meaning "what is on this side of this block": nothing, plain wall, door, switch, decoration … Its meaning is set per level by the WLL file. |

@@ -2,7 +2,7 @@
 
 **What:** `LEVELnn.TLC`, one per level, CD edition only: two lookup tables used to draw see-through colours (glass, ghosts, effect colours) over the scene.
 
-**Edition read:** CD (29 files). LANDSoL has none (CONFIRMED: `tlc_reader.py --check` finds 0).
+**Edition read:** CD (29 files). floppy has none (CONFIRMED: `tlc_reader.py --check` finds 0).
 
 ## Correction to the closure memo
 

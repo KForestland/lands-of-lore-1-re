@@ -16,7 +16,7 @@ The DOS and CD name lists are the same 12 strings (`devtools/create_kyradat/reso
 
 ## Bytes on every level
 
-CONFIRMED on CD (`L01.PAK` through `L29.PAK`) and on LANDSoL (`CHAPTER1.PAK` through `CHAPTER8.PAK`), levels 1 through 29:
+CONFIRMED on CD (`L01.PAK` through `L29.PAK`) and on floppy (`CHAPTER1.PAK` through `CHAPTER8.PAK`), levels 1 through 29:
 
 - `(file_size - 2) % 12 == 0`. A 4-byte header would leave a remainder of 10, and it does: `(file_size - 4) % 12 == 10` on all 58 files.
 - The uint16 at file offset 2 is 0. That is the wall-type id of record 0, read at `scene_lol.cpp:154`.

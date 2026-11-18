@@ -2,7 +2,7 @@
 
 [Save file layout](../savegame_format.md) · [Executable locations](../executable_tables.md)
 
-This page uses offsets from the start of the saved global-state block. Its file start is CD `0x0254` or LANDSoL floppy `0x0249`. In the tables below, both executable columns mean file offsets in that edition's `MAIN.EXE`. The comparison uses the English CD DOS 1.02 and LANDSoL English floppy writers and loaders. ScummVM's import path is `engines/kyra/gui/saveload_lol.cpp:55–67,107–186,237–245,255–289` at revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801a3`.
+This page uses offsets from the start of the saved global-state block. Its file start is CD `0x0254` or floppy `0x0249`. In the tables below, both executable columns mean file offsets in that edition's `MAIN.EXE`. The comparison uses the English CD DOS 1.02 and English floppy writers and loaders. ScummVM's import path is `engines/kyra/gui/saveload_lol.cpp:55–67,107–186,237–245,255–289` at revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801a3`.
 
 ## Global-state block
 
@@ -31,13 +31,13 @@ This page uses offsets from the start of the saved global-state block. Its file 
 
 Example (**CONFIRMED**, CD `+0xCC86–0xCC93`; floppy `+0x10498–0x104A5`). The difficulty extraction is `(word & 0x0030) >> 4`. A word `20 00` at offset `0x025E` in a CD save or `0x0253` in a floppy save therefore selects difficulty index 2. These are constructed example bytes.
 
-The four-byte character and monster fields skipped by the importer are native far pointers. The native character load paths replace the modifier pointer after loading (`CD MAIN.EXE+0x48923–0x4898B`; floppy `+0x51FE2–0x5204A`). The monster pointer is present in the original LANDSoL `_LEVEL1.TMP+0x8A`, and ScummVM rebuilds it from the saved monster type (`saveload_lol.cpp:279–289`). A populated native level slot begins with a four-byte sidecar length. The original loaders consume that length and the fixed-size buffer to recreate the temporary file, while ScummVM uses the fixed slot stride (`CD MAIN.EXE+0x48A70–0x48AEC`; floppy `+0x520E1–0x5215D`; ScummVM `saveload_lol.cpp:237–245,309–310`).
+The four-byte character and monster fields skipped by the importer are native far pointers. The native character load paths replace the modifier pointer after loading (`CD MAIN.EXE+0x48923–0x4898B`; floppy `+0x51FE2–0x5204A`). The monster pointer is present in the original floppy `_LEVEL1.TMP+0x8A`, and ScummVM rebuilds it from the saved monster type (`saveload_lol.cpp:279–289`). A populated native level slot begins with a four-byte sidecar length. The original loaders consume that length and the fixed-size buffer to recreate the temporary file, while ScummVM uses the fixed slot stride (`CD MAIN.EXE+0x48A70–0x48AEC`; floppy `+0x520E1–0x5215D`; ScummVM `saveload_lol.cpp:237–245,309–310`).
 
 ## Isolated bytes
 
-**CONFIRMED** The native game-state initialization zero-fills the entire saved global block, including these bytes. CD calls its byte-fill routine with zero, length `0x233` and `DS:7FD0` at `MAIN.EXE+0x4A437–0x4A445`. LANDSoL calls the equivalent with zero, length `0x22D` and `DS:B476` at `MAIN.EXE+0x53A1D–0x53A2B`. Both fill the final odd byte as well as the whole words (CD `+0x7512–0x7535`, floppy `+0x7790–0x77B3`). The resident data image also starts each byte at zero.
+**CONFIRMED** The native game-state initialization zero-fills the entire saved global block, including these bytes. CD calls its byte-fill routine with zero, length `0x233` and `DS:7FD0` at `MAIN.EXE+0x4A437–0x4A445`. floppy calls the equivalent with zero, length `0x22D` and `DS:B476` at `MAIN.EXE+0x53A1D–0x53A2B`. Both fill the final odd byte as well as the whole words (CD `+0x7512–0x7535`, floppy `+0x7790–0x77B3`). The resident data image also starts each byte at zero.
 
-| Block offset | CD save / runtime / initial executable byte | LANDSoL save / runtime / initial executable byte |
+| Block offset | CD save / runtime / initial executable byte | floppy save / runtime / initial executable byte |
 | --- | --- | --- |
 | `0x014` | `0x268` / `DS:7FE4` / `MAIN.EXE+0x39AB4` | `0x25D` / `DS:B48A` / `MAIN.EXE+0x42CEA` |
 | `0x20F` | `0x463` / `DS:81DF` / `MAIN.EXE+0x39CAF` | `0x458` / `DS:B685` / `MAIN.EXE+0x42EE5` |

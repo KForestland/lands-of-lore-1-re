@@ -2,7 +2,7 @@
 
 **What:** Westwood archive used for almost every LoL1 data file. The CD speech files `NN.TLK` use the same layout (see [tlk.md](tlk.md)).
 
-**Edition read:** CD (`DATA/`, `DATA/ENG`) and LANDSoL.
+**Edition read:** CD (`DATA/`, `DATA/ENG`) and floppy.
 
 ## Layout
 
@@ -23,7 +23,7 @@ CONFIRMED, `tools/pak_reader.py --check`:
 
 - CD `DATA/`: `CHECK pak: 111 containers, 6075 members, bad=none` (81 PAK + 30 TLK; the 81 PAKs hold 1163 members).
 - CD `DATA/ENG`: `17 containers, 378 members, bad=none` (FRE and GER the same counts).
-- LANDSoL: `15 containers, 1213 members, bad=none`.
+- floppy: `15 containers, 1213 members, bad=none`.
 
 "bad" means the members do not tile the file exactly from the end of the directory to the end of the file.
 
@@ -50,4 +50,4 @@ First 40 bytes of CD `GENERAL.PAK` (`tools/pak_reader.py list GENERAL.PAK` shows
 
 ## Open
 
-- [Q9](../OPEN_QUESTIONS.md): which PAK wins when two PAKs hold the same member name (search order of `Resource::loadPakFile`). Not needed to read files; matters for the edition comparison. UNCONFIRMED.
+- [Q9](../OPEN_QUESTIONS.md): which PAK wins when two PAKs hold the same member name **Answered** ([unknowns/09](../unknowns/09_pak_order.md)): a loose file beats every PAK; an earlier-loaded archive beats a later one.

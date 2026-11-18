@@ -2,7 +2,7 @@
 
 [Executable tables and offsets](executable_tables.md) · [EMC2 functions](emc2_scripts.md) · [Save-state fields](savegame_format.md) · [Native spell, timer, monster and WLL rules](unknowns/07_native_rules.md)
 
-**CONFIRMED** marks original CD or LANDSoL bytes and instructions checked directly. **UNCONFIRMED** marks a rule whose expression is documented in the reference implementation but whose native behavior still needs a direct check. References use ScummVM revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801a3`. CD executable addresses below refer to `DATA/HARDRIVE/MAIN.EXE`; floppy addresses refer to LANDSoL `MAIN.EXE`.
+**CONFIRMED** marks original CD or floppy bytes and instructions checked directly. **UNCONFIRMED** marks a rule whose expression is documented in the reference implementation but whose native behavior still needs a direct check. References use ScummVM revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801a3`. CD executable addresses below refer to `DATA/HARDRIVE/MAIN.EXE`; floppy addresses refer to floppy `MAIN.EXE`.
 
 | Source shorthand | ScummVM file |
 | --- | --- |
@@ -44,7 +44,7 @@
 
 **CONFIRMED** The 17 spell records agree across the two CD images and the floppy. Rows 0–9 have four MP amounts per rank plus four HP amounts; all populated rows have zero HP costs in all four columns. Native records at CD `MAIN.EXE+0x2B5E0` and floppy `MAIN.EXE+0x2CE80`; `devtools/create_kyradat/resources/lol_dos_cd.h:501–521` and `lol_dos.h:453–473`. English labels come from the original `LANDS.ENG` lookup words at CD `STARTUP.PAK+0x8B50–0x8B5F, +0x8F86` and floppy `GENERAL.PAK+0xD4F9F–0xD4FAE, +0xD53D5` (LoL:1066–1104).
 
-**CONFIRMED** Ordinary casts require MP ≥ cost and HP > cost, then dispatch by the low byte of the spell property word. The direct effect path skips payment. CD decodes a negative caster as slot `−ID − 1`, and LANDSoL recognizes −1 and uses slot 0. Vortex has a cost record and a null effect pointer. See the [native spell effect table](unknowns/07_native_rules.md#casting) for each rank's effects, damage inputs and the executable offsets.
+**CONFIRMED** Ordinary casts require MP ≥ cost and HP > cost, then dispatch by the low byte of the spell property word. The direct effect path skips payment. CD decodes a negative caster as slot `−ID − 1`, and floppy recognizes −1 and uses slot 0. Vortex has a cost record and a null effect pointer. See the [native spell effect table](unknowns/07_native_rules.md#casting) for each rank's effects, damage inputs and the executable offsets.
 
 ## Experience and skills
 

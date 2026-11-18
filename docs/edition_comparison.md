@@ -1,12 +1,12 @@
-# LoL1 LANDSoL Comparison (2026-03-18)
+# LoL1 floppy Comparison (2026-03-18)
 
 Scope:
 - the CD edition's `DATA/` folder, indexed in [`../data/pak_index.json`](../data/pak_index.json)
-- LANDSoL, an English floppy-edition installation (no speech, chapter-based PAKs)
+- floppy, an English floppy-edition installation (no speech, chapter-based PAKs)
 
 ## Main Result
 
-- `LANDSoL` is a real LoL1 install tree, not just patch junk.
+- `floppy` is a real LoL1 install tree, not just patch junk.
 - It uses the same underlying LoL1 `PAK` container grammar documented in `formats/pak.md`:
   - leading absolute offset
   - null-terminated filename
@@ -44,19 +44,19 @@ ScummVM identifies a LoL release by the MD5 of the first 1 MiB of `GENERAL.PAK` 
 |------|-------------------------------------|-------------------------|
 | CD `DATA/` | `05a4f588fb81dc9c0ef1f2ec20d89e24` | "Lands of Lore CD", English (`engines/kyra/detection_tables.h:1349`) |
 | CD `DATA/ENG` (also FRE, GER) | `2dd5305434b11b40cbda565c0f729913` | the warning entry "You added the game incorrectly. Please add the root folder of the game." (`:1434`): the language folders are part of the CD layout, not a game on their own |
-| LANDSoL | `0f1fabc1f67b772a30d8e05ece720ac5` | English floppy, labelled "Extracted", no speech (`:1716`, `LOL_FLOPPY_FLAGS`) |
+| floppy | `0f1fabc1f67b772a30d8e05ece720ac5` | English floppy, labelled "Extracted", no speech (`:1716`, `LOL_FLOPPY_FLAGS`) |
 
-Full-file MD5s: CD `DATA/` `a7dbbf23c4438967f89dc221bc659e88`, LANDSoL `74aa23c530155c2c9a7f894a616b4464`.
+Full-file MD5s: CD `DATA/` `a7dbbf23c4438967f89dc221bc659e88`, floppy `74aa23c530155c2c9a7f894a616b4464`.
 
 Practical read:
-- LANDSoL is a different edition (the floppy release), not a copy of the CD corpus
+- floppy is a different edition (the floppy release), not a copy of the CD corpus
 
 ## Content Comparison
 
-- fully parsed new `LANDSoL` entries: `1213`
-- unique filenames in new `LANDSoL` tree: `1199`
+- fully parsed new `floppy` entries: `1213`
+- unique filenames in new `floppy` tree: `1199`
 - shared filenames with existing LoL1 corpus: `1040`
-- filenames only in `LANDSoL`: `159`
+- filenames only in `floppy`: `159`
 - filenames only in existing corpus: `123`
 
 ### New-only filename examples
@@ -90,7 +90,7 @@ Practical read:
 - many `LEVELxx.TLC` dialogue files
 
 Practical read:
-- `LANDSoL` appears more English-focused / chapter-packaged
+- `floppy` appears more English-focused / chapter-packaged
 - the existing corpus carries more language-specific material and per-level dialogue packaging
 
 ## Shared Content Stability
@@ -132,7 +132,7 @@ Practical read:
 
 ## Best Use
 
-- treat `LANDSoL` as the second edition to check against
+- treat `floppy` as the second edition to check against
 - use it to:
   - confirm the `PAK` format across editions
   - compare stable versus drifting asset families

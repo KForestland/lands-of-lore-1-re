@@ -2,7 +2,7 @@
 
 [Executable and script tables](../executable_tables.md) · [Save format](../savegame_format.md)
 
-There are four different native layouts. An item or monster **definition** describes a type. An **instance** is an allocated world slot with position, state and a reference to a definition. The findings below are from English DOS CD `MAIN.EXE` and LANDSoL floppy `MAIN.EXE`. Offsets in record tables are hexadecimal, and all multi-byte fields are little-endian. Executable references are file offsets. Borland overlay code offsets are given at the file-backed body when the dispatch table points to a loading stub.
+There are four different native layouts. An item or monster **definition** describes a type. An **instance** is an allocated world slot with position, state and a reference to a definition. The findings below are from English DOS CD `MAIN.EXE` and floppy `MAIN.EXE`. Offsets in record tables are hexadecimal, and all multi-byte fields are little-endian. Executable references are file offsets. Borland overlay code offsets are given at the file-backed body when the dispatch table points to a loading stub.
 
 | Native layout | Stride | How the game locates it (**CONFIRMED**) |
 | --- | ---: | --- |
@@ -49,7 +49,7 @@ Worked example (**CONFIRMED**). Definition 1 receives name `0x40F6`, shape 6, fl
 | `4C`–`4F` | Four `u8` values from args 35–38: attack chance/type, defense chance/type | `0x47B0A–0x47B4A` | `0x512E9–0x51329` |
 | `50`–`52` | Three `u8` sound IDs, args 39–41 | `0x47B4C–0x47B6F` | `0x5132B–0x5134E` |
 
-The native attack test follows the embedded stat pointer at `+14`; the monster instance points to the start of the whole definition. For example, CD `LEVEL1.INI` submits hit percentage 200, armour percentage 100 and raw evade 100 at `L01.PAK+0xF3B3`. The setter stores `00 02` at `+02`, `00 01` at `+06` and `64 00` at `+08`. LANDSoL's corresponding call is `CHAPTER1.PAK+0x61B53`. **CONFIRMED** using the stores above.
+The native attack test follows the embedded stat pointer at `+14`; the monster instance points to the start of the whole definition. For example, CD `LEVEL1.INI` submits hit percentage 200, armour percentage 100 and raw evade 100 at `L01.PAK+0xF3B3`. The setter stores `00 02` at `+02`, `00 01` at `+06` and `64 00` at `+08`. floppy's corresponding call is `CHAPTER1.PAK+0x61B53`. **CONFIRMED** using the stores above.
 
 ## Instances
 

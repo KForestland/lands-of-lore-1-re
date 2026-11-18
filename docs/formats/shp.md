@@ -2,7 +2,7 @@
 
 **What:** a table of small sprites: monsters, items, doors, portraits (`FACEnn.SHP`), spell effects, GUI pieces, and the wall decorations of each area (`AREA.SHP`, used through the `AREA.DAT` table, see [dat.md](dat.md)).
 
-**Edition read:** CD `DATA/` (89 files, 3492 shapes), CD `DATA/ENG` (49 files, 1269 shapes), LANDSoL (95 files, 3601 shapes).
+**Edition read:** CD `DATA/` (89 files, 3492 shapes), CD `DATA/ENG` (49 files, 1269 shapes), floppy (95 files, 3601 shapes).
 
 ## File layout
 
@@ -40,10 +40,10 @@ Line data (`screen.cpp:2095-2108`, `drawShapeProcessLineNoScaleUpwind`): each ro
 
 `tools/shp_renderer.py --check` decodes every shape strictly: every row fills its width exactly, the line data is exactly the frame size, and the two height bytes agree.
 
-- CD `DATA/`: 3492/3492 shapes. CD `DATA/ENG`: 1269/1269. LANDSoL: 3601/3601. CONFIRMED.
+- CD `DATA/`: 3492/3492 shapes. CD `DATA/ENG`: 1269/1269. floppy: 3601/3601. CONFIRMED.
 - Negative control: with `--alt-header` (a 2-byte prefix before each header) no CD file decodes: most stop with a read past the end of their data, and of the 197 shapes that can be read at all, none decodes. CONFIRMED.
 
-## Correction to the closure memo: no 2-byte prefix on CD or LANDSoL
+## Correction to the closure memo: no 2-byte prefix on CD or floppy
 
 The closure memo (sections A and B.6) says shapes have a 12-byte header that starts with a 2-byte prefix. That came from the March 2026 renderer, which took the shape offsets as counted from the start of the file, not from byte 2. It therefore read each shape 2 bytes early. For shape 0 those 2 bytes are the high half of the table's end entry; for later shapes they are the last 2 bytes of the previous shape. The real header is the 10-byte one above.
 

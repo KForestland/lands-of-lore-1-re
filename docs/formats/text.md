@@ -2,7 +2,7 @@
 
 **What:** string tables. `LANDS.<lang>` holds the global strings (ids with bit 0x4000); `LEVELnn.<lang>` (loaded by the level script) holds the level strings.
 
-**Edition read:** CD (30 files per language). LANDSoL has the 30 ENG files only.
+**Edition read:** CD (30 files per language). floppy has the 30 ENG files only.
 
 ## Layout
 

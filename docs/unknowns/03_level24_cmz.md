@@ -35,20 +35,20 @@ CD `DATA/HARDRIVE/MAIN.EXE`, 356928 bytes:
 - File `0x48540`: `mov ax, es:[bx+4]` (the length word). File `0x48549`: `push 4`. File `0x4855e`: `imul` that length by the block index. File `0x48567`: `add dx, 6`. File `0x48578`: `cmp si, 0x400`. The call between the pushes copies 4 bytes from image+6+index*length onto image+index*4.
 - File `0x48764` through `0x487a0`: the same copy, with `push 4` at `0x4876d` and `add dx, 6` at `0x4878b`.
 
-LANDSoL `MAIN.EXE`, 373872 bytes:
+floppy `MAIN.EXE`, 373872 bytes:
 
 - File `0x51c10`: `mov ax, es:[bx+4]`. File `0x51c19`: `push 4`. File `0x51c2e`: `imul` the length. File `0x51c37`: `add dx, 6`. File `0x51c48`: `cmp si, 0x400`.
 - File `0x51e34` through `0x51e70`: the same copy, `push 4` at `0x51e3d`, `add dx, 6` at `0x51e5b`.
 
-The format string those functions print is `level%d.cmz` (CD file `0x329f6`, LANDSoL file `0x388da` and `0x38900`). One function writes `_LEVEL%d.TMP`. The other reads it back. Both still go back to `level%d.cmz` for the original four wall bytes.
+The format string those functions print is `level%d.cmz` (CD file `0x329f6`, floppy file `0x388da` and `0x38900`). One function writes `_LEVEL%d.TMP`. The other reads it back. Both still go back to `level%d.cmz` for the original four wall bytes.
 
-After the copy, the LANDSoL load function clears `0x2800` bytes (1024 times 10) at `ds:0xB6A3` (file `0x51e72`). The CD load function clears the same `0x2800` bytes at `ds:0x8203` (file `0x487a2`). That array is 10 bytes per block. The loops that follow write bytes 0-3 and byte 9 of each slot from the temp-file delta XOR-combined with the four wall bytes. Bytes 4-8 of the slot are left 0. The temp file's own 5-byte-per-block blob is `0x1400` bytes (1024 times 5): four XOR bytes plus slot byte 9. That is the live block record, not the CMZ tail.
+After the copy, the floppy load function clears `0x2800` bytes (1024 times 10) at `ds:0xB6A3` (file `0x51e72`). The CD load function clears the same `0x2800` bytes at `ds:0x8203` (file `0x487a2`). That array is 10 bytes per block. The loops that follow write bytes 0-3 and byte 9 of each slot from the temp-file delta XOR-combined with the four wall bytes. Bytes 4-8 of the slot are left 0. The temp file's own 5-byte-per-block blob is `0x1400` bytes (1024 times 5): four XOR bytes plus slot byte 9. That is the live block record, not the CMZ tail.
 
 A search of both executables for `add dx, 6` next to a compare against `0x400`, and for `mov ax, es:[bx+4]`, found no other stride loop. `LANDS.EXE` and `FINALE.EXE` do not contain `level%d.cmz`.
 
 ## What the level 24 scripts do with these blocks
 
-CONFIRMED as a negative. CD `LEVEL24.INF` (9242 bytes) pushes some of the block indexes: 746 five times, 273 three times, 395 twice, 427 once, 715 once. CD `LEVEL24.INI` (888 bytes) pushes 232 once. The tail words 6564, 5868, and 5866 are not push immediates in either script. LANDSoL `LEVEL24.INF` is 8840 bytes, not a copy of the CD script, while the CMZ files are byte-identical, so those three numbers are not offsets into the script file either.
+CONFIRMED as a negative. CD `LEVEL24.INF` (9242 bytes) pushes some of the block indexes: 746 five times, 273 three times, 395 twice, 427 once, 715 once. CD `LEVEL24.INI` (888 bytes) pushes 232 once. The tail words 6564, 5868, and 5866 are not push immediates in either script. floppy `LEVEL24.INF` is 8840 bytes, not a copy of the CD script, while the CMZ files are byte-identical, so those three numbers are not offsets into the script file either.
 
 `LEVEL24.ENG` has 39 strings and `LANDS.ENG` has 735. 6564 is outside both tables, so it is not a string id in those files.
 
@@ -63,7 +63,7 @@ CONFIRMED as a negative. CD `LEVEL24.INF` (9242 bytes) pushes some of the block 
 - The decompressed `LEVEL24.CMZ` image begins `20 00 20 00 09 00 00 00 00 00 00 00 00 00 00 02` (both editions). CONFIRMED.
 - `LEVEL24.INI` in both editions names `FOREST1` and `LEVEL24.CMZ` (TEXT strings 1 and 3), and `LEVEL24.WLL` selects area 1 (FOREST1): a forest map stored with a longer block record. CONFIRMED.
 - The 26 blocks with tail `04 00 a4 19 04` sit on wall types 46, 47, 51, 53, 54, 55, 57, 65 and 69, not on the plain `(1, 1, 2, 2)` corridors. CONFIRMED.
-- Compressed CMZ sizes match between CD and LANDSoL on levels 1-28. `LEVEL29.CMZ` is 765 bytes on CD and 767 on LANDSoL; both decompress to 4102 bytes with length 4. CONFIRMED.
+- Compressed CMZ sizes match between CD and floppy on levels 1-28. `LEVEL29.CMZ` is 765 bytes on CD and 767 on floppy; both decompress to 4102 bytes with length 4. CONFIRMED.
 
 ## What would settle it
 

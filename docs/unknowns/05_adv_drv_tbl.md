@@ -6,9 +6,9 @@ This note stops at the copyright string and the file's first instruction byte. T
 
 ## Drivers in DRIVERS.PAK
 
-CONFIRMED. Both editions have one `DRIVERS.PAK`. The directory names seven files: six `.ADV` files and `ALFX.DRV`. At directory offset 109 both archives store a 0 byte and a uint32 0, and the first file begins at offset 114. That last slot is the end marker. Sizes differ. The CD file and the LANDSoL file of each name are different bytes.
+CONFIRMED. Both editions have one `DRIVERS.PAK`. The directory names seven files: six `.ADV` files and `ALFX.DRV`. At directory offset 109 both archives store a 0 byte and a uint32 0, and the first file begins at offset 114. That last slot is the end marker. Sizes differ. The CD file and the floppy file of each name are different bytes.
 
-| Name | CD size | CD bytes 0-1 | LANDSoL size | LANDSoL bytes 0-1 | Identity string at byte 2, unless noted |
+| Name | CD size | CD bytes 0-1 | floppy size | floppy bytes 0-1 | Identity string at byte 2, unless noted |
 | --- | --- | --- | --- | --- | --- |
 | ALFX.DRV | 6960 | `e9 8b` | 6521 | `e9 d4` | First byte is `E9`, a jmp. No copyright in the first bytes. |
 | ALGDIG.ADV | 4449 | `3f 00` | 5584 | `36 00` | `Copyright (C) 1991,1992 Miles Design, Inc.` then `Ad Lib(R) Gold Music Synthesizer Card` |
@@ -18,11 +18,11 @@ CONFIRMED. Both editions have one `DRIVERS.PAK`. The directory names seven files
 | SBPDIG.ADV | 4076 | `3f 00` | 4820 | `36 00` | same copyright, then `Creative Labs Sound Blaster Pro(TM) Digital Sound` |
 | TANDYDIG.ADV | 3779 | `3f 00` | 4549 | `36 00` | same copyright and the same Sound Blaster / Thunderboard strings as `SBDIG.ADV` |
 
-The first uint16 of an `.ADV` is 0x003F on the CD Ad Lib Gold, Sound Blaster, Sound Blaster Pro, and Tandy files, and 0x0036 on those four LANDSoL files. Roland and the PC speaker are 0x002D in both editions. The copyright string begins at file offset 2 in every `.ADV`. CONFIRMED. What the uint16 counts is UNCONFIRMED, because the following bytes are driver code.
+The first uint16 of an `.ADV` is 0x003F on the CD Ad Lib Gold, Sound Blaster, Sound Blaster Pro, and Tandy files, and 0x0036 on those four floppy files. Roland and the PC speaker are 0x002D in both editions. The copyright string begins at file offset 2 in every `.ADV`. CONFIRMED. What the uint16 counts is UNCONFIRMED, because the following bytes are driver code.
 
 ## Who names them
 
-CONFIRMED. The strings sit in the LANDSoL executables. Offsets are file offsets of the first matching byte.
+CONFIRMED. The strings sit in the floppy executables. Offsets are file offsets of the first matching byte.
 
 `LANDS.EXE` (129490 bytes): `Unable to load sound driver` at 116100, `Initializing sound card.` at 117299, `ALGDIG.ADV` at 118830 and 120448, `ALFX.DRV` at 118898 and 120497. The same executable also names `PASDIG.ADV` at 120437, `PCSOUND.DRV` at 120510, `ADLIB.ADV` at 120571, `ADLIB.COM` at 120483, `TANDY.ADV` at 120537, `ADLIBG.ADV` at 120581, `PASFM.ADV` at 120592, `SBFM.ADV` at 120602, `SBP1FM.ADV` at 120611, and `SBP2FM.ADV` at 120622. Those ten names are not members of either `DRIVERS.PAK`. `MAIN.EXE` has the same ten names starting at 234059 (`PASDIG.ADV`). `FINALE.EXE` has them starting at 156827.
 
@@ -62,9 +62,9 @@ Worked example, index 1. File offset 71 holds `5a 98 90 69 61 00`. After `decode
 
 The 42-byte run at file offset 29 is repeated at file offset 117: `85 59 b3 20 f9 79 20 66 a0 e0 a2 84 a8 f5 67 88 25 e4 20 cc ac 20 25 e0 77 b1 e0 25 e0 b4 20 47 89 b0 27 b8 47 ef e1 2e 0d 00`. Decoded alone, that run is `  You may find it on page %d, line %d word %d of Geron's Guide.` followed by `0x0D` and `0x00`. It is the shared ending of strings 0 and 2. CONFIRMED.
 
-The 16-byte first table and the 128-byte second table from `util.cpp:30-48` are present in the executables, and the 144 bytes match. LANDSoL: `MAIN.EXE` at 253658, `FINALE.EXE` at 159392, `LANDS.EXE` at 123002. CD: `DATA/ENG/FINALE.EXE` at 130438, `DATA/ENG/LANDS.EXE` at 140150, `DATA/HARDRIVE/MAIN.EXE` at 217984. CONFIRMED.
+The 16-byte first table and the 128-byte second table from `util.cpp:30-48` are present in the executables, and the 144 bytes match. floppy: `MAIN.EXE` at 253658, `FINALE.EXE` at 159392, `LANDS.EXE` at 123002. CD: `DATA/ENG/FINALE.EXE` at 130438, `DATA/ENG/LANDS.EXE` at 140150, `DATA/HARDRIVE/MAIN.EXE` at 217984. CONFIRMED.
 
-LANDSoL `MAIN.EXE` names `TRIG.TBL` at 238876 and `FINALE.EXE` names it at 144880. The filename string is absent from CD `DATA/ENG/FINALE.EXE`, `DATA/ENG/LANDS.EXE`, and `DATA/HARDRIVE/MAIN.EXE`. CONFIRMED. Kyra has no loader for this filename. Which instruction opens the file, and how a typed password is compared, stay UNCONFIRMED.
+floppy `MAIN.EXE` names `TRIG.TBL` at 238876 and `FINALE.EXE` names it at 144880. The filename string is absent from CD `DATA/ENG/FINALE.EXE`, `DATA/ENG/LANDS.EXE`, and `DATA/HARDRIVE/MAIN.EXE`. CONFIRMED. Kyra has no loader for this filename. Which instruction opens the file, and how a typed password is compared, stay UNCONFIRMED.
 
 Full file, 166 bytes:
 

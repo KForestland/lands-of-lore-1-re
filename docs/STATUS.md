@@ -6,7 +6,7 @@
 
 - **Documented**: a page in [`formats/`](formats/README.md) (or the named doc) describes the layout with ScummVM citations.
 - **Tool**: a reader in `tools/` with `--help`, reading the original data through `--data <DATA folder>` or `$LOL1_DATA`.
-- **Checked on data**: the tool's `--check` parses every file of that kind. CD = the top-level `DATA/` folder of the CD-ROM edition with spoken dialogue (version CD1.02); ENG = its `DATA/ENG` folder; LS = LANDSoL, an English floppy-edition installation (no speech, chapter-based PAKs). Details: [formats/README.md](formats/README.md).
+- **Checked on data**: the tool's `--check` parses every file of that kind. CD = the top-level `DATA/` folder of the CD-ROM edition with spoken dialogue (version CD1.02); ENG = its `DATA/ENG` folder; LS = floppy, an English floppy-edition installation (no speech, chapter-based PAKs). Details: [formats/README.md](formats/README.md).
 - **Open**: what is not known yet, as numbered in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 
 Run every check at once: `python3 tools/check_all.py --data <DATA>` (26 checks; all pass on the CD and on the floppy edition, about 6 seconds).
@@ -39,7 +39,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (26 checks; 
 
 ## Level sheets
 
-[`levels/`](levels/README.md) has one sheet per level, written by `tools/level_report.py` from the level's own files: 1475 script entries described, 241 item and 522 monster placements found through constant script arguments (including one level of subroutine calls), 659 text ids. Arguments computed while the game runs are shown as `?`; which player action raises event bit 1 versus 2 (and 4 versus 8) is UNCONFIRMED.
+[`levels/`](levels/README.md) has one sheet per level, written by `tools/level_report.py` from the level's own files: 1475 script entries described, 241 item and 522 monster placements found through constant script arguments (including one level of subroutine calls), 659 text ids. Arguments computed while the game runs are shown as `?`; which player action raises event bit 1 versus 2 (and 4 versus 8) of a script entry is UNCONFIRMED ([event bits](levels/README.md#events)).
 
 ## Corpus coverage
 
@@ -47,7 +47,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (26 checks; 
 |--------|-----------|---------|------------------------|
 | CD `DATA/` | 81 PAK + 30 TLK | 1163 + 4912 | PAK members yes (1163); TLK only as "parsed" |
 | CD `DATA/ENG`, `FRE`, `GER` | 17 PAK each | 378 each | **no**: INTRO1-9, FINALE*, HISTORY, INTROVOC, language GENERAL/STARTUP, NEW6P/NEW8P/INTRO fonts |
-| LANDSoL | 15 PAK + `MAIN.EXE` + four `_LEVELn.TMP` level-state files left by the game | 1213 | compared in `docs/edition_comparison.md` |
+| floppy | 15 PAK + `MAIN.EXE` + four `_LEVELn.TMP` level-state files the original game wrote while that copy was played (not shipped; a fresh install has none) | 1213 | compared in `docs/edition_comparison.md` |
 
 The readers have been run on all three. The JSON files in `data/` describe CD `DATA/` only.
 
@@ -60,8 +60,8 @@ Pages: [executable_tables.md](executable_tables.md), [savegame_format.md](savega
 | Where the executables are | [executable_tables.md](executable_tables.md) | CD: inside `WESTWOOD.001` (the CD's install archive) and loose in `DATA/HARDRIVE` (`MAIN.EXE`, `MAINW.EXE`), byte-identical; LS `MAIN.EXE` | — |
 | Spells (17 x 28 bytes), experience thresholds, character defaults (9 x 130), difficulty modifiers, CD price table | [executable_tables.md](executable_tables.md) | offsets in all three executables, values equal ScummVM's tables | native meaning of a few fields |
 | Item types (285) and monster properties (79 script calls) | [executable_tables.md](executable_tables.md), [emc2.md](formats/emc2.md) | supplied by scripts in both editions; 4 item rows differ between editions; native record layouts traced ([Q18](unknowns/18_native_records.md)) | a few field roles (Q18) |
-| Save file (original `_SAVEnnn.DAT`, level-state `_LEVELn.TMP`, ScummVM saves) | [savegame_format.md](savegame_format.md); reader `tools/save_reader.py` | save-name and version strings and section sizes in both executables; 4 LS `_LEVELn.TMP` files; 11 ScummVM saves end where the layout predicts; skipped native fields traced in both executables ([Q17](unknowns/17_native_save_fields.md)) | three single bytes; no original save examined (Q17) |
-| Combat, magic, experience and skills, monster behaviour, light, time | [game_rules.md](game_rules.md) | in both executables (disassembled): dice and random generator, armour reduction; per the page also hit test, damage categories, experience awards; data: spell damage tables, experience thresholds, monster mode flags. Spell casting and effects, lamp oil, regeneration and the 12 timers, monster transitions and WLL flags: traced in both executables ([Q7](unknowns/07_native_rules.md)) | Q7: native tick-to-time conversion, WLL wall bit 0x40, some monster mode details |
+| Save file (original `_SAVEnnn.DAT`, level-state `_LEVELn.TMP`, ScummVM saves) | [savegame_format.md](savegame_format.md); reader `tools/save_reader.py` | save-name and version strings and section sizes in both executables; 4 floppy `_LEVELn.TMP` files written by the game in one played installation; the maintainer's 11 ScummVM saves end where the layout predicts (not shipped; `save_reader.py --check --saves DIR` checks yours); skipped native fields traced in both executables ([Q17](unknowns/17_native_save_fields.md)) | three single bytes; no original save examined (Q17) |
+| Combat, magic, experience and skills, monster behaviour, light, time | [game_rules.md](game_rules.md) | in both executables (disassembled): dice and random generator, armour reduction; per the page also hit test, damage categories, experience awards; data: spell damage tables, experience thresholds, monster mode flags. Spell casting and effects, lamp oil, regeneration and the 12 timers, monster transitions and WLL flags: traced in both executables ([Q7](unknowns/07_native_rules.md)) | Q7: WLL wall bit 0x40, some monster mode details (the clock is CONFIRMED at 60 ticks per second) |
 
 ## Tools
 
@@ -74,9 +74,9 @@ All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--dat
 3. VMP is 330 floor/ceiling words plus 431 words per wall page; the "8bpp VCN" variant in `level_tileset_map.md` does not occur in LoL1 ([vcn_vmp.md](formats/vcn_vmp.md)).
 4. VOC "majority 11111 Hz": the effects use the 11025 Hz divisor class, CD speech 22050 Hz ([voc.md](formats/voc.md)).
 5. "1163 files" covers only the CD top-level `DATA/` PAKs (see Corpus coverage).
-6. SHP has no 2-byte prefix on CD or LANDSoL. The March renderer read every shape 2 bytes early because it counted offsets from the file start instead of byte 2 ([shp.md](formats/shp.md)).
+6. SHP has no 2-byte prefix on CD or floppy. The March renderer read every shape 2 bytes early because it counted offsets from the file start instead of byte 2 ([shp.md](formats/shp.md)).
 7. The "bytes 0-3 unknown" header belongs to CMZ, not WLL ([cmz.md](formats/cmz.md)).
-8. FNT "226 glyphs per font" holds for the CD; LANDSoL FONT6P/9P/9PN have 128 ([fnt.md](formats/fnt.md)).
+8. FNT "226 glyphs per font" holds for the CD; floppy FONT6P/9P/9PN have 128 ([fnt.md](formats/fnt.md)).
 9. WSA needs no per-file palette fix: frame offsets are relative to the frame data, which starts after the palette ([wsa.md](formats/wsa.md)).
 10. `data/wall_type_analysis.json` was built with the old LCW bug and had wrong wall counts; regenerated ([cmz.md](formats/cmz.md)).
 11. `data/tileset_mapping.json` (uint16 "tile ID" guess) replaced by the real level-to-set mapping. Level 25 draws its walls with CAVE1 and CAV_PLT3.PAL, not CATWALK ([vcn_vmp.md](formats/vcn_vmp.md)).
