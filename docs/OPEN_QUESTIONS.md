@@ -20,5 +20,5 @@ Numbered so the format pages and [`STATUS.md`](STATUS.md) can point at them. Eac
 | Q14 | Who loads CAV_PLT2.PAL, CAV_PLT4.PAL and ALTPAL3.PAL | [formats/palette.md](formats/palette.md) |
 | Q15 | Music: what "C55" stands for; the ADL layout field by field; no MIDI converter yet | [formats/music.md](formats/music.md) |
 | Q16 | What decides the 16-colour bank (shift value) of each wall tile | [formats/vcn_vmp.md](formats/vcn_vmp.md) |
-| Q17 | Save files: the native fields ScummVM skips; no original `_SAVEnnn.DAT` examined yet | STATUS.md |
+| Q17 | Save files: the native fields ScummVM skips. **Mostly answered** ([unknowns/17_native_save_fields.md](unknowns/17_native_save_fields.md)): the options word (difficulty, effects, music, cursor, scrolling), the full 100-word flag table and 100-entry script-global table, and on the CD language, text and three volume bytes. Open: three single bytes, and no original `_SAVEnnn.DAT` has been examined | [savegame_format.md](savegame_format.md) |
 | Q18 | Native in-memory layout of item and monster records (the files only give the script arguments) | STATUS.md |
