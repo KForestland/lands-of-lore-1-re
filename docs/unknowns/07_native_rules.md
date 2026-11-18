@@ -51,7 +51,21 @@
 
 **CONFIRMED** Syscall `0x48` adds 5 to the script timer index. The callback adds `0x401` to its argument to get the script entry. CD `0x14BCB`, `0xF832–0xF847`, floppy `0x19552`, `0x14220–0x14235`. A native delay sets its deadline to the current 32-bit counter plus the requested delay, then services the engine until that deadline. The delay reads CD `DS:384C` or floppy `DS:6F0C` (CD `0xC806–0xC82F`, floppy `0x10022–0x1004B`). These addresses differ from the clock used by timer slots 0–10, which is `DS:3858` or `DS:6F14` in the tables.
 
-**UNCONFIRMED** The conversion from these DOS clock counters to wall time is open. The floppy increment at `0x2938C–0x293D5`, deadline loops and clock pointers establish logical ticks. To settle cadence and pause behavior, trace the driver's interrupt period and compare the two counter deltas over 60 interrupts with and without pausing. ScummVM's 16-ms DOS timer unit is documented by `engines/kyra/engine/kyra_v1.cpp:46–50,715–732`.
+### Native tick duration and pause
+
+**CONFIRMED** Both DOS sound-driver initializers register the game-clock callback at frequency 60. CD `MAIN.EXE+0x52458–0x5247E` passes offset 2 with overlay segment index `0x458`. That index selects segment `0x2318` from the directory at `0x2FC50`, giving callback file offset `0x26982`. LANDSoL `+0x57E0C–0x57E32` passes offset `0xC` with index `0x2F0`. Its directory at `0x36500` gives segment `0x24B8` and callback `0x2938C`. Frequency 60 is the literal `0x3C` in each registration path.
+
+**CONFIRMED** The driver derives the logical period as integer `1,000,000 / frequency` microseconds, so 60 gives `16,666 μs`. It chooses the shortest registered period for the hardware clock. When that period is `16,666`, the integer PIT divisor is `floor(16666 × 10000 / 8380) = 19887` (`0x4DAF`). The timer setup writes `0x36` to port `0x43` and then the divisor's low and high bytes to port `0x40`. Other registrations can change the hardware interrupt period. The software scheduler accumulates elapsed periods and calls the registered handler when its slot period is reached.
+
+| Native evidence | CD `MAIN.EXE` | LANDSoL `MAIN.EXE` |
+| --- | --- | --- |
+| Integer frequency-to-period conversion and slot write | `0x5679B–0x56853` | `0x26E73–0x26EB2, 0x26CE9–0x26D3C` |
+| Pick shortest period | `0x566CA–0x56749` | `0x26A2A–0x26ABD` |
+| Convert to divisor and write PIT ports | `0x56654–0x5667C, 0x564D2–0x564F3` | `0x269B6–0x269DE, 0x2698D–0x269B5` |
+| Increment the game clock counters | `0x26982–0x269C7` | `0x2938C–0x293D5` |
+| Pause and resume the gameplay clock with argument 2 | `0x4C5B3–0x4C5D4, 0x269C8–0x26A49` | `0x5521A–0x55249, 0x24F85–0x24FEC` |
+
+**CONFIRMED** At the nominal 60 ticks per second, 360 ticks of an enabled clock is about 6 seconds, and 1200 is about 20 seconds. The gameplay timer table uses the gated counter, CD `DS:3858` (enable bit 3 of `DS:384A`) or LANDSoL `DS:6F14` (enable bit 1 of `DS:6F1C`). The delay clock is `DS:384C` or `DS:6F0C` and keeps advancing when those gameplay bits are cleared. The CD data image initializes its delay clock's enable bit 0 at `MAIN.EXE+0x3531A`. LANDSoL advances the delay clock unconditionally in the callback. The script pause and resume entry points are `0x9A` and `0x9B` (CD wrappers `0x4D4E0–0x4D4F7`, floppy `0x56078–0x5608F`). ScummVM's DOS engine represents its interval as an integer `16 ms` (`engines/kyra/engine/kyra_v1.cpp:46–50,715–732`).
 
 ## Monster transitions
 
