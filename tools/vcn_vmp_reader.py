@@ -63,7 +63,7 @@ def main():
     pak, b = L.find_member(a.area + ".VCN", a.data, a.pak)
     info, shift, col, pal, tiles = read_vcn(b)
     m, dl, words = read_vmp(L.find_member(a.area + ".VMP", a.data, pak)[1])
-    print(f"{a.area} ({pak}): VCN {info}, shift values {sorted(set(shift))}; VMP {m} words = {m/431:.2f} x 431")
+    print(f"{a.area} ({pak}): VCN {info}, shift values {sorted(set(shift))}; VMP {m} words = 330 floor/ceiling + {(m-330)/431:g} wall pages of 431")
     if a.png:
         from PIL import Image
         n = info["tiles"]; cols = 32

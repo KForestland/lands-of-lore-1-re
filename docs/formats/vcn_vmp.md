@@ -16,7 +16,7 @@ Source: `LoLEngine::loadLevelGraphics` `engines/kyra/engine/scene_lol.cpp:300-38
 | 2 | n | shift table `_vcnShift`: per tile, ORed into the colour-table index (`engines/kyra/engine/scene_rpg.cpp:386`, `:429-449`) |
 | 2+n | 128 | colour table `_vcnColTable` (16 entries per shift value) |
 | 130+n | 384 | palette: 128 colours, 6-bit RGB (replaced when the script passes an override `.PAL`, `scene_lol.cpp:360-367`) |
-| 514+n | 32 x n | tiles: 8x8 pixels, 4 bits each (`tlen << 5`) |
+| 514+n | 32 x n | tiles: 8x8 pixels, 4 bits each (`tlen << 5`), high nibble = left pixel (`scene_rpg.cpp:429-430`) |
 
 Decompressed size = 514 + 33n exactly. CONFIRMED on all 13 sets, CD and LANDSoL.
 
@@ -42,7 +42,7 @@ The memo's "431-entry pages, stride = 22×15 viewport + overhead" is now precise
 ## Open
 
 - Which script loads YVEL2 and when: Grok item 4. (`loadLevelGraphics` is called by script function `olol_loadLevelGraphics`, `engines/kyra/script/script_lol.cpp:208-212`, with the file name as a string; `scene_lol.cpp:315` names YVEL2 for the 16-colour mode.)
-- Meaning of the 128-byte colour table per shift value (lighting banks?) — UNCONFIRMED.
+- The shift table values on KEEP are 0, 16, …, 112 (CONFIRMED, `vcn_vmp_reader.py KEEP`): each tile picks one of 8 banks of 16 entries in the 128-byte colour table. What decides the bank per tile (artist choice vs. lighting) is UNCONFIRMED.
 
 ## Tool
 
