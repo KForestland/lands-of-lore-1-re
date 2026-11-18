@@ -27,6 +27,22 @@
 
 **CONFIRMED** The common block loop used by Freeze I–III, Mist, Lightning and Guardian stops after an affected target with runtime flag `0x20`, except on level 22 (CD `0x4FC37–0x4FCB3`, floppy `0x59F57–0x59FD3`). Freeze IV has its own loop and stop check (CD `0x44897–0x448B1`, floppy `0x4E06E–0x4E088`).
 
+### Vortex's item and native call sites
+
+**CONFIRMED** In both editions `ONETIME.INF` configures item type 239 with item script entry 14 and item might 7. Those operands are at CD `STARTUP.PAK+0x230E9–0x230F9` and LANDSoL `GENERAL.PAK+0xDC940–0xDC950`. Item entry 14 reads the type's might field with `getItemPara` selector 11 and gives it to `addSpellToScroll` as the spell ID. The add call is at CD `STARTUP.PAK+0x117E9` and LANDSoL `GENERAL.PAK+0xDA22C`. The native add routines store the supplied ID in the available-spell array (CD `MAIN.EXE+0x4FAC7–0x4FB32`, LANDSoL `+0x59DFD–0x59E61`). Upstream `engines/kyra/script/script_lol.cpp:314–315,1580–1584`, `engines/kyra/engine/lol.cpp:3173–3193`.
+
+**CONFIRMED** The menu reads the selected spell ID from that array, passes it with the caster and rank, and calls the cast routine at CD `MAIN.EXE+0x1092E` or LANDSoL `+0x1526D`. Vortex's 28-byte spell record starts at CD `+0x2B6A4` or floppy `+0x2CF44`. The last two bytes `07 01` select effect slot 7 on the paid path and impose the forward-wall test. The four MP costs are 3, 6, 12 and 24. All four HP costs are zero. Upstream menu reference `engines/kyra/gui/gui_lol.cpp:1092–1115`.
+
+| Casting step for Vortex | CD `MAIN.EXE` | LANDSoL `MAIN.EXE` |
+| --- | --- | --- |
+| Cost paid on an accepted ordinary cast | `0x4FF57–0x4FFE4` | `0x5A25A–0x5A2E7` |
+| Test both words of effect slot 7, containing `00 00 00 00` | `0x4FFF8–0x50000`, slot `0x32F10` | `0x5A2FB–0x5A303`, slot `0x39620` |
+| Skip the indirect call and return 1 | Skips `0x50018`, returns at `0x50024–0x5002A` | Skips `0x5A31B`, returns at `0x5A327–0x5A32D` |
+
+**CONFIRMED** An accepted ordinary Vortex cast spends MP and runs no spell effect. The separate no-cost path uses the supplied effect ID directly at CD `0x4FF4D` and LANDSoL `0x5A250`. Its indirect call lacks the paid path's zero-pointer guard. EMC `0xAD` reaches the cast routine at CD `0x16353` and floppy `0x1AC43`. The five `0xAD` calls per edition are in `ITEM.INF`. Their fixed effects are 4 and 12, and the other three use item attributes. In the startup definitions, the item handlers feeding those three calls supply 3, 5, 6, 9 (entry 20), 4, 5, 9, 16 (entry 24), and 8 (entry 29). For example, entry 20's getter and cast are CD `STARTUP.PAK+0x11A97–0x11AFD` and LANDSoL `GENERAL.PAK+0xDA49E–0xDA4EE`. The corresponding startup definitions span CD `STARTUP.PAK+0x22FD1–0x2302D, +0x234AF–0x23525` and LANDSoL `GENERAL.PAK+0xDC828–0xDC884, +0xDCD06–0xDCD7C`.
+
+**UNCONFIRMED** An ordinary shipped-play route that awards item 239 remains open. The definition and its reading path are present. The corpus check tested literal uses of 239 in the level scripts and found it as a block or rectangle operand, e.g. in CD `L01.PAK+0xD5D7` and LANDSoL `CHAPTER1.PAK+0x58B4D`. To verify reachability, trace native item grants and placements filtered by type 239, including the shop and any computed script arguments.
+
 ## Lamp, regeneration and the clock
 
 **CONFIRMED** The oil event decrements oil once if flags 251 and 250, brightness, and oil are all nonzero. The lamp effect is 8 with no oil or brightness. Otherwise let `O = min(oil, 100)` and compute `2 × (3 − floor((O − 1) / 25))`. When only the low indicator bit changes, the next deadline is current tick `+10+1d30`. CD `0xF9DE–0xFA04, 0xFBAF–0xFD0A`, floppy `0x143C6–0x143EC, 0x14578–0x146D3`. For example 25 oil gives 6, 26 oil gives 4, and 100 gives 0 (same instructions).
