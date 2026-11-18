@@ -135,7 +135,7 @@ def render_schematic(level, data_dir, cell=10):
 def main():
     ap = L.tool_args(__doc__)
     ap.add_argument("--level", type=int, help="1..29 (default: all)")
-    ap.add_argument("--out-dir", default=".", help="folder for levelNN_<area>.png")
+    ap.add_argument("--out-dir", help="folder for levelNN_<area>.png (required to write; nothing is written without it)")
     ap.add_argument("--schematic", action="store_true", help="line drawing without game pixels")
     a = ap.parse_args()
     levels = [a.level] if a.level else range(1, 30)
@@ -151,6 +151,8 @@ def main():
               f"{len(levels)-len(bad)}/{len(levels)}, bad={bad or 'none'}; "
               f"CMZ wall types without a WLL record (open point, drawn empty): {undef or 'none'}")
         return 0 if not bad else 1
+    if not a.out_dir:
+        ap.error("--out-dir is required to write map images")
     os.makedirs(a.out_dir, exist_ok=True)
     for lv in levels:
         if a.schematic:

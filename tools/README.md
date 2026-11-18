@@ -21,14 +21,14 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 
 ### `check_all.py`
 
-Run every tool's `--check` (25 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (26 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
 $ python3 tools/check_all.py | sed -n "1,3p;26p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 25 CHECKS PASSED
+ALL 26 CHECKS PASSED
 ```
 
 ### `pak_reader.py`
@@ -301,7 +301,7 @@ ScummVM save, CD, version 21: "daraicale cave 2"; ends at 84912 as the layout pr
 
 ### `tests/test_emc2_corpus.py`
 
-Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its 25th check.
+Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its 26th check.
 
 ```
 $ python3 tests/test_emc2_corpus.py
