@@ -320,6 +320,17 @@
       ]
     },
     {
+      "path": "docs/ROUND_TRIP.md",
+      "title": "Round-trip proof for LoL1",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/check_all.py",
+        "tools/lol1_compression_writer.py",
+        "tools/lol1_pak_writer.py"
+      ]
+    },
+    {
       "path": "docs/START_HERE.md",
       "title": "Start here, by goal",
       "answers": [],
