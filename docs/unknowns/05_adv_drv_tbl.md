@@ -18,7 +18,7 @@ CONFIRMED. Both editions have one `DRIVERS.PAK`. The directory names seven files
 | SBPDIG.ADV | 4076 | `3f 00` | 4820 | `36 00` | same copyright, then `Creative Labs Sound Blaster Pro(TM) Digital Sound` |
 | TANDYDIG.ADV | 3779 | `3f 00` | 4549 | `36 00` | same copyright and the same Sound Blaster / Thunderboard strings as `SBDIG.ADV` |
 
-The first uint16 of an `.ADV` is 0x003F on the CD Ad Lib Gold, Sound Blaster, Sound Blaster Pro, and Tandy files, and 0x0036 on those four floppy files. Roland and the PC speaker are 0x002D in both editions. The copyright string begins at file offset 2 in every `.ADV`. CONFIRMED. What the uint16 counts is UNCONFIRMED, because the following bytes are driver code.
+The first uint16 of an `.ADV` is 0x003F on the CD Ad Lib Gold, Sound Blaster, Sound Blaster Pro, and Tandy files, and 0x0036 on those four floppy files. Roland and the PC speaker are 0x002D in both editions. The copyright string begins at file offset 2 in every `.ADV`. CONFIRMED. CONFIRMED. The uint16 is not a count. It is the file offset of a table of uint16 pairs, an id and then an offset inside the file, ended by `FFFF`. The ids start at 100. Every pair's offset lands on `55 8B EC` (`push bp; mov bp, sp`). Roland and the PC speaker have 38 pairs at offset 45, ids 100 to 159, in both editions. CD `ALGDIG.ADV` has 20 pairs at 63, ids 100 to 220; the other three CD files at 63 have 18. The floppy files at 54 have 19 (`ALGDIG.ADV`) or 17 pairs. The bytes between the copyright and the table are data, such as `1A FF FF 00 00`. Which game routine reads the table, and what each id does, is UNCONFIRMED; the driver loader in `MAIN.EXE` that opens an `.ADV` file would settle it.
 
 ## Who names them
 
@@ -64,7 +64,7 @@ The 42-byte run at file offset 29 is repeated at file offset 117: `85 59 b3 20 f
 
 The 16-byte first table and the 128-byte second table from `util.cpp:30-48` are present in the executables, and the 144 bytes match. floppy: `MAIN.EXE` at 253658, `FINALE.EXE` at 159392, `LANDS.EXE` at 123002. CD: `DATA/ENG/FINALE.EXE` at 130438, `DATA/ENG/LANDS.EXE` at 140150, `DATA/HARDRIVE/MAIN.EXE` at 217984. CONFIRMED.
 
-floppy `MAIN.EXE` names `TRIG.TBL` at 238876 and `FINALE.EXE` names it at 144880. The filename string is absent from CD `DATA/ENG/FINALE.EXE`, `DATA/ENG/LANDS.EXE`, and `DATA/HARDRIVE/MAIN.EXE`. CONFIRMED. Kyra has no loader for this filename. Which instruction opens the file, and how a typed password is compared, stay UNCONFIRMED.
+floppy `MAIN.EXE` names `TRIG.TBL` at 238876 and `FINALE.EXE` names it at 144880. The filename string is absent from CD `DATA/ENG/FINALE.EXE`, `DATA/ENG/LANDS.EXE`, and `DATA/HARDRIVE/MAIN.EXE`. CONFIRMED. Kyra has no loader for this filename. Which instruction opens the file, and how a typed password is compared, stay UNCONFIRMED. In floppy `MAIN.EXE` the name is registered in catalog row 226 at file `0x2E208`: far pointer `BC 2C 06 33` to the name at 238876, length `0xA6` (166), flags `0x1000`, like the rows in [Q14](14_palette_callers.md). A row is a registration, not a load. No instruction loads the name's data offset `0x2CBC`. A run-time trace of the open routine filtered on `TRIG.TBL`, or the caller of the catalog lookup during the password prompt, would settle it.
 
 Full file, 166 bytes:
 

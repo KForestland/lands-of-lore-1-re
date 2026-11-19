@@ -61,8 +61,9 @@ reduce a nonzero ordinary hit, with a minimum of two in that branch.
 ## Experience and magic
 
 The native experience thresholds start at 0, 500, 1,500 and 5,000 in
-both editions. The exact HP and MP gains at each new level come from
-ScummVM and are **UNCONFIRMED** in the native executables.
+both editions. The HP and MP gains at each new level are **CONFIRMED** in both
+native executables: Fighter `4d6` HP, Rogue `2d6` HP, Mage `1d6` HP
+plus MP. They match ScummVM.
 [Experience and skills](game_rules.md#experience-and-skills)
 
 The program has tables for spell costs and separate routines for the
@@ -92,5 +93,6 @@ A mask tells the loader which snapshots are populated. The layout comes
 from the save code in both DOS executables and four level files
 (`_LEVELn.TMP`) written by the original floppy program. No complete
 original save file has been examined yet, so the end of the file and a
-few skipped bytes are still **UNCONFIRMED**.
+few skipped bytes are still **UNCONFIRMED**. One save written by either DOS
+program, read against this layout, would settle them.
 [Save layout](savegame_format.md) · [Unresolved save bytes](unknowns/17_native_save_fields.md#isolated-bytes)

@@ -401,7 +401,7 @@ def render(r):
           "Descriptions summarize calls found by a bounded static walk. Different calls can belong to different branches. "
           "`?` marks an argument the walk could not recover. `…` marks additional actions. "
           "The [EMC2 table](../emc2_scripts.md#lol1-system-functions) gives the native handler offsets "
-          "and marks effects inferred from ScummVM **UNCONFIRMED** for DOS where applicable.", ""]
+          "and the evidence label of each effect (effects known only from ScummVM are labelled there).", ""]
     for ext in ("INI", "INF"):
         if ext not in r["scripts"]:
             continue
@@ -483,7 +483,7 @@ One page per level, written by `tools/level_report.py` from the level's own file
 | 0x0800 | a monster leaves the block | `engines/kyra/engine/sprites_lol.cpp:289` |
 | 0x8000 | a thrown item hits | `items_lol.cpp:493` |
 
-The difference between bits 1 and 2 (and 4 and 8) is the movement path that raises them; which player actions take which path is UNCONFIRMED.
+Bits 1 and 2 (and 4 and 8) are not different player actions. They are two stages of the same step. Every step the party takes runs 4 on the old block and 1 on the new block before the view moves. After the move is drawn it runs 8 on the old block and 2 on the new block, but only if no script from the first pair set the stop flag (ScummVM `_flagsTable[73]` bit 2) and the party is still on the new block. Bit 2 also runs on the block queued by the `setNextFunc` script function. **CONFIRMED** in both DOS programs: CD `MAIN.EXE` file offsets 0xD785-0xD815 (step) and 0x10E4C-0x10E61 (queued block); floppy 0x10F0B-0x10F9A and 0x15755-0x15762. No other resident call passes these bits.
 
 ## Levels
 

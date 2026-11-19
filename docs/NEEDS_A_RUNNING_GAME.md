@@ -232,8 +232,12 @@ the mode table always restores the saved mode, here 3), and the DOS
 exit at `+0x3972` used `AX=0x4C00`.
 [Recorded shutdown calls](unknowns/08_native_script_exit.md#english-cd-quit-from-play)
 
-**UNCONFIRMED.** Which setups provide a nonzero optional callback.
-For another setup or edition, record the far pointer at the test
-above, and record the executed target if nonzero. The earlier
-[refusal to start](#an-earlier-launch-that-was-refused) gives an
-unarmed control.
+**CONFIRMED (static).** No setup arms the optional callback through a
+named store. Neither program has a store to CD `DS:361E` or floppy
+`DS:63EA`; the only references are the test and the call. The file
+image holds `0000:0000` (CD `MAIN.EXE+0x350EE`, floppy `+0x3DC4A`).
+[Scan details](unknowns/08_native_script_exit.md#english-cd-quit-from-play).
+A computed-address store is the only open route. A write watch on
+that pointer from program start, in any setup, would rule it out.
+The earlier [refusal to start](#an-earlier-launch-that-was-refused)
+gives an unarmed control.

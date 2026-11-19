@@ -4,7 +4,7 @@ A TIM file is an IFF FORM. The AVTL chunk is a little-endian uint16 array. An op
 
 An instruction is `length, delay, opcode_word, parameters...`. `length` is in words. The opcode is the low byte of word 2 (`script_tim.cpp:232`, `int8(cur.ip[2] & 0xFF)`). The next instruction is `ip + length` (`script_tim.cpp:258-259`). The delay added to the clock is the next instruction's word 1 (`script_tim.cpp:260-261`). CONFIRMED.
 
-The high byte of every opcode word accepted by the walk below is 1. The runtime ignores it (native dispatch below). A separate compiler use of that byte is **UNCONFIRMED**.
+The high byte of every opcode word accepted by the walk below is 1. The runtime ignores it (native dispatch below). A separate compiler use of that byte is **UNCONFIRMED**; no TIM compiler or its source is available, so the game files cannot settle it.
 
 `data/tim_analysis.json` lines 43-44 list opcodes 112 and 176. The command tables end at 0x1E. Those two numbers are not commands. The counts below replace that file's opcode map.
 
@@ -229,6 +229,7 @@ filename. The two intro filename calls and their fixed tables can
 thus be located without a runtime breakpoint.
 
 **UNCONFIRMED** Higher-level names for several unused native
-callbacks remain open.
+callbacks remain open. A name needs a traced in-game effect for that
+callback; the static reads above are all the code shows.
 
 **CONFIRMED** TEXT offsets in these files are little-endian. floppy `VICTOR4.TIM` stores its initial offsets as `06 00 3C 00 BF 00` at `CHAPTER1.PAK+0xE7926`; the floppy `0A` handler reads the offset word directly at `MAIN.EXE+0x96CC`. The equivalent read in ScummVM is `engines/kyra/script/script_tim.cpp:643,703,756`.

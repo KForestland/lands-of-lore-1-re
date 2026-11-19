@@ -23,7 +23,7 @@ CONFIRMED. The encoder in `Screen::encodeShape` (`engines/kyra/graphics/screen.c
 
 CONFIRMED. With the alt flag set, `drawShape` (`screen.cpp:1637-1638`) skips 2 bytes before reading flags, and the encoder (`screen.cpp:2851-2852`) writes 2 bytes and then the same 10-byte record. `detection.h:51` describes that flag as "alternative shape header (uses 2 bytes more, those are unused though)".
 
-CONFIRMED. The flag is the second bool in `GameFlags` (`detection.h:50-51`). `LOL_CD_FLAGS` and `LOL_FLOPPY_FLAGS` (`detection_tables.h:56` and `:58`) both pass false for it. `LOL_DEMO_FLAGS` (`detection_tables.h:63`) passes true. No demo disc is in either tree, so the demo's two extra bytes are UNCONFIRMED on data.
+CONFIRMED. The flag is the second bool in `GameFlags` (`detection.h:50-51`). `LOL_CD_FLAGS` and `LOL_FLOPPY_FLAGS` (`detection_tables.h:56` and `:58`) both pass false for it. `LOL_DEMO_FLAGS` (`detection_tables.h:63`) passes true. No demo disc is in either tree, so the demo's two extra bytes are UNCONFIRMED on data. A shape file from the Lands of Lore demo would settle them.
 
 Monster palette copy starts at `shape + 10` (`engines/kyra/engine/sprites_lol.cpp:88-90`). That matches a 10-byte header. CONFIRMED.
 
@@ -75,4 +75,4 @@ The five-shape gap is two files. CD `GAMESHP.SHP` in `STARTUP.PAK` has count 89.
 
 floppy stores a second copy of five names. Summing every `.SHP` member, including those copies, is 3601 shapes, and all 3601 pass the 10-byte check. The extra 114 are `FACE01.SHP` 28, `FACE05.SHP` 28, `FACE08.SHP` 28, `FACE09.SHP` 28 (each in `GENERAL.PAK` and again in `INTRO.PAK`), and `ITEMICN.SHP` in `INTRO.PAK` with count 2. CONFIRMED. The unique-name count and the every-member count are both 10-byte headers.
 
-Flag values other than bit 0 are not fully specified here. `GUARD` shape 0 has flags 5, so bit 2 is set in that word. What bit 2 means is UNCONFIRMED.
+Flag values other than bit 0 are not fully specified here. `GUARD` shape 0 has flags 5, so bit 2 is set in that word. What bit 2 means is UNCONFIRMED. On the CD it is set on 804 shapes: shapes 0–15 of 49 files such as `GUARD.SHP` and `BOAR.SHP`, all 19 shapes of `THROWN.SHP`, and the one shape of `FXPAL.SHP`. Every such shape also has bit 0. ScummVM never tests bit 2; `drawShape` tests only bit 0 (`screen.cpp:1640-1641`). Finding the DOS routine that reads the flags word and seeing what its bit-2 branch does would settle it.

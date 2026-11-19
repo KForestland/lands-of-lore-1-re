@@ -15,7 +15,7 @@
 
 A member runs from its offset to the next member's offset (the last one to end of file). No sizes or checksums are stored.
 
-Source: `engines/kyra/resource/resource_intern.cpp:296-380` (`ResLoaderPak::load`), `:246-294` (`isLoadable`, which also accepts a big-endian variant not used by DOS LoL1). UNCONFIRMED for the big-endian branch (no such file in either edition).
+Source: `engines/kyra/resource/resource_intern.cpp:296-380` (`ResLoaderPak::load`), `:246-294` (`isLoadable`, which also accepts a big-endian variant not used by DOS LoL1). The big-endian branch does not apply: every container in both editions reads as little-endian and its members tile the file exactly (`pak_reader.py --check`, counts below). CONFIRMED.
 
 ## Confirmed
 

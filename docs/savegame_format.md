@@ -21,7 +21,7 @@ Reader: `tools/save_reader.py FILE` prints these fields for all three kinds of f
 | Level snapshot slots | `0x1D87`, 30 × 2500 | `0x1D76`, 30 × 2500 | CD `+0x48BC7–0x48C49`; floppy `+0x52222–0x522A4`. |
 | Calculated EOF | `0x1427F` | `0x1426E` | Sum of serialized section lengths in the preceding rows. |
 
-The floppy reader compares the five-byte field as a C string against `.13` at `MAIN.EXE+0x3890C`; the comparison stops at NUL (floppy `+0x51F95–0x51FC8`). **CONFIRMED** ScummVM's original-save recognition checks for `CD04` at a candidate description boundary and ` CD1` after advancing past two bytes. This matches the native CD header at the 60-byte boundary and brings its reader to offset `0x4C`. The branch recognizes only the CD signature for LoL (Header:54–101). **CONFIRMED** Three original CD 1.02 slots end at `0x1427F`. Their level, character, position and isolated-byte offsets match the native layout. The floppy EOF prediction and general meanings of the skipped bytes remain **UNCONFIRMED**. [CD save and load comparison](unknowns/17_native_save_fields.md#cd-movement-and-save-round-trip)
+The floppy reader compares the five-byte field as a C string against `.13` at `MAIN.EXE+0x3890C`; the comparison stops at NUL (floppy `+0x51F95–0x51FC8`). **CONFIRMED** ScummVM's original-save recognition checks for `CD04` at a candidate description boundary and ` CD1` after advancing past two bytes. This matches the native CD header at the 60-byte boundary and brings its reader to offset `0x4C`. The branch recognizes only the CD signature for LoL (Header:54–101). **CONFIRMED** Three original CD 1.02 slots end at `0x1427F`. Their level, character, position and isolated-byte offsets match the native layout. **CONFIRMED** The floppy writer makes only fixed-length writes between its open at `+0x521AE` and its close at `+0x522A5`, all through the same write routine: `0x3C`, 5, `0x208`, `0x22D` and `0x1900` bytes, then 30 slots of 4 + `0x9C0` or `0x9C4` bytes. There is no seek. A floppy save therefore ends at `0x1426E`. No floppy save file was checked. The general meanings of the skipped bytes remain **UNCONFIRMED**; [Q17](unknowns/17_native_save_fields.md) gives the memory-watch test for them. [CD save and load comparison](unknowns/17_native_save_fields.md#cd-movement-and-save-round-trip)
 
 ## ScummVM header
 
@@ -49,7 +49,7 @@ The floppy reader compares the five-byte field as a C string against `.13` at `M
 
 [Native fields skipped during ScummVM import](unknowns/17_native_save_fields.md) gives the original options and audio fields.
 
-Offsets below are decimal relative to the start of global state, using version 21 for the ScummVM column. Field order comes from Save:107–202 and 386–430. **CONFIRMED** The serialization boundaries, native level index and mask are also anchored by CD `MAIN.EXE+0x48B02, +0x48BD8` and floppy `+0x52173, +0x52233`. Native fields that the reference skips are **UNCONFIRMED** except where noted. In ScummVM rows after the flags, `F` is the stored flag byte count.
+Offsets below are decimal relative to the start of global state, using version 21 for the ScummVM column. Field order comes from Save:107–202 and 386–430. **CONFIRMED** The serialization boundaries, native level index and mask are also anchored by CD `MAIN.EXE+0x48B02, +0x48BD8` and floppy `+0x52173, +0x52233`. Native fields that the reference skips are **UNCONFIRMED** except where noted. [Q17](unknowns/17_native_save_fields.md) gives the memory-watch test for each. In ScummVM rows after the flags, `F` is the stored flag byte count.
 
 | Native | ScummVM | Type and field |
 | ---: | ---: | --- |
@@ -74,9 +74,9 @@ Offsets below are decimal relative to the start of global state, using version 2
 | 530 | 178 + F | 8 × `u16` secondary script globals |
 | 546 | 194 + F | Seven available-spell bytes |
 | 553 | 201 + F | `u32` level mask. Bit 0 is the level 1 snapshot. |
-| 557 | — | Six more bytes in CD only. The first five are language, dialogue text, talking volume, sound volume and music volume. The last byte is **UNCONFIRMED**. See [Q17](unknowns/17_native_save_fields.md) for the native readers. |
+| 557 | — | Six more bytes in CD only. The first five are language, dialogue text, talking volume, sound volume and music volume. The last byte is **UNCONFIRMED**. It is zero after startup, and only the bulk save and load touched it in the CD round trip. A memory watch on CD `DS:8202` during a lamp change, a party change and a level transition would settle it. See [Q17](unknowns/17_native_save_fields.md) for the native readers. |
 
-**UNCONFIRMED** Legacy ScummVM layouts have no example files checked here. The reader skips 80 bytes after characters for versions below 17, and four bytes after each item slot. Its version 14 flags comprise words 0–15, 26 and 36. Version 15 reads 40 words. Version 16 onward reads a count and a byte array (Save:104–105,134–159,189–202).
+**UNCONFIRMED** Legacy ScummVM layouts have no example files checked here. A ScummVM LoL save of version 14, 15 or 16 would settle them. The reader skips 80 bytes after characters for versions below 17, and four bytes after each item slot. Its version 14 flags comprise words 0–15, 26 and 36. Version 15 reads 40 words. Version 16 onward reads a count and a byte array (Save:104–105,134–159,189–202).
 
 ## Item instance record
 
@@ -95,7 +95,7 @@ The **CONFIRMED** block boundaries above give 400 packed 16-byte item records in
 
 **CONFIRMED** The original save writer iterates 30 slots. For a set mask bit, it stores a `u32 LE` sidecar length followed by `0x9C0` sidecar buffer bytes. For a clear bit it writes `0x9C4` bytes from that buffer, and the reader seeks past the whole slot. Each slot is always 2500 bytes. CD `MAIN.EXE+0x48BC7–0x48C49` and `+0x48A70–0x48AEC`; floppy `+0x52222–0x522A4` and `+0x520E1–0x5215D`. The ScummVM original-save path reads up to 29 levels using the same slot stride (Save:210–245,309–313).
 
-**CONFIRMED** Four floppy sidecars have this little-endian layout. In a used original save slot, start the sidecar layout at slot offset `+0x04`. Bytes left after the length-delimited sidecar in that slot have **UNCONFIRMED** contents and are not part of its payload.
+**CONFIRMED** Four floppy sidecars have this little-endian layout. In a used original save slot, start the sidecar layout at slot offset `+0x04`. **CONFIRMED** Bytes left after the length-delimited sidecar in that slot are not part of its payload. The writer reads `_LEVELn.TMP` into the shared buffer at `DS:4EDC`, stores the returned length, then writes `0x9C0` bytes of that buffer whatever the length (CD `+0x48BDF–0x48C38`). The floppy writer does the same with `DS:8382` (`+0x5223E–0x52293`). The reader writes back only the stored length (CD `+0x48A83–0x48ACA`). The tail bytes are whatever that buffer held before the read, so they have no fixed meaning.
 
 | Sidecar section | Layout | Witness and source |
 | --- | --- | --- |
@@ -139,7 +139,7 @@ Field offsets are decimal. **CONFIRMED** The 46-byte native and 42-byte ScummVM 
 
 ### Flying object slot
 
-Offsets are decimal. **CONFIRMED** The same 17-byte boundaries fit both sets of examples. See Save:292–307,478–493. The purposes of `field_D` and `c` remain **UNCONFIRMED**.
+Offsets are decimal. **CONFIRMED** The same 17-byte boundaries fit both sets of examples. See Save:292–307,478–493. The purposes of `field_D` and `c` remain **UNCONFIRMED**. The DOS launch routine (CD `+0xF1DF–0xF321`) fills a free slot of the 8 × 17-byte array at `DS:4DCC`. It copies its last stack argument into byte 14 (`c`); the call at CD `+0x12601` passes `0x3F`. It never writes byte 13. No direct access to bytes 13 or 14 of that array was found in CD `+0xE000–0x10800`. Finding the routine that walks `DS:4DCC` with stride `0x11` and reads bytes 13 and 14 would settle both.
 
 | Offset | Field |
 | ---: | --- |

@@ -13,7 +13,7 @@
 | PCS | `FORM` … `XDIR` | CONFIRMED (16/16) |
 | ADL | no IFF: 250 track ids, then 500 program and 500 instrument offsets, then program bytecode and 11-byte instruments ([`../unknowns/15_adl_and_c55.md`](../unknowns/15_adl_and_c55.md)) | CONFIRMED |
 
-ScummVM plays XMI through its XMIDI parser and ADL through `engines/kyra/sound/drivers/adlib.cpp` (Westwood AdLib driver; the driver version it uses for LoL is not checked here). The ADL layout (track table, program table) is described by that driver; not checked field by field in this repo. UNCONFIRMED.
+ScummVM plays XMI through its XMIDI parser and ADL through `engines/kyra/sound/drivers/adlib.cpp` (Westwood AdLib driver; the driver version it uses for LoL is not checked here). The ADL layout (track map, program and instrument offset tables, program headers, 11-byte instruments) is now checked field by field on the data of both editions, including the floppy `LORESFX.ADL` short track map: CONFIRMED ([Q15](../unknowns/15_adl_and_c55.md)). Still open there: how the native floppy driver treats programs 217 and 218.
 
 C55 is the XMIDI set for General MIDI / Roland GS: the executable's sound selector pairs the MT-32/MPU driver with XMI and again with C55, and `LOLSYSEX.C55` holds Roland's GS reset ([`../unknowns/15_adl_and_c55.md`](../unknowns/15_adl_and_c55.md)). What the letters stand for (the closure memo says "Creative Music File"; the files are XMIDI containers like XMI) is OPEN, [Q15](../OPEN_QUESTIONS.md). Which driver file plays it: [Q5](../OPEN_QUESTIONS.md) ([drivers.md](drivers.md)).
 

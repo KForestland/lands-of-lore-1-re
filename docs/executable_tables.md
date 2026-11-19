@@ -26,8 +26,8 @@ Evidence references use ScummVM revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801
 | Spell properties | `0x2B5E0` | `0x2B0A0` | `0x2CE80` | 17 × 28 bytes, 14 `u16 LE` values per row. Byte-identical in these three images. `lol_dos_cd.h:501–521`, `lol_dos.h:453–473`, `staticres_lol.cpp:102–122`. |
 | Experience thresholds | `0x2B830` | `0x2B2F0` | `0x324F0` | 11 × `u32 LE`, identical in both editions. Values are 0, 500, 1500, 5000, 25000, 50000, 80000, 120000, 180000, 270000, 2147483647. `lol_dos_cd.h:619–624`, `lol_dos.h:571–576`. |
 | Monster difficulty modifiers 1–3 | `0x2B85C` | `0x2B31C` | `0x3251C` | 3 rows of 3 × `u16 LE`, easy/normal/hard, with 256 representing 1.0. The first row's easy value is 102 on CD and 192 on floppy. `lol_dos_cd.h:626–642`, `lol_dos.h:578–594`. |
-| Monster difficulty modifier 4 | `0x2B86E` | `0x2B32E` | — | 3 × `u16 LE`, values 128, 256, 256. **UNCONFIRMED** whether a floppy analogue exists elsewhere. ScummVM selects this provider for talkie (`lol_dos_cd.h:644–648`, `devtools/create_kyradat/resources.cpp:5192–5195,5423–5427`). |
-| Item price thresholds | `0x2F8C0` | `0x2F380` | — | 46 × `u16 LE` including final zero. **UNCONFIRMED** whether a floppy analogue exists elsewhere. The matching span is absent in floppy `MAIN.EXE`; the ScummVM CD provider and consumer are `lol_dos_cd.h:794–803`, `engines/kyra/script/script_lol.cpp:2329–2347`. |
+| Monster difficulty modifier 4 | `0x2B86E` | `0x2B32E` | — | 3 × `u16 LE`, values 128, 256, 256. **CONFIRMED** no floppy analogue. CD `MAIN.EXE+0xAE6C–0xAE89` reads this table at `2803:003E`, indexed by difficulty, and passes the value with a monster stat word to the helper at `1AFF:0420`. The readers of modifiers 2 and 3 use the same helper (`+0xAA2D`, `+0x129BA`). The floppy counterpart at `+0xAD93–0xADD6` has no difficulty lookup at that point, and floppy `MAIN.EXE` holds no `128, 256, 256` word run. ScummVM selects this provider for talkie (`lol_dos_cd.h:644–648`, `devtools/create_kyradat/resources.cpp:5192–5195,5423–5427`). |
+| Item price thresholds | `0x2F8C0` | `0x2F380` | — | 46 × `u16 LE` including final zero. **CONFIRMED** no floppy analogue. The only native reader is the CD handler of script function `0xBD` (`MAIN.EXE+0x16837–0x16897`), which walks the words at `2C0C:0000` up to the zero entry. The floppy function table ends at `0xBA`, no floppy script calls `0xBD`, and no run of six consecutive table words occurs in floppy `MAIN.EXE`. The matching span is absent in floppy `MAIN.EXE`; the ScummVM CD provider and consumer are `lol_dos_cd.h:794–803`, `engines/kyra/script/script_lol.cpp:2329–2347`. |
 
 Short references `lol_dos_cd.h`, `lol_dos.h` and `lol_dos_english.h` are under `devtools/create_kyradat/resources/`. `staticres_lol.cpp` is under `engines/kyra/resource/`. `script_lol.cpp` below is under `engines/kyra/script/`.
 
@@ -46,7 +46,7 @@ Short references `lol_dos_cd.h`, `lol_dos.h` and `lol_dos_english.h` are under `
 | `17`, `27` | 8 × `u16` item might and 8 × `u16` protection against each item category |
 | `37` | `u16` item protection |
 | `39`, `3B`, `3D`, `3F` | Current and max HP, current and max MP, each a 16-bit word. Current values are signed. |
-| `41` | `u8` field of unresolved purpose (**UNCONFIRMED**). |
+| `41` | `u8` shape selector. **CONFIRMED** CD `MAIN.EXE+0xDE38–0xDE5E` reads it from the character record (`2803:362D` + 0x82 × character, set up at `+0xDC43–0xDC54`). It indexes a far-pointer table at `2803:01C6`, which is zero in the file, and draws that pointer at x 44, y 17. Floppy `+0x115B0–0x115CD` does the same with table `2DCF:01B8`. What the drawn shapes show is **UNCONFIRMED**; a run with a nonzero value would settle it. ScummVM draws game shape 72 (CD) or 70 (floppy) plus this byte at the same point (`engines/kyra/gui/gui_lol.cpp:410`). |
 | `42`, `44` | `u16` damage suffered and weapon hit |
 | `46`, `48` | `u16` total might and total protection multipliers |
 | `4A`, `4C` | `u16` base might and protection |
@@ -64,9 +64,9 @@ Short references `lol_dos_cd.h`, `lol_dos.h` and `lol_dos_english.h` are under `
 | --- | --- |
 | `00` | Name language ID |
 | `02` | MP costs, four words in rank order |
-| `0A`, `0C` | `field_a`, `field_c`. Their native meanings remain **UNCONFIRMED**. |
+| `0A`, `0C` | `field_a`, `field_c`. Their native meanings remain **UNCONFIRMED**: no static reader was found. Every stride-28 indexed read in both executables (CD resident base `27DD:0010`, overlay segment `05E8`) uses only row offsets `00`, `02`, `0E` and `1A`. The only reads through a row pointer (CD `+0x4FFE9, +0x50009`; floppy `+0x5A2EC, +0x5A30C`) use `1A`. All rows hold 0 here except row 9's `field_a`, which is 15. A runtime watch on these words while each spell is cast would settle it. |
 | `0E` | HP costs, four words in rank order |
-| `16`, `18` | `field_16`, `field_18`. Further native use **UNCONFIRMED**. |
+| `16`, `18` | `field_16`, `field_18`. Further native use **UNCONFIRMED**: the same scan finds no reader, and both words are 0 in all 17 rows. A runtime watch would settle it. |
 | `1A` | **CONFIRMED** Both executables use bit 8 to check the forward wall and the low byte to index the paid-cast dispatch table (CD `MAIN.EXE+0x4FEEE–0x4FF17, +0x4FFE6–0x50018`, floppy `+0x5A1F3–0x5A21C, +0x5A2E9–0x5A31B`). ScummVM uses the low byte for the Heal target click (`engines/kyra/engine/lol.cpp:2091–2122`, `engines/kyra/gui/gui_lol.cpp:1469–1476`). |
 
 ## Item types and item properties
@@ -101,9 +101,9 @@ The table gives the script ABI checked on data and reference field widths from `
 | 9–16 | Eight equipment-might values. | `script_lol.cpp:951–952` |
 | 17–24 | Eight protection percentages. Multiply by 256 and divide by 100. | `script_lol.cpp:951–954` |
 | 25–27 | Item protection, base HP, flags. Speed wait initially uses the literal 1. | `script_lol.cpp:956–959` |
-| 28–29 | 28 is discarded by the reference. 29 becomes `unk5`; the field's native meaning is **UNCONFIRMED**. | `script_lol.cpp:960–962` |
+| 28–29 | 28 is discarded by the reference. 29 becomes `unk5`, natively the word at definition `+40`, which overwrites slot 28 ([native record](unknowns/18_native_records.md#monster-definition)). Its native meaning is **UNCONFIRMED**. In both executables, no instruction right after loading a monster's definition pointer (`les` from instance `+21`) uses `+40`, while `+3A`, `+3E`, `+42` and others do. A runtime watch on `+40` of a loaded definition would settle it. | `script_lol.cpp:960–962` |
 | 30–34 | Ranged attack count, ranged weapon count, three ranged weapon entries. | `script_lol.cpp:964–967` |
 | 35–38 | Attack chance, attack skill type, defense chance, defense skill type. | `script_lol.cpp:969–972` |
 | 39–41 | Three sound IDs. | `script_lol.cpp:974–975` |
 
-The call layout and argument counts above are **CONFIRMED** at the listed data offsets. The reference uses typed memory records in `engines/kyra/engine/lol.h:92–112`. The [native monster definition](unknowns/18_native_records.md#monster-definition) is 83 bytes and has its own far pointer to the fighting stats. A duplicate copy of the script definitions inside the images remains **UNCONFIRMED**.
+The call layout and argument counts above are **CONFIRMED** at the listed data offsets. The reference uses typed memory records in `engines/kyra/engine/lol.h:92–112`. The [native monster definition](unknowns/18_native_records.md#monster-definition) is 83 bytes and has its own far pointer to the fighting stats. **CONFIRMED** The images hold no prefilled copy of the script definitions. The native definition bank (CD `2803:1B5E`, file `0x2D38E`; floppy `2DCF:1B40`, file `0x34030`) is 5 × 83 zero bytes in the file. The first `LEVEL1.INI` definition's raw arguments 2–5 (`200, 100, 100, 200`) and its converted record bytes `+02–+09` occur in none of CD `MAIN.EXE`, CD `MAINW.EXE` or floppy `MAIN.EXE`.

@@ -38,11 +38,16 @@ exit was chosen and confirmed. The trace captured guest instructions with load s
 | `+0x268F7–0x2690A` | The video query returned `AX=0x0013` at `+0x268FC`, while `DS:388C = 3`. The restore call at `+0x26904` took argument 9 and returned with `AX=3`. Read from code: mode-table entry 9 (`DS:38A0`) is 0 in the file and has no direct writer, so argument 9 always sets the saved mode `DS:388C` through `INT 10h`. The original helpers pass BIOS function 0x0F and then the saved mode through the `INT 10h` wrapper (`+0x26C82–0x26C9D`, `+0x26CBA–0x26CDD`, `+0x66CC–0x6719`). |
 | `+0x3E54`, `+0x2689C–0x268A6`, `+0x3972` | The wrapper re-entered prep with the one-shot word already zero and skipped its body. DOS termination ran with `AX=0x4C00` and the prompt returned. |
 
-**UNCONFIRMED.** Installations with a nonzero registered far pointer
-at `+0x268EB`. Repeat the quit under the specific setup and capture
-the indirect call at `+0x268F3` and its destination if the pointer
-is nonzero. For a floppy run use `DS:63EA` and the corresponding
-sites listed above.
+**CONFIRMED** No code in either program stores to this far pointer by
+address. A whole-file scan for the displacement or immediate
+`0x361E` (CD) and `0x63EA` (floppy) finds only the test and the
+indirect call (CD `+0x268EB`, `+0x268F3`; floppy `+0x1DAE2`,
+`+0x1DAEA`). The file image holds `0000:0000` at CD `+0x350EE` and
+floppy `+0x3DC4A` (data base CD `+0x31AD0`, floppy `+0x37860`).
+No nearby base address (`0x3600–0x3630`) is used as a pointer to
+it either. So the call is not armed in any setup of the shipped
+programs unless a computed-address store reaches it. A write watch
+on `DS:361E` or `DS:63EA` from program start would rule that out.
 
 ## Script evidence
 

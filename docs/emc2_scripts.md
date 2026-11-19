@@ -20,7 +20,7 @@ All integer fields here are big-endian. File offsets are relative to the INF or 
 | `TEXT` | Optional. Array of `u16` **byte offsets relative to this payload**, then NUL-terminated byte strings. The first offset equals twice the number of entries in both English corpora. Index 0 reads the first pointer at offset 0. | **CONFIRMED** both editions' `LEVEL1.INI+0x20`. The first pointer `0x0014` leads to `KEEP` at script offset `0x34`. ABI:68 implements lookup as `TEXT[BE16(TEXT + 2 × index)]`. |
 | `DATA` | Array of `u16` words. A word can be an instruction, the operand of the previous word, or an ORDR entry header. Jump addresses are DATA word indexes. | **CONFIRMED** both editions' `LEVEL1.INI+0x96`; VM:81–89, 195–218, 228–230, 323–328. |
 
-**UNCONFIRMED in the original caller:** ScummVM starts an INI at entry 0 and may call an additional entry. On INF load it dispatches entry `0x400` with flags `-1`. The level dispatch seeds registers 0–6 with event flags, character number, item, two caller-supplied values, block, and script direction. LoL:34–89.
+**CONFIRMED** for the level dispatch: CD `MAIN.EXE+0xCF93–0xD025`, floppy `+0x1077B–0x1080D`. It does nothing while the word at CD `DS:4BF6` (floppy `DS:809C`) is nonzero. Otherwise it starts the entry given in argument 0 and seeds registers 0–6 with argument 1 (the event flags), arguments 2–5, the entry number, and the sign-extended byte at CD `DS:7FD8` (floppy `DS:B47E`). It runs the entry only when the header word before it ANDs nonzero with the flags (CD `+0xCFF8–0xD01A`). A two-argument wrapper (CD `+0xD026`) passes −1, 0, 0, 0 as arguments 2–5, like ScummVM's `runLevelScript`. Character number, item and script direction are ScummVM's names for those values (LoL:34–89). **UNCONFIRMED in the original caller:** ScummVM starts an INI at entry 0 and may call an additional entry, and on INF load dispatches entry `0x400` with flags `-1`. No static caller passes entry `0x400`: not the 10 far and 1 near callers of the dispatch, and not the 15 callers of the wrapper. One routine (CD `+0xF832`) dispatches entry `0x401` plus its argument with flags −1 and has no static caller. To settle, trace the level loader that opens `LEVELn.INI` and `LEVELn.INF`, or break on CD `+0xCF93` during a level load.
 
 A listing prints DATA word addresses in hex and string indexes in decimal. To locate a word in the PAK, add the script's PAK offset, its DATA payload offset and twice the word address. TEXT output follows the pointer table, preserving indexed entries. The listing annotates string operands when immediately preceding constant pushes identify them within the same straight-line span.
 
@@ -41,7 +41,7 @@ python3 tests/test_emc2_corpus.py /path/to/CD/DATA /path/to/floppy
 | `0x2000` | Signed 16-bit operand in the next word. |
 | Otherwise | Operand 0. |
 
-Effects below describe the ScummVM implementation (**UNCONFIRMED** native behavior, with data coverage reported separately). `p` is the decoded operand, `SP` the top of the downward-growing stack and `BP` the frame base. The VM stores signed 16-bit values and uses `SP = 99`, `BP = 101` at init (ABI:47–59, VM:148–154).
+**CONFIRMED** in both executables: the effects below match the native step routine, except where this paragraph says otherwise. The routine is CD `MAIN.EXE+0x12F20–0x133A1` and floppy `+0x178E3–0x17D64`. The two copies are byte-identical apart from relocated far calls and jump-table bases. It decodes one instruction per call (CD `+0x12F42–0x12FB4`) and jumps through a 19-entry table at CD `+0x133C6` (floppy `+0x17D89`). `p` is the decoded operand, `SP` the top of the downward-growing stack and `BP` the frame base. Stack words are signed 16-bit. The native state is 0xF6 bytes: IP and data far pointers, return value at `+08`, BP `+0A`, SP `+0C`, 15 registers from `+0E`, 100 stack words from `+2C`, and a flag word at `+F4`. Differences from ScummVM: native init sets `SP = 100`, `BP = 102` (CD `+0x12DC8–0x12DD3`), where ScummVM uses `SP = 99`, `BP = 101` and zeroes slot 99 (ABI:47–59, VM:148–154). So the root-frame tests of opcodes 08 and 12 compare SP with 100 (CD `+0x130E2`, `+0x13357`). Opcode 12 clears the `+F4` flag instead of a stack slot (CD `+0x1338E`). A second native start routine (CD `+0x12E52`) sets that flag and pushes the current IP index and return value before entering an entry, so opcode 12 is its return. Opcode 0E calls the table entry with no null check.
 
 | Hex | Opcode | Operand | Effect | ScummVM |
 | --- | --- | --- | --- | --- |
@@ -65,7 +65,7 @@ Effects below describe the ScummVM implementation (**UNCONFIRMED** native behavi
 | 11 | eval | selector | Pop A, then B, and push the selected result. | VM:354–443 |
 | 12 | setRetAndJmp | none | Stop at the root frame. Otherwise pop return value and target, clear stack slot 99, and jump. | VM:445–453 |
 
-**UNCONFIRMED native behavior** for the `eval` selectors below. A is the first pop, B the second. Comparisons and logical operators return 0 or 1. Arithmetic and bitwise results are stored as 16-bit values. VM:354–443.
+**CONFIRMED native behavior** for the `eval` selectors below. The 18-entry jump table at CD `MAIN.EXE+0x133A2` (floppy `+0x17D65`) reaches compare, add, subtract, `imul`, `idiv`, `sar`, `shl`, `and`, `or` and `xor` bodies that match each row (CD `+0x13292–0x1333A`). Division and remainder are signed, and right shift is arithmetic. A selector above 17 stops the script. A is the first pop, B the second. Comparisons and logical operators return 0 or 1. Arithmetic and bitwise results are stored as 16-bit values. VM:354–443.
 
 | Selector (decimal) | Result |
 | --- | --- |
@@ -78,7 +78,7 @@ Effects below describe the ScummVM implementation (**UNCONFIRMED** native behavi
 
 ## LoL1 system functions
 
-Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` for a string-table index and `lang ID` for a separate localized text identifier. Arguments can be read conditionally. Columns CD and Floppy count static call sites (**CONFIRMED**, corpus locations below). Unless a row cites native behavior, the names, arguments and effects describe the ScummVM implementation (**UNCONFIRMED** native semantics). A vacant ScummVM slot returns 0 in that interpreter (LoL:2683–2974, ABI:63–69, VM:309–321).
+Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` for a string-table index and `lang ID` for a separate localized text identifier. Arguments can be read conditionally. Columns CD and Floppy count static call sites (**CONFIRMED**, corpus locations below). Unless a row cites native behavior, the names, arguments and effects describe the ScummVM implementation (**UNCONFIRMED** native semantics). To settle a row, read its native handler at the CD and floppy offsets in the table. A vacant ScummVM slot returns 0 in that interpreter (LoL:2683–2974, ABI:63–69, VM:309–321).
 
 **CONFIRMED** Native tables are arrays of relocated 16:16 pointers with the offset word first. CD `MAIN.EXE+0x33F64` and `MAINW.EXE+0x33A08` have 192 entries. floppy `MAIN.EXE+0x3D1EE` has 187 entries, ending at ID 0xBA. All segment words are MZ relocation targets. Table ends are the first following addresses without a segment relocation at this stride. The native handler columns give file offsets in the two `MAIN.EXE` files. They include entry stubs for overlay code. Resolve a table entry using image header bytes plus pointer segment × 16 plus pointer offset. The original stack accessor is visible in the CD and floppy 0x40 wrappers at `+0x148FC` and `+0x19283`. See [Executable tables](executable_tables.md#locating-the-executables) for the CD archive coordinates.
 
@@ -89,7 +89,7 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | 02 | drawScene | draw mode | Draws the dungeon scene. | 80 | 81 | `0x1352B` | `0x17EEE` | LoL:2691, LoL:110–114 |
 | 03 | rollDice | count, sides | Rolls dice and returns the sum. | 439 | 437 | `0x13433` | `0x17DF6` | LoL:2692, LoL:116–119 |
 | 04 | moveParty | move mode | Moves or rotates the party. Modes 0–5 use relative controls, 6–9 transform a compass movement, and 10–13 use the facing-change branch. | 85 | 85 | `0x13548` | `0x17F0B` | LoL:2695, LoL:121–180 |
-| 05 | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x135FA` | `0x17FBD` | LoL:2696, VM:309–321 |
+| 05 | Unimplemented | string (TEXT) | VM returns 0 in ScummVM. **CONFIRMED** native: reads argument 0 as a TEXT index, calls a setup routine with 3, sets `DS:3713` to `0xFE`, passes the string to a text routine and returns 1 (CD `+0x135FA–0x13652`, floppy `+0x17FBD–0x18015`). | 0 | 0 | `0x135FA` | `0x17FBD` | LoL:2696, VM:309–321 |
 | 06 | delay | ticks | Delays in engine ticks while updating. | 92 | 100 | `0x13653` | `0x18016` | LoL:2697, LoL:183–187 |
 | 07 | setGameFlag | flag ID, enabled | Sets or clears game flag. | 531 | 517 | `0x13670` | `0x18033` | LoL:2698, LoL:189–198 |
 | 08 | testGameFlag | flag ID | Tests game flag. Negative ID returns 0. | 638 | 625 | `0x136C8` | `0x1808B` | LoL:2701, LoL:200–206 |
@@ -127,8 +127,8 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | 28 | fadePalette | — | Fades to loaded palette or reapplies brightness in 16-color mode. | 14 | 14 | `0x1404A` | `0x18A07` | LoL:2749, LoL:592–600 |
 | 29 | loadBitmap | filename (TEXT), destination page | Loads a bitmap and its palette, optionally copying to another page. | 52 | 52 | `0x1406A` | `0x18A24` | LoL:2750, LoL:602–608 |
 | 2A | stopBackgroundAnimation | animation slot | Stops background animation. | 69 | 61 | `0x140F7` | `0x18AB9` | LoL:2751, LoL:610–614 |
-| 2B | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x14114` | `0x18AD6` | LoL:2752, VM:309–321 |
-| 2C | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x14134` | `0x18AF6` | LoL:2755, VM:309–321 |
+| 2B | Unimplemented | index | VM returns 0 in ScummVM. **CONFIRMED** native: sets byte `+1` of the 0xB5-byte record chosen by argument 0 to 1 and returns 1 (CD byte `DS:4EED` + 0xB5 × index, `+0x14114–0x14133`; floppy `DS:8393`, `+0x18AD6–0x18AF5`). | 0 | 0 | `0x14114` | `0x18AD6` | LoL:2752, VM:309–321 |
+| 2C | Unimplemented | index | VM returns 0 in ScummVM. **CONFIRMED** native: sets bytes `+0` and `+1` of the same record to 1 and returns 1 (CD `+0x14134–0x1416B`, floppy `+0x18AF6–0x18B2D`). | 0 | 0 | `0x14134` | `0x18AF6` | LoL:2755, VM:309–321 |
 | 2D | getGlobalScriptVar | index | Reads one of 24 script globals. | 26 | 30 | `0x14199` | `0x18B5B` | LoL:2756, LoL:616–620 |
 | 2E | setGlobalScriptVar | index, value | Sets one of 24 script globals. | 20 | 20 | `0x1416C` | `0x18B2E` | LoL:2757, LoL:622–627 |
 | 2F | getGlobalVar | selector, subindex | Reads a selected engine global, including position, level, hand, brightness, money, lamp or control state. See LoL:629–666. | 75 | 65 | `0x141B3` | `0x18B75` | LoL:2758, LoL:629–666 |
@@ -136,7 +136,7 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | 31 | triggerDoorSwitch | block, switch action | Processes a door switch. | 111 | 111 | `0x14374` | `0x18D0A` | LoL:2762, LoL:742–746 |
 | 32 | checkEquippedItemScriptFlags | — | Tests whether any of the first four equipment slots of active characters refer to item script entry 0 or 2. | 2 | 2 | `0x143C7` | `0x18D5D` | LoL:2763, LoL:748–760 |
 | 33 | setDoorState | block, state | Sets or clears block flag 0x20, clearing 0x10 when setting it. | 15 | 15 | `0x1651B` | `0x1AE1D` | LoL:2764, LoL:762–769 |
-| 34 | updateBlockAnimations | block, side, wall A, wall B | Toggles wall type between A and B. Side −1 for all four walls follows ScummVM `setWallType` (scene_lol.cpp:1241–1249); **UNCONFIRMED** for DOS. | 55 | 55 | `0x14443` | `0x18DD9` | LoL:2767, LoL:771–777 |
+| 34 | updateBlockAnimations | block, side, wall A, wall B | Toggles wall type between A and B. Side −1 sets all four walls. **CONFIRMED** on DOS: for side −1 the handler compares wall A with side 0 of the block (CD `+0x144AF–0x144F3`, floppy `+0x18E4A–0x18E8B`). It then calls the wall setter with side −1, whose loop writes all four sides (CD `+0x16C09–0x16C22`, floppy `+0x1B374–0x1B38D`). The handler returns 0. | 55 | 55 | `0x14443` | `0x18DD9` | LoL:2767, LoL:771–777 |
 | 35 | assignLevelDecorationShape | wall/decoration index | Assigns level decoration shapes. | 14 | 14 | `0x30B94` | `0x3719F` | LoL:2768, LoL:779–782 |
 | 36 | resetBlockShapeAssignment | replacement byte | Resets two groups of five wall-to-shape mappings. | 14 | 14 | `0x30B8F` | `0x3719A` | LoL:2769, LoL:784–790 |
 | 37 | copyRegion | source X, source Y, destination X, destination Y, width, height, source page, destination page | Copies a screen region and updates the visible screen for page 0. | 203 | 201 | `0x14506` | `0x18E9C` | LoL:2770, LoL:792–799 |
@@ -150,8 +150,8 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | 3F | loadMonsterProperties | property slot, shape, combat values, equipment strengths/resistances, HP, flags, ranged and skill settings, sounds | Loads a 42-position property definition. Argument layout is in [Executable and script tables](executable_tables.md), and the source assignments are at LoL:919–977. | 79 | 79 | `0x30B67` | `0x37172` | LoL:2782, LoL:919–978 |
 | 40 | battleHitSkillTest | attacker, target, skill | Returns battle hit test result. | 4 | 4 | `0x148FC` | `0x19283` | LoL:2785, LoL:980–983 |
 | 41 | inflictDamage | target or −1, damage, attacker, skill, death flags | Applies damage to one entity or all four party slots for target −1. | 66 | 66 | `0x1493A` | `0x192C1` | LoL:2786, LoL:985–995 |
-| 42 | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x30F0A` | `0x374EA` | LoL:2787, VM:309–321 |
-| 43 | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x30F0F` | `0x374EF` | LoL:2788, VM:309–321 |
+| 42 | Unimplemented | value | VM returns 0 in ScummVM. **CONFIRMED** native: sets bit 0x80 of the word at CD `DS:804C` (floppy `DS:B4F2`) when argument 0 is nonzero and clears it otherwise, passes argument 0 to an overlay routine and returns 1 (overlay body CD `+0x4DDB8–0x4DDE6`, floppy `+0x56915–0x56943`). | 0 | 0 | `0x30F0A` | `0x374EA` | LoL:2787, VM:309–321 |
+| 43 | Unimplemented | — | VM returns 0 in ScummVM. **CONFIRMED** native: reads no argument, calls one overlay routine and returns 1 (overlay body CD `+0x4DDE7`, floppy `+0x56944`). | 0 | 0 | `0x30F0F` | `0x374EF` | LoL:2788, VM:309–321 |
 | 44 | moveMonster | monster, block, X, Y, facing | Sets movement destination and facing for modes 1 or 2. | 17 | 17 | `0x14A0C` | `0x19393` | LoL:2791, LoL:997–1009 |
 | 45 | setupDialogueButtons | count, three lang IDs | Creates dialogue choices from their localized labels. | 103 | 106 | `0x14AEF` | `0x19476` | LoL:2792, LoL:1011–1015 |
 | 46 | giveTakeMoney | signed credits | Gives positive credits or takes the magnitude of a negative amount. | 41 | 41 | `0x14B64` | `0x194EB` | LoL:2793, LoL:1017–1026 |
@@ -161,7 +161,7 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | 4A | playAttackSound | type index | Plays an attack sound selected by item skill and type. | 1 | 1 | `0x1646B` | `0x1AD6D` | LoL:2799, LoL:1057–1069 |
 | 4B | addRemoveCharacter | signed character ID | Adds a character for a nonnegative ID. A negative ID removes that character from the active party. | 7 | 7 | `0x30F6A` | `0x3753F` | LoL:2800, LoL:1071–1098 |
 | 4C | giveItem | type index, frame flags, placed flag | Creates an item for the inventory. Deletes it again if placement fails. | 12 | 13 | `0x14C50` | `0x195D7` | LoL:2803, LoL:1100–1108 |
-| 4D | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x14CAB` | `0x19632` | LoL:2804, VM:309–321 |
+| 4D | Unimplemented | three values | VM returns 0 in ScummVM. **CONFIRMED** native: passes arguments 0 and 1 and argument 2 sign-extended to 32 bits to one routine and returns 1 (CD `+0x14CAB–0x14CEF`, floppy `+0x19632–0x19676`). | 0 | 0 | `0x14CAB` | `0x19632` | LoL:2804, VM:309–321 |
 | 4E | loadTimScript | TIM slot, TIM stem (TEXT) | Loads the named TIM in an empty slot. | 91 | 87 | `0x14CF0` | `0x19677` | LoL:2805, LoL:1110–1117 |
 | 4F | runTimScript | TIM slot, loop mode | Executes the active TIM and returns its result. | 77 | 80 | `0x14D8D` | `0x19714` | LoL:2806, LoL:1119–1122 |
 | 50 | releaseTimScript | TIM slot | Unloads the TIM. | 89 | 88 | `0x14DC1` | `0x19748` | LoL:2809, LoL:1124–1128 |
@@ -187,7 +187,7 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | 64 | playMusicTrack | track | Plays a music track. | 121 | 120 | `0x151EE` | `0x19B68` | LoL:2839, LoL:1343–1346 |
 | 65 | deleteMonstersFromBlock | block | Removes monsters from a block. | 1 | 1 | `0x1672B` | `0x1AFC5` | LoL:2840, LoL:1348–1352 |
 | 66 | countBlockItems | block | Counts assigned items, skipping monsters. | 27 | 27 | `0x15208` | `0x19B82` | LoL:2841, LoL:1354–1366 |
-| 67 | characterSkillTest | skill | Rolls against the highest active skill level plus modifier plus 25. Returns that slot or −1. | 67 | 67 | `0x1524C` | `0x19BC6` | LoL:2842, LoL:1368–1384 |
+| 67 | characterSkillTest | skill | Native (`0x1529C`–`0x152AF`): 10 × (skill level + modifier) + the second script argument + 25 per active character; returns the best slot or −1. ScummVM has no ×10 and ignores the second argument. **CONFIRMED** (CD). | 67 | 67 | `0x1524C` | `0x19BC6` | LoL:2842, LoL:1368–1384 |
 | 68 | countAllMonsters | — | Counts positive-HP monsters except mode 13. | 4 | 4 | `0x152E5` | `0x19C5F` | LoL:2845, LoL:1386–1396 |
 | 69 | playEndSequence | — | Plays ending and quits or fades in demo mode. | 1 | 1 | `0x16662` | `0x1AF64` | LoL:2846, LoL:1398–1428 |
 | 6A | stopPortraitSpeechAnim | — | Stops portrait speech animation and stops audio speech in talkie mode. | 73 | 41 | `0x15319` | `0x19C93` | LoL:2847, LoL:1430–1436 |
@@ -202,8 +202,8 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | 73 | removeCharacterEffects | character, effect selector, redraw | Removes selected character effects. | 3 | 3 | `0x15670` | `0x19FE2` | LoL:2860, LoL:1513–1517 |
 | 74 | checkInventoryFull | — | Returns 0 if any inventory slot is nonzero, otherwise 1 in this reference handler. | 13 | 14 | `0x156BC` | `0x1A02E` | LoL:2863, LoL:1519–1526 |
 | 75 | moveBlockObjects | from block, to block, level, include monsters, run script, include items | Removes selected monsters and moves eligible placed items. May dispatch destination event 0x80. | 89 | 89 | `0x156DB` | `0x1A04D` | LoL:2864, LoL:1528–1578 |
-| 76 | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x1586A` | `0x1A1A5` | LoL:2865, VM:309–321 |
-| 77 | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x30B80` | `0x3718B` | LoL:2866, VM:309–321 |
+| 76 | Unimplemented | slot 0 unused, value | VM returns 0 in ScummVM. **CONFIRMED** native: reads only argument 1. When it is nonzero it calls one routine, otherwise another with 0, then returns 1 (CD `+0x1586A–0x15893`, floppy `+0x1A1A5–0x1A1CE`). | 0 | 0 | `0x1586A` | `0x1A1A5` | LoL:2865, VM:309–321 |
+| 77 | Unimplemented | — | VM returns 0 in ScummVM. **CONFIRMED** native: reads no argument, calls one overlay routine and returns 1 (overlay body CD `+0x47C8D`, floppy `+0x5146C`). | 0 | 0 | `0x30B80` | `0x3718B` | LoL:2866, VM:309–321 |
 | 78 | addSpellToScroll | spell, availability flag | Changes spell scroll availability. | 2 | 2 | `0x31094` | `0x376D4` | LoL:2869, LoL:1580–1584 |
 | 79 | playDialogueText | lang ID, formatting arguments | Prints dialogue text. | 1 | 35 | `0x15894` | `0x1A1CF` | LoL:2870, LoL:1586–1590 |
 | 7A | playDialogueTalkText | speech/lang ID, formatting arguments | Plays speech and prints dialogue if speech fails or text is enabled. | 60 | 61 | `0x158C9` | `0x1A204` | LoL:2871, LoL:1592–1602 |
@@ -228,12 +228,12 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | 8D | restoreAfterDialogueSequence | restore mode | Restores after dialogue sequence. | 21 | 20 | `0x30E92` | `0x37472` | LoL:2900, LoL:1806–1810 |
 | 8E | setSpecialSceneButtons | X, Y, width, height, enable flags | Sets special-scene buttons in the rectangle. | 5 | 5 | `0x30E97` | `0x37477` | LoL:2901, LoL:1812–1816 |
 | 8F | restoreButtonsAfterSpecialScene | — | Restores normal buttons after a special scene. | 4 | 4 | `0x30E9C` | `0x3747C` | LoL:2902, LoL:1818–1822 |
-| 90 | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x30EA1` | `0x37481` | LoL:2905, VM:309–321 |
-| 91 | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x30EA6` | `0x37486` | LoL:2906, VM:309–321 |
+| 90 | Unimplemented | value | VM returns 0 in ScummVM. **CONFIRMED** native: passes argument 0 to one overlay routine and returns 1 (overlay body CD `+0x4D3E3`, floppy `+0x55F7B`). | 0 | 0 | `0x30EA1` | `0x37481` | LoL:2905, VM:309–321 |
+| 91 | Unimplemented | value | VM returns 0 in ScummVM. **CONFIRMED** native: passes argument 0 to a different overlay routine and returns 1 (overlay body CD `+0x4D3FF`, floppy `+0x55F97`). | 0 | 0 | `0x30EA6` | `0x37486` | LoL:2906, VM:309–321 |
 | 92 | prepareSpecialScene | field type, dialogue flag, suspend GUI, allow scene update, control mode, fade flag | Prepares a special scene. | 37 | 37 | `0x30EAB` | `0x3748B` | LoL:2907, LoL:1824–1828 |
 | 93 | restoreAfterSpecialScene | fade flag, redraw playfield, release TIM scripts, scene update mode | Restores after a special scene and returns status. | 45 | 45 | `0x30EB0` | `0x37490` | LoL:2908, LoL:1830–1833 |
 | 94 | assignCustomSfx | filename (TEXT), sound ID | Assigns a custom filename to a mapped sound entry. | 203 | 202 | `0x30B76` | `0x37181` | LoL:2911, LoL:1835–1851 |
-| 95 | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x30B7B` | `0x37186` | LoL:2912, VM:309–321 |
+| 95 | Unimplemented | value | VM returns 0 in ScummVM. **CONFIRMED** native: passes argument 0 to one routine and returns 1 if its 32-bit result is nonzero, otherwise 0 (overlay body CD `+0x47C68–0x47C8C`, floppy `+0x51447–0x5146B`). | 0 | 0 | `0x30B7B` | `0x37186` | LoL:2912, VM:309–321 |
 | 96 | findAssignedMonster | block, previous object or −1 | Returns next assigned monster index or −1. | 22 | 22 | `0x15DFF` | `0x1A6F2` | LoL:2913, LoL:1853–1862 |
 | 97 | checkBlockForMonster | block, monster or −1 | Looks for a monster within the initial monster portion of the block list. | 4 | 4 | `0x15E77` | `0x1A76A` | LoL:2914, LoL:1864–1876 |
 | 98 | crossFadeRegion | source X, source Y, destination X, destination Y, width, height, source page, destination page | Crossfades a screen region. | 10 | 10 | `0x15EDF` | `0x1A7D2` | LoL:2917, LoL:1878–1882 |
@@ -245,8 +245,8 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | 9E | paralyzePoisonCharacter | character, effect type flag, immunity flags, hit chance, redraw | Attempts a paralysis or poison effect. | 4 | 4 | `0x1603C` | `0x1A92F` | LoL:2925, LoL:1925–1928 |
 | 9F | drawCharPortrait | character or −1 | Redraws a portrait and stats or redraws all of them. | 1 | 1 | `0x1609E` | `0x1A991` | LoL:2926, LoL:1930–1938 |
 | A0 | removeInventoryItem | type index | Removes the first matching inventory or equipment reference and returns success. | 1 | 1 | `0x160D4` | `0x1A9C7` | LoL:2929, LoL:1940–1963 |
-| A1 | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x161A7` | `0x1AA9A` | LoL:2930, VM:309–321 |
-| A2 | Unimplemented | Unknown | VM returns 0 in ScummVM. | 0 | 0 | `0x161C4` | `0x1AAB7` | LoL:2931, VM:309–321 |
+| A1 | Unimplemented | value | VM returns 0 in ScummVM. **CONFIRMED** native: passes argument 0 to one routine and returns 1 (CD `+0x161A7–0x161C3`, floppy `+0x1AA9A–0x1AAB6`). | 0 | 0 | `0x161A7` | `0x1AA9A` | LoL:2930, VM:309–321 |
+| A2 | Unimplemented | value | VM returns 0 in ScummVM. **CONFIRMED** native: passes argument 0 to a different routine and returns 1 (CD `+0x161C4–0x161E0`, floppy `+0x1AAB7–0x1AAD3`). | 0 | 0 | `0x161C4` | `0x1AAB7` | LoL:2931, VM:309–321 |
 | A3 | getAnimationLastPart | animation slot | Returns and resets the last animation part. | 9 | 9 | `0x161E1` | `0x1AAD4` | LoL:2932, LoL:1965–1968 |
 | A4 | assignSpecialGuiShape | wall shape index, subshape, X, Y, mirror | Sets a special GUI shape, or clears it for first argument 0. | 2 | 2 | `0x30CAD` | `0x372AD` | LoL:2935, LoL:1970–1983 |
 | A5 | findInventoryItem | skip inventory flag, character selector, type index | Returns 0 for inventory hit, otherwise an eligible character slot or −1. In this handler the equipment loop covers all four slots for selector −1 and is empty for a concrete slot. | 3 | 3 | `0x1621F` | `0x1AB12` | LoL:2936, LoL:1985–2012 |
@@ -330,4 +330,4 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | ONETIME | `STARTUP.PAK` | `0x2127B` | — | `GENERAL.PAK` | `0xDAAD2` | — |
 
 
-The static test verifies instruction boundaries, names and dispatch indexes. Runtime behavior for handlers documented only from ScummVM remains **UNCONFIRMED** on DOS. VM:187–221 and LoL:2683–2974.
+The static test verifies instruction boundaries, names and dispatch indexes. Runtime behavior for function handlers documented only from ScummVM remains **UNCONFIRMED** on DOS; settle each by reading its native handler at the listed offsets. The VM opcodes and `eval` selectors are checked against the native step routine (see above). VM:187–221 and LoL:2683–2974.

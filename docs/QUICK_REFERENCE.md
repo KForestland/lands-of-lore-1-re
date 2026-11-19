@@ -25,7 +25,7 @@ Set `LOL1_MAIN` to the CD's `DATA/HARDRIVE/MAIN.EXE` or the floppy `MAIN.EXE`, a
 | `.INF`, `.INI` | EMC2 events and initialization scripts | [EMC2](formats/emc2.md) | EMC2 disassembler | `python3 tools/emc2_decompile.py L01.PAK --entry LEVEL1.INI` |
 | `.TIM` | Timed animation and dialogue commands | [TIM](formats/tim.md) | TIM parser | `python3 tools/parse_tim.py --check` |
 | `.ENG`, `.FRE`, `.GER` | Indexed global and level text strings | [Text](formats/text.md) | Text decoder | `python3 tools/decode_dialogue.py LEVEL01.ENG --index 0` |
-| `.TXT`, `.DIP` | Language-archive members with **UNCONFIRMED** payload roles | [Archive inventory](formats/README.md) | PAK reader lists members | `python3 tools/pak_reader.py list ENG/STARTUP.PAK` |
+| `.TXT`, `.DIP` | Intro, history and finale text: each `.DIP` is an indexed string file in the [text](formats/text.md) layout; `CREDITS.TXT` is the end credits. Named only by the intro (`LANDS.EXE`) and finale (`FINALE.EXE`) programs. **CONFIRMED** layout and names | [Archive inventory](formats/README.md) | Text decoder | `python3 tools/decode_dialogue.py LOLINTRO.DIP --pak STARTUP.PAK --index 1` |
 | `.XMI`, `.C55`, `.PCS` | XMIDI sequences for the selected sound setup | [Music](formats/music.md) | Music inventory | `python3 tools/extract_music.py --check` |
 | `.ADL` | AdLib sequence and program data | [Music](formats/music.md) | ADL reader and MIDI projector | `python3 tools/adl_to_midi.py --check` |
 | `.ADV`, `.DRV` | Native sound drivers | [Drivers](formats/drivers.md) | PAK reader lists driver members | `python3 tools/pak_reader.py list DRIVERS.PAK` |

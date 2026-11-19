@@ -36,7 +36,7 @@ Worked example (**CONFIRMED**). Definition 1 receives name `0x40F6`, shape 6, fl
 | `00` | `u8` shape bank, argument 1 | `0x47867` | `0x51046` |
 | `01` | `u8` maximum width from 16 shapes | `0x47873–0x478CB` | `0x51052–0x510AA` |
 | `02`, `04`, `06`, `08` | `u16` stats 0–3. Hit factor from converted arg 2, might factor 256, armour factor from converted arg 3, evade from raw arg 4 | `0x478CF–0x4793E` | `0x510AE–0x5111D` |
-| `0A`, `0C`, `0E`, `10`, `12` | `u16` stats 4–8. Speed at `0A`, converted values from args 5–8, then literal zero for stat 8. Uses of stats 5–7 are **UNCONFIRMED**. | `0x47942–0x479EA` | `0x51121–0x511C9` |
+| `0A`, `0C`, `0E`, `10`, `12` | `u16` stats 4–8. Speed at `0A`, converted values from args 5–8, then literal zero for stat 8. Uses of stats 5–7 are **UNCONFIRMED**; only the setter stores were found. Test: [test Q18](../NEEDS_A_RUNNING_GAME.md#q18-which-monster-definition-fields-does-an-actual-fight-use). | `0x47942–0x479EA` | `0x51121–0x511C9` |
 | `14` | Far pointer with offset and segment words, targeting this record's own `+02` | `0x47A4B–0x47A5B` | `0x5122A–0x5123A` |
 | `18` | 8 × `u16` might categories from args 9–16 | `0x479F2–0x47A0F` | `0x511D1–0x511EE` |
 | `28` | 8 × two-byte category factors from converted args 17–24. Native damage applies the sign of the word. | `0x47A13–0x47A49, +0xAFD8–0xAFFF` | `0x511F2–0x51228, +0xAEFA–0xAF21` |
@@ -44,7 +44,7 @@ Worked example (**CONFIRMED**). Definition 1 receives name `0x40F6`, shape 6, fl
 | `3C` | `u8` total speed wait, initialized to 1 | `0x47AAA` | `0x51289` |
 | `3D` | One-byte critical skill level, read by the hit test. Starts at zero in the loaded executable image. The definition setter leaves it unwritten. | `0xAD82–0xAD8F, +0x47AA6–0x47AAF` | `0xACC3–0xACD0, +0x51285–0x5128E` |
 | `3E` | `u16` definition flags, arg 27 | `0x47AA6` | `0x51285` |
-| `40` | `u16` auxiliary word. Arg 29 immediately overwrites arg 28. Interpretation **UNCONFIRMED**. | `0x47AAD–0x47ADD` | `0x5128C–0x512BC` |
+| `40` | `u16` auxiliary word. Arg 29 immediately overwrites arg 28. Interpretation **UNCONFIRMED**; only the two setter stores were found. Test: [test Q18](../NEEDS_A_RUNNING_GAME.md#q18-which-monster-definition-fields-does-an-actual-fight-use). | `0x47AAD–0x47ADD` | `0x5128C–0x512BC` |
 | `42`, `44`, `46`, `48`, `4A` | Five `u16` words from args 30–34: ranged charge count, ranged weapon count, three ranged weapon IDs | `0x47AE1–0x47B08` | `0x512C0–0x512E7` |
 | `4C`–`4F` | Four `u8` values from args 35–38: attack chance/type, defense chance/type | `0x47B0A–0x47B4A` | `0x512E9–0x51329` |
 | `50`–`52` | Three `u8` sound IDs, args 39–41 | `0x47B4C–0x47B6F` | `0x5132B–0x5134E` |

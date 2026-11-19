@@ -6,7 +6,7 @@
 
 **CONFIRMED** An ordinary cast requires MP ≥ the rank cost and HP > the rank cost, then subtracts both. If property `0x100` is set, a forward wall with flag `0x01` blocks the cast. Paid casts index the far pointers with the **low byte of the spell record's property word**. CD `0x4FE9D–0x5002A`, floppy `0x5A1A2–0x5A32D`.
 
-**CONFIRMED** The direct effect path skips the cost check. CD accepts any negative caster, computes character slot `−caster − 1`, and dispatches by the supplied effect ID. floppy checks specifically for caster −1 and passes slot 0. CD `0x4FF33–0x4FF54`, floppy `0x5A238–0x5A257`. The 17 far-pointer entries start at CD `0x32EF4` and floppy `0x39604`. Slot 7 (Vortex) is zero in each, as are slots 10, 11 and 13–15. The paid spell record at index 9 has low byte 8, whereas a direct request for ID 9 selects Swarm. CD `0x2B6DC` and `0x32F14–0x32F1B`, floppy `0x2CF7C` and `0x39624–0x3962B`. The use of other fields in the index-9 record remains **UNCONFIRMED** beyond the cost and dispatch reads. ScummVM dispatches by the supplied spell index in `engines/kyra/engine/lol.cpp:2093–2124`.
+**CONFIRMED** The direct effect path skips the cost check. CD accepts any negative caster, computes character slot `−caster − 1`, and dispatches by the supplied effect ID. floppy checks specifically for caster −1 and passes slot 0. CD `0x4FF33–0x4FF54`, floppy `0x5A238–0x5A257`. The 17 far-pointer entries start at CD `0x32EF4` and floppy `0x39604`. Slot 7 (Vortex) is zero in each, as are slots 10, 11 and 13–15. The paid spell record at index 9 has low byte 8, whereas a direct request for ID 9 selects Swarm. CD `0x2B6DC` and `0x32F14–0x32F1B`, floppy `0x2CF7C` and `0x39624–0x3962B`. The use of other fields in the index-9 record remains **UNCONFIRMED** beyond the cost and dispatch reads. The records sit at overlay segment word `0x5E8`, which the directory at CD `0x2FC50` resolves to segment `0x27DD`, so record 0 starts at offset `0x10`. No shipped script puts ID 9 in the spell list. `addSpellToScroll` (EMC `0x78`) has one literal call, ID 1 at CD `L01.PAK` DATA word `0x076F`, and one item-handler call that passes the item's might. The only item types using that handler entry 14 are 234–239, with might 2, 6, 3, 4, 5 and 7 (`ONETIME.INF` in CD `STARTUP.PAK` and floppy `GENERAL.PAK`). Native callers of the add routine (CD `0x4FAC7`) were not checked. Test: in a running game, watch reads of CD `0x27DD:010C–0127` (plus the load segment) through new game, the spell menu and casts. ScummVM dispatches by the supplied spell index in `engines/kyra/engine/lol.cpp:2093–2124`.
 
 **CONFIRMED** The MP costs below come from the 28-byte records at CD `0x2B5E0` and floppy `0x2CE80`. The four HP costs are zero in each listed row. All spell effects below were traced in both executables. Damage inputs are the arguments to the resistance helper, in rank order. A category selector of `0x80` picks resistance category 7. “Roll” in the table uses the native dice helper and “hit code” refers to the input to damage calculation. CD `0xAFD8–0xB052`, floppy `0xAEFA–0xAF74`.
 
@@ -41,7 +41,7 @@
 
 **CONFIRMED** An accepted ordinary Vortex cast spends MP and runs no spell effect. The separate no-cost path uses the supplied effect ID directly at CD `0x4FF4D` and floppy `0x5A250`. Its indirect call lacks the paid path's zero-pointer guard. EMC `0xAD` reaches the cast routine at CD `0x16353` and floppy `0x1AC43`. The five `0xAD` calls per edition are in `ITEM.INF`. Four of them pass `-1 - caster` and take the no-cost path; one (CD `STARTUP.PAK+0x11CBB`) passes the caster itself and takes the paid path. None of the five can supply ID 7. Their fixed effects are 4 and 12, and the other three use item attributes. In the startup definitions, the item handlers feeding those three calls supply 3, 5, 6, 9 (entry 20), 4, 5, 9, 16 (entry 24), and 8 (entry 29). For example, entry 20's getter and cast are CD `STARTUP.PAK+0x11A97–0x11AFD` and floppy `GENERAL.PAK+0xDA49E–0xDA4EE`. The corresponding startup definitions span CD `STARTUP.PAK+0x22FD1–0x2302D, +0x234AF–0x23525` and floppy `GENERAL.PAK+0xDC828–0xDC884, +0xDCD06–0xDCD7C`.
 
-**UNCONFIRMED** An ordinary shipped-play route that awards item 239 remains open. The definition and its reading path are present. The corpus check tested literal uses of 239 in the level scripts and found it as a block or rectangle operand, e.g. in CD `L01.PAK+0xD5D7` and floppy `CHAPTER1.PAK+0x58B4D`. To verify reachability, trace native item grants and placements filtered by type 239, including the shop and any computed script arguments.
+**UNCONFIRMED** An ordinary shipped-play route that awards item 239 remains open. The definition and its reading path are present. The corpus check tested literal uses of 239 in the level scripts and found it as a block or rectangle operand, e.g. in CD `L01.PAK+0xD5D7` and floppy `CHAPTER1.PAK+0x58B4D`. A second pass followed the item-type argument (stack slot 0, as ScummVM reads it) of EMC `0x0F`, `0x11`, `0x49` and `0x4C` through literal pushes and the callers of script subroutines. In each edition 541 calls resolve, and none of them gives 239. Scroll types 234–238 do appear, for example 234 at CD `L07.PAK` LEVEL7.INF DATA word `0x051E`. Fourteen CD and 15 floppy calls stay open (local variables, return values or registers), e.g. CD `L12.PAK` LEVEL12.INF words `0x0091, 0x0151, 0x0191` and `STARTUP.PAK` ITEM.INF words `0x0417, 0x0456`. To settle it, resolve those open arguments, or break on the native item constructor in a running game and log any type 239.
 
 ## Lamp, regeneration and the clock
 
@@ -125,7 +125,7 @@
 
 **CONFIRMED** There are three literal mode-11 assignments in `LEVEL23.INF` in each edition. They find a monster in block 105, 121 or 369, play sounds 88 and 87, then invoke EMC `0x5B` with selector 0 and value 11. The native selector 0 calls the mode setter (CD `MAIN.EXE+0x14FBC–0x14FC6`, floppy `+0x19943–0x1994D`). For example, the state change for block 105 is the call at CD `L23.PAK+0xC2AE` and floppy `CHAPTER6.PAK+0x6AC2D`. The other calls are CD `+0xC2DE, +0xC310` and floppy `+0x6AC5D, +0x6AC8F`.
 
-**UNCONFIRMED** The intended gameplay entry into mode 10 remains open. The native update and frame tables establish what it does once set. The search checked direct immediate accesses to mode byte +0x14 and literal mode inputs to EMC `0x5B` and `0x38` in both 60-script corpora. It found the mode-11 witnesses above, and did not resolve every computed argument. A trace of mode writes in the original, conditioned on new value 10, or a static reconstruction of the computed parameters to those two EMC handlers would settle whether the state is used in shipped gameplay.
+**CONFIRMED** No shipped script requests mode 10. Every reachable mode argument to EMC `0x38` (stack slot 6) and every value argument to EMC `0x5B` with selector 0 resolves to literals, through subroutine callers where needed. That is 304 `0x38` calls in each edition (4 more are unreachable) and 38 CD / 39 floppy selector-0 `0x5B` calls. None gives 10, and the check reproduces the three mode-11 witnesses above. All 13 near callers of the native setter pass literal modes 3, 4, 5, 7, 8, 9 or 14 (CD target `0x11855`, e.g. `+0x12149`, `+0x12986`). The seven CD and eight floppy far callers pass 13 or 14, or forward one of those two script arguments (CD `+0x14826`, `+0x14FC1`; floppy `+0x191AD`, `+0x19948`). The far pointer `0D6C:0995` occurs only at the seven CD far calls. A mode-10 producer outside the setter remains open (below).
 
 **CONFIRMED, probe setup.** The English CD launcher now reaches
 play in the documented `MAIN.EXE`. Its native starting slot has
@@ -134,7 +134,8 @@ level 1 at `+0x269` (the current-level byte at `DS:7FE5`).
 slot has no level-23 start, and the CD launcher setup did not
 provide a level selector. A played level-23 slot near block 105
 can drive the original `L23.PAK+0xC2AE` case above. Record the
-selector arguments and the eventual frame for the same instance.
+selector arguments and the eventual frame for the same instance
+([test Q7b](../NEEDS_A_RUNNING_GAME.md#q7b-which-animation-actually-displays-when-a-script-selects-mode-11)).
 
 ## WLL flags and special types
 
@@ -148,7 +149,7 @@ selector arguments and the eventual frame for the same instance.
 | `0x08` | Marks the door side for direction selection and drawing. | `0x17A2F`, `0x3EA36` | `0x1C05A`, `0x47B7C` |
 | `0x10` | Fully open door end state. | `0x17AA8–0x17AC3`, mask pair at `0x34318, 0x3431A` | `0x1C0D5–0x1C0EE`, mask pair at `0x3D574, 0x3D576` |
 | `0x20` | Fully closed end state. The timer selects a closing sound on this bit, and monsters with definition flag `0x1000` substitute it for their ordinary wall collision mask. | `0xF490`, `0x1147D–0x11489` | `0x13E7E`, `0x15F19–0x15F25` |
-| `0x40` | **UNCONFIRMED**. None of the supplied wall records sets the bit. | WLL records loaded at `0x47350` | WLL records loaded at `0x50B33` |
+| `0x40` | **UNCONFIRMED** native use. None of the supplied wall records sets the bit. Test: [Q7a](../NEEDS_A_RUNNING_GAME.md#q7a-can-wall-bit-0x40-change-anything-besides-the-emc-byte-test). | WLL records loaded at `0x47350` | WLL records loaded at `0x50B33` |
 | `0x80` | Draws the block's visible objects in the pass between two wall draws, when the block's render-object list is populated. The renderer also forces the bit for view entry 16. | `0x3E9E8–0x3EA35` | `0x47B2E–0x47B7B` |
 
 **CONFIRMED** The click handler reads the forward wall's special byte. A zero byte skips dispatch. Nonzero values index a far-pointer table. CD `0x1797A–0x179D7`, table at `0x342FC`; floppy `0x1BFA5–0x1C002`, table at `0x3D558`.
@@ -185,7 +186,8 @@ from 0 to 79, and every declared flag had bit `0x40` clear after the
 sequence. Wall 3 stayed `0xAF` (record at `L01.PAK+0x109E9`, flag at record +8,
 `+0x109F1`).
 **UNCONFIRMED:** the proposed level-8
-block-172 contrast still needs a native level-8 starting state.
+block-172 contrast still needs a native level-8 starting state
+([test Q7a](../NEEDS_A_RUNNING_GAME.md#q7a-can-wall-bit-0x40-change-anything-besides-the-emc-byte-test)).
 
 ### Additional wall consumers in both editions
 
@@ -243,9 +245,12 @@ finds no literal ES:disp8 byte store of 10 at displacement +0x14
 in either complete tested image. It corroborates the earlier
 mode-10 search over the shipped scripts.
 
-**UNCONFIRMED** The gameplay producer for mode 10. The measured
-scope includes the direct setter encodings and the literal store
-form. It leaves indirect calls and computed setter arguments open.
-A watch on the mode setter's incoming argument equal to 10, or
-the final +0x14 write at CD `0x118FA` or floppy `0x16396`,
-would settle the producer.
+**UNCONFIRMED** A gameplay producer for mode 10 outside the setter.
+The setter's 20 CD and 21 floppy callers are now resolved and none
+supplies 10 (see the mode-10 paragraph above). What remains is a
+byte store to +0x14 that bypasses the setter. Such stores include
+the collision-query restore (CD `0x114AC`) and a register store at
+CD `0x16A69` into a record whose type is not identified. A write
+watch on instance byte +0x14 for value 10 in a running game would
+settle it. Watch the slots at CD `2803:15FA + 46 × slot + 0x14` or
+floppy `2DCF:15DC + 46 × slot + 0x14`, adding the load segment.

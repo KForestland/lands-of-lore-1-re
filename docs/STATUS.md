@@ -15,7 +15,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (31 checks; 
 
 <!-- rating:begin -->
 - **Files read:** 162 of 199 files in the CD `DATA` folder (285.7 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 394 statements CONFIRMED (proved from the program code or the files) and 133 UNCONFIRMED (a reading not yet proved), on 87 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 456 statements CONFIRMED (proved from the program code or the files) and 67 UNCONFIRMED (a reading not yet proved), on 87 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 5 questions that can only be settled by watching the original game run are settled.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->
@@ -50,7 +50,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (31 checks; 
 
 ## Level sheets
 
-[`levels/`](levels/README.md) has one sheet per level, written by `tools/level_report.py` from the level's own files: 1475 script entries described, 241 item and 522 monster placements found through constant script arguments (including one level of subroutine calls), 659 text ids. Arguments computed while the game runs are shown as `?`; which player action raises event bit 1 versus 2 (and 4 versus 8) of a script entry is UNCONFIRMED ([event bits](levels/README.md#events)).
+[`levels/`](levels/README.md) has one sheet per level, written by `tools/level_report.py` from the level's own files: 1475 script entries described, 241 item and 522 monster placements found through constant script arguments (including one level of subroutine calls), 659 text ids. Arguments computed while the game runs are shown as `?`; event bits 1 and 4 of a script entry run before a party step is drawn and bits 2 and 8 after it, CONFIRMED in the DOS step routine ([event bits](levels/README.md#events)).
 
 ## Corpus coverage
 

@@ -51,7 +51,7 @@ floppy level 29 has one extra undefined face that the CD map does not. Block 876
 
 CONFIRMED for ScummVM. Five property arrays are allocated once and filled with 0: four in `engines/kyra/engine/kyra_rpg.cpp:190-193`, and the automap array (80 entries) in `engines/kyra/engine/lol.cpp:442`. `loadLevelWallData` writes one row per record and does not clear the arrays first (`scene_lol.cpp:153-172`). A type the new file does not mention keeps the previous level's row, or 0 if no level has written it.
 
-CONFIRMED for the floppy loader's body. `MAIN.EXE` (373872 bytes) reads the 12-byte records at file `0x50b33-0x50c04`. That span contains no `rep stos`. The CD `MAIN.EXE` (356928 bytes) has the same `level%00d.wll` format string. Its loader body was not opened. The wall files of these levels are byte-identical, so the rows the CD program would read are the same bytes.
+CONFIRMED for the floppy loader's body. `MAIN.EXE` (373872 bytes) reads the 12-byte records at file `0x50b33-0x50c04`. That span contains no `rep stos`. The CD `MAIN.EXE` (356928 bytes) has the same `level%00d.wll` format string. Its loader body (`0x47350–0x47421`) also writes rows by id and clears nothing. The wall files of these levels are byte-identical, so the rows the CD program would read are the same bytes.
 
 The row is not the same number on every level that defines the id. Worked example, type 60, the four walls of level 2 block 526. Level 2 has no record. Level 1 does. Its 12 bytes are `3c 00 06 00 03 00 04 00 06 00 0d 00`: type 60, VMP page 6, shape 3, special 4, flags 6, automap 0x0D (record order id, VMP, shape, special, flags, automap: `scene_lol.cpp:156-171`). If level 1 was the last level that wrote type 60, those are the bytes the drawer still holds. No later file in a level-1-then-level-2 load replaces them.
 
@@ -74,7 +74,7 @@ Who already has a row (CD wall files; floppy matches on levels 1, 2 and 24):
 | 67 | yes | yes, different bytes | level 3 does not |
 | 42 | no | no | 4-9, 12, 14-16, 18, 20, 22, 23, 26-29. Not level 21 |
 
-Level 1's type 58 is `3a 00 05 00 00 00 04 00 07 00 ff ff`. Level 2's type 58 is `3a 00 00 00 03 00 00 00 06 00 3f 00`. Same id, different VMP page, shape, special, flags and automap. A level 3 wall of type 58 therefore looks like level 2 if level 2 was loaded more recently, and like level 1 if only level 1 was. Which order a game actually loads is UNCONFIRMED.
+Level 1's type 58 is `3a 00 05 00 00 00 04 00 07 00 ff ff`. Level 2's type 58 is `3a 00 00 00 03 00 00 00 06 00 3f 00`. Same id, different VMP page, shape, special, flags and automap. A level 3 wall of type 58 therefore looks like level 2 if level 2 was loaded more recently, and like level 1 if only level 1 was. Which order a game actually loads is UNCONFIRMED. A play trace that names the level loaded before level 3 would settle it.
 
 Types 46 and 56 are in neither level 1 nor level 2. A path that has loaded only those two has not written a row for them. Level 3 does define both. Levels 18 and 20 share area index 7 with level 21 and both define type 42.
 
@@ -90,4 +90,4 @@ Level 21's map script has 40 words that are system call 0 (34 of them reached fr
 
 ## What would settle the picture on screen
 
-Which level was loaded last, on a real path into level 2, level 3 or level 21. The missing ids, the fact that the loader does not clear the tables, and the script immediates are measured. The CD loader body, and the four level-21 calls whose type sits in a register, are the two checks still open. Until a play trace names the previous level, the row a missing type shows stays UNCONFIRMED.
+Which level was loaded last, on a real path into level 2, level 3 or level 21. The missing ids, the fact that the loader does not clear the tables, and the script immediates are measured. CONFIRMED. The CD loader body does not clear the tables either. CD `MAIN.EXE+0x47350–0x47421` opens `level%00d.wll`, reads 12-byte records until the read returns 0, and writes each by its id into `DS:53BE`, `DS:536E`, `DS:531E` and the far table at segment word `0x5F8`, offsets `+0x56` and `+0x3835`. No other direct write to those three DS tables was found in the CD program. Two 80-byte copies move the far table at `+0x3835` out to a buffer and back (CD `+0x3F30C–0x3F31F`, `+0x3F471–0x3F484`); what runs between them was not traced. The four level-21 calls whose type sits in a register are the remaining static check. Until a play trace names the previous level, the row a missing type shows stays UNCONFIRMED.

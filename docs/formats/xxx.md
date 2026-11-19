@@ -25,7 +25,7 @@ The memo's field names (shapeDrawX, shapeDrawY, shapeIndex, labelBlockX, labelBl
 
 ## Confirmed
 
-`tools/xxx_reader.py --check` (CD): `29 files, 73 records (all sizes multiple of 12, <=32 records), 0 without shape, string-id top bits [1, 3], bad=none`. All coordinates are < 32. String ids carry bit 0x4000 (global `LANDS` strings) and some also 0x8000; what 0x8000 means here is UNCONFIRMED (`printMapText` not traced), [Q12](../OPEN_QUESTIONS.md).
+`tools/xxx_reader.py --check` (CD): `29 files, 73 records (all sizes multiple of 12, <=32 records), 0 without shape, string-id top bits [1, 3], bad=none`. All coordinates are < 32. String ids carry bit 0x4000 (global `LANDS` strings) on 71 records; the other 2 are 0xFFFF (no text, skipped by the draw). No real id has bit 0x8000 in either edition: the `3` in the check output is those two 0xFFFF ids. CONFIRMED (both editions), [Q12](../OPEN_QUESTIONS.md) answered ([`../unknowns/12_legend_bit.md`](../unknowns/12_legend_bit.md)).
 
 
 ## Worked example

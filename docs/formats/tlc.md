@@ -19,7 +19,7 @@ Drawing: `screen.cpp:2314-2331` (`_dsTransparencyTable1[cmd]`, then `_dsTranspar
 
 ## Confirmed
 
-`tools/tlc_reader.py --check` (CD): `29 files, all 5376 bytes and table1 values <20: 29/29, distinct table1 maps: 1`. Table1 is identical in all 29 files (the same effect colours everywhere); table2 comes in 15 distinct versions over the 29 levels (CONFIRMED, CD), consistent with blending against each area's palette. The cause of the differences is UNCONFIRMED (expected from `screen_lol.cpp:170-178`, not recomputed here).
+`tools/tlc_reader.py --check` (CD): `29 files, all 5376 bytes and table1 values <20: 29/29, distinct table1 maps: 1`. Table1 is identical in all 29 files (the same effect colours everywhere); table2 comes in 15 distinct versions over the 29 levels (CONFIRMED, CD), consistent with blending against each area's palette. The differences follow the area palette: the 15 table2 versions match exactly the 15 distinct pairs of tile set and override palette that the level scripts load. Levels with the same pair share table2 byte for byte (5-9 CAVE1; 13-16 MINE1; 18-21 TOWER1; 27-29 CIMMERIA; 10 and 17 FOREST1; 3 and 24 FOREST1 + `ALTPAL1.PAL`), and every other pair has its own (for example 25, CAVE1 + `CAV_PLT3.PAL`). CONFIRMED (CD, `tlc_reader.py` and `tileset_mapper.py`). That each byte is the blend of `screen_lol.cpp:170-178` is not recomputed here (UNCONFIRMED; settle it by recomputing one level's table2 from its palette and `FXPAL.COL`).
 
 
 ## Worked example

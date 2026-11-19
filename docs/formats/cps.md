@@ -25,7 +25,7 @@ CONFIRMED, `tools/cps_reader.py --check`:
 - CD ENG folder: `60 files, comp types {4: 60}, 60 with palette … 60/60`.
 - floppy: `112 files, comp types {4: 112}, 112 with palette … 112/112`.
 
-Only type 4 occurs in LoL1. Types 1 and 3 are handled by the engine for other games (UNCONFIRMED for LoL1, never seen).
+Only type 4 occurs in LoL1. No file read through this header uses type 1 or 3 in either edition: every CPS, CMZ, VCN and VMP member, and every SHP member with the same header, is type 4. CONFIRMED (scan of all PAK members, CD `DATA/`, `DATA/ENG` and floppy). Types 1 and 3 are handled by ScummVM's loader for other games; whether the DOS LoL1 loader accepts them is UNCONFIRMED and does not matter for the shipped data.
 
 
 ## Worked example
