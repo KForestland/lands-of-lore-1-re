@@ -4,6 +4,7 @@ Newest first. One line per question worked on, new tool or visible change; each 
 
 ## 19 November 2026
 
+- **Glossary.** The [glossary](GLOSSARY.md) gives a one-line meaning to each term on the front page, the start page and the cookbook. A word shared with the other two games has the same meaning there. The rating still counts the glossary as a page, but not its label words.
 - **Link check.** `doc_links.py` resolves every relative link and anchor in the README and the docs, and `check_all.py` runs it.
 - **Twelve loose files, second pass.** The blend tables and the symbol blocks now have a measured layout and a settling test. They stay unread: in each symbol block only the string pool at the end is walked, and the bytes before it are unread. None of the eleven simple index formulas tried (minimum, maximum, average rounded down or up, product /255 or >>8, sum, difference, OR, AND, XOR) reproduces a blend table; palette-based formulas were not tried ([loose files](formats/loose.md)).
 - **Loose CD files.** `lol1_loose.py` walks 25 files that are not PAK or TLK archives through their last byte; these 25 are inside the 187 of 199 files counted as read. The twelve not counted are the six blend tables, the three `.TDS` symbol files and the three `LANDS.EXE` tails; the page gives the test that would finish each one.

@@ -34,7 +34,7 @@ does **not** mean that every entry inside is decoded or understood; the
 **Rules traced.** How many statements on the current pages carry the
 evidence label CONFIRMED (backed by a program address or a file offset
 that was checked) and how many carry UNCONFIRMED (a reading, with the test
-that would settle it). Pages marked as history are left out. It counts
+that would settle it). Pages marked as history are left out. The glossary defines the label words; its labels are not counted. It counts
 labels, not importance: one CONFIRMED may cover a whole table and one
 UNCONFIRMED a single byte. It does **not** claim that unlabelled text is
 wrong or that labelled text is complete.
