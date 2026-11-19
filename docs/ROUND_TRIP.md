@@ -1,6 +1,6 @@
 # Round-trip proof for LoL1
 
-Two writers read the original files, build a replacement in memory and compare it with the original. Nothing is written to disk. "Byte-identical" means the rebuilt file equals the original file. "Decode-identical" means the rebuilt file reads back through the existing readers to the same pixels and palettes, while its compressed bytes differ.
+Three writers read the original files, build a replacement in memory and compare it with the original. Their checks write nothing to disk. "Byte-identical" means the rebuilt file equals the original file. "Decode-identical" means the rebuilt file reads back through the existing readers to the same pixels and palettes, while its compressed bytes differ.
 
 The CD counts cover the `DATA` folder with its `ENG`, `FRE` and `GER` subfolders (CD1.02). The floppy counts are an English floppy installation.
 
@@ -10,6 +10,7 @@ The CD counts cover the `DATA` folder with its `ENG`, `FRE` and `GER` subfolders
 | `lol1_compression_writer.py` | CPS, CMZ, VCN and VMP bitmaps, re-encoded with a new Frame4 encoder | Decode-identical: palette and expanded pixels | 320 files | 167 files |
 | same | WSA animations: XOR deltas and Frame4 re-encoded, frame offsets regenerated | Decode-identical: every frame through the reader | 529 files, 12,785 deltas | 254 files, 5,420 deltas |
 | same | SHP shapes: scanlines and Frame4 re-encoded, shape offsets and sizes regenerated | Decode-identical: flags, dimensions and pixels of every shape (colour tables copied) | 236 files, 7,299 shapes | 95 files, 3,601 shapes |
+| `lol1_script_writer.py` | EMC2 level and item scripts (INF/INI) and TIM cut-scene scripts, assembled from their lossless listings | Byte-identical | 60 EMC2 and 157 TIM scripts (139 in `DATA`, 6 each in `ENG`, `FRE`, `GER`) | 60 EMC2 and 147 TIM scripts |
 
 On both editions none of the 1,085 (CD) and 516 (floppy) re-encoded files is byte-identical to its original. All Frame4 streams in them (20,354 on the CD, 9,075 on the floppy) decode to the same bytes through both Frame4 readers.
 
@@ -23,12 +24,19 @@ On both editions none of the 1,085 (CD) and 516 (floppy) re-encoded files is byt
 
 This proves that the formats can be written, not that the original compressor is reproduced. The new encoder chooses a different mix of literal, fill and copy commands, and the WSA and SHP writers choose different XOR and transparent runs, so the rebuilt files are larger than the originals (see [tools/README](../tools/README.md#lol1_compression_writerpy)).
 
+## Scripts (EMC2 and TIM)
+
+**CONFIRMED.** `emc2_decompile.py --assembly` and `parse_tim.py --list NAME --assembly` write a lossless listing (JSON): the FORM length convention, each chunk's tag and alignment byte, the EMC2 entry table, one row per EMC2 instruction (opcode, mnemonic, argument and encoding mode, plus the spare low byte where the encoding keeps one), one row per TIM command (delay, opcode, operands) and the TEXT string table with its offsets. No chunk of a shipped script falls back to raw hex and no TIM word is left outside a command row. `lol1_script_writer.py` assembles a listing back into the script and refuses a listing that does not read back to itself. Changing one instruction's argument in a listing changes only that word, and the rebuilt script disassembles to the changed instruction. [EMC2 scripts](formats/emc2.md) · [TIM opcodes](unknowns/06_tim_opcodes.md)
+
+The assembler writes only a new file given with `--out`, and refuses an existing file, a path inside the repository or `--data`, and any folder at or below one holding a PAK or TLK archive.
+
 ## Run the checks
 
 ```bash
 python3 tools/lol1_pak_writer.py --data "$LOL1_DATA" --check
 python3 tools/lol1_compression_writer.py --data "$LOL1_DATA" --check
-python3 -m unittest tests.test_round_trip
+python3 tools/lol1_script_writer.py --data "$LOL1_DATA" --check
+python3 -m unittest tests.test_round_trip tests.test_structures_write
 ```
 
-Both checks run in `tools/check_all.py`; neither has an output option. The unit tests use synthetic archives and pictures and need no game files: member order, duplicate names and the end of the directory; refused names and a final empty member; Frame4 literals, fills, back-references and the end command; a WSA skip and closing delta; a SHP colour table and a long transparent run.
+All three checks run in `tools/check_all.py`. The PAK and compression writers have no output option; the script assembler writes one new file only when given a listing and `--out`. The unit tests use synthetic archives and pictures and need no game files: member order, duplicate names and the end of the directory; refused names and a final empty member; Frame4 literals, fills, back-references and the end command; a WSA skip and closing delta; a SHP colour table and a long transparent run. `tests.test_structures_write` covers a duplicate EMC2 mnemonic, a TIM tail and alignment byte, and the refused output folders.

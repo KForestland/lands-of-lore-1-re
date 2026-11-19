@@ -326,6 +326,7 @@ def main():
     parser.add_argument("--data", type=Path, default=os.environ.get("LOL1_DATA"),
                         help="the game's DATA folder for bare names (default: $LOL1_DATA)")
     parser.add_argument("--entry", help="INF/INI name within the PAK (case-insensitive)")
+    parser.add_argument("--assembly", action="store_true", help="write the lossless listing for lol1_script_writer.py")
     parser.add_argument("-o", "--out", "--output", type=Path, help="Write listing here instead of stdout")
     args = parser.parse_args()
     try:
@@ -342,7 +343,11 @@ def main():
                 raise ValueError(f"{args.entry} is absent from the PAK")
         else:
             data = args.input.read_bytes()
-        listing = "\n".join(format_listing(read_script(data), name)) + "\n"
+        if args.assembly:
+            from lol1_script_writer import listing as assembly_listing
+            listing = json.dumps(assembly_listing(data), indent=2, ensure_ascii=True) + "\n"
+        else:
+            listing = "\n".join(format_listing(read_script(data), name)) + "\n"
         if args.out:
             with args.out.open("x", encoding="utf-8") as output:
                 output.write(listing)

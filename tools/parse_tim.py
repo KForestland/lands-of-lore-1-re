@@ -312,12 +312,22 @@ def decode_avtl_instructions(words, entry_points):
 def main():
     ap = L.tool_args((__doc__ or "") + USAGE)
     ap.add_argument("--list", metavar="NAME.TIM", help="print one TIM file command by command")
+    ap.add_argument("--assembly", action="store_true", help="with --list, write the lossless assembly listing")
     ap.add_argument("--with-words", action="store_true",
                     help="keep the raw AVTL words, decoded instructions and TEXT strings of the sample files in --out "
                          "(left out by default: they copy game script content)")
     a = ap.parse_args()
     if a.list:
         pak, blob = L.find_member(a.list, a.data, a.pak)
+        if a.assembly:
+            from lol1_script_writer import listing
+            text = json.dumps(listing(blob), indent=2, ensure_ascii=True) + "\n"
+            if a.out:
+                with open(a.out, "x", encoding="utf-8") as dest:
+                    dest.write(text)
+            else:
+                print(text, end="")
+            return 0
         print(f"{a.list.upper()} in {pak}")
         print("\n".join(tim_listing(a.list, blob)))
         return 0

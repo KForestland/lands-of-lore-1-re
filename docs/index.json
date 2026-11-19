@@ -326,8 +326,11 @@
       "question_references": [],
       "tools": [
         "tools/check_all.py",
+        "tools/emc2_decompile.py",
         "tools/lol1_compression_writer.py",
-        "tools/lol1_pak_writer.py"
+        "tools/lol1_pak_writer.py",
+        "tools/lol1_script_writer.py",
+        "tools/parse_tim.py"
       ]
     },
     {
@@ -1379,6 +1382,7 @@
         "tools/lol1_name_callers.py",
         "tools/lol1_numbers.py",
         "tools/lol1_pak_writer.py",
+        "tools/lol1_script_writer.py",
         "tools/lol1_tim_words.py",
         "tools/lol1lib.py",
         "tools/monster_reference_scan.py",

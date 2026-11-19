@@ -6,7 +6,7 @@ Use Python 3.8 or later and your own copy of *Lands of Lore: The Throne of Chaos
 
 ```bash
 export LOL1_DATA=/path/to/your/LOL1/DATA
-python3 tools/check_all.py        # 40 checks; the last line should read ALL 40 CHECKS PASSED
+python3 tools/check_all.py        # 41 checks; the last line should read ALL 41 CHECKS PASSED
 ```
 
 Words you do not know are in the [glossary](GLOSSARY.md). Short worked commands, with the first lines they print, are in the [cookbook](COOKBOOK.md). Run the examples from the clone after `mkdir -p ../lol1-out`; they write there, outside the clone, so nothing from your game ends up in the repository. To contribute, see [CONTRIBUTING](../CONTRIBUTING.md).

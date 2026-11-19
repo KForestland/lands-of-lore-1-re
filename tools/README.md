@@ -76,14 +76,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (40 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (41 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;41p"
+$ python3 tools/check_all.py | sed -n "1,3p;42p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 40 CHECKS PASSED
+ALL 41 CHECKS PASSED
 ```
 
 ### `doc_links.py`
@@ -543,3 +543,5 @@ python3 tools/doc_index.py --check
 ```
 
 The check also runs in `check_all.py` and GitHub Actions. It needs no game data.
+
+`lol1_script_writer.py` assembles the lossless listings of `emc2_decompile.py --assembly` and `parse_tim.py --list NAME --assembly` back into scripts. `--check --data DATA` rebuilds every EMC2 and TIM script in memory and compares it byte for byte; `LISTING --out NEW` writes one new file, never over an existing one, inside the repository, `--data` or a folder holding PAK or TLK archives. See [round trip](../docs/ROUND_TRIP.md#scripts-emc2-and-tim).
