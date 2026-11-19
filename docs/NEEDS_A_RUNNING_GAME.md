@@ -145,6 +145,23 @@ instance's mode byte +0x14 also distinguishes an actual mode-10
 transition from a frame picked while mode 11 remains set. Not
 reached yet: the launch works, but this needs a level-23 save.
 
+### Q7c. What writes mode 10 during ordinary play?
+
+**CONFIRMED, new-game guard control.** In English CD level 1,
+four hardware watches on instance +0x14 covered the approach to
+the original guard event at `L01.PAK+0xD545`. Rows 2 and 3
+temporarily changed from 1 to 15 at `MAIN.EXE+0x11474` and
+back to 1 at `+0x114AC`. The game-written save has all four
+rows in mode 1 after the encounter.
+[Watch addresses and native slot rows](unknowns/07_native_rules.md#early-cd-guard-modes-in-a-new-game)
+
+**UNCONFIRMED.** The producer of mode 10. In an encounter that
+shows it, watch +0x14 for the first write of 10. On CD, use
+`2803:15FA + 46 × slot + 0x14` plus the load segment.
+Record the writer, previous mode and object, then observe its
+next animation selection. The tested guard encounter used only
+modes 1 and 15.
+
 ### Q17. Are the isolated save bytes touched during play?
 
 There are three on the CD and two on the floppy (its block ends before `0x232`).
@@ -170,8 +187,9 @@ changed the expected fields in the new slots.
 **CONFIRMED, level-1 lamp-effect reset.** The original CD menu's
 store at `MAIN.EXE+0x4DE6C` changed `DS:81DE` from 0 to 0xFF
 while brightness and oil stayed zero. Only the bulk save/load
-calls accessed the three isolated bytes, which stayed zero at
-`+0x268/+0x463/+0x486` in both new slots.
+calls accessed the three isolated bytes in the watched interval.
+Both new slots read zero at `+0x268/+0x463/+0x486`, and the
+lamp-available flag at +0x2EE mask 0x0800 was clear.
 [Watch and native saves](unknowns/17_native_save_fields.md#cd-level-1-lamp-effect-reset)
 
 **CONFIRMED, level-1 selected-character control.** The guard and

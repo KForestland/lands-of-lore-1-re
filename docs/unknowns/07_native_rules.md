@@ -254,3 +254,35 @@ CD `0x16A69` into a record whose type is not identified. A write
 watch on instance byte +0x14 for value 10 in a running game would
 settle it. Watch the slots at CD `2803:15FA + 46 × slot + 0x14` or
 floppy `2DCF:15DC + 46 × slot + 0x14`, adding the load segment.
+
+### Early CD guard modes in a new game
+
+**CONFIRMED.** One new English CD 1.02 game ran through a local
+DOSBox build on a private Xvfb display, with null audio and a
+disposable copy of the installation. With the load segment
+`0x01A2`, instance-array address `2803:15FA` became
+`29A5:15FA` (the original array initialization is at
+`MAIN.EXE+0x146A4–0x146D7`). The four active rows had type 1
+and mode 1 when the party was at block 557. Their starting blocks
+were 589, 524, 271 and 271. GDB hardware write watches covered
+the mode byte +0x14 in all four while the party opened the two
+doors and approached the original guard event at
+`L01.PAK+0xD545` (block 270).
+
+Rows 2 and 3 each changed 1 → 15 → 1 four times. The stores
+were `MAIN.EXE+0x11474` and `+0x114AC` (stop IPs
+`0F0E:05B9/05F0` after the write). The first stores 15 while the
+routine calls the position query at `+0x1149E → 0x111F8`, and
+the second restores the previously saved register byte. Rows 0
+and 1 had no mode changes in the watch. No watched byte became 10.
+
+The native level-1 slot written after the encounter (SHA-256 prefix
+`b4dfac0a61cd`, not shipped) records player block 270 at +0x254.
+Its four 46-byte monster records at `+0x1DB1/+0x1DDF/+0x1E0D/+0x1E3B`
+hold blocks 589, 524, 239 and 303 at row +5 and mode 1 at row +0x14.
+The visit identifies the temporary collision-probe mode in this
+encounter. **UNCONFIRMED.** The gameplay producer for mode 10.
+Keep a value-10 write watch on +0x14 in an encounter that
+actually enters that mode, and record the native writer and its
+incoming object. The early guard route provides a comparison for
+temporary mode 15.

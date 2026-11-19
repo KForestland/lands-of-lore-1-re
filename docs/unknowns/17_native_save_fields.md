@@ -82,20 +82,25 @@ roles and the floppy runtime result remain open
 **CONFIRMED.** The English CD 1.02 slot `477b08b82ecd`
 loaded level 1, block 557 (slot +0x269 and +0x254), with
 brightness, oil and lamp effect all zero at slot `+0x460..+0x462`.
-The native rest button left those values zero. The next two menu
-saves, from that same block, wrote `00 00 00` (`ecdc069aaa57`)
+The next two menu saves, from that same block
+(written by the game in this run, not shipped), wrote `00 00 00` (`ecdc069aaa57`)
 and `00 00 FF` (`6dd94ac6ac93`). All three isolated bytes
 (`+0x268/+0x463/+0x486`) were zero in both of those saves.
 
-On resume, a write watch on `DS:81DE` captured 0 → 255 and
+On resume, a GDB hardware watch on `DS:81DE` in a local
+DOSBox build captured 0 → 255 and
 instruction bytes `C6 06 DE 81 FF` immediately before the
 reported IP. They match `MAIN.EXE+0x4DE6C`, with the following
 far call relocated in the running overlay. Read/write watches on
 `DS:7FE4/81DF/8202` saw only bulk file reads and writes at
 `F000:14A5` during this load/save sequence
 (`MAIN.EXE+0x4898D–0x4899D/+0x48B92–0x48BA2`).
-The menu changes the effect sentinel independently of all three
-isolated bytes, with brightness and oil zero throughout.
+The menu resets the effect byte during the watched interval,
+and brightness and oil were zero in the sampled states. The
+second menu save (`6dd94ac6ac93`) was written between watch
+sessions, so its isolated-byte values come from the slot. In all
+three slots the word at +0x2EE has mask `0x0800` clear, the
+lamp-availability test at `MAIN.EXE+0xBF56`.
 
 **UNCONFIRMED.** An active lamp or oil change on this route.
 The starting level-1 state provides no lit-lamp control. To
