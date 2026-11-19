@@ -33,3 +33,11 @@ ScummVM's outro command copies a name out of the TIM text and then deletes the l
 ## What would settle it
 
 A caller that reaches row 40 by index through one of the segment-`0x1ACB` lookups (for example `ENG/FINALE.EXE+0xCDD1`), a by-name open of `00000.VOC` through the row-name scan at `+0xF0B0`, or code that copies the name at DS:`0x08D0`. The catalog row is a registration of a 44115-byte file, not a play call. Until one of those turns up, the player of `00000.VOC` stays UNCONFIRMED. The identity of the 59 entries is CONFIRMED: one 44115-byte clip, duplicated. `lol1_name_callers.py --check` re-reads the row, the lookup bytes and the absence from programs, payloads and the installer.
+
+## Close-out
+
+**What was measured.** `ENG/FINALE.EXE` contains the eight bytes `BA 14 00 F7 EA BA CB 1A` at 12 file offsets, each a multiply by `0x14` then segment `0x1ACB`. One of them, file `+0xCE81`, is fed by `26 8B 47 0C` at `+0xCE7D`, which loads the index from a run-time word rather than the constant 40.
+
+**What was tried.** The scan counted that eight-byte sequence through the finale program. The page already resolved the catalog row at file `+0x1D1D0` and the lookup at `+0xCDD1`.
+
+**What would settle it.** The test is the one under [What would settle it](#what-would-settle-it) above. The running-game test is not yet run ([probes not yet run](../NEEDS_A_RUNNING_GAME.md#probes-not-yet-run)).

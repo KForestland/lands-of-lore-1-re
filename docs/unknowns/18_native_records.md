@@ -274,3 +274,11 @@ and the purposes of the four fields. Repeat with a ranged
 weapon already equipped and follow an original projectile
 through the release routine. Both slot-1 (nonzero modifiers)
 and Hatchet slot-2 (zero modifiers) now have scoped read controls.
+
+## Close-out
+
+**What was measured.** After `les bx, es:[bx+0x21]` at `HARDRIVE/MAIN.EXE` `+0x147B6`, file `+0x147BA` reads definition byte `+0x42` with `26 8A 47 42`. The same pointer at `+0x1253B` is followed at `+0x1253F` by `26 8B 57 44`, a word read of definition `+0x44`.
+
+**What was tried.** The scan followed definition-pointer loads and recorded displacements `0x42` and `0x44`. The page's whole-program scan already counted one critical read and the five setter stores, and did not list these two reads.
+
+**What would settle it.** The whole-program scan finds one critical read, and the five setter stores are pinned by byte check in the definition setter. The edited level-27 slot-1 and Hatchet slot-2 fights observed the critical read and the speed controls and no fight-time read of the modifiers or `+0x40`; a ranged attack remains open ([fight trace](../NEEDS_A_RUNNING_GAME.md#q18-which-monster-definition-fields-does-an-actual-fight-use)). Repeat the level-27 fight with a ranged weapon already equipped and follow an original projectile through the release routine, with read watches on definition +0x0C–0x10 and +0x40.

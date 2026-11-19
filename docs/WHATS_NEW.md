@@ -4,6 +4,7 @@ Newest first. One line per question worked on, new tool or visible change; each 
 
 ## 19 November 2026
 
+- **Close-out.** Six open questions (Q1, Q7, Q10, Q14, Q17, Q18) each end with what was measured, what was tried, and what would settle the rest. States stay as they are ([open questions](OPEN_QUESTIONS.md)).
 - **Readme bytes.** `README.ENG`, beside `DATA` and outside the counted files, holds `LANDS OF` at file +0x72. `lol1_loose.py --check` re-reads those eight bytes ([loose files](formats/loose.md)).
 - **Transparency tables.** Table1 of the level files is the twenty colour indexes in `FXPAL.SHP`. The weight-70 nearest-colour mix of `FXPAL.COL` with the KEEP palette matches 3611 of 5120 bytes of `LEVEL01.TLC`; the rule that matches every byte stays open ([transparency tables](formats/tlc.md)).
 - **More edited-save runs (Q17 and Q18, both mostly answered).** On a level-8 copy with the lamp lit, the oil ran dry at the instruction the oil rules name, and a walk from level 8 to level 7 was watched; the three isolated save bytes were touched only by the save. A level-27 copy with 500 HP fought the Hatchets under read watches: the critical byte and speed were read, the modifiers and `+0x40` were not. Open: a ranged attack (Q18) and the same events in a game-written save ([edited saves](EDITED_SAVES.md)).

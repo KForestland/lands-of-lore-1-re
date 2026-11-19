@@ -295,3 +295,11 @@ and 7. The three isolated bytes stayed zero with no watch hits on
 that walk and transition. This bounds the result to those actions.
 A different native level or party change could still access an
 isolated byte.
+
+## Close-out
+
+**What was measured.** `HARDRIVE/MAINW.EXE` (352656 bytes) holds the word `0x81DF` twice, at file `+0x1EF95` and `+0x4A2C1`. The instruction at `+0x1EF94` is the six bytes `03 DF 81 FB 40 01` (`add bx, di` then `cmp bx, 0x140`), and the instruction at `+0x4A2C0` is `8B DF 81 E3 FF 7F` (`mov bx, di` then `and bx, 0x7FFF`). The save address `0x8202`, bytes `02 82`, occurs 0 times in that file.
+
+**What was tried.** The scan counted those address words and decoded the instructions that contain them. The page already compared literal addresses in `HARDRIVE/MAIN.EXE`, including the two straddling hits of word `0x81DF` at `+0x1EE77` and `+0x4A8E1`.
+
+**What would settle it.** Write watches on the three isolated bytes during a different native level change or party change, as in [test Q17](../NEEDS_A_RUNNING_GAME.md#q17-are-the-isolated-save-bytes-touched-during-play). The edited oil refill, portrait clicks, dark-lamp depletion and level-8 to level-7 walk are the controls already recorded.

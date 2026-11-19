@@ -350,3 +350,11 @@ nearby party alone did not provide the monster-leaves event
 (`L23.PAK+0xC2AE` for 105). Use a native save with an active monster
 approaching a pose square, then follow that instance from the
 `MAIN.EXE+0x14FC1` setter call into the overlay frame selector.
+
+## Close-out
+
+**What was measured.** A 16-bit decode of `HARDRIVE/MAIN.EXE` found 15 `test` instructions whose memory displacement is the wall-flag base `0x531E`. None of the 15 immediates is `0x40`; they are 1, 2, 4, 7, 8 and `0x20`, and the test at file `+0x14395` is the five bytes `F6 87 1E 53 08`.
+
+**What was tried.** The scan enumerated every instruction with displacement `0x531E` and read each test immediate. The page already traced the collision callers to masks 0, 1, 2 and 7 and the direct tests at `0xC91C`, `0x481AB` and `0x3EA1A`.
+
+**What would settle it.** The running-game test is not yet run: a trace of the WLL wall byte, whose collision callers supply only masks 0, 1, 2 and 7, and the remaining mode-10 gameplay producer ([Q7a](../NEEDS_A_RUNNING_GAME.md#q7a-can-wall-bit-0x40-change-anything-besides-the-emc-byte-test), [probes not yet run](../NEEDS_A_RUNNING_GAME.md#probes-not-yet-run)).

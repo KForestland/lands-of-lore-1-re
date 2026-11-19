@@ -91,3 +91,11 @@ CD `KEEP.SHP` (plain, not wrapped). First 10 bytes: `4e 00  3c 01 00 00  bf 05 0
 ## Tool
 
 `tools/shp_renderer.py NAME.SHP [--out-dir pngs/] [--pal-from X.CPS]`, `--check`, `--out inventory.json`. Inventory: `data/shp_inventory.json`.
+
+## Close-out
+
+**What was measured.** `ENG/FINALE1.PAK` holds one shape file named `DOOR.SHP` (657 bytes, one shape). Its unwrapped image header at offset `0x0A` is the ten bytes `00 00 2c 30 00 2c 76 02 40 08` (flags 0, height 44, width 48, the same height again, size 630, frame 2112), and that shape decodes from those ten bytes; the same record read two bytes later does not, because the two height bytes are `00` and `02`.
+
+**What was tried.** The scan unwrapped that member and checked the ten-byte record against the record two bytes later. The page already compared `FOREST1.SHP`, `GUARD.SHP` and `ITEMICN.SHP` on the CD and the floppy, and did not read a demo DATA folder.
+
+**What would settle it.** On a demo DATA folder, `shp_renderer.py --check` once plain and once with `--alt-header` would settle it. `FOREST1.SHP`, `GUARD.SHP` and `ITEMICN.SHP` (shapes 0, middle and last) cover a copy that does not hold every file; no demo copy was read here.
