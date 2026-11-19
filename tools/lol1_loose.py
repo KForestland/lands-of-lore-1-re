@@ -74,6 +74,10 @@ POOL_COUNT = {
 SYMBOL = b"\xfb\x52\x10\x03"
 BLEND_HEAD = b"\x38\xb6\xb7\xb7\xc1\x3e\x77\x3f"
 BLEND2_HEAD = b"\x13\x13\x8a\x8a\x8c\x0a\x8e\x0b"
+# PAL, COL and 768-byte picture palettes stored in the CD PAK files.
+STORED_PALETTES = 300
+# mov cx, 256. A 256-step loop can be written another way; this only pins this encoding.
+MOV_CX_256 = b"\xb9\x00\x01"
 NAME_PINS = (
     ("HARDRIVE/MAIN.EXE", 0x334DC, b"FILEDATA.FDT\x00"),
     ("HARDRIVE/MAIN.EXE", 0x33C44, b"FILEDATA.FDT\x00ENG.LM\x00FRE.LM\x00GER.LM\x00"),
@@ -493,6 +497,37 @@ def fail(message):
     return 1
 
 
+def diagonal_indexes(table):
+    return [table[index * 256 + index] for index in range(256)]
+
+
+def diagonal_is_same_colour(palette, indexes):
+    """True when each diagonal byte names a colour equal to that row's colour."""
+    for index, chosen in enumerate(indexes):
+        if palette[index * 3:index * 3 + 3] != palette[chosen * 3:chosen * 3 + 3]:
+            return False
+    return True
+
+
+def stored_palettes(root):
+    """768-byte palettes: PAL and COL members, and picture palettes of that size."""
+    found = []
+    for path in sorted(item for item in root.rglob("*.PAK") if item.is_file()):
+        data = path.read_bytes()
+        for name, offset, size in L.pak_entries(data):
+            upper = name.upper()
+            if upper.endswith((".PAL", ".COL")) and size >= 768 and offset + 768 <= len(data):
+                found.append(data[offset:offset + 768])
+            elif size >= 778 and offset + 778 <= len(data) and offset + 778 <= offset + size:
+                if struct.unpack_from("<H", data, offset + 8)[0] == 768 and not upper.endswith((".PAL", ".COL")):
+                    found.append(data[offset + 10:offset + 778])
+    return found
+
+
+def has_mov_cx_256(blob):
+    return MOV_CX_256 in blob
+
+
 def check(data_dir):
     from pathlib import Path
     root = Path(data_dir)
@@ -619,6 +654,13 @@ def check(data_dir):
         return fail("BLEND.TAB first two rows are equal")
     if index_formula_matches(blends["BLEND.TAB"][0]) or index_formula_matches(blends["BLEND2.TAB"][0]):
         return fail("a blend table matches a 256-by-256 index formula")
+    palettes = stored_palettes(root)
+    if len(palettes) != STORED_PALETTES:
+        return fail(f"stored palette count is {len(palettes)}, not {STORED_PALETTES}")
+    for name in ("BLEND.TAB", "BLEND2.TAB"):
+        indexes = diagonal_indexes(blends[name][0])
+        if any(diagonal_is_same_colour(palette, indexes) for palette in palettes):
+            return fail(f"a stored palette has the {name} diagonal")
     ending = b"FILECHNG\x00new_size\x00.\\FILECHNG.C\x00"
     lands = left["ENG/LANDS.EXE"][1]
     if not left["ENG/FINALE.TDS"][1].endswith(ending) or not lands[mz_declared(lands):].endswith(ending):
@@ -639,6 +681,14 @@ def check(data_dir):
     for offset, needle in INSTALL_BLEND:
         if install[offset:offset + len(needle)] != needle:
             return fail(f"installer blend string +{offset:#x} differs")
+    programs = [("INSTALL.EXE", install)]
+    for rel in ("ENG/FINALE.EXE", "FRE/FINALE.EXE", "GER/FINALE.EXE"):
+        programs.append((rel, read[rel]))
+    for rel, (_size, declared) in LANDS.items():
+        programs.append((rel + " image", left[rel][1][:declared]))
+    for label, blob in programs:
+        if has_mov_cx_256(blob):
+            return fail(f"{label} contains mov cx, 256")
     finale2 = (root / "ENG" / "FINALE2.PAK").read_bytes()
     for offset, needle in FINALE_BLEND:
         if finale2[offset:offset + len(needle)] != needle:

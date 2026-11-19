@@ -22,8 +22,10 @@ credited only on the CD layout (a `DATA` folder with `L01.PAK`, the same test
 `lol1_loose.py` uses); on a floppy copy only PAK archives count. A measured tail is not enough: the symbol blocks end in a
 string pool whose length is the uint32 at byte 4, and the blend tables are
 65536 bytes that none of the eleven simple index formulas the tool tries
-(min, max, average, product, sum, difference, OR, AND, XOR) reproduces;
-palette-based formulas were not tried. Neither fact puts
+(min, max, average, product, sum, difference, OR, AND, XOR) reproduces.
+No stored 768-byte palette (300 read, 109 different) keeps the colour on all
+256 diagonal entries; the nearest keeps 240 of 256, so a blend over a palette
+the game builds at runtime stays open. Neither fact puts
 those files in the count. The [loose-file page](formats/loose.md) names the twelve
 CD files still in that set and the test that would finish each one. The rating
 is counted on the CD edition; `--check` does not compare it on a floppy copy. It
