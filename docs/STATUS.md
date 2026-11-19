@@ -14,10 +14,10 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (30 checks; 
 **Rating** (counted by `tools/rating.py` on the CD edition; see [how we rate](HOW_WE_RATE.md)):
 
 <!-- rating:begin -->
-- **Files read:** 162 of 199 files in the CD `DATA` folder (285.7 of 289.0 MiB) are accounted for to the last byte by a reader here.
-- **Rules traced:** 389 statements labelled CONFIRMED against the program or the files, 136 labelled UNCONFIRMED, on 87 current pages.
-- **Seen in the running game:** 1 of 5 probes that need the original game running are answered.
-- **Open questions:** 18: 11 answered, 5 mostly, 2 partly.
+- **Files read:** 162 of 199 files in the CD `DATA` folder (285.7 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
+- **Rules traced:** the pages mark 389 statements CONFIRMED (proved from the program code or the files) and 136 UNCONFIRMED (a reading not yet proved), on 87 current pages; old notes kept as history are not counted.
+- **Seen in the running game:** 1 of 5 questions that can only be settled by watching the original game run are settled.
+- **Open questions:** 18 numbered questions: 11 answered, 5 mostly answered, 2 partly answered.
 <!-- rating:end -->
 
 ## File formats

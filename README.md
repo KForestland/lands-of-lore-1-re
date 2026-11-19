@@ -6,10 +6,10 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 
 ## At a glance
 
-- **What this is:** documentation of every data file and the main rules of the original 1993 DOS game (CD and floppy editions), checked against the game files and the original program.
+- **What this is:** documentation of every type of data file and the main rules of the original 1993 DOS game (CD and floppy editions), checked against the game files and the original program.
 - **What you can do today:** read every file type with a tool (pictures, sprites, animations, sound, speech, music, fonts, text, maps, scripts, saves), draw any level, disassemble every level script, and look up how combat, magic and monsters work.
 - **Start in five minutes:** the [Quick start](#quick-start-5-minutes) below, then [Start here, by goal](docs/START_HERE.md), [How the game works](docs/HOW_THE_GAME_WORKS.md) or the [worked example](docs/tutorial-one-event.md).
-- **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md): the counts are in the [rating](#rating). The game now runs from its own installer under a debugger ([procedures and results](docs/NEEDS_A_RUNNING_GAME.md)); level-1 checks are done, and the rest need saves from levels 8, 23 and 27.
+- **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md) and counted in the [rating](#rating). Some can only be settled by watching the original game run; [those checks](docs/NEEDS_A_RUNNING_GAME.md) are done for level 1, and the rest need saved games from levels 8, 23 and 27.
 - **What changed lately:** [what's new](docs/WHATS_NEW.md), newest first.
 - **The three games:** [LoL1](https://github.com/KForestland/lands-of-lore-1-re) · [LoL2](https://github.com/KForestland/lands-of-lore-2-re) · [LoL3](https://github.com/KForestland/Lands-of-lore-3-re) ([what they share](docs/series-formats.md), [how the engine changed](docs/engine-evolution.md)).
 
@@ -19,13 +19,13 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 
 ## Rating
 
-Counted by `tools/rating.py` on the English CD copy; [how we rate](docs/HOW_WE_RATE.md) explains each line and what it does not claim.
+These are counts of work done, not a percentage of how complete the project is. They are produced by `tools/rating.py` on the English CD copy; [how we rate](docs/HOW_WE_RATE.md) explains each line and what it does not claim.
 
 <!-- rating:begin -->
-- **Files read:** 162 of 199 files in the CD `DATA` folder (285.7 of 289.0 MiB) are accounted for to the last byte by a reader here.
-- **Rules traced:** 389 statements labelled CONFIRMED against the program or the files, 136 labelled UNCONFIRMED, on 87 current pages.
-- **Seen in the running game:** 1 of 5 probes that need the original game running are answered.
-- **Open questions:** 18: 11 answered, 5 mostly, 2 partly.
+- **Files read:** 162 of 199 files in the CD `DATA` folder (285.7 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
+- **Rules traced:** the pages mark 389 statements CONFIRMED (proved from the program code or the files) and 136 UNCONFIRMED (a reading not yet proved), on 87 current pages; old notes kept as history are not counted.
+- **Seen in the running game:** 1 of 5 questions that can only be settled by watching the original game run are settled.
+- **Open questions:** 18 numbered questions: 11 answered, 5 mostly answered, 2 partly answered.
 <!-- rating:end -->
 
 ## What you get
@@ -55,16 +55,16 @@ The last command prints the first line of level 1's English text: `[0] Welcome t
 
 ## Status
 
-Full table with evidence: [`docs/STATUS.md`](docs/STATUS.md). Open questions: [`docs/OPEN_QUESTIONS.md`](docs/OPEN_QUESTIONS.md).
+Full table with evidence: [`docs/STATUS.md`](docs/STATUS.md). "Q7" and the like are numbered questions in [`docs/OPEN_QUESTIONS.md`](docs/OPEN_QUESTIONS.md); format names (CMZ, WLL, EMC2, TIM and so on) are explained in the [glossary](docs/GLOSSARY.md).
 
 | Area | State |
 |------|-------|
 | Archives, compression, pictures, sprites, animations, sound, fonts, text | Documented, readers, checked on every file of both editions read |
-| Level maps (CMZ, WLL, VCN/VMP, decorations, automap legend) | Documented, readers and renderer, checked on every file; Q3 and Q11 answered (what level 24's extra bytes were meant to hold is not in the files) |
+| Level maps (CMZ, WLL, VCN/VMP, decorations, automap legend) | Documented, readers and renderer, checked on every file; Q3 and Q11 answered; level 24 has extra bytes whose purpose cannot be found in the files |
 | Level and item scripts (EMC2), cut-scene scripts (TIM) | Documented with full opcode and function tables; all 60 scripts of both editions and the 139 TIM files of the CD checked |
 | Tables inside the program, save files | Documented and checked in both executables and on save files |
 | Game rules (combat, magic, experience, monsters, light, time) | Traced in both original executables: combat, spells, timers, regeneration, lamp oil, monster modes; clock CONFIRMED at 60 ticks per second; WLL bit 0x40 and a few monster details open (Q7) |
-| Music | XMIDI (XMI, C55, PCS) converts to standard MIDI; the AdLib (ADL) layout is documented field by field (Q15) and `adl_to_midi.py` projects ADL tracks to a MIDI note timeline |
+| Music | XMIDI (XMI, C55, PCS) converts to standard MIDI; the AdLib (ADL) layout is documented field by field (Q15) and `adl_to_midi.py` turns ADL tracks into a MIDI file of notes |
 
 Two editions were read: the CD-ROM edition with speech (version CD1.02) and an English floppy edition. See [`docs/edition_comparison.md`](docs/edition_comparison.md).
 
@@ -82,7 +82,7 @@ Formats the three games share, with links to the LoL2 and LoL3 repositories: [do
 - [`data/`](data): tables produced by the tools (inventories, wall tables, counts)
 - [`examples/`](examples): three small example outputs, checked against today's tools by `example_images.py`
 
-[`docs/closure_memo.md`](docs/closure_memo.md) and [`docs/level_tileset_map.md`](docs/level_tileset_map.md) are notes from March 2026, kept as history; the format pages correct them where the data disagrees.
+[`docs/closure_memo.md`](docs/closure_memo.md) and [`docs/level_tileset_map.md`](docs/level_tileset_map.md) are older notes from March 2026, kept as history; where they disagree with the format pages, the format pages are right.
 
 ## Asset policy
 
