@@ -21,14 +21,14 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 
 ### `check_all.py`
 
-Run every tool's `--check` (29 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (30 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;28p"
+$ python3 tools/check_all.py | sed -n "1,3p;31p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 29 CHECKS PASSED
+ALL 30 CHECKS PASSED
 ```
 
 ### `pak_reader.py`
@@ -313,6 +313,15 @@ Regenerates each image in `examples/` with the command listed in `examples/READM
 ```
 $ python3 tools/example_images.py --check
 CHECK example_images: 3 example images equal today's tool output pixel for pixel
+```
+
+### `lol1_name_callers.py`
+
+On the CD, re-reads the `00000.VOC` catalog row in `ENG/FINALE.EXE` and checks that the three unused palette names occur in `FILEDATA.FDT` and in no program, archive payload, or `INSTALL.EXE` beside `DATA`. On a floppy folder it reports that the CD finale is not there.
+
+```
+$ python3 tools/lol1_name_callers.py --check
+CHECK name_callers: FINALE.EXE+0x1D1D0 is the 00000.VOC catalog row (44115 bytes); no instruction pushes the name; the three palettes are catalog names only, installer included
 ```
 
 ### `repo_guard.py`

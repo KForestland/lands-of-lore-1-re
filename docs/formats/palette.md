@@ -6,7 +6,7 @@
 
 | File | Size (CD) | Loaded by |
 |------|-----------|-----------|
-| CAV_PLT2/3/4.PAL, ALTPAL1/2/3.PAL | 768 | as the override palette of `loadLevelGraphics` (first 384 bytes, `engines/kyra/engine/scene_lol.cpp:360-367`), name passed by the level script (`script/script_lol.cpp:208-212`). By static scan: ALTPAL2 level 2; ALTPAL1 levels 3 and 24; CAV_PLT3 level 25 (CONFIRMED, `tools/tileset_mapper.py`). CAV_PLT2, CAV_PLT4 and ALTPAL3 are named by no `loadLevelGraphics` call; who loads them is OPEN, [Q14](../OPEN_QUESTIONS.md) |
+| CAV_PLT2/3/4.PAL, ALTPAL1/2/3.PAL | 768 | as the override palette of `loadLevelGraphics` (first 384 bytes, `engines/kyra/engine/scene_lol.cpp:360-367`), name passed by the level script (`script/script_lol.cpp:208-212`). By static scan: ALTPAL2 level 2; ALTPAL1 levels 3 and 24; CAV_PLT3 level 25 (CONFIRMED, `tools/tileset_mapper.py`). CAV_PLT2, CAV_PLT4 and ALTPAL3 are named by no `loadLevelGraphics` call, and the programs and the installer do not contain those names; who loads them is OPEN, [Q14](../OPEN_QUESTIONS.md) |
 | FXPAL.COL | 768 | transparency tables on floppy (`lol.cpp:1870`) |
 | SWAMPICE.COL | 768 | level 11 ice palette (`scene_lol.cpp:375`, `lol.cpp:2433`) |
 | LITEPAL1/2/3.COL | 768 | script function at `script/script_lol.cpp:2184-2215` (`olol_restoreMagicShroud`) |

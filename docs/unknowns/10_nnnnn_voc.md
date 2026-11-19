@@ -18,7 +18,7 @@ The intro calls play `KING01`, `KING02`, `KING03` and `star2`. The character-sel
 
 ## Where the name does sit
 
-CONFIRMED as a filename in one executable, and not as a call. CD `ENG/FINALE.EXE` (132328 bytes) contains the ASCII string `00000.VOC` at file offset 123008. The bytes around it are a flat list: `TROT5.VOC`, then `00000.VOC`, then `CONGRATK.VOC`, `CONGRATA.VOC`, `CONGRATM.VOC`, `CONGRATC.VOC`, then `INTRO.FNT`. The same string is absent from CD `DATA/HARDRIVE/MAIN.EXE` (356928 bytes), CD `ENG/LANDS.EXE` (357509 bytes), and from floppy `MAIN.EXE`, `LANDS.EXE` and `FINALE.EXE`.
+CONFIRMED as a filename in the finale programs, and not as a call. CD `ENG/FINALE.EXE` (132328 bytes) contains the ASCII string `00000.VOC` once, at file offset 123008 (`0x1E080`). The bytes around it are a flat list: `TROT5.VOC`, then `00000.VOC`, then `CONGRATK.VOC`, `CONGRATA.VOC`, `CONGRATM.VOC`, `CONGRATC.VOC`, then `INTRO.FNT`. One relocated far pointer targets that string: the 20-byte catalog row at file `0x1D1D0` (segment `0x1ACB`, offset `0x320`, row 40). Its dword at +4 is `0xAC53` (44115), the same length as each speech-archive copy, and the word at +0x12 is `0x1000`. Startup sets DS to `0x1B5B` (`mov dx, 0x1B5B` at file `0x2200`). The name's offset in that segment is `0x08D0`, and those two bytes occur once in the file, inside the row. The lookup at file `0xCDD1` (`BA 14 00 F7 EA BA CB 1A`) multiplies an index from `es:[bx+0xC]` by `0x14` and uses segment `0x1ACB`. It does not name row 40. French `FINALE.EXE` has the one string at `0x1E782` and German at `0x1E7DC`; each row is the same size and flags. The string is absent from CD `DATA/HARDRIVE/MAIN.EXE` (356928 bytes), from `ENG/LANDS.EXE` (357509 bytes, the intro), from `SETUP.EXE` and from `INSTALL.EXE`, and from every archive payload. Floppy `MAIN.EXE`, `LANDS.EXE` and `FINALE.EXE` were already searched and do not contain it.
 
 ScummVM's outro command copies a name out of the TIM text and then deletes the last four characters (`engines/kyra/script/script_tim.cpp:699-731`). For talkie outro slot 2 it ignores that text and forces `CONGRATA.VOC`, then writes K, A, M or C at character 7 (`script_tim.cpp:705-723`). The play call appends `.VOC` again (`script_tim.cpp:746` through `sound.cpp:79-87`). No TIM member in any archive contains `00000.VOC`. No ScummVM source contains that filename.
 
@@ -27,8 +27,9 @@ ScummVM's outro command copies a name out of the TIM text and then deletes the l
 - Hashing all 59 entries. One clip.
 - Searching script text, TIM text and the effect-name list for the stem.
 - Reading the speech-name builder, the effect player, the custom-effect opcode, the intro and character-select calls, and the outro command.
-- Searching the six executables for the filename.
+- Searching the six executables for the filename, then the installer, the setup program and the French and German finale programs.
+- Resolving the one far pointer at `ENG/FINALE.EXE+0x1D1D0` and the index times 20 lookup at `+0xCDD1`.
 
 ## What would settle it
 
-A call in CD `FINALE.EXE` that opens the filename at file offset 123008, or a TIM string stored in a form this scan does not see (the extension stripped already, or the text living outside the root archives). The filename's presence in that list is not a play call. Until one of those turns up, the player of `00000.VOC` stays UNCONFIRMED. The identity of the 59 entries is CONFIRMED: one 44115-byte clip, duplicated.
+A caller that passes index 40 to the lookup at `ENG/FINALE.EXE+0xCDD1`, or that copies the name at DS:`0x08D0`. The catalog row is a registration of a 44115-byte file, not a play call. Until one of those turns up, the player of `00000.VOC` stays UNCONFIRMED. The identity of the 59 entries is CONFIRMED: one 44115-byte clip, duplicated. `lol1_name_callers.py --check` re-reads the row, the lookup bytes and the absence from programs, payloads and the installer.

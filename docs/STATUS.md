@@ -9,7 +9,7 @@
 - **Checked on data**: the tool's `--check` parses every file of that kind. CD = the top-level `DATA/` folder of the CD-ROM edition with spoken dialogue (version CD1.02); ENG = its `DATA/ENG` folder; floppy = an English floppy-edition installation (no speech, chapter-based PAKs). Details: [formats/README.md](formats/README.md).
 - **Open**: what is not known yet, as numbered in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 
-Run every check at once: `python3 tools/check_all.py --data <DATA>` (29 checks; all pass on the CD and on the floppy edition, about 10 to 15 seconds).
+Run every check at once: `python3 tools/check_all.py --data <DATA>` (30 checks; all pass on the CD and on the floppy edition, about 10 to 15 seconds).
 
 **Rating** (counted by `tools/rating.py` on the CD edition; see [how we rate](HOW_WE_RATE.md)):
 
@@ -27,7 +27,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (29 checks; 
 | Format | Documented | Tool | Checked on data | Open |
 |--------|-----------|------|-----------------|------|
 | PAK container | [pak.md](formats/pak.md) | `pak_reader.py`, `pak_indexer.py` | CD 81 PAK / 1163 members (rebuilds `data/pak_index.json`), ENG 17/378, floppy 15/1213 | Q9 answered ([page](unknowns/09_pak_order.md)) |
-| TLK speech (CD) | [tlk.md](formats/tlk.md) | `tlk_verify.py`, `pak_reader.py`, `voc_reader.py` | 30 files, 4912 VOC members; names follow the engine's speech patterns | Q10 mostly answered: one padding clip ([page](unknowns/10_nnnnn_voc.md)) |
+| TLK speech (CD) | [tlk.md](formats/tlk.md) | `tlk_verify.py`, `pak_reader.py`, `voc_reader.py`, `lol1_name_callers.py` | 30 files, 4912 VOC members; names follow the engine's speech patterns. The finale catalog row for `00000.VOC` is 44115 bytes and no instruction pushes the name | Q10 mostly answered: one padding clip ([page](unknowns/10_nnnnn_voc.md)) |
 | Frame4 / LCW | [lcw.md](formats/lcw.md) | `lol1lib.py`, `decode_frame4.py` | two independent ports agree on 140/140 CD files; every CPS/CMZ/VCN/VMP in CD, ENG, floppy decodes to its stated size | — |
 | CPS | [cps.md](formats/cps.md) | `cps_reader.py` | CD 85/85, ENG 60/60, floppy 112/112 | — |
 | SHP | [shp.md](formats/shp.md) | `shp_renderer.py` | strict decode CD 3492/3492, ENG 1269/1269, floppy 3601/3601; 2-byte-prefix variant 0/197 | Q1 (demo only) |
@@ -42,7 +42,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (29 checks; 
 | XXX automap legend | [xxx.md](formats/xxx.md) | `xxx_reader.py` | 29 files, 73 records, CD and floppy | Q12 answered ([page](unknowns/12_legend_bit.md)) |
 | DAT decorations | [dat.md](formats/dat.md) | `dat_reader.py` | 12/12 CD and floppy | Q13 answered ([page](unknowns/13_decoration_positions.md)) |
 | TLC (CD) | [tlc.md](formats/tlc.md) | `tlc_reader.py` | 29/29 CD; floppy has none | — |
-| PAL / COL | [palette.md](formats/palette.md) | `cps_reader.py --pal-from` | 11/11 are 768 bytes (CD); level use of 3 PALs by script scan | Q14 partly answered: catalogued, no caller found ([page](unknowns/14_palette_callers.md)) |
+| PAL / COL | [palette.md](formats/palette.md) | `cps_reader.py --pal-from`, `lol1_name_callers.py` | 11/11 are 768 bytes (CD); level use of 3 PALs by script scan. The three unused names are absent from programs, payloads and the installer | Q14 partly answered: catalogued, no caller found ([page](unknowns/14_palette_callers.md)) |
 | FNT | [fnt.md](formats/fnt.md) | `fnt_reader.py` | CD 4, ENG 7, floppy 9 | — |
 | EMC2 scripts (INF/INI) | [emc2.md](formats/emc2.md), [emc2_scripts.md](emc2_scripts.md) | `emc2_decompile.py`, `tests/test_emc2_corpus.py` | CD 60/60, floppy 60/60, 0 unknown opcodes or functions; native dispatch tables located (independently re-checked) | Q8 (downstream effect only) |
 | TIM sequences | [tim.md](formats/tim.md) | `parse_tim.py` | 139/139 `FORM…AVFS`; command use counted by two independent walkers | native effect of a few unimplemented commands |
@@ -76,7 +76,7 @@ Pages: [executable_tables.md](executable_tables.md), [savegame_format.md](savega
 
 ## Tools
 
-All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 27 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
+All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 30 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
 
 ## Corrections to the closure memo and the March data
 
