@@ -23,3 +23,10 @@ class XmiWriteTests(unittest.TestCase):
         chunks = read_chunks(source)
         self.assertEqual(chunks[0][0][1][1][0], [(b"TEST", b"x", b"b")])
         self.assertEqual(write_chunks(*chunks), source)
+
+    def test_chunk_parity_changes_keep_the_next_header_aligned(self):
+        next_chunk = (b"NEXT", b"", b"")
+        source = write_chunks([(b"TEST", b"x", b""), next_chunk], b"")
+        self.assertEqual(read_chunks(source)[0], [(b"TEST", b"x", b"\0"), next_chunk])
+        edited = write_chunks([(b"TEST", b"xx", b"\xa5"), next_chunk], b"")
+        self.assertEqual(read_chunks(edited)[0], [(b"TEST", b"xx", b""), next_chunk])

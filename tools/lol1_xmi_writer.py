@@ -115,11 +115,12 @@ def write_chunks(chunks, remainder):
             body = struct.pack("<H", fields)
         else:
             body = fields
-        if len(pad) > len(body) % 2:
-            raise ValueError("change alters IFF alignment")
+        if len(pad) > 1:
+            raise ValueError("IFF alignment field is more than one byte")
         out.extend(CHUNK.pack(tag, len(body)))
         out.extend(body)
-        out.extend(pad)
+        if len(body) & 1:
+            out.extend(pad or b"\0")
     return bytes(out) + remainder
 
 

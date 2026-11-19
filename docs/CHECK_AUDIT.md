@@ -1,0 +1,58 @@
+# Check audit
+
+The 19 November 2026 audit used reviewed commit `dbd6880` and the English CD originals.
+An untouched local clone passed the corpus checks and unit tests. In scratch clones
+each case changed one value or deleted one file, ran the full `check_all.py`
+and `python3 -m unittest`, then restored the file. The source installations
+were read-only for the audit. The deliberate changes were never committed.
+
+**Baseline result.** 10 of 20 changes failed at least one suite.
+10 escaped both suites. Rows below describe the deliberate scratch errors.
+
+| Case | Kind | File and deliberate change | Full corpus check that failed | Unit tests |
+|---:|---|---|---|---|
+| 01 | Generated page | `docs/NUMBERS.md`: XP for skill 1 from 500 to 501 | `lol1_numbers` | Passed |
+| 02 | Generated page | `docs/NUMBERS.md`: XP row address from +0x2B834 to +0x2B835 | `lol1_numbers` | Passed |
+| 03 | Generated page | `docs/NUMBERS.md`: XP column label to MP | `lol1_numbers` | Passed |
+| 04 | Reader | `tools/lol1_script_writer.py`: expected EMC2 count from 60 to 59 | `lol1_script_writer` | Passed |
+| 05 | Reader | `tools/lol1_level_writer.py`: signed WLL shape to unsigned | Passed | Passed |
+| 06 | Reader | `tools/lol1_level_writer.py`: DAT next field from u8 to u16 | `lol1_level_writer` | Passed |
+| 07 | Reader | `tools/parse_tim.py`: TIM opcode 0x06 from frame to palette | Passed | Passed |
+| 08 | Reader | `tools/exe_tables.py`: CD XP table from 0x2B830 to 0x2B832 | `exe_tables`, `lol1_numbers` | Passed |
+| 09 | Reader | `tools/lol1_xmi_writer.py`: XMIDI chunk size from big-endian to little-endian | `lol1_xmi_writer` | Passed |
+| 10 | Reader | `tools/lol1_xmi_writer.py`: discard stored XMIDI VLQ width | Passed | Failed |
+| 11 | Reader | `tools/lol1_level_writer.py`: replace .GER with .ESP in writer filter | Passed | Passed |
+| 12 | Format documentation | `docs/formats/pak.md`: first member name from +4 to +5 | Passed | Passed |
+| 13 | Format documentation | `docs/formats/cps.md`: bitmap expanded size from +4 to +5 | Passed | Passed |
+| 14 | Format documentation | `docs/formats/wsa.md`: WSA delta buffer size from +10 to +11 | Passed | Passed |
+| 15 | Format documentation | `docs/formats/shp.md`: SHP offset directory from +2 to +3 | Passed | Passed |
+| 16 | Format documentation | `docs/formats/dat.md`: DAT scale flags from +20 to +21 | Passed | Passed |
+| 17 | Format documentation | `docs/formats/wll.md`: WLL automap field from +10 to +11 | Passed | Passed |
+| 18 | Deleted target | `docs/formats/pak.md`: remove the PAK format page | `rating`, `doc_index`, `doc_links` | Passed |
+| 19 | Deleted target | `docs/images/level01_schematic.png`: remove the level 1 diagram | `example_images`, `doc_links` | Passed |
+| 20 | Narrative | `docs/TOUR.md`: describe light areas as solid blocks | Passed | Passed |
+
+Escaped cases: 05, 07, 11, 12, 13, 14, 15, 16, 17, 20.
+
+## Checks added after the audit
+
+- `doc_format_offsets.py --check` reads six sampled offsets from the format
+  pages. For each one it builds a small synthetic file with a marker at the
+  documented offset and asks the reader that decodes the field (`pak_entries`,
+  `bitmap_header`, the WSA, SHP, DAT and WLL parsers) for its value. A wrong
+  page offset, or a reader that moved the field, fails. The check reports the
+  affected page and field and is part of `check_all.py`.
+- The writer compares its language counts with the existing dialogue inventory
+  for CD and the English-only floppy count. Removing German now fails the corpus
+  check even though the English and French files still rebuild.
+- Synthetic WLL and TIM fixtures assert the signed shape word and the name shown
+  for opcode 0x06. An additional XMIDI test checks that a changed chunk length
+  adds or removes the alignment byte before the next chunk. Both original
+  editions still produce byte-identical XMIDI output.
+
+The focused checks rejected all 9 automatable escapes in a second
+scratch pass (cases 05, 07, 11, 12, 13, 14, 15, 16, 17).
+Case 20 remains outside automated coverage. The sentence changes the meaning
+of a description while leaving the bytes, generated tables and links valid.
+A reviewer can compare that sentence with the evidence it cites. The offset
+check covers the named rows only.

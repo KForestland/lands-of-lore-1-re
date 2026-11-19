@@ -176,6 +176,21 @@
       ]
     },
     {
+      "path": "docs/CHECK_AUDIT.md",
+      "title": "Check audit",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/check_all.py",
+        "tools/doc_format_offsets.py",
+        "tools/exe_tables.py",
+        "tools/lol1_level_writer.py",
+        "tools/lol1_script_writer.py",
+        "tools/lol1_xmi_writer.py",
+        "tools/parse_tim.py"
+      ]
+    },
+    {
       "path": "docs/COOKBOOK.md",
       "title": "Cookbook",
       "answers": [],
@@ -1383,6 +1398,7 @@
         "tools/dat_reader.py",
         "tools/decode_dialogue.py",
         "tools/decode_frame4.py",
+        "tools/doc_format_offsets.py",
         "tools/doc_index.py",
         "tools/doc_links.py",
         "tools/emc2_decompile.py",

@@ -76,14 +76,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (45 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (46 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;46p"
+$ python3 tools/check_all.py | sed -n '1,3p;$p'
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 45 CHECKS PASSED
+ALL 46 CHECKS PASSED
 ```
 
 ### `doc_links.py`
@@ -522,7 +522,7 @@ CHECK repo_guard: N tracked files; game files, converted media, stray PNGs, file
 
 ### `tests/test_emc2_corpus.py`
 
-Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last (45th) check.
+Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last (46th) check.
 
 ```
 $ python3 tests/test_emc2_corpus.py
@@ -567,3 +567,7 @@ The check also runs in `check_all.py` and GitHub Actions. It needs no game data.
 `lol1_level_writer.py` rebuilds every CMZ maze, WLL wall table, decoration DAT and ENG/FRE/GER string table in the PAKs of `--data` and compares it byte for byte (`--check`; no output option). CMZ files are byte-identical because the parsed Frame4 packet choices of the original are kept; level 24's five extra bytes per block are kept verbatim without a parse. See [round trip](../docs/ROUND_TRIP.md#levels-and-text).
 
 `lol1_xmi_writer.py` rebuilds every XMI, C55 and PCS score (in the PAKs of `--data` and loose in it) from its IFF chunks and parsed EVNT events and compares it byte for byte (`--check`; no output option). Delays, statuses, note durations and the stored variable-length widths are written from the parsed fields; TIMB/RBRN payloads, padding and the bytes after each end-of-track are kept verbatim. For standard MIDI use `xmi_to_midi.py`. See [round trip](../docs/ROUND_TRIP.md#music-xmidi).
+
+`doc_format_offsets.py` checks six format-page offsets against the readers that decode those fields, using small synthetic files. It runs in `check_all.py` and needs no game data. [Check audit](../docs/CHECK_AUDIT.md)
+
+`check_all.py --quick` skips the Frame4, WSA and SHP re-encoding check. It lists each skip and reports the total elapsed time for the checks it ran.

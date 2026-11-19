@@ -7,7 +7,9 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
+from lol1_level_writer import parse_walls, write_walls
 from lol1_script_writer import assemble, listing
+from parse_tim import tim_listing
 
 
 def form(kind, chunks, bias):
@@ -16,6 +18,19 @@ def form(kind, chunks, bias):
 
 
 class ScriptAssembly(unittest.TestCase):
+    def test_tim_listing_names_opcode_06_as_frame(self):
+        # ScummVM script_tim.cpp:686–688 at 3b4db303.
+        payload = struct.pack("<6H", 1, 5, 0, 0x0106, 3, 10)
+        source = form(b"AVFS", [(b"AVTL", payload, b"")], 12)
+        self.assertIn("cmd_wsaDisplayFrame slot=3 frame=10",
+                      "\n".join(tim_listing("SYNTHETIC.TIM", source)))
+
+    def test_wll_shape_is_signed(self):
+        fields = (0, [(0, 0, -256, 0, 0, 0)])
+        source = struct.pack("<HHHhHHH", 0, 0, 0, -256, 0, 0, 0)
+        self.assertEqual(parse_walls(source), fields)
+        self.assertEqual(write_walls(fields), source)
+
     def test_duplicate_mnemonic_uses_original_opcode(self):
         original = form(b"EMC2", [(b"ORDR", struct.pack(">H", 0), b""),
                                   (b"DATA", struct.pack(">3H", 0xABCD, 0x44FF, 0x1200), b"")], 0)

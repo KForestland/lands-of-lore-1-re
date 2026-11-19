@@ -170,9 +170,14 @@ def check(data):
         except (ValueError, IndexError, struct.error) as error:
             raise ValueError(f"{where}: {error}") from error
         counts[suffix] += 1
-    if (counts[".CMZ"] != 29 or counts[".WLL"] != 29 or not counts[".DAT"] or counts[".ENG"] != 30
-            or {counts[".FRE"], counts[".GER"]} - {0, 30}):
+    reference = L.repo_json("dialogue_summary.json", str(data))
+    expected_text = (Counter(Path(row["file"]).suffix for row in reference["files"])
+                     if reference else Counter({".ENG": 30}))
+    if counts[".CMZ"] != 29 or counts[".WLL"] != 29 or not counts[".DAT"]:
         raise ValueError("incomplete original level corpus")
+    for suffix in expected_text.keys() | LANGUAGES:
+        if counts[suffix] != expected_text[suffix]:
+            raise ValueError(f"{suffix}: rebuilt {counts[suffix]} of {expected_text[suffix]} expected text tables")
     print(f"CHECK level fields write: {counts['.CMZ']} CMZ, {counts['.WLL']} WLL, {counts['.DAT']} decoration DAT, "
           f"{counts['.ENG']} ENG, {counts['.FRE']} FRE and {counts['.GER']} GER; byte-identical")
 
