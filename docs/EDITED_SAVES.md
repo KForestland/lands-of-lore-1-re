@@ -14,7 +14,7 @@ rules an edit must keep (same section lengths, same file size, no
 checksum to update) are in
 [editing a copy of an original slot](savegame_format.md#editing-a-copy-of-an-original-slot).
 
-All five runs below belong to probes that are still open. None of them
+All eight runs below belong to probes that are still open. None of them
 answers a probe on its own; the [rating](../README.md#rating) counts how
 many answered probes rest on edited saves only.
 
@@ -27,8 +27,37 @@ many answered probes rest on edited saves only.
 - **Showed:** the game took the oil onto the lamp. The lamp handler
   added 100 oil at `MAIN.EXE+0x1065B`. The three isolated bytes were
   touched only by the bulk write when saving.
-- **A native save would add:** the oil-depletion event and the
-  brightness writer, from a dark level with flags 250 and 251 set.
+- **A native save would add:** the brightness writer and the
+  oil-depletion event in ordinary play, from a dark level with flags
+  250 and 251 set (the [dark-lamp run](#q17-dark-lamp-on-level-8)
+  saw the decrement only on an edited copy).
+
+## Q17. Dark lamp on level 8
+
+- **Question:** the same probe, with the lamp lit and burning down.
+- **Edited:** level 8, block 113, flags 250 and 251, 2 oil and lamp
+  effect 0xFF
+  ([byte table](unknowns/17_native_save_fields.md#dark-lamp-depletion-on-an-edited-level-8-copy)).
+- **Showed:** after the load the lamp held brightness 4, oil 1,
+  effect 7. The oil fell 1 → 0 at `MAIN.EXE+0xF9FF`, the gated
+  `dec byte [0x81DD]`. The slot the game then wrote holds brightness
+  4, oil 0, effect 8 and flag 250 clear. The three isolated bytes were
+  touched only by the bulk write when saving, and are zero in that
+  slot.
+- **A native save would add:** a watch from the load through the
+  first decrement, so that writes during load and a level event's
+  writes can be told apart, and which code clears flag 250.
+
+## Q17. Level 8 to level 7
+
+- **Question:** the same probe, through a level change.
+- **Edited:** level 8, block 208, facing west
+  ([byte table](unknowns/17_native_save_fields.md#level-8-to-level-7-with-the-isolated-bytes-watched)).
+- **Showed:** one step west ran block 207's event, which loaded level
+  7 at block 206 facing west (`L07.PAK` opened). The three isolated
+  bytes stayed zero with no watch hit.
+- **A native save would add:** a level change and party changes from
+  ordinary play; other levels could still touch a byte.
 
 ## Q17. Two portraits on level 1
 
@@ -82,4 +111,21 @@ many answered probes rest on edited saves only.
   fight-time access to the three modifier words. The Hatchet copy
   reached defeat before any watch hit.
 - **A native save would add:** a longer-lived party with watches armed
-  before the load, to catch the first slot-2 attack.
+  before the load, to catch the first slot-2 attack (the
+  [Hatchet run](#q18-hatchet-fight-on-level-27) did this on an edited
+  copy).
+
+## Q18. Hatchet fight on level 27
+
+- **Question:** the same probe, for the slot-2 Hatchet definition.
+- **Edited:** the block-497 Hatchet placement with current and
+  maximum HP raised from 20 to 500
+  ([byte table](unknowns/18_native_records.md#read-watches-on-the-hatchet-definition)).
+- **Showed:** under read watches on the slot-2 definition, the fight,
+  a reload and a short replay read the critical byte at
+  `MAIN.EXE+0xAD87` and speed at `+0x12997`. No read after
+  initialization touched the modifiers `+0x0C/+0x0E/+0x10` or the
+  word at `+0x40`. The ranged click left the item in the hand, so no
+  ranged attack was seen.
+- **A native save would add:** a party with a ranged weapon ready,
+  to follow a real projectile through the release routine.

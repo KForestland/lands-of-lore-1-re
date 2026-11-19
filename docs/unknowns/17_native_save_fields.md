@@ -198,10 +198,12 @@ writer's new slot (`5e0f69a88205`) has `00 7E 08` at
 oil row is free again (bit 15 at `+0x545`). The character and
 lighting evidence remains scoped to this edited state.
 
-**UNCONFIRMED.** The active oil-depletion event and exact
-brightness-normalization writer. A native save in a dark level
-with flags 250 and 251 set would allow a watch from the load through
-the first `+0xF9FF` decrement and distinguish writes during load
+**UNCONFIRMED.** The exact brightness-normalization writer, and
+the oil-depletion event in ordinary play. The edited dark-lamp run
+[below](#dark-lamp-depletion-on-an-edited-level-8-copy) saw one
+`+0xF9FF` decrement after the watch was attached. A native save in a
+dark level with flags 250 and 251 set would allow a watch from the
+load through the first decrement and distinguish writes during load
 from writes by a level event.
 
 ### Selecting between two portraits in an edited copy
@@ -240,31 +242,56 @@ dialogue without a second active portrait or a lead-byte change.
 A native slot after a follower joins would test the selection
 and its persistence through a normal save.
 
-### Dark-lamp depletion and a stair transition
+### Dark-lamp depletion on an edited level-8 copy
 
-**CONFIRMED, edited-save run.** Source `477b08b82ecd` was placed
-at level 8 block 113. The changed bytes were `+0x254=2D→71`,
-`+0x255=02→00`, `+0x257=0D→11`, `+0x259=11→03`,
-`+0x269=01→08`, `+0x2EF=02→0E`, `+0x461=00→02` and
-`+0x462=00→FF` (copy `26ce624904cc`). At attachment the
-lamp bytes `DS:81DC–81DE` were `04 01 07`. The oil watch
-then recorded 1 → 0 at `MAIN.EXE+0xF9FF` with next guest
-CS:IP `0D5E:0643`. The first decrement happened before
-attachment. The game-written slot `28205f83a55a` contains
-`04 00 08` at `+0x460..+0x462`. The three access watches
-on `DS:7FE4/81DF/8202` hit only during the DOS bulk write.
-All three isolated file bytes were zero in that slot.
+**CONFIRMED, edited-save run.** A copy of the game-written CD slot
+`477b08b82ecd` was placed at level 8, block 113 with the lamp lit.
+Only these bytes changed (copy `26ce624904cc`).
 
-**CONFIRMED, edited-save run.** In a separate copy of the same
-source, change `+0x254=2D→D0`, `+0x255=02→00`,
-`+0x257=0D→10`, `+0x259=11→06`, `+0x263=00→03` and
-`+0x269=01→08` (`a8b3f6582059`). The active watches were
-armed at level 8 block 208. A westward step triggered block
-207's event (`LEVEL8.INF` DATA words `0x07F9–0x0805`), which
-passes level 7, block 206 and facing 3 to the load helper at
-word `0x045B`. The native I/O trace opened `L07.PAK`, and the
-globals at `DS:7FD0/7FDF/7FE5` then held 206, 3 and 7.
-The three isolated bytes stayed zero with no watch hits on
-that walk and transition. This bounds the result to those
-actions. A different native level or party change could still
-access an isolated byte.
+| Slot offset | Old → new | Field |
+|---|---|---|
+| `0x254/0x255` | `2D 02 → 71 00` | Block 113 |
+| `0x257/0x259` | `0D/11 → 11/03` | High bytes of X and Y (block column 17, row 3) |
+| `0x269` | `01 → 08` | Level 8 |
+| `0x2EF` | `02 → 0E` | Set flags 250 and 251 in the high byte of flag word 15 |
+| `0x461` | `00 → 02` | Oil, 2 |
+| `0x462` | `00 → FF` | Lamp effect 0xFF, which makes the lamp routine redraw at once (`MAIN.EXE+0xFC34`) |
+
+When the watches were attached after the load, the lamp bytes
+`DS:81DC–81DE` were `04 01 07` (brightness 4, oil 1, effect 7). The
+first decrement, 2 → 1, happened before attachment. The oil write
+watch then recorded 1 → 0 with next guest CS:IP `0D5E:0643`. With
+the program loaded at linear `0x1A20`, that is the instruction at
+`MAIN.EXE+0xF9FF`, `dec byte [0x81DD]`. It runs only when flag word 15
+has bits `0x0800` and `0x0400` set and brightness and oil are nonzero
+(gates at `+0xF9E1–0xF9FD`; [oil rules](07_native_rules.md)). The
+game-written slot from this run (`28205f83a55a`, "Dark lamp spent")
+contains `04 00 08` at `+0x460..+0x462` and `0A` at `+0x2EF`, so
+flag 250 was clear when it was saved. Effect 8 is the no-oil value
+of the lamp routine at `+0xFBDC`. The three access watches on
+`DS:7FE4/81DF/8202` hit only in the DOS bulk write (`F000:14A5`).
+All three isolated bytes are zero in that slot. Which code cleared
+flag 250 was not watched.
+
+### Level 8 to level 7 with the isolated bytes watched
+
+**CONFIRMED, edited-save run.** A second copy of the same source
+was placed at level 8, block 208, facing west. Only these bytes
+changed (copy `a8b3f6582059`).
+
+| Slot offset | Old → new | Field |
+|---|---|---|
+| `0x254/0x255` | `2D 02 → D0 00` | Block 208 |
+| `0x257/0x259` | `0D/11 → 10/06` | High bytes of X and Y (block column 16, row 6) |
+| `0x263` | `00 → 03` | Facing west |
+| `0x269` | `01 → 08` | Level 8 |
+
+The watches were armed at block 208. A westward step triggered block
+207's event (`LEVEL8.INF` DATA words `0x07F9–0x0805`), which passes
+level 7, block 206 and facing 3 to the load helper at word `0x045B`
+(`loadNewLevel`). The native I/O trace opened `L07.PAK` (then
+`L06.PAK`), and the globals at `DS:7FD0/7FDF/7FE5` then held 206, 3
+and 7. The three isolated bytes stayed zero with no watch hits on
+that walk and transition. This bounds the result to those actions.
+A different native level or party change could still access an
+isolated byte.

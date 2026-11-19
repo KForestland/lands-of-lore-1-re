@@ -4,6 +4,7 @@ Newest first. One line per question worked on, new tool or visible change; each 
 
 ## 19 November 2026
 
+- **More edited-save runs (Q17 and Q18, both mostly answered).** On a level-8 copy with the lamp lit, the oil ran dry at the instruction the oil rules name, and a walk from level 8 to level 7 was watched; the three isolated save bytes were touched only by the save. A level-27 copy with 500 HP fought the Hatchets under read watches: the critical byte and speed were read, the modifiers and `+0x40` were not. Open: a ranged attack (Q18) and the same events in a game-written save ([edited saves](EDITED_SAVES.md)).
 - **Edited saves (Q7, Q17 and Q18, all mostly answered).** Five runs loaded a copy of a game-written save with a few bytes changed by hand: an oil refill and two portraits on level 1, a wall click on level 8, the pose squares on level 23 and a fight on level 27. Each adds evidence to a probe that stays open; [edited saves](EDITED_SAVES.md) lists what each showed and what a game-written save would still add. The editing rules are on the [save page](savegame_format.md#editing-a-copy-of-an-original-slot). Open: wall bit 0x40 and the mode-11 frame (Q7), the oil-depletion writer and a real two-member party (Q17), and the Hatchet fight (Q18).
 - **Rating.** The running-game line now also says how many answered probes rest on edited saves only; today none do ([how we rate](HOW_WE_RATE.md)).
 - **Picture check.** `example_images.py` also compares the two level schematics in `docs/images` with today's tools.

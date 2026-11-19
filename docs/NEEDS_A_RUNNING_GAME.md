@@ -232,7 +232,7 @@ an unused-byte witness for that play sequence. Keep the watchpoints
 active through the resume following the load. Movement, turning and
 two load/save cycles are covered above.
 
-**CONFIRMED, edited-save run.** The original lamp handler added 100 oil at `MAIN.EXE+0x1065B`. In a separate copy with two character records, the portrait clicks changed the live selected byte. None of the isolated bytes was accessed by those actions in the sampled watches. Lit-lamp depletion and a watched native level transition remain open. [Oil](unknowns/17_native_save_fields.md#level-1-oil-refill-on-an-edited-copy) and [portraits](unknowns/17_native_save_fields.md#selecting-between-two-portraits-in-an-edited-copy)
+**CONFIRMED, edited-save run.** The original lamp handler added 100 oil at `MAIN.EXE+0x1065B`. In a separate copy with two character records, the portrait clicks changed the live selected byte. On an edited level-8 copy with the lamp lit, the oil fell 1 → 0 at `MAIN.EXE+0xF9FF`, and a walk from level 8 to level 7 was watched. None of the isolated bytes was accessed by those actions in the sampled watches, except by the bulk write when saving. Depletion and a level change in a game-written save remain open. [Oil](unknowns/17_native_save_fields.md#level-1-oil-refill-on-an-edited-copy), [portraits](unknowns/17_native_save_fields.md#selecting-between-two-portraits-in-an-edited-copy), [dark lamp](unknowns/17_native_save_fields.md#dark-lamp-depletion-on-an-edited-level-8-copy) and [level change](unknowns/17_native_save_fields.md#level-8-to-level-7-with-the-isolated-bytes-watched)
 
 ### Q18. Which monster definition fields does an actual fight use?
 
@@ -267,7 +267,7 @@ its downstream calculation identifies that word's role. A trace
 containing only the known critical and control reads bounds the
 result to the actions taken.
 
-**CONFIRMED, edited-save run.** A level-27 slot-1 battle read the critical byte and speed at `MAIN.EXE+0xAD87/+0x12744`. The Hatchet slot-2 trial reached defeat without a watch hit. [Byte changes and fight trace](unknowns/18_native_records.md#level-27-fight-from-an-edited-placement)
+**CONFIRMED, edited-save run.** A level-27 slot-1 battle read the critical byte and speed at `MAIN.EXE+0xAD87/+0x12744`. The first Hatchet slot-2 trial reached defeat without a watch hit. A second copy with 500 HP fought the Hatchets under read watches: the critical byte and speed were read (`+0xAD87/+0x12997`), and no read after initialization touched `+0x0C/+0x0E/+0x10` or `+0x40`. The ranged click did not fire, so the ranged attack is still untested. [Byte changes and fight trace](unknowns/18_native_records.md#level-27-fight-from-an-edited-placement) and [Hatchet read watches](unknowns/18_native_records.md#read-watches-on-the-hatchet-definition)
 
 ## Answered probes
 

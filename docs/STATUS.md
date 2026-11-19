@@ -15,7 +15,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (36 checks; 
 
 <!-- rating:begin -->
 - **Files read:** 193 of 199 files in the CD `DATA` folder (288.6 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 489 statements CONFIRMED (proved from the program code or the files) and 77 UNCONFIRMED (a reading not yet proved), on 89 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 492 statements CONFIRMED (proved from the program code or the files) and 78 UNCONFIRMED (a reading not yet proved), on 89 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->

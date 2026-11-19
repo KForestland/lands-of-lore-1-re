@@ -221,9 +221,11 @@ adjacent definition flags +0x3E or ranged fields. The watch
 found no fight-time access to the three modifier words or
 +0x40 and no write to +0x3D in that window.
 
-**UNCONFIRMED, edited-save run.** The actual slot-2 Hatchet trace
-remains open. The block-497 copy restored at the requested position
-but reached defeat before a hit in the four watched spans
+**UNCONFIRMED, edited-save run.** In this first trial the slot-2
+Hatchet trace stayed open (a later run with more hit points is
+[below](#read-watches-on-the-hatchet-definition)). The block-497 copy
+restored at the requested position but reached defeat before a hit
+in the four watched spans
 (`2803:1C08/1C10/1C38/1C40`, eight bytes each, plus load segment).
 A longer-lived native party, with watches armed before the load,
 would capture the first slot-2 attack and more varied ranged/hit
@@ -232,15 +234,29 @@ cases. The slot-1 access record is a separate control.
 ### Read watches on the Hatchet definition
 
 **CONFIRMED, edited-save run.** The English CD original loaded
-`335aa1b42956` from source `477b08b82ecd`. Use the block-497
-placement bytes in the table above and change `+0x85..+0x88`
-from `14 00 14 00` to `F4 01 F4 01` (current and maximum HP,
-20 to 500 in the first 130-byte character row). The visible attackers
+`335aa1b42956` from source `477b08b82ecd`. The copy has the
+block-497 bytes from the [table above](#level-27-fight-from-an-edited-placement)
+and higher hit points; only these bytes changed.
+
+| Slot offset | Old → new | Field |
+|---|---|---|
+| `0x85/0x86` | `14 00 → F4 01` | Current HP, 20 → 500 (first 130-byte character row) |
+| `0x87/0x88` | `14 00 → F4 01` | Maximum HP, 20 → 500 |
+| `0x254/0x255` | `2D 02 → F1 01` | Block 497 |
+| `0x257/0x259` | `0D/11 → 11/0F` | High bytes of X and Y (block column 17, row 15) |
+| `0x263` | `00 → 03` | Facing west |
+| `0x269` | `01 → 1B` | Level 27 |
+
+The visible attackers
 used the two-axe shape. Their slot-2 definition is the bank-1
 record initialized at `L27.PAK+0xAD45`.
 
 The four eight-byte hardware read watches started at
-`2803:1C08/1C10/1C38/1C40` plus the loaded segment. They were armed
+`2803:1C08/1C10/1C38/1C40` plus the loaded segment. The slot-2
+record starts at `2803:1C04` (bank `2803:1B5E` + 2 × 83), so the
+spans cover definition `+0x04–0x0B`, `+0x0C–0x13`, `+0x34–0x3B` and
+`+0x3C–0x43`; the logged initialization stores to `+0x0A`, `+0x0C`
+and `+0x3A` fall in the spans this layout predicts. They were armed
 in the first fight and stayed armed through a reload and a logged
 five-second replay of a forward input, two weapon clicks, an
 inventory pickup and an attempted ranged click. The first fight
