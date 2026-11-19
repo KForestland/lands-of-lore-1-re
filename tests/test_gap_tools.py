@@ -1,5 +1,6 @@
 """Unit tests for the wall assembler, the level map drawing, the monster scan's
-folder handling and the EMC2 listing's broken-pipe handling. Synthetic bytes only;
+folder handling, the EMC2 listing's broken-pipe handling and the blend-table
+palette mix. Synthetic bytes only;
 no game files needed."""
 import os
 import struct
@@ -160,6 +161,29 @@ class Emc2PipeTests(unittest.TestCase):
             rc = p.wait()
         self.assertTrue(first.startswith(b"; big.inf"))
         self.assertEqual((rc, err), (0, b""))
+
+
+class BlendModelTests(unittest.TestCase):
+    """lol1_loose.blend_model on a four-colour palette: black, white and red twice."""
+
+    PALETTE = bytes([0, 0, 0, 63, 63, 63, 63, 0, 0, 63, 0, 0])
+
+    def test_nearest_tie_goes_to_later_index(self):
+        import lol1_loose
+        rgb = lol1_loose.palette_rgb(self.PALETTE)
+        self.assertEqual(lol1_loose.nearest_colour((41, 0, 0), rgb), 3)
+        self.assertEqual(lol1_loose.nearest_colour((21, 21, 21), rgb), 0)
+
+    def test_mix_22_42(self):
+        import lol1_loose
+        table = lol1_loose.blend_model(self.PALETTE)
+        self.assertEqual(len(table), 16)
+        # row 0: (0) + (col*42)>>6; white 63 -> 41, red -> (41, 0, 0)
+        self.assertEqual(list(table[0:4]), [0, 1, 3, 3])
+        # row 1: white*22>>6 = 21 per channel
+        self.assertEqual(list(table[4:7]), [0, 1, 3])
+        # row 2: red*22>>6 = (21, 0, 0)
+        self.assertEqual(list(table[8:11]), [0, 1, 3])
 
 
 if __name__ == "__main__":

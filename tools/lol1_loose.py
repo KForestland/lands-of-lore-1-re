@@ -4,7 +4,9 @@
 A file counts as read when every byte sits in a header, a directory or an
 entry. The six blend tables fail that walk and stay unread. The check pins
 the structure that was measured: the blend-table sizes, the installer status
-text, and the TDINFO tables on each symbol block.
+text, and the TDINFO tables on each symbol block. It also rebuilds both blend
+tables as a self-blend of the paired finale palette (RETURN.CPS for BLEND.TAB,
+FACE.CPS for BLEND2.TAB): all but the last four bytes match.
 
   lol1_loose.py --check
 """
@@ -608,6 +610,53 @@ def index_formula_matches(data):
     return any(matches(formula) for formula in formulas)
 
 
+# Finale scene whose palette each blend table is built from (LOLFINAL.TIM nested
+# function 5 pairs RETURN and RICHARDF with BLEND.TAB, FACE and TAPPING with BLEND2.TAB).
+BLEND_SCENES = {"BLEND.TAB": ("RETURN.CPS", "RICHARDF.CPS"), "BLEND2.TAB": ("FACE.CPS", "TAPPING.CPS")}
+BLEND_MODEL_MATCH = 65532
+BLEND_TRAILER = b"\xe4\xd5\x02\x00"
+
+
+def palette_rgb(palette):
+    """768 palette bytes as 256 (r, g, b) tuples on 6 bits."""
+    return [tuple(value & 63 for value in palette[index * 3:index * 3 + 3]) for index in range(len(palette) // 3)]
+
+
+def nearest_colour(colour, rgb):
+    """Index of the nearest palette colour (squared distance); a tie goes to the later index."""
+    best, chosen = 1 << 30, 0
+    red, green, blue = colour
+    for index, (r, g, b) in enumerate(rgb):
+        distance = (red - r) ** 2 + (green - g) ** 2 + (blue - b) ** 2
+        if distance <= best:
+            best, chosen = distance, index
+    return chosen
+
+
+def blend_model(palette):
+    """table[row*size+col] = nearest colour to ((row*22)>>6) + ((col*42)>>6) per channel."""
+    rgb = palette_rgb(palette)
+    size = len(rgb)
+    rows = [tuple((value * 22) >> 6 for value in colour) for colour in rgb]
+    cols = [tuple((value * 42) >> 6 for value in colour) for colour in rgb]
+    cache, out = {}, bytearray()
+    for row in rows:
+        for col in cols:
+            mixed = (row[0] + col[0], row[1] + col[1], row[2] + col[2])
+            chosen = cache.get(mixed)
+            if chosen is None:
+                chosen = cache[mixed] = nearest_colour(mixed, rgb)
+            out.append(chosen)
+    return bytes(out)
+
+
+def cps_palette(member):
+    """The 768-byte palette of a CPS member, or None."""
+    if len(member) >= 778 and struct.unpack_from("<H", member, 8)[0] == 768:
+        return member[10:778]
+    return None
+
+
 def open_kind(filename, data):
     upper = filename.upper()
     if upper in ("BLEND.TAB", "BLEND2.TAB") and len(data) == 65536:
@@ -802,6 +851,19 @@ def check(data_dir):
         return fail("BLEND.TAB first two rows are equal")
     if index_formula_matches(blends["BLEND.TAB"][0]) or index_formula_matches(blends["BLEND2.TAB"][0]):
         return fail("a blend table matches a 256-by-256 index formula")
+    finale1 = L.read_pak(str(root / "ENG" / "FINALE1.PAK"))
+    model_rates = []
+    for name, scenes in BLEND_SCENES.items():
+        palette = cps_palette(finale1.get(scenes[0], b""))
+        if palette is None or any(cps_palette(finale1.get(other, b"")) != palette for other in scenes[1:]):
+            return fail(f"{name} scene palettes differ or are missing")
+        table, model = blends[name][0], blend_model(palette)
+        same = sum(a == b for a, b in zip(table, model))
+        if same != BLEND_MODEL_MATCH or table[:BLEND_MODEL_MATCH] != model[:BLEND_MODEL_MATCH]:
+            return fail(f"{name} self-blend of {scenes[0]} matches {same} bytes, not the first {BLEND_MODEL_MATCH}")
+        if table[BLEND_MODEL_MATCH:] != BLEND_TRAILER:
+            return fail(f"{name} last four bytes are not E4 D5 02 00")
+        model_rates.append(f"{name} {same} of 65536 from {scenes[0]}")
     palettes = stored_palettes(root)
     if len(palettes) != STORED_PALETTES:
         return fail(f"stored palette count is {len(palettes)}, not {STORED_PALETTES}")
@@ -863,7 +925,8 @@ def check(data_dir):
     print("CHECK loose: 31 files reach the last byte "
           "(3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com, "
           "3 symbol, 3 mz plus symbol tail); "
-          "6 open (6 blend tables)")
+          "6 open (6 blend tables; palette self-blend 22/42 matches "
+          + ", ".join(model_rates) + ", last four bytes E4 D5 02 00 open)")
     return 0
 
 
