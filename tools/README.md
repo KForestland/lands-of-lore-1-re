@@ -317,7 +317,7 @@ CHECK example_images: 3 example images equal today's tool output pixel for pixel
 
 ### `lol1_tim_words.py`
 
-Re-reads the extra TIM argument words. On the CD, nested 0x07 and 0x0D push the operand pointer and a start index, the formatter reads `operand[index]` per `%n`/`%s`/`%d`, and the 14 extra words are 0. On a floppy folder with `MAIN.EXE`, the same pushes are checked and the four nonzero words are 20, 10, 10 and 100.
+Re-reads the extra TIM argument words. On the CD, nested 0x07 and 0x0D push the operand pointer and a start index, the formatter reads `operand[index]` per `%n`, `%s`, `%d`, `%u`, `%x` or `%X` (`%a` reads none), and the 14 extra words are 0. On a floppy folder with `MAIN.EXE`, the same pushes are checked and the four nonzero words are 20, 10, 10 and 100.
 
 ```
 $ python3 tools/lol1_tim_words.py --check

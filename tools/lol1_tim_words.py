@@ -2,7 +2,7 @@
 """Re-prove the extra TIM argument words as formatter operands.
 
 Nested 0x07 and 0x0D push the operand pointer and a start index. The
-formatter reads operand[index] once per %n, %s or %d. Nested 0x03 pushes
+formatter reads operand[index] once per %n, %s, %d, %u, %x or %X (%a reads none). Nested 0x03 pushes
 three words and does not pass the pointer.
 
   lol1_tim_words.py --data DATA --check
