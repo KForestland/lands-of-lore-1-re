@@ -74,7 +74,7 @@ The native attack test follows the embedded stat pointer at `+14`; the monster i
 
 **CONFIRMED** In all 79 original property-load calls per edition, modifier args 6–8 are jointly zero in 50 calls and each is nonzero in 29. A nonzero example is `LEVEL27.INI` at CD `L27.PAK+0xACB9` and floppy `CHAPTER8.PAK+0x3C940`, with inputs 100, 25, 100 and stored words 256, 64, 256. The same decoder finds that arg 28 spans 0–15 and arg 29 spans 20–1000 in both editions. For example, the inputs 10 and 768 in `LEVEL1.INI` leave 768 at `+0x40` because the second write immediately overwrites the first (CD `L01.PAK+0xF3B3`, floppy `CHAPTER1.PAK+0x61B53`, stores above).
 
-**UNCONFIRMED** No writer beyond startup initialization was found for `+0x3D`. A bounded search of direct far loads from instance `+0x21` and its displacement aliases found the hit-test reads above. It also verified speed lookup through the embedded pointer at `+0x14` (CD `+0x12740, +0x12993`, floppy `+0x170DE, +0x17332`), but found no use of modifier offsets `+0x0C–0x10` or the last word at `+0x40` from the same pointer-loading pattern. The CD selector table for EMC getter `0x5C` has no branch for these fields (`+0x1502C–0x150CA`). A watch on those definition fields during the original level-27 fights would distinguish unused fields from accesses through a generic pointer.
+**UNCONFIRMED** (superseded in scope by the [whole-program reference scan](#whole-program-reference-scan) below) No writer beyond startup initialization was found for `+0x3D`. A bounded search of direct far loads from instance `+0x21` and its displacement aliases found the hit-test reads above. It also verified speed lookup through the embedded pointer at `+0x14` (CD `+0x12740, +0x12993`, floppy `+0x170DE, +0x17332`), but found no use of modifier offsets `+0x0C–0x10` or the last word at `+0x40` from the same pointer-loading pattern. The CD selector table for EMC getter `0x5C` has no branch for these fields (`+0x1502C–0x150CA`). A watch on those definition fields during the original level-27 fights would distinguish unused fields from accesses through a generic pointer.
 
 ### Additional native pointer tests
 
@@ -142,9 +142,10 @@ while the same monster takes and deals damage.
 **CONFIRMED** The scan covered every byte of each resident load image
 and every byte of its appended FBOV area. The DOS header size comes from
 file +8 and the resident file end from +2/+4. The FBOV body length
-comes from FBOV +4. Ranges are half-open. In particular, the overlay
-contains the property setter, so a scan of the resident image alone
-would miss all five property stores.
+comes from FBOV +4. Ranges are half-open. The property setter and its five
+stores are in the overlay; they reach the definition through a
+stack-local pointer (`les bx,[bp-4]`), so the scan does not find them by
+access form; the tool pins their bytes at the cited addresses instead.
 
 | Edition | Resident file range | FBOV header and body | Definition bank | Instance-pointer displacement aliases |
 |---|---|---|---|---|
@@ -184,8 +185,8 @@ python3 tools/monster_reference_scan.py --check \
 ```
 
 **UNCONFIRMED** References through computed aliases, stack reloads or
-calls beyond the tracked block. The scan confirms one critical reader
-and the five setter stores in each edition across the tested access
-forms. A read/write watch on the slots above during a level-27 fight
-would resolve the remaining alias question and detect a write to +0x3D
-from outside the proven definition setter.
+calls beyond the tracked block. Among the 57/58 instance-pointer and 7 stat-pointer candidates, the
+only tracked field access is the one +0x3D read; none touches
++0x0C–+0x11 or +0x40–+0x41. The five setter stores are byte-checked in
+the definition setter. A read/write watch on the slots above during a level-27 fight
+would resolve the remaining alias question and detect any write to +0x3D.
