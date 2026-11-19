@@ -21,7 +21,6 @@ from cli_errors import run_cli
 import struct
 import os
 import json
-from PIL import Image
 
 
 import lol1lib as L
@@ -125,6 +124,7 @@ def decode_cps(data):
 
 def cps_to_image(pixels, palette, width=320, height=200):
     """Convert CPS pixels + palette to PIL Image."""
+    from PIL import Image
     if not pixels or not palette:
         return None
     img = Image.new('RGB', (width, height))

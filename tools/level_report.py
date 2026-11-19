@@ -518,12 +518,12 @@ def main():
         os.makedirs(a.out, exist_ok=True)
         rows = []
         for lv, text in pages.items():
-            with open(os.path.join(a.out, f"level{lv:02d}.md"), "w") as f:
+            with open(os.path.join(a.out, f"level{lv:02d}.md"), "w", encoding="utf-8") as f:
                 f.write(text)
             s = stats[lv]
             rows.append(f"| [{lv}](level{lv:02d}.md) | {s['entries']} | {s['items']} | {s['monsters']} | {s['text_ids']} |")
         if not a.level:
-            with open(os.path.join(a.out, "README.md"), "w") as f:
+            with open(os.path.join(a.out, "README.md"), "w", encoding="utf-8") as f:
                 f.write(INDEX + "| Level | Script entries | Items placed | Monsters placed | Text ids |\n|---|---|---|---|---|\n" + "\n".join(rows) + "\n")
         print(f"wrote {len(pages)} sheets to {a.out}")
         return 0

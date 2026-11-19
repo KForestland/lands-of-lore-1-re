@@ -31,20 +31,22 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 ## Quick start (5 minutes)
 
-You need Python 3.8+ and your own copy of the DOS game (CD or floppy edition).
+Use Python 3.8 or later and your own copy of the DOS game (CD or floppy edition). Install Pillow for the image tools and Capstone for the executable reference scan. The full check uses both packages.
 
 ```bash
 git clone https://github.com/KForestland/lands-of-lore-1-re.git
 cd lands-of-lore-1-re
 python3 -m venv .venv && . .venv/bin/activate
-pip install -r requirements.txt                 # Pillow, for PNG output
-export LOL1_DATA=/path/to/your/LOL1/DATA        # the folder holding GENERAL.PAK (CD: DATA; floppy: the install folder)
+python3 -m pip install -r requirements.txt
+export LOL1_DATA="/path/to/your/LOL1/DATA"      # the folder holding GENERAL.PAK (CD: DATA; floppy: the install folder)
 python3 tools/check_all.py                      # 36 checks, ends with ALL 36 CHECKS PASSED
+python3 -m unittest discover -s tests
 python3 tools/level_renderer.py --level 1 --out-dir ../maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
+python3 tools/full_report.py --out "../lol1-out/report"
 ```
 
-The last command prints the first line of level 1's English text: `[0] Welcome to Gladstone Keep.  King Richard awaits you in the throne room.`
+The dialogue command prints `[0] Welcome to Gladstone Keep.  King Richard awaits you in the throne room.` The report command writes an inventory, level sheets and text counts to the named folder. On Windows, use `py -3 -m venv .venv` and `.\.venv\Scripts\python.exe` in place of `python3`. Set `$env:LOL1_DATA = 'D:\Games\LoL1\DATA'` in PowerShell, or pass `--data` with a quoted folder path to each tool.
 
 ## Tools at a glance
 

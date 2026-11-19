@@ -39,7 +39,7 @@ def run_cli(main, *args):
         with open(os.devnull, "w") as sink:
             os.dup2(sink.fileno(), sys.stdout.fileno())
         return 0
-    except (OSError, EOFError, ValueError, struct.error, IndexError, KeyError) as error:
+    except (OSError, EOFError, ImportError, ValueError, struct.error, IndexError, KeyError) as error:
         message = one_line(error) or type(error).__name__
         print(f"{Path(sys.argv[0]).name}: {message}", file=sys.stderr)
         return 1

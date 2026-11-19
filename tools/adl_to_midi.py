@@ -318,7 +318,8 @@ def main():
     if a.out:
         target = Path(a.out).resolve()
         repo = Path(__file__).resolve().parents[1]
-        if target.suffix.lower() != ".mid" or target.is_relative_to(repo) or target.is_relative_to(Path(a.data).resolve()):
+        roots = (repo, Path(a.data).resolve())
+        if target.suffix.lower() != ".mid" or any(target == root or root in target.parents for root in roots):
             ap.error("--out needs a .mid path outside the repository and game data")
     _pak, blob = L.find_member(a.name, a.data)
     adl = Adl(blob)
