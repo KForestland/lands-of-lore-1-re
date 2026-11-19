@@ -2,8 +2,9 @@
 """Walk the CD DATA files that are not PAK or TLK archives.
 
 A file counts as read when every byte sits in a header, a directory or an
-entry. The twelve files that fail that walk stay unread: the check names
-them and pins the signature that was actually found.
+entry. The twelve files that fail that walk stay unread. The check pins the
+structure that was measured: the blend-table sizes, the installer status
+text, and the trailing string pool on each symbol block.
 
   lol1_loose.py --check
 """
@@ -51,7 +52,18 @@ LANDS = {
     "GER/LANDS.EXE": (359418, 148032),
 }
 TDS_SIZE = {"ENG/FINALE.TDS": 210583, "FRE/FINALE.TDS": 210724, "GER/FINALE.TDS": 210724}
+# uint32 at +4: byte length of the trailing NUL-terminated string pool.
+POOL_LEN = {
+    "ENG/FINALE.TDS": 0xA5E4,
+    "FRE/FINALE.TDS": 0xA600,
+    "GER/FINALE.TDS": 0xA600,
+    "ENG/LANDS.EXE": 0xA4F9,
+    "FRE/LANDS.EXE": 0xA515,
+    "GER/LANDS.EXE": 0xA515,
+}
 SYMBOL = b"\xfb\x52\x10\x03"
+BLEND_HEAD = b"\x38\xb6\xb7\xb7\xc1\x3e\x77\x3f"
+BLEND2_HEAD = b"\x13\x13\x8a\x8a\x8c\x0a\x8e\x0b"
 NAME_PINS = (
     ("HARDRIVE/MAIN.EXE", 0x334DC, b"FILEDATA.FDT\x00"),
     ("HARDRIVE/MAIN.EXE", 0x33C44, b"FILEDATA.FDT\x00ENG.LM\x00FRE.LM\x00GER.LM\x00"),
@@ -402,6 +414,55 @@ def L_path(path):
     return path if hasattr(path, "read_bytes") else Path(path)
 
 
+def string_pool_reaches_end(block, pool_len):
+    """True when the last pool_len bytes are packed printable strings ending at EOF."""
+    if len(block) < 8 or block[:4] != SYMBOL:
+        return False
+    if struct.unpack_from("<I", block, 4)[0] != pool_len:
+        return False
+    if pool_len < 8 or pool_len >= len(block):
+        return False
+    pos = len(block) - pool_len
+    count = 0
+    while pos < len(block):
+        end = pos
+        while end < len(block) and 32 <= block[end] < 127:
+            end += 1
+        if end == pos or end >= len(block) or block[end] != 0:
+            return False
+        pos = end + 1
+        count += 1
+    return count > 0
+
+
+def index_formula_matches(data):
+    """True when a 256-by-256 index formula reproduces every byte."""
+    if len(data) != 65536:
+        return False
+
+    def matches(formula):
+        for index, value in enumerate(data):
+            if value != (formula(index >> 8, index & 255) & 255):
+                return False
+        return True
+
+    formulas = (
+        lambda row, col: min(row, col),
+        lambda row, col: max(row, col),
+        lambda row, col: (row + col) // 2,
+        lambda row, col: (row + col + 1) // 2,
+        lambda row, col: (row * col) // 255,
+        lambda row, col: (row * col) >> 8,
+        lambda row, col: row + col,
+        lambda row, col: row - col,
+        lambda row, col: row | col,
+        lambda row, col: row & col,
+        lambda row, col: row ^ col,
+        lambda row, col: row if row > col else col,
+    )
+    return any(matches(formula) for formula in formulas)
+
+
 def open_kind(filename, data):
     upper = filename.upper()
     if upper in ("BLEND.TAB", "BLEND2.TAB") and len(data) == 65536:
@@ -517,11 +578,17 @@ def check(data_dir):
             tail = data[declared:]
             if len(tail) in struct.unpack_from("<16I", tail, 0):
                 return fail(f"{rel} tail length is a header dword")
+            if struct.unpack_from("<I", tail, 0x20)[0] != declared:
+                return fail(f"{rel} tail +0x20 is not the file offset of the tail")
+            if not string_pool_reaches_end(tail, POOL_LEN[rel]):
+                return fail(f"{rel} string pool does not reach the last byte")
         elif rel in TDS_SIZE:
             if len(data) != TDS_SIZE[rel] or data[:4] != SYMBOL:
                 return fail(f"{rel} differs")
             if len(data) in struct.unpack_from("<16I", data, 0):
                 return fail(f"{rel} length is a header dword")
+            if not string_pool_reaches_end(data, POOL_LEN[rel]):
+                return fail(f"{rel} string pool does not reach the last byte")
         else:
             return fail(f"unexpected open file {rel}")
     if len(blends["BLEND.TAB"]) != 3 or len(blends["BLEND2.TAB"]) != 3:
@@ -532,6 +599,14 @@ def check(data_dir):
         return fail("BLEND2.TAB copies differ")
     if blends["BLEND.TAB"][0] == blends["BLEND2.TAB"][0]:
         return fail("BLEND.TAB and BLEND2.TAB are the same bytes")
+    if not blends["BLEND.TAB"][0].startswith(BLEND_HEAD) or not blends["BLEND2.TAB"][0].startswith(BLEND2_HEAD):
+        return fail("blend table head differs")
+    if blends["BLEND2.TAB"][0][:256] != blends["BLEND2.TAB"][0][256:512]:
+        return fail("BLEND2.TAB first two rows differ")
+    if blends["BLEND.TAB"][0][:256] == blends["BLEND.TAB"][0][256:512]:
+        return fail("BLEND.TAB first two rows are equal")
+    if index_formula_matches(blends["BLEND.TAB"][0]) or index_formula_matches(blends["BLEND2.TAB"][0]):
+        return fail("a blend table matches a 256-by-256 index formula")
     ending = b"FILECHNG\x00new_size\x00.\\FILECHNG.C\x00"
     lands = left["ENG/LANDS.EXE"][1]
     if not left["ENG/FINALE.TDS"][1].endswith(ending) or not lands[mz_declared(lands):].endswith(ending):
@@ -565,6 +640,8 @@ def check(data_dir):
     for needle in ABSENT_NEEDLES:
         if any(needle in blob for blob in scanned):
             return fail(f"{needle.decode()} occurs in a scanned program")
+    if any(BLEND_HEAD in blob or BLEND2_HEAD in blob for blob in scanned):
+        return fail("a blend-table head occurs in a scanned program")
     print("CHECK loose: 25 files reach the last byte "
           "(3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com); "
           "12 open (6 blend tables, 3 symbol files, 3 LANDS tails)")

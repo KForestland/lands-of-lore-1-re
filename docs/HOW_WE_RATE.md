@@ -19,7 +19,10 @@ is the whole file, an MZ stub plus LE (Windows VxD) program, an MZ program
 whose FBOV overlay body reaches the end, a file of whole text lines, or the
 one COM program image. Files the walk refuses stay unread. The loose walk is
 credited only on the CD layout (a `DATA` folder with `L01.PAK`, the same test
-`lol1_loose.py` uses); on a floppy copy only PAK archives count. The [loose-file page](formats/loose.md) names the twelve
+`lol1_loose.py` uses); on a floppy copy only PAK archives count. A measured tail is not enough: the symbol blocks end in a
+string pool whose length is the uint32 at byte 4, and the blend tables are
+65536 bytes that no index formula here reproduces, and neither fact puts
+those files in the count. The [loose-file page](formats/loose.md) names the twelve
 CD files still in that set and the test that would finish each one. The rating
 is counted on the CD edition; `--check` does not compare it on a floppy copy. It
 does **not** mean that every entry inside is decoded or understood; the
