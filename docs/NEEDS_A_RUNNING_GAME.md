@@ -174,6 +174,13 @@ calls accessed the three isolated bytes, which stayed zero at
 `+0x268/+0x463/+0x486` in both new slots.
 [Watch and native saves](unknowns/17_native_save_fields.md#cd-level-1-lamp-effect-reset)
 
+**CONFIRMED, level-1 selected-character control.** The guard and
+audience route reached block 273. The original overlay at
+`MAIN.EXE+0x4C4AA/+0x4C4CB` twice changed the selected byte
+0 → 99 → 0 with no access to the three isolated bytes. The native
+save from block 272 still had one active character.
+[Native stores, slot offsets and second-portrait test](unknowns/17_native_save_fields.md#cd-level-1-selected-character-control)
+
 **UNCONFIRMED.** Any byte-specific writer or reader. Start a new
 game, arm read and write watches after initialization, change the
 active character and lamp state, enter another level, then save,
@@ -182,7 +189,7 @@ live values. A byte-specific access outside that path identifies a
 new producer or consumer. A stable zero and only bulk copies give
 an unused-byte witness for that play sequence. Keep the watchpoints
 active through the resume following the load. Movement, turning and
-two load/save cycles are covered above. Not reached yet: an active oil or brightness change, a party change and a level change.
+two load/save cycles are covered above. Not reached yet: an active oil or brightness change, a choice between two active portraits and a level change.
 
 ### Q18. Which monster definition fields does an actual fight use?
 
