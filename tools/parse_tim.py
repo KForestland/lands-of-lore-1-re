@@ -507,4 +507,8 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except FileNotFoundError as exc:
+        print(f"parse_tim.py: {exc}", file=sys.stderr)
+        sys.exit(1)
