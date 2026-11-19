@@ -335,11 +335,11 @@ CHECK name_callers: FINALE.EXE+0x1D1D0 is the 00000.VOC catalog row (44115 bytes
 
 ### `lol1_loose.py`
 
-Walks the CD `DATA` files that are not PAK or TLK archives. Twenty-five reach their last byte (font, string table, archive inventory, icon, PIF, MZ image, FBOV overlay, text lines, COM image). Twelve stay open: the blend tables, the symbol files and the `LANDS.EXE` tails. On a floppy folder the check returns without comparing.
+Walks the CD `DATA` files that are not PAK or TLK archives. Twenty-five reach their last byte (font whose parts tile the file, string table, archive inventory, icon, PIF, MZ image with its relocation table inside the header, MZ stub plus LE VxD, FBOV overlay with its directory row count, text lines, COM image). Twelve stay open: the blend tables, the symbol files and the `LANDS.EXE` tails. On a floppy folder the check returns without comparing, and `rating.py` credits loose files only on the CD layout.
 
 ```
 $ python3 tools/lol1_loose.py --check
-CHECK loose: 25 files reach the last byte (3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 7 mz, 2 overlay, 1 text, 1 com); 12 open (6 blend tables, 3 symbol files, 3 LANDS tails)
+CHECK loose: 25 files reach the last byte (3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com); 12 open (6 blend tables, 3 symbol files, 3 LANDS tails)
 ```
 
 ### `repo_guard.py`

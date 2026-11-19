@@ -29,7 +29,7 @@ Use: FONT9P/FONT6P are the normal fonts (`engines/kyra/engine/lol.cpp:596-597`, 
 `tools/fnt_reader.py --check`:
 - CD: `FONT6PN 226 glyphs 172 drawn h6; FONT9PN 226/172 h9; FONT6P 226/172 h6; FONT9P 226/172 h9, bad=none` (size field = file size, every glyph inside the file and inside the font height).
 - CD ENG: adds `INTRO.FNT 174 glyphs 170 drawn h19; NEW6P.FNT 226/172 h8; NEW8P.FNT 226/172 h11`.
-- The loose copies `ENG/NEW6P.FNT`, `FRE/NEW6P.FNT` and `GER/NEW6P.FNT` are byte-identical, 3213 bytes, and the same font. `tools/lol1_loose.py` reads them to the last byte.
+- The loose copies `ENG/NEW6P.FNT`, `FRE/NEW6P.FNT` and `GER/NEW6P.FNT` are byte-identical, 3213 bytes, and the same font. `tools/lol1_loose.py` checks that header, descriptor, offset table, width table, glyph bitmaps and height table tile the file with no gap or overlap.
 - floppy: FONT6P, FONT9P, FONT9PN have **128 glyphs** (all drawn); FONT6PN 226. Edition difference CONFIRMED.
 
 The memo's "226 glyphs per font, 172 with bitmaps" holds for the CD fonts only.

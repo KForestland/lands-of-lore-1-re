@@ -79,7 +79,38 @@ ABSENT_FROM = (
     "ENG/LANDS.EXE", "FRE/LANDS.EXE", "GER/LANDS.EXE",
     "ENG/FINALE.EXE", "FRE/FINALE.EXE", "GER/FINALE.EXE", "DRIVERS.PAK",
 )
-ABSENT_NEEDLES = (b"BLEND", b".TAB", b"STATE.RST")
+# Compared case-insensitively. INSTALL.EXE does contain the word "blend" (pinned below as
+# INSTALL_BLEND), so the needles are the file names, not the word.
+ABSENT_NEEDLES = (b"blend.tab", b"blend2.tab", b".tab", b"state.rst")
+# INSTALL.EXE string-table entries (byte-length prefixed) 1049 and 1050 of the English block.
+INSTALL_BLEND = (
+    (0x12ABF, b"\x1eCreating intro blend tables..."),
+    (0x12ADE, b"\x1fCreating finale blend tables..."),
+)
+# ENG/FINALE2.PAK: LOLFINAL.TIM TEXT strings 3 and 30, and the nested 0x19 function 6
+# instructions that pass those string indexes (length 5, delay 0, opcode 0x0119, 6, index).
+FINALE_BLEND = (
+    (0xC9D0D, b"FORM"),
+    (0xCAF7B, b"BLEND.TAB\x00"),
+    (0xCB08F, b"BLEND2.TAB\x00"),
+    (0xC9D49, bytes.fromhex("05000000190106000300")),
+    (0xCA45B, bytes.fromhex("05000000190106001e00")),
+)
+VISBIOS_PINS = (
+    (0x1C4, b"VIS video emulation"),
+    (0x215, b"VIS synthesizer"),
+    (0x513F, b"Installed OK."),
+    (0x5151, b"VIS BIOS Extensions for Sensation"),
+    (0x519F, b"Tandy Corporation"),
+)
+# LE header of the two Windows VxDs: file offset of LE, page count, last page bytes,
+# data pages offset, non-resident name table offset and length.
+LE_FIELDS = {
+    "HARDRIVE/VDSPD.386": (0x80, 3, 641, 0x800, 0x2A81, 55),
+    "HARDRIVE/VWWSD.386": (0x80, 2, 201, 0x400, 0x14C9, 50),
+}
+# FBOV directory rows (8 bytes) and the program name that follows the last row.
+FBOV_ROWS = {"HARDRIVE/MAIN.EXE": (0x127, b"main.exe\x00"), "HARDRIVE/MAINW.EXE": (0x127, b"mainw.exe\x00")}
 PALETTE_ROWS = (
     (122, b"ALTPAL3.PAL", 0x1B8B5),
     (204, b"CAV_PLT2.PAL", 0x1D72C),
@@ -102,18 +133,39 @@ def header_bytes(data):
 
 
 def font_covers(data):
+    """The font's parts tile the file with no gap and no overlap.
+
+    Header 0..14 (seven words), descriptor D..D+6, bitmap-offset table (2 bytes per
+    glyph), width table (1 byte per glyph), glyph bitmaps, height table (2 bytes per
+    glyph). Glyphs may share one bitmap offset; a shared bitmap spans the largest
+    size that points at it. The bitmaps must tile their region on their own.
+    """
     try:
         header, glyphs = fnt_reader.parse(data)
+        size, sig, desc, offsets, widths, _field10, heights = struct.unpack_from("<7H", data, 0)
     except (struct.error, IndexError, ValueError):
         return False
-    if header["signature"] != "0x500" or header["size_field"] != len(data):
+    if header["signature"] != "0x500" or size != len(data):
         return False
     if any(item["top"] + item["rows"] > header["height"] for item in glyphs):
         return False
-    return all(
-        not item["offset"] or item["offset"] + ((item["width"] + 1) // 2) * item["rows"] <= len(data)
-        for item in glyphs
-    )
+    count = len(glyphs)
+    bitmaps = {}
+    for item in glyphs:
+        if item["offset"]:
+            span = ((item["width"] + 1) // 2) * item["rows"]
+            bitmaps[item["offset"]] = max(bitmaps.get(item["offset"], 0), span)
+    if not bitmaps:
+        return False
+    parts = [(0, 14), (desc, desc + 6), (offsets, offsets + 2 * count), (widths, widths + count),
+             (heights, heights + 2 * count)]
+    parts += [(start, start + span) for start, span in bitmaps.items()]
+    cursor = 0
+    for start, end in sorted(parts):
+        if start != cursor or end <= start:
+            return False
+        cursor = end
+    return cursor == len(data)
 
 
 def strings_cover(data):
@@ -153,6 +205,8 @@ def inventory_covers(data):
     if pool % 20 or pool < 20 or pool >= len(data):
         return False
     rows = pool // 20
+    if rows != 1275:
+        return False
     if data[(rows - 1) * 20:rows * 20] != b"\0" * 20:
         return False
     cursor = pool
@@ -225,9 +279,62 @@ def pif_covers(data):
 
 
 def mz_exact(data):
+    """The MZ page fields declare the whole file and the relocation table fits in the header."""
     declared = mz_declared(data)
-    header = header_bytes(data) if declared is not None else 0
+    if declared is None:
+        return False
+    header = header_bytes(data)
+    count, table = struct.unpack_from("<H", data, 6)[0], struct.unpack_from("<H", data, 0x18)[0]
+    if not (0x1C <= table and table + 4 * count <= header):
+        return False
     return declared == len(data) and 0x1C <= header < len(data)
+
+
+def le_covers(data):
+    """MZ stub + LE (Windows VxD) program.
+
+    The MZ word at 0x3C points at `LE`. The loader and fixup sections end before
+    the data pages, the gap up to the data pages is zero, the data pages
+    ((pages - 1) * page size + last page bytes) end where the non-resident name
+    table starts, and that table ends on the last byte.
+    """
+    if not mz_exact(data) or len(data) < 0x40:
+        return False
+    le = struct.unpack_from("<I", data, 0x3C)[0]
+    if le < header_bytes(data) or le + 0x90 > len(data) or data[le:le + 4] != b"LE\0\0":
+        return False
+
+    def field(offset):
+        return struct.unpack_from("<I", data, le + offset)[0]
+
+    pages, page_size, last = field(0x14), field(0x28), field(0x2C)
+    loader_end = le + field(0x40) + field(0x38) + field(0x30)
+    data_pages, names, names_size = field(0x80), field(0x88), field(0x8C)
+    if not pages or not 0 < last <= page_size or not loader_end <= data_pages:
+        return False
+    if data[loader_end:data_pages].strip(b"\0"):
+        return False
+    return data_pages + (pages - 1) * page_size + last == names and names + names_size == len(data)
+
+
+def fbov_rows(data):
+    """Rows of the FBOV directory: 8 bytes each (uint16 segment, size, kind, adjust).
+
+    Walks rows while the segment field does not decrease; returns the row count
+    and whether the last row's segment * 16 + header + size is the MZ image end.
+    """
+    declared = mz_declared(data)
+    directory = struct.unpack_from("<I", data, declared + 8)[0]
+    header = header_bytes(data)
+    rows, previous = 0, -1
+    while directory + 8 * (rows + 1) <= declared:
+        segment = struct.unpack_from("<H", data, directory + 8 * rows)[0]
+        if segment < previous or header + segment * 16 >= declared:
+            break
+        previous = segment
+        rows += 1
+    segment, size = struct.unpack_from("<HH", data, directory + 8 * (rows - 1))
+    return rows, header + segment * 16 + size == declared
 
 
 def overlay_covers(data):
@@ -278,7 +385,9 @@ def covers(filename, data):
         return text_covers(data)
     if suffix == "COM":
         return com_covers(data)
-    if suffix in ("EXE", "386"):
+    if suffix == "386":
+        return le_covers(data)
+    if suffix == "EXE":
         return mz_exact(data) or overlay_covers(data)
     return False
 
@@ -335,9 +444,17 @@ def check(data_dir):
     fonts = [read[f"{lang}/NEW6P.FNT"] for lang in ("ENG", "FRE", "GER")]
     if fonts[0] != fonts[1] or fonts[1] != fonts[2]:
         return fail("the three NEW6P.FNT copies differ")
+    if not font_covers(fonts[0]):
+        return fail("NEW6P.FNT parts do not tile the file")
     header, glyphs = fnt_reader.parse(fonts[0])
     if header["glyphs"] != 226 or header["height"] != 8 or len(fonts[0]) != 3213:
         return fail("NEW6P.FNT is not the 226-glyph height-8 font of 3213 bytes")
+    for rel, (le, pages, last, data_pages, names, names_size) in LE_FIELDS.items():
+        data = read[rel]
+        fields = struct.unpack_from("<I", data, 0x3C)[0], *(
+            struct.unpack_from("<I", data, le + offset)[0] for offset in (0x14, 0x2C, 0x80, 0x88, 0x8C))
+        if fields != (le, pages, last, data_pages, names, names_size) or not le_covers(data):
+            return fail(f"{rel} LE layout differs")
     for rel, (size, header_len) in MZ_EXACT.items():
         data = read[rel]
         if len(data) != size or header_bytes(data) != header_len or not mz_exact(data):
@@ -348,6 +465,15 @@ def check(data_dir):
     main, mainw = read["HARDRIVE/MAIN.EXE"], read["HARDRIVE/MAINW.EXE"]
     if mz_declared(main) != 248896 or struct.unpack_from("<III", main, 248896 + 4) != (0x1A5F0, 0x2FC50, 0x127):
         return fail("MAIN.EXE FBOV header differs")
+    for rel, (rows, name) in FBOV_ROWS.items():
+        blob = read[rel]
+        directory = struct.unpack_from("<I", blob, mz_declared(blob) + 8)[0]
+        third = struct.unpack_from("<I", blob, mz_declared(blob) + 12)[0]
+        walked, ends = fbov_rows(blob)
+        if walked != rows or third != rows or not ends:
+            return fail(f"{rel} FBOV directory is not {rows:#x} rows ending at the MZ image end")
+        if blob[directory + 8 * rows:directory + 8 * rows + len(name)] != name:
+            return fail(f"{rel} FBOV directory is not followed by its program name")
     if len(main) != 356928:
         return fail("MAIN.EXE length differs")
     if mz_declared(mainw) != 247328 or struct.unpack_from("<III", mainw, 247328 + 4) != (0x19B60, 0x2F710, 0x127):
@@ -423,13 +549,24 @@ def check(data_dir):
     for offset, needle in INSTALL_PINS:
         if install[offset:offset + len(needle)] != needle:
             return fail(f"installer pin +{offset:#x} differs")
-    scanned = [(root / rel).read_bytes() for rel in ABSENT_FROM]
-    scanned.append(install)
+    for offset, needle in INSTALL_BLEND:
+        if install[offset:offset + len(needle)] != needle:
+            return fail(f"installer blend string +{offset:#x} differs")
+    finale2 = (root / "ENG" / "FINALE2.PAK").read_bytes()
+    for offset, needle in FINALE_BLEND:
+        if finale2[offset:offset + len(needle)] != needle:
+            return fail(f"ENG/FINALE2.PAK+{offset:#x} differs")
+    visbios = read["HARDRIVE/VISBIOS.COM"]
+    for offset, needle in VISBIOS_PINS:
+        if visbios[offset:offset + len(needle)] != needle:
+            return fail(f"VISBIOS.COM+{offset:#x} differs")
+    scanned = [(root / rel).read_bytes().lower() for rel in ABSENT_FROM]
+    scanned.append(install.lower())
     for needle in ABSENT_NEEDLES:
         if any(needle in blob for blob in scanned):
             return fail(f"{needle.decode()} occurs in a scanned program")
     print("CHECK loose: 25 files reach the last byte "
-          "(3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 7 mz, 2 overlay, 1 text, 1 com); "
+          "(3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com); "
           "12 open (6 blend tables, 3 symbol files, 3 LANDS tails)")
     return 0
 

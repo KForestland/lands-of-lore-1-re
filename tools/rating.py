@@ -59,8 +59,11 @@ def files_read(data_dir):
     """Every file under the DATA folder, sub-folders included.
 
     PAK and TLK archives count when pak_covered() holds. Any other file counts when
-    lol1_loose.covered() walks it to the last byte.
+    lol1_loose.covered() walks it to the last byte, on the CD layout only (the
+    loose walk and its pinned check are made for the CD DATA folder; a floppy
+    copy keeps the PAK/TLK count alone).
     """
+    loose = lol1lib.is_cd_layout(data_dir)
     total = read = total_bytes = read_bytes = 0
     for path in sorted(p for p in Path(data_dir).rglob("*") if p.is_file()):
         size = path.stat().st_size
@@ -69,7 +72,7 @@ def files_read(data_dir):
         if path.suffix.lower() in (".pak", ".tlk") and pak_covered(path):
             read += 1
             read_bytes += size
-        elif lol1_loose.covered(path):
+        elif loose and lol1_loose.covered(path):
             read += 1
             read_bytes += size
     return read, total, read_bytes, total_bytes
@@ -119,8 +122,9 @@ def rating(data_dir):
     confirmed, unconfirmed, pages = labels()
     seen, needed = probes()
     answered, mostly, partly, count = questions()
+    folder = "the CD `DATA` folder" if lol1lib.is_cd_layout(data_dir) else "the floppy game folder"
     return [
-        f"- **Files read:** {read} of {total} files in the CD `DATA` folder ({read_bytes / 2**20:,.1f} of {total_bytes / 2**20:,.1f} MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).",
+        f"- **Files read:** {read} of {total} files in {folder} ({read_bytes / 2**20:,.1f} of {total_bytes / 2**20:,.1f} MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).",
         f"- **Rules traced:** the pages mark {confirmed:,} statements CONFIRMED (proved from the program code or the files) and {unconfirmed:,} UNCONFIRMED (a reading not yet proved), on {pages} current pages; old notes kept as history are not counted.",
         f"- **Seen in the running game:** {seen} of {needed} questions that can only be settled by watching the original game run are settled.",
         f"- **Open questions:** {count} numbered questions: {answered} answered, {mostly} mostly answered, {partly} partly answered.",

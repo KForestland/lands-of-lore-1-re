@@ -15,9 +15,11 @@ the first member (after its zero terminator) and the members reach the end
 of the file. A file that is not a PAK or a TLK counts when `tools/lol1_loose.py`
 walks it to the last byte: a DOS font, a uint16 string table, the archive
 inventory, a Windows icon, a Windows PIF, an MZ program whose declared image
-is the whole file, an MZ program whose FBOV overlay body reaches the end, a
-file of whole text lines, or the one COM program image. Files the walk
-refuses stay unread. The [loose-file page](formats/loose.md) names the twelve
+is the whole file, an MZ stub plus LE (Windows VxD) program, an MZ program
+whose FBOV overlay body reaches the end, a file of whole text lines, or the
+one COM program image. Files the walk refuses stay unread. The loose walk is
+credited only on the CD layout (a `DATA` folder with `L01.PAK`, the same test
+`lol1_loose.py` uses); on a floppy copy only PAK archives count. The [loose-file page](formats/loose.md) names the twelve
 CD files still in that set and the test that would finish each one. The rating
 is counted on the CD edition; `--check` does not compare it on a floppy copy. It
 does **not** mean that every entry inside is decoded or understood; the
