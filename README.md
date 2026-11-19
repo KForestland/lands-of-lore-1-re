@@ -9,6 +9,7 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 - **What this is:** documentation of every type of data file and the main rules of the original 1993 DOS game (CD and floppy editions), checked against the game files and the original program.
 - **What you can do today:** read every file type with a tool (pictures, sprites, animations, sound, speech, music, fonts, text, maps, scripts, saves), draw any level, disassemble every level script, and look up how combat, magic and monsters work.
 - **Start in five minutes:** the [Quick start](#quick-start-5-minutes) below, then [Start here, by goal](docs/START_HERE.md), [How the game works](docs/HOW_THE_GAME_WORKS.md) or the [worked example](docs/tutorial-one-event.md).
+- **Recipes:** [cookbook](docs/COOKBOOK.md), eight short runs with the command and the first lines it prints.
 - **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md) and counted in the [rating](#rating). Some can only be settled by watching the original game run; [those checks](docs/NEEDS_A_RUNNING_GAME.md) are done for level 1, and the rest need saved games from levels 8, 23 and 27.
 - **What changed lately:** [what's new](docs/WHATS_NEW.md), newest first.
 - **The three games:** [LoL1](https://github.com/KForestland/lands-of-lore-1-re) · [LoL2](https://github.com/KForestland/lands-of-lore-2-re) · [LoL3](https://github.com/KForestland/Lands-of-lore-3-re) ([what they share](docs/series-formats.md), [how the engine changed](docs/engine-evolution.md)).
@@ -23,7 +24,7 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- rating:begin -->
 - **Files read:** 187 of 199 files in the CD `DATA` folder (287.0 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 473 statements CONFIRMED (proved from the program code or the files) and 70 UNCONFIRMED (a reading not yet proved), on 88 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 473 statements CONFIRMED (proved from the program code or the files) and 70 UNCONFIRMED (a reading not yet proved), on 89 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 5 probes that need the original game running are answered (a question can have more than one probe).
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->

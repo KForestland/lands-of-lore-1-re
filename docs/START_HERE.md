@@ -9,7 +9,7 @@ export LOL1_DATA=/path/to/your/LOL1/DATA
 python3 tools/check_all.py        # 36 checks; the last line should read ALL 36 CHECKS PASSED
 ```
 
-Words you do not know are in the [glossary](GLOSSARY.md). The examples write into folders such as `maps/`: run them from a folder outside the clone, or give paths outside it, so nothing from your game ends up in the repository. To contribute, see [CONTRIBUTING](../CONTRIBUTING.md).
+Words you do not know are in the [glossary](GLOSSARY.md). Short worked commands, with the first lines they print, are in the [cookbook](COOKBOOK.md). The examples write into folders such as `maps/`: run them from a folder outside the clone, or give paths outside it, so nothing from your game ends up in the repository. To contribute, see [CONTRIBUTING](../CONTRIBUTING.md).
 
 ## I want to read the level maps
 
