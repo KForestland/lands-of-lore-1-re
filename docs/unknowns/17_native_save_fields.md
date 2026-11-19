@@ -153,3 +153,89 @@ at `L01.PAK+0xDA3B/+0xDA41`. To settle selection, use an original
 slot after a follower has joined. Click the other active portrait,
 watch `DS:7FE3` and the three isolated cells, then check the
 selected byte at slot +0x267 and the four character flags.
+
+### Level-1 oil refill on an edited copy
+
+**CONFIRMED, edited-save run.** In the English CD 1.02 slot from
+block 557 (source SHA-256 prefix `477b08b82ecd`, 82,559 bytes), the
+first trial changed exactly these bytes.
+
+| Slot offset | Old → new | Field |
+|---|---|---|
+| `0x2EF` | `02 → 0E` | Set flags 250 and 251 in the high byte of flag word 15 |
+| `0x460` | `00 → 01` | Brightness |
+| `0x461` | `00 → 1A` | Oil, 26 |
+
+The game loaded the copy (`c9fc6fca866f`), but at block 557 the
+live brightness, oil and effect were `0, 26, 8` at `DS:81DC–81DE`.
+Clicking the lamp reported low oil. The original writer produced
+`5c87f471feb7`, with the same three values at `+0x460..+0x462` and
+high flag byte `0A` at `+0x2EF`. The cleared brightness and flag 250
+leave the oil-decrement gates at `MAIN.EXE+0xF9E9–0xF9F6` closed.
+
+**CONFIRMED, edited-save run.** From the same original slot, the
+refill trial changed only the following bytes. The inventory handle
+names row 11 at `+0x537` in the 16-byte item array; unused rows carry
+bit 15 in the word at row `+0x0E`.
+
+| Slot offset | Old → new | Field |
+|---|---|---|
+| `0x2EF` | `02 → 0A` | Set flag 251 |
+| `0x461` | `00 → 1A` | Oil, 26 |
+| `0x270` | `00 → 0B` | Fourth inventory entry, low byte of handle |
+| `0x542` | `00 → FF` | Item row 11 level, −1 for a carried item |
+| `0x543` | `00 → F8` | Item row 11 property ID, 248 |
+| `0x546` | `80 → 00` | Item row 11 high flag byte, mark in use |
+
+The game loaded the copy (`ca2da634f398`), displayed the oil in the
+fourth inventory cell, and accepted it when clicked onto the lamp.
+A hardware write watch saw `DS:81DD` reach 126 at
+`MAIN.EXE+0x1065B` after `add al, 0x64`. Simultaneous access
+watches on `7FE4`, `81DF` and `8202` fired only in the DOS
+bulk write (`F000:14A5` after the access) when saving. The original
+writer's new slot (`5e0f69a88205`) has `00 7E 08` at
+`+0x460..+0x462`, zeroes at `+0x268/+0x463/+0x486` and the used
+oil row is free again (bit 15 at `+0x545`). The character and
+lighting evidence remains scoped to this edited state.
+
+**UNCONFIRMED.** The active oil-depletion event and exact
+brightness-normalization writer. A native save in a dark level
+with flags 250 and 251 set would allow a watch from the load through
+the first `+0xF9FF` decrement and distinguish writes during load
+from writes by a level event.
+
+### Selecting between two portraits in an edited copy
+
+**CONFIRMED, edited-save run.** The native defaults record at
+`MAIN.EXE+0x29DE2..+0x29E63` supplied Timothy's second character
+row at slot `+0xCE..+0x14F` in a copy of `477b08b82ecd`.
+The original row was all zero. The complete byte changes are below.
+The pointer at row `+0x13` was left zero for the loader to rebind
+(`MAIN.EXE+0x48923–0x4898B`); the 11 equipment handles were left
+zero because the default record holds property IDs there.
+
+```text
+offset (hex) : old → new (hex)
+CE:00→01  D0:00→54  D1:00→69  D2:00→6D  D3:00→6F  D4:00→74
+D5:00→68  D6:00→79  DC:00→02  E0:00→16  F6:00→01  F8:00→01
+FA:00→01  FC:00→01  FE:00→01 100:00→01 102:00→01 104:00→01
+107:00→1B 109:00→1B 10B:00→05 10D:00→05 115:00→01 117:00→01
+134:00→03 135:00→02 136:00→01 13A:00→C4 13B:00→09 13E:00→E8
+13F:00→03 142:00→FA
+```
+
+The copy (`f7692902d85c`) showed two portraits in level 1,
+block 557. In that session, clicking right, left, right changed
+`DS:7FE3` from 0 to 1 to 0 to 1 at overlay `3FED:0845` just
+after the store, with no hits on the three isolated-byte access
+watches. The temporary 99 → 0 pair also occurred twice before the
+first persistent store. The attempted menu save produced no new
+slot, so the selection witness is the live watch only.
+
+**UNCONFIRMED, edited-save run.** A separate copy of
+`4bfff15d2666` changed only slot `+0x2D4` from `00` to `80`
+(flag 39, the gate at `L01.PAK+0xD7FD`). Moving east from block
+272 reached the poisoned-king sequence. The trial ended during
+dialogue without a second active portrait or a lead-byte change.
+A native slot after a follower joins would test the selection
+and its persistence through a normal save.

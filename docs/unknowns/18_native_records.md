@@ -191,3 +191,40 @@ only tracked field access is the one +0x3D read; none touches
 +0x0C–+0x11 or +0x40–+0x41. The five setter stores are byte-checked in
 the definition setter. A read/write watch on the slots above during a level-27 fight
 would resolve the remaining alias question and detect any write to +0x3D.
+
+### Level-27 fight from an edited placement
+
+**CONFIRMED, edited-save run.** Two copies of the native CD
+level-1 slot `477b08b82ecd` reached level 27. Both changed
+`+0x269=01→1B`, `+0x255=02→01`, and `+0x263=00→03`
+(level, high block byte and west facing). The additional
+changed bytes were as follows.
+
+| Copy and placement | Slot offset and old → new |
+|---|---|
+| `1fa09b2431df`, block 345 next to slot-1 actors | `0x254=2D→59, 0x257=0D→19, 0x259=11→0A` |
+| `3d99217b84dd`, block 497 next to the shipped slot-2 placement | `0x254=2D→F1, 0x257=0D→11, 0x259=11→0F` |
+
+Slot 1 uses shape bank 0 (`TCABAL.SHP`), set by the
+`L27.PAK+0xACB9` call. Slot 2 uses `HATCHETS.SHP` in bank 1
+(`+0xAD45`), with zero values for the three modifiers. At
+block 345, an active slot-1 row was on adjacent block 344.
+The first trial reached defeat. A reload with the watches
+armed covered definition initialization and attacks with
+the weapon button. The watch at definition +0x3D recorded two
+reads at `MAIN.EXE+0xAD87`. The aligned watches covering
++0x0C/+0x0E/+0x10 and +0x40 recorded the initialization stores
+in `+0x47942–0x479EA` and `+0x47AAD–0x47ADD`. During the
+sampled fight, reads in those aligned spans instead selected
+speed +0x0A (`+0x12744/+0x12997`), other earlier stats, and
+adjacent definition flags +0x3E or ranged fields. The watch
+found no fight-time access to the three modifier words or
++0x40 and no write to +0x3D in that window.
+
+**UNCONFIRMED, edited-save run.** The actual slot-2 Hatchet trace
+remains open. The block-497 copy restored at the requested position
+but reached defeat before a hit in the four watched spans
+(`2803:1C08/1C10/1C38/1C40`, eight bytes each, plus load segment).
+A longer-lived native party, with watches armed before the load,
+would capture the first slot-2 attack and more varied ranged/hit
+cases. The slot-1 access record is a separate control.

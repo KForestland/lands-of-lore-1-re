@@ -149,3 +149,35 @@ Offsets are decimal. **CONFIRMED** The same 17-byte boundaries fit both sets of 
 | 10, 11, 12 | `u8` flying height, direction, distance |
 | 13 | `i8` `field_D` |
 | 14, 15, 16 | `u8` `c`, flags, wall flags |
+
+## Editing a copy of an original slot
+
+**CONFIRMED, edited-save run.** CD 1.02 accepted same-length
+edits to party position (`+0x254/+0x256/+0x258/+0x263`),
+level (`+0x269`), flag words and a referenced item row.
+For a centered position in block `b`, use X =
+`256 × (b mod 32) + 128` and Y = `256 × floor(b / 32) + 128`.
+The level-8 copy loaded at block 113 and the writer saved back
+a level-8 slot with mask `0x81` at `+0x47D` and a 1,554-byte
+level-8 sidecar length at `+0x61E3`. No digest or header stamp was
+recomputed for these edits. This is acceptance by the tested
+CD build, whose fixed-length reads and snapshot loop are at
+`MAIN.EXE+0x48A70–0x48BBF`.
+
+Keep the version header, total size, fixed 2,500-byte stride and
+level-mask/sidecar pairing. A clear destination bit let the
+native loader initialize the three tested levels. For initialized
+levels, the stored wall XOR, flags, monsters and flying objects
+stay associated with their level. An incoming item handle must
+name a valid 16-byte row. The lamp trial set the handle, carried
+level and definition, cleared the row's free flag and kept its
+links zero. The program consumed it and freed the row. Character
+defaults hold equipment property IDs, while saved equipment holds
+row handles. The far pointer at character `+0x13` is rebound on load.
+[Wall recipe](unknowns/07_native_rules.md#level-8-wall-click-from-an-edited-copy)
+and [oil and party recipes](unknowns/17_native_save_fields.md#level-1-oil-refill-on-an-edited-copy).
+
+**UNCONFIRMED.** Whether all native versions accept the same
+classes of edits. The floppy has different header and global
+offsets. A separate native floppy round trip would establish
+acceptance without applying the CD offsets to its shorter block.

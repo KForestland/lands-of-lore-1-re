@@ -289,3 +289,64 @@ Keep a value-10 write watch on +0x14 in an encounter that
 actually enters that mode, and record the native writer and its
 incoming object. The early guard route provides a comparison for
 temporary mode 15.
+
+### Level-8 wall click from an edited copy
+
+**CONFIRMED, edited-save run.** The 82,559-byte English CD 1.02
+level-1 source slot `477b08b82ecd` was copied and changed to level 8,
+block 113 (X 4480, Y 896), facing north. The held handle names item
+row 11 at `+0x537`, with property 169. Only these bytes changed.
+
+| Slot offset | Old → new |
+|---|---|
+| `0x254/0x255` | `2D 02 → 71 00` |
+| `0x257/0x259` | `0D/11 → 11/03` |
+| `0x269` | `01 → 08` |
+| `0x2CC` | `00 → 0B` |
+| `0x542/0x543/0x546` | `00/00/80 → FF/A9/00` |
+
+The original loaded the copy `6ad987e8ceae` at the requested
+block and held the key. Clicking the lock on the south face of
+block 81 (wall ID 48 in `LEVEL8.CMZ`) triggered the wall query
+at `L08.PAK+0xCAA8`. The access watch read `07` for wall ID 2
+at `DS:5320`, with guest CS:IP after the instruction
+`1160:0146`. Load segment `01A2` maps that read to
+`MAIN.EXE+0x13522`. Thus the whole-byte comparison skipped
+the zero arm. A second watch recorded the held handle go to 0
+at `09E7:0B85`, consistent with the script's delete-hand call at
+DATA word `0x0849`. The game wrote a new slot (`faa47c52114f`)
+after the click.
+
+**UNCONFIRMED.** A bit-`0x40` contrast. The saved wall sidecar
+reconstructs wall **IDs**; the flag byte comes from the native
+WLL table. The observed ID-2 byte stayed `07`. A diagnostic
+run with a single controlled WLL flag-byte change would settle
+the branch comparison and could test other accesses to that
+same entry. This save-only trial leaves that contrast open.
+
+### Level-23 pose squares from edited placements
+
+**CONFIRMED, edited-save run.** Two independent copies of
+`477b08b82ecd` booted through the English CD original into level 23.
+Both changed `+0x269` from `01` to `17` (hex). The remaining changes
+were the following, with facing north unchanged at `+0x263`.
+
+| Copy, target | Changed bytes, offset and old → new |
+|---|---|
+| `1eb7014b4606`, block 812 | `0x254=2D→2C, 0x255=02→03, 0x257=0D→0C, 0x259=11→19` |
+| `f85d238ef093`, block 105 | `0x254=2D→69, 0x255=02→00, 0x257=0D→09, 0x259=11→03` |
+
+The first copy reached block 812 and a northward move reached the
+block-780 scene path (`LEVEL23.INF` DATA word `0x0709`).
+The four mode watches recorded only row 0's temporary 4 → 15 → 4
+collision query at `MAIN.EXE+0x11474/+0x114AC`. The second copy
+loaded at the actual pose square, block 105. No active row occupied
+105, 121 or 369 in either of the two samples of the 30-row array at
+CD `2803:15FA` plus the load segment, before and after the wall click
+and attempted move. The party was still on 105 in both samples.
+
+**UNCONFIRMED.** Mode-11 frame selection in a live pose event. A
+nearby party alone did not provide the monster-leaves event
+(`L23.PAK+0xC2AE` for 105). Use a native save with an active monster
+approaching a pose square, then follow that instance from the
+`MAIN.EXE+0x14FC1` setter call into the overlay frame selector.

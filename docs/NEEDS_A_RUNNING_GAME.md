@@ -114,6 +114,11 @@ an additional consumer. A match over this one route bounds that
 route's behavior. Not reached yet: the launch works, but this needs a
 level-8 save (or level 7 before the pit).
 
+**CONFIRMED, edited-save run.** At level 8 block 113 the original
+key click read wall ID 2 as `0x07` at `MAIN.EXE+0x13522`. The
+bit-`0x40` contrast stays open.
+[Byte changes and wall query](unknowns/07_native_rules.md#level-8-wall-click-from-an-edited-copy)
+
 ### Q7b. Which animation actually displays when a script selects mode 11?
 
 Question: [Q7 in OPEN_QUESTIONS](OPEN_QUESTIONS.md).
@@ -142,8 +147,9 @@ bank, selector, direction offset and pending-damage state. Fixed frame
 that fixed arm reached the screen. Any other frame should be accounted
 for by the captured selector or draw flags. A write watch on that
 instance's mode byte +0x14 also distinguishes an actual mode-10
-transition from a frame picked while mode 11 remains set. Not
-reached yet: the launch works, but this needs a level-23 save.
+transition from a frame picked while mode 11 remains set.
+
+**CONFIRMED, edited-save run.** The position edit reached block 105. Neither active-row sample had a monster on a pose square. The mode-11 frame still needs the original monster-leaves event. [Byte changes and live placement](unknowns/07_native_rules.md#level-23-pose-squares-from-edited-placements)
 
 ### Q7c. What writes mode 10 during ordinary play?
 
@@ -216,7 +222,9 @@ live values. A byte-specific access outside that path identifies a
 new producer or consumer. A stable zero and only bulk copies give
 an unused-byte witness for that play sequence. Keep the watchpoints
 active through the resume following the load. Movement, turning and
-two load/save cycles are covered above. Not reached yet: an active oil or brightness change, a choice between two active portraits and a level change.
+two load/save cycles are covered above.
+
+**CONFIRMED, edited-save run.** The original lamp handler added 100 oil at `MAIN.EXE+0x1065B`. In a separate copy with two character records, the portrait clicks changed the live selected byte. None of the isolated bytes was accessed by those actions in the sampled watches. Lit-lamp depletion and a watched native level transition remain open. [Oil](unknowns/17_native_save_fields.md#level-1-oil-refill-on-an-edited-copy) and [portraits](unknowns/17_native_save_fields.md#selecting-between-two-portraits-in-an-edited-copy)
 
 ### Q18. Which monster definition fields does an actual fight use?
 
@@ -249,8 +257,9 @@ control. The known critical read computes `100 − value` (CD
 nonzero write after setup identifies the producer. A word read with
 its downstream calculation identifies that word's role. A trace
 containing only the known critical and control reads bounds the
-result to the actions taken. Not reached on this pass: see the CD
-launch note.
+result to the actions taken.
+
+**CONFIRMED, edited-save run.** A level-27 slot-1 battle read the critical byte and speed at `MAIN.EXE+0xAD87/+0x12744`. The Hatchet slot-2 trial reached defeat without a watch hit. [Byte changes and fight trace](unknowns/18_native_records.md#level-27-fight-from-an-edited-placement)
 
 ## Answered probes
 
