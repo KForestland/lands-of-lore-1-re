@@ -160,9 +160,14 @@ For a centered position in block `b`, use X =
 The level-8 copy loaded at block 113 and the writer saved back
 a level-8 slot with mask `0x81` at `+0x47D` and a 1,554-byte
 level-8 sidecar length at `+0x61E3`. No digest or header stamp was
-recomputed for these edits. This is acceptance by the tested
-CD build, whose fixed-length reads and snapshot loop are at
-`MAIN.EXE+0x48A70–0x48BBF`.
+recomputed for these edits: a native save has no checksum or
+digest field. The sections in the header table account for every
+byte up to the calculated end (`0x1427F`, 82,559 bytes on the CD),
+so an edit must keep each section's length and the file size.
+This is acceptance by the tested
+CD build, whose fixed-length character and global reads are at
+`MAIN.EXE+0x48923–0x48A09` and whose snapshot loop is at
+`+0x48A70–0x48AEC`.
 
 Keep the version header, total size, fixed 2,500-byte stride and
 level-mask/sidecar pairing. A clear destination bit let the

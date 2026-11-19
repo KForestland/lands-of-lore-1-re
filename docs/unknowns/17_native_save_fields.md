@@ -233,7 +233,7 @@ first persistent store. The attempted menu save produced no new
 slot, so the selection witness is the live watch only.
 
 **UNCONFIRMED, edited-save run.** A separate copy of
-`4bfff15d2666` changed only slot `+0x2D4` from `00` to `80`
+`4bfff15d2666` (edited copy `b123e80eef5d`) changed only slot `+0x2D4` from `00` to `80`
 (flag 39, the gate at `L01.PAK+0xD7FD`). Moving east from block
 272 reached the poisoned-king sequence. The trial ended during
 dialogue without a second active portrait or a lead-byte change.

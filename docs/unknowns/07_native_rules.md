@@ -308,7 +308,7 @@ row 11 at `+0x537`, with property 169. Only these bytes changed.
 The original loaded the copy `6ad987e8ceae` at the requested
 block and held the key. Clicking the lock on the south face of
 block 81 (wall ID 48 in `LEVEL8.CMZ`) triggered the wall query
-at `L08.PAK+0xCAA8`. The access watch read `07` for wall ID 2
+at `L08.PAK+0xCAA8` (block 172, face 1). The access watch read `07` for wall ID 2
 at `DS:5320`, with guest CS:IP after the instruction
 `1160:0146`. Load segment `01A2` maps that read to
 `MAIN.EXE+0x13522`. Thus the whole-byte comparison skipped

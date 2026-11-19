@@ -57,6 +57,11 @@ each trace. Starting `MAIN.EXE` by itself does not work: without its one
 argument it takes the refusal branch at file `0x51F00` and exits with
 status 1 at `0x51F9D`.
 
+Edited-save runs used this launch on a private display with host
+audio off. Each run placed one edited copy of a game-written slot as
+`_SAVE000.DAT` in its own scratch install, with one game instance at
+a time. The original slots were not changed.
+
 ### An earlier launch that was refused
 
 **CONFIRMED.** An earlier pass used the DOSBox 0.74-3 debugger,
@@ -111,8 +116,9 @@ Also walk past and click that face from the same state in both runs.
 A changed result only at the whole-byte EMC test is the expected
 control. A second changed branch whose input is bit 0x40 identifies
 an additional consumer. A match over this one route bounds that
-route's behavior. Not reached yet: the launch works, but this needs a
-level-8 save (or level 7 before the pit).
+route's behavior. Not reached yet with a native save: the launch works,
+but the live-byte contrast needs a level-8 save written by the game
+(or level 7 before the pit). An edited copy reached level 8 (below).
 
 **CONFIRMED, edited-save run.** At level 8 block 113 the original
 key click read wall ID 2 as `0x07` at `MAIN.EXE+0x13522`. The
