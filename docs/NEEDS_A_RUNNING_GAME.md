@@ -186,19 +186,26 @@ changed the expected fields in the new slots.
 
 **CONFIRMED, level-1 lamp-effect reset.** The original CD menu's
 store at `MAIN.EXE+0x4DE6C` changed `DS:81DE` from 0 to 0xFF
-while brightness and oil stayed zero. Only the bulk save/load
-calls accessed the three isolated bytes in the watched interval.
-Both new slots read zero at `+0x268/+0x463/+0x486`, and the
-lamp-available flag at +0x2EE mask 0x0800 was clear.
+under GDB hardware watches on a local DOSBox build. Brightness
+and oil read zero in the sampled states; only `DS:81DE` had a
+value watch. Only the bulk save/load calls accessed the three
+isolated bytes in the watched intervals. Both new slots, written
+by the game in this run and not shipped, read zero at
+`+0x268/+0x463/+0x486`. The second slot was written between
+watch sessions, so its values come from the file only. In all
+three slots flag word 15 (+0x2EE) has the lamp-available bit
+0x0800 clear, so this start offers no active-lamp control.
 [Watch and native saves](unknowns/17_native_save_fields.md#cd-level-1-lamp-effect-reset)
 
 **CONFIRMED, level-1 selected-character control.** The guard and
 audience route reached block 273. The original overlay at
 `MAIN.EXE+0x4C4AA/+0x4C4CB` twice changed the selected byte
 0 → 99 → 0 with no access to the three isolated bytes. The native
-save from block 272 still had one active character. The party
-route is gated by flag 39, set by the original level-4 block-73
-event (`L04.PAK+0xB516`).
+save from block 272, written by the game in this run and not
+shipped, still had one active character. A later entry to block
+273 sends the party back to block 272 while flag 39 is clear.
+Flag 39 is first set by the level-4 block-73 event
+(`L04.PAK+0xB516`), so level 1 alone cannot pass this point.
 [Native stores, slot offsets and second-portrait test](unknowns/17_native_save_fields.md#cd-level-1-selected-character-control)
 
 **UNCONFIRMED.** Any byte-specific writer or reader. Start a new

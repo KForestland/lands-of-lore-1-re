@@ -273,15 +273,18 @@ Rows 2 and 3 each changed 1 → 15 → 1 four times. The stores
 were `MAIN.EXE+0x11474` and `+0x114AC` (stop IPs
 `0F0E:05B9/05F0` after the write). The first stores 15 while the
 routine calls the position query at `+0x1149E → 0x111F8`, and
-the second restores the previously saved register byte. Rows 0
+the second restores the old mode, saved on the stack at entry
+(`+0x1146C–0x11471`). Rows 0
 and 1 had no mode changes in the watch. No watched byte became 10.
 
 The native level-1 slot written after the encounter (SHA-256 prefix
-`b4dfac0a61cd`, not shipped) records player block 270 at +0x254.
+`b4dfac0a61cd`, written by the game in this run; not shipped) records player block 270 at +0x254.
 Its four 46-byte monster records at `+0x1DB1/+0x1DDF/+0x1E0D/+0x1E3B`
 hold blocks 589, 524, 239 and 303 at row +5 and mode 1 at row +0x14.
 The visit identifies the temporary collision-probe mode in this
-encounter. **UNCONFIRMED.** The gameplay producer for mode 10.
+encounter. It does not change the result above: no shipped script
+asks for mode 10 and none of the setter's 22 CD callers passes 10.
+**UNCONFIRMED.** The gameplay producer for mode 10.
 Keep a value-10 write watch on +0x14 in an encounter that
 actually enters that mode, and record the native writer and its
 incoming object. The early guard route provides a comparison for

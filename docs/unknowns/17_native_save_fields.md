@@ -83,7 +83,7 @@ roles and the floppy runtime result remain open
 loaded level 1, block 557 (slot +0x269 and +0x254), with
 brightness, oil and lamp effect all zero at slot `+0x460..+0x462`.
 The next two menu saves, from that same block
-(written by the game in this run, not shipped), wrote `00 00 00` (`ecdc069aaa57`)
+(written by the game in this run; not shipped), wrote `00 00 00` (`ecdc069aaa57`)
 and `00 00 FF` (`6dd94ac6ac93`). All three isolated bytes
 (`+0x268/+0x463/+0x486`) were zero in both of those saves.
 
@@ -95,12 +95,16 @@ far call relocated in the running overlay. Read/write watches on
 `DS:7FE4/81DF/8202` saw only bulk file reads and writes at
 `F000:14A5` during this load/save sequence
 (`MAIN.EXE+0x4898D–0x4899D/+0x48B92–0x48BA2`).
-The menu resets the effect byte during the watched interval,
-and brightness and oil were zero in the sampled states. The
+The menu resets the effect byte during the watched interval.
+Only `DS:81DE` had a value watch: brightness and oil were zero
+in the sampled states, not watched throughout. The menu and
+rest-button clicks between the sessions have no log. The
 second menu save (`6dd94ac6ac93`) was written between watch
-sessions, so its isolated-byte values come from the slot. In all
-three slots the word at +0x2EE has mask `0x0800` clear, the
-lamp-availability test at `MAIN.EXE+0xBF56`.
+sessions, so its isolated-byte values are confirmed from the
+file only. In all three slots flag word 15 (+0x2EE) has the
+lamp-available bit `0x0800` clear, the bit tested at
+`MAIN.EXE+0xBF56`. That is why this start offers no active-lamp
+control.
 
 **UNCONFIRMED.** An active lamp or oil change on this route.
 The starting level-1 state provides no lit-lamp control. To
@@ -116,17 +120,20 @@ new slot with the menu-reset control above.
 **CONFIRMED.** Starting at block 557 in the same English CD slot,
 normal movement and two door switches reached the guard in block
 270 and the first audience in block 273 (event instructions
-`L01.PAK+0xD545/+0xD76D`). During the run, GDB hardware watches on a local DOSBox
-build twice saw `DS:7FE3` change 0 → 99 → 0. The overlay offsets within the
+`L01.PAK+0xD545/+0xD76D`). The watches were attached at block
+493; the walk from 557 to 493 was not watched. GDB hardware
+watches on a local DOSBox build then twice saw `DS:7FE3` change
+0 → 99 → 0. The overlay offsets within the
 loaded segment, 0x4A and 0x6B, match the immediate store
 `MAIN.EXE+0x4C4AA` and the saved-byte restoration
 `+0x4C4CB`. The three isolated bytes had no access during the
-two transitions. The first watch ended after the audience. A
-separate watch on the next approach and menu save recorded only
-the bulk save write (`+0x48B92–0x48BA2`).
+two transitions. The first watch ended after the audience, and
+the move from block 273 back to 272 happened between watch
+sessions. A separate watch from block 272 through the menu save
+recorded only the bulk save write (`+0x48B92–0x48BA2`).
 
 The resulting native slot, `4bfff15d2666` (written by the
-game during this run, not shipped), has level 1 and
+game in this run; not shipped), has level 1 and
 block 272 at +0x269/+0x254. Its selected byte +0x267 and all
 three isolated bytes are zero. The four character flags at
 `+0x4C + 130*i` are `1, 0, 0, 0`. This is a live control
@@ -135,10 +142,12 @@ still contains one selectable character.
 
 **UNCONFIRMED.** A selection between two active members. In
 this slot, flag 4 is set at +0x2D0 and flag 39 is clear at
-+0x2D4. The return path at `L01.PAK+0xD7FD` tests flag 39
-and calls the position setter at `+0xD813` with block 272
-when that flag is clear. The original level-4 block-73 event
-sets flag 39 at `L04.PAK+0xB516`. The level-1 block-274
++0x2D4. On a later entry to block 273, after flag 4 is set,
+the block-273 event tests flag 39 at `L01.PAK+0xD7FD`. While it
+is clear, `setGlobalVar(0, 0, 272)` at `+0xD813` puts the party
+back on block 272. Flag 39 is first set by the level-4 block-73
+event (`setGameFlag(39, 1)` at `L04.PAK+0xB516`), so level 1
+alone cannot open this route. The level-1 block-274
 event contains the party calls
 at `L01.PAK+0xDA3B/+0xDA41`. To settle selection, use an original
 slot after a follower has joined. Click the other active portrait,
