@@ -443,11 +443,11 @@ CHECK name_callers: FINALE.EXE+0x1D1D0 is the 00000.VOC catalog row (44115 bytes
 
 ### `lol1_loose.py`
 
-Walks the CD `DATA` files that are not PAK or TLK archives. Twenty-five reach their last byte (font whose parts tile the file, string table, archive inventory, icon, PIF, MZ image with its relocation table inside the header, MZ stub plus LE VxD, FBOV overlay with its directory row count, text lines, COM image). Twelve stay open: the blend tables, the symbol files and the `LANDS.EXE` tails. The check pins the two 65536-byte heads and the trailing string pool on each symbol block. It also reads the 300 stored 768-byte palettes and requires that none has either blend table's diagonal colour, and that the installer, the three finale programs and the three intro-program images contain no `B9 00 01`. On a floppy folder the check returns without comparing, and `rating.py` credits loose files only on the CD layout.
+Walks the CD `DATA` files that are not PAK or TLK archives. Thirty-one reach their last byte (font whose parts tile the file, string table, archive inventory, icon, PIF, MZ image with its relocation table inside the header, MZ stub plus LE VxD, FBOV overlay with its directory row count, text lines, COM image, a TDINFO symbol file, and an MZ image plus a TDINFO tail). Six stay open: the blend tables. The check pins the two 65536-byte heads, the 300 stored 768-byte palettes (109 distinct; `SCROLL.CPS` keeps 240 and 233 diagonal colours), and the TDINFO table walk on each symbol block. It requires that none of those palettes has either blend table's full diagonal, and that the installer, the three finale programs and the three intro-program images contain no `B9 00 01`. On a floppy folder the check returns without comparing, and `rating.py` credits loose files only on the CD layout.
 
 ```
 $ python3 tools/lol1_loose.py --check
-CHECK loose: 25 files reach the last byte (3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com); 12 open (6 blend tables, 3 symbol files, 3 LANDS tails)
+CHECK loose: 31 files reach the last byte (3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com, 3 symbol, 3 mz plus symbol tail); 6 open (6 blend tables)
 ```
 
 ### `exe_tables.py`

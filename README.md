@@ -23,8 +23,8 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 These are counts of work done, not a percentage of how complete the project is. They are produced by `tools/rating.py` on the English CD copy; [how we rate](docs/HOW_WE_RATE.md) explains each line and what it does not claim.
 
 <!-- rating:begin -->
-- **Files read:** 187 of 199 files in the CD `DATA` folder (287.0 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 488 statements CONFIRMED (proved from the program code or the files) and 78 UNCONFIRMED (a reading not yet proved), on 89 current pages; old notes kept as history are not counted.
+- **Files read:** 193 of 199 files in the CD `DATA` folder (288.6 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
+- **Rules traced:** the pages mark 489 statements CONFIRMED (proved from the program code or the files) and 77 UNCONFIRMED (a reading not yet proved), on 89 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe).
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->

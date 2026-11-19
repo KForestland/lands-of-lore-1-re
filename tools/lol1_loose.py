@@ -2,9 +2,9 @@
 """Walk the CD DATA files that are not PAK or TLK archives.
 
 A file counts as read when every byte sits in a header, a directory or an
-entry. The twelve files that fail that walk stay unread. The check pins the
-structure that was measured: the blend-table sizes, the installer status
-text, and the trailing string pool on each symbol block.
+entry. The six blend tables fail that walk and stay unread. The check pins
+the structure that was measured: the blend-table sizes, the installer status
+text, and the TDINFO tables on each symbol block.
 
   lol1_loose.py --check
 """
@@ -28,12 +28,12 @@ COVERED = {
     "HARDRIVE/VDSPD.386", "HARDRIVE/VWWSD.386",
     "HARDRIVE/MAIN.EXE", "HARDRIVE/MAINW.EXE",
     "FRE/STATE.RST", "HARDRIVE/VISBIOS.COM",
+    "ENG/FINALE.TDS", "FRE/FINALE.TDS", "GER/FINALE.TDS",
+    "ENG/LANDS.EXE", "FRE/LANDS.EXE", "GER/LANDS.EXE",
 }
 OPEN = {
     "ENG/BLEND.TAB", "FRE/BLEND.TAB", "GER/BLEND.TAB",
     "ENG/BLEND2.TAB", "FRE/BLEND2.TAB", "GER/BLEND2.TAB",
-    "ENG/FINALE.TDS", "FRE/FINALE.TDS", "GER/FINALE.TDS",
-    "ENG/LANDS.EXE", "FRE/LANDS.EXE", "GER/LANDS.EXE",
 }
 # Declared MZ image size and header length, for the seven files whose image is the whole file.
 MZ_EXACT = {
@@ -76,6 +76,10 @@ BLEND_HEAD = b"\x38\xb6\xb7\xb7\xc1\x3e\x77\x3f"
 BLEND2_HEAD = b"\x13\x13\x8a\x8a\x8c\x0a\x8e\x0b"
 # PAL, COL and 768-byte picture palettes stored in the CD PAK files.
 STORED_PALETTES = 300
+# Distinct byte strings among those 300, and how many of SCROLL.CPS's 256 colours
+# the blend-table diagonal names. The rest of the 300 are language copies.
+DISTINCT_PALETTES = 109
+SCROLL_DIAGONAL = {"BLEND.TAB": 240, "BLEND2.TAB": 233}
 # mov cx, 256. A 256-step loop can be written another way; this only pins this encoding.
 MOV_CX_256 = b"\xb9\x00\x01"
 NAME_PINS = (
@@ -413,8 +417,20 @@ def covers(filename, data):
         return com_covers(data)
     if suffix == "386":
         return le_covers(data)
+    if suffix == "TDS":
+        return symbol_block_covers(data)
     if suffix == "EXE":
-        return mz_exact(data) or overlay_covers(data)
+        if mz_exact(data) or overlay_covers(data):
+            return True
+        declared = mz_declared(data)
+        if declared is None or declared >= len(data) or data[declared:declared + 4] != SYMBOL:
+            return False
+        header = header_bytes(data)
+        count = struct.unpack_from("<H", data, 6)[0]
+        table = struct.unpack_from("<H", data, 0x18)[0]
+        if not (0x1C <= table and table + 4 * count <= header and 0x1C <= header < declared):
+            return False
+        return symbol_block_covers(data[declared:])
     return False
 
 
@@ -450,6 +466,119 @@ def string_pool_reaches_end(block, pool_len, pool_count):
         pos = end + 1
         count += 1
     return count == pool_count
+
+
+def word(block, offset):
+    return struct.unpack_from("<H", block, offset)[0]
+
+
+def symbol_block_covers(block):
+    """True when a TDINFO header's counts size every table and the name pool ends the block.
+
+    The header is 48 bytes plus the extension at +0x2E. Tables then follow, in order:
+    symbols (9), modules (16), source files (6), line numbers (4), scopes (12),
+    segments (16), correlations (8), types (8), members (5), then the extension
+    tables classes (11), parents (2), overloads (8), scope classes (4), module
+    classes (8) and browsers (6), then DataCount bytes from +0x2B. CoverageOffsetCount
+    uint16 values and one uint16 per segment come next. Zero bytes run from there to
+    the name pool. NamePoolOffset is relative to the first symbol byte. GlobalsCount
+    sizes no table of its own, and LocalsCount is 0.
+    """
+    if len(block) < 80 or block[:4] != SYMBOL:
+        return False
+    pool = struct.unpack_from("<I", block, 4)[0]
+    (names, types, members, symbols, _global_count, modules, _locals, scopes,
+     lines, sources, segments, correlations) = struct.unpack_from("<12H", block, 8)
+    if names == 0 or symbols == 0 or scopes == 0 or pool < 2 or pool >= len(block):
+        return False
+    if word(block, 0x14) != 0:
+        return False
+    extension = word(block, 0x2E)
+    if extension < 24 or 48 + extension >= len(block):
+        return False
+    extra = block[48:48 + extension]
+    classes, parents, global_classes, overloads, scope_classes, module_classes, coverage = struct.unpack_from("<7H", extra, 0)
+    browsers = word(extra, 18)
+    base = 48 + extension
+    cursor = base
+
+    def take(count, size):
+        nonlocal cursor
+        end = cursor + count * size
+        if end > len(block):
+            return None
+        start = cursor
+        cursor = end
+        return start
+
+    symbol_at = take(symbols, 9)
+    module_at = take(modules, 16)
+    source_at = take(sources, 6)
+    if take(lines, 4) is None:
+        return False
+    scope_at = take(scopes, 12)
+    segment_at = take(segments, 16)
+    correlation_at = take(correlations, 8)
+    type_at = take(types, 8)
+    member_at = take(members, 5)
+    for count, size in ((classes, 11), (parents, 2), (overloads, 8),
+                        (scope_classes, 4), (module_classes, 8), (browsers, 6)):
+        if take(count, size) is None:
+            return False
+    if take(word(block, 0x2B), 1) is None:
+        return False
+    coverage_at = take(coverage, 2)
+    segment_words = take(segments, 2)
+    if None in (symbol_at, module_at, source_at, scope_at, segment_at,
+                correlation_at, type_at, member_at, coverage_at, segment_words):
+        return False
+    module_words = take(modules, 4)
+    if module_words is None or global_classes:
+        return False
+    pool_at = base + struct.unpack_from("<I", extra, 14)[0]
+    if cursor != pool_at or pool_at + pool != len(block) or block[module_words:cursor].strip(b"\0"):
+        return False
+    for index in range(symbols):
+        name, type_index = struct.unpack_from("<HH", block, symbol_at + index * 9)
+        if name > names or type_index > types:
+            return False
+    for index in range(modules):
+        if not 1 <= word(block, module_at + index * 16) <= names:
+            return False
+    for index in range(sources):
+        if not 1 <= word(block, source_at + index * 6) <= names:
+            return False
+    for index in range(scopes):
+        start, count, parent, function = struct.unpack_from("<4H", block, scope_at + index * 12)
+        if start + count > symbols or parent > scopes:
+            return False
+        if function not in (0xFFFE, 0xFFFF) and function > symbols:
+            return False
+    for index in range(segments):
+        module, _code_seg, _code_off, _code_len, scope_index, scope_count, corr_index, corr_count = struct.unpack_from(
+            "<8H", block, segment_at + index * 16)
+        if not 1 <= module <= modules:
+            return False
+        if scope_index + scope_count > scopes + 1 or corr_index + corr_count > correlations + 1:
+            return False
+        if not 1 <= word(block, segment_words + index * 2) <= symbols:
+            return False
+    for index in range(correlations):
+        segment, source, line, line_count = struct.unpack_from("<4H", block, correlation_at + index * 8)
+        if not 1 <= segment <= segments or not 1 <= source <= sources or line + line_count > lines + 1:
+            return False
+    for index in range(types):
+        name = word(block, type_at + index * 8 + 1)
+        if name & 0x8000 == 0 and name > names:
+            return False
+    for index in range(members):
+        offset = member_at + index * 5
+        if word(block, offset + 1) > names or word(block, offset + 3) & 0x0FFF > types:
+            return False
+    for index in range(coverage):
+        if word(block, coverage_at + index * 2) > lines:
+            return False
+    return string_pool_reaches_end(block, pool, names)
 
 
 def index_formula_matches(data):
@@ -503,10 +632,28 @@ def diagonal_indexes(table):
 
 def diagonal_is_same_colour(palette, indexes):
     """True when each diagonal byte names a colour equal to that row's colour."""
+    return diagonal_hits(palette, indexes) == 256
+
+
+def diagonal_hits(palette, indexes):
+    hits = 0
     for index, chosen in enumerate(indexes):
-        if palette[index * 3:index * 3 + 3] != palette[chosen * 3:chosen * 3 + 3]:
-            return False
-    return True
+        if palette[index * 3:index * 3 + 3] == palette[chosen * 3:chosen * 3 + 3]:
+            hits += 1
+    return hits
+
+
+def scroll_palette(root):
+    """The 768-byte palette of GENERAL.PAK SCROLL.CPS, or None."""
+    path = root / "GENERAL.PAK"
+    if not path.is_file():
+        return None
+    data = path.read_bytes()
+    for name, offset, size in L.pak_entries(data):
+        if name.upper() == "SCROLL.CPS" and size >= 778 and offset + 778 <= len(data):
+            if struct.unpack_from("<H", data, offset + 8)[0] == 768:
+                return data[offset + 10:offset + 778]
+    return None
 
 
 def stored_palettes(root):
@@ -616,28 +763,29 @@ def check(data_dir):
     for rel, (kind, data) in left.items():
         if kind == "blend":
             blends.setdefault(Path(rel).name, []).append(data)
-        elif rel in LANDS:
-            size, declared = LANDS[rel]
-            if len(data) != size or mz_declared(data) != declared or data[declared:declared + 4] != SYMBOL:
-                return fail(f"{rel} tail differs")
-            if header_bytes(data) != 10240:
-                return fail(f"{rel} header differs")
-            tail = data[declared:]
-            if len(tail) in struct.unpack_from("<16I", tail, 0):
-                return fail(f"{rel} tail length is a header dword")
-            if struct.unpack_from("<I", tail, 0x20)[0] != declared:
-                return fail(f"{rel} tail +0x20 is not the file offset of the tail")
-            if not string_pool_reaches_end(tail, POOL_LEN[rel], POOL_COUNT[rel]):
-                return fail(f"{rel} string pool or its +8 count differs")
-        elif rel in TDS_SIZE:
-            if len(data) != TDS_SIZE[rel] or data[:4] != SYMBOL:
-                return fail(f"{rel} differs")
-            if len(data) in struct.unpack_from("<16I", data, 0):
-                return fail(f"{rel} length is a header dword")
-            if not string_pool_reaches_end(data, POOL_LEN[rel], POOL_COUNT[rel]):
-                return fail(f"{rel} string pool or its +8 count differs")
         else:
             return fail(f"unexpected open file {rel}")
+    for rel, (size, declared) in LANDS.items():
+        data = read[rel]
+        if len(data) != size or mz_declared(data) != declared or header_bytes(data) != 10240:
+            return fail(f"{rel} image differs")
+        tail = data[declared:]
+        if data[declared:declared + 4] != SYMBOL or not symbol_block_covers(tail):
+            return fail(f"{rel} symbol tail does not tile")
+        if len(tail) in struct.unpack_from("<16I", tail, 0):
+            return fail(f"{rel} tail length is a header dword")
+        if struct.unpack_from("<I", tail, 0x20)[0] != declared:
+            return fail(f"{rel} tail +0x20 is not the file offset of the tail")
+        if not string_pool_reaches_end(tail, POOL_LEN[rel], POOL_COUNT[rel]):
+            return fail(f"{rel} string pool or its +8 count differs")
+    for rel, size in TDS_SIZE.items():
+        data = read[rel]
+        if len(data) != size or not symbol_block_covers(data):
+            return fail(f"{rel} symbol block does not tile")
+        if len(data) in struct.unpack_from("<16I", data, 0):
+            return fail(f"{rel} length is a header dword")
+        if not string_pool_reaches_end(data, POOL_LEN[rel], POOL_COUNT[rel]):
+            return fail(f"{rel} string pool or its +8 count differs")
     if len(blends["BLEND.TAB"]) != 3 or len(blends["BLEND2.TAB"]) != 3:
         return fail("blend table count differs")
     if blends["BLEND.TAB"][0] != blends["BLEND.TAB"][1] or blends["BLEND.TAB"][1] != blends["BLEND.TAB"][2]:
@@ -657,13 +805,20 @@ def check(data_dir):
     palettes = stored_palettes(root)
     if len(palettes) != STORED_PALETTES:
         return fail(f"stored palette count is {len(palettes)}, not {STORED_PALETTES}")
+    if len(set(palettes)) != DISTINCT_PALETTES:
+        return fail(f"stored palettes are {len(set(palettes))} distinct, not {DISTINCT_PALETTES}")
+    scroll = scroll_palette(root)
+    if scroll is None:
+        return fail("GENERAL.PAK SCROLL.CPS has no 768-byte palette")
     for name in ("BLEND.TAB", "BLEND2.TAB"):
         indexes = diagonal_indexes(blends[name][0])
         if any(diagonal_is_same_colour(palette, indexes) for palette in palettes):
             return fail(f"a stored palette has the {name} diagonal")
+        if diagonal_hits(scroll, indexes) != SCROLL_DIAGONAL[name]:
+            return fail(f"SCROLL.CPS keeps a different number of {name} diagonal colours")
     ending = b"FILECHNG\x00new_size\x00.\\FILECHNG.C\x00"
-    lands = left["ENG/LANDS.EXE"][1]
-    if not left["ENG/FINALE.TDS"][1].endswith(ending) or not lands[mz_declared(lands):].endswith(ending):
+    lands = read["ENG/LANDS.EXE"]
+    if not read["ENG/FINALE.TDS"].endswith(ending) or not lands[mz_declared(lands):].endswith(ending):
         return fail("English symbol block does not end with FILECHNG.C")
     for rel, offset, needle in NAME_PINS:
         blob = read[rel] if rel in read else left[rel][1]
@@ -685,7 +840,7 @@ def check(data_dir):
     for rel in ("ENG/FINALE.EXE", "FRE/FINALE.EXE", "GER/FINALE.EXE"):
         programs.append((rel, read[rel]))
     for rel, (_size, declared) in LANDS.items():
-        programs.append((rel + " image", left[rel][1][:declared]))
+        programs.append((rel + " image", read[rel][:declared]))
     for label, blob in programs:
         if has_mov_cx_256(blob):
             return fail(f"{label} contains mov cx, 256")
@@ -705,9 +860,10 @@ def check(data_dir):
     raw = [(root / rel).read_bytes() for rel in ABSENT_FROM] + [install]
     if any(BLEND_HEAD in blob or BLEND2_HEAD in blob for blob in raw):
         return fail("a blend-table head occurs in a scanned program")
-    print("CHECK loose: 25 files reach the last byte "
-          "(3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com); "
-          "12 open (6 blend tables, 3 symbol files, 3 LANDS tails)")
+    print("CHECK loose: 31 files reach the last byte "
+          "(3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com, "
+          "3 symbol, 3 mz plus symbol tail); "
+          "6 open (6 blend tables)")
     return 0
 
 

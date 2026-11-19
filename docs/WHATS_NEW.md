@@ -4,6 +4,7 @@ Newest first. One line per question worked on, new tool or visible change; each 
 
 ## 19 November 2026
 
+- **Symbol tables.** The three `FINALE.TDS` files and the three `LANDS.EXE` tails are TDINFO tables. The header counts size every record, the name and index fields stay inside those counts, and only zero bytes sit before the string pool, so those six files are counted as read. The six blend tables stay unread ([loose files](formats/loose.md)).
 - **Blend tables.** The six files stay unread. No stored 768-byte palette, used whole, keeps the colour on every diagonal entry; the closest (`SCROLL.CPS`, 240 and 233 of 256) leaves a blend over the running game's palette open. The installer status strings still have no caller. Who writes the tables stays open ([loose files](formats/loose.md)).
 - **Glossary.** The [glossary](GLOSSARY.md) gives a one-line meaning to each term on the front page, the start page and the cookbook. A word shared with the other two games has the same meaning there. The rating still counts the glossary as a page, but not its label words.
 - **Link check.** `doc_links.py` resolves every relative link and anchor in the README and the docs, and `check_all.py` runs it.
