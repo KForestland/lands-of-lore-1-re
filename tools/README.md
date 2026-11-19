@@ -447,7 +447,7 @@ CHECK name_callers: FINALE.EXE+0x1D1D0 is the 00000.VOC catalog row (44115 bytes
 
 ### `lol1_loose.py`
 
-Walks the loose CD `DATA` files. Thirty-one reach their last byte, including fonts, string tables, executable images and symbol tables. The check reproduces bytes 0–65531 of both distinct finale blend tables and pins the four-byte trailer. See the loose-file page for the palette pairings and the remaining open bytes. [Loose-file formats](../docs/formats/loose.md)
+Walks the loose CD `DATA` files. Thirty-one reach their last byte, including fonts, string tables, executable images and symbol tables. The check reproduces bytes 0–65531 of both distinct finale blend tables and pins the four-byte trailer. It also re-reads `README.ENG` beside `DATA` at file +0x72, the eight bytes `LANDS OF`. See the loose-file page for the palette pairings and the remaining open bytes. [Loose-file formats](../docs/formats/loose.md)
 
 ```
 $ python3 tools/lol1_loose.py --check

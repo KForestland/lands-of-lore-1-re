@@ -4,7 +4,7 @@
 A file counts as read when every byte sits in a header, a directory or an
 entry. The six blend tables fail that walk and stay unread. The check pins
 the structure that was measured: the blend-table sizes, the installer status
-text, and the TDINFO tables on each symbol block. It also rebuilds both blend
+text, README.ENG at file +0x72, and the TDINFO tables on each symbol block. It also rebuilds both blend
 tables as a self-blend of the paired finale palette (RETURN.CPS for BLEND.TAB,
 FACE.CPS for BLEND2.TAB): all but the last four bytes match.
 
@@ -892,6 +892,13 @@ def check(data_dir):
     install = Path(install_path).read_bytes()
     if len(install) != 134819:
         return fail("INSTALL.EXE length differs")
+    readme_path = os.path.join(os.path.dirname(os.path.abspath(data_dir)), "README.ENG")
+    if not os.path.isfile(readme_path):
+        return fail("README.ENG is not beside DATA")
+    with open(readme_path, "rb") as handle:
+        handle.seek(0x72)
+        if handle.read(8) != b"LANDS OF":
+            return fail("README.ENG+0x72 differs")
     for offset, needle in INSTALL_PINS:
         if install[offset:offset + len(needle)] != needle:
             return fail(f"installer pin +{offset:#x} differs")

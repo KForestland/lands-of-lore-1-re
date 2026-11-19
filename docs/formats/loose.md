@@ -14,7 +14,7 @@ Thirty-seven files under `DATA` are not a PAK archive and not a `NN.TLK` speech 
 
 `ENG.LM` is 1794 bytes and its first word is `0x0058` (44 strings). `SETUPENG.DIP` is 3881 bytes and its first word is `0x00D6` (107 strings). String 1 is `File Write Error`.
 
-`HARDRIVE/MAIN.EXE+0x33C44` and `HARDRIVE/MAINW.EXE+0x336E8` name `FILEDATA.FDT`, `ENG.LM`, `FRE.LM` and `GER.LM` in that order. `HARDRIVE/SETUP.EXE+0x17518` contains `SETUP%s.DIP`. `INSTALL.EXE` (134819 bytes, beside `DATA`) contains `SETUPENG.DIP` at `+0x7D69`.
+`HARDRIVE/MAIN.EXE+0x33C44` and `HARDRIVE/MAINW.EXE+0x336E8` name `FILEDATA.FDT`, `ENG.LM`, `FRE.LM` and `GER.LM` in that order. `HARDRIVE/SETUP.EXE+0x17518` contains `SETUP%s.DIP`. `INSTALL.EXE` (134819 bytes, beside `DATA`) contains `SETUPENG.DIP` at `+0x7D69`. `README.ENG`, in the same folder and not one of the files under `DATA`, holds `LANDS OF` at file +0x72. The check re-reads those eight bytes.
 
 These are plain strings. The `.DIP` members inside the language PAKs use the [text](text.md) layout. This walk does not read those members.
 
