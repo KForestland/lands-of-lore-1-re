@@ -10,8 +10,8 @@ one edited copy in its own scratch install
 An edited save shows what the original program does with that state. It
 does not show that ordinary play reaches the same state. A native save
 (one the game wrote during normal play) is still needed for that. The
-rules an edit must keep (same section lengths, same file size, no
-checksum to update) are in
+rules the tested edits kept (same section lengths, same file size, no
+digest recomputed) are in
 [editing a copy of an original slot](savegame_format.md#editing-a-copy-of-an-original-slot).
 
 All eight runs below belong to probes that are still open. None of them

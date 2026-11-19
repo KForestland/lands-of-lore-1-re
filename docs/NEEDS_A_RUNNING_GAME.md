@@ -370,9 +370,9 @@ the mode table always restores the saved mode, here 3), and the DOS
 exit at `+0x3972` used `AX=0x4C00`.
 [Recorded shutdown calls](unknowns/08_native_script_exit.md#english-cd-quit-from-play)
 
-**CONFIRMED (static).** No setup arms the optional callback through a
-named store. Neither program has a store to CD `DS:361E` or floppy
-`DS:63EA`; the only references are the test and the call. The file
+**CONFIRMED (static).** The explicit-operand search found no direct store to the optional
+callback at CD `DS:361E` or floppy `DS:63EA`. The test and the call
+are the references found by that search. The file
 image holds `0000:0000` (CD `MAIN.EXE+0x350EE`, floppy `+0x3DC4A`).
 [Scan details](unknowns/08_native_script_exit.md#english-cd-quit-from-play).
 A computed-address store is the only open route. A write watch on

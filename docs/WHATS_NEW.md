@@ -2,6 +2,10 @@
 
 Newest first. One line per question worked on, new tool or visible change; each question bullet gives its state. Details are on the linked pages; the counts are in the [rating](../README.md#rating).
 
+## 20 November 2026
+
+- **Confirmed statements re-derived.** Two samples of 30 statements labelled confirmed were checked again from the original bytes. The first: at most 27 held, 1 wrong, 2 not re-derived. The second: 20 held, 5 held in part, 1 wrong and 2 overstated, 2 not re-derived. The wrong and overstated statements are corrected: the bitmap writer recalculates the size word, the edited-save statement is limited to the tested edits, and the callback search covers explicit operands only ([samples](CONFIRMED_SAMPLE.md)).
+
 ## 19 November 2026
 
 - **Readme heading.** `README.ENG` at file +0x5C is `Late Notes`. `lol1_loose.py --check` re-reads those ten bytes ([loose files](formats/loose.md)).
