@@ -196,7 +196,9 @@ lamp-available flag at +0x2EE mask 0x0800 was clear.
 audience route reached block 273. The original overlay at
 `MAIN.EXE+0x4C4AA/+0x4C4CB` twice changed the selected byte
 0 → 99 → 0 with no access to the three isolated bytes. The native
-save from block 272 still had one active character.
+save from block 272 still had one active character. The party
+route is gated by flag 39, set by the original level-4 block-73
+event (`L04.PAK+0xB516`).
 [Native stores, slot offsets and second-portrait test](unknowns/17_native_save_fields.md#cd-level-1-selected-character-control)
 
 **UNCONFIRMED.** Any byte-specific writer or reader. Start a new

@@ -116,15 +116,17 @@ new slot with the menu-reset control above.
 **CONFIRMED.** Starting at block 557 in the same English CD slot,
 normal movement and two door switches reached the guard in block
 270 and the first audience in block 273 (event instructions
-`L01.PAK+0xD545/+0xD76D`). During the run, watches twice saw
-`DS:7FE3` change 0 → 99 → 0. The overlay offsets within the
+`L01.PAK+0xD545/+0xD76D`). During the run, GDB hardware watches on a local DOSBox
+build twice saw `DS:7FE3` change 0 → 99 → 0. The overlay offsets within the
 loaded segment, 0x4A and 0x6B, match the immediate store
 `MAIN.EXE+0x4C4AA` and the saved-byte restoration
 `+0x4C4CB`. The three isolated bytes had no access during the
-two transitions. In the menu afterward their only observed
-access was the bulk save write (`+0x48B92–0x48BA2`).
+two transitions. The first watch ended after the audience. A
+separate watch on the next approach and menu save recorded only
+the bulk save write (`+0x48B92–0x48BA2`).
 
-The resulting native slot, `4bfff15d2666`, has level 1 and
+The resulting native slot, `4bfff15d2666` (written by the
+game during this run, not shipped), has level 1 and
 block 272 at +0x269/+0x254. Its selected byte +0x267 and all
 three isolated bytes are zero. The four character flags at
 `+0x4C + 130*i` are `1, 0, 0, 0`. This is a live control
@@ -134,8 +136,10 @@ still contains one selectable character.
 **UNCONFIRMED.** A selection between two active members. In
 this slot, flag 4 is set at +0x2D0 and flag 39 is clear at
 +0x2D4. The return path at `L01.PAK+0xD7FD` tests flag 39
-and branches back to block 272 via `+0xD813` while it is clear.
-The original adjacent block-274 event contains the party calls
+and calls the position setter at `+0xD813` with block 272
+when that flag is clear. The original level-4 block-73 event
+sets flag 39 at `L04.PAK+0xB516`. The level-1 block-274
+event contains the party calls
 at `L01.PAK+0xDA3B/+0xDA41`. To settle selection, use an original
 slot after a follower has joined. Click the other active portrait,
 watch `DS:7FE3` and the three isolated cells, then check the
