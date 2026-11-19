@@ -335,8 +335,10 @@
         "tools/lol1_level_writer.py",
         "tools/lol1_pak_writer.py",
         "tools/lol1_script_writer.py",
+        "tools/lol1_xmi_writer.py",
         "tools/parse_tim.py",
-        "tools/wll_parser.py"
+        "tools/wll_parser.py",
+        "tools/xmi_to_midi.py"
       ]
     },
     {
@@ -661,6 +663,7 @@
       "tools": [
         "tools/adl_to_midi.py",
         "tools/extract_music.py",
+        "tools/lol1_xmi_writer.py",
         "tools/xmi_to_midi.py"
       ]
     },
@@ -1391,6 +1394,7 @@
         "tools/lol1_pak_writer.py",
         "tools/lol1_script_writer.py",
         "tools/lol1_tim_words.py",
+        "tools/lol1_xmi_writer.py",
         "tools/lol1lib.py",
         "tools/monster_reference_scan.py",
         "tools/pak_indexer.py",

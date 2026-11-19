@@ -76,14 +76,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (42 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (43 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;43p"
+$ python3 tools/check_all.py | sed -n "1,3p;44p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 42 CHECKS PASSED
+ALL 43 CHECKS PASSED
 ```
 
 ### `doc_links.py`
@@ -547,3 +547,5 @@ The check also runs in `check_all.py` and GitHub Actions. It needs no game data.
 `lol1_script_writer.py` assembles the lossless listings of `emc2_decompile.py --assembly` and `parse_tim.py --list NAME --assembly` back into scripts. `--check --data DATA` rebuilds every EMC2 and TIM script in memory and compares it byte for byte; `LISTING --out NEW` writes one new file, never over an existing one, inside the repository, `--data` or a folder holding PAK or TLK archives. See [round trip](../docs/ROUND_TRIP.md#scripts-emc2-and-tim).
 
 `lol1_level_writer.py` rebuilds every CMZ maze, WLL wall table, decoration DAT and ENG/FRE/GER string table in the PAKs of `--data` and compares it byte for byte (`--check`; no output option). CMZ files are byte-identical because the parsed Frame4 packet choices of the original are kept; level 24's five extra bytes per block are kept verbatim without a parse. See [round trip](../docs/ROUND_TRIP.md#levels-and-text).
+
+`lol1_xmi_writer.py` rebuilds every XMI, C55 and PCS score (in the PAKs of `--data` and loose in it) from its IFF chunks and parsed EVNT events and compares it byte for byte (`--check`; no output option). Delays, statuses, note durations and the stored variable-length widths are written from the parsed fields; TIMB/RBRN payloads, padding and the bytes after each end-of-track are kept verbatim. For standard MIDI use `xmi_to_midi.py`. See [round trip](../docs/ROUND_TRIP.md#music-xmidi).

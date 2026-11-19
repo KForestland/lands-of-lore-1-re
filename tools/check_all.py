@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read an original LoL1 DATA folder and run the repository checks.
 
-  check_all.py --data DATA       # or set $LOL1_DATA; runs 42 checks
+  check_all.py --data DATA       # or set $LOL1_DATA; runs 43 checks
 Exit code 0 when every check passes.
 """
 from cli_errors import ReaderArgumentParser, run_cli
@@ -12,7 +12,7 @@ READERS = ["pak_reader", "lol1_pak_writer", "pak_indexer", "tlk_verify", "decode
            "fnt_reader", "xxx_reader", "dat_reader", "tlc_reader", "vcn_vmp_reader",
            "wll_parser", "cmz_analyzer", "lol1_level_writer", "tileset_mapper", "level_renderer", "shp_renderer",
            "wsa_extract", "extract_dialogue", "decode_dialogue", "extract_music", "adl_to_midi", "parse_tim", "lol1_script_writer",
-           "save_reader", "xmi_to_midi", "level_report", "repo_guard", "rating", "example_images",
+           "save_reader", "xmi_to_midi", "lol1_xmi_writer", "level_report", "repo_guard", "rating", "example_images",
            "lol1_name_callers", "lol1_tim_words", "lol1_loose", "exe_tables", "palette_reader", "doc_index", "doc_links", "monster_reference_scan", "lol1_numbers"]
 
 

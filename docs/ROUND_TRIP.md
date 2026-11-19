@@ -1,6 +1,6 @@
 # Round-trip proof for LoL1
 
-Four writers read the original files, build a replacement in memory and compare it with the original. Their checks write nothing to disk. "Byte-identical" means the rebuilt file equals the original file. "Decode-identical" means the rebuilt file reads back through the existing readers to the same pixels and palettes, while its compressed bytes differ.
+Five writers read the original files, build a replacement in memory and compare it with the original. Their checks write nothing to disk. "Byte-identical" means the rebuilt file equals the original file. "Decode-identical" means the rebuilt file reads back through the existing readers to the same pixels and palettes, while its compressed bytes differ.
 
 The CD counts cover the `DATA` folder with its `ENG`, `FRE` and `GER` subfolders (CD1.02). The floppy counts are an English floppy installation.
 
@@ -12,6 +12,7 @@ The CD counts cover the `DATA` folder with its `ENG`, `FRE` and `GER` subfolders
 | same | SHP shapes: scanlines and Frame4 re-encoded, shape offsets and sizes regenerated | Decode-identical: flags, dimensions and pixels of every shape (colour tables copied) | 236 files, 7,299 shapes | 95 files, 3,601 shapes |
 | `lol1_script_writer.py` | EMC2 level and item scripts (INF/INI) and TIM cut-scene scripts, assembled from their lossless listings | Byte-identical | 60 EMC2 and 157 TIM scripts (139 in `DATA`, 6 each in `ENG`, `FRE`, `GER`) | 60 EMC2 and 147 TIM scripts |
 | `lol1_level_writer.py` | CMZ mazes (Frame4 packets kept), WLL wall tables, decoration DATs and ENG/FRE/GER string tables, from their parsed fields and strings | Byte-identical | 29 CMZ, 29 WLL, 12 DAT, 30 each of ENG, FRE and GER | 29 CMZ, 29 WLL, 13 DAT (`CIMMERIA.DAT` is in two PAKs), 30 ENG |
+| `lol1_xmi_writer.py` | XMI, C55 and PCS XMIDI scores: IFF chunk sizes and order, the INFO sequence count and every EVNT event, from their parsed fields | Byte-identical | 51 files (18 XMI, 17 C55, 16 PCS), 620 sequences, 71,966 events | 57 files (20 XMI, 19 C55, 18 PCS), 808 sequences, 88,438 events |
 
 On both editions none of the 1,085 (CD) and 516 (floppy) re-encoded files is byte-identical to its original. All Frame4 streams in them (20,354 on the CD, 9,075 on the floppy) decode to the same bytes through both Frame4 readers.
 
@@ -41,6 +42,12 @@ A CMZ is a Frame4-compressed bitmap. Its maze fields (the 32 by 32 grid, the per
 
 Changing one wall byte, one WLL record field, one decoration offset or one string (with the later offsets moved by `replace_string`) gives a different file that reads back through the existing readers with only that change. The checks write nothing; the writer has no output option.
 
+## Music (XMIDI)
+
+**CONFIRMED.** `lol1_xmi_writer.py --check` rebuilds every XMI, C55 and PCS file in the PAKs of `--data` (and any loose in it) and compares it byte for byte. Chunk sizes, the `INFO` sequence count and each `EVNT` stream are written from the parsed fields: each event's delay bytes, its status byte (XMIDI has no running status), its data bytes, a note's duration and the stored width of every variable-length number. Kept verbatim are the payloads of the other chunks (`TIMB`, `RBRN`), the `FORM`/`CAT` type tags, the pad bytes and the bytes after each end-of-track (368 on the CD, 476 on the floppy). The file and sequence counts equal those of `xmi_to_midi.py --check`. The floppy has six more files than the CD: `LOREINTR` and `LOREFINL` in their XMI, C55 and PCS forms (intro and finale scores, in `INTROVOC.PAK` and `FINALE2.PAK`); the CD `DATA` folder holds neither. ADL files are not XMIDI and are not covered. [Music formats](formats/music.md#writing-the-original-scores)
+
+Changing one note's key gives a file that differs in that one byte and converts through `xmi_to_midi.py` to the same MIDI except for that note's on and off events. The check writes nothing; the writer has no output option. Standard MIDI files still come from `xmi_to_midi.py`, unchanged.
+
 ## Run the checks
 
 ```bash
@@ -48,7 +55,8 @@ python3 tools/lol1_pak_writer.py --data "$LOL1_DATA" --check
 python3 tools/lol1_compression_writer.py --data "$LOL1_DATA" --check
 python3 tools/lol1_script_writer.py --data "$LOL1_DATA" --check
 python3 tools/lol1_level_writer.py --data "$LOL1_DATA" --check
-python3 -m unittest tests.test_round_trip tests.test_structures_write
+python3 tools/lol1_xmi_writer.py --data "$LOL1_DATA" --check
+python3 -m unittest tests.test_round_trip tests.test_structures_write tests.test_xmi_write
 ```
 
-All four checks run in `tools/check_all.py`. The PAK, compression and level writers have no output option; the script assembler writes one new file only when given a listing and `--out`. The unit tests use synthetic archives and pictures and need no game files: member order, duplicate names and the end of the directory; refused names and a final empty member; Frame4 literals, fills, back-references and the end command; a WSA skip and closing delta; a SHP colour table and a long transparent run. `tests.test_structures_write` covers a duplicate EMC2 mnemonic, a TIM tail and alignment byte, the refused output folders, a 9-byte maze block with kept Frame4 packets, an edited maze wall, WLL high bytes and duplicate or moved string offsets.
+All five checks run in `tools/check_all.py`. The PAK, compression, level and music writers have no output option; the script assembler writes one new file only when given a listing and `--out`. The unit tests use synthetic archives and pictures and need no game files: member order, duplicate names and the end of the directory; refused names and a final empty member; Frame4 literals, fills, back-references and the end command; a WSA skip and closing delta; a SHP colour table and a long transparent run. `tests.test_structures_write` covers a duplicate EMC2 mnemonic, a TIM tail and alignment byte, the refused output folders, a 9-byte maze block with kept Frame4 packets, an edited maze wall, WLL high bytes and duplicate or moved string offsets. `tests.test_xmi_write` covers a two-byte delay, a note duration, a byte after the end-of-track and a padded opaque chunk.

@@ -44,3 +44,20 @@ ADL files have no IFF header; CD `LORESFX.ADL` starts `00 00 01 00 ff ff ff ff �
 ## Tool
 
 `tools/extract_music.py` (inventory, `--out-dir` for raw files, `--check` rebuilds the file list and IFF trees of `data/music_inventory.json`: 67 files, no IFF parse errors). `tools/xmi_to_midi.py` converts XMI (and the XMIDI-container C55 and PCS files) to standard MIDI, one file per sequence.
+
+## Writing the original scores
+
+**CONFIRMED.** `python3 tools/lol1_xmi_writer.py --check --data /path/to/DATA`
+re-emits the IFF chunk sizes and order, INFO sequence count, and native EVNT
+fields. It preserves individual delay bytes, explicit status, note durations
+and the stored variable-length widths. See ScummVM
+`audio/midiparser_xmidi.cpp:104–110,157–205,296–311` at `3b4db303` and
+`LORESFX.XMI+0x0`, +0x0C (INFO), and +0x16 (CAT) in the example above.
+Other chunks and padding keep their stored bytes.
+
+**CONFIRMED.** The 51 CD files (18 XMI, 17 C55, 16 PCS) rebuild byte for byte,
+with 620 EVNT sequences and 71,966 events including end markers. The 57 floppy
+files (20 XMI, 19 C55, 18 PCS) also match, with 808 sequences and 88,438
+events. The writer retains 368 CD and 476 floppy bytes after the EVNT end
+markers. The check runs in memory. For a standard MIDI file use the
+conversion tool described above.
