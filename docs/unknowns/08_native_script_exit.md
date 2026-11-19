@@ -18,9 +18,31 @@
 
 **CONFIRMED** The two routines clear a pending pointer after calling its service shutdown if it is set (CD `0x56333–0x5636A`, floppy `0x25A44–0x25A7C`). Both optionally print a NUL-terminated byte string via DOS function 06h when their preceding runtime call returns −1 (CD `0x26914–0x2692B`, `0x2413E–0x2415E`; floppy `0x1DB06–0x1DB1A`, `0x27BC6–0x27BE5`). floppy also installs interrupt vector 3Fh from the saved pointer at `DS:E31E` with DOS function 25h (floppy `0x1DB1D–0x1DB29`, `0x4F92–0x4FA2`).
 
-**CONFIRMED** for one CD launch of `MAIN.EXE` with no game argument, setup English, no musical scores, no sound effects, no digitized sounds. The command and the two drive mounts are in the [launch note](../NEEDS_A_RUNNING_GAME.md#cd-launch-on-this-pass). The image takes that launch through the refusal at `MAIN.EXE+0x51F00`: `cmp si, 1` / `jle` reaches `+0x51F6A`, which prints the RAM and XMS lines and calls the runtime exit wrapper at `+0x3E54` with status 1. The one-shot setter at `+0x5197B` is not on this path. The registered prep at `+0x2689C` still ran. In the recorded run the load segment was `01EB` and `DS` was `3018`. `DS:3618` was `0000` and the far pointer at `DS:361E` was `0000:0000`. The compare at `+0x2689F` jumped to the return at `+0x2692E`. A breakpoint on the dword test at `+0x268EB` did not fire, so the indirect call and the `INT 10h` `AX=0F00h` query were not executed. The following break was `INT 21h` `AH=4Ch` at `MAIN.EXE+0x3972`. Segment numbers are for that run. The debugger loaded `MAIN.EXE`; no later file open was traced, and the session returned to the DOS prompt on drive C.
+**CONFIRMED** for one CD launch of `MAIN.EXE` with no game argument, setup English, no musical scores, no sound effects, no digitized sounds. The command and the two drive mounts are in the [launch note](../NEEDS_A_RUNNING_GAME.md#an-earlier-launch-that-was-refused). The image takes that launch through the refusal at `MAIN.EXE+0x51F00`: `cmp si, 1` / `jle` reaches `+0x51F6A`, which prints the RAM and XMS lines and calls the runtime exit wrapper at `+0x3E54` with status 1. The one-shot setter at `+0x5197B` is not on this path. The registered prep at `+0x2689C` still ran. In the recorded run the load segment was `01EB` and `DS` was `3018`. `DS:3618` was `0000` and the far pointer at `DS:361E` was `0000:0000`. The compare at `+0x2689F` jumped to the return at `+0x2692E`. A breakpoint on the dword test at `+0x268EB` did not fire, so the indirect call and the `INT 10h` `AX=0F00h` query were not executed. The following break was `INT 21h` `AH=4Ch` at `MAIN.EXE+0x3972`. Segment numbers are for that run. The debugger loaded `MAIN.EXE`; no later file open was traced, and the session returned to the DOS prompt on drive C.
 
-**UNCONFIRMED** Which optional service callbacks execute on a quit from play. The refusal above never arms the one-shot flag, so it does not exercise a setup-registered target or the video helper's argument 9. The static trace followed the resident and overlay targets and the DOS exit path. A quit from a running game, or a launch that passes the argument check, is still the missing record.
+### English CD quit from play
+
+**CONFIRMED.** The English CD 1.02 run used the [installed
+launcher and Sound Blaster setup](../NEEDS_A_RUNNING_GAME.md#working-launch-for-the-english-dos-cd)
+under DOSBox 0.74-3 with host sound muted. The level-1 slot
+`477b08b82ecd` was written by the original program in the probe
+run (`+0x269` = 1). After loading it, choose the in-play exit and
+confirm. The trace captured guest instructions with load segment
+`01A2` and `DS=2FCF`; file offsets below are in `MAIN.EXE`.
+
+| Site | Observed for this setup |
+|---|---|
+| `+0x2689C`, `+0x268A9`, `+0x268AF` | Prep entered with `DS:3618 = 1`, then cleared it before calling the service cleanup. |
+| `+0x268BB`, `+0x268CD`, `+0x268DC–0x268E6` | The calls at `+0x268BB` and `+0x268DC–0x268E6` ran. The `+0x268CD` call was skipped with `DS:35E8 = 0xFFFF`. |
+| `+0x268EB–0x268F7` | `DS:361E` was `0000:0000` after the preceding cleanup calls. Execution reached `+0x268F7` without executing the indirect call at `+0x268F3`. |
+| `+0x268F7–0x2690A` | The video query returned `AX=0x0013` at `+0x268FC`, while `DS:388C = 3`. The restore call at `+0x26904` took argument 9 and returned with `AX=3`. The original helpers pass BIOS function 0x0F and then the saved mode through the `INT 10h` wrapper (`+0x26C82–0x26C9D`, `+0x26CBA–0x26CDD`, `+0x66CC–0x6719`). |
+| `+0x3E54`, `+0x2689C–0x268A6`, `+0x3972` | The wrapper re-entered prep with the one-shot word already zero and skipped its body. DOS termination ran with `AX=0x4C00` and the prompt returned. |
+
+**UNCONFIRMED.** Installations with a nonzero registered far pointer
+at `+0x268EB`. Repeat the quit under the specific setup and capture
+the indirect call at `+0x268F3` and its destination if the pointer
+is nonzero. For a floppy run use `DS:63EA` and the corresponding
+sites listed above.
 
 ## Script evidence
 

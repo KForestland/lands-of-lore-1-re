@@ -13,7 +13,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (27 checks; 
 
 ## File formats
 
-**Running-game results** (English CD installed with its own installer, run under the DOSBox debugger; [procedures and results](NEEDS_A_RUNNING_GAME.md)): on level 1 the wall flags never change in play and wall bit 0x40 is never set (Q7); the three isolated save bytes stay zero and are touched only by saving and loading (Q17); a start without the launcher's argument is a refusal exit (Q8). Levels 8, 23 and 27 need played saves.
+**Running-game results.** In an English CD DOSBox run, all 52 declared level-1 wall flags matched the original after play (Q7). The watched save bytes stayed zero through movement, turning and two load/save cycles (Q17). A confirmed quit from play restored the saved BIOS mode and exited with status 0 (Q8). Levels 8, 23 and 27 still need played saves. [Procedures and results](NEEDS_A_RUNNING_GAME.md)
 
 | Format | Documented | Tool | Checked on data | Open |
 |--------|-----------|------|-----------------|------|

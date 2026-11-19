@@ -151,22 +151,19 @@ pointer in CD `DS:361E` or floppy `DS:63EA` and query video
 mode (CD `MAIN.EXE+0x2689C–0x2692F`, floppy
 `+0x1DAB8–0x1DB2D`). [Shutdown trace](unknowns/08_native_script_exit.md#what-the-preparatory-routine-changes)
 
-**UNCONFIRMED.** The target and branch for a specific sound/video
-setup. Start the original under that setup, quit to DOS and break at
-the prep routine. Record the pointer's value and actual far target,
-then record INT 10h with AX=0x0F00 and INT 21h with AH=0x4C. A null
-pointer skips the optional callback, and a nonzero one must supply
-the executed target. A different current and saved video mode must
-reach the video helper with argument 9. Keep the recorded setup with
-the result since the callbacks can differ by installation.
+**CONFIRMED, English CD with Sound Blaster.** Quit from the installed
+original after loading level 1. The prep at `MAIN.EXE+0x2689C`
+cleared its armed one-shot flag. At `+0x268EB`, `DS:361E` was null.
+The BIOS query returned mode `0x13` at `+0x268FC`, the helper at
+`+0x26904` took argument 9 and restored saved mode 3, and the DOS
+exit at `+0x3972` used `AX=0x4C00`.
+[Recorded shutdown calls](unknowns/08_native_script_exit.md#english-cd-quit-from-play)
 
-**CONFIRMED** for the no-argument refusal in the launch note above, not
-for a quit from play. The runtime exit calls the prep. On this path the
-one-shot word is still clear, because `+0x5197B` did not run, so the
-optional callback and the video-mode query do not run. A breakpoint on
-the dword test at `+0x268EB` did not fire. A quit from play, which is
-when a setup would register a callback and that init would set the
-one-shot flag, was not reached, so that branch stays **UNCONFIRMED**.
+**UNCONFIRMED.** Which setups provide a nonzero optional callback.
+For another setup or edition, record the far pointer at the test
+above, and record the executed target if nonzero. The earlier
+[refusal to start](#an-earlier-launch-that-was-refused) gives an
+unarmed control.
 
 ## Q17. Are the isolated save bytes touched during play?
 

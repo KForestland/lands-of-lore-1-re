@@ -17,7 +17,7 @@ One line per question: its state and what would settle what is left. Details are
 | Q5 | Answered | — |
 | Q6 | Mostly | The extra argument words in a few calls; the floppy intro and finale tables are resolved natively; 0x07 and nested 0x02 are native return-1 stubs in both editions |
 | Q7 | Mostly | A runtime trace of the WLL wall byte (the collision callers supply only masks 0, 1, 2 and 7) and the remaining monster mode branches |
-| Q8 | Answered | Which optional sound/video shutdown callbacks run depends on the setup; run it on a chosen setup to list them |
+| Q8 | Answered | The English CD Sound Blaster quit is traced; check setups with a nonzero registered callback |
 | Q9 | Answered | — |
 | Q10 | Mostly | Find any caller of the `00000.VOC` name (only `FINALE.EXE` lists it) |
 | Q11 | Answered | Which earlier level supplies the row depends on the play order of a given game |
