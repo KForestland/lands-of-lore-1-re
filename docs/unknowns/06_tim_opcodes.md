@@ -115,7 +115,7 @@ The single nested opcode 0x02 is in `VICTOR4.TIM`, the same file as the two comm
 
 ## Intro opcodes, floppy LOLINTRO.TIM only
 
-Four function entries, stop count 0. Nested list is `script_lol.cpp:2978-2991`.
+Three function entries (the AVTL table words are 3, 6636, 6689: the first word is the offset of function 0, just past the three-word table), stop count 0. **CONFIRMED** (floppy `LOLINTRO.TIM`; corrects an earlier 'four'). Nested list is `script_lol.cpp:2978-2991`.
 
 Commands: 0x01 x3 (0 params), 0x02 x14 (6), 0x03 x16 (1), 0x06 x1022 (2), 0x08 x28 (2), 0x09 x28 (1), 0x0A x100 (2), 0x0C x1 (1), 0x0E x1 (1), 0x14 x2 (0), 0x15 x2 (1), 0x17 x12 (0), 0x18 x12 (0), 0x19 x83, 0x1A x3 (1), 0x1B x3 (1). The 83 dispatches have 2, 3, and 6 parameter words on 19, 37, and 27 instructions. CONFIRMED.
 
@@ -132,7 +132,7 @@ Commands: 0x01 x3 (0 params), 0x02 x14 (6), 0x03 x16 (1), 0x06 x1022 (2), 0x08 x
 
 ## Outro opcodes, floppy LOLFINAL.TIM only
 
-Four function entries, stop count 0. Nested list is `script_lol.cpp:2993-3018`. `load` sets `isLoLOutro` for this filename (`script_tim.cpp:178`).
+Three function entries (AVTL table words 3, 2008, 2047), stop count 0. **CONFIRMED** (floppy `LOLFINAL.TIM`; corrects an earlier 'four'). Nested list is `script_lol.cpp:2993-3018`. `load` sets `isLoLOutro` for this filename (`script_tim.cpp:178`).
 
 Commands: 0x01 x3, 0x02 x12 (6), 0x03 x11 (1), 0x06 x194 (2), 0x07 x1 (2), 0x08 x10 (2), 0x09 x10 (1), 0x0A x28 (2), 0x0C x1 (1), 0x0E x3 (1), 0x14 x2, 0x15 x2, 0x17 x9, 0x18 x10, 0x19 x110, 0x1A x2, 0x1B x2. The 110 dispatches have 1, 2, 3, and 4 parameter words on 2, 42, 61, and 5 instructions. The single 0x07 is the base `cmd_displayText`, because the outro uses `TIMInterpreter`, not `TIMInterpreter_LoL`. CONFIRMED.
 
