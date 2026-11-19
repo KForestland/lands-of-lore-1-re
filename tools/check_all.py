@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run every reader's --check against a LoL1 DATA folder and print one line each.
 
-  check_all.py --data DATA       # or set $LOL1_DATA; runs 33 checks
+  check_all.py --data DATA       # or set $LOL1_DATA; runs 35 checks
 Exit code 0 when every check passes.
 """
 import argparse, os, subprocess, sys
@@ -12,7 +12,7 @@ READERS = ["pak_reader", "pak_indexer", "tlk_verify", "decode_frame4", "cps_read
            "wll_parser", "cmz_analyzer", "tileset_mapper", "level_renderer", "shp_renderer",
            "wsa_extract", "extract_dialogue", "decode_dialogue", "extract_music", "adl_to_midi", "parse_tim",
            "save_reader", "xmi_to_midi", "level_report", "repo_guard", "rating", "example_images",
-           "lol1_name_callers", "lol1_tim_words", "lol1_loose", "doc_links"]
+           "lol1_name_callers", "lol1_tim_words", "lol1_loose", "exe_tables", "palette_reader", "doc_links"]
 
 
 def main():

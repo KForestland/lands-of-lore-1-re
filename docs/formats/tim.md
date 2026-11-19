@@ -60,4 +60,4 @@ CD `AUTOMAP.TIM` starts:
 | `03 00 00 00 18 01` | instruction: length 3 words, delay 0, opcode word 0x0118: command 0x18 (return 1) |
 | `09 00 00 00 02 01 …` | instruction: length 9, delay 0, command 0x02 (init WSA) with 6 parameters |
 
-**Tool:** `tools/parse_tim.py` (chunk structure; `--check` rebuilds the file list and statistics of `data/tim_analysis.json`: 139/139, chunks AVTL 139, TEXT 51).
+**Tool:** `tools/parse_tim.py` (`--list NAME.TIM` prints one file command by command; chunk structure; `--check` rebuilds the file list and statistics of `data/tim_analysis.json`: 139/139, chunks AVTL 139, TEXT 51).

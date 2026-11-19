@@ -2,6 +2,8 @@
 
 [EMC2 script format and corpus locations](emc2_scripts.md)
 
+`tools/exe_tables.py` prints the static tables below from your copy of the program, and its `--check` re-reads their values ([tools](../tools/README.md#exe_tablespy)).
+
 Evidence references use ScummVM revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801a3`. **CONFIRMED** marks observations on the original CD and floppy data. **UNCONFIRMED** marks an interpretation from the reference implementation without proof from the native data or code. Hex offsets are file bytes unless marked as DATA words.
 
 ## Locating the executables

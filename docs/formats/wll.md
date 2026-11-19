@@ -49,4 +49,4 @@ CD `LEVEL1.WLL` starts:
 
 ## Tool
 
-`tools/wll_parser.py` (summary, `--out`, `--check` rebuilds `data/wll_parsed.json` exactly: 29 files, 1726 records). Wall types used by a CMZ but missing from its WLL: see [cmz.md](cmz.md#open).
+`tools/wll_parser.py` (summary, `--level N` for every record of one level, `--out`, `--check` rebuilds `data/wll_parsed.json` exactly: 29 files, 1726 records). Wall types used by a CMZ but missing from its WLL: see [cmz.md](cmz.md#open).

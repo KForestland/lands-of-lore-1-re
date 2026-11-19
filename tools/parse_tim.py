@@ -14,9 +14,153 @@ USAGE = """
   parse_tim.py                     # summary + sample files
   parse_tim.py --out tim.json      # same shape as data/tim_analysis.json (raw script words left out;
                                    # --with-words keeps them for local study)
-  parse_tim.py --check             # rebuild and compare with data/tim_analysis.json
-See docs/formats/tim.md. The opcode table is open question Q6 (docs/OPEN_QUESTIONS.md).
+  parse_tim.py --check             # rebuild and compare with data/tim_analysis.json; on the CD
+                                   # also re-count the commands of docs/unknowns/06_tim_opcodes.md
+  parse_tim.py --list AUTOMAP.TIM  # one TIM file command by command, with the command names
+                                   # of docs/unknowns/06_tim_opcodes.md (prints to stdout only)
+See docs/formats/tim.md and docs/unknowns/06_tim_opcodes.md.
 """
+
+# Command names: docs/unknowns/06_tim_opcodes.md, "LoL command table" (script_tim.cpp:853-892).
+TIM_COMMANDS = {
+    0x00: "cmd_initFunc0", 0x01: "cmd_stopAllFuncs", 0x02: "cmd_initWSA", 0x03: "cmd_uninitWSA",
+    0x04: "cmd_initFunc", 0x05: "cmd_stopFunc", 0x06: "cmd_wsaDisplayFrame", 0x07: "unimplemented on LoL",
+    0x08: "cmd_loadVocFile", 0x09: "cmd_unloadVocFile", 0x0A: "cmd_playVocFile", 0x0B: "unimplemented",
+    0x0C: "cmd_loadSoundFile", 0x0D: "cmd_return(1)", 0x0E: "cmd_playMusicTrack", 0x0F: "unimplemented",
+    0x10: "cmd_return(1)", 0x11: "cmd_return(1)", 0x12: "unimplemented", 0x13: "unimplemented",
+    0x14: "cmd_setLoopIp", 0x15: "cmd_continueLoop", 0x16: "cmd_resetLoopIp", 0x17: "cmd_resetAllRuntimes",
+    0x18: "cmd_return(1)", 0x19: "cmd_execOpcode", 0x1A: "cmd_initFuncNow", 0x1B: "cmd_stopFuncNow",
+    0x1C: "cmd_processDialogue", 0x1D: "cmd_dialogueBox", 0x1E: "cmd_return(n1)",
+}
+# The floppy intro and outro run the base table (TIMInterpreter); the page names these two differently.
+TIM_BASE_DIFFERENT = {0x01: "cmd_stopCurFunc", 0x07: "cmd_displayText"}
+# Parameter names, same table ("Parameters" column).
+TIM_PARAMS = {
+    0x02: ("index", "string_id", "x", "y", "offscreen", "flags"), 0x03: ("index",), 0x04: ("function",),
+    0x05: ("function",), 0x06: ("slot", "frame"), 0x08: ("string_id", "index"), 0x09: ("index",),
+    0x0A: ("index", "volume"), 0x0C: ("string_id",), 0x0E: ("track",), 0x15: ("factor",),
+    0x1A: ("function",), 0x1B: ("function",), 0x1D: ("function", "string_id", "string_id", "string_id"),
+}
+# Commands whose string id is a TEXT-chunk string (script_tim.cpp:643,703,756).
+TIM_TEXT_PARAM = {0x02: 1, 0x08: 0, 0x0C: 0}
+# Nested 0x19 functions: in-game (script_lol.cpp:3020-3048), intro (:2978-2991), outro (:2993-3018).
+TIM_NESTED = {
+    "in-game": ["tlol_initSceneWindowDialogue", "tlol_restoreAfterSceneWindowDialogue", "unimplemented",
+                "tlol_giveItem", "tlol_setPartyPosition", "tlol_fadeClearWindow", "tlol_copyRegion",
+                "tlol_characterChat", "tlol_drawScene", "tlol_update", "tlol_clearTextField",
+                "tlol_loadSoundFile", "tlol_playMusicTrack", "tlol_playDialogueTalkText",
+                "tlol_playSoundEffect", "tlol_startBackgroundAnimation", "tlol_stopBackgroundAnimation"],
+    "intro": ["tlol_setupPaletteFade", "unimplemented", "tlol_loadPalette", "tlol_setupPaletteFadeEx",
+              "tlol_processWsaFrame", "tlol_displayText", "unimplemented", "unimplemented"],
+    "outro": ["tlol_setupPaletteFade", "unimplemented", "tlol_loadPalette", "tlol_setupPaletteFadeEx",
+              "unimplemented", "tlol_fadeInScene", "tlol_unusedResourceFunc", "tlol_unusedResourceFunc",
+              "tlol_fadeInPalette", "unimplemented", "unimplemented", "tlol_fadeOutSound",
+              "tlol_displayAnimFrame", "tlol_delayForChat", "tlol_displayText", "unimplemented"],
+}
+# Uses / files of each command in the 139 CD files: docs/formats/tim.md and 06 ("Uses", "Files").
+DOC_CD_USES = {0x01: (139, 139), 0x02: (74, 50), 0x03: (60, 43), 0x06: (4658, 138), 0x07: (2, 1),
+               0x14: (175, 118), 0x15: (175, 118), 0x17: (170, 76), 0x18: (88, 59), 0x19: (807, 67),
+               0x1D: (113, 56)}
+# Floppy intro and outro command counts: 06, "Intro opcodes" and "Outro opcodes".
+DOC_FLOPPY_USES = {
+    "LOLINTRO.TIM": {0x01: 3, 0x02: 14, 0x03: 16, 0x06: 1022, 0x08: 28, 0x09: 28, 0x0A: 100, 0x0C: 1, 0x0E: 1,
+                     0x14: 2, 0x15: 2, 0x17: 12, 0x18: 12, 0x19: 83, 0x1A: 3, 0x1B: 3},
+    "LOLFINAL.TIM": {0x01: 3, 0x02: 12, 0x03: 11, 0x06: 194, 0x07: 1, 0x08: 10, 0x09: 10, 0x0A: 28, 0x0C: 1,
+                     0x0E: 3, 0x14: 2, 0x15: 2, 0x17: 9, 0x18: 10, 0x19: 110, 0x1A: 2, 0x1B: 2},
+}
+
+
+def tim_chunks(data):
+    """{chunk id: bytes} of a TIM (IFF FORM AVFS) file."""
+    if data[:4] != b"FORM" or len(data) < 12:
+        raise ValueError("no FORM header")
+    out = {}
+    pos, end = 12, min(8 + struct.unpack_from(">I", data, 4)[0], len(data))
+    while pos + 8 <= end:
+        cid = data[pos:pos + 4].decode("latin-1")
+        size = struct.unpack_from(">I", data, pos + 4)[0]
+        out[cid] = data[pos + 8:pos + 8 + size]
+        pos += 8 + size + (size & 1)
+    return out
+
+
+def tim_function_count(words):
+    """Entry words at the start of AVTL: the first count words whose smallest value is count."""
+    for count in range(1, 11):
+        if count <= len(words) and min(words[:count]) == count:
+            return count
+    return 1
+
+
+def walk_avtl(words):
+    """Walk each function from its entry word (docs/unknowns/06_tim_opcodes.md): an instruction is
+    taken while its length is 3..32 words, its opcode-word high byte is 1 and the opcode is at most 0x1E.
+    A function also ends where another function's entry word starts, so no instruction is listed twice.
+    Returns (instructions, stops); an instruction is (function, word index, length, delay, opcode word,
+    parameters); stops counts functions ended by a failing word rather than the end of AVTL."""
+    out, stops = [], 0
+    nf = tim_function_count(words)
+    entries = set(words[:nf])
+    for f in range(nf):
+        ip = words[f] if f < len(words) else len(words)
+        seen = set()
+        while ip < len(words) and ip not in seen and (ip == words[f] or ip not in entries):
+            seen.add(ip)
+            length = words[ip]
+            if not 3 <= length <= 32 or ip + length > len(words) or words[ip + 2] >> 8 != 1 \
+                    or (words[ip + 2] & 0xFF) > 0x1E:
+                stops += 1
+                break
+            out.append((f, ip, length, words[ip + 1], words[ip + 2], list(words[ip + 3:ip + length])))
+            ip += length
+    return out, stops
+
+
+def tim_text(text, sid):
+    """TEXT string number sid: a uint16 LE offset table, then C strings."""
+    if text is None or 2 * sid + 2 > len(text):
+        return None
+    off = struct.unpack_from("<H", text, 2 * sid)[0]
+    if off >= len(text):
+        return None
+    end = text.find(b"\0", off)
+    return text[off:end if end >= 0 else len(text)].decode("latin-1")
+
+
+def tim_listing(name, data):
+    """Lines of a command-by-command listing of one TIM file."""
+    ch = tim_chunks(data)
+    avtl, text = ch.get("AVTL", b""), ch.get("TEXT")
+    words = [struct.unpack_from("<H", avtl, i * 2)[0] for i in range(len(avtl) // 2)]
+    up = name.upper()
+    table = "intro" if up == "LOLINTRO.TIM" else "outro" if up == "LOLFINAL.TIM" else "in-game"
+    nested = TIM_NESTED[table]
+    instrs, stops = walk_avtl(words)
+    nf = tim_function_count(words)
+    lines = [f"{name}: AVTL {len(words)} words, {nf} function(s) at word(s) {words[:nf]}, "
+             f"TEXT {'none' if text is None else str(len(text)) + ' bytes'}, {table} table"
+             + (" (base table: 0x01 and 0x07 named as on the page)" if table != "in-game" else "")]
+    lines.append("word  fn len delay opcode command parameters")
+    for f, ip, length, delay, opw, params in instrs:
+        op = opw & 0xFF
+        cmd = TIM_COMMANDS[op] if table == "in-game" else TIM_BASE_DIFFERENT.get(op, TIM_COMMANDS[op])
+        if op == 0x19 and params:
+            sel = params[0]
+            fn = nested[sel] if sel < len(nested) else "past the registered list"
+            ps = f"nested 0x{sel:02X} {fn} args {params[1:]}"
+        elif op in TIM_PARAMS:
+            names = TIM_PARAMS[op]
+            parts = [f"{names[i] if i < len(names) else 'word' + str(i)}={v}" for i, v in enumerate(params)]
+            if op in TIM_TEXT_PARAM and TIM_TEXT_PARAM[op] < len(params):
+                s = tim_text(text, params[TIM_TEXT_PARAM[op]])
+                if s is not None:
+                    parts[TIM_TEXT_PARAM[op]] += f' "{s}"'
+            ps = " ".join(parts)
+        else:
+            ps = " ".join(str(v) for v in params)
+        lines.append(f"{ip:4d}  {f:2d} {length:3d} {delay:5d} 0x{opw:04X} {cmd} {ps}".rstrip())
+    lines.append(f"{len(instrs)} instructions, walk stops before the end of AVTL: {stops}")
+    return lines
 
 def read_pak_entry(pak_path, offset, size):
     """Read a single entry from a PAK file."""
@@ -168,10 +312,16 @@ def decode_avtl_instructions(words, entry_points):
 
 def main():
     ap = L.tool_args((__doc__ or "") + USAGE)
+    ap.add_argument("--list", metavar="NAME.TIM", help="print one TIM file command by command")
     ap.add_argument("--with-words", action="store_true",
                     help="keep the raw AVTL words, decoded instructions and TEXT strings of the sample files in --out "
                          "(left out by default: they copy game script content)")
     a = ap.parse_args()
+    if a.list:
+        pak, blob = L.find_member(a.list, a.data, a.pak)
+        print(f"{a.list.upper()} in {pak}")
+        print("\n".join(tim_listing(a.list, blob)))
+        return 0
     DATA_DIR = a.data
     tim_files = []
     for pak_name in L.list_paks(a.data):
@@ -298,9 +448,35 @@ def main():
         same = skipped or new["files"] == ref["files"] and all(
             ref["statistics"].get(k) == v for k, v in new["statistics"].items())
         st = analysis["statistics"]
+        # command-by-command walk of every distinct TIM name (docs/unknowns/06_tim_opcodes.md)
+        uses, files, stops, seen, seq_ok, seq_n = {}, {}, 0, set(), True, 0
+        for tf in tim_files:
+            if tf["name"].upper() in seen:
+                continue
+            seen.add(tf["name"].upper())
+            blob = read_pak_entry(os.path.join(DATA_DIR, tf["pak"]), tf["offset"], tf["size"])
+            words = tim_chunks(blob).get("AVTL", b"")
+            instrs, n = walk_avtl([struct.unpack_from("<H", words, i * 2)[0] for i in range(len(words) // 2)])
+            stops += n
+            if tf["name"].upper() in DOC_FLOPPY_USES:
+                got = {}
+                for i in instrs:
+                    got[i[4] & 0xFF] = got.get(i[4] & 0xFF, 0) + 1
+                seq_ok = seq_ok and got == DOC_FLOPPY_USES[tf["name"].upper()]
+                seq_n += 1
+            for op in {i[4] & 0xFF for i in instrs}:
+                files[op] = files.get(op, 0) + 1
+            for i in instrs:
+                uses[i[4] & 0xFF] = uses.get(i[4] & 0xFF, 0) + 1
+        counted = {op: (uses[op], files[op]) for op in uses}
+        doc_ok = None if skipped else counted == DOC_CD_USES
+        walk = (f"walk of {len(seen)} names: {sum(uses.values())} commands, stops {stops}, "
+                f"uses and files per command match docs/unknowns/06: {'skipped (not the CD layout)' if skipped else doc_ok}")
+        if seq_n:
+            walk += f"; floppy intro/outro counts match 06: {seq_ok} ({seq_n} files)"
         print(f"CHECK tim: {st['total_parsed']}/{st['total_tim_files']} files, FORM types {st['form_types']}, "
-              f"chunks {st['chunk_type_counts']}, files + statistics match data/tim_analysis.json: {'skipped (not the CD layout)' if skipped else same}")
-        return 0 if same else 1
+              f"chunks {st['chunk_type_counts']}, files + statistics match data/tim_analysis.json: {'skipped (not the CD layout)' if skipped else same}; {walk}")
+        return 0 if same and stops == 0 and doc_ok is not False and seq_ok else 1
     if a.out:
         L.write_json(a.out, analysis)
 

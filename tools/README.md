@@ -23,7 +23,7 @@ Legend:
 
 - **Check**: "yes" = the tool has `--check` and `check_all.py` runs it; "corpus test" = `check_all.py` runs `tests/test_emc2_corpus.py` instead; "not in check_all" = the tool has a check that `check_all.py` does not run.
 - **Look at it**: the command that shows you the content. "picture" = it writes PNG files you can open; "text" = it prints the content; "listen" = WAV or MIDI.
-- **Unit test**: a test in `tests/test_readers.py` that needs no game files (`python3 -m unittest`).
+- **Unit test**: a test in `tests/test_readers.py` or `tests/test_formats.py` that needs no game files (`python3 -m unittest discover -s tests`).
 - **Example**: a section below with the command and its expected output.
 - **gap** = missing; **part** = only partly covered (the note says what is missing).
 
@@ -32,39 +32,39 @@ Legend:
 | [pak](../docs/formats/pak.md) | `pak_reader.py`, `pak_indexer.py` | yes | text: `pak_reader.py list GENERAL.PAK`; `extract … -o DIR` copies a member out | part: PAK directory parsing, but through `emc2_decompile.py`'s own reader, not `lol1lib`'s | yes |
 | [tlk](../docs/formats/tlk.md) | `tlk_verify.py`, `voc_reader.py` | yes | text: `tlk_verify.py`; listen: `voc_reader.py 01.TLK:000_0.01 --wav out.wav` | gap | yes |
 | [lcw](../docs/formats/lcw.md) | `lol1lib.py`, `decode_frame4.py` | yes | picture: `decode_frame4.py --out-dir DIR` (every CPS screen) | yes | yes |
-| [cps](../docs/formats/cps.md) | `cps_reader.py` | yes | picture: `cps_reader.py PARCH.CPS --png parch.png` | gap | yes |
+| [cps](../docs/formats/cps.md) | `cps_reader.py` | yes | picture: `cps_reader.py PARCH.CPS --png parch.png`; its palette: `palette_reader.py PARCH.CPS` | yes (header and palette) | yes |
 | [shp](../docs/formats/shp.md) | `shp_renderer.py` | yes | picture: one PNG per shape; monsters, items and wall decorations need `--level N`, interface shapes `--pal-from` a CPS | gap | yes |
 | [wsa](../docs/formats/wsa.md) | `wsa_extract.py`, `wsa_all_frames_extract.py` | yes (`wsa_all_frames_extract.py --check` repeats the same check, not in check_all) | picture: frame 0, or every frame with `--all` | gap | yes |
-| [voc](../docs/formats/voc.md) | `voc_reader.py` | yes | listen: `--wav` | gap | yes |
+| [voc](../docs/formats/voc.md) | `voc_reader.py` | yes | listen: `--wav` | yes (header and sound block) | yes |
 | [music](../docs/formats/music.md) | `extract_music.py`, `xmi_to_midi.py`, `adl_to_midi.py` | yes | listen: `xmi_to_midi.py` (XMI, C55, PCS) and `adl_to_midi.py` (ADL) write MIDI files | gap | yes |
 | [text](../docs/formats/text.md) | `extract_dialogue.py`, `decode_dialogue.py` | yes | text: `decode_dialogue.py LEVEL01.ENG` | gap | yes |
 | [cmz](../docs/formats/cmz.md) | `cmz_analyzer.py`, `level_renderer.py` | yes | picture: `level_renderer.py --level N --schematic`; text: wall-type counts | gap | yes |
-| [wll](../docs/formats/wll.md) | `wll_parser.py` | yes | text: counts per level; every record only in the `--out` JSON | gap | yes |
+| [wll](../docs/formats/wll.md) | `wll_parser.py` | yes | text: counts per level; every record with its fields: `wll_parser.py --level N` | yes | yes |
 | [vcn_vmp](../docs/formats/vcn_vmp.md) | `vcn_vmp_reader.py`, `tileset_mapper.py` | yes | picture: `vcn_vmp_reader.py KEEP --png tiles.png`, part: the 8×8 tiles in file order, not assembled into walls | gap | yes |
-| [xxx](../docs/formats/xxx.md) | `xxx_reader.py` | yes | text: every legend record with its name | gap | yes |
+| [xxx](../docs/formats/xxx.md) | `xxx_reader.py` | yes | text: every legend record with its name | yes | yes |
 | [dat](../docs/formats/dat.md) | `dat_reader.py` | yes | text: one record per `--index` | gap | yes |
-| [tlc](../docs/formats/tlc.md) | `tlc_reader.py` | yes | text, part: first 16 bytes of each of the 20 rows | gap | yes |
-| [palette](../docs/formats/palette.md) | `cps_reader.py --pal-from` | part: only through the CPS check | gap: no swatch or value dump; you see a palette only applied to a CPS (`cps_reader.py PARCH.CPS --png p.png --pal-from FXPAL.COL`) | gap | gap |
-| [fnt](../docs/formats/fnt.md) | `fnt_reader.py` | yes | picture: glyph atlas | gap | yes |
+| [tlc](../docs/formats/tlc.md) | `tlc_reader.py` | yes | text: first 16 bytes of each used row; table1 and all 20 rows in full with `--full` | yes | yes |
+| [palette](../docs/formats/palette.md) | `palette_reader.py`, `cps_reader.py --pal-from` | yes | text: `palette_reader.py ALTPAL1.PAL` (256 colours, 6-bit and 8-bit); picture: `--out-dir DIR` writes a 16 × 16 swatch; applied to a CPS: `cps_reader.py PARCH.CPS --png p.png --pal-from FXPAL.COL` | yes | yes |
+| [fnt](../docs/formats/fnt.md) | `fnt_reader.py` | yes | picture: glyph atlas | yes (header and glyph tables) | yes |
 | [emc2](../docs/formats/emc2.md) | `emc2_decompile.py` | corpus test (the tool has no `--check`) | text: script listing | yes | yes |
-| [tim](../docs/formats/tim.md) | `parse_tim.py`, `lol1_tim_words.py` | yes | text, part: chunk structure and statistics; no command-by-command listing of one TIM file | gap | yes |
+| [tim](../docs/formats/tim.md) | `parse_tim.py`, `lol1_tim_words.py` | yes (also re-counts the command table of Q6) | text: `parse_tim.py --list NAME.TIM`, command by command with the command names | yes (framing, walk, listing) | yes |
 | [drivers](../docs/formats/drivers.md) | `decode_dialogue.py` (`TRIG.TBL` only) | yes | text: `decode_dialogue.py TRIG.TBL`; the `.ADV`/`.DRV` drivers have no reader (they are program code) | gap | gap (no `TRIG.TBL` example) |
 | [loose](../docs/formats/loose.md) | `lol1_loose.py` | yes | gap: only the one `CHECK` line, no per-file dump | gap | yes |
-| [game_rules](../docs/game_rules.md) | none: the rules are read from program code | gap | gap | gap | gap |
-| [executable_tables](../docs/executable_tables.md) | none for the tables inside `MAIN.EXE` (character defaults, spell properties, experience thresholds, difficulty and price tables); item types and monster properties are script calls | part: the corpus test | part: `emc2_decompile.py STARTUP.PAK --entry ONETIME.INF` lists the item-type calls, `Lnn.PAK --entry LEVELn.INI` the monster calls; gap for the executable tables | gap | gap |
+| [game_rules](../docs/game_rules.md) | `exe_tables.py` for the tables the rules use (experience thresholds, difficulty rows, spell costs, character modifier rows, movement step words); the formulas themselves are program code | part: the tables | part: `exe_tables.py --table difficulty` (text); the formulas have no reader | yes (tables) | yes |
+| [executable_tables](../docs/executable_tables.md) | `exe_tables.py` for the tables inside `MAIN.EXE` and `MAINW.EXE` (character defaults, modifier rows, equipment layout, spell properties, experience thresholds, difficulty and price tables); item types and monster properties are script calls | yes, and the corpus test | text: `exe_tables.py` (every table, both editions); `emc2_decompile.py STARTUP.PAK --entry ONETIME.INF` lists the item-type calls, `Lnn.PAK --entry LEVELn.INI` the monster calls | yes | yes |
 | [savegame_format](../docs/savegame_format.md) | `save_reader.py` | yes | text; every field with `--json` | yes (original save layout) | yes |
 | [emc2_scripts](../docs/emc2_scripts.md) | `emc2_decompile.py`, `tests/test_emc2_corpus.py` | corpus test | text: script listing | yes | yes |
 | [levels/](../docs/levels/README.md) | `level_report.py` | yes | text: `level_report.py --level N` (same sheet as the page) | gap | yes |
 | [level_tileset_map](../docs/level_tileset_map.md) | `tileset_mapper.py` | yes | text | gap | yes |
 | [Q5 TRIG.TBL](../docs/unknowns/05_adv_drv_tbl.md) | `decode_dialogue.py` | yes | text: `decode_dialogue.py TRIG.TBL` | gap | gap |
-| [Q6 TIM opcodes](../docs/unknowns/06_tim_opcodes.md) | `lol1_tim_words.py` | yes | gap: no dump of the opcode tables | gap | yes (check only) |
-| [Q7 native rules](../docs/unknowns/07_native_rules.md) | none | gap | gap | gap | gap |
+| [Q6 TIM opcodes](../docs/unknowns/06_tim_opcodes.md) | `lol1_tim_words.py`, `parse_tim.py`, `exe_tables.py` | yes (`parse_tim.py --check` re-counts the command uses) | text: `exe_tables.py --table tim_commands` and `--table tim_nested` (native command tables); `parse_tim.py --list NAME.TIM` | yes | yes |
+| [Q7 native rules](../docs/unknowns/07_native_rules.md) | `exe_tables.py` for its tables (timer array, monster mode flags, spell-effect and wall-click pointers); the traced code has no reader | part: the tables | part: `exe_tables.py --table timers` (text) | yes (tables) | yes |
 | [Q13 decoration positions](../docs/unknowns/13_decoration_positions.md) | none for the cell table in `MAIN.EXE`; `dat_reader.py` for the records | gap | part: DAT records only | gap | gap |
 | [Q16 VCN colour banks](../docs/unknowns/16_vcn_colour_banks.md) | `vcn_vmp_reader.py` | yes | text: shift values; picture: tile atlas | gap | yes |
 | [Q17 native save fields](../docs/unknowns/17_native_save_fields.md) | `save_reader.py` | yes | text, `--json` | part | yes |
 | [Q18 native records](../docs/unknowns/18_native_records.md) | `monster_reference_scan.py` (needs Capstone, not in `requirements.txt`) | not in check_all | text: two `CHECK` lines | gap | gap (command only on the Q18 page) |
 
-Tools in `check_all.py` with no section below: `rating.py`. No unit test needs game data; tests exist only for PAK directories, Frame4, EMC2 and the original save layout.
+Tools in `check_all.py` with no section below: `rating.py`. No unit test needs game data; tests cover PAK directories, Frame4, EMC2, the original save layout (`tests/test_readers.py`) and PAL/CPS palettes, WLL, TLC, XXX, FNT, VOC headers, TIM framing and the executable tables (`tests/test_formats.py`).
 
 ## Examples and expected output
 
@@ -72,14 +72,14 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 
 ### `check_all.py`
 
-Run every tool's `--check` (33 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (35 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;34p"
+$ python3 tools/check_all.py | sed -n "1,3p;36p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 33 CHECKS PASSED
+ALL 35 CHECKS PASSED
 ```
 
 ### `doc_links.py`
@@ -195,12 +195,17 @@ $ python3 tools/cmz_analyzer.py
 
 ### `wll_parser.py`
 
-Wall-type tables of every level (rebuilds `data/wll_parsed.json`).
+Wall-type tables of every level (rebuilds `data/wll_parsed.json`). `--level N` prints every record of one level with the fields of the [WLL page](../docs/formats/wll.md); the high bytes the loader skips are shown raw.
 
 ```
 $ python3 tools/wll_parser.py
   Level  1: shape_idx=0 records=52 with_vmp=47 without=5
   Level  2: shape_idx=1 records=41 with_vmp=32 without=7
+$ python3 tools/wll_parser.py --level 1 | head -4
+LEVEL1.WLL: area 0 (KEEP), 52 records of 12 bytes, (size - 2) % 12 = 0
+rec  file+  wall_type  vmp  shape_map  special  flags  automap  bytes 3/7/9/11
+  0  0x002          0    0          0        0  0x80   0x3F     00 00 00 00
+  1  0x00E          1    1          0        0  0x07   0xFF     00 00 00 FF
 ```
 
 ### `vcn_vmp_reader.py`
@@ -266,12 +271,31 @@ $ python3 tools/level_report.py --level 1 | grep -E "^- Area|^\| block 621 "
 
 ### `tlc_reader.py`
 
-CD transparency tables of a level.
+CD transparency tables of a level. `--full` prints table1 and all 20 rows of table2, 16 hex values per line.
 
 ```
 $ python3 tools/tlc_reader.py LEVEL01.TLC
 LEVEL01.TLC in L01.PAK: 5376 bytes; effect colours -> slot: {0: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 7: 6, 8: 7, 9: 8, 10: 9, 11: 10, 12: 11, 13: 12, 1...
 slot 0: first 16 of row = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+$ python3 tools/tlc_reader.py LEVEL01.TLC --full | sed -n 2,3p
+table1 (colour -> slot, ff = opaque)
+    0: 00 ff 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e
+```
+
+### `palette_reader.py`
+
+A palette's colours: a `.PAL` or `.COL` file, or the palette inside a CPS. One row per colour with the 6-bit VGA values and the 8-bit RGB; `--out-dir DIR` also writes `DIR/NAME_EXT_swatch.png`, 16 × 16 squares with colour 0 top left. A file longer than 768 bytes (floppy `MONSTERS.PAL`) shows its first 256 colours unless you pass `--all`.
+
+```
+$ python3 tools/palette_reader.py ALTPAL1.PAL | head -6
+ALTPAL1.PAL in FOREST1.PAK: 768 palette bytes = 256 colours
+index  6-bit r  g  b   8-bit   r   g   b  hex
+    0         0  0  0           0   0   0  #000000
+    1         0  0  0           0   0   0  #000000
+    2        63 51 52         255 206 210  #ffced2
+    3        63 36 37         255 145 149  #ff9195
+$ python3 tools/palette_reader.py --check
+CHECK palette: 6 PAL, 5 COL, other than 768 bytes: none; 85 of 85 CPS carry a 768-byte palette; every value 0-63 and sizes a multiple of 3, bad=none
 ```
 
 ### `extract_dialogue.py`
@@ -335,11 +359,18 @@ CHECK ADL: 16 assets, 2207 entry projections (2158 with notes), 9 unavailable en
 
 ### `parse_tim.py`
 
-TIM cut-scene scripts: chunk structure and statistics (rebuilds `data/tim_analysis.json`).
+TIM cut-scene scripts: chunk structure and statistics (rebuilds `data/tim_analysis.json`). `--list NAME.TIM` prints one file command by command: word index, function, length, delay, opcode word, the command name from [Q6](../docs/unknowns/06_tim_opcodes.md), and the parameters (named where the page names them; the TEXT string of an animation or sound name; the nested function of command 0x19). `--check` also walks every file and re-counts the uses and files of each command against Q6 (CD), and the floppy intro and outro counts.
 
 ```
 $ python3 tools/parse_tim.py
 Parsed 139/139 TIM files
+$ python3 tools/parse_tim.py --list AUTOMAP.TIM | head -6
+AUTOMAP.TIM in O00A.PAK
+AUTOMAP.TIM: AVTL 143 words, 1 function(s) at word(s) [1], TEXT 7 bytes, in-game table
+word  fn len delay opcode command parameters
+   1   0   3     0 0x0118 cmd_return(1)
+   4   0   9     0 0x0102 cmd_initWSA index=0 string_id=0 "BOOK" x=288 y=32 offscreen=0 flags=40
+  13   0   3     0 0x0117 cmd_resetAllRuntimes
 ```
 
 ### `emc2_decompile.py`
@@ -404,6 +435,21 @@ $ python3 tools/lol1_loose.py --check
 CHECK loose: 25 files reach the last byte (3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com); 12 open (6 blend tables, 3 symbol files, 3 LANDS tails)
 ```
 
+### `exe_tables.py`
+
+The static tables inside the game program, at the offsets of [executable tables](../docs/executable_tables.md), [game rules](../docs/game_rules.md), [Q6](../docs/unknowns/06_tim_opcodes.md) and [Q7](../docs/unknowns/07_native_rules.md): character defaults, character modifier rows, equipment display layout, spell properties, experience thresholds, monster difficulty rows, item price thresholds (CD), timer array, monster mode flags, movement step words (CD), and the spell-effect, wall-click and TIM command pointer tables. It finds CD `HARDRIVE/MAIN.EXE` and `MAINW.EXE` and floppy `MAIN.EXE` by size. `--list` names the tables, `--table NAME` and `--image cd|cdw|floppy` pick one. Words the pages mark UNCONFIRMED are printed raw with their record offset. `--check` re-reads the values and counts the pages give (character modifier rows 0,0,0,1,0,0,1,2,4, spell rows, thresholds, difficulty rows, the CD-only tables absent on floppy, timer periods and callbacks, the TIM routines).
+
+```
+$ python3 tools/exe_tables.py --table difficulty --image cd
+# CD MAIN.EXE (356928 bytes, MZ header 0x3800)
+## Monster difficulty modifiers 1-3, easy/normal/hard, 256 = 1.0 (executable_tables.md): +0x2B85C
+row 1 (+0x2B85C): easy/normal/hard = [102, 256, 384]
+row 2 (+0x2B862): easy/normal/hard = [256, 256, 192]
+row 3 (+0x2B868): easy/normal/hard = [320, 256, 128]
+$ python3 tools/exe_tables.py --check
+CHECK exe_tables: CD MAIN.EXE, CD MAINW.EXE: character rows 0,0,0,1,0,0,1,2,4, spells, experience, difficulty rows, prices, timers, mode flags, spell/wall/TIM pointers as the pages give, bad=none
+```
+
 ### `repo_guard.py`
 
 Asset-policy guard, run by `check_all.py`: fails if git tracks any game file type (`.PAK`, `.CPS`, `.SHP`, `.XMI`, …), converted media (`.MID`, `.WAV`, …), a PNG outside `examples/` and `docs/images/`, a file over 300 KB (except the tables it lists by name), a machine path, or a word from an optional local word list (`.git/info/private_words`, never tracked). `--release` also checks every commit's author and committer address. Needs no game data. `N` is the number of tracked files; with a local word list the line ends `private word list: K words` instead.
@@ -415,7 +461,7 @@ CHECK repo_guard: N tracked files; game files, converted media, stray PNGs, file
 
 ### `tests/test_emc2_corpus.py`
 
-Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its 26th check.
+Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last (35th) check.
 
 ```
 $ python3 tests/test_emc2_corpus.py

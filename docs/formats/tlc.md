@@ -36,4 +36,4 @@ Byte 256 starts table2 row 0, which is all zeros (`00 00 00 …`). Slot 0 belong
 
 ## Tool
 
-`tools/tlc_reader.py LEVEL01.TLC`, `--check`.
+`tools/tlc_reader.py LEVEL01.TLC`, `--full` (table1 and all 20 rows), `--check`.

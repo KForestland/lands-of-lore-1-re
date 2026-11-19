@@ -2,6 +2,8 @@
 
 [Executable tables and offsets](executable_tables.md) · [EMC2 functions](emc2_scripts.md) · [Save-state fields](savegame_format.md) · [Native spell, timer, monster and WLL rules](unknowns/07_native_rules.md)
 
+The tables these rules read (experience thresholds, difficulty rows, spell costs, modifier rows, timer periods) are printed by `tools/exe_tables.py` ([tools](../tools/README.md#exe_tablespy)).
+
 **CONFIRMED** marks original CD or floppy bytes and instructions checked directly. **UNCONFIRMED** marks a rule whose expression is documented in the reference implementation but whose native behavior still needs a direct check. References use ScummVM revision `3b4db3035ac68d06391bbb23a15a8ff6cb9801a3`. CD executable addresses below refer to `DATA/HARDRIVE/MAIN.EXE`; floppy addresses refer to floppy `MAIN.EXE`.
 
 | Source shorthand | ScummVM file |

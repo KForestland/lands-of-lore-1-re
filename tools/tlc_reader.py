@@ -12,6 +12,7 @@ Used when drawing shapes and TIM animations with transparency
 (screen.cpp:2314-2331, sprites_lol.cpp:908-980, animator_tim.cpp:212).
 
   tlc_reader.py LEVEL01.TLC
+  tlc_reader.py LEVEL01.TLC --full   # table1 and all 20 rows of table2, 256 values each (hex)
   tlc_reader.py --check
 """
 import argparse, sys
@@ -24,9 +25,15 @@ def parse(b):
     return t1, t2, slots
 
 
+def full_rows(table):
+    """16 lines of 16 hex values; each line starts with the colour index of its first value."""
+    return [f"  {r * 16:3d}: " + " ".join(f"{v:02x}" for v in table[r * 16:r * 16 + 16]) for r in range(16)]
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("name", nargs="?")
+    ap.add_argument("--full", action="store_true", help="print table1 and every table2 row in full")
     ap.add_argument("--check", action="store_true")
     L.add_data_arg(ap)
     a = ap.parse_args()
@@ -48,6 +55,13 @@ def main():
     pak, b = L.find_member(a.name, a.data, a.pak)
     t1, t2, slots = parse(b)
     print(f"{a.name} in {pak}: {len(b)} bytes; effect colours -> slot: {slots}")
+    if a.full:
+        for title, table in [("table1 (colour -> slot, ff = opaque)", t1)] + \
+                [(f"table2 row {i} (screen colour -> blended colour)", t2[i * 256:(i + 1) * 256]) for i in range(20)]:
+            print(title)
+            for line in full_rows(table):
+                print(line)
+        return 0
     for i in sorted(set(slots.values())):
         print(f"slot {i}: first 16 of row = {list(t2[i*256:i*256+16])}")
     return 0

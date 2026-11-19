@@ -32,7 +32,25 @@ USAGE = """
   wll_parser.py                 # per-level summary
   wll_parser.py --out wll.json  # full parse (same shape as data/wll_parsed.json)
   wll_parser.py --check         # rebuild and compare with data/wll_parsed.json
+  wll_parser.py --level 1       # every record of LEVEL1.WLL with its fields (docs/formats/wll.md)
 """
+
+
+def record_lines(data):
+    """One line per 12-byte record, field names of docs/formats/wll.md; the high bytes (3, 7, 9, 11)
+    that the loader skips are shown raw."""
+    area = struct.unpack_from('<H', data, 0)[0]
+    from tileset_mapper import AREAS
+    out = [f"area {area} ({AREAS[area] if area < len(AREAS) else '?'}), {(len(data) - 2) // 12} records of 12 bytes, (size - 2) % 12 = {(len(data) - 2) % 12}",
+           "rec  file+  wall_type  vmp  shape_map  special  flags  automap  bytes 3/7/9/11"]
+    for i in range((len(data) - 2) // 12):
+        off = 2 + i * 12
+        r = data[off:off + 12]
+        out.append(f"{i:3d}  0x{off:03X}  {struct.unpack_from('<H', r, 0)[0]:9d}  {r[2]:3d}  "
+                   f"{struct.unpack_from('<h', r, 4)[0]:9d}  {r[6]:7d}  0x{r[8]:02X}   0x{r[10]:02X}     "
+                   f"{r[3]:02X} {r[7]:02X} {r[9]:02X} {r[11]:02X}")
+    return out
+
 
 
 def parse_wll(data):
@@ -69,7 +87,15 @@ def parse_wll(data):
 
 
 def main():
-    a = L.tool_args(__doc__ + USAGE).parse_args()
+    ap = L.tool_args(__doc__ + USAGE)
+    ap.add_argument("--level", type=int, help="print every record of LEVELn.WLL")
+    a = ap.parse_args()
+    if a.level is not None:
+        raw = L.level_member(a.level, "WLL", a.data)
+        if raw is None:
+            print(f"LEVEL{a.level}.WLL not found"); return 1
+        print(f"LEVEL{a.level}.WLL: " + "\n".join(record_lines(raw)))
+        return 0
     quiet = a.check
 
     all_results = {}
