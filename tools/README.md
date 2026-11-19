@@ -76,14 +76,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (37 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (38 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;37p"
+$ python3 tools/check_all.py | sed -n "1,3p;39p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 37 CHECKS PASSED
+ALL 38 CHECKS PASSED
 ```
 
 ### `doc_links.py`
@@ -501,3 +501,20 @@ Set `LOL1_DATA` or pass `--data` for the original game's DATA or floppy folder. 
 | Output path can be a file or folder | A single result, such as a WAV or a JSON save, takes a file. Frame and map batches take a folder. For `shp_renderer.py`, a named member selects a folder of PNGs and no member selects an inventory file. |
 | `--walls-png` and `extract_music.py --out-dir` | These request a second output alongside the ordinary `--out` product, assembled wall pages or raw music files. |
 | Older output flags | The original `--out-dir`, `--png`, `--wav`, `--json` and `--output` spellings are kept as aliases and shown in `--help`, where they previously requested the same output. |
+
+## Documentation index
+
+`doc_index.py` reads the repository's Markdown pages and generates [docs/index.json](../docs/index.json).
+Its `pages` records include the title, original path, question IDs and cited tool source paths.
+`answers` uses the Page or Where column of [Open questions](../docs/OPEN_QUESTIONS.md).
+`question_references` records other references to the same IDs. The top-level `questions`
+object preserves the published state and lists each question's answer pages. Tool citations
+include command examples. The index covers the Markdown files shipped in the repository,
+including the root pages, example and evidence notes, and issue templates.
+
+```bash
+python3 tools/doc_index.py --out docs/index.json
+python3 tools/doc_index.py --check
+```
+
+The check also runs in `check_all.py` and GitHub Actions. It needs no game data.

@@ -1,0 +1,1388 @@
+{
+  "schema_version": 1,
+  "question_source": "docs/OPEN_QUESTIONS.md",
+  "questions": {
+    "Q1": {
+      "state": "Partly",
+      "answer_pages": [
+        "docs/formats/shp.md"
+      ]
+    },
+    "Q2": {
+      "state": "Answered",
+      "answer_pages": [
+        "docs/formats/cmz.md"
+      ]
+    },
+    "Q3": {
+      "state": "Answered",
+      "answer_pages": [
+        "docs/formats/cmz.md"
+      ]
+    },
+    "Q4": {
+      "state": "Answered",
+      "answer_pages": [
+        "docs/formats/vcn_vmp.md",
+        "docs/unknowns/04_yvel2.md"
+      ]
+    },
+    "Q5": {
+      "state": "Answered",
+      "answer_pages": [
+        "docs/formats/drivers.md"
+      ]
+    },
+    "Q6": {
+      "state": "Answered",
+      "answer_pages": [
+        "docs/formats/tim.md"
+      ]
+    },
+    "Q7": {
+      "state": "Mostly",
+      "answer_pages": [
+        "docs/NEEDS_A_RUNNING_GAME.md",
+        "docs/game_rules.md"
+      ]
+    },
+    "Q8": {
+      "state": "Answered",
+      "answer_pages": [
+        "docs/NEEDS_A_RUNNING_GAME.md",
+        "docs/formats/emc2.md"
+      ]
+    },
+    "Q9": {
+      "state": "Answered",
+      "answer_pages": [
+        "docs/formats/pak.md"
+      ]
+    },
+    "Q10": {
+      "state": "Mostly",
+      "answer_pages": [
+        "docs/formats/tlk.md"
+      ]
+    },
+    "Q11": {
+      "state": "Answered",
+      "answer_pages": [
+        "docs/formats/cmz.md"
+      ]
+    },
+    "Q12": {
+      "state": "Answered",
+      "answer_pages": [
+        "docs/formats/xxx.md"
+      ]
+    },
+    "Q13": {
+      "state": "Answered",
+      "answer_pages": [
+        "docs/formats/dat.md"
+      ]
+    },
+    "Q14": {
+      "state": "Partly",
+      "answer_pages": [
+        "docs/formats/palette.md"
+      ]
+    },
+    "Q15": {
+      "state": "Answered",
+      "answer_pages": [
+        "docs/formats/music.md"
+      ]
+    },
+    "Q16": {
+      "state": "Answered",
+      "answer_pages": [
+        "docs/formats/vcn_vmp.md"
+      ]
+    },
+    "Q17": {
+      "state": "Mostly",
+      "answer_pages": [
+        "docs/NEEDS_A_RUNNING_GAME.md",
+        "docs/savegame_format.md"
+      ]
+    },
+    "Q18": {
+      "state": "Mostly",
+      "answer_pages": [
+        "docs/NEEDS_A_RUNNING_GAME.md",
+        "docs/executable_tables.md"
+      ]
+    }
+  },
+  "pages": [
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "title": "Bug report",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/research_note.md",
+      "title": "Research note",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "title": "Contributing",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/check_all.py",
+        "tools/example_images.py",
+        "tools/repo_guard.py"
+      ]
+    },
+    {
+      "path": "README.md",
+      "title": "Lands of Lore I: file formats and game rules",
+      "answers": [],
+      "question_references": [
+        "Q3",
+        "Q7",
+        "Q11",
+        "Q15"
+      ],
+      "tools": [
+        "tools/adl_to_midi.py",
+        "tools/check_all.py",
+        "tools/cps_reader.py",
+        "tools/decode_dialogue.py",
+        "tools/emc2_decompile.py",
+        "tools/example_images.py",
+        "tools/exe_tables.py",
+        "tools/full_report.py",
+        "tools/level_renderer.py",
+        "tools/level_report.py",
+        "tools/palette_reader.py",
+        "tools/parse_tim.py",
+        "tools/rating.py",
+        "tools/repo_guard.py",
+        "tools/save_reader.py",
+        "tools/shp_renderer.py",
+        "tools/vcn_vmp_reader.py",
+        "tools/voc_reader.py",
+        "tools/wsa_extract.py",
+        "tools/xmi_to_midi.py"
+      ]
+    },
+    {
+      "path": "docs/COOKBOOK.md",
+      "title": "Cookbook",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/full_report.py",
+        "tools/level_renderer.py",
+        "tools/level_report.py",
+        "tools/parse_tim.py",
+        "tools/save_reader.py",
+        "tools/xmi_to_midi.py"
+      ]
+    },
+    {
+      "path": "docs/EDITED_SAVES.md",
+      "title": "Runs on edited saves",
+      "answers": [],
+      "question_references": [
+        "Q17",
+        "Q18"
+      ],
+      "tools": []
+    },
+    {
+      "path": "docs/GLOSSARY.md",
+      "title": "Glossary",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/lol1_loose.py",
+        "tools/rating.py",
+        "tools/voc_reader.py"
+      ]
+    },
+    {
+      "path": "docs/HOW_A_LEVEL_IS_PUT_TOGETHER.md",
+      "title": "How a LoL1 level is put together",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "docs/HOW_THE_GAME_WORKS.md",
+      "title": "How Lands of Lore works",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "docs/HOW_WE_RATE.md",
+      "title": "How we rate this repository",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/check_all.py",
+        "tools/lol1_loose.py",
+        "tools/rating.py"
+      ]
+    },
+    {
+      "path": "docs/NEEDS_A_RUNNING_GAME.md",
+      "title": "LoL1 questions to test in the original DOS game",
+      "answers": [
+        "Q7",
+        "Q8",
+        "Q17",
+        "Q18"
+      ],
+      "question_references": [
+        "Q4",
+        "Q10",
+        "Q14"
+      ],
+      "tools": []
+    },
+    {
+      "path": "docs/NUMBERS.md",
+      "title": "LoL1 numbers at a glance",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/lol1_numbers.py"
+      ]
+    },
+    {
+      "path": "docs/OPEN_QUESTIONS.md",
+      "title": "Open questions",
+      "answers": [],
+      "question_references": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4",
+        "Q5",
+        "Q6",
+        "Q7",
+        "Q8",
+        "Q9",
+        "Q10",
+        "Q11",
+        "Q12",
+        "Q13",
+        "Q14",
+        "Q15",
+        "Q16",
+        "Q17",
+        "Q18"
+      ],
+      "tools": [
+        "tools/shp_renderer.py"
+      ]
+    },
+    {
+      "path": "docs/QUICK_REFERENCE.md",
+      "title": "Format quick reference",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/adl_to_midi.py",
+        "tools/cmz_analyzer.py",
+        "tools/cps_reader.py",
+        "tools/dat_reader.py",
+        "tools/decode_dialogue.py",
+        "tools/decode_frame4.py",
+        "tools/emc2_decompile.py",
+        "tools/extract_music.py",
+        "tools/fnt_reader.py",
+        "tools/lol1_loose.py",
+        "tools/pak_indexer.py",
+        "tools/pak_reader.py",
+        "tools/parse_tim.py",
+        "tools/save_reader.py",
+        "tools/shp_renderer.py",
+        "tools/tlc_reader.py",
+        "tools/tlk_verify.py",
+        "tools/vcn_vmp_reader.py",
+        "tools/voc_reader.py",
+        "tools/wll_parser.py",
+        "tools/wsa_extract.py",
+        "tools/xxx_reader.py"
+      ]
+    },
+    {
+      "path": "docs/START_HERE.md",
+      "title": "Start here, by goal",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/check_all.py",
+        "tools/cps_reader.py",
+        "tools/decode_dialogue.py",
+        "tools/emc2_decompile.py",
+        "tools/fnt_reader.py",
+        "tools/level_renderer.py",
+        "tools/level_report.py",
+        "tools/pak_reader.py",
+        "tools/save_reader.py",
+        "tools/shp_renderer.py",
+        "tools/tileset_mapper.py",
+        "tools/vcn_vmp_reader.py",
+        "tools/voc_reader.py",
+        "tools/wsa_extract.py",
+        "tools/xmi_to_midi.py",
+        "tools/xxx_reader.py"
+      ]
+    },
+    {
+      "path": "docs/STATUS.md",
+      "title": "LoL1 reverse-engineering status",
+      "answers": [],
+      "question_references": [
+        "Q1",
+        "Q3",
+        "Q6",
+        "Q7",
+        "Q8",
+        "Q9",
+        "Q10",
+        "Q11",
+        "Q12",
+        "Q13",
+        "Q14",
+        "Q15",
+        "Q16",
+        "Q17",
+        "Q18"
+      ],
+      "tools": [
+        "tools/adl_to_midi.py",
+        "tools/check_all.py",
+        "tools/cmz_analyzer.py",
+        "tools/cps_reader.py",
+        "tools/dat_reader.py",
+        "tools/decode_dialogue.py",
+        "tools/decode_frame4.py",
+        "tools/emc2_decompile.py",
+        "tools/extract_dialogue.py",
+        "tools/extract_music.py",
+        "tools/fnt_reader.py",
+        "tools/level_renderer.py",
+        "tools/level_report.py",
+        "tools/lol1_name_callers.py",
+        "tools/lol1_numbers.py",
+        "tools/lol1_tim_words.py",
+        "tools/lol1lib.py",
+        "tools/pak_indexer.py",
+        "tools/pak_reader.py",
+        "tools/parse_tim.py",
+        "tools/rating.py",
+        "tools/save_reader.py",
+        "tools/shp_renderer.py",
+        "tools/tileset_mapper.py",
+        "tools/tlc_reader.py",
+        "tools/tlk_verify.py",
+        "tools/vcn_vmp_reader.py",
+        "tools/voc_reader.py",
+        "tools/wll_parser.py",
+        "tools/wsa_all_frames_extract.py",
+        "tools/wsa_extract.py",
+        "tools/xmi_to_midi.py",
+        "tools/xxx_reader.py"
+      ]
+    },
+    {
+      "path": "docs/TOUR.md",
+      "title": "Follow LoL1 level 1 from map to exit",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/emc2_decompile.py",
+        "tools/level_renderer.py",
+        "tools/level_report.py",
+        "tools/lol1_numbers.py"
+      ]
+    },
+    {
+      "path": "docs/WHATS_NEW.md",
+      "title": "What's new",
+      "answers": [],
+      "question_references": [
+        "Q1",
+        "Q6",
+        "Q7",
+        "Q8",
+        "Q10",
+        "Q14",
+        "Q17",
+        "Q18"
+      ],
+      "tools": [
+        "tools/check_all.py",
+        "tools/doc_links.py",
+        "tools/example_images.py",
+        "tools/exe_tables.py",
+        "tools/level_renderer.py",
+        "tools/lol1_loose.py",
+        "tools/lol1_name_callers.py",
+        "tools/lol1_tim_words.py",
+        "tools/palette_reader.py",
+        "tools/parse_tim.py",
+        "tools/rating.py",
+        "tools/shp_renderer.py",
+        "tools/vcn_vmp_reader.py"
+      ]
+    },
+    {
+      "path": "docs/closure_memo.md",
+      "title": "LoL1 — Final Closure Memo",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "docs/edition_comparison.md",
+      "title": "LoL1 floppy Comparison (2026-03-18)",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "docs/emc2_scripts.md",
+      "title": "Lands of Lore 1 EMC2 scripts",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/emc2_decompile.py"
+      ]
+    },
+    {
+      "path": "docs/engine-evolution.md",
+      "title": "How the Lands of Lore engine changed",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "docs/executable_tables.md",
+      "title": "LoL1 executable and script tables",
+      "answers": [
+        "Q18"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/exe_tables.py",
+        "tools/lol1_numbers.py"
+      ]
+    },
+    {
+      "path": "docs/formats/README.md",
+      "title": "LoL1 file formats, one page each",
+      "answers": [],
+      "question_references": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4",
+        "Q5",
+        "Q6",
+        "Q7",
+        "Q9",
+        "Q10",
+        "Q11",
+        "Q12",
+        "Q13",
+        "Q14",
+        "Q15",
+        "Q16"
+      ],
+      "tools": [
+        "tools/adl_to_midi.py",
+        "tools/cmz_analyzer.py",
+        "tools/cps_reader.py",
+        "tools/dat_reader.py",
+        "tools/decode_dialogue.py",
+        "tools/decode_frame4.py",
+        "tools/emc2_decompile.py",
+        "tools/extract_music.py",
+        "tools/fnt_reader.py",
+        "tools/level_renderer.py",
+        "tools/lol1_loose.py",
+        "tools/lol1lib.py",
+        "tools/pak_indexer.py",
+        "tools/pak_reader.py",
+        "tools/parse_tim.py",
+        "tools/shp_renderer.py",
+        "tools/tileset_mapper.py",
+        "tools/tlc_reader.py",
+        "tools/tlk_verify.py",
+        "tools/vcn_vmp_reader.py",
+        "tools/voc_reader.py",
+        "tools/wll_parser.py",
+        "tools/wsa_extract.py",
+        "tools/xmi_to_midi.py",
+        "tools/xxx_reader.py"
+      ]
+    },
+    {
+      "path": "docs/formats/cmz.md",
+      "title": "CMZ level maps",
+      "answers": [
+        "Q2",
+        "Q3",
+        "Q11"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/cmz_analyzer.py",
+        "tools/level_renderer.py",
+        "tools/lol1lib.py"
+      ]
+    },
+    {
+      "path": "docs/formats/cps.md",
+      "title": "CPS full-screen images",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/cps_reader.py",
+        "tools/decode_frame4.py"
+      ]
+    },
+    {
+      "path": "docs/formats/dat.md",
+      "title": "DAT area decoration tables",
+      "answers": [
+        "Q13"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/dat_reader.py"
+      ]
+    },
+    {
+      "path": "docs/formats/drivers.md",
+      "title": "ADV, DRV, TBL",
+      "answers": [
+        "Q5"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/pak_reader.py"
+      ]
+    },
+    {
+      "path": "docs/formats/emc2.md",
+      "title": "EMC2 level scripts (INF, INI)",
+      "answers": [
+        "Q8"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/emc2_decompile.py"
+      ]
+    },
+    {
+      "path": "docs/formats/fnt.md",
+      "title": "FNT fonts",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/fnt_reader.py",
+        "tools/lol1_loose.py"
+      ]
+    },
+    {
+      "path": "docs/formats/lcw.md",
+      "title": "Frame4 / LCW compression (\"format 80\")",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/cps_reader.py",
+        "tools/decode_frame4.py",
+        "tools/lol1lib.py",
+        "tools/vcn_vmp_reader.py"
+      ]
+    },
+    {
+      "path": "docs/formats/loose.md",
+      "title": "Loose files in the CD DATA folder",
+      "answers": [],
+      "question_references": [
+        "Q6",
+        "Q14"
+      ],
+      "tools": [
+        "tools/lol1_loose.py",
+        "tools/rating.py"
+      ]
+    },
+    {
+      "path": "docs/formats/music.md",
+      "title": "Music: XMI, C55, ADL, PCS",
+      "answers": [
+        "Q15"
+      ],
+      "question_references": [
+        "Q5"
+      ],
+      "tools": [
+        "tools/adl_to_midi.py",
+        "tools/extract_music.py",
+        "tools/xmi_to_midi.py"
+      ]
+    },
+    {
+      "path": "docs/formats/pak.md",
+      "title": "PAK container",
+      "answers": [
+        "Q9"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/lol1lib.py",
+        "tools/pak_indexer.py",
+        "tools/pak_reader.py"
+      ]
+    },
+    {
+      "path": "docs/formats/palette.md",
+      "title": "PAL and COL palettes",
+      "answers": [
+        "Q14"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/cps_reader.py",
+        "tools/palette_reader.py",
+        "tools/tileset_mapper.py"
+      ]
+    },
+    {
+      "path": "docs/formats/shp.md",
+      "title": "SHP sprite shapes",
+      "answers": [
+        "Q1"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/shp_renderer.py"
+      ]
+    },
+    {
+      "path": "docs/formats/text.md",
+      "title": "Text files: ENG, FRE, GER",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/extract_dialogue.py"
+      ]
+    },
+    {
+      "path": "docs/formats/tim.md",
+      "title": "TIM sequence scripts",
+      "answers": [
+        "Q6"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/parse_tim.py"
+      ]
+    },
+    {
+      "path": "docs/formats/tlc.md",
+      "title": "TLC transparency tables (CD only)",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/tileset_mapper.py",
+        "tools/tlc_reader.py"
+      ]
+    },
+    {
+      "path": "docs/formats/tlk.md",
+      "title": "TLK speech containers (CD edition)",
+      "answers": [
+        "Q10"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/pak_reader.py",
+        "tools/tlk_verify.py",
+        "tools/voc_reader.py"
+      ]
+    },
+    {
+      "path": "docs/formats/vcn_vmp.md",
+      "title": "VCN and VMP wall tile sets",
+      "answers": [
+        "Q4",
+        "Q16"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/level_renderer.py",
+        "tools/tileset_mapper.py",
+        "tools/vcn_vmp_reader.py"
+      ]
+    },
+    {
+      "path": "docs/formats/voc.md",
+      "title": "VOC sound samples",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/voc_reader.py"
+      ]
+    },
+    {
+      "path": "docs/formats/wll.md",
+      "title": "WLL wall-type tables",
+      "answers": [],
+      "question_references": [
+        "Q7"
+      ],
+      "tools": [
+        "tools/wll_parser.py"
+      ]
+    },
+    {
+      "path": "docs/formats/wsa.md",
+      "title": "WSA animations",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/wsa_all_frames_extract.py",
+        "tools/wsa_extract.py"
+      ]
+    },
+    {
+      "path": "docs/formats/xxx.md",
+      "title": "XXX automap legend",
+      "answers": [
+        "Q12"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/xxx_reader.py"
+      ]
+    },
+    {
+      "path": "docs/game_rules.md",
+      "title": "LoL1 game rules",
+      "answers": [
+        "Q7"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/exe_tables.py"
+      ]
+    },
+    {
+      "path": "docs/level_tileset_map.md",
+      "title": "LoL1 Level → Tileset Mapping (ScummVM-verified)",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "docs/levels/README.md",
+      "title": "Level sheets",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level01.md",
+      "title": "Level 1",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level02.md",
+      "title": "Level 2",
+      "answers": [],
+      "question_references": [
+        "Q11"
+      ],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level03.md",
+      "title": "Level 3",
+      "answers": [],
+      "question_references": [
+        "Q11"
+      ],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level04.md",
+      "title": "Level 4",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level05.md",
+      "title": "Level 5",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level06.md",
+      "title": "Level 6",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level07.md",
+      "title": "Level 7",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level08.md",
+      "title": "Level 8",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level09.md",
+      "title": "Level 9",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level10.md",
+      "title": "Level 10",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level11.md",
+      "title": "Level 11",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level12.md",
+      "title": "Level 12",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level13.md",
+      "title": "Level 13",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level14.md",
+      "title": "Level 14",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level15.md",
+      "title": "Level 15",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level16.md",
+      "title": "Level 16",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level17.md",
+      "title": "Level 17",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level18.md",
+      "title": "Level 18",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level19.md",
+      "title": "Level 19",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level20.md",
+      "title": "Level 20",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level21.md",
+      "title": "Level 21",
+      "answers": [],
+      "question_references": [
+        "Q11"
+      ],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level22.md",
+      "title": "Level 22",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level23.md",
+      "title": "Level 23",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level24.md",
+      "title": "Level 24",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level25.md",
+      "title": "Level 25",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level26.md",
+      "title": "Level 26",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level27.md",
+      "title": "Level 27",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level28.md",
+      "title": "Level 28",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/levels/level29.md",
+      "title": "Level 29",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/decode_dialogue.py",
+        "tools/level_report.py"
+      ]
+    },
+    {
+      "path": "docs/repo_scope.md",
+      "title": "Repository Scope",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "docs/savegame_format.md",
+      "title": "LoL1 save-game format",
+      "answers": [
+        "Q17"
+      ],
+      "question_references": [],
+      "tools": [
+        "tools/save_reader.py"
+      ]
+    },
+    {
+      "path": "docs/series-formats.md",
+      "title": "What the three games share",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "docs/series-progress-and-numbers.md",
+      "title": "How the three games gate progress and scale numbers",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "docs/tutorial-one-event.md",
+      "title": "Follow one wall click in Lands of Lore",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/emc2_decompile.py"
+      ]
+    },
+    {
+      "path": "docs/unknowns/01_shp_header.md",
+      "title": "SHP header, CD and floppy",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/02_wll_header.md",
+      "title": "WLL bytes 0-3",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/03_level24_cmz.md",
+      "title": "Q3. Level 24's extra five bytes per block",
+      "answers": [],
+      "question_references": [
+        "Q3",
+        "Q11"
+      ],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/04_yvel2.md",
+      "title": "YVEL2.VCN and YVEL2.VMP",
+      "answers": [
+        "Q4"
+      ],
+      "question_references": [],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/05_adv_drv_tbl.md",
+      "title": "ADV, DRV, and TBL",
+      "answers": [],
+      "question_references": [
+        "Q14"
+      ],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/06_tim_opcodes.md",
+      "title": "TIM opcodes",
+      "answers": [],
+      "question_references": [
+        "Q6"
+      ],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/07_native_rules.md",
+      "title": "Q7 — Spell effects, timers, monster updates and walls in native DOS",
+      "answers": [],
+      "question_references": [
+        "Q7"
+      ],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/08_native_script_exit.md",
+      "title": "Q8 — EMC2 function 0x7E exits to DOS",
+      "answers": [],
+      "question_references": [
+        "Q8"
+      ],
+      "tools": [
+        "tools/emc2_decompile.py"
+      ]
+    },
+    {
+      "path": "docs/unknowns/09_pak_order.md",
+      "title": "Q9. Which PAK wins when the name is shared",
+      "answers": [],
+      "question_references": [
+        "Q9"
+      ],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/10_nnnnn_voc.md",
+      "title": "Q10. The 59 speech-archive entries named 00000.VOC",
+      "answers": [],
+      "question_references": [
+        "Q10"
+      ],
+      "tools": [
+        "tools/lol1_name_callers.py"
+      ]
+    },
+    {
+      "path": "docs/unknowns/11_undefined_walls.md",
+      "title": "Q11. Wall types the level file never defines",
+      "answers": [],
+      "question_references": [
+        "Q11"
+      ],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/12_legend_bit.md",
+      "title": "Q12. Bit 0x8000 on an automap legend string",
+      "answers": [],
+      "question_references": [
+        "Q12"
+      ],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/13_decoration_positions.md",
+      "title": "Q13 — How DAT decoration slots map to visible wall faces",
+      "answers": [],
+      "question_references": [
+        "Q13"
+      ],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/14_palette_callers.md",
+      "title": "Q14 — Callers for three alternative VGA palettes",
+      "answers": [],
+      "question_references": [
+        "Q14"
+      ],
+      "tools": [
+        "tools/lol1_name_callers.py"
+      ]
+    },
+    {
+      "path": "docs/unknowns/15_adl_and_c55.md",
+      "title": "Q15 — ADL records and the C55 music set",
+      "answers": [],
+      "question_references": [
+        "Q15"
+      ],
+      "tools": [
+        "tools/adl_to_midi.py"
+      ]
+    },
+    {
+      "path": "docs/unknowns/16_vcn_colour_banks.md",
+      "title": "Q16 — Which 16-colour bank a DOS wall tile uses",
+      "answers": [],
+      "question_references": [
+        "Q16"
+      ],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/17_native_save_fields.md",
+      "title": "Q17 — Fields skipped when importing a DOS save",
+      "answers": [],
+      "question_references": [
+        "Q17"
+      ],
+      "tools": []
+    },
+    {
+      "path": "docs/unknowns/18_native_records.md",
+      "title": "Q18 — Native item and monster records",
+      "answers": [],
+      "question_references": [
+        "Q18"
+      ],
+      "tools": [
+        "tools/check_all.py",
+        "tools/monster_reference_scan.py"
+      ]
+    },
+    {
+      "path": "examples/README.md",
+      "title": "Examples",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/check_all.py",
+        "tools/example_images.py",
+        "tools/level_renderer.py",
+        "tools/shp_renderer.py",
+        "tools/wsa_extract.py"
+      ]
+    },
+    {
+      "path": "tools/README.md",
+      "title": "Tools",
+      "answers": [],
+      "question_references": [
+        "Q5",
+        "Q6",
+        "Q7",
+        "Q13",
+        "Q15",
+        "Q16",
+        "Q17",
+        "Q18"
+      ],
+      "tools": [
+        "tools/adl_to_midi.py",
+        "tools/check_all.py",
+        "tools/cmz_analyzer.py",
+        "tools/cps_reader.py",
+        "tools/dat_reader.py",
+        "tools/decode_dialogue.py",
+        "tools/decode_frame4.py",
+        "tools/doc_index.py",
+        "tools/doc_links.py",
+        "tools/emc2_decompile.py",
+        "tools/example_images.py",
+        "tools/exe_tables.py",
+        "tools/extract_dialogue.py",
+        "tools/extract_music.py",
+        "tools/fnt_reader.py",
+        "tools/full_report.py",
+        "tools/level_renderer.py",
+        "tools/level_report.py",
+        "tools/lol1_loose.py",
+        "tools/lol1_name_callers.py",
+        "tools/lol1_numbers.py",
+        "tools/lol1_tim_words.py",
+        "tools/lol1lib.py",
+        "tools/monster_reference_scan.py",
+        "tools/pak_indexer.py",
+        "tools/pak_reader.py",
+        "tools/palette_reader.py",
+        "tools/parse_tim.py",
+        "tools/rating.py",
+        "tools/repo_guard.py",
+        "tools/save_reader.py",
+        "tools/shp_renderer.py",
+        "tools/tileset_mapper.py",
+        "tools/tlc_reader.py",
+        "tools/tlk_verify.py",
+        "tools/vcn_vmp_reader.py",
+        "tools/voc_reader.py",
+        "tools/wll_parser.py",
+        "tools/wsa_all_frames_extract.py",
+        "tools/wsa_extract.py",
+        "tools/xmi_to_midi.py",
+        "tools/xxx_reader.py"
+      ]
+    }
+  ]
+}
