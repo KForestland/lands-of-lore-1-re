@@ -45,7 +45,7 @@ cd lands-of-lore-1-re
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt                 # Pillow, for PNG output
 export LOL1_DATA=/path/to/your/LOL1/DATA        # the folder holding GENERAL.PAK (CD: DATA; floppy: the install folder)
-python3 tools/check_all.py                      # 28 checks, ends with ALL 28 CHECKS PASSED
+python3 tools/check_all.py                      # 29 checks, ends with ALL 29 CHECKS PASSED
 python3 tools/level_renderer.py --level 1 --out-dir ../maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
 ```
@@ -79,7 +79,7 @@ Formats the three games share, with links to the LoL2 and LoL3 repositories: [do
 - [`tools/`](tools/README.md): readers, renderers and extractors
 - [`tests/`](tests): synthetic reader tests (`python3 -m unittest`, no game files) and the script disassembler's corpus test (needs game data)
 - [`data/`](data): tables produced by the tools (inventories, wall tables, counts)
-- [`examples/`](examples): three small example outputs
+- [`examples/`](examples): three small example outputs, checked against today's tools by `example_images.py`
 
 [`docs/closure_memo.md`](docs/closure_memo.md) and [`docs/level_tileset_map.md`](docs/level_tileset_map.md) are notes from March 2026, kept as history; the format pages correct them where the data disagrees.
 

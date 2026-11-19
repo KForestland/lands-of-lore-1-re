@@ -32,9 +32,12 @@ Line data (screen.cpp:2095-2108): per row, `width` pixels; a nonzero byte is
 one pixel (mapped through the colour table when bit0), `0, n` skips n
 transparent pixels.
 
+  shp_renderer.py GUARD.SHP --out-dir shapes/ --level 1
+      (monster and item shapes: their colour table points into the 3D scene
+       palette of the level that loads them, so give that level; the runtime
+       colour tables of sprites_lol.cpp can still tint some monsters)
   shp_renderer.py KEEP.SHP --out-dir shapes/ [--pal-from PARCH.CPS]
-      (colours: monster and item shapes are drawn through the scene palette
-       and runtime colour tables, so a CPS palette gives wrong colours)
+      (interface shapes drawn over a CPS screen)
   shp_renderer.py --check      # every shape in every SHP decodes exactly
   shp_renderer.py --out inv.json   # per-file inventory (data/shp_inventory.json)
 """
@@ -109,6 +112,9 @@ def main():
     ap.add_argument("name", nargs="?", help="SHP member name, e.g. KEEP.SHP")
     ap.add_argument("--out-dir", help="write one PNG per shape here")
     ap.add_argument("--pal-from", default="PARCH.CPS", help="CPS (or .PAL/.COL) to take the palette from")
+    ap.add_argument("--level", type=int,
+                    help="draw with level N's scene palette (its VCN palette, or the override .PAL its script names), "
+                         "the palette monster and item shapes are drawn with in the 3D view; overrides --pal-from")
     ap.add_argument("--alt-header", action="store_true", help="demo edition: 2 extra bytes before each shape header")
     a = ap.parse_args()
     if a.check:
@@ -156,8 +162,16 @@ def main():
             print(f"{i:3d} {sh['width']}x{sh['height']} flags={sh['flags']:#06x} frame_size={sh['frame_size']} exact={sh['exact']}")
     if a.out_dir:
         from PIL import Image
-        _, pb = L.find_member(a.pal_from, a.data)
-        pal = L.load_bitmap(pb)[1] if a.pal_from.upper().endswith(".CPS") else pb[:768]
+        if a.level:
+            import level_renderer
+            import tileset_mapper
+            g = tileset_mapper.build(a.data)[a.level]["loadLevelGraphics"]
+            pal = level_renderer.area_set(g[0]["vcn_vmp"], a.data)[3]
+            if g[0]["palette"]:
+                pal = L.find_member(g[0]["palette"], a.data)[1][:384]
+        else:
+            _, pb = L.find_member(a.pal_from, a.data)
+            pal = L.load_bitmap(pb)[1] if a.pal_from.upper().endswith(".CPS") else pb[:768]
         flat = [c for rgb in L.vga_palette(pal) for c in rgb]
         os.makedirs(a.out_dir, exist_ok=True)
         stem = a.name.rsplit(".", 1)[0].lower()

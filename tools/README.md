@@ -21,14 +21,14 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 
 ### `check_all.py`
 
-Run every tool's `--check` (28 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (29 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
 $ python3 tools/check_all.py | sed -n "1,3p;28p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 28 CHECKS PASSED
+ALL 29 CHECKS PASSED
 ```
 
 ### `pak_reader.py`
@@ -83,10 +83,10 @@ wrote parch.png
 
 ### `shp_renderer.py`
 
-SHP sprites: list the shapes, write one PNG per shape (`--out-dir`), inventory (`--out`).
+SHP sprites: list the shapes, write one PNG per shape (`--out-dir`), inventory (`--out`). Monster and item shapes need the scene palette of the level that loads them: `--level N`. Interface shapes take a CPS palette with `--pal-from`.
 
 ```
-$ python3 tools/shp_renderer.py GUARD.SHP --out-dir guard
+$ python3 tools/shp_renderer.py GUARD.SHP --level 1 --out-dir guard
   0 56x96 flags=0x0005 frame_size=2846 exact=True
   1 56x96 flags=0x0005 frame_size=2867 exact=True
   2 56x96 flags=0x0005 frame_size=2948 exact=True
@@ -94,7 +94,7 @@ $ python3 tools/shp_renderer.py GUARD.SHP --out-dir guard
 
 ### `wsa_extract.py`
 
-WSA animations: header and frame table; frame 0 (or every frame with `--all`) as PNG.
+WSA animations: header and frame table; frame 0 (or every frame with `--all`) as PNG. A WSA without its own palette needs the one it is shown over: `--pal-from` the backdrop CPS the script loads with it (for `KNOWLTK1.WSA`, `KNOWLTK.CPS`).
 
 ```
 $ python3 tools/wsa_extract.py ESCAPE.WSA --out-dir escape
@@ -304,6 +304,15 @@ $ python3 tools/save_reader.py /path/to/scummvm/saves/lol-cd.NNN
 ScummVM save, CD, version 21: "<save name>"; ends at <size> as the layout predicts: True
   <one line per character: name, HP, MP, skills, XP>
   level <n>, block <b> (x, y), facing <f>, money <m>, <k> game flags set, levels stored [...], <i> items in use
+```
+
+### `example_images.py`
+
+Regenerates each image in `examples/` with the command listed in `examples/README.md` and compares pixels; part of `check_all.py`. `--out-dir` writes today's versions.
+
+```
+$ python3 tools/example_images.py --check
+CHECK example_images: 3 example images equal today's tool output pixel for pixel
 ```
 
 ### `repo_guard.py`

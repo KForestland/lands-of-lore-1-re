@@ -68,7 +68,7 @@ The closure memo's "3492/3492 frames" count was right in number, but the March 2
 
 ## Colours
 
-Monster and item shapes are drawn through the scene palette plus run-time colour tables (`sprites_lol.cpp:908-980`), so a PNG made with a fixed CPS palette shows the right shapes in the wrong colours. No single palette file gives the in-game colours; `--pal-from` a level's palette (e.g. `ALTPAL1.PAL`) only gets closer.
+Monster and item shapes are drawn through the scene palette plus run-time colour tables (`sprites_lol.cpp:908-980`). Their colour table points into the 3D scene palette of the level that loads them, so render them with `--level N` (the level's VCN palette, or the override `.PAL` its script names); a fixed CPS palette gives the right shapes in the wrong colours. Example: `shp_renderer.py GUARD.SHP --level 1` (`LEVEL1.INI` loads `GUARD.SHP`).
 
 
 ## Worked example

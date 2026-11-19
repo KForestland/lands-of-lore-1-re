@@ -9,7 +9,7 @@
 - **Checked on data**: the tool's `--check` parses every file of that kind. CD = the top-level `DATA/` folder of the CD-ROM edition with spoken dialogue (version CD1.02); ENG = its `DATA/ENG` folder; floppy = an English floppy-edition installation (no speech, chapter-based PAKs). Details: [formats/README.md](formats/README.md).
 - **Open**: what is not known yet, as numbered in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 
-Run every check at once: `python3 tools/check_all.py --data <DATA>` (28 checks; all pass on the CD and on the floppy edition, about 10 to 15 seconds).
+Run every check at once: `python3 tools/check_all.py --data <DATA>` (29 checks; all pass on the CD and on the floppy edition, about 10 to 15 seconds).
 
 **Rating** (counted by `tools/rating.py` on the CD edition; see [how we rate](HOW_WE_RATE.md)):
 

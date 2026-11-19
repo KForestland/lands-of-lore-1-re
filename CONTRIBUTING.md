@@ -28,7 +28,7 @@ Out of scope:
 ## Repo Shape
 
 - `docs/` holds the format pages, the rules and script pages, status and open questions.
-- `examples/` holds three small example images.
+- `examples/` holds three small example images; `tools/example_images.py --check` must pass after any change to the tools that make them.
 - `tools/` holds the readers and extractors; each needs `--data` and has `--check`.
 - `data/` holds structured inventories and parsed outputs.
 
