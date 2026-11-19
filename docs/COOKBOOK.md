@@ -145,3 +145,62 @@ python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
 ```text
 [0] Welcome to Gladstone Keep. …
 ```
+
+## Change one thing safely
+
+This example copies an English CD installation. It changes only the high
+byte of the first wall type's automap word, at `LEVEL1.WLL+0x0D` inside
+`L01.PAK` (CD archive `+0x109D0`). The [WLL format](formats/wll.md) shows
+this field and the original loader's low-byte read. **CONFIRMED** for that
+installation.
+
+The result is a modified copy for your own tests, not the original game.
+This repository ships no game files and no changed files. The script only
+reads your installation and writes only inside the new folder, so your
+original stays untouched. Keep the changed copy to yourself and do not
+share modified game files.
+
+From this repository's root, set `source` to your game folder containing
+`DATA`. Set `out` to a new directory outside both the repository and the
+original installation. The script refuses any other output folder and
+needs room for a full copy.
+
+```bash
+source="/path/to/LoL1"
+out="/path/to/my-lol1-copy"
+PYTHONPATH=tools python3 - "$source" "$out" <<'PY'
+from pathlib import Path
+import shutil
+import sys
+
+from cli_errors import output_refusal
+from lol1_level_writer import parse_walls, write_walls
+from lol1_pak_writer import write_pak
+from lol1lib import pak_entries
+
+source, out = (Path(arg).resolve() for arg in sys.argv[1:])
+refusal = output_refusal(out, source, repository=True)
+if refusal:
+    raise SystemExit(refusal)
+archive = Path("DATA/L01.PAK")
+original = (source / archive).read_bytes()
+members = [(name, original[start:start + size])
+           for name, start, size in pak_entries(original)]
+index, = (i for i, (name, _) in enumerate(members) if name == "LEVEL1.WLL")
+name, member = members[index]
+area, rows = parse_walls(member)
+row = rows[0]
+if row[0] != 0 or row[-1] != 0x003F:
+    raise SystemExit("this is not the expected first wall row")
+rows[0] = row[:-1] + (0x013F,)
+members[index] = name, write_walls((area, rows))
+rebuilt = write_pak(members)
+shutil.copytree(source, out)
+(out / archive).write_bytes(rebuilt)
+PY
+python3 tools/wll_parser.py --data "$out/DATA" --level 1 | sed -n '1,4p'
+```
+
+In row 0, the automap column still reads `0x3F`. The last of the four
+displayed high bytes is now `01`. The original and copied archive have
+the same length, and the single difference is at `L01.PAK+0x109D0`.
