@@ -9,29 +9,29 @@ export LOL1_DATA=/path/to/your/LOL1/DATA
 python3 tools/check_all.py        # 36 checks; the last line should read ALL 36 CHECKS PASSED
 ```
 
-Words you do not know are in the [glossary](GLOSSARY.md). Short worked commands, with the first lines they print, are in the [cookbook](COOKBOOK.md). The examples write into folders such as `maps/`: run them from a folder outside the clone, or give paths outside it, so nothing from your game ends up in the repository. To contribute, see [CONTRIBUTING](../CONTRIBUTING.md).
+Words you do not know are in the [glossary](GLOSSARY.md). Short worked commands, with the first lines they print, are in the [cookbook](COOKBOOK.md). Run the examples from the clone after `mkdir -p ../lol1-out`; they write there, outside the clone, so nothing from your game ends up in the repository. To contribute, see [CONTRIBUTING](../CONTRIBUTING.md).
 
 ## I want to read the level maps
 
 0. Start with the level's sheet in [levels/](levels/README.md): how the level is put together, block by block (made by `python3 tools/level_report.py --level N`).
 1. Read [formats/cmz.md](formats/cmz.md) (the 32 x 32 grid of wall types) and [formats/wll.md](formats/wll.md) (what each wall type is).
-2. Draw a map: `python3 tools/level_renderer.py --level 1 --out-dir maps/ --schematic` (a plain drawing) or without `--schematic` (with the game's wall tiles).
+2. Draw a map: `python3 tools/level_renderer.py --level 1 --out-dir ../lol1-out --schematic` (a plain drawing) or without `--schematic` (with the game's wall tiles).
 3. See which tile set, decorations and palette each level uses: `python3 tools/tileset_mapper.py`.
 4. Named places on the automap: [formats/xxx.md](formats/xxx.md), `python3 tools/xxx_reader.py LEVEL1.XXX` (prints each place's name, e.g. FOUNTAIN).
 
 ## I want to look at pictures, sprites and animations
 
-- Full-screen pictures: [formats/cps.md](formats/cps.md), `python3 tools/cps_reader.py PARCH.CPS --png parch.png`.
-- Sprites: [formats/shp.md](formats/shp.md), `python3 tools/shp_renderer.py GUARD.SHP --out-dir guard/`.
-- Animations: [formats/wsa.md](formats/wsa.md), `python3 tools/wsa_extract.py ESCAPE.WSA --out-dir escape/ --all`.
-- Wall tiles: [formats/vcn_vmp.md](formats/vcn_vmp.md), `python3 tools/vcn_vmp_reader.py KEEP --png keep_tiles.png`.
-- Fonts: [formats/fnt.md](formats/fnt.md), `python3 tools/fnt_reader.py FONT9P.FNT --png font.png`.
+- Full-screen pictures: [formats/cps.md](formats/cps.md), `python3 tools/cps_reader.py PARCH.CPS --png ../lol1-out/parch.png`.
+- Sprites: [formats/shp.md](formats/shp.md), `python3 tools/shp_renderer.py GUARD.SHP --level 1 --out-dir ../lol1-out/guard` (`--level` picks the palette of a level that uses the sprite).
+- Animations: [formats/wsa.md](formats/wsa.md), `python3 tools/wsa_extract.py ESCAPE.WSA --out-dir ../lol1-out/escape --all`.
+- Wall tiles: [formats/vcn_vmp.md](formats/vcn_vmp.md), `python3 tools/vcn_vmp_reader.py KEEP --png ../lol1-out/keep_tiles.png`.
+- Fonts: [formats/fnt.md](formats/fnt.md), `python3 tools/fnt_reader.py FONT9P.FNT --png ../lol1-out/font.png`.
 
 ## I want to listen to sound and speech
 
-- [formats/voc.md](formats/voc.md): `python3 tools/voc_reader.py VOC.PAK:1BOLTC.VOC --wav bolt.wav`.
-- CD speech is in `NN.TLK` files ([formats/tlk.md](formats/tlk.md)): `python3 tools/pak_reader.py list 01.TLK`, then `python3 tools/voc_reader.py 01.TLK:000_0.01 --wav line.wav`.
-- Music: [formats/music.md](formats/music.md), `python3 tools/xmi_to_midi.py LORE01A.XMI --out-dir midi/` (standard MIDI files you can play).
+- [formats/voc.md](formats/voc.md): `python3 tools/voc_reader.py VOC.PAK:1BOLTC.VOC --wav ../lol1-out/bolt.wav`.
+- CD speech is in `NN.TLK` files ([formats/tlk.md](formats/tlk.md)): `python3 tools/pak_reader.py list 01.TLK`, then `python3 tools/voc_reader.py 01.TLK:000_0.01 --wav ../lol1-out/line.wav`.
+- Music: [formats/music.md](formats/music.md), `python3 tools/xmi_to_midi.py LORE01A.XMI --out-dir ../lol1-out/midi` (standard MIDI files you can play).
 
 ## I want to read the game's text
 

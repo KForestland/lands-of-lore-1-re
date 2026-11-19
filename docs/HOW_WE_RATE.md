@@ -1,7 +1,7 @@
 # How we rate this repository
 
 The README and [STATUS](STATUS.md) carry four counted lines instead of a
-single percentage. `python3 tools/rating.py --data <DAT>` prints them from
+single percentage. `python3 tools/rating.py --data <DATA>` prints them from
 your copy of the game and the pages; `--check` (part of `check_all.py`)
 fails when the README or STATUS lines differ from the counts.
 

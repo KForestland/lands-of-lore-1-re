@@ -15,14 +15,14 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (36 checks; 
 
 <!-- rating:begin -->
 - **Files read:** 193 of 199 files in the CD `DATA` folder (288.6 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 489 statements CONFIRMED (proved from the program code or the files) and 77 UNCONFIRMED (a reading not yet proved), on 90 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 489 statements CONFIRMED (proved from the program code or the files) and 77 UNCONFIRMED (a reading not yet proved), on 89 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->
 
 ## File formats
 
-**Running-game results.** One probe is answered: in one quit from play on the English CD, the game restored the saved BIOS mode and exited with status 0 (Q8). The other runs were controls or partial runs, not answers. All 52 declared level-1 wall flags matched the original after play (a level-1 control; the Q7 probe needs level 8). The watched save bytes stayed zero through movement, turning and two load/save cycles (a partial run of the Q17 probe). Levels 8, 23 and 27 still need played saves. [Procedures and results](NEEDS_A_RUNNING_GAME.md)
+**Running-game results.** Answered probes are counted in the rating; which ones and how: [NEEDS_A_RUNNING_GAME](NEEDS_A_RUNNING_GAME.md#answered-probes). Runs on hand-edited copies of a game-written save: [edited saves](EDITED_SAVES.md).
 
 | Format | Documented | Tool | Checked on data | Open |
 |--------|-----------|------|-----------------|------|
@@ -37,14 +37,14 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (36 checks; 
 | ADL | [music.md](formats/music.md), [Q15](unknowns/15_adl_and_c55.md) | `adl_to_midi.py` | both original track-map widths and a four-second MIDI projection of all usable entry programs in 16 CD and 18 floppy assets | native sound effects and timbre |
 | ENG / FRE / GER text | [text.md](formats/text.md) | `decode_dialogue.py`, `extract_dialogue.py` | 90 files, 6495 strings, all bigram bytes in range (CD) | — |
 | CMZ level map | [cmz.md](formats/cmz.md) | `cmz_analyzer.py`, `level_renderer.py` | 29/29, size = 6 + 1024 x len (rebuilds the corrected `data/wall_type_analysis.json`) | Q3 settled, Q11 answered ([page](unknowns/11_undefined_walls.md)) |
-| WLL wall types | [wll.md](formats/wll.md) | `wll_parser.py` | 29/29, 1726 records (rebuilds `data/wll_parsed.json`) | Q7 (meaning of flag bits and special types) |
+| WLL wall types | [wll.md](formats/wll.md) | `wll_parser.py` | 29/29, 1726 records (rebuilds `data/wll_parsed.json`) | Q7 mostly answered: wall bit 0x40 needs a runtime trace ([page](unknowns/07_native_rules.md)) |
 | VCN / VMP | [vcn_vmp.md](formats/vcn_vmp.md) | `vcn_vmp_reader.py`, `tileset_mapper.py` | 13/13 sets CD and floppy; 35 `loadLevelGraphics` calls mapped | Q16 answered ([page](unknowns/16_vcn_colour_banks.md)) |
 | XXX automap legend | [xxx.md](formats/xxx.md) | `xxx_reader.py` | 29 files, 73 records, CD and floppy | Q12 answered ([page](unknowns/12_legend_bit.md)) |
 | DAT decorations | [dat.md](formats/dat.md) | `dat_reader.py` | 12/12 CD and floppy | Q13 answered ([page](unknowns/13_decoration_positions.md)) |
 | TLC (CD) | [tlc.md](formats/tlc.md) | `tlc_reader.py` | 29/29 CD; floppy has none | — |
 | PAL / COL | [palette.md](formats/palette.md) | `cps_reader.py --pal-from`, `lol1_name_callers.py` | 11/11 are 768 bytes (CD); level use of 3 PALs by script scan. The three unused names are absent from programs, payloads and the installer | Q14 partly answered: catalogued, no caller found ([page](unknowns/14_palette_callers.md)) |
 | FNT | [fnt.md](formats/fnt.md) | `fnt_reader.py` | CD 4, ENG 7, floppy 9 | — |
-| EMC2 scripts (INF/INI) | [emc2.md](formats/emc2.md), [emc2_scripts.md](emc2_scripts.md) | `emc2_decompile.py`, `tests/test_emc2_corpus.py` | CD 60/60, floppy 60/60, 0 unknown opcodes or functions; native dispatch tables located (independently re-checked) | Q8 (downstream effect only) |
+| EMC2 scripts (INF/INI) | [emc2.md](formats/emc2.md), [emc2_scripts.md](emc2_scripts.md) | `emc2_decompile.py`, `tests/test_emc2_corpus.py` | CD 60/60, floppy 60/60, 0 unknown opcodes or functions; native dispatch tables located (independently re-checked) | Q8 answered ([page](unknowns/08_native_script_exit.md)) |
 | TIM sequences | [tim.md](formats/tim.md) | `parse_tim.py`, `lol1_tim_words.py` | 139/139 `FORM…AVFS`; command use counted by two independent walkers. The 14 extra CD words and the four floppy `%d` words are re-read by `lol1_tim_words.py` | Q6 answered ([page](unknowns/06_tim_opcodes.md)) |
 | ADV / DRV / TBL | [drivers.md](formats/drivers.md) | `decode_dialogue.py` (TRIG.TBL) | drivers identified (Miles Sound System code); TRIG.TBL decoded (copy-protection text) | driver internals are code, not documented |
 
@@ -71,12 +71,12 @@ Pages: [executable_tables.md](executable_tables.md), [savegame_format.md](savega
 | Where the executables are | [executable_tables.md](executable_tables.md) | CD: inside `WESTWOOD.001` (the CD's install archive) and loose in `DATA/HARDRIVE` (`MAIN.EXE`, `MAINW.EXE`), byte-identical; floppy `MAIN.EXE` | — |
 | Spells (17 x 28 bytes), experience thresholds, character defaults (9 x 130), difficulty modifiers, CD price table | [executable_tables.md](executable_tables.md) | offsets in all three executables, values equal ScummVM's tables | native meaning of a few fields |
 | Item types (285) and monster properties (79 script calls) | [executable_tables.md](executable_tables.md), [emc2.md](formats/emc2.md) | supplied by scripts in both editions; 4 item rows differ between editions; native record layouts traced ([Q18](unknowns/18_native_records.md)) | a few field roles (Q18) |
-| Save file (original `_SAVEnnn.DAT`, level-state `_LEVELn.TMP`, ScummVM saves) | [savegame_format.md](savegame_format.md); reader `tools/save_reader.py` | save-name and version strings and section sizes in both executables; 4 floppy `_LEVELn.TMP` files written by the game in one played installation; the maintainer's 11 ScummVM saves end where the layout predicts (not shipped; `save_reader.py --check --saves DIR` checks yours); skipped native fields traced in both executables ([Q17](unknowns/17_native_save_fields.md)) | three single bytes; no original save examined (Q17) |
+| Save file (original `_SAVEnnn.DAT`, level-state `_LEVELn.TMP`, ScummVM saves) | [savegame_format.md](savegame_format.md); reader `tools/save_reader.py` | save-name and version strings and section sizes in both executables; 4 floppy `_LEVELn.TMP` files written by the game in one played installation; the maintainer's 11 ScummVM saves end where the layout predicts (not shipped; `save_reader.py --check --saves DIR` checks yours); skipped native fields traced in both executables ([Q17](unknowns/17_native_save_fields.md)) | three single bytes (Q17); the game-written CD `_SAVE000.DAT` slots were watched through save and load, and edited copies were loaded ([edited saves](EDITED_SAVES.md)) |
 | Combat, magic, experience and skills, monster behaviour, light, time | [game_rules.md](game_rules.md) | in both executables (disassembled): dice and random generator, armour reduction; per the page also hit test, damage categories, experience awards; data: spell damage tables, experience thresholds, monster mode flags. Spell casting and effects, lamp oil, regeneration and the 12 timers, monster transitions and WLL flags: traced in both executables ([Q7](unknowns/07_native_rules.md)) | Q7: WLL wall bit 0x40 (static collision masks traced to 0/1/2/7; needs a runtime trace), the remaining mode-10 gameplay producer (the clock is CONFIRMED at 60 ticks per second) |
 
 ## Tools
 
-All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 36 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
+All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given an output option (`--out`, `--out-dir`, `--png`, `--wav`; `emc2_decompile.py` uses `-o`/`--output`), and has a `--check`, except `emc2_decompile.py`, which `tests/test_emc2_corpus.py` checks on every script; `tools/check_all.py` runs the 36 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
 
 ## Corrections to the closure memo and the March data
 

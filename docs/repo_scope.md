@@ -1,3 +1,5 @@
+> **History (March 2026).** The scope note of the first published pass, kept as a record. Today's scope and asset policy are in the [README](../README.md#asset-policy); where they differ, the README is right.
+
 # Repository Scope
 
 This repository documents the reverse-engineering state of *Lands of Lore I* and publishes the tooling and structured outputs needed to reproduce the findings.

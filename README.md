@@ -10,7 +10,7 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 - **What you can do today:** read every file type with a tool (pictures, sprites, animations, sound, speech, music, fonts, text, maps, scripts, saves), draw any level, disassemble every level script, and look up how combat, magic and monsters work.
 - **Start in five minutes:** the [Quick start](#quick-start-5-minutes) below, then [Start here, by goal](docs/START_HERE.md), [How the game works](docs/HOW_THE_GAME_WORKS.md) or the [worked example](docs/tutorial-one-event.md).
 - **Recipes:** [cookbook](docs/COOKBOOK.md), eight short runs with the command and the first lines it prints.
-- **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md) and counted in the [rating](#rating). Some can only be settled by watching the original game run; [those checks](docs/NEEDS_A_RUNNING_GAME.md) are done for level 1, and the rest need saved games from levels 8, 23 and 27. Some probes were also tried on [edited saves](docs/EDITED_SAVES.md), copies of a game-written save with a few bytes changed.
+- **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md) and counted in the [rating](#rating). Some can only be settled by watching the original game run. Answered probes are counted in the rating; which ones and how: [NEEDS_A_RUNNING_GAME](docs/NEEDS_A_RUNNING_GAME.md#answered-probes). Some probes were also tried on [edited saves](docs/EDITED_SAVES.md), copies of a game-written save with a few bytes changed.
 - **What changed lately:** [what's new](docs/WHATS_NEW.md), newest first.
 - **The three games:** [LoL1](https://github.com/KForestland/lands-of-lore-1-re) · [LoL2](https://github.com/KForestland/lands-of-lore-2-re) · [LoL3](https://github.com/KForestland/Lands-of-lore-3-re) ([what they share](docs/series-formats.md), [how the engine changed](docs/engine-evolution.md)).
 
@@ -24,14 +24,31 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- rating:begin -->
 - **Files read:** 193 of 199 files in the CD `DATA` folder (288.6 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 489 statements CONFIRMED (proved from the program code or the files) and 77 UNCONFIRMED (a reading not yet proved), on 90 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 489 statements CONFIRMED (proved from the program code or the files) and 77 UNCONFIRMED (a reading not yet proved), on 89 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->
 
+## Quick start (5 minutes)
+
+You need Python 3.8+ and your own copy of the DOS game (CD or floppy edition).
+
+```bash
+git clone https://github.com/KForestland/lands-of-lore-1-re.git
+cd lands-of-lore-1-re
+python3 -m venv .venv && . .venv/bin/activate
+pip install -r requirements.txt                 # Pillow, for PNG output
+export LOL1_DATA=/path/to/your/LOL1/DATA        # the folder holding GENERAL.PAK (CD: DATA; floppy: the install folder)
+python3 tools/check_all.py                      # 36 checks, ends with ALL 36 CHECKS PASSED
+python3 tools/level_renderer.py --level 1 --out-dir ../maps/ --schematic
+python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
+```
+
+The last command prints the first line of level 1's English text: `[0] Welcome to Gladstone Keep.  King Richard awaits you in the throne room.`
+
 ## Tools at a glance
 
-What you can look at with your own copy of the game. Run from the clone with `export LOL1_DATA=/path/to/your/LOL1/DATA` (CD) or the floppy install folder; pictures and files go only where you point them (here `../lol1-out`, outside the clone). Every tool and option is in [`tools/README.md`](tools/README.md), with a table of every format and how to look at it.
+What you can look at with your own copy of the game. Run from the clone with `export LOL1_DATA=/path/to/your/LOL1/DATA` (CD) or the floppy install folder; pictures and files go only where you point them (here `../lol1-out`, outside the clone; make it first with `mkdir -p ../lol1-out`). Every tool and option is in [`tools/README.md`](tools/README.md), with a table of every format and how to look at it.
 
 | To see | Command |
 |---|---|
@@ -55,26 +72,9 @@ What you can look at with your own copy of the game. Run from the clone with `ex
 
 - **One page per file format** in [`docs/formats/`](docs/formats/README.md): layout, a worked example with real bytes, which part of the game reads it, and how it was checked.
 - **How the game works**: [`docs/HOW_THE_GAME_WORKS.md`](docs/HOW_THE_GAME_WORKS.md), with the details in [scripts](docs/emc2_scripts.md), [rules](docs/game_rules.md), [tables in the program](docs/executable_tables.md) and [save files](docs/savegame_format.md).
-- **Tools** in [`tools/`](tools/README.md): a reader for every format, map and sprite renderers, a script disassembler, text and sound extractors. Each has `--help`, writes only where you tell it, and has a `--check` that tests it against every file of its kind.
+- **Tools** in [`tools/`](tools/README.md): a reader for every format, map and sprite renderers, a script disassembler, text and sound extractors. Each has `--help`, writes only where you tell it, and has a `--check` that tests it against every file of its kind (the script disassembler is tested by `tests/test_emc2_corpus.py` instead).
 - **[Level sheets](docs/levels/README.md)**: one page per level, made from its files: graphics, wall types, clickable walls, every script entry with a one-line description, items and monsters placed, automap legend.
 - **[Start here, by goal](docs/START_HERE.md)** and a **[glossary](docs/GLOSSARY.md)**.
-
-## Quick start (5 minutes)
-
-You need Python 3.8+ and your own copy of the DOS game (CD or floppy edition).
-
-```bash
-git clone https://github.com/KForestland/lands-of-lore-1-re.git
-cd lands-of-lore-1-re
-python3 -m venv .venv && . .venv/bin/activate
-pip install -r requirements.txt                 # Pillow, for PNG output
-export LOL1_DATA=/path/to/your/LOL1/DATA        # the folder holding GENERAL.PAK (CD: DATA; floppy: the install folder)
-python3 tools/check_all.py                      # 36 checks, ends with ALL 36 CHECKS PASSED
-python3 tools/level_renderer.py --level 1 --out-dir ../maps/ --schematic
-python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
-```
-
-The last command prints the first line of level 1's English text: `[0] Welcome to Gladstone Keep.  King Richard awaits you in the throne room.`
 
 ## Status
 
@@ -91,10 +91,6 @@ Full table with evidence: [`docs/STATUS.md`](docs/STATUS.md). "Q7" and the like 
 
 Two editions were read: the CD-ROM edition with speech (version CD1.02) and an English floppy edition. See [`docs/edition_comparison.md`](docs/edition_comparison.md).
 
-## The other Lands of Lore games
-
-Formats the three games share, with links to the LoL2 and LoL3 repositories: [docs/series-formats.md](docs/series-formats.md).
-
 ## Repository layout
 
 - [`docs/`](docs): format pages, how the game works, status, open questions, glossary
@@ -105,7 +101,7 @@ Formats the three games share, with links to the LoL2 and LoL3 repositories: [do
 - [`data/`](data): tables produced by the tools (inventories, wall tables, counts)
 - [`examples/`](examples): three small example outputs, checked against today's tools by `example_images.py`
 
-[`docs/closure_memo.md`](docs/closure_memo.md) and [`docs/level_tileset_map.md`](docs/level_tileset_map.md) are older notes from March 2026, kept as history; where they disagree with the format pages, the format pages are right.
+[`docs/closure_memo.md`](docs/closure_memo.md), [`docs/repo_scope.md`](docs/repo_scope.md) and [`docs/level_tileset_map.md`](docs/level_tileset_map.md) are older notes from March 2026, kept as history; where they disagree with the format pages, the format pages are right.
 
 ## Asset policy
 
