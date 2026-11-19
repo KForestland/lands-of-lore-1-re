@@ -159,6 +159,8 @@ transition from a frame picked while mode 11 remains set.
 
 **CONFIRMED, edited-save run.** The position edit reached block 105. Neither active-row sample had a monster on a pose square. The mode-11 frame still needs the original monster-leaves event. [Byte changes and live placement](unknowns/07_native_rules.md#level-23-pose-squares-from-edited-placements)
 
+Parked (not run); see [Parked probes](#parked-probes-not-run).
+
 ### Q7c. What writes mode 10 during ordinary play?
 
 **CONFIRMED, new-game guard control.** In English CD level 1,
@@ -175,6 +177,8 @@ shows it, watch +0x14 for the first write of 10. On CD, use
 Record the writer, previous mode and object, then observe its
 next animation selection. The tested guard encounter used only
 modes 1 and 15.
+
+Parked (not run); see [Parked probes](#parked-probes-not-run).
 
 ### Q17. Are the isolated save bytes touched during play?
 
@@ -268,6 +272,72 @@ containing only the known critical and control reads bounds the
 result to the actions taken.
 
 **CONFIRMED, edited-save run.** A level-27 slot-1 battle read the critical byte and speed at `MAIN.EXE+0xAD87/+0x12744`. The first Hatchet slot-2 trial reached defeat without a watch hit. A second copy with 500 HP fought the Hatchets under read watches: the critical byte and speed were read (`+0xAD87/+0x12997`), and no read after initialization touched `+0x0C/+0x0E/+0x10` or `+0x40`. The ranged click did not fire, so the ranged attack is still untested. [Byte changes and fight trace](unknowns/18_native_records.md#level-27-fight-from-an-edited-placement) and [Hatchet read watches](unknowns/18_native_records.md#read-watches-on-the-hatchet-definition)
+
+## Parked probes (not run)
+
+These running-game tests were planned and then parked. No one will run
+them here. Each one is "not run": it has no result and the question it
+belongs to keeps its state. A reader with the original game and a
+debugger can do it. Addresses are `MAIN.EXE` file offsets unless the
+line names another program; turn them into breakpoints as described at
+the top of this page.
+
+- **Level 23 pose squares: which picture shows (not run).** Settles the
+  mode-11 frame of [Q7](OPEN_QUESTIONS.md). Full test:
+  [Q7b](#q7b-which-animation-actually-displays-when-a-script-selects-mode-11).
+  Setup: an edited copy of a level-1 slot set to level 23, as in the
+  [pose-square recipe](unknowns/07_native_rules.md#level-23-pose-squares-from-edited-placements),
+  but with the party one block beside block 105 (or 121, 369) while a
+  monster stands on that square. Watch: the far call to the mode setter
+  at CD `+0x14FC1` (floppy `+0x19948`), then the overlay frame selector
+  found by its byte pattern, and a write watch on that monster's byte
+  +0x14. Play: wait until the monster walks off the pose square, so the
+  script at CD `L23.PAK+0xC2AE` runs. Result: frame 14 with selector 0
+  and no direction or damage offset means the fixed mode-11 frame
+  reached the screen. Any other frame must match the captured selector
+  or draw flags. A write of 10 to +0x14 means a real mode-10 change.
+- **Mode 10 in ordinary play (not run).** Settles the mode-10 producer
+  of [Q7](OPEN_QUESTIONS.md). Full test:
+  [Q7c](#q7c-what-writes-mode-10-during-ordinary-play). Setup: any
+  game-written slot in a level with active monsters. Watch: a write
+  watch for the value 10 on byte +0x14 of each monster slot, at CD
+  `2803:15FA + 46 × slot + 0x14` or floppy
+  `2DCF:15DC + 46 × slot + 0x14`, plus the load segment. Play: fight,
+  flee and walk past monsters. Result: the first write of 10 gives the
+  writer, the old mode and the monster; then check its next frame
+  choice. No write of 10 over a stated stretch of play bounds that
+  stretch only.
+- **Who opens the three palettes (not run).** Settles
+  [Q14](OPEN_QUESTIONS.md) (`CAV_PLT2.PAL`, `CAV_PLT4.PAL`,
+  `ALTPAL3.PAL`). Setup: a new game from the intro, or any game-written
+  slot. Watch: a breakpoint on the generic file open that logs the
+  incoming name and stops only on these three. On the floppy the open
+  routine is at `+0xB442` (row lookup `+0x236D3–0x2383E`). On the CD
+  no open routine address is on these pages: break on DOS open
+  (`INT 21h` `AH=3Dh`) and seek (`AH=42h`) instead. The CD members sit
+  at `CAVE1.PAK+0x1D72C`, `CAVE1.PAK+0x1DD2C` and
+  `FOREST1.PAK+0x1B8B5` (rows 204, 206 and 122 of `FILEDATA.FDT`), so
+  a seek to one of those offsets after opening that archive is a hit.
+  Play: the intro, one level change and, if a slot can reach it, the
+  finale. Result: a stop on one of the three gives the caller address
+  and the read length; that caller is the answer. The palettes named by
+  the level 2, 3, 24 and 25 scripts (`ALTPAL1.PAL`, `ALTPAL2.PAL`,
+  `CAV_PLT3.PAL`) are positive controls for the breakpoint. No stop
+  over the whole run bounds only what was played. Details:
+  [palette callers](unknowns/14_palette_callers.md#remaining-question).
+- **Who plays `00000.VOC` in the finale (not run).** Settles
+  [Q10](OPEN_QUESTIONS.md). Setup: the finale program
+  `ENG/FINALE.EXE`. Its addresses are its own file offsets; use the
+  same rule as for `MAIN.EXE` with that program's header size. No
+  edited-save recipe reaches the finale yet, so this needs a slot near
+  the end of the game. Watch: the row-name scan at `+0xF0B0–0xF118`
+  and the indexed lookup at `+0xCDD1`, stopping when the index is 40
+  or the requested name is `00000.VOC`; and a read watch on the name
+  at `DS:08D0` (startup sets DS to `0x1B5B` plus the load segment).
+  Play: the whole finale. Result: a stop gives the caller of catalog
+  row 40 (file `0x1D1D0`), and that caller is the answer. No stop over
+  the whole finale means the row was not used in that run. Details:
+  [00000.VOC](unknowns/10_nnnnn_voc.md#what-would-settle-it).
 
 ## Answered probes
 
