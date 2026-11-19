@@ -4,6 +4,8 @@ To write the inventory, level sheets and text counts together, use `full_report.
 
 Python tools that read the data files of *Lands of Lore: The Throne of Chaos* (DOS) from your own copy of the game. Format pages: [`../docs/formats/`](../docs/formats/README.md); terms: [glossary](../docs/GLOSSARY.md).
 
+The numeric tables can be regenerated with `python3 tools/lol1_numbers.py`. On the CD edition, `--check` prints `CHECK numbers: CD tables match docs/NUMBERS.md`. [Numbers at a glance](../docs/NUMBERS.md)
+
 ## Setup
 
 - Python 3.8+ and Pillow (`pip install -r requirements.txt`) for the tools that write PNG files; Capstone (in the same file) for `monster_reference_scan.py`.
@@ -74,14 +76,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (36 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (37 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
 $ python3 tools/check_all.py | sed -n "1,3p;37p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 36 CHECKS PASSED
+ALL 37 CHECKS PASSED
 ```
 
 ### `doc_links.py`
