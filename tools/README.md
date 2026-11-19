@@ -407,7 +407,7 @@ CHECK CD monster references: 57 instance and 7 stat load candidates, 1 critical 
 Reads native `_SAVEnnn.DAT` slots, native `_LEVELn.TMP` files and ScummVM LoL saves field by field. `--json out.json` writes every field. `--check` checks the end boundary of each save in the game folder or its parent, and in a ScummVM save folder supplied with `--saves DIR`. It also checks the native layout on synthetic CD and floppy saves.
 
 ```
-$ python3 tools/save_reader.py /path/to/cd/_LEVEL1.TMP
+$ python3 tools/save_reader.py /path/to/cd/_LEVEL1.TMP   # a level file the CD game wrote during play (game-written, not shipped)
 level file; ends at 1529 as the layout predicts: True
   difficulty 1, 0 changed wall bytes, 4 monster slots in use, 0 flying objects
 $ python3 tools/save_reader.py /path/to/scummvm/saves/lol-cd.NNN

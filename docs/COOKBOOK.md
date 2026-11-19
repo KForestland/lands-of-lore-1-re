@@ -14,7 +14,7 @@ Pictures and written sheets go outside the clone. The examples use `../lol1-out`
 python3 tools/full_report.py --data "$LOL1_DATA" --out ../lol1-out/report
 ```
 
-The tool writes `inventory.tsv` with the files in `DATA`, their sizes, the reader used and its result. For an archive, `complete` describes its directory and payload spans.{1: '', 2: ' The two copies of the credits table have separate rows.', 3: ' The report labels the shipped cache seed and PHT files as repeated blocks when the byte-pattern checks pass.'} Open `levels/README.md` for the level sheets. `text-counts.tsv` gives one count per table from the language tables inside PAK archives.
+The tool writes `inventory.tsv` with the files in `DATA`, their sizes, the reader used and its result. For an archive, `complete` describes its directory and payload spans. Open `levels/README.md` for the level sheets. `text-counts.tsv` gives one count per table from the language tables inside PAK archives.
 
 Choose an output folder outside the game and clone. Use a fresh folder for each report.
 
