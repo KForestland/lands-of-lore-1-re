@@ -13,7 +13,7 @@ The three games share some file formats and design ideas. Their programs store l
 
 ## Archives and name lookup
 
-PAK stores the names directly alongside the positions. MIX and WSX keep a numeric key, a position and a size in each directory row. Both use signed key ordering. MIX uppercases and folds four-byte words with a rotate left and addition. WSX uppercases and folds individual bytes, after reducing each to `(b-0x30)&0x3F`, with a rotate right and addition. Their shared directory structure says nothing about whether a particular name will have the same key.
+PAK stores the names directly alongside the positions. MIX and WSX keep a numeric key, a position and a size in each directory row. Both use signed key ordering. MIX uppercases and folds four-byte words with a rotate left by 1 and addition. WSX uppercases and folds individual bytes, after reducing each to `(b-0x30)&0x3F`, with a rotate right by 6 and addition. Their shared directory structure says nothing about whether a particular name will have the same key.
 
 The shipped LoL3 `cdcache.wsx` and the four `.PHT` files sit outside that comparison. After the 114-byte header it shares with the game-written cache, the shipped cache is 51 copies of one 64,000-byte block. The four `.PHT` files are prefixes of one 0x1010000-byte block repeated end to end. No reader is known for either, and they are not counted as read.
 

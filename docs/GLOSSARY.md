@@ -10,6 +10,7 @@ These words mean the same thing in the notes for all three Lands of Lore games.
 |------|---------|
 | Original | The released game's own files and program. Every fact in this repository is about the original game. |
 | CONFIRMED / UNCONFIRMED | CONFIRMED: proved from the program code or the files. UNCONFIRMED: a reading not yet proved. |
+| Answered / Mostly answered / Partly answered | The state words of [open questions](OPEN_QUESTIONS.md). *Answered*: nothing is left to settle from the files or the program. *Mostly answered*: the main question is settled; named details remain. *Partly answered*: part is settled; the main point is open. A row that says 'answered for' a setup (one renderer, one device) counts as answered for that setup only. |
 | Native | In or from the original game program, as opposed to a reimplementation. |
 | Open question | A numbered question on the [open-questions page](OPEN_QUESTIONS.md). |
 | Archive | A file that holds many pieces of game data. |
@@ -25,9 +26,8 @@ These words mean the same thing in the notes for all three Lands of Lore games.
 | Placement | One recorded place where a level puts an item, a creature, or another object. |
 | Save slot | One file the original game wrote for a game in progress. Tools may read it; this repository does not store it. |
 | Probe | One check that needs the original game running. |
-| Answered, mostly answered, partly answered | The states of an open question. *Answered*: nothing is left to settle from the files or the program. *Mostly answered*: the main question is settled; named details remain. *Partly answered*: part is settled; the main point is open. A row that says 'answered for' a setup (one renderer, one device) counts as answered for that setup only. |
 | Rating | The four counted lines near the top of the README, written by `tools/rating.py`. |
-| Files read | A file whose every byte a tool here assigns to a known header, directory, entry or other named part; what is inside an entry may still be only partly understood. Files the game writes into the data folder while it runs are added to the total and count as read only if a reader walks them. |
+| Files read | A file whose every byte a tool here assigns to a known header, directory, entry or other named part; what is inside an entry may still be only partly understood. Files the game writes into the data folder while it runs are added to the total and count as read only if a reader walks them. Which folder is counted: [how we rate](HOW_WE_RATE.md). |
 | History page | A page marked **History** at its top: an older note kept as a record. The rating does not count it; where it differs, the current pages are right. |
 | File offset | The position of a byte in a file on disk. |
 | Spell | A magic effect the player casts. Its cost is stored in the game's tables. |
