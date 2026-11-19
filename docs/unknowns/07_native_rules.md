@@ -125,7 +125,7 @@
 
 **CONFIRMED** There are three literal mode-11 assignments in `LEVEL23.INF` in each edition. They find a monster in block 105, 121 or 369, play sounds 88 and 87, then invoke EMC `0x5B` with selector 0 and value 11. The native selector 0 calls the mode setter (CD `MAIN.EXE+0x14FBC–0x14FC6`, floppy `+0x19943–0x1994D`). For example, the state change for block 105 is the call at CD `L23.PAK+0xC2AE` and floppy `CHAPTER6.PAK+0x6AC2D`. The other calls are CD `+0xC2DE, +0xC310` and floppy `+0x6AC5D, +0x6AC8F`.
 
-**CONFIRMED** No shipped script requests mode 10. Every reachable mode argument to EMC `0x38` (stack slot 6) and every value argument to EMC `0x5B` with selector 0 resolves to literals, through subroutine callers where needed. That is 304 `0x38` calls in each edition (4 more are unreachable) and 38 CD / 39 floppy selector-0 `0x5B` calls. None gives 10, and the check reproduces the three mode-11 witnesses above. All 13 near callers of the native setter pass literal modes 3, 4, 5, 7, 8, 9 or 14 (CD target `0x11855`, e.g. `+0x12149`, `+0x12986`). The nine CD far callers (seven resident, two in the overlay through `0088:0995` at `+0x44824` and `+0x4490A`) and eight floppy far callers pass 13 or 14, or forward one of those two script arguments (CD `+0x14826`, `+0x14FC1`; floppy `+0x191AD`, `+0x19948`). The far pointer `0D6C:0995` occurs only at the seven CD far calls. A mode-10 producer outside the setter remains open (below).
+**CONFIRMED** No shipped script requests mode 10. Every reachable mode argument to EMC `0x38` (stack slot 6) and every value argument to EMC `0x5B` with selector 0 resolves to literals, through subroutine callers where needed. That is 304 `0x38` calls in each edition (4 more are unreachable) and 38 CD / 39 floppy selector-0 `0x5B` calls. None gives 10, and the check reproduces the three mode-11 witnesses above. All 13 near callers of the native setter pass literal modes 3, 4, 5, 7, 8, 9 or 14 (CD target `0x11855`, e.g. `+0x12149`, `+0x12986`). The nine CD far callers (seven resident, two in the overlay through `0088:0995` at `+0x44824` and `+0x4490A`) and eight floppy far callers pass 13 or 14, or forward one of those two script arguments (CD `+0x14826`, `+0x14FC1`; floppy `+0x191AD`, `+0x19948`). The far pointer `0D6C:0995` occurs only at the seven CD far calls. The stores outside the setter are listed under [mode-byte stores](#mode-byte-stores): they write 15, 16, 8 or 0, or restore a saved byte.
 
 **CONFIRMED, probe setup.** The English CD launcher now reaches
 play in the documented `MAIN.EXE`. Its native starting slot has
@@ -245,15 +245,34 @@ finds no literal ES:disp8 byte store of 10 at displacement +0x14
 in either complete tested image. It corroborates the earlier
 mode-10 search over the shipped scripts.
 
-**UNCONFIRMED** A gameplay producer for mode 10 outside the setter.
-The setter's 22 CD and 21 floppy callers are resolved and none
-supplies 10 (see the mode-10 paragraph above). What remains is a
-byte store to +0x14 that bypasses the setter. Such stores include
-the collision-query restore (CD `0x114AC`) and a register store at
-CD `0x16A69` into a record whose type is not identified. A write
-watch on instance byte +0x14 for value 10 in a running game would
-settle it. Watch the slots at CD `2803:15FA + 46 × slot + 0x14` or
-floppy `2DCF:15DC + 46 × slot + 0x14`, adding the load segment.
+### Mode-byte stores
+
+**CONFIRMED** The instance mode byte has ten direct stores in the CD program and eight in the floppy program. Seven CD and five floppy stores go through a pointer to one instance (`es:[bx+0x14]`). The other three in each edition index the array itself (`es:[bx+0x160E]` on the CD, `es:[bx+0x15F0]` on the floppy, with `bx` = slot × 46), in overlay code whose data segment word is `0x5F8` (CD) or `0x460` (floppy). `lol1_mode_paths.py --check` re-reads that set. None of the stores is the immediate 10 or 11.
+
+| Role | Writes | When | CD | floppy |
+| --- | --- | --- | --- | --- |
+| Collision query | 15 | on entry, before the position query | `0x11474` | `0x15F10` |
+| Collision restore | the byte saved at entry | after that query | `0x114AC` | `0x15F48` |
+| Mode-1 fan-out | the argument, and the compare requires 7 | current mode is 1 and the argument is 7 | `0x118AC` | `0x16348` |
+| Setter, general | the caller argument | the mode-13 early return and the mode-1 fan-out do not run | `0x118FA` | `0x16396` |
+| Mode-13 arm | 0 | the argument is 13 and instance +0x19 bit 0x20 is set | `0x11920` | `0x163BC` |
+| Overlay, low HP | 0 | HP word +0x1D is at most the compared word and bit 0x20 is set | `0x44806` | none |
+| Overlay, mode 11 | 0 | the current mode is 11 and bit 0x20 is set | `0x448EC` | none |
+| Overlay, array reset | 16 | every one of the 30 slots, after the slot is cleared | `0x45FD1` | `0x4F791` |
+| Overlay, block list | 8 | each monster in the list whose mode is below 13 (compare at CD `0x50A68`, floppy `0x5A8F8`) | `0x50B44` | `0x5A9C8` |
+| Overlay, block-list restore | the mode saved before the 8 | the same monsters, later in the same routine | `0x50BBB` | `0x5AA40` |
+
+Three more writers fill whole records rather than the byte. The library call that clears 46 bytes clears one slot (CD call `0x146D2`, floppy `0x1906A`) and each slot of the array reset (CD `0x45FBF`, floppy `0x4F77F`), so the byte becomes 0. The level-state load reads 1380 bytes, the whole array, from the file (CD call `0x48704`, floppy `0x51DD4`); the byte then holds whatever the file holds. The save path writes the same 1380 bytes out (CD `0x4864C`, floppy `0x51D1C`).
+
+The general store is the only one that can write a caller-chosen value. The fan-out writes 7 only. The two restores put back a value read from the same byte earlier in the routine. The mode-11 overlay store runs only when the mode is already 11, then writes 0, so it consumes 11. The CD setter's twenty-two call sites push 3, 4, 5, 7, 8, 9, 13 or 14, or they forward a script word. The two-way site at `0x12149` pushes 3 or 4. `0x14826` and `0x14FC1` forward the script. No immediate is 10 or 11. The floppy script walk matches the CD walk: 304 reached `0x38` calls out of 308, no resolved 10, and the same three `LEVEL23.INF` calls pass 11.
+
+**How complete the search is.** Every byte offset of each program was decoded. The search kept every instruction that writes memory at displacement +0x14 (or +0x13 as a word, +0x11 or +0x12 as a dword) from any base register, at a displacement inside the array from any index register, or at an absolute mode-byte address. It also kept every use of the array base `0x15FA` / `0x15DC` and every push of the lengths 46 and 1380. The word and dword stores at +0x12 to +0x14 that it found write far-pointer or table fields of other records. It does not see a store through a pointer already advanced to +0x14, a library string routine reached with a computed pointer, or an indirect call of the setter.
+
+**CONFIRMED** Two other byte stores at displacement +0x14 are not the instance. CD `0x16A69` and floppy `0x1B1D4` copy byte +0xF. Its one caller (CD `0x16B74`) walks the `0xB5`-stride table at `DS:0x4EE0`, not the 46-byte array. The function takes byte +0xF as an index, shifts it left by 4 and adds `0x15`, which selects a 16-byte record. The store runs when byte +0x10, after it is stepped, equals the selected record's word +2 plus that step, and either the incremented byte +0x11 is greater than the record's word +4 or byte +0xD is not 0. CD `0x4CE36` and floppy `0x559D1` write `0xFF` into a record of the same `0xB5`-stride table.
+
+**UNCONFIRMED** That nothing produces mode 10. No store found writes 10 and no resolved caller or script passes 10, but the search has the limits above and a save file can bring in any byte. The running-game watch is [Q7c](../NEEDS_A_RUNNING_GAME.md#q7c-what-writes-mode-10-during-ordinary-play).
+
+Wall bit 0x40, the mode-10 producer and the on-screen mode-11 frame stay open, so Q7 stays mostly answered.
 
 ### Early CD guard modes in a new game
 
@@ -284,6 +303,7 @@ hold blocks 589, 524, 239 and 303 at row +5 and mode 1 at row +0x14.
 The visit identifies the temporary collision-probe mode in this
 encounter. It does not change the result above: no shipped script
 asks for mode 10 and none of the setter's 22 CD callers passes 10.
+The [store census](#mode-byte-stores) lists the instance writers found statically.
 **UNCONFIRMED.** The gameplay producer for mode 10.
 Keep a value-10 write watch on +0x14 in an encounter that
 actually enters that mode, and record the native writer and its
@@ -357,4 +377,4 @@ approaching a pose square, then follow that instance from the
 
 **What was tried.** The scan enumerated every instruction with displacement `0x531E` and read each test immediate. The page already traced the collision callers to masks 0, 1, 2 and 7 and the direct tests at `0xC91C`, `0x481AB` and `0x3EA1A`.
 
-**What would settle it.** The running-game test is not yet run: a trace of the WLL wall byte, whose collision callers supply only masks 0, 1, 2 and 7, and the remaining mode-10 gameplay producer ([Q7a](../NEEDS_A_RUNNING_GAME.md#q7a-can-wall-bit-0x40-change-anything-besides-the-emc-byte-test), [probes not yet run](../NEEDS_A_RUNNING_GAME.md#probes-not-yet-run)).
+**What would settle it.** The running-game test is not yet run: a trace of the WLL wall byte, whose collision callers supply only masks 0, 1, 2 and 7 ([Q7a](../NEEDS_A_RUNNING_GAME.md#q7a-can-wall-bit-0x40-change-anything-besides-the-emc-byte-test), [probes not yet run](../NEEDS_A_RUNNING_GAME.md#probes-not-yet-run)), and a value-10 write watch on the mode byte, which would test the static store census above ([Q7c](../NEEDS_A_RUNNING_GAME.md#q7c-what-writes-mode-10-during-ordinary-play)).

@@ -171,8 +171,10 @@ back to 1 at `+0x114AC`. The game-written save has all four
 rows in mode 1 after the encounter.
 [Watch addresses and native slot rows](unknowns/07_native_rules.md#early-cd-guard-modes-in-a-new-game)
 
-**UNCONFIRMED.** The producer of mode 10. In an encounter that
-shows it, watch +0x14 for the first write of 10. On CD, use
+**CONFIRMED, static.** The direct stores to the instance mode byte are the ten CD sites and eight floppy sites on the rules page. None stores the constant 10, and no resolved caller or script value is 10. [Mode-byte stores](unknowns/07_native_rules.md#mode-byte-stores)
+
+**UNCONFIRMED.** That nothing produces mode 10. The static search does not cover a store through a pointer already advanced to +0x14, an indirect call of the setter, or the value a save file brings in. In an encounter that
+shows mode 10, watch +0x14 for the first write of 10. On CD, use
 `2803:15FA + 46 × slot + 0x14` plus the load segment.
 Record the writer, previous mode and object, then observe its
 next animation selection. The tested guard encounter used only
@@ -293,8 +295,8 @@ the top of this page.
   and no direction or damage offset means the fixed mode-11 frame
   reached the screen. Any other frame must match the captured selector
   or draw flags. A write of 10 to +0x14 means a real mode-10 change.
-- **Mode 10 in ordinary play (not run).** Settles the mode-10 producer
-  of [Q7](OPEN_QUESTIONS.md). Full test:
+- **Mode 10 in ordinary play (not run).** Tests the static result
+  for the mode-10 producer of [Q7](OPEN_QUESTIONS.md). Full test:
   [Q7c](#q7c-what-writes-mode-10-during-ordinary-play). Setup: any
   game-written slot in a level with active monsters. Watch: a write
   watch for the value 10 on byte +0x14 of each monster slot, at CD
@@ -327,12 +329,13 @@ the top of this page.
   `ENG/FINALE.EXE`. Its addresses are its own file offsets; use the
   same rule as for `MAIN.EXE` with that program's header size. No
   edited-save recipe reaches the finale yet, so this needs a slot near
-  the end of the game. Watch: the row-name scan at `+0xF0B0–0xF118`
-  and the indexed lookup at `+0xCDD1`, stopping when the index is 40
-  or the requested name is `00000.VOC`; and a read watch on the name
-  at `DS:08D0` (startup sets DS to `0x1B5B` plus the load segment).
-  Play: the whole finale. Result: a stop gives the caller of catalog
-  row 40 (file `0x1D1D0`), and that caller is the answer. No stop over
+  the end of the game. Watch: the catalog lookups at `+0xCDD1`, `+0xCE4D`
+  and `+0xEB05`, stopping when the selected row's name pointer is the
+  name at `DS:08D0` (`00000.VOC`); and a read watch on that name
+  (startup sets DS to `0x1B5B` plus the load segment). Do not stop on
+  index 40: the startup sort at `+0xF0B0` reorders rows 4 to 92.
+  Play: the whole finale. Result: a stop gives the caller of the
+  clip's catalog row (file `0x1D1D0`), and that caller is the answer. No stop over
   the whole finale means the row was not used in that run. Details:
   [00000.VOC](unknowns/10_nnnnn_voc.md#what-would-settle-it).
 - **Level 22 block 27: what the wall shows (not run).** Settles the

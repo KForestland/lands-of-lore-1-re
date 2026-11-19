@@ -4,6 +4,7 @@ Newest first. One line per question worked on, new tool or visible change; each 
 
 ## 19 November 2026
 
+- **Mode stores, finale row and palette indexes (Q7 mostly answered, Q10 mostly answered, Q14 partly answered).** Ten CD and eight floppy direct stores write the instance mode byte; none stores 10, and three LEVEL23 calls pass 11. Whether anything produces mode 10 stays open. Finale row 40 is one of 93 catalog rows; every catalog index read is computed, none is the constant 40, and startup sorts rows 4 to 92 by name. No stride-20 site loads the three palette row numbers as a constant. `lol1_mode_paths.py --check` re-reads these ([native rules](unknowns/07_native_rules.md), [00000.VOC](unknowns/10_nnnnn_voc.md), [palette callers](unknowns/14_palette_callers.md)).
 - **Numbers at a glance.** Tables generated from the original files, with a check that the page equals the tool output ([numbers](NUMBERS.md)).
 - **How a level is put together.** The pieces a level needs, the file that holds each and the order the program loads them ([level assembly](HOW_A_LEVEL_IS_PUT_TOGETHER.md)).
 - **Tour.** One level followed end to end: its picture, sheet, exits and numbers, with the command behind each part ([tour](TOUR.md)).

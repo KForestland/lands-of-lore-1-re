@@ -25,7 +25,7 @@ Built by `LoLEngine::snd_playCharacterSpeech`, `engines/kyra/sound/sound_lol.cpp
 | `%03X` … `.00` | id has bit 0x4000 (global lines, TLK number forced to 00) |
 | `@%04d` + speaker + `.%02d` | id >= 1000 |
 
-Example on the data: `01.TLK` holds `00000.VOC`, `000_0.01`, `000_1.01`, `001A0.01`, … CONFIRMED (`pak_reader.py list 01.TLK`). The `NNNNN.VOC` members (59 in total) are one 44115-byte clip named `00000.VOC`, stored as the first and last entry of each TLK (once in `25.TLK`). CONFIRMED. These patterns never produce that name. Who plays it is UNCONFIRMED, [Q10](../OPEN_QUESTIONS.md): it would be settled by code that reaches row 40 of the catalog at `ENG/FINALE.EXE+0x1D1D0` (for example through the lookup at `+0xCDD1`), or opens the name through the row scan at `+0xF0B0`.
+Example on the data: `01.TLK` holds `00000.VOC`, `000_0.01`, `000_1.01`, `001A0.01`, … CONFIRMED (`pak_reader.py list 01.TLK`). The `NNNNN.VOC` members (59 in total) are one 44115-byte clip named `00000.VOC`, stored as the first and last entry of each TLK (once in `25.TLK`). CONFIRMED. These patterns never produce that name. Who plays it is UNCONFIRMED, [Q10](../OPEN_QUESTIONS.md): every catalog index in `ENG/FINALE.EXE` is computed and none is the constant 40, and startup sorts catalog rows 4 to 92 by name, so the file row number 40 need not be the row used in memory. Who requests the name stays open.
 
 ## Confirmed
 

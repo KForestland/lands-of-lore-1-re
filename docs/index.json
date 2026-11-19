@@ -456,6 +456,7 @@
         "tools/exe_tables.py",
         "tools/level_renderer.py",
         "tools/lol1_loose.py",
+        "tools/lol1_mode_paths.py",
         "tools/lol1_name_callers.py",
         "tools/lol1_tim_words.py",
         "tools/palette_reader.py",
@@ -1228,7 +1229,9 @@
       "question_references": [
         "Q7"
       ],
-      "tools": []
+      "tools": [
+        "tools/lol1_mode_paths.py"
+      ]
     },
     {
       "path": "docs/unknowns/08_native_script_exit.md",
@@ -1258,6 +1261,7 @@
         "Q10"
       ],
       "tools": [
+        "tools/lol1_mode_paths.py",
         "tools/lol1_name_callers.py"
       ]
     },
@@ -1296,6 +1300,7 @@
         "Q14"
       ],
       "tools": [
+        "tools/lol1_mode_paths.py",
         "tools/lol1_name_callers.py"
       ]
     },
@@ -1389,6 +1394,7 @@
         "tools/lol1_compression_writer.py",
         "tools/lol1_level_writer.py",
         "tools/lol1_loose.py",
+        "tools/lol1_mode_paths.py",
         "tools/lol1_name_callers.py",
         "tools/lol1_numbers.py",
         "tools/lol1_pak_writer.py",

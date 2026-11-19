@@ -62,7 +62,7 @@ Legend:
 | [level_tileset_map](../docs/level_tileset_map.md) | `tileset_mapper.py` | yes | text | gap | yes |
 | [Q5 TRIG.TBL](../docs/unknowns/05_adv_drv_tbl.md) | `decode_dialogue.py` | yes | text: `decode_dialogue.py TRIG.TBL` | gap | gap |
 | [Q6 TIM opcodes](../docs/unknowns/06_tim_opcodes.md) | `lol1_tim_words.py`, `parse_tim.py`, `exe_tables.py` | yes (`parse_tim.py --check` re-counts the command uses) | text: `exe_tables.py --table tim_commands` and `--table tim_nested` (native command tables); `parse_tim.py --list NAME.TIM` | yes | yes |
-| [Q7 native rules](../docs/unknowns/07_native_rules.md) | `exe_tables.py` for its tables (timer array, monster mode flags, spell-effect and wall-click pointers); the traced code has no reader | part: the tables | part: `exe_tables.py --table timers` (text) | yes (tables) | yes |
+| [Q7 native rules](../docs/unknowns/07_native_rules.md) | `exe_tables.py` for its tables (timer array, monster mode flags, spell-effect and wall-click pointers); `lol1_mode_paths.py` for the direct instance mode stores, the finale catalog index sites and the three palette row numbers | yes | text: one `CHECK` line per edition; `exe_tables.py --table timers` for the timer array | part: the tables, not the mode stores | yes |
 | [Q13 decoration positions](../docs/unknowns/13_decoration_positions.md) | none for the cell table in `MAIN.EXE`; `dat_reader.py` for the records | gap | part: DAT records only | gap | gap |
 | [Q16 VCN colour banks](../docs/unknowns/16_vcn_colour_banks.md) | `vcn_vmp_reader.py` | yes | text: shift values; picture: tile atlas, assembled walls | yes: bank ORed into the colour index | yes |
 | [Q17 native save fields](../docs/unknowns/17_native_save_fields.md) | `save_reader.py` | yes | text, `--json` | part | yes |
@@ -76,14 +76,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (43 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (44 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;44p"
+$ python3 tools/check_all.py | sed -n "1,3p;45p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 43 CHECKS PASSED
+ALL 44 CHECKS PASSED
 ```
 
 ### `doc_links.py`
@@ -458,6 +458,15 @@ Re-reads the extra TIM argument words. On the CD, nested 0x07 and 0x0D push the 
 ```
 $ python3 tools/lol1_tim_words.py --check
 CHECK tim_words: 14 CD extra words are 0; 0x07 and 0x0D pass the operand pointer and a start index; 6 level strings have one %n and 6 have none; giveItem pushes three words
+```
+
+### `lol1_mode_paths.py`
+
+Re-reads the direct instance mode-byte stores in both editions (ten CD, eight floppy), the CD setter's call immediates, the script modes, finale catalog row 40 with its index sites and the startup sort, and the absence of the three palette row numbers as constant stride-20 indexes. Needs Capstone (`requirements.txt`). On a floppy folder the finale catalog is not present, so that half of the line is the floppy store and palette sentence. The absence checks rule out literal constants only; a computed index is not excluded.
+
+```
+$ python3 tools/lol1_mode_paths.py --check
+CHECK mode_paths: 10 CD mode-byte stores, none stores 10, no resolved caller or script passes 10, 3 LEVEL23 calls pass 11; finale row 40 is one of 93 catalog rows, no index site loads the constant 40, startup sorts rows 4-92; no stride-20 site loads palette rows 122, 204 or 206 as a constant
 ```
 
 ### `lol1_name_callers.py`
