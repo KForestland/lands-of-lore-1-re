@@ -69,6 +69,8 @@ def text_findings(root, f):
     for n, line in enumerate(lines, 1):
         if MACHINE_PATH.search(line):
             out.append(f"{f}:{n} (machine path)")
+        if line.startswith(("<<<<<<< ", ">>>>>>> ")) or line == "=======":
+            out.append(f"{f}:{n} (merge conflict marker)")
         hits = [m for m in WORD.finditer(line) if m.group(0) in PRIVATE]
         for m in hits:
             if line[m.start() - 1:m.start()] == '"' and line[m.end():m.end() + 1] == '"':
