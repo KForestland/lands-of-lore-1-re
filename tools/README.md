@@ -21,14 +21,14 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 
 ### `check_all.py`
 
-Run every tool's `--check` (31 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (32 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;32p"
+$ python3 tools/check_all.py | sed -n "1,3p;33p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 31 CHECKS PASSED
+ALL 32 CHECKS PASSED
 ```
 
 ### `pak_reader.py`
@@ -331,6 +331,15 @@ On the CD, re-reads the `00000.VOC` catalog row in `ENG/FINALE.EXE` and checks t
 ```
 $ python3 tools/lol1_name_callers.py --check
 CHECK name_callers: FINALE.EXE+0x1D1D0 is the 00000.VOC catalog row (44115 bytes); no other reference to the name's offset; the three palettes are catalog names only, installer included
+```
+
+### `lol1_loose.py`
+
+Walks the CD `DATA` files that are not PAK or TLK archives. Twenty-five reach their last byte (font, string table, archive inventory, icon, PIF, MZ image, FBOV overlay, text lines, COM image). Twelve stay open: the blend tables, the symbol files and the `LANDS.EXE` tails. On a floppy folder the check returns without comparing.
+
+```
+$ python3 tools/lol1_loose.py --check
+CHECK loose: 25 files reach the last byte (3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 7 mz, 2 overlay, 1 text, 1 com); 12 open (6 blend tables, 3 symbol files, 3 LANDS tails)
 ```
 
 ### `repo_guard.py`

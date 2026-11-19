@@ -17,6 +17,7 @@ from pathlib import Path
 import os
 import struct
 
+import lol1_loose
 import lol1lib
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -55,14 +56,20 @@ def pak_covered(path):
 
 
 def files_read(data_dir):
-    """Every file under the DATA folder, sub-folders included. PAK and TLK archives count when pak_covered()
-    holds; every other file counts as not read."""
+    """Every file under the DATA folder, sub-folders included.
+
+    PAK and TLK archives count when pak_covered() holds. Any other file counts when
+    lol1_loose.covered() walks it to the last byte.
+    """
     total = read = total_bytes = read_bytes = 0
     for path in sorted(p for p in Path(data_dir).rglob("*") if p.is_file()):
         size = path.stat().st_size
         total += 1
         total_bytes += size
         if path.suffix.lower() in (".pak", ".tlk") and pak_covered(path):
+            read += 1
+            read_bytes += size
+        elif lol1_loose.covered(path):
             read += 1
             read_bytes += size
     return read, total, read_bytes, total_bytes

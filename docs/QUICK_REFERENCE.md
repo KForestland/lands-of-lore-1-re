@@ -7,7 +7,7 @@ Set `LOL1_MAIN` to the CD's `DATA/HARDRIVE/MAIN.EXE` or the floppy `MAIN.EXE`, a
 
 | File or entry | What it contains | Format and evidence | Tool | Command |
 |---|---|---|---|---|
-| `.PAK`, `FILEDATA.FDT` | Named resource archive and the separate archive inventory | [PAK](formats/pak.md), [archive inventory](unknowns/09_pak_order.md) | Archive indexer | `python3 tools/pak_indexer.py --check` |
+| `.PAK`, `FILEDATA.FDT` | Named resource archive and the separate archive inventory | [PAK](formats/pak.md), [archive inventory](unknowns/09_pak_order.md), [loose files](formats/loose.md) | Archive indexer; the inventory walk is `lol1_loose.py` | `python3 tools/pak_indexer.py --check` |
 | `NN.TLK` | CD speech archive with named VOC entries | [TLK](formats/tlk.md) | TLK verifier | `python3 tools/tlk_verify.py --check` |
 | `.VOC` | Creative Voice audio blocks | [VOC](formats/voc.md) | VOC reader | `python3 tools/voc_reader.py --check` |
 | Frame4 / LCW blocks | Compressed bytes inside bitmaps, map and animation resources | [LCW](formats/lcw.md) | LCW checker | `python3 tools/decode_frame4.py --check` |
@@ -30,5 +30,6 @@ Set `LOL1_MAIN` to the CD's `DATA/HARDRIVE/MAIN.EXE` or the floppy `MAIN.EXE`, a
 | `.ADL` | AdLib sequence and program data | [Music](formats/music.md) | ADL reader and MIDI projector | `python3 tools/adl_to_midi.py --check` |
 | `.ADV`, `.DRV` | Native sound drivers | [Drivers](formats/drivers.md) | PAK reader lists driver members | `python3 tools/pak_reader.py list DRIVERS.PAK` |
 | `TRIG.TBL` | Indexed manual-prompt text | [TBL](formats/drivers.md#worked-example-trigtbl-copy-protection-text) | Text decoder | `python3 tools/decode_dialogue.py TRIG.TBL --pak GENERAL.PAK --index 0` |
-| `WESTWOOD.001`, `.EXE` | CD installer archive and DOS executable images | [Executable locations](executable_tables.md#locating-the-executables) | Python reads the MZ tag | `python3 -c 'import sys; print(open(sys.argv[1], "rb").read(2))' "$LOL1_MAIN"` |
+| `WESTWOOD.001`, `.EXE` | CD installer archive and DOS executable images | [Executable locations](executable_tables.md#locating-the-executables), [loose files](formats/loose.md) | Loose-file reader walks the DATA copies to the last byte | `python3 tools/lol1_loose.py --check` |
+| Loose CD files | Fonts, string tables, icons, PIF files, the FBOV overlay, one COM image, one text file | [Loose files](formats/loose.md) | Loose-file reader | `python3 tools/lol1_loose.py --check` |
 | `_SAVEnnn.DAT`, `_LEVELn.TMP` | Original DOS save and level sidecar layouts | [Saves](savegame_format.md) | Save reader | `python3 tools/save_reader.py "$LOL1_SLOT"` |

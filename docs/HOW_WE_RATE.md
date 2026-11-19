@@ -12,8 +12,14 @@ included) a reader in this repository accounts for to the last byte, by
 count and by size. For a PAK archive, and for the CD speech files `NN.TLK`,
 which are PAK archives, that means the name and offset directory ends at
 the first member (after its zero terminator) and the members reach the end
-of the file. The rating is counted on the CD edition; `--check` does not
-compare it on a floppy copy. It
+of the file. A file that is not a PAK or a TLK counts when `tools/lol1_loose.py`
+walks it to the last byte: a DOS font, a uint16 string table, the archive
+inventory, a Windows icon, a Windows PIF, an MZ program whose declared image
+is the whole file, an MZ program whose FBOV overlay body reaches the end, a
+file of whole text lines, or the one COM program image. Files the walk
+refuses stay unread. The [loose-file page](formats/loose.md) names the twelve
+CD files still in that set and the test that would finish each one. The rating
+is counted on the CD edition; `--check` does not compare it on a floppy copy. It
 does **not** mean that every entry inside is decoded or understood; the
 [STATUS](STATUS.md) table says how far each format is read. Only the `DATA` folder is counted; files the game writes while it runs
 (caches, saves) change the count on a copy that has been played.
