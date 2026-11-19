@@ -371,7 +371,8 @@ def render(r):
     o = [f"# Level {lv}", "",
          f"Made by `tools/level_report.py` from `LEVEL{lv}.CMZ`, `.WLL`, `.XXX`, `.INI`, `.INF` ({EDITION}). "
          "How to read it: [README](README.md). Formats: [cmz](../formats/cmz.md), [wll](../formats/wll.md), "
-         "[emc2](../formats/emc2.md), [xxx](../formats/xxx.md).", ""]
+         "[emc2](../formats/emc2.md), [xxx](../formats/xxx.md).", "",
+         "[Item, spell and creature numbers](../NUMBERS.md).", ""]
     g = r["gfx"]["loadLevelGraphics"]
     o += ["## Size, area and graphics", "",
           f"- Map: 32 x 32 blocks, {r['len']} bytes per block in the CMZ.",
@@ -511,8 +512,20 @@ def main():
         stats[lv] = st
     if a.check:
         tot = {k: sum(s[k] for s in stats.values()) for k in ("entries", "items", "monsters", "text_ids")}
+        note = ""
+        if a.level is None and EDITION == "CD edition":
+            root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "levels")
+            expected = {f"level{lv:02d}.md": page for lv, page in pages.items()}
+            present = {name for name in os.listdir(root) if name.endswith(".md")} - {"README.md"}
+            if present != expected.keys():
+                raise ValueError(f"level sheet filenames differ: {sorted(present ^ expected.keys())}")
+            for name, page in expected.items():
+                with open(os.path.join(root, name), encoding="utf-8") as source:
+                    if source.read() != page:
+                        raise ValueError(f"level sheet differs: {name}")
+            note = "; sheets match docs/levels"
         print(f"CHECK level_report: {len(stats)} levels; {tot['entries']} script entries, {tot['items']} item "
-              f"placements, {tot['monsters']} monster placements, {tot['text_ids']} text ids; every script decodes")
+              f"placements, {tot['monsters']} monster placements, {tot['text_ids']} text ids; every script decodes{note}")
         return 0 if len(stats) == len(levels) else 1
     if a.out:
         os.makedirs(a.out, exist_ok=True)
