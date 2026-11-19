@@ -109,7 +109,8 @@ Also walk past and click that face from the same state in both runs.
 A changed result only at the whole-byte EMC test is the expected
 control. A second changed branch whose input is bit 0x40 identifies
 an additional consumer. A match over this one route bounds that
-route's behavior. Not reached on this pass: see the CD launch note.
+route's behavior. Not reached yet: the launch works, but this needs a
+level-8 save (or level 7 before the pit).
 
 ## Q7b. Which animation actually displays when a script selects mode 11?
 
@@ -140,7 +141,7 @@ that fixed arm reached the screen. Any other frame should be accounted
 for by the captured selector or draw flags. A write watch on that
 instance's mode byte +0x14 also distinguishes an actual mode-10
 transition from a frame picked while mode 11 remains set. Not
-reached on this pass: see the CD launch note.
+reached yet: the launch works, but this needs a level-23 save.
 
 ## Q8. Which shutdown callbacks run on a given installation?
 
@@ -151,11 +152,12 @@ pointer in CD `DS:361E` or floppy `DS:63EA` and query video
 mode (CD `MAIN.EXE+0x2689C–0x2692F`, floppy
 `+0x1DAB8–0x1DB2D`). [Shutdown trace](unknowns/08_native_script_exit.md#what-the-preparatory-routine-changes)
 
-**CONFIRMED, English CD with Sound Blaster.** Quit from the installed
-original after loading level 1. The prep at `MAIN.EXE+0x2689C`
+**CONFIRMED, English CD with Sound Blaster.** The run quit from the
+installed original after loading level 1. The prep at `MAIN.EXE+0x2689C`
 cleared its armed one-shot flag. At `+0x268EB`, `DS:361E` was null.
 The BIOS query returned mode `0x13` at `+0x268FC`, the helper at
-`+0x26904` took argument 9 and restored saved mode 3, and the DOS
+`+0x26904` took argument 9 and returned with `AX=3` (read from code: entry 9 of
+the mode table always restores the saved mode, here 3), and the DOS
 exit at `+0x3972` used `AX=0x4C00`.
 [Recorded shutdown calls](unknowns/08_native_script_exit.md#english-cd-quit-from-play)
 
@@ -194,9 +196,9 @@ reload and save again. The known copy path gives equal saved and
 live values. A byte-specific access outside that path identifies a
 new producer or consumer. A stable zero and only bulk copies give
 an unused-byte witness for that play sequence. Keep the watchpoints
-active through the resume following the load. Not reached on this
-pass: the launch returns to DOS before a new game, a level change or
-a save.
+active through the resume following the load. Movement, turning and
+two load/save cycles are covered above. Not reached yet: a lamp
+change, a party change and a level change, which need a later save.
 
 ## Q18. Which monster definition fields does an actual fight use?
 

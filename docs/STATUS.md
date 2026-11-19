@@ -13,7 +13,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (27 checks; 
 
 ## File formats
 
-**Running-game results.** In an English CD DOSBox run, all 52 declared level-1 wall flags matched the original after play (Q7). The watched save bytes stayed zero through movement, turning and two load/save cycles (Q17). A confirmed quit from play restored the saved BIOS mode and exited with status 0 (Q8). Levels 8, 23 and 27 still need played saves. [Procedures and results](NEEDS_A_RUNNING_GAME.md)
+**Running-game results.** In an English CD DOSBox run, all 52 declared level-1 wall flags matched the original after play (Q7). The watched save bytes stayed zero through movement, turning and two load/save cycles (Q17). In one quit from play, the game restored the saved BIOS mode and exited with status 0 (Q8). Levels 8, 23 and 27 still need played saves. [Procedures and results](NEEDS_A_RUNNING_GAME.md)
 
 | Format | Documented | Tool | Checked on data | Open |
 |--------|-----------|------|-----------------|------|

@@ -26,8 +26,8 @@
 launcher and Sound Blaster setup](../NEEDS_A_RUNNING_GAME.md#working-launch-for-the-english-dos-cd)
 under DOSBox 0.74-3 with host sound muted. The level-1 slot
 `477b08b82ecd` was written by the original program in the probe
-run (`+0x269` = 1). After loading it, choose the in-play exit and
-confirm. The trace captured guest instructions with load segment
+run (slot byte `0x269` = 1, level 1). After it was loaded, the in-play
+exit was chosen and confirmed. The trace captured guest instructions with load segment
 `01A2` and `DS=2FCF`; file offsets below are in `MAIN.EXE`.
 
 | Site | Observed for this setup |
@@ -35,7 +35,7 @@ confirm. The trace captured guest instructions with load segment
 | `+0x2689C`, `+0x268A9`, `+0x268AF` | Prep entered with `DS:3618 = 1`, then cleared it before calling the service cleanup. |
 | `+0x268BB`, `+0x268CD`, `+0x268DC–0x268E6` | The calls at `+0x268BB` and `+0x268DC–0x268E6` ran. The `+0x268CD` call was skipped with `DS:35E8 = 0xFFFF`. |
 | `+0x268EB–0x268F7` | `DS:361E` was `0000:0000` after the preceding cleanup calls. Execution reached `+0x268F7` without executing the indirect call at `+0x268F3`. |
-| `+0x268F7–0x2690A` | The video query returned `AX=0x0013` at `+0x268FC`, while `DS:388C = 3`. The restore call at `+0x26904` took argument 9 and returned with `AX=3`. The original helpers pass BIOS function 0x0F and then the saved mode through the `INT 10h` wrapper (`+0x26C82–0x26C9D`, `+0x26CBA–0x26CDD`, `+0x66CC–0x6719`). |
+| `+0x268F7–0x2690A` | The video query returned `AX=0x0013` at `+0x268FC`, while `DS:388C = 3`. The restore call at `+0x26904` took argument 9 and returned with `AX=3`. Read from code: mode-table entry 9 (`DS:38A0`) is 0 in the file and has no direct writer, so argument 9 always sets the saved mode `DS:388C` through `INT 10h`. The original helpers pass BIOS function 0x0F and then the saved mode through the `INT 10h` wrapper (`+0x26C82–0x26C9D`, `+0x26CBA–0x26CDD`, `+0x66CC–0x6719`). |
 | `+0x3E54`, `+0x2689C–0x268A6`, `+0x3972` | The wrapper re-entered prep with the one-shot word already zero and skipped its body. DOS termination ran with `AX=0x4C00` and the prompt returned. |
 
 **UNCONFIRMED.** Installations with a nonzero registered far pointer
