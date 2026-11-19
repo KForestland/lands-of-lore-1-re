@@ -9,12 +9,23 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 - **What this is:** documentation of every data file and the main rules of the original 1993 DOS game (CD and floppy editions), checked against the game files and the original program.
 - **What you can do today:** read every file type with a tool (pictures, sprites, animations, sound, speech, music, fonts, text, maps, scripts, saves), draw any level, disassemble every level script, and look up how combat, magic and monsters work.
 - **Start in five minutes:** the [Quick start](#quick-start-5-minutes) below, then [Start here, by goal](docs/START_HERE.md), [How the game works](docs/HOW_THE_GAME_WORKS.md) or the [worked example](docs/tutorial-one-event.md).
-- **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md): 11 of 18 questions are answered, 5 mostly, 2 partly. The game now runs from its own installer under a debugger ([procedures and results](docs/NEEDS_A_RUNNING_GAME.md)); level-1 checks are done, and the rest need saves from levels 8, 23 and 27.
+- **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md): the counts are in the [rating](#rating). The game now runs from its own installer under a debugger ([procedures and results](docs/NEEDS_A_RUNNING_GAME.md)); level-1 checks are done, and the rest need saves from levels 8, 23 and 27.
 - **The three games:** [LoL1](https://github.com/KForestland/lands-of-lore-1-re) · [LoL2](https://github.com/KForestland/lands-of-lore-2-re) · [LoL3](https://github.com/KForestland/Lands-of-lore-3-re) ([what they share](docs/series-formats.md), [how the engine changed](docs/engine-evolution.md)).
 
 ![Level 12 drawn by tools/level_renderer.py --schematic](docs/images/level12_schematic.png)
 
 *Level 12 drawn from its map file alone (`tools/level_renderer.py --level 12 --schematic`): open squares light, walls dark, doors and switches orange, decorated walls marked red.*
+
+## Rating
+
+Counted by `tools/rating.py` on the English CD copy; [how we rate](docs/HOW_WE_RATE.md) explains each line and what it does not claim.
+
+<!-- rating:begin -->
+- **Files read:** 162 of 199 files in the CD `DATA` folder (285.7 of 289.0 MiB) are accounted for to the last byte by a reader here.
+- **Rules traced:** 385 statements labelled CONFIRMED against the program or the files, 134 labelled UNCONFIRMED, on 86 current pages.
+- **Seen in the running game:** 1 of 5 probes that need the original game running are answered.
+- **Open questions:** 18: 11 answered, 5 mostly, 2 partly.
+<!-- rating:end -->
 
 ## What you get
 
@@ -34,7 +45,7 @@ cd lands-of-lore-1-re
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt                 # Pillow, for PNG output
 export LOL1_DATA=/path/to/your/LOL1/DATA        # the folder holding GENERAL.PAK (CD: DATA; floppy: the install folder)
-python3 tools/check_all.py                      # 27 checks, ends with ALL 27 CHECKS PASSED
+python3 tools/check_all.py                      # 28 checks, ends with ALL 28 CHECKS PASSED
 python3 tools/level_renderer.py --level 1 --out-dir ../maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
 ```

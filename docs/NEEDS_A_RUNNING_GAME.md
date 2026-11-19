@@ -82,7 +82,9 @@ segment was `01EB` and `DS` was `3018`. `DS:3618` was `0000` and
 
 `DATA/ENG/LANDS.EXE` (357,509 bytes) is the intro and character-generation program; it does not contain the `MAIN.EXE` prologues used for breakpoints. After character select it starts `MAIN.EXE` with one argument, and the `MAIN.EXE` breakpoints apply from then on (a new PSP).
 
-## Q7a. Can wall bit 0x40 change anything besides the EMC byte test?
+## Remaining probes
+
+### Q7a. Can wall bit 0x40 change anything besides the EMC byte test?
 
 Question: [Q7 in OPEN_QUESTIONS](OPEN_QUESTIONS.md).
 
@@ -112,7 +114,7 @@ an additional consumer. A match over this one route bounds that
 route's behavior. Not reached yet: the launch works, but this needs a
 level-8 save (or level 7 before the pit).
 
-## Q7b. Which animation actually displays when a script selects mode 11?
+### Q7b. Which animation actually displays when a script selects mode 11?
 
 Question: [Q7 in OPEN_QUESTIONS](OPEN_QUESTIONS.md).
 
@@ -143,31 +145,7 @@ instance's mode byte +0x14 also distinguishes an actual mode-10
 transition from a frame picked while mode 11 remains set. Not
 reached yet: the launch works, but this needs a level-23 save.
 
-## Q8. Which shutdown callbacks run on a given installation?
-
-Question: [Q8 in OPEN_QUESTIONS](OPEN_QUESTIONS.md).
-
-**CONFIRMED.** Shutdown preparation can call the registered far
-pointer in CD `DS:361E` or floppy `DS:63EA` and query video
-mode (CD `MAIN.EXE+0x2689C–0x2692F`, floppy
-`+0x1DAB8–0x1DB2D`). [Shutdown trace](unknowns/08_native_script_exit.md#what-the-preparatory-routine-changes)
-
-**CONFIRMED, English CD with Sound Blaster.** The run quit from the
-installed original after loading level 1. The prep at `MAIN.EXE+0x2689C`
-cleared its armed one-shot flag. At `+0x268EB`, `DS:361E` was null.
-The BIOS query returned mode `0x13` at `+0x268FC`, the helper at
-`+0x26904` took argument 9 and returned with `AX=3` (read from code: entry 9 of
-the mode table always restores the saved mode, here 3), and the DOS
-exit at `+0x3972` used `AX=0x4C00`.
-[Recorded shutdown calls](unknowns/08_native_script_exit.md#english-cd-quit-from-play)
-
-**UNCONFIRMED.** Which setups provide a nonzero optional callback.
-For another setup or edition, record the far pointer at the test
-above, and record the executed target if nonzero. The earlier
-[refusal to start](#an-earlier-launch-that-was-refused) gives an
-unarmed control.
-
-## Q17. Are the isolated save bytes touched during play?
+### Q17. Are the isolated save bytes touched during play?
 
 There are three on the CD and two on the floppy (its block ends before `0x232`).
 
@@ -200,7 +178,7 @@ active through the resume following the load. Movement, turning and
 two load/save cycles are covered above. Not reached yet: a lamp
 change, a party change and a level change, which need a later save.
 
-## Q18. Which monster definition fields does an actual fight use?
+### Q18. Which monster definition fields does an actual fight use?
 
 Question: [Q18 in OPEN_QUESTIONS](OPEN_QUESTIONS.md).
 
@@ -233,3 +211,29 @@ its downstream calculation identifies that word's role. A trace
 containing only the known critical and control reads bounds the
 result to the actions taken. Not reached on this pass: see the CD
 launch note.
+
+## Answered probes
+
+### Q8. Which shutdown callbacks run on a given installation?
+
+Question: [Q8 in OPEN_QUESTIONS](OPEN_QUESTIONS.md).
+
+**CONFIRMED.** Shutdown preparation can call the registered far
+pointer in CD `DS:361E` or floppy `DS:63EA` and query video
+mode (CD `MAIN.EXE+0x2689C–0x2692F`, floppy
+`+0x1DAB8–0x1DB2D`). [Shutdown trace](unknowns/08_native_script_exit.md#what-the-preparatory-routine-changes)
+
+**CONFIRMED, English CD with Sound Blaster.** The run quit from the
+installed original after loading level 1. The prep at `MAIN.EXE+0x2689C`
+cleared its armed one-shot flag. At `+0x268EB`, `DS:361E` was null.
+The BIOS query returned mode `0x13` at `+0x268FC`, the helper at
+`+0x26904` took argument 9 and returned with `AX=3` (read from code: entry 9 of
+the mode table always restores the saved mode, here 3), and the DOS
+exit at `+0x3972` used `AX=0x4C00`.
+[Recorded shutdown calls](unknowns/08_native_script_exit.md#english-cd-quit-from-play)
+
+**UNCONFIRMED.** Which setups provide a nonzero optional callback.
+For another setup or edition, record the far pointer at the test
+above, and record the executed target if nonzero. The earlier
+[refusal to start](#an-earlier-launch-that-was-refused) gives an
+unarmed control.

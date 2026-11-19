@@ -1,0 +1,46 @@
+# How we rate this repository
+
+The README and [STATUS](STATUS.md) carry four counted lines instead of a
+single percentage. `python3 tools/rating.py --data <DAT>` prints them from
+your copy of the game and the pages; `--check` (part of `check_all.py`)
+fails when the README or STATUS lines differ from the counts.
+
+## The four lines
+
+**Files read.** How many files in the CD edition's `DATA` folder (sub-folders
+included) a reader in this repository accounts for to the last byte, by
+count and by size. For a PAK archive, and for the CD speech files `NN.TLK`,
+which are PAK archives, that means the name and offset directory ends at
+the first member (after its zero terminator) and the members reach the end
+of the file. The rating is counted on the CD edition; `--check` does not
+compare it on a floppy copy. It
+does **not** mean that every entry inside is decoded or understood; the
+[STATUS](STATUS.md) table says how far each format is read. Only the `DATA` folder is counted; files the game writes while it runs
+(caches, saves) change the count on a copy that has been played.
+
+**Rules traced.** How many statements on the current pages carry the
+evidence label CONFIRMED (backed by a program address or a file offset
+that was checked) and how many carry UNCONFIRMED (a reading, with the test
+that would settle it). Pages marked as history are left out. It counts
+labels, not importance: one CONFIRMED may cover a whole table and one
+UNCONFIRMED a single byte. It does **not** claim that unlabelled text is
+wrong or that labelled text is complete.
+
+**Seen in the running game.** Of the probes on
+[NEEDS_A_RUNNING_GAME.md](NEEDS_A_RUNNING_GAME.md) (questions that the files
+and the program text cannot settle alone), how many were answered by
+running the original game. Each answer holds for the setup it names (one
+display, one renderer, one save). Most documented facts were never
+observed in a running game; they are proved from the program and the files
+instead, and this line does **not** count them.
+
+**Open questions.** The state words of the At-a-glance table in
+[OPEN_QUESTIONS.md](OPEN_QUESTIONS.md): answered, mostly answered, partly
+answered. A question may be answered for one setup only; the table says so.
+
+## What the rating does not say
+
+It is not a measure of completeness and cannot be turned into one: the
+four lines count different things and none of them has a known total for
+"everything the game does". Older notes in this repository that gave a
+percentage are kept as history and are marked so.

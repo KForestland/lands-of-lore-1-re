@@ -11,7 +11,7 @@ READERS = ["pak_reader", "pak_indexer", "tlk_verify", "decode_frame4", "cps_read
            "fnt_reader", "xxx_reader", "dat_reader", "tlc_reader", "vcn_vmp_reader",
            "wll_parser", "cmz_analyzer", "tileset_mapper", "level_renderer", "shp_renderer",
            "wsa_extract", "extract_dialogue", "decode_dialogue", "extract_music", "adl_to_midi", "parse_tim",
-           "save_reader", "xmi_to_midi", "level_report", "repo_guard"]
+           "save_reader", "xmi_to_midi", "level_report", "repo_guard", "rating"]
 
 
 def main():

@@ -9,7 +9,16 @@
 - **Checked on data**: the tool's `--check` parses every file of that kind. CD = the top-level `DATA/` folder of the CD-ROM edition with spoken dialogue (version CD1.02); ENG = its `DATA/ENG` folder; floppy = an English floppy-edition installation (no speech, chapter-based PAKs). Details: [formats/README.md](formats/README.md).
 - **Open**: what is not known yet, as numbered in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 
-Run every check at once: `python3 tools/check_all.py --data <DATA>` (27 checks; all pass on the CD and on the floppy edition, about 10 to 15 seconds).
+Run every check at once: `python3 tools/check_all.py --data <DATA>` (28 checks; all pass on the CD and on the floppy edition, about 10 to 15 seconds).
+
+**Rating** (counted by `tools/rating.py` on the CD edition; see [how we rate](HOW_WE_RATE.md)):
+
+<!-- rating:begin -->
+- **Files read:** 162 of 199 files in the CD `DATA` folder (285.7 of 289.0 MiB) are accounted for to the last byte by a reader here.
+- **Rules traced:** 385 statements labelled CONFIRMED against the program or the files, 134 labelled UNCONFIRMED, on 86 current pages.
+- **Seen in the running game:** 1 of 5 probes that need the original game running are answered.
+- **Open questions:** 18: 11 answered, 5 mostly, 2 partly.
+<!-- rating:end -->
 
 ## File formats
 
