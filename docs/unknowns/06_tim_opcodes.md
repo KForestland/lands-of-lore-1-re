@@ -90,11 +90,28 @@ Registered in `script_lol.cpp:3020-3048`. The body lines are the reads. Counts a
 
 The 80 opcode-0x19 instructions with no argument word are the 71 updates plus the 9 text clears. The 497 instructions with 9 words are the 497 copies (opcode plus 8 arguments). CONFIRMED.
 
-`tlol_giveItem` reads three words and both call sites encode four. The fourth word is not read by this function. CONFIRMED. What a caller expected that word to do is UNCONFIRMED.
+The argument counts in that table are the ScummVM bodies. The native reads follow.
+
+**CONFIRMED** Nested 0x03 at CD `MAIN.EXE+0x983F` (floppy `+0x9A0A`) pushes the three words at operand `+4`, `+2` and `+0` and drops them with `add sp, 6`. It does not pass the operand pointer. Both CD calls encode a fourth word 0 (`O01A.PAK+0x8DE4`, `O01E.PAK+0xA89`). That word is not a format argument.
 
 The single nested opcode 0x02 is in `VICTOR4.TIM`, the same file as the two command-0x07 instructions. CONFIRMED. It warns and returns 0.
 
-`tlol_characterChat` reads three words. Two calls encode a fourth. `tlol_playDialogueTalkText` reads one word and passes a count of 1. Ten calls encode a second. Whether those extra words are read by the callee is UNCONFIRMED.
+**CONFIRMED** Nested 0x07 at CD `MAIN.EXE+0x99C6` begins `6A 03 66 FF 76 06`: push start index 3, then the operand pointer. Nested 0x0D does the same with start index 1 at `+0x9B08`. Floppy `MAIN.EXE+0x9B8D` and `+0x9C64` begin with those same two pushes. 0x07 reaches `+0x16C6D`, which forwards the pointer and the start index at `+0x16DBC` and `+0x16E02`. 0x0D calls `+0x1731C` directly. That function calls the formatter at `+0x1705E` (`+0x173FC` pushes the start index, the operand pointer, and the format string). The formatter loads SI from `[bp+0x12]` at `+0x17066`. While `[bp+0xA]` is 0, each `%n` (`+0x1719C`), `%s` (`+0x171E8`) and `%d` (`+0x1728D`) reads one word at `operand[SI]` and increments SI. `%n` then uses `word * 0x82 + 0x362F` (`+0x171A8`). The text id comes from `+0xC348`, which masks with `0x3FFF` (`+0xC360`) and takes the string at `index * 2` (`+0x24C34`).
+
+**CONFIRMED** Six of the twelve CD calls that encode an extra word resolve a level string with one `%n`, so the extra word is that character index. The word is 0 at all 14 CD sites.
+
+| Call | Text id | String in the level file | Codes |
+| --- | ---: | --- | --- |
+| `O01E.PAK` `KING1.TIM` talk | 8 | `L01.PAK+0x65FE` `LEVEL01.ENG` | one `%n` |
+| `O02B.PAK` `TIM1.TIM` talk | `0x3E` | `L02.PAK+0xC338` `LEVEL02.ENG` | one `%n` |
+| `O02B.PAK` `TIM1.TIM` talk | `0x43` | `L02.PAK+0xC415` | one `%n` |
+| `O02B.PAK` `VICTOR6.TIM` talk | `0x4C` | `L02.PAK+0xC5CF` | one `%n` |
+| `O04A.PAK` `ROLAND1.TIM` chat | 2 | `L04.PAK+0x9178` `LEVEL04.ENG` | one `%n` |
+| `O07A.PAK` `POD2.TIM` chat | `0x11` | `L07.PAK+0x5F5B` `LEVEL07.ENG` | one `%n` |
+
+**CONFIRMED** The other six extra words are 0, and the string has no `%` code, so this formatter call does not read them: `LEVEL02.ENG` `0x4E` at `L02.PAK+0xC63A`, `0x50` at `+0xC688`, `0x51` at `+0xC6D8`; `LEVEL07.ENG` `0x0E` at `L07.PAK+0x5ECD`, `0x0F` at `+0x5ED7`, `0x12` at `+0x5F76`.
+
+**CONFIRMED** Floppy `CHAPTER1.PAK` talk calls in `BUCK03.TIM`, `BUCK04.TIM`, `BUCK05.TIM` and `BUCK14.TIM` pass 20, 10, 10 and 100. Each is the `%d` of one `LEVEL03.ENG` string: `0x28` at `CHAPTER1.PAK+0x56C74`, `0x2B` at `+0x56CB2`, `0x2C` at `+0x56CCF`, `0x2A` at `+0x56C96`. The floppy formatter loads SI at `MAIN.EXE+0x1B6BF` and reads `operand[SI]` at `+0x1B7F5`, `+0x1B841` and `+0x1B8E6`.
 
 ## Intro opcodes, floppy LOLINTRO.TIM only
 
@@ -155,7 +172,7 @@ Both `tlol_fadeOutSound` calls encode zero argument words, so a build that evalu
 | `1A`, `1B` | `0x33904`, `0x33908` | `0x397D0`, `0x397D4` | Null in both native in-game tables. These have separate valid entries in the sequence executable. |
 | `19/02` | `0x9837` | `0x9A02` | Return 1, with no read of the supplied word. The `19` handler indexes the nested table at CD `+0x33918` or floppy `+0x397E0` and skips the selector when passing the operand pointer (`0x9621–0x964B`, `0x980F–0x9839`). |
 
-**CONFIRMED** Both editions store the same `VICTOR4.TIM` witness sequence. The `19/02` call passes 0 at CD `O02B.PAK+0xCEE1` and floppy `CHAPTER1.PAK+0xE7548`. The two `07` calls pass `(0, 0)` and `(2, 0)` at CD `+0xCEEB, +0xD0ED` and floppy `+0xE7552, +0xE774E`. Those arguments go to the return-1 routines above.
+**CONFIRMED** Both editions store the same `VICTOR4.TIM` witness sequence. The `19/02` instruction starts at CD `O02B.PAK+0xCEE1` and floppy `CHAPTER1.PAK+0xE7548` (length word 5, opcode word `0x0119`, selector 2). Its argument word is 0 at CD `+0xCEE9` and floppy `+0xE7550`. The two `07` calls pass `(0, 0)` and `(2, 0)` at CD `+0xCEEB, +0xD0ED` and floppy `+0xE7552, +0xE774E`. Those arguments go to the return-1 routines above.
 
 ### floppy finale executable
 

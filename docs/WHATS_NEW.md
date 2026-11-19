@@ -4,6 +4,7 @@ Newest first. One line per answered question, new tool or visible change. Detail
 
 ## 19 November 2026
 
+- **TIM extra words (Q6).** Nested 0x07 and 0x0D pass those words into the `%` formatter; `lol1_tim_words.py` re-reads the pushes and the strings.
 - **Counted rating.** The README and [STATUS](STATUS.md) show four counted lines instead of a percentage; [how we rate](HOW_WE_RATE.md) explains them.
 - **Example pictures remade.** The guard is drawn in its real colours, the talking head in its backdrop's palette, and level 1 as a readable map; a check now compares each example with today's tools pixel for pixel ([examples](../examples/README.md)).
 - **Quitting the game (Q8).** The shutdown when quitting from play on the English CD is traced and re-read in the program.

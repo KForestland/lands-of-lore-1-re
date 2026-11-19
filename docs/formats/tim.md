@@ -40,9 +40,9 @@ The [native table selection](../unknowns/06_tim_opcodes.md#floppy-intro-table-se
 identifies the separate intro and finale tables from the original
 floppy executables. CONFIRMED.
 
-## Open
+## Extra argument words
 
-Extra argument words in a few calls (`giveItem`, `characterChat`, `playDialogueTalkText`) that the ScummVM functions do not read. UNCONFIRMED.
+**CONFIRMED** Nested 0x07 and 0x0D pass the operand pointer and a start index (3 and 1) into the formatter at CD `MAIN.EXE+0x1705E`. Each `%n`, `%s` or `%d` reads one word at `operand[index]`. Six CD calls resolve a level string with one `%n`, so the extra word is that character index, and it is 0. Six more resolve a string with no `%` code, so that call does not read the extra 0. Nested 0x03 pushes three words and does not pass its fourth word, which is 0 at both calls. On the floppy, `BUCK03.TIM`, `BUCK04.TIM`, `BUCK05.TIM` and `BUCK14.TIM` pass 20, 10, 10 and 100 into one `%d` each. Offsets: [Q6](../unknowns/06_tim_opcodes.md).
 
 ## Worked example
 

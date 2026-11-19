@@ -21,14 +21,14 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 
 ### `check_all.py`
 
-Run every tool's `--check` (30 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (31 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;31p"
+$ python3 tools/check_all.py | sed -n "1,3p;32p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 30 CHECKS PASSED
+ALL 31 CHECKS PASSED
 ```
 
 ### `pak_reader.py`
@@ -313,6 +313,15 @@ Regenerates each image in `examples/` with the command listed in `examples/READM
 ```
 $ python3 tools/example_images.py --check
 CHECK example_images: 3 example images equal today's tool output pixel for pixel
+```
+
+### `lol1_tim_words.py`
+
+Re-reads the extra TIM argument words. On the CD, nested 0x07 and 0x0D push the operand pointer and a start index, the formatter reads `operand[index]` per `%n`/`%s`/`%d`, and the 14 extra words are 0. On a floppy folder with `MAIN.EXE`, the same pushes are checked and the four nonzero words are 20, 10, 10 and 100.
+
+```
+$ python3 tools/lol1_tim_words.py --check
+CHECK tim_words: 14 CD extra words are 0; 0x07 and 0x0D pass the operand pointer and a start index; 6 level strings have one %n and 6 have none; giveItem pushes three words
 ```
 
 ### `lol1_name_callers.py`

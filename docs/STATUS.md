@@ -9,15 +9,15 @@
 - **Checked on data**: the tool's `--check` parses every file of that kind. CD = the top-level `DATA/` folder of the CD-ROM edition with spoken dialogue (version CD1.02); ENG = its `DATA/ENG` folder; floppy = an English floppy-edition installation (no speech, chapter-based PAKs). Details: [formats/README.md](formats/README.md).
 - **Open**: what is not known yet, as numbered in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 
-Run every check at once: `python3 tools/check_all.py --data <DATA>` (30 checks; all pass on the CD and on the floppy edition, about 10 to 15 seconds).
+Run every check at once: `python3 tools/check_all.py --data <DATA>` (31 checks; all pass on the CD and on the floppy edition, about 10 to 15 seconds).
 
 **Rating** (counted by `tools/rating.py` on the CD edition; see [how we rate](HOW_WE_RATE.md)):
 
 <!-- rating:begin -->
 - **Files read:** 162 of 199 files in the CD `DATA` folder (285.7 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 389 statements CONFIRMED (proved from the program code or the files) and 136 UNCONFIRMED (a reading not yet proved), on 87 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 394 statements CONFIRMED (proved from the program code or the files) and 133 UNCONFIRMED (a reading not yet proved), on 87 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 5 questions that can only be settled by watching the original game run are settled.
-- **Open questions:** 18 numbered questions: 11 answered, 5 mostly answered, 2 partly answered.
+- **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->
 
 ## File formats
@@ -45,7 +45,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (30 checks; 
 | PAL / COL | [palette.md](formats/palette.md) | `cps_reader.py --pal-from`, `lol1_name_callers.py` | 11/11 are 768 bytes (CD); level use of 3 PALs by script scan. The three unused names are absent from programs, payloads and the installer | Q14 partly answered: catalogued, no caller found ([page](unknowns/14_palette_callers.md)) |
 | FNT | [fnt.md](formats/fnt.md) | `fnt_reader.py` | CD 4, ENG 7, floppy 9 | — |
 | EMC2 scripts (INF/INI) | [emc2.md](formats/emc2.md), [emc2_scripts.md](emc2_scripts.md) | `emc2_decompile.py`, `tests/test_emc2_corpus.py` | CD 60/60, floppy 60/60, 0 unknown opcodes or functions; native dispatch tables located (independently re-checked) | Q8 (downstream effect only) |
-| TIM sequences | [tim.md](formats/tim.md) | `parse_tim.py` | 139/139 `FORM…AVFS`; command use counted by two independent walkers | native effect of a few unimplemented commands |
+| TIM sequences | [tim.md](formats/tim.md) | `parse_tim.py`, `lol1_tim_words.py` | 139/139 `FORM…AVFS`; command use counted by two independent walkers. The 14 extra CD words and the four floppy `%d` words are re-read by `lol1_tim_words.py` | Q6 answered ([page](unknowns/06_tim_opcodes.md)) |
 | ADV / DRV / TBL | [drivers.md](formats/drivers.md) | `decode_dialogue.py` (TRIG.TBL) | drivers identified (Miles Sound System code); TRIG.TBL decoded (copy-protection text) | driver internals are code, not documented |
 
 ## Level sheets
@@ -76,7 +76,7 @@ Pages: [executable_tables.md](executable_tables.md), [savegame_format.md](savega
 
 ## Tools
 
-All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 30 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
+All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given `--out`/`--out-dir`, and has a `--check`; `tools/check_all.py` runs the 31 checks. The March 2026 versions depended on the author's machine (fixed paths, modules not in the repository) and were rewritten on 2026-11-18.
 
 ## Corrections to the closure memo and the March data
 
@@ -97,6 +97,6 @@ All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--dat
 
 ## What "done" means here
 
-A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 12 of the 21 format rows meet that: LCW, CPS, WSA, VOC, TLC, FNT, text, PAK, CMZ, VCN/VMP, XXX, DAT. Six more have a page, a reader and a passing check but one or more open points: TLK (why the padding clip is there), SHP (demo edition unread), WLL, EMC2, TIM (a few commands ScummVM leaves unimplemented), ADV/DRV/TBL (the drivers are program code, not documented inside). PAL/COL is only partly documented (Q14). XMI/C55/PCS and ADL have a page, readers and a check; open: what "C55" stands for, and timbre details (Q15). All five rules and tables rows are documented. Four are checked against the data; the game-rules row is checked in the original program for its core combat arithmetic, and the rest of it is now traced in both executables too ([Q7](unknowns/07_native_rules.md)); a few details stay open.
+A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 13 of the 21 format rows meet that: LCW, CPS, WSA, VOC, TLC, FNT, text, PAK, CMZ, VCN/VMP, XXX, DAT, TIM. Five more have a page, a reader and a passing check but one or more open points: TLK (why the padding clip is there), SHP (demo edition unread), WLL, EMC2, ADV/DRV/TBL (the drivers are program code, not documented inside). PAL/COL is only partly documented (Q14). XMI/C55/PCS and ADL have a page, readers and a check; open: what "C55" stands for, and timbre details (Q15). All five rules and tables rows are documented. Four are checked against the data; the game-rules row is checked in the original program for its core combat arithmetic, and the rest of it is now traced in both executables too ([Q7](unknowns/07_native_rules.md)); a few details stay open.
 
 "Checked independently" in this page means a second program, written separately from the one that produced the claim, gave the same result on the same files (for example two separate Frame4 decoders, or two separate TIM walkers).
