@@ -15,7 +15,7 @@ import os
 from pathlib import Path
 import struct
 
-from cli_errors import ReaderArgumentParser, run_cli
+from cli_errors import ReaderArgumentParser, output_refusal, run_cli
 import emc2_decompile as emc
 import lol1lib as L
 import parse_tim as tim
@@ -200,17 +200,6 @@ def check(root):
     print(f"CHECK script assembly: {counts[b'EMC2']} EMC2 and {counts[b'AVFS']} TIM scripts, byte-identical")
 
 
-def holds_game_data(folder):
-    """True when folder or a folder above it holds a game archive (PAK or TLK)."""
-    for place in (folder, *folder.parents):
-        try:
-            if any(entry.suffix.upper() in (".PAK", ".TLK") for entry in place.iterdir()):
-                return True
-        except OSError:
-            continue
-    return False
-
-
 def main():
     parser = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--data", type=Path, default=os.environ.get("LOL1_DATA"),
@@ -223,11 +212,9 @@ def main():
         check(args.data)
     elif args.listing and args.out and not args.check:
         output = args.out.resolve()
-        roots = [Path(__file__).resolve().parents[1]]
-        if args.data:
-            roots.append(args.data.resolve())
-        if any(root == output or root in output.parents for root in roots) or holds_game_data(output.parent):
-            parser.error("give an output path outside the game data and repository")
+        refusal = output_refusal(output, args.data, repository=True)
+        if refusal:
+            parser.error(refusal)
         rebuilt = assemble(json.loads(args.listing.read_text(encoding="utf-8")))
         with output.open("xb") as dest:
             dest.write(rebuilt)

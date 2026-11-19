@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read an original LoL1 EMC2 script from a file or PAK member."""
 
-from cli_errors import ReaderArgumentParser, run_cli
+from cli_errors import ReaderArgumentParser, output_refusal, run_cli
 from collections import defaultdict
 from dataclasses import dataclass
 import json
@@ -329,6 +329,10 @@ def main():
     parser.add_argument("--assembly", action="store_true", help="write the lossless listing for lol1_script_writer.py")
     parser.add_argument("-o", "--out", "--output", type=Path, help="Write listing here instead of stdout")
     args = parser.parse_args()
+    if args.assembly and args.out:
+        refusal = output_refusal(args.out, args.data, repository=True)
+        if refusal:
+            parser.error(refusal)
     try:
         if not args.input.exists() and args.data and (args.data / args.input).exists():
             args.input = args.data / args.input

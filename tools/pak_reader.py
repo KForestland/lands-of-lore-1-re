@@ -13,7 +13,7 @@ opens "%02d.TLK" with loadPakFile (engines/kyra/engine/lol.cpp:1892-1902).
   pak_reader.py extract GENERAL.PAK PARCH.CPS -o /tmp/out
   pak_reader.py --check      # parse every .PAK and .TLK in the DATA folder
 """
-from cli_errors import ReaderArgumentParser, run_cli
+from cli_errors import ReaderArgumentParser, output_refusal, run_cli
 import argparse, os
 import lol1lib as L
 
@@ -47,6 +47,9 @@ def main():
         for name, off, sz in e:
             print(f"{off:10d} {sz:9d}  {name}")
         return 0
+    refusal = output_refusal(a.out or ".", a.data, repository=True)
+    if refusal:
+        ap.error(refusal)
     for name, off, sz in e:
         if a.member is None or name.upper() == a.member.upper():
             os.makedirs(a.out or ".", exist_ok=True)

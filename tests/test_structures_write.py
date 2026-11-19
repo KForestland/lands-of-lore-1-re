@@ -53,6 +53,57 @@ class ScriptAssembly(unittest.TestCase):
                            capture_output=True, env={"PATH": ""})
             self.assertTrue(fine.exists())
 
+    def assert_listing_guard(self, command, data, name, original):
+        """command(target) runs a listing writer; it must refuse every game, data and
+        repository path with a usage error and write only the fresh outside path, once."""
+        import subprocess
+        import tempfile
+        repo = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            game = root / "GAME"
+            (game / "ENG").mkdir(parents=True)
+            (game / "FAKE.TLK").write_bytes(b"")
+            data.mkdir(exist_ok=True)
+            (data / name).write_bytes(original)
+            refused = (game / "NEW.json", game / "ENG" / "NEW.json", data / "NEW.json",
+                       repo / "no-such-folder" / "NEW.json")
+            for target in refused:
+                with self.subTest(target=target):
+                    done = subprocess.run(command(target), capture_output=True, text=True, env={"PATH": ""})
+                    self.assertEqual(done.returncode, 2, done.stderr)
+                    self.assertIn("give an output path outside", done.stderr)
+                    self.assertFalse(target.exists())
+            fine = root / "NEW.json"
+            subprocess.run(command(fine), check=True, capture_output=True, env={"PATH": ""})
+            self.assertEqual(assemble(json.loads(fine.read_text())), original)
+            again = subprocess.run(command(fine), capture_output=True, env={"PATH": ""})
+            self.assertNotEqual(again.returncode, 0)
+
+    def test_emc2_assembly_listing_refused_in_game_folders(self):
+        import tempfile
+        tool = Path(__file__).resolve().parents[1] / "tools" / "emc2_decompile.py"
+        script = form(b"EMC2", [(b"ORDR", struct.pack(">H", 0), b""),
+                                (b"DATA", struct.pack(">3H", 0xABCD, 0x44FF, 0x1200), b"")], 0)
+        with tempfile.TemporaryDirectory() as folder:
+            data = Path(folder) / "DATA"
+            self.assert_listing_guard(
+                lambda target: [sys.executable, str(tool), str(data / "A.INF"), "--data", str(data),
+                                "--assembly", "-o", str(target)],
+                data, "A.INF", script)
+
+    def test_tim_assembly_listing_refused_in_game_folders(self):
+        import tempfile
+        tool = Path(__file__).resolve().parents[1] / "tools" / "parse_tim.py"
+        script = form(b"AVFS", [(b"AVTL", struct.pack("<5H", 1, 3, 7, 0x118, 0xCDCD), b""),
+                                (b"TEXT", b"\x02\0AB\0", b"\xa5")], 12)
+        with tempfile.TemporaryDirectory() as folder:
+            data = Path(folder) / "DATA"
+            self.assert_listing_guard(
+                lambda target: [sys.executable, str(tool), "--data", str(data), "--list", "TEST.TIM",
+                                "--assembly", "--out", str(target)],
+                data, "TEST.TIM", script)
+
 
 class LevelFieldAssembly(unittest.TestCase):
     def test_maze_keeps_skipped_block_bytes_and_frame4_choices(self):

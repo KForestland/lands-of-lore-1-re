@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Parse LoL1 TIM files from PAK containers and document their IFF chunk structure."""
 
-from cli_errors import run_cli
+from cli_errors import output_refusal, run_cli
 import json
 import struct
 import os
@@ -317,6 +317,10 @@ def main():
                     help="keep the raw AVTL words, decoded instructions and TEXT strings of the sample files in --out "
                          "(left out by default: they copy game script content)")
     a = ap.parse_args()
+    if a.list and a.assembly and a.out:
+        refusal = output_refusal(a.out, a.data, repository=True)
+        if refusal:
+            ap.error(refusal)
     if a.list:
         pak, blob = L.find_member(a.list, a.data, a.pak)
         if a.assembly:
