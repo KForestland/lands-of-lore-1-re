@@ -21,14 +21,23 @@ Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` fol
 
 ### `check_all.py`
 
-Run every tool's `--check` (32 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (33 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;33p"
+$ python3 tools/check_all.py | sed -n "1,3p;34p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
 CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 32 CHECKS PASSED
+ALL 33 CHECKS PASSED
+```
+
+### `doc_links.py`
+
+Resolves every relative link and anchor in `README.md` and under `docs/`. Part of `check_all.py`. A link written inside a fenced example is not followed.
+
+```
+$ python3 tools/doc_links.py --check
+CHECK links: every relative link and anchor in README.md and docs resolves
 ```
 
 ### `pak_reader.py`
@@ -201,7 +210,7 @@ A sheet per level made from its files: graphics loaded, wall types used, clickab
 ```
 $ python3 tools/level_report.py --level 1 | grep -E "^- Area|^\| block 621 "
 - Area (WLL header): 0 = KEEP (decorations `KEEP.SHP` / `.DAT`).
-| block 621 (x 13, y 19) | party steps in, wall clicked | moves the party to level 2, block 106; a character speaks; shows a message; set global var; plays a sound |
+| block 621 (x 13, y 19) | `0x12D2` | party steps in, wall clicked | moves the party to level 2, block 106, facing 2; ...
 ```
 
 ### `tlc_reader.py`
