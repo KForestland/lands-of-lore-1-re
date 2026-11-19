@@ -24,7 +24,7 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- rating:begin -->
 - **Files read:** 193 of 199 files in the CD `DATA` folder (288.6 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 494 statements CONFIRMED (proved from the program code or the files) and 79 UNCONFIRMED (a reading not yet proved), on 90 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 498 statements CONFIRMED (proved from the program code or the files) and 80 UNCONFIRMED (a reading not yet proved), on 91 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->
@@ -49,6 +49,8 @@ python3 tools/full_report.py --out "../lol1-out/report"
 The dialogue command prints `[0] Welcome to Gladstone Keep.  King Richard awaits you in the throne room.` The report command writes an inventory, level sheets and text counts to the named folder. On Windows, use `py -3 -m venv .venv` and `.\.venv\Scripts\python.exe` in place of `python3`. Set `$env:LOL1_DATA = 'D:\Games\LoL1\DATA'` in PowerShell, or pass `--data` with a quoted folder path to each tool.
 
 ## Tools at a glance
+
+[How a level is put together](docs/HOW_A_LEVEL_IS_PUT_TOGETHER.md) · [Numbers at a glance](docs/NUMBERS.md)
 
 What you can look at with your own copy of the game. Run from the clone with `export LOL1_DATA=/path/to/your/LOL1/DATA` (CD) or the floppy install folder; pictures and files go only where you point them (here `../lol1-out`, outside the clone; make it first with `mkdir -p ../lol1-out`). Every tool and option is in [`tools/README.md`](tools/README.md), with a table of every format and how to look at it.
 
