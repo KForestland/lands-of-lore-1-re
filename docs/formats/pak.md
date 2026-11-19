@@ -27,6 +27,12 @@ CONFIRMED, `tools/pak_reader.py --check`:
 
 "bad" means the members do not tile the file exactly from the end of the directory to the end of the file.
 
+## End of the directory in the original files
+
+CONFIRMED, `tools/lol1_pak_writer.py --check`: every original archive ends its directory the same way. After the last member's name comes one more uint32 LE offset equal to the file size, then five zero bytes; the first member starts right after them. The directory is therefore 9 + Σ(5 + name length) bytes. The reader stops at the offset that equals the file size, so it never reads the five zero bytes; a writer must add them to reproduce the file. Example: CD `L01.PAK` ends its directory with `7d 0c 01 00  00 00 00 00 00` (0x10C7D = 68733 = the file size).
+
+Evidence: the writer rebuilds each archive from its parsed `(name, bytes)` members with this trailer and compares every byte: CD `CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical` (81 PAKs in `DATA/`, 17 each in `ENG`, `FRE`, `GER`; members 6075 + 3 × 378), floppy `15 PAK and 0 PAK-layout TLK files, 1213 ordered members; byte-identical`. No archive ends with an empty member (the writer refuses one).
+
 
 ## Worked example
 
@@ -46,7 +52,7 @@ First 40 bytes of CD `GENERAL.PAK` (`tools/pak_reader.py list GENERAL.PAK` shows
 
 ## Tool
 
-`tools/pak_reader.py list|extract <PAK> [member]`, `--check`. Library: `tools/lol1lib.py: pak_entries()`. `tools/pak_indexer.py` rebuilds `data/pak_index.json` (`--check` matches it: 81 PAKs, 1163 members).
+`tools/pak_reader.py list|extract <PAK> [member]`, `--check`. Library: `tools/lol1lib.py: pak_entries()`. `tools/lol1_pak_writer.py --check` rebuilds every archive byte for byte (library: `write_pak()`). `tools/pak_indexer.py` rebuilds `data/pak_index.json` (`--check` matches it: 81 PAKs, 1163 members).
 
 ## Open
 

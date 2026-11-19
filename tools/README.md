@@ -27,13 +27,13 @@ Legend:
 
 - **Check**: "yes" = the tool has `--check` and `check_all.py` runs it; "corpus test" = `check_all.py` runs `tests/test_emc2_corpus.py` instead; "not in check_all" = the tool has a check that `check_all.py` does not run.
 - **Look at it**: the command that shows you the content. "picture" = it writes PNG files you can open; "text" = it prints the content; "listen" = WAV or MIDI.
-- **Unit test**: a test in `tests/` (`test_readers.py`, `test_formats.py`, `test_gap_tools.py`) that needs no game files (`python3 -m unittest discover -s tests`).
+- **Unit test**: a test in `tests/` (`test_readers.py`, `test_formats.py`, `test_gap_tools.py`, `test_round_trip.py`) that needs no game files (`python3 -m unittest discover -s tests`).
 - **Example**: a section below with the command and its expected output.
 - **gap** = missing; **part** = only partly covered (the note says what is missing).
 
 | Page | Reader | Check | Look at it | Unit test | Example |
 |------|--------|-------|-----------|-----------|---------|
-| [pak](../docs/formats/pak.md) | `pak_reader.py`, `pak_indexer.py` | yes | text: `pak_reader.py list GENERAL.PAK`; `extract … -o DIR` copies a member out | part: PAK directory parsing, but through `emc2_decompile.py`'s own reader, not `lol1lib`'s | yes |
+| [pak](../docs/formats/pak.md) | `pak_reader.py`, `pak_indexer.py`, `lol1_pak_writer.py` | yes | text: `pak_reader.py list GENERAL.PAK`; `extract … -o DIR` copies a member out | yes: `tests/test_round_trip.py` writes synthetic PAKs and reads them back with `lol1lib` | yes |
 | [tlk](../docs/formats/tlk.md) | `tlk_verify.py`, `voc_reader.py` | yes | text: `tlk_verify.py`; listen: `voc_reader.py 01.TLK:000_0.01 --out out.wav` | gap | yes |
 | [lcw](../docs/formats/lcw.md) | `lol1lib.py`, `decode_frame4.py` | yes | picture: `decode_frame4.py --out DIR` (every CPS screen) | yes | yes |
 | [cps](../docs/formats/cps.md) | `cps_reader.py` | yes | picture: `cps_reader.py PARCH.CPS --out parch.png`; its palette: `palette_reader.py PARCH.CPS` | yes (header and palette) | yes |
@@ -68,7 +68,7 @@ Legend:
 | [Q17 native save fields](../docs/unknowns/17_native_save_fields.md) | `save_reader.py` | yes | text, `--json` | part | yes |
 | [Q18 native records](../docs/unknowns/18_native_records.md) | `monster_reference_scan.py` (needs Capstone, in `requirements.txt`) | yes (the edition of `--data`) | text: one `CHECK` line per edition | part: folder handling and `--help`, not the census | yes |
 
-Tools in `check_all.py` with no section below: `rating.py`. No unit test needs game data; tests cover PAK directories, Frame4, EMC2 (with the closed-pipe case), the original save layout (`tests/test_readers.py`), PAL/CPS palettes, WLL, TLC, XXX, FNT, VOC headers, TIM framing and the executable tables (`tests/test_formats.py`), and wall assembly (VCN/VMP), the level map drawing, `shp_renderer.py --help` and `monster_reference_scan.py`'s folder handling (`tests/test_gap_tools.py`).
+Tools in `check_all.py` with no section below: `rating.py`. No unit test needs game data; tests cover PAK directories, Frame4, EMC2 (with the closed-pipe case), the original save layout (`tests/test_readers.py`), PAL/CPS palettes, WLL, TLC, XXX, FNT, VOC headers, TIM framing and the executable tables (`tests/test_formats.py`), and wall assembly (VCN/VMP), the level map drawing, `shp_renderer.py --help` and `monster_reference_scan.py`'s folder handling (`tests/test_gap_tools.py`), and the PAK writer: order, duplicate names, the end-offset and five zero bytes, and refused inputs (`tests/test_round_trip.py`).
 
 ## Examples and expected output
 
@@ -76,14 +76,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (38 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (39 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;39p"
+$ python3 tools/check_all.py | sed -n "1,3p;40p"
 CHECK pak: 111 containers, 6075 members, bad=none
+CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-CHECK tlk: 30 files, 4912 members, all VOC: 4912/4912, speech-pattern names 4853, NNNNN.VOC names 59, bad=none
-ALL 38 CHECKS PASSED
+ALL 39 CHECKS PASSED
 ```
 
 ### `doc_links.py`
@@ -106,6 +106,17 @@ $ python3 tools/pak_reader.py list GENERAL.PAK
      12778      3924  LORESFX.C55
      16702       768  FXPAL.COL
 ```
+
+### `lol1_pak_writer.py`
+
+Rebuild every PAK and PAK-layout TLK under the data folder (subfolders included) from its parsed members, in memory, and compare every byte with the original. It writes no file; `--check` is its only mode. The library function `write_pak(members)` builds an archive from ordered `(name, bytes)` pairs.
+
+```
+$ python3 tools/lol1_pak_writer.py --check
+CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
+```
+
+The floppy edition gives `15 PAK and 0 PAK-layout TLK files, 1213 ordered members`.
 
 ### `pak_indexer.py`
 
@@ -482,7 +493,7 @@ CHECK repo_guard: N tracked files; game files, converted media, stray PNGs, file
 
 ### `tests/test_emc2_corpus.py`
 
-Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last (36th) check.
+Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last (39th) check.
 
 ```
 $ python3 tests/test_emc2_corpus.py
@@ -500,6 +511,7 @@ Set `LOL1_DATA` or pass `--data` for the original game's DATA or floppy folder. 
 | A positional script, archive or save | `emc2_decompile.py`, `pak_reader.py` and `save_reader.py` can inspect one named file. The folder option helps resolve a bare resource name or run corpus checks. |
 | Output path can be a file or folder | A single result, such as a WAV or a JSON save, takes a file. Frame and map batches take a folder. For `shp_renderer.py`, a named member selects a folder of PNGs and no member selects an inventory file. |
 | `--walls-png` and `extract_music.py --out-dir` | These request a second output alongside the ordinary `--out` product, assembled wall pages or raw music files. |
+| `lol1_pak_writer.py` has no `--out` | It rebuilds archives in memory only, to compare them with the originals, so it cannot write into the game folder or the repository. `--check` is its only mode. |
 | Older output flags | The original `--out-dir`, `--png`, `--wav`, `--json` and `--output` spellings are kept as aliases and shown in `--help`, where they previously requested the same output. |
 
 ## Documentation index
