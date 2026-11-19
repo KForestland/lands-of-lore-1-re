@@ -176,7 +176,7 @@ def file_strings(data):
 
 USAGE = """
   decode_dialogue.py LEVEL01.ENG [--index 5]   # decode straight from the game data
-  decode_dialogue.py --in-dir raw/ --out-dir decoded/   # decode extract_dialogue.py output
+  decode_dialogue.py --in-dir raw/ --out decoded/   # decode extract_dialogue.py output
   decode_dialogue.py --check     # decode all strings; every bigram byte maps inside the tables
 """
 
@@ -184,10 +184,10 @@ USAGE = """
 def main():
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import lol1lib as L
-    ap = L.tool_args(__doc__ + USAGE)
+    ap = L.tool_args(__doc__ + USAGE, out_help="write decoded JSON files to this directory", out_aliases=("--out-dir",))
     ap.add_argument("name", nargs="?")
     ap.add_argument("--index", type=int)
-    ap.add_argument("--in-dir"); ap.add_argument("--out-dir")
+    ap.add_argument("--in-dir")
     a = ap.parse_args()
     if a.check:
         n = files = bad = accented = 0
@@ -210,15 +210,15 @@ def main():
             if a.index is None or a.index == i:
                 print(f"[{i}] {decode_raw(raw)}")
         return 0
-    if a.in_dir and a.out_dir:
-        os.makedirs(a.out_dir, exist_ok=True)
+    if a.in_dir and a.out:
+        os.makedirs(a.out, exist_ok=True)
         for fn in sorted(f for f in os.listdir(a.in_dir) if f.endswith(".json") and f != "summary.json"):
             with open(os.path.join(a.in_dir, fn)) as f:
                 d = json.load(f)
             d["strings"] = [decode_lol_string(x) for x in d["strings"]]
-            with open(os.path.join(a.out_dir, fn), "w", encoding="utf-8") as f:
+            with open(os.path.join(a.out, fn), "w", encoding="utf-8") as f:
                 json.dump(d, f, indent=2, ensure_ascii=False)
-        print("wrote", a.out_dir)
+        print("wrote", a.out)
         return 0
     ap.print_help()
     return 2

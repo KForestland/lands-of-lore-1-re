@@ -68,7 +68,7 @@ def iter_all(data_dir):
 def main():
     ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("ref", nargs="?", help="CONTAINER:MEMBER or a member name")
-    ap.add_argument("--wav", help="write 8-bit mono WAV")
+    ap.add_argument("--out", "--wav", help="write 8-bit mono WAV")
     ap.add_argument("--check", action="store_true")
     L.add_data_arg(ap)
     a = ap.parse_args()
@@ -95,10 +95,10 @@ def main():
         blob = L.find_member(a.ref, a.data, a.pak)[1]
     info, pcm = parse(blob)
     print(info)
-    if a.wav:
-        with wave.open(a.wav, "wb") as w:
+    if a.out:
+        with wave.open(a.out, "wb") as w:
             w.setnchannels(1); w.setsampwidth(1); w.setframerate(info["rate"]); w.writeframes(pcm)
-        print("wrote", a.wav)
+        print("wrote", a.out)
     return 0
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LoL1 top-down level map renderer: CMZ -> WLL -> VMP -> VCN.
+"""Read LoL1 level geometry and tile tables to draw overhead maps.
 
 Each of the 32x32 blocks becomes a square cell (10 px by default):
 
@@ -29,11 +29,11 @@ The tile set is the first loadLevelGraphics call of LEVELn.INI (with its
 override palette, if any), as listed by tileset_mapper.py. This is a map
 overview, not the in-game 3D view: one flat colour per wall type, no textures.
 
-  level_renderer.py --level 1 --out-dir maps/     # one PNG
-  level_renderer.py --level 1 --out-dir maps/ --schematic
+  level_renderer.py --level 1 --out maps/     # one PNG
+  level_renderer.py --level 1 --out maps/ --schematic
       # drawing from CMZ + WLL only, no game pixels: open squares light, solid dark,
       # mixed (doors, switches, part walls) orange, decorated walls (WLL shape > 0) red marks
-  level_renderer.py --out-dir maps/                # all 29
+  level_renderer.py --out maps/                # all 29
   level_renderer.py --check                        # every wall page resolves; lists wall types
                                                    # missing from the level's WLL; no PNGs written
 """
@@ -227,9 +227,9 @@ def render_schematic(level, data_dir, cell=10):
 
 
 def main():
-    ap = L.tool_args(__doc__)
+    ap = L.tool_args(__doc__, out_help="write each map PNG to this directory", out_aliases=("--out-dir",))
     ap.add_argument("--level", type=int, help="1..29 (default: all)")
-    ap.add_argument("--out-dir", help="folder for levelNN_<area>.png (required to write; nothing is written without it)")
+
     ap.add_argument("--schematic", action="store_true", help="line drawing without game pixels")
     a = ap.parse_args()
     levels = [a.level] if a.level else range(1, 30)
@@ -245,16 +245,16 @@ def main():
               f"{len(levels)-len(bad)}/{len(levels)}, bad={bad or 'none'}; "
               f"CMZ wall types without a WLL record (open point, drawn empty): {undef or 'none'}")
         return 0 if not bad else 1
-    if not a.out_dir:
+    if not a.out:
         ap.error("--out-dir is required to write map images")
-    os.makedirs(a.out_dir, exist_ok=True)
+    os.makedirs(a.out, exist_ok=True)
     for lv in levels:
         if a.schematic:
             img = render_schematic(lv, a.data)
-            p = os.path.join(a.out_dir, f"level{lv:02d}_schematic.png")
+            p = os.path.join(a.out, f"level{lv:02d}_schematic.png")
             img.save(p); print("wrote", p); continue
         name, img = render(lv, a.data)
-        p = os.path.join(a.out_dir, f"level{lv:02d}_{name.lower()}.png")
+        p = os.path.join(a.out, f"level{lv:02d}_{name.lower()}.png")
         img.save(p)
         print("wrote", p)
     return 0

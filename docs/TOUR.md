@@ -9,7 +9,7 @@ Start with the CD edition's level 1. The map locates the blocks. The sheet ties 
 ```bash
 export LOL1_DATA=/path/to/your/LoL1/DATA
 mkdir -p ../lol1-tour
-python3 tools/level_renderer.py --level 1 --schematic --out-dir ../lol1-tour
+python3 tools/level_renderer.py --level 1 --schematic --out ../lol1-tour
 python3 tools/level_report.py --level 1 --out ../lol1-tour
 ```
 
@@ -19,7 +19,7 @@ python3 tools/level_report.py --level 1 --out ../lol1-tour
 
 ```bash
 python3 tools/emc2_decompile.py "$LOL1_DATA/L01.PAK" --entry LEVEL1.INF \
-  --output ../lol1-tour/level1.inf.txt
+  --out ../lol1-tour/level1.inf.txt
 ```
 
 **CONFIRMED.** In `LEVEL1.INF` at `L01.PAK+0xC259`, ORDR entry `0x26D` for block 621 (13, 19) starts at DATA word `0x12D2`. Its event mask is `0x0041`, for stepping in or clicking a wall. At `0x12D9–0x12E9`, a nonzero hostility check takes the chat path and returns. After a zero result, the branch at `0x12EA–0x12EE` tests current facing against 2. The matching arm reaches `loadNewLevel(2, 106, 2)` at DATA word `0x130C`. The other facing takes the alternate arm at `0x130F`. [Script entry list](levels/level01.md#script-entry-points) · [Native syscall table](emc2_scripts.md)
@@ -28,7 +28,7 @@ python3 tools/emc2_decompile.py "$LOL1_DATA/L01.PAK" --entry LEVEL1.INF \
 
 ```bash
 python3 tools/emc2_decompile.py "$LOL1_DATA/L01.PAK" --entry LEVEL1.INI \
-  --output ../lol1-tour/level1.ini.txt
+  --out ../lol1-tour/level1.ini.txt
 python3 tools/lol1_numbers.py --out ../lol1-tour/numbers.md
 ```
 

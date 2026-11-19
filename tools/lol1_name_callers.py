@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Re-prove who names 00000.VOC and the three unused palettes.
+"""Read the LoL1 executable and locate the VOC and palette callers.
 
 On the CD edition:
   ENG/FINALE.EXE holds one catalog row for 00000.VOC and no other copy of that name.
@@ -111,7 +111,7 @@ def check_english(data):
 
 
 def main():
-    parser = L.tool_args(__doc__)
+    parser = L.tool_args(__doc__, writes=False)
     args = parser.parse_args()
     if not args.check:
         parser.error("this tool only checks; pass --check")

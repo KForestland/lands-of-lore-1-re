@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""
+"""Read the LoL1 CMZ level grids and count their wall IDs.
+
+
 LoL1 Task 1 (corrected): CMZ Wall Type Analysis
 
 ScummVM reveals the actual CMZ structure:

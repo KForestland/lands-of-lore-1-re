@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Dump Lands of Lore 1 save files field by field.
+"""Read LoL1 player saves and print their fields.
 
 Reads three kinds of file (layout: docs/savegame_format.md, docs/unknowns/
 17_native_save_fields.md, docs/unknowns/18_native_records.md):
@@ -269,7 +269,7 @@ def default_save_dir():
 def main():
     ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("file", nargs="?")
-    ap.add_argument("--json", help="write every field as JSON")
+    ap.add_argument("--out", "--json", help="write every field as JSON")
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--data", default=L.DEFAULT_DATA, help="game DATA folder searched for _SAVE*.DAT and _LEVEL*.TMP (with --check)")
     ap.add_argument("--saves", default=None,
@@ -307,10 +307,10 @@ def main():
         ap.print_help(); return 2
     r = read_any(a.file)
     print(summary(r))
-    if a.json:
-        with open(a.json, "w") as f:
+    if a.out:
+        with open(a.out, "w") as f:
             json.dump(r, f, indent=1)
-        print("wrote", a.json)
+        print("wrote", a.out)
     return 0
 
 

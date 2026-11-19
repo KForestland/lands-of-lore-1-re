@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write a file inventory, level sheets and text counts for a local game copy."""
+"""Read a LoL1 DATA folder and write inventory, level and text reports."""
 import csv
 import os
 import subprocess

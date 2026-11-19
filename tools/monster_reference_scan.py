@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Check the encoded original LoL1 DOS monster definition access paths in MAIN.EXE
-(docs/unknowns/18_native_records.md). Needs Capstone (pip install -r requirements.txt).
+"""Read the original LoL1 DOS MAIN.EXE and check its encoded monster definition access paths.
+
+See docs/unknowns/18_native_records.md. Needs Capstone (pip install -r requirements.txt).
 
   monster_reference_scan.py --check --data DATA     # or $LOL1_DATA: the edition's MAIN.EXE
                                                     # (CD: DATA/HARDRIVE/MAIN.EXE; floppy: MAIN.EXE)

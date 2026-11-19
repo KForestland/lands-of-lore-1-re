@@ -40,7 +40,7 @@ def parse(b):
 def main():
     ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("name", nargs="?")
-    ap.add_argument("--png")
+    ap.add_argument("--out", "--png")
     ap.add_argument("--check", action="store_true")
     L.add_data_arg(ap)
     a = ap.parse_args()
@@ -61,7 +61,7 @@ def main():
     pak, b = L.find_member(a.name, a.data, a.pak)
     h, g = parse(b)
     print(a.name, pak, h)
-    if a.png:
+    if a.out:
         from PIL import Image
         cw = max(x["width"] for x in g) + 1; ch = h["height"] + 1
         img = Image.new("L", (16 * cw, ((len(g) + 15) // 16) * ch), 0)
@@ -73,7 +73,7 @@ def main():
                     v = b[p + r * bw + c // 2]
                     v = (v >> 4) if c & 1 else (v & 15)
                     if v: img.putpixel(((i % 16) * cw + c, (i // 16) * ch + x["top"] + r), 255)
-        img.save(a.png); print("wrote", a.png)
+        img.save(a.out); print("wrote", a.out)
     return 0
 
 

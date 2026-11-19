@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run every reader's --check against a LoL1 DATA folder and print one line each.
+"""Read an original LoL1 DATA folder and run the repository checks.
 
   check_all.py --data DATA       # or set $LOL1_DATA; runs 37 checks
 Exit code 0 when every check passes.
@@ -19,6 +19,7 @@ READERS = ["pak_reader", "pak_indexer", "tlk_verify", "decode_frame4", "cps_read
 def main():
     ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--data", default=L.DEFAULT_DATA, required=L.DEFAULT_DATA is None)
+    ap.add_argument("--check", action="store_true", help="run all checks (the default)")
     a = ap.parse_args()
     here = os.path.dirname(os.path.abspath(__file__))
     rc = 0

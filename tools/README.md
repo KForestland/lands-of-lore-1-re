@@ -15,7 +15,7 @@ The numeric tables can be regenerated with `python3 tools/lol1_numbers.py`. On t
 
 - `--help` prints usage and changes nothing.
 - The game folder comes from `--data` or `$LOL1_DATA`; there are no built-in paths. `monster_reference_scan.py` also takes the two `MAIN.EXE` files directly as `--cd FILE --floppy FILE`.
-- Nothing is written unless you pass `--out FILE`, `--out-dir DIR`, `--png FILE`, `--walls-png FILE`, `--wav FILE`, `--json FILE` or `-o`/`--output FILE` (`emc2_decompile.py`), and then only there. Do not point them inside this repository: `.gitignore` blocks game file types and the example output folders, and `repo_guard.py` fails if any is committed.
+- Write output by giving `--out` and a path outside the repository. The tools reference below notes the few secondary outputs.
 - `--check` reads every file of the tool's kind and prints one `CHECK` line; exit code 0 means it passed. On the CD edition, tools that rebuild a file in `data/` also compare with it.
 - `lol1lib.py` is the shared library (PAK listing, Frame4, bitmap header, palettes); it has no command line.
 
@@ -34,21 +34,21 @@ Legend:
 | Page | Reader | Check | Look at it | Unit test | Example |
 |------|--------|-------|-----------|-----------|---------|
 | [pak](../docs/formats/pak.md) | `pak_reader.py`, `pak_indexer.py` | yes | text: `pak_reader.py list GENERAL.PAK`; `extract … -o DIR` copies a member out | part: PAK directory parsing, but through `emc2_decompile.py`'s own reader, not `lol1lib`'s | yes |
-| [tlk](../docs/formats/tlk.md) | `tlk_verify.py`, `voc_reader.py` | yes | text: `tlk_verify.py`; listen: `voc_reader.py 01.TLK:000_0.01 --wav out.wav` | gap | yes |
-| [lcw](../docs/formats/lcw.md) | `lol1lib.py`, `decode_frame4.py` | yes | picture: `decode_frame4.py --out-dir DIR` (every CPS screen) | yes | yes |
-| [cps](../docs/formats/cps.md) | `cps_reader.py` | yes | picture: `cps_reader.py PARCH.CPS --png parch.png`; its palette: `palette_reader.py PARCH.CPS` | yes (header and palette) | yes |
+| [tlk](../docs/formats/tlk.md) | `tlk_verify.py`, `voc_reader.py` | yes | text: `tlk_verify.py`; listen: `voc_reader.py 01.TLK:000_0.01 --out out.wav` | gap | yes |
+| [lcw](../docs/formats/lcw.md) | `lol1lib.py`, `decode_frame4.py` | yes | picture: `decode_frame4.py --out DIR` (every CPS screen) | yes | yes |
+| [cps](../docs/formats/cps.md) | `cps_reader.py` | yes | picture: `cps_reader.py PARCH.CPS --out parch.png`; its palette: `palette_reader.py PARCH.CPS` | yes (header and palette) | yes |
 | [shp](../docs/formats/shp.md) | `shp_renderer.py` | yes | picture: one PNG per shape; monsters, items and wall decorations need `--level N`, interface shapes `--pal-from` a CPS (`GAMESHP.SHP --pal-from PLAYFLD.CPS`) | part: the `--help` example only | yes |
 | [wsa](../docs/formats/wsa.md) | `wsa_extract.py`, `wsa_all_frames_extract.py` | yes (`wsa_all_frames_extract.py --check` repeats the same check, not in check_all) | picture: frame 0, or every frame with `--all` | gap | yes |
-| [voc](../docs/formats/voc.md) | `voc_reader.py` | yes | listen: `--wav` | yes (header and sound block) | yes |
+| [voc](../docs/formats/voc.md) | `voc_reader.py` | yes | listen: `--out` | yes (header and sound block) | yes |
 | [music](../docs/formats/music.md) | `extract_music.py`, `xmi_to_midi.py`, `adl_to_midi.py` | yes | listen: `xmi_to_midi.py` (XMI, C55, PCS) and `adl_to_midi.py` (ADL) write MIDI files | gap | yes |
 | [text](../docs/formats/text.md) | `extract_dialogue.py`, `decode_dialogue.py` | yes | text: `decode_dialogue.py LEVEL01.ENG` | gap | yes |
 | [cmz](../docs/formats/cmz.md) | `cmz_analyzer.py`, `level_renderer.py` | yes | picture: `level_renderer.py --level N` (one flat colour per wall type, taken from the wall face the game draws) or `--schematic`; text: wall-type counts | part: the map drawing (`level_renderer.draw_map`), not the CMZ reader | yes |
 | [wll](../docs/formats/wll.md) | `wll_parser.py` | yes | text: counts per level; every record with its fields: `wll_parser.py --level N` | yes | yes |
-| [vcn_vmp](../docs/formats/vcn_vmp.md) | `vcn_vmp_reader.py`, `tileset_mapper.py` | yes | picture: `vcn_vmp_reader.py KEEP --walls-png walls.png` (every wall page assembled from the VMP, its nine pieces as drawn on screen, and the floor/ceiling); `--png tiles.png` the 8×8 tiles in file order | yes: tile colours, mirroring, transparent words, piece offsets | yes |
+| [vcn_vmp](../docs/formats/vcn_vmp.md) | `vcn_vmp_reader.py`, `tileset_mapper.py` | yes | picture: `vcn_vmp_reader.py KEEP --walls-png walls.png` (every wall page assembled from the VMP, its nine pieces as drawn on screen, and the floor/ceiling); `--out tiles.png` the 8×8 tiles in file order | yes: tile colours, mirroring, transparent words, piece offsets | yes |
 | [xxx](../docs/formats/xxx.md) | `xxx_reader.py` | yes | text: every legend record with its name | yes | yes |
 | [dat](../docs/formats/dat.md) | `dat_reader.py` | yes | text: one record per `--index` | gap | yes |
 | [tlc](../docs/formats/tlc.md) | `tlc_reader.py` | yes | text: first 16 bytes of each used row; table1 and all 20 rows in full with `--full` | yes | yes |
-| [palette](../docs/formats/palette.md) | `palette_reader.py`, `cps_reader.py --pal-from` | yes | text: `palette_reader.py ALTPAL1.PAL` (256 colours, 6-bit and 8-bit); picture: `--out-dir DIR` writes a 16 × 16 swatch; applied to a CPS: `cps_reader.py PARCH.CPS --png p.png --pal-from FXPAL.COL` | yes | yes |
+| [palette](../docs/formats/palette.md) | `palette_reader.py`, `cps_reader.py --pal-from` | yes | text: `palette_reader.py ALTPAL1.PAL` (256 colours, 6-bit and 8-bit); picture: `--out DIR` writes a 16 × 16 swatch; applied to a CPS: `cps_reader.py PARCH.CPS --out p.png --pal-from FXPAL.COL` | yes | yes |
 | [fnt](../docs/formats/fnt.md) | `fnt_reader.py` | yes | picture: glyph atlas | yes (header and glyph tables) | yes |
 | [emc2](../docs/formats/emc2.md) | `emc2_decompile.py` | corpus test (the tool has no `--check`) | text: script listing (stops quietly when the reader closes the pipe, e.g. `\| head`) | yes | yes |
 | [tim](../docs/formats/tim.md) | `parse_tim.py`, `lol1_tim_words.py` | yes (also re-counts the command table of Q6) | text: `parse_tim.py --list NAME.TIM`, command by command with the command names | yes (framing, walk, listing) | yes |
@@ -128,7 +128,7 @@ $ python3 tools/tlk_verify.py
 
 ### `decode_frame4.py`
 
-An independent port of the Frame4 (LCW) decompressor; `--check` compares it with `lol1lib`; `--out-dir` writes every CPS as PNG.
+An independent port of the Frame4 (LCW) decompressor; `--check` compares it with `lol1lib`; `--out` writes every CPS as PNG.
 
 ```
 $ python3 tools/decode_frame4.py --check
@@ -140,21 +140,21 @@ CHECK frame4: 140 files (CPS, CMZ, VCN, VMP), both decoders agree and reach the 
 CPS full-screen pictures: header, decode, PNG.
 
 ```
-$ python3 tools/cps_reader.py PARCH.CPS --png parch.png
+$ python3 tools/cps_reader.py PARCH.CPS --out parch.png
 PARCH.CPS in GENERAL.PAK: {'size_field': 12665, 'comp_type': 4, 'byte3': 0, 'uncompressed_size': 64000, 'palette_size': 768}, decoded 64000 bytes
 wrote parch.png
 ```
 
 ### `shp_renderer.py`
 
-SHP sprites: list the shapes, write one PNG per shape (`--out-dir`), inventory (`--out`). Monster, item and wall-decoration shapes (`KEEP.SHP`, `KEEPDOOR.SHP`, …) need the scene palette of a level that loads them: `--level N`. Interface shapes take a CPS palette with `--pal-from`: `GAMESHP.SHP` (buttons, arrows, spell icons) is drawn over the game screen, so `--pal-from PLAYFLD.CPS`; its shape 6, a splash, comes out magenta because `PLAYFLD.CPS` holds 63,0,63 at that index; what colour the game uses there is not checked.
+SHP sprites: give a member and `--out DIR` for individual PNGs, or omit the member and use `--out FILE` for the inventory. Monster, item and wall-decoration shapes (`KEEP.SHP`, `KEEPDOOR.SHP`, …) need the scene palette of a level that loads them: `--level N`. Interface shapes take a CPS palette with `--pal-from`: `GAMESHP.SHP` (buttons, arrows, spell icons) is drawn over the game screen, so `--pal-from PLAYFLD.CPS`; its shape 6, a splash, comes out magenta because `PLAYFLD.CPS` holds 63,0,63 at that index; what colour the game uses there is not checked.
 
 ```
-$ python3 tools/shp_renderer.py GUARD.SHP --level 1 --out-dir guard
+$ python3 tools/shp_renderer.py GUARD.SHP --level 1 --out guard
   0 56x96 flags=0x0005 frame_size=2846 exact=True
   1 56x96 flags=0x0005 frame_size=2867 exact=True
   2 56x96 flags=0x0005 frame_size=2948 exact=True
-$ python3 tools/shp_renderer.py GAMESHP.SHP --out-dir gameshp --pal-from PLAYFLD.CPS | head -3
+$ python3 tools/shp_renderer.py GAMESHP.SHP --out gameshp --pal-from PLAYFLD.CPS | head -3
   0 13x19 flags=0x0001 frame_size=247 exact=True
   1 18x19 flags=0x0001 frame_size=259 exact=True
   2 12x19 flags=0x0001 frame_size=185 exact=True
@@ -165,7 +165,7 @@ $ python3 tools/shp_renderer.py GAMESHP.SHP --out-dir gameshp --pal-from PLAYFLD
 WSA animations: header and frame table; frame 0 (or every frame with `--all`) as PNG. A WSA without its own palette needs the one it is shown over: `--pal-from` the backdrop CPS the script loads with it (for `KNOWLTK1.WSA`, `KNOWLTK.CPS`).
 
 ```
-$ python3 tools/wsa_extract.py ESCAPE.WSA --out-dir escape
+$ python3 tools/wsa_extract.py ESCAPE.WSA --out escape
 ESCAPE.WSA O27A.PAK {'frames': 51, 'x_add': 4, 'y_add': 0, 'width': 136, 'height': 104, 'delta_buffer': 1859, 'flags': 1, 'has_first_frame': True, ...
 wrote PNGs to escape
 ```
@@ -175,7 +175,7 @@ wrote PNGs to escape
 Every frame of every WSA, or of the named ones.
 
 ```
-$ python3 tools/wsa_all_frames_extract.py --out-dir frames CHANDELR.WSA
+$ python3 tools/wsa_all_frames_extract.py --out frames CHANDELR.WSA
 wrote 3 frames of 1 WSA files to frames
 ```
 
@@ -184,7 +184,7 @@ wrote 3 frames of 1 WSA files to frames
 Fonts: header and a glyph atlas PNG.
 
 ```
-$ python3 tools/fnt_reader.py FONT9P.FNT --png font.png
+$ python3 tools/fnt_reader.py FONT9P.FNT --out font.png
 FONT9P.FNT STARTUP.PAK {'size_field': 3881, 'signature': '0x500', 'glyphs': 226, 'height': 9, 'width': 8}
 wrote font.png
 ```
@@ -218,7 +218,7 @@ rec  file+  wall_type  vmp  shape_map  special  flags  automap  bytes 3/7/9/11
 
 ### `vcn_vmp_reader.py`
 
-An area's wall tiles (VCN) and tile layouts (VMP). `--png` writes the 8×8 tiles in file order; `--walls-png` assembles the blocks as they appear on screen: the first row is the 22×15-tile floor/ceiling layout, then one row per wall page with its nine pieces (side walls at three depths, the wall two squares ahead, the 128×96 wall one square ahead, the near side wall), drawn at 2× size. For KEEP the six rows after the floor are plain wall, the window wall, an open archway, the bird relief, the fountain niche and the double door.
+An area's wall tiles (VCN) and tile layouts (VMP). `--out` writes the 8×8 tiles in file order; `--walls-png` assembles the blocks as they appear on screen: the first row is the 22×15-tile floor/ceiling layout, then one row per wall page with its nine pieces (side walls at three depths, the wall two squares ahead, the 128×96 wall one square ahead, the near side wall), drawn at 2× size. For KEEP the six rows after the floor are plain wall, the window wall, an open archway, the bird relief, the fountain niche and the double door.
 
 ```
 $ python3 tools/vcn_vmp_reader.py KEEP --walls-png keep_walls.png
@@ -242,9 +242,9 @@ L03  WLL area  1 FOREST1   graphics: INI:FOREST1+ALTPAL1.PAL
 Top-down map PNG of a level (10 px per square). Without `--schematic`, solid rock is the colour of the level's main wall face and floor the colour of its floor, both averaged from the game's own tiles and palette (only the brightness is adjusted, so walls stand out); doors, switches and wall faces of other types are strips on their side of the square. `--schematic` draws from the CMZ and WLL only, without game pixels. For level 1 the keep's corridors show dark blue-grey inside sand-coloured stone, with door strips across them.
 
 ```
-$ python3 tools/level_renderer.py --level 1 --out-dir maps
+$ python3 tools/level_renderer.py --level 1 --out maps
 wrote maps/level01_keep.png
-$ python3 tools/level_renderer.py --level 1 --out-dir maps --schematic
+$ python3 tools/level_renderer.py --level 1 --out maps --schematic
 wrote maps/level01_schematic.png
 ```
 
@@ -271,7 +271,7 @@ KEEP.DAT in KEEP.PAK: 26 records
 
 ### `level_report.py`
 
-A sheet per level made from its files: graphics loaded, wall types used, clickable walls, every script entry with a one-line description, items and monsters placed, automap legend, text ids. `--out-dir docs/levels` writes all 29 and an index.
+A sheet per level made from its files: graphics loaded, wall types used, clickable walls, every script entry with a one-line description, items and monsters placed, automap legend, text ids. `--out docs/levels` writes all 29 and an index.
 
 ```
 $ python3 tools/level_report.py --level 1 | grep -E "^- Area|^\| block 621 "
@@ -294,7 +294,7 @@ table1 (colour -> slot, ff = opaque)
 
 ### `palette_reader.py`
 
-A palette's colours: a `.PAL` or `.COL` file, or the palette inside a CPS. One row per colour with the 6-bit VGA values and the 8-bit RGB; `--out-dir DIR` also writes `DIR/NAME_EXT_swatch.png`, 16 × 16 squares with colour 0 top left. A file longer than 768 bytes (floppy `MONSTERS.PAL`) shows its first 256 colours unless you pass `--all`.
+A palette's colours: a `.PAL` or `.COL` file, or the palette inside a CPS. One row per colour with the 6-bit VGA values and the 8-bit RGB; `--out DIR` also writes `DIR/NAME_EXT_swatch.png`, 16 × 16 squares with colour 0 top left. A file longer than 768 bytes (floppy `MONSTERS.PAL`) shows its first 256 colours unless you pass `--all`.
 
 ```
 $ python3 tools/palette_reader.py ALTPAL1.PAL | head -6
@@ -310,7 +310,7 @@ CHECK palette: 6 PAL, 5 COL, other than 768 bytes: none; 85 of 85 CPS carry a 76
 
 ### `extract_dialogue.py`
 
-Raw strings of every text file (`--out-dir` writes one JSON per file).
+Raw strings of every text file (`--out` writes one JSON per file).
 
 ```
 $ python3 tools/extract_dialogue.py
@@ -331,7 +331,7 @@ $ python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
 Sound samples: blocks and rate; WAV output.
 
 ```
-$ python3 tools/voc_reader.py VOC.PAK:1BOLTC.VOC --wav bolt.wav
+$ python3 tools/voc_reader.py VOC.PAK:1BOLTC.VOC --out bolt.wav
 {'header_size': 26, 'version': '0x10a', 'check_ok': True, 'blocks': [(1, 21320)], 'rate': 11025, 'samples': 21318}
 wrote bolt.wav
 ```
@@ -347,10 +347,10 @@ $ python3 tools/extract_music.py
 
 ### `xmi_to_midi.py`
 
-XMIDI music (`.XMI`, and the XMIDI-container `.C55` and `.PCS` files) to standard MIDI files, one per sequence (`--out-dir`). `--check` converts every sequence of every file and re-reads each result as MIDI.
+XMIDI music (`.XMI`, and the XMIDI-container `.C55` and `.PCS` files) to standard MIDI files, one per sequence (`--out`). `--check` converts every sequence of every file and re-reads each result as MIDI.
 
 ```
-$ python3 tools/xmi_to_midi.py LORE01A.XMI --out-dir midi | head -3
+$ python3 tools/xmi_to_midi.py LORE01A.XMI --out midi | head -3
 LORE01A #00: 0 notes, 0 controller, 0 program, 4 meta, 0 sysex events; 0.0 s; end-of-track: True
 LORE01A #01: 0 notes, 0 controller, 0 program, 4 meta, 0 sysex events; 0.0 s; end-of-track: True
 LORE01A #02: 8 notes, 8 controller, 3 program, 7 meta, 0 sysex events; 35.7 s; end-of-track: True
@@ -422,7 +422,7 @@ The counts and end offset depend on the save you pass.
 
 ### `example_images.py`
 
-Regenerates each image in `examples/` and the two level schematics in `docs/images/` with its listed command and compares pixels; part of `check_all.py`. `--out-dir` writes today's versions.
+Regenerates each image in `examples/` and the two level schematics in `docs/images/` with its listed command and compares pixels; part of `check_all.py`. `--out` writes today's versions.
 
 ```
 $ python3 tools/example_images.py --check
@@ -488,3 +488,16 @@ Disassembles every level and item script (60 per edition) and fails on any unkno
 $ python3 tests/test_emc2_corpus.py
 /path/to/DATA: PASS 60/60 scripts, 124298 DATA words, 109845 instructions, 756 TEXT strings, 0 unknown opcodes/functions
 ```
+
+## Command-line conventions
+
+Set `LOL1_DATA` or pass `--data` for the original game's DATA or floppy folder. Run `--help` for the tool's inputs and modes. Use `--check` for the available read-only validation and `--out` to write a result to a path you choose. Read-only listings print to stdout. `check_all.py` runs the whole suite by default. `doc_links.py` and `repo_guard.py` use repository files and need no game data.
+
+| Difference | Why it remains |
+|---|---|
+| `LOL1_DATA`, where LoL2 and LoL3 use `LOL2_DAT` and `LOL3_DAT` | Each name follows the game's own folder: LoL1 keeps its files in `DATA`, LoL2 and LoL3 in `DAT`. Shells and scripts already set these names. |
+| `--pak` and `--game-dir` | The CD and floppy group resources differently. `--pak` restricts a member search. The loose-file survey can select the install root separately. |
+| A positional script, archive or save | `emc2_decompile.py`, `pak_reader.py` and `save_reader.py` can inspect one named file. The folder option helps resolve a bare resource name or run corpus checks. |
+| Output path can be a file or folder | A single result, such as a WAV or a JSON save, takes a file. Frame and map batches take a folder. For `shp_renderer.py`, a named member selects a folder of PNGs and no member selects an inventory file. |
+| `--walls-png` and `extract_music.py --out-dir` | These request a second output alongside the ordinary `--out` product, assembled wall pages or raw music files. |
+| Older output flags | The original `--out-dir`, `--png`, `--wav`, `--json` and `--output` spellings are kept as aliases and shown in `--help`, where they previously requested the same output. |

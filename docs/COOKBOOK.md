@@ -21,7 +21,7 @@ Choose an output folder outside the game and clone. Use a fresh folder for each 
 ## Draw a level schematic
 
 ```bash
-python3 tools/level_renderer.py --level 1 --schematic --out-dir ../lol1-out
+python3 tools/level_renderer.py --level 1 --schematic --out ../lol1-out
 ```
 
 ```text
@@ -134,7 +134,7 @@ LORE01A #01: 0 notes, 0 controller, 0 program, 4 meta, 0 sysex events; 0.0 s; en
 LORE01A #02: 8 notes, 8 controller, 3 program, 7 meta, 0 sysex events; 35.7 s; end-of-track: True
 ```
 
-Add `--out-dir ../lol1-out/midi` to write one `.mid` per sequence. The same lines are printed, then `wrote` and the folder.
+Add `--out ../lol1-out/midi` to write one `.mid` per sequence. The same lines are printed, then `wrote` and the folder.
 
 ## Read one line of game text
 

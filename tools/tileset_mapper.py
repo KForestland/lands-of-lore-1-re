@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LoL1 level -> area tile set mapping, from the level files themselves.
+"""Read LoL1 level scripts to map levels to their area tile sets.
 
 Rewritten 2026-11-18. The March version read the CMZ map as uint16 "tile IDs"
 and guessed the tile set from their high bytes; that reading was wrong (see

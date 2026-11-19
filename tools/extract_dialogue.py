@@ -6,7 +6,7 @@ engines/kyra/engine/lol.cpp:1100-1104): uint16 offsets, count = first / 2,
 NUL-terminated strings. Output keeps the bytes as text with [XX] for
 non-ASCII bytes; decode_dialogue.py turns them into readable text.
 
-  extract_dialogue.py --out-dir dialogue/   # one JSON per file + summary.json
+  extract_dialogue.py --out dialogue/   # one JSON per file + summary.json
   extract_dialogue.py --check               # counts vs data/dialogue_summary.json
 """
 
@@ -71,8 +71,8 @@ def extract_strings(data):
 
 
 def main():
-    ap = L.tool_args(__doc__)
-    ap.add_argument("--out-dir", help="write one JSON per text file and summary.json here")
+    ap = L.tool_args(__doc__, out_help="write per-file JSON and a summary to this directory", out_aliases=("--out-dir",))
+
     a = ap.parse_args()
     files = []
     for pak, name, data in L.find_all("", a.data):
@@ -87,9 +87,9 @@ def main():
         summary["by_language"][ext] += len(strings)
         summary["total_strings"] += len(strings)
         summary["files"].append({"file": name, "pak": pak, "output": out_name, "string_count": len(strings)})
-        if a.out_dir:
-            os.makedirs(a.out_dir, exist_ok=True)
-            with open(os.path.join(a.out_dir, out_name), "w", encoding="utf-8") as f:
+        if a.out:
+            os.makedirs(a.out, exist_ok=True)
+            with open(os.path.join(a.out, out_name), "w", encoding="utf-8") as f:
                 json.dump({"file": name, "pak": pak, "string_count": len(strings), "strings": strings},
                           f, indent=2, ensure_ascii=False)
     if a.check:
@@ -100,10 +100,10 @@ def main():
         print(f"CHECK dialogue: {summary['total_files']} files, {summary['total_strings']} strings "
               f"{summary['by_language']}, matches data/dialogue_summary.json: {'skipped (not the CD layout)' if skipped else same}")
         return 0 if same else 1
-    if a.out_dir:
-        with open(os.path.join(a.out_dir, "summary.json"), "w") as f:
+    if a.out:
+        with open(os.path.join(a.out, "summary.json"), "w") as f:
             json.dump(summary, f, indent=2)
-        print(f"wrote {len(files)} files to {a.out_dir}")
+        print(f"wrote {len(files)} files to {a.out}")
     print(f"{summary['total_files']} files, {summary['total_strings']} strings, {summary['by_language']}")
     return 0
 

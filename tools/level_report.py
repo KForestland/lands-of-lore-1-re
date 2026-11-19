@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write a "level sheet" for each Lands of Lore 1 level, made only from the data.
+"""Read LoL1 level grids, walls and scripts to write level sheets.
 
 For level n it reads LEVELn.CMZ, LEVELn.WLL, LEVELn.XXX, LEVELn.INI and
 LEVELn.INF (and ONETIME.INF / LANDS.<lang> for item and place names) and
@@ -25,7 +25,6 @@ an event mask; the entry runs only if it shares a bit with the event.
   level_report.py --check              # build all 29; every entry and call decodes
 """
 from cli_errors import run_cli
-import argparse
 import os
 import re
 import struct
@@ -497,9 +496,8 @@ EDITION = "CD edition"
 
 def main():
     global EDITION
-    ap = L.tool_args(__doc__, out_help="write all 29 sheets and an index to this folder")
+    ap = L.tool_args(__doc__, out_help="write level sheets to this directory", out_aliases=("--out-dir",))
     ap.add_argument("--level", type=int)
-    ap.add_argument("--out-dir", dest="out", help=argparse.SUPPRESS)
     a = ap.parse_args()
     EDITION = "CD edition" if any(os.path.isfile(os.path.join(a.data, n)) for n in ("L01.PAK", "l01.pak")) else "floppy edition"
     items, lands = item_names(a.data)

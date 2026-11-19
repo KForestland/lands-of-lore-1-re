@@ -41,7 +41,7 @@ python3 -m pip install -r requirements.txt
 export LOL1_DATA="/path/to/your/LOL1/DATA"      # the folder holding GENERAL.PAK (CD: DATA; floppy: the install folder)
 python3 tools/check_all.py                      # 37 checks, ends with ALL 37 CHECKS PASSED
 python3 -m unittest discover -s tests
-python3 tools/level_renderer.py --level 1 --out-dir ../maps/ --schematic
+python3 tools/level_renderer.py --level 1 --out ../maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
 python3 tools/full_report.py --out "../lol1-out/report"
 ```
@@ -56,20 +56,20 @@ What you can look at with your own copy of the game. Run from the clone with `ex
 
 | To see | Command |
 |---|---|
-| A level as a map | `python3 tools/level_renderer.py --level 1 --schematic --out-dir ../lol1-out` |
-| A level's walls in their colours | `python3 tools/level_renderer.py --level 1 --out-dir ../lol1-out` |
-| A level sheet (scripts, items, monsters) | `python3 tools/level_report.py --level 1 --out-dir ../lol1-out` |
-| A monster in its colours | `python3 tools/shp_renderer.py GUARD.SHP --level 1 --out-dir ../lol1-out/guard` |
+| A level as a map | `python3 tools/level_renderer.py --level 1 --schematic --out ../lol1-out` |
+| A level's walls in their colours | `python3 tools/level_renderer.py --level 1 --out ../lol1-out` |
+| A level sheet (scripts, items, monsters) | `python3 tools/level_report.py --level 1 --out ../lol1-out` |
+| A monster in its colours | `python3 tools/shp_renderer.py GUARD.SHP --level 1 --out ../lol1-out/guard` |
 | An area's walls as the game draws them | `python3 tools/vcn_vmp_reader.py KEEP --walls-png ../lol1-out/keep_walls.png` |
-| A full-screen picture | `python3 tools/cps_reader.py PARCH.CPS --png ../lol1-out/parch.png` |
-| An animation | `python3 tools/wsa_extract.py KNOWLTK1.WSA --pal-from KNOWLTK.CPS --out-dir ../lol1-out/knowltk1` |
-| A palette and its swatch | `python3 tools/palette_reader.py PARCH.CPS --out-dir ../lol1-out` |
+| A full-screen picture | `python3 tools/cps_reader.py PARCH.CPS --out ../lol1-out/parch.png` |
+| An animation | `python3 tools/wsa_extract.py KNOWLTK1.WSA --pal-from KNOWLTK.CPS --out ../lol1-out/knowltk1` |
+| A palette and its swatch | `python3 tools/palette_reader.py PARCH.CPS --out ../lol1-out` |
 | A line of game text | `python3 tools/decode_dialogue.py LEVEL01.ENG --index 0` |
 | A level script | `python3 tools/emc2_decompile.py L01.PAK --entry LEVEL1.INI` |
 | A cut-scene script, command by command | `python3 tools/parse_tim.py --list AUTOMAP.TIM` |
 | The tables inside the game program | `python3 tools/exe_tables.py --table difficulty --image cd` |
-| A sound effect as WAV | `python3 tools/voc_reader.py VOC.PAK:1BOLTC.VOC --wav ../lol1-out/bolt.wav` |
-| Music as standard MIDI | `python3 tools/xmi_to_midi.py LORE01A.XMI --out-dir ../lol1-out/midi` |
+| A sound effect as WAV | `python3 tools/voc_reader.py VOC.PAK:1BOLTC.VOC --out ../lol1-out/bolt.wav` |
+| Music as standard MIDI | `python3 tools/xmi_to_midi.py LORE01A.XMI --out ../lol1-out/midi` |
 | A saved game you made | `python3 tools/save_reader.py /path/to/your/save` |
 
 ## What you get

@@ -127,7 +127,7 @@ def walls_image(words, tiles, col, shift, pal, scale=2, bg=(40, 40, 52)):
 def main():
     ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("area", nargs="?", help="area name, e.g. KEEP, CAVE1, YVEL2")
-    ap.add_argument("--png", help="write the 8x8 tiles in file order (32 per row) here")
+    ap.add_argument("--out", "--png", help="write the 8x8 tiles in file order (32 per row) here")
     ap.add_argument("--walls-png", help="write the wall pages assembled from the VMP here: one row per page, "
                     "the floor/ceiling layout first, then the nine pieces of each wall page as drawn on screen")
     ap.add_argument("--check", action="store_true")
@@ -153,7 +153,7 @@ def main():
     info, shift, col, pal, tiles = read_vcn(b)
     m, dl, words = read_vmp(L.find_member(a.area + ".VMP", a.data, pak)[1])
     print(f"{a.area} ({pak}): VCN {info}, shift values {sorted(set(shift))}; VMP {m} words = 330 floor/ceiling + {(m-330)/431:g} wall pages of 431")
-    if a.png:
+    if a.out:
         from PIL import Image
         n = info["tiles"]; cols = 32
         img = Image.new("P", (cols * 8, ((n + cols - 1) // cols) * 8))
@@ -164,7 +164,7 @@ def main():
                 v = tiles[t * 32 + p // 2]
                 v = (v >> 4) if not p & 1 else (v & 15)
                 img.putpixel(((t % cols) * 8 + p % 8, (t // cols) * 8 + p // 8), col[v | shift[t]])
-        img.save(a.png); print("wrote", a.png)
+        img.save(a.out); print("wrote", a.out)
     if a.walls_png:
         walls_image(words, tiles, col, shift, pal).save(a.walls_png)
         print("wrote", a.walls_png)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the CD speech files NN.TLK: PAK containers of VOC samples.
+"""Read LoL1 CD speech archives and verify their VOC members.
 
 Rewritten 2026-11-18. The March version ran on start (no --help), wrote into
 fixed folders, and paired each member name with the next member's offset in

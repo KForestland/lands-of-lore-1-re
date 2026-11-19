@@ -72,3 +72,20 @@ class ReaderErrors(unittest.TestCase):
 
     def test_save(self):
         self.bad_files("_SAVE000.DAT", b"short", "save_reader.py", self.data / "_SAVE000.DAT")
+
+    def test_voc_out_and_legacy_alias(self):
+        version = 0x10A
+        header = b"Creative Voice File\x1a" + struct.pack("<HHH", 26, version, (~version + 0x1234) & 0xFFFF)
+        block = b"\x01\x07\x00\x00\xa6\x00" + bytes(range(5)) + b"\x00"
+        (self.data / "A.VOC").write_bytes(header + block)
+        results = []
+        for index, option in enumerate(("--out", "--wav")):
+            target = self.root / f"{index}.wav"
+            run = subprocess.run(
+                [sys.executable, str(TOOLS / "voc_reader.py"), "--data", str(self.data), "A.VOC", option, str(target)],
+                cwd=self.root, env=self.env, capture_output=True, text=True, timeout=10,
+            )
+            self.assertEqual(run.returncode, 0, run.stderr)
+            results.append(target.read_bytes())
+        self.assertEqual(results[0], results[1])
+        self.assertTrue(results[0].startswith(b"RIFF"))

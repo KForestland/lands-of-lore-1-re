@@ -20,7 +20,7 @@ import lol1lib as L
 def main():
     ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("name", nargs="?")
-    ap.add_argument("--png", help="write a PNG (needs Pillow)")
+    ap.add_argument("--out", "--png", help="write a PNG (needs Pillow)")
     ap.add_argument("--pal-from", help="take the palette from another CPS or a .PAL/.COL file when this one has none")
     ap.add_argument("--check", action="store_true")
     L.add_data_arg(ap)
@@ -47,7 +47,7 @@ def main():
     if h["size_field"] + 2 != len(blob) or len(px) != h["uncompressed_size"]:
         raise ValueError(f"{a.name}: bitmap size does not match the bytes read")
     print(f"{a.name} in {pak}: {h}, decoded {len(px)} bytes")
-    if a.png:
+    if a.out:
         from PIL import Image
         if not pal and a.pal_from:
             _, pb = L.find_member(a.pal_from, a.data)
@@ -56,7 +56,7 @@ def main():
         if pal:
             flat = [c for rgb in L.vga_palette(pal) for c in rgb]
             img.putpalette(flat + [0] * (768 - len(flat)))
-        img.save(a.png); print("wrote", a.png)
+        img.save(a.out); print("wrote", a.out)
     return 0
 
 

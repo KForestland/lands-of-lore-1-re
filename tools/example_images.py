@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Check that every image in examples/ is exactly what today's tools make from the game files.
+"""Read game files and compare the published LoL1 example images.
 
   example_images.py --data DATA --check            # regenerate each example in a temporary folder and compare pixels
-  example_images.py --data DATA --out-dir new/     # write today's versions (to replace stale examples)
+  example_images.py --data DATA --out new/     # write today's versions (to replace stale examples)
 
 Each example is listed in EXAMPLES with the tool command that makes it (also in examples/README.md).
 Pixels are compared after conversion to RGBA, so PNG compression settings do not matter.
@@ -32,7 +32,7 @@ ROOT = os.path.normpath(os.path.join(HERE, ".."))
 def make(data_dir, name, out_dir):
     tool, args, produced = EXAMPLES[name]
     with tempfile.TemporaryDirectory() as tmp:
-        p = subprocess.run([sys.executable, os.path.join(HERE, tool), *args, "--data", data_dir, "--out-dir", tmp],
+        p = subprocess.run([sys.executable, os.path.join(HERE, tool), *args, "--data", data_dir, "--out", tmp],
                            capture_output=True, text=True)
         if p.returncode:
             raise ValueError(f"{name}: {tool} failed: {(p.stderr or p.stdout).strip()[-200:]}")
@@ -54,10 +54,10 @@ def pixels(blob):
 
 
 def main():
-    ap = L.tool_args(__doc__)
-    ap.add_argument("--out-dir", help="write today's versions of the examples here")
+    ap = L.tool_args(__doc__, out_help="write today's versions of the images to this directory", out_aliases=("--out-dir",))
+
     a = ap.parse_args()
-    if not (a.check or a.out_dir):
+    if not (a.check or a.out):
         ap.print_help(); return 2
     tracked = sorted(f"{d}/{n}" for d in ("examples", "docs/images")
                      for n in os.listdir(os.path.join(ROOT, d)) if n.lower().endswith(".png"))
@@ -66,7 +66,7 @@ def main():
         return 0
     stale = []
     for name in sorted(EXAMPLES):
-        today = make(a.data, name, a.out_dir)
+        today = make(a.data, name, a.out)
         path = os.path.join(ROOT, name)
         if a.check and (not os.path.exists(path) or pixels(open(path, "rb").read()) != pixels(today)):
             stale.append(name)

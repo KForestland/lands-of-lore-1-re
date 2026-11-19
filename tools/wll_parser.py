@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""
+"""Read the LoL1 WLL wall tables and their VMP indices.
+
+
 LoL1 WLL Parser + Wall-to-VMP Mapping (ScummVM-verified)
 
 WLL file format (from ScummVM loadLevelWallData):

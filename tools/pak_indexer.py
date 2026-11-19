@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LoL1 PAK index: every member of every PAK in a DATA folder.
+"""Read all LoL1 PAK directories or survey the loose game files.
 
 Rebuilds data/pak_index.json (pak_files: name/offset/header_pos/size per
 member; flat_index). header_pos = position of the member's offset field in

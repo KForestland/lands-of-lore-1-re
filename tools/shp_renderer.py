@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LoL1 SHP shape reader and renderer, following ScummVM's drawing code.
+"""Read LoL1 SHP members and their palette inputs.
 
 Rewritten 2026-11-18. The March version read each shape 2 bytes too early
 (it took offsets from file start; they count from byte 2) and so saw a
@@ -114,7 +114,7 @@ def read_shp(blob, alt=False):
 
 
 def main():
-    ap = L.tool_args(__doc__)
+    ap = L.tool_args(__doc__, out_help="write shape PNGs to this directory, or a JSON inventory without a member")
     ap.add_argument("name", nargs="?", help="SHP member name, e.g. GAMESHP.SHP or GUARD.SHP")
     ap.add_argument("--out-dir", help="write one PNG per shape here")
     ap.add_argument("--pal-from", default="PARCH.CPS", help="CPS (or .PAL/.COL) to take the palette from")
@@ -123,6 +123,10 @@ def main():
                          "the palette monster and item shapes are drawn with in the 3D view; overrides --pal-from")
     ap.add_argument("--alt-header", action="store_true", help="demo edition: 2 extra bytes before each shape header")
     a = ap.parse_args()
+    if a.out and a.out_dir:
+        ap.error("give one shape output path")
+    if a.name and a.out:
+        a.out_dir = a.out
     if a.check:
         files = shapes = exact = empty = 0; bad = []
         for pak, name, blob in L.find_all(".SHP", a.data):

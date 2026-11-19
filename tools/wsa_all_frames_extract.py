@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract every frame of every LoL1 WSA (or of the named ones) to PNG.
+"""Read LoL1 WSA animations and export their frames to PNG.
 
 Rewritten 2026-11-18 as a batch front end for wsa_extract.py, which holds
 the ScummVM-exact decoder (docs/formats/wsa.md). The March version only took
@@ -7,8 +7,8 @@ the top-20 files from an earlier inventory and needed a palette fix for
 ESCAPE.WSA and CHANDELR.WSA; with the offsets read as ScummVM does
 (relative to the start of frame data, after the palette) no fix is needed.
 
-  wsa_all_frames_extract.py --out-dir frames/                 # all WSAs
-  wsa_all_frames_extract.py --out-dir frames/ ESCAPE.WSA ...  # some
+  wsa_all_frames_extract.py --out frames/                 # all WSAs
+  wsa_all_frames_extract.py --out frames/ ESCAPE.WSA ...  # some
   wsa_all_frames_extract.py --check                           # same check as wsa_extract.py
 """
 from cli_errors import run_cli
@@ -20,15 +20,15 @@ import wsa_extract as W
 
 
 def main():
-    ap = L.tool_args(__doc__)
+    ap = L.tool_args(__doc__, out_help="write frame PNGs under this directory", out_aliases=("--out-dir",))
     ap.add_argument("names", nargs="*")
-    ap.add_argument("--out-dir")
+
     ap.add_argument("--pal-from", default="PARCH.CPS")
     a = ap.parse_args()
     if a.check:
         sys.argv = [sys.argv[0], "--check", "--data", a.data]
         return W.main()
-    if not a.out_dir:
+    if not a.out:
         ap.print_help(); return 2
     from PIL import Image
     _, pb = L.find_member(a.pal_from, a.data)
@@ -40,7 +40,7 @@ def main():
             continue
         info = W.parse(b)
         flat = [c for rgb in L.vga_palette(info["palette"] or default_pal) for c in rgb]
-        d = os.path.join(a.out_dir, name.rsplit(".", 1)[0].lower())
+        d = os.path.join(a.out, name.rsplit(".", 1)[0].lower())
         os.makedirs(d, exist_ok=True)
         for i, pic, ok in W.frames(b, info):
             img = Image.frombytes("P", (info["width"], info["height"]), pic)
@@ -48,7 +48,7 @@ def main():
             img.save(os.path.join(d, f"frame_{i:03d}.png"))
             frames += 1
         files += 1
-    print(f"wrote {frames} frames of {files} WSA files to {a.out_dir}")
+    print(f"wrote {frames} frames of {files} WSA files to {a.out}")
     return 0
 
 

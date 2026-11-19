@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The repository's four-line rating, counted from the game files and the pages.
+"""Read original LoL1 files and documentation to compute the rating.
 
   rating.py --data DAT          # print the four lines
   rating.py --data DAT --check  # also require README.md and docs/STATUS.md to carry them

@@ -7,10 +7,10 @@ header) and docs/formats/cps.md (a CPS carries its 768-byte palette after the
 
   palette_reader.py ALTPAL1.PAL                  # 256 rows: index, 6-bit, 8-bit, hex
   palette_reader.py PARCH.CPS                    # the palette inside a CPS
-  palette_reader.py FXPAL.COL --out-dir DIR      # also write DIR/FXPAL_COL_swatch.png (16 x 16 squares)
+  palette_reader.py FXPAL.COL --out DIR      # also write DIR/FXPAL_COL_swatch.png (16 x 16 squares)
   palette_reader.py --check                      # every PAL, COL and CPS palette in the game folder
 
-Writes nothing unless --out-dir is given, and then only the swatch PNG there.
+Writes nothing unless --out is given, and then only the swatch PNG there.
 """
 from cli_errors import ReaderArgumentParser, run_cli
 import argparse, os
@@ -44,7 +44,7 @@ def swatch(raw, path, cell=16):
 def main():
     ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("name", nargs="?", help="a .PAL, .COL or .CPS file (PAK member or loose)")
-    ap.add_argument("--out-dir", help="write <name>_swatch.png here (needs Pillow)")
+    ap.add_argument("--out", "--out-dir", help="write <name>_swatch.png here (needs Pillow)")
     ap.add_argument("--all", action="store_true", help="print every RGB triple of a file larger than 768 bytes")
     ap.add_argument("--check", action="store_true")
     L.add_data_arg(ap)
@@ -84,9 +84,9 @@ def main():
     for i, six, rgb in rows(raw, len(raw) // 3 if a.all else 256):
         print(f"{i:5d}        {six[0]:2d} {six[1]:2d} {six[2]:2d}         {rgb[0]:3d} {rgb[1]:3d} {rgb[2]:3d}  "
               f"#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}")
-    if a.out_dir:
-        os.makedirs(a.out_dir, exist_ok=True)
-        path = os.path.join(a.out_dir, a.name.upper().replace(".", "_") + "_swatch.png")
+    if a.out:
+        os.makedirs(a.out, exist_ok=True)
+        path = os.path.join(a.out, a.name.upper().replace(".", "_") + "_swatch.png")
         swatch(raw, path)
         print("wrote", path)
     return 0

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""
+"""Read LoL1 CPS images and decode their Frame4 payloads.
+
+
 LoL1 CPS Decoder — ScummVM-exact Frame4 (LCW) implementation
 
 The key insight: Frame4/LCW has MIXED referencing:
@@ -26,7 +28,7 @@ import json
 import lol1lib as L
 
 USAGE = """
-  decode_frame4.py --out-dir cps/   # every CPS to PNG
+  decode_frame4.py --out cps/   # every CPS to PNG
   decode_frame4.py --check          # this file's decoder vs lol1lib.decode_frame4 on every
                                     # CPS, CMZ, VCN and VMP (two independent ports must agree)
 """
@@ -138,8 +140,8 @@ def cps_to_image(pixels, palette, width=320, height=200):
 
 
 def main():
-    ap = L.tool_args(__doc__ + USAGE)
-    ap.add_argument("--out-dir")
+    ap = L.tool_args(__doc__ + USAGE, out_help="write one decoded PNG per CPS to this directory", out_aliases=("--out-dir",))
+
     a = ap.parse_args()
     if a.check:
         n = same = 0; bad = []
@@ -157,9 +159,9 @@ def main():
         print(f"CHECK frame4: {n} files (CPS, CMZ, VCN, VMP), both decoders agree and reach the stated size: "
               f"{same}/{n}, bad={bad or 'none'}")
         return 0 if not bad else 1
-    if not a.out_dir:
+    if not a.out:
         ap.print_help(); return 2
-    os.makedirs(a.out_dir, exist_ok=True)
+    os.makedirs(a.out, exist_ok=True)
     total = ok = 0
     for pak, name, data in L.find_all(".CPS", a.data):
         total += 1
@@ -167,11 +169,11 @@ def main():
         if pixels and palette and len(pixels) >= 64000:
             img = cps_to_image(pixels, palette)
             if img:
-                img.save(os.path.join(a.out_dir, name.replace(".CPS", ".png").lower()))
+                img.save(os.path.join(a.out, name.replace(".CPS", ".png").lower()))
                 ok += 1
                 continue
         print(f"  FAIL: {name} in {pak}")
-    print(f"CPS decode: {ok}/{total}, output {a.out_dir}")
+    print(f"CPS decode: {ok}/{total}, output {a.out}")
     return 0 if ok == total else 1
 
 

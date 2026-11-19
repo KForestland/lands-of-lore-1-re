@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""LoL1 WSA animation reader (Westwood Screen Animation, version 2).
+"""Read LoL1 WSA animation chunks and their palette inputs.
 
 Rewritten 2026-11-18 to follow ScummVM exactly; the March version used its
 own offset model ("4-byte gap", absolute vs relative guesses) plus a
@@ -20,7 +20,7 @@ engines/kyra/graphics/screen.cpp:2533-2594). Frame 0 is XORed onto a blank
 picture (wsamovie.cpp:133-147, :208-218). Entry n is the loop-back frame.
 
   wsa_extract.py NAME.WSA                         # header and frame table
-  wsa_extract.py NAME.WSA --out-dir f/ [--all]    # frame 0 PNG, or every frame
+  wsa_extract.py NAME.WSA --out f/ [--all]    # frame 0 PNG, or every frame
   wsa_extract.py --check                          # decode every frame of every WSA
 """
 from cli_errors import run_cli
@@ -98,9 +98,9 @@ def frames(b, info=None):
 
 
 def main():
-    ap = L.tool_args(__doc__)
+    ap = L.tool_args(__doc__, out_help="write the selected frame PNGs to this directory", out_aliases=("--out-dir",))
     ap.add_argument("name", nargs="?")
-    ap.add_argument("--out-dir")
+
     ap.add_argument("--all", action="store_true", help="write every frame, not only frame 0")
     ap.add_argument("--pal-from", default="PARCH.CPS", help="palette when the WSA has none")
     a = ap.parse_args()
@@ -124,22 +124,22 @@ def main():
     info = parse(b)
     print(a.name, pak, {k: v for k, v in info.items() if k not in ("palette", "offsets")},
           "offsets[:4]", info["offsets"][:4])
-    if a.out_dir:
+    if a.out:
         from PIL import Image
         pal = info["palette"]
         if pal is None:
             _, pb = L.find_member(a.pal_from, a.data)
             pal = L.load_bitmap(pb)[1] if a.pal_from.upper().endswith(".CPS") else pb[:768]
         flat = [c for rgb in L.vga_palette(pal) for c in rgb]
-        os.makedirs(a.out_dir, exist_ok=True)
+        os.makedirs(a.out, exist_ok=True)
         stem = a.name.rsplit(".", 1)[0].lower()
         for i, pic, ok in frames(b, info):
             img = Image.frombytes("P", (info["width"], info["height"]), pic)
             img.putpalette(flat + [0] * (768 - len(flat)))
-            img.save(os.path.join(a.out_dir, f"{stem}_{i:03d}.png"))
+            img.save(os.path.join(a.out, f"{stem}_{i:03d}.png"))
             if not a.all:
                 break
-        print("wrote PNGs to", a.out_dir)
+        print("wrote PNGs to", a.out)
     return 0
 
 

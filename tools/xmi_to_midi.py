@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Convert Lands of Lore 1 XMIDI music (.XMI, also the XMIDI-container .C55
+"""Read LoL1 XMIDI music and convert each sequence to MIDI.
+
+Convert Lands of Lore 1 XMIDI music (.XMI, also the XMIDI-container .C55
 and .PCS files) to standard MIDI files, one per sequence.
 
 XMIDI as read by ScummVM (audio/midiparser_xmidi.cpp, upstream 3b4db303):
@@ -19,7 +21,7 @@ XMIDI as read by ScummVM (audio/midiparser_xmidi.cpp, upstream 3b4db303):
 Output: standard MIDI file format 0, division 60, a 500000 us tempo at time
 0, note-offs generated from the durations.
 
-  xmi_to_midi.py LOREINTR.XMI --out-dir midi/     # one .mid per sequence
+  xmi_to_midi.py LOREINTR.XMI --out midi/     # one .mid per sequence
   xmi_to_midi.py LOREINTR.XMI                     # list sequences and event counts
   xmi_to_midi.py --check   # every sequence of every XMI (and C55, PCS) parses to its end-of-track,
                            # and the written MIDI re-reads cleanly with every note closed
@@ -169,9 +171,9 @@ def verify_smf(smf, division=60):
 
 
 def main():
-    ap = L.tool_args(__doc__)
+    ap = L.tool_args(__doc__, out_help="write one MIDI per sequence to this directory", out_aliases=("--out-dir",))
     ap.add_argument("name", nargs="?", help="music member, e.g. LOREINTR.XMI")
-    ap.add_argument("--out-dir", help="write NAME_NN.mid per sequence here")
+
     a = ap.parse_args()
     if a.check:
         res = {}
@@ -204,12 +206,12 @@ def main():
         secs = end / 120
         print(f"{stem} #{i:02d}: {st['notes']} notes, {st['controllers']} controller, {st['programs']} program, "
               f"{st['meta']} meta, {st['sysex']} sysex events; {secs:.1f} s; end-of-track: {st['end']}")
-        if a.out_dir:
-            os.makedirs(a.out_dir, exist_ok=True)
-            with open(os.path.join(a.out_dir, f"{stem}_{i:02d}.mid"), "wb") as f:
+        if a.out:
+            os.makedirs(a.out, exist_ok=True)
+            with open(os.path.join(a.out, f"{stem}_{i:02d}.mid"), "wb") as f:
                 f.write(to_smf(ev, end))
-    if a.out_dir:
-        print("wrote", a.out_dir)
+    if a.out:
+        print("wrote", a.out)
     return 0
 
 

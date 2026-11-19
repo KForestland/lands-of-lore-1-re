@@ -222,14 +222,16 @@ def add_data_arg(parser):
 REPO_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
 
 
-def tool_args(doc, out_help="write the JSON result here (default: print a summary only)"):
+def tool_args(doc, out_help="write the JSON result here (default: print a summary only)",
+              *, out_aliases=(), writes=True):
     """argparse parser with --data, --pak, --out and --check."""
     import argparse
     ap = ReaderArgumentParser(description=doc, formatter_class=argparse.RawDescriptionHelpFormatter)
     add_data_arg(ap)
-    ap.add_argument("--out", help=out_help)
+    if writes:
+        ap.add_argument("--out", *out_aliases, help=out_help)
     ap.add_argument("--check", action="store_true",
-                    help="parse the whole corpus and compare with the repo's data/ JSON where one exists; one line, exit 1 on mismatch")
+                    help="run the tool's check and exit nonzero on failure")
     return ap
 
 

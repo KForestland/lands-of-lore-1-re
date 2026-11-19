@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Re-prove the extra TIM argument words as formatter operands.
+"""Read LoL1 TIM scripts and verify the formatter arguments.
 
 Nested 0x07 and 0x0D push the operand pointer and a start index. The
 formatter reads operand[index] once per %n, %s, %d, %u, %x or %X (%a reads none). Nested 0x03 pushes
@@ -252,7 +252,7 @@ def check_floppy(data_dir):
 
 
 def main():
-    parser = L.tool_args(__doc__)
+    parser = L.tool_args(__doc__, writes=False)
     args = parser.parse_args()
     if not args.check:
         parser.error("this tool only checks; pass --check")

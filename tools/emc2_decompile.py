@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Disassemble Lands of Lore 1 EMC2 scripts without executing bytecode."""
+"""Read an original LoL1 EMC2 script from a file or PAK member."""
 
 from cli_errors import ReaderArgumentParser, run_cli
 from collections import defaultdict
@@ -326,7 +326,7 @@ def main():
     parser.add_argument("--data", type=Path, default=os.environ.get("LOL1_DATA"),
                         help="the game's DATA folder for bare names (default: $LOL1_DATA)")
     parser.add_argument("--entry", help="INF/INI name within the PAK (case-insensitive)")
-    parser.add_argument("-o", "--output", type=Path, help="Write listing here instead of stdout")
+    parser.add_argument("-o", "--out", "--output", type=Path, help="Write listing here instead of stdout")
     args = parser.parse_args()
     try:
         if not args.input.exists() and args.data and (args.data / args.input).exists():
@@ -343,8 +343,8 @@ def main():
         else:
             data = args.input.read_bytes()
         listing = "\n".join(format_listing(read_script(data), name)) + "\n"
-        if args.output:
-            with args.output.open("x", encoding="utf-8") as output:
+        if args.out:
+            with args.out.open("x", encoding="utf-8") as output:
                 output.write(listing)
         else:
             write_stdout(listing)
