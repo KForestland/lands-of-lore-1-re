@@ -33,4 +33,4 @@ The pixel data of CD `PARCH.CPS` (after its 10-byte header and 768-byte palette)
 | `82` + `3b 3e` | copy 2 literal bytes | `40 40 40 40 3b 3e` |
 | `10 06` | copy (1) + 3 = 4 bytes from 6 bytes back | `40 40 40 40 3b 3e 40 40 40 40` |
 
-**Tool:** `tools/lol1lib.py: decode_frame4()` (port of the function above); `tools/decode_frame4.py` (the March 2026 port; `--check` runs both ports on all 140 CPS, CMZ, VCN and VMP files of the CD: identical output, 140/140).
+**Tool:** `tools/lol1lib.py: decode_frame4()` (port of the function above); `tools/decode_frame4.py` (the March 2026 port; `--check` runs both ports on all 140 CPS, CMZ, VCN and VMP files of the CD: identical output, 140/140). `tools/lol1_compression_writer.py --check` re-encodes every Frame4 stream of the CPS, CMZ, VCN, VMP, WSA and SHP files (CD 20354, floppy 9075) in memory and reads it back through this reader with identical pixels; the rebuilt bytes differ from the original, so this is not the original encoder (see [tools/README](../../tools/README.md#lol1_compression_writerpy)).

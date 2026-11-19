@@ -50,4 +50,4 @@ First 30 bytes of CD `ESCAPE.WSA` (29,544 bytes):
 
 ## Tool
 
-`tools/wsa_extract.py NAME.WSA [--out-dir d/ --all]`, `--check`; `tools/wsa_all_frames_extract.py --out-dir d/` for every file.
+`tools/wsa_extract.py NAME.WSA [--out-dir d/ --all]`, `--check`; `tools/wsa_all_frames_extract.py --out-dir d/` for every file. `tools/lol1_compression_writer.py --check` re-encodes every WSA delta (CD 12785, floppy 5420) in memory and reads it back through this reader with identical pixels; the rebuilt bytes differ from the original, so this is not the original encoder (see [tools/README](../../tools/README.md#lol1_compression_writerpy)).

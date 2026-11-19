@@ -35,7 +35,7 @@ Legend:
 |------|--------|-------|-----------|-----------|---------|
 | [pak](../docs/formats/pak.md) | `pak_reader.py`, `pak_indexer.py`, `lol1_pak_writer.py` | yes | text: `pak_reader.py list GENERAL.PAK`; `extract … -o DIR` copies a member out | yes: `tests/test_round_trip.py` writes synthetic PAKs and reads them back with `lol1lib` | yes |
 | [tlk](../docs/formats/tlk.md) | `tlk_verify.py`, `voc_reader.py` | yes | text: `tlk_verify.py`; listen: `voc_reader.py 01.TLK:000_0.01 --out out.wav` | gap | yes |
-| [lcw](../docs/formats/lcw.md) | `lol1lib.py`, `decode_frame4.py` | yes | picture: `decode_frame4.py --out DIR` (every CPS screen) | yes | yes |
+| [lcw](../docs/formats/lcw.md) | `lol1lib.py`, `decode_frame4.py`, `lol1_compression_writer.py` | yes | picture: `decode_frame4.py --out DIR` (every CPS screen) | yes | yes |
 | [cps](../docs/formats/cps.md) | `cps_reader.py` | yes | picture: `cps_reader.py PARCH.CPS --out parch.png`; its palette: `palette_reader.py PARCH.CPS` | yes (header and palette) | yes |
 | [shp](../docs/formats/shp.md) | `shp_renderer.py` | yes | picture: one PNG per shape; monsters, items and wall decorations need `--level N`, interface shapes `--pal-from` a CPS (`GAMESHP.SHP --pal-from PLAYFLD.CPS`) | part: the `--help` example only | yes |
 | [wsa](../docs/formats/wsa.md) | `wsa_extract.py`, `wsa_all_frames_extract.py` | yes (`wsa_all_frames_extract.py --check` repeats the same check, not in check_all) | picture: frame 0, or every frame with `--all` | gap | yes |
@@ -76,14 +76,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (39 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (40 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;40p"
+$ python3 tools/check_all.py | sed -n "1,3p;41p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 39 CHECKS PASSED
+ALL 40 CHECKS PASSED
 ```
 
 ### `doc_links.py`
@@ -117,6 +117,17 @@ CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte
 ```
 
 The floppy edition gives `15 PAK and 0 PAK-layout TLK files, 1213 ordered members`.
+
+### `lol1_compression_writer.py`
+
+Re-encode every CPS, CMZ, VCN, VMP, WSA and SHP file under the data folder (loose files and PAK members), in memory, and read each rebuilt file back through the existing readers (`lol1lib.load_bitmap` and `decode_frame4`, `decode_frame4.py`, `wsa_extract.py`, `shp_renderer.py`); the decoded pixels must equal the original's. It writes no file; `--check` is its only mode. The encoders are new and simple (Frame4 literals and fills, back-references only when a 16-bit size field needs them; WSA XOR deltas with skips and literals; SHP scanlines with zero runs). They are not the original encoder: no rebuilt file matches its original byte for byte, and on the CD the rebuilt files are larger (WSA 1.5 times, CPS 1.8 times, SHP 1.4 times, VCN 1.2 times, VMP 1.1 times, CMZ 5.8 times the original bytes). The check proves that every original picture survives encoding and reading back, not that the original compressed bytes can be recreated.
+
+```
+$ python3 tools/lol1_compression_writer.py --check
+CHECK compression write: 1085 files (29 .cmz, 265 .cps, 236 .shp, 13 .vcn, 13 .vmp, 529 .wsa); 20354 source Frame4 streams, 12785 WSA deltas and 7299 SHP shapes read back identically; 0 files byte-identical
+```
+
+The floppy edition gives `516 files (29 .cmz, 112 .cps, 95 .shp, 13 .vcn, 13 .vmp, 254 .wsa); 9075 source Frame4 streams, 5420 WSA deltas and 3601 SHP shapes`. The CD check takes about a minute, the floppy about 15 seconds.
 
 ### `pak_indexer.py`
 
@@ -512,6 +523,7 @@ Set `LOL1_DATA` or pass `--data` for the original game's DATA or floppy folder. 
 | Output path can be a file or folder | A single result, such as a WAV or a JSON save, takes a file. Frame and map batches take a folder. For `shp_renderer.py`, a named member selects a folder of PNGs and no member selects an inventory file. |
 | `--walls-png` and `extract_music.py --out-dir` | These request a second output alongside the ordinary `--out` product, assembled wall pages or raw music files. |
 | `lol1_pak_writer.py` has no `--out` | It rebuilds archives in memory only, to compare them with the originals, so it cannot write into the game folder or the repository. `--check` is its only mode. |
+| `lol1_compression_writer.py` has no `--out` | It re-encodes pictures in memory only, to read them back through the existing readers, so it cannot write into the game folder or the repository. `--check` is its only mode. |
 | Older output flags | The original `--out-dir`, `--png`, `--wav`, `--json` and `--output` spellings are kept as aliases and shown in `--help`, where they previously requested the same output. |
 
 ## Documentation index

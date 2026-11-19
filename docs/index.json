@@ -610,6 +610,7 @@
       "tools": [
         "tools/cps_reader.py",
         "tools/decode_frame4.py",
+        "tools/lol1_compression_writer.py",
         "tools/lol1lib.py",
         "tools/vcn_vmp_reader.py"
       ]
@@ -677,6 +678,7 @@
       ],
       "question_references": [],
       "tools": [
+        "tools/lol1_compression_writer.py",
         "tools/shp_renderer.py"
       ]
     },
@@ -764,6 +766,7 @@
       "answers": [],
       "question_references": [],
       "tools": [
+        "tools/lol1_compression_writer.py",
         "tools/wsa_all_frames_extract.py",
         "tools/wsa_extract.py"
       ]
@@ -1359,6 +1362,7 @@
         "tools/full_report.py",
         "tools/level_renderer.py",
         "tools/level_report.py",
+        "tools/lol1_compression_writer.py",
         "tools/lol1_loose.py",
         "tools/lol1_name_callers.py",
         "tools/lol1_numbers.py",

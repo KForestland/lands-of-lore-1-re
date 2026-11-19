@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Read an original LoL1 DATA folder and run the repository checks.
 
-  check_all.py --data DATA       # or set $LOL1_DATA; runs 39 checks
+  check_all.py --data DATA       # or set $LOL1_DATA; runs 40 checks
 Exit code 0 when every check passes.
 """
 from cli_errors import ReaderArgumentParser, run_cli
 import argparse, os, subprocess, sys
 import lol1lib as L
 
-READERS = ["pak_reader", "lol1_pak_writer", "pak_indexer", "tlk_verify", "decode_frame4", "cps_reader", "voc_reader",
+READERS = ["pak_reader", "lol1_pak_writer", "pak_indexer", "tlk_verify", "decode_frame4", "lol1_compression_writer", "cps_reader", "voc_reader",
            "fnt_reader", "xxx_reader", "dat_reader", "tlc_reader", "vcn_vmp_reader",
            "wll_parser", "cmz_analyzer", "tileset_mapper", "level_renderer", "shp_renderer",
            "wsa_extract", "extract_dialogue", "decode_dialogue", "extract_music", "adl_to_midi", "parse_tim",

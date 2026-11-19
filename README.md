@@ -39,7 +39,7 @@ cd lands-of-lore-1-re
 python3 -m venv .venv && . .venv/bin/activate
 python3 -m pip install -r requirements.txt
 export LOL1_DATA="/path/to/your/LOL1/DATA"      # the folder holding GENERAL.PAK (CD: DATA; floppy: the install folder)
-python3 tools/check_all.py                      # 39 checks, ends with ALL 39 CHECKS PASSED
+python3 tools/check_all.py                      # 40 checks, ends with ALL 40 CHECKS PASSED
 python3 -m unittest discover -s tests
 python3 tools/level_renderer.py --level 1 --out ../maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0

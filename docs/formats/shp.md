@@ -90,7 +90,7 @@ CD `KEEP.SHP` (plain, not wrapped). First 10 bytes: `4e 00  3c 01 00 00  bf 05 0
 
 ## Tool
 
-`tools/shp_renderer.py NAME.SHP [--out-dir pngs/] [--pal-from X.CPS]`, `--check`, `--out inventory.json`. Inventory: `data/shp_inventory.json`.
+`tools/shp_renderer.py NAME.SHP [--out-dir pngs/] [--pal-from X.CPS]`, `--check`, `--out inventory.json`. Inventory: `data/shp_inventory.json`. `tools/lol1_compression_writer.py --check` re-encodes every SHP shape (CD 7299, floppy 3601) in memory and reads it back through this reader with identical pixels; the rebuilt bytes differ from the original, so this is not the original encoder (see [tools/README](../../tools/README.md#lol1_compression_writerpy)).
 
 ## Close-out
 
