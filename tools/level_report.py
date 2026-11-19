@@ -24,6 +24,7 @@ an event mask; the entry runs only if it shares a bit with the event.
   level_report.py --out DIR           # write all 29 sheets and an index
   level_report.py --check              # build all 29; every entry and call decodes
 """
+from cli_errors import run_cli
 import argparse
 import os
 import re
@@ -532,4 +533,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

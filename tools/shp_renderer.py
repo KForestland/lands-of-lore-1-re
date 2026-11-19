@@ -47,9 +47,9 @@ transparent pixels.
   shp_renderer.py --check      # every shape in every SHP decodes exactly
   shp_renderer.py --out inv.json   # per-file inventory (data/shp_inventory.json)
 """
+from cli_errors import run_cli
 import os
 import struct
-import sys
 
 import lol1lib as L
 
@@ -193,4 +193,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

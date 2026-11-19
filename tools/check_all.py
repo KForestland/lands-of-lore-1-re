@@ -4,6 +4,7 @@
   check_all.py --data DATA       # or set $LOL1_DATA; runs 36 checks
 Exit code 0 when every check passes.
 """
+from cli_errors import ReaderArgumentParser, run_cli
 import argparse, os, subprocess, sys
 import lol1lib as L
 
@@ -16,7 +17,7 @@ READERS = ["pak_reader", "pak_indexer", "tlk_verify", "decode_frame4", "cps_read
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--data", default=L.DEFAULT_DATA, required=L.DEFAULT_DATA is None)
     a = ap.parse_args()
     here = os.path.dirname(os.path.abspath(__file__))
@@ -43,4 +44,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

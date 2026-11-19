@@ -12,12 +12,13 @@ Header (ScummVM engines/kyra/graphics/screen.cpp:3355-3401, Screen::loadBitmap):
   cps_reader.py PARCH.CPS --png out.png --pal-from SWAMP.CPS
   cps_reader.py --check                 # decode every CPS in the DATA folder
 """
-import argparse, sys
+from cli_errors import ReaderArgumentParser, run_cli
+import argparse
 import lol1lib as L
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("name", nargs="?")
     ap.add_argument("--png", help="write a PNG (needs Pillow)")
     ap.add_argument("--pal-from", help="take the palette from another CPS or a .PAL/.COL file when this one has none")
@@ -43,6 +44,8 @@ def main():
         ap.print_help(); return 2
     pak, blob = L.find_member(a.name, a.data, a.pak)
     h, pal, px = L.load_bitmap(blob)
+    if h["size_field"] + 2 != len(blob) or len(px) != h["uncompressed_size"]:
+        raise ValueError(f"{a.name}: bitmap size does not match the bytes read")
     print(f"{a.name} in {pak}: {h}, decoded {len(px)} bytes")
     if a.png:
         from PIL import Image
@@ -58,4 +61,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

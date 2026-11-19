@@ -7,6 +7,7 @@ three words and does not pass the pointer.
 
   lol1_tim_words.py --data DATA --check
 """
+from cli_errors import run_cli
 import os
 import struct
 
@@ -264,4 +265,4 @@ def main():
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(run_cli(main))

@@ -11,6 +11,7 @@ ESCAPE.WSA and CHANDELR.WSA; with the offsets read as ScummVM does
   wsa_all_frames_extract.py --out-dir frames/ ESCAPE.WSA ...  # some
   wsa_all_frames_extract.py --check                           # same check as wsa_extract.py
 """
+from cli_errors import run_cli
 import os
 import sys
 
@@ -52,4 +53,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

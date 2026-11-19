@@ -17,12 +17,12 @@ The actual format has no mode flag — short refs are always relative, long refs
 Source: ScummVM engines/kyra/graphics/screen.cpp Screen::decodeFrame4()
 """
 
+from cli_errors import run_cli
 import struct
 import os
 import json
 from PIL import Image
 
-import sys
 
 import lol1lib as L
 
@@ -176,4 +176,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

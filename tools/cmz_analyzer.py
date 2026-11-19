@@ -17,10 +17,10 @@ ScummVM reveals the actual CMZ structure:
 This script extracts wall types (uint8) from all 29 CMZ files, NOT uint16 tile IDs.
 """
 
+from cli_errors import run_cli
 import json
 import struct
 import os
-import sys
 from collections import Counter
 
 import lol1lib as L
@@ -135,13 +135,11 @@ def main():
         decompressed = decompress_cmz(raw)
 
         if decompressed is None:
-            print(f"  FAIL: Level {level_num} decompression failed")
-            continue
+            raise ValueError(f"level {level_num}: CMZ decompression failed")
 
         analysis = analyze_cmz_blocks(decompressed)
-        if analysis is None:
-            print(f"  FAIL: Level {level_num} block analysis failed")
-            continue
+        if analysis is None or not analysis["size_match"]:
+            raise ValueError(f"level {level_num}: CMZ block data is incomplete")
 
         all_wall_types.update(analysis["unique_wall_types"])
         results[f"level{level_num:02d}"] = analysis
@@ -161,6 +159,8 @@ def main():
         print(f"CHECK cmz: {len(results)} levels, all sizes 6+1024*len: {ok}, "
               f"matches data/wall_type_analysis.json: {same if ref else 'skipped (not the CD layout)'}")
         return 0 if ok and (same or ref is None) else 1
+    if not results:
+        raise ValueError("no CMZ level files found")
     print(f"\n=== SUMMARY ===")
     print(f"Levels analyzed: {len(results)}")
     print(f"Total unique wall types: {len(all_wall_types)}")
@@ -184,4 +184,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Parse LoL1 TIM files from PAK containers and document their IFF chunk structure."""
 
+from cli_errors import run_cli
 import json
 import struct
 import os
-import sys
 
-import sys
 
 import lol1lib as L
 
@@ -507,8 +506,4 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        sys.exit(main())
-    except FileNotFoundError as exc:
-        print(f"parse_tim.py: {exc}", file=sys.stderr)
-        sys.exit(1)
+    raise SystemExit(run_cli(main))

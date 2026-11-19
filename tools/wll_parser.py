@@ -21,10 +21,10 @@ VMP mapping: _wllVmpMap[wall_type] → VMP page (1-indexed)
   Each VMP page = 431 uint16 entries = one wall face's tiles
 """
 
+from cli_errors import run_cli
 import json
 import struct
 import os
-import sys
 
 import lol1lib as L
 
@@ -205,4 +205,4 @@ def check(per_level, data_dir):
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

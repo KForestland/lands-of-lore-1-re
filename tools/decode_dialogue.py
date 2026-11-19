@@ -16,6 +16,7 @@ After decodeString1, decodeString2 handles escape sequences:
 In our JSON files, bytes are stored as [XX] hex notation.
 """
 
+from cli_errors import run_cli
 import json
 import os
 import re
@@ -224,4 +225,4 @@ def main():
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

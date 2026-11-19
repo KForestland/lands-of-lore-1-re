@@ -12,7 +12,8 @@ header) and docs/formats/cps.md (a CPS carries its 768-byte palette after the
 
 Writes nothing unless --out-dir is given, and then only the swatch PNG there.
 """
-import argparse, os, sys
+from cli_errors import ReaderArgumentParser, run_cli
+import argparse, os
 import lol1lib as L
 
 
@@ -41,7 +42,7 @@ def swatch(raw, path, cell=16):
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("name", nargs="?", help="a .PAL, .COL or .CPS file (PAK member or loose)")
     ap.add_argument("--out-dir", help="write <name>_swatch.png here (needs Pillow)")
     ap.add_argument("--all", action="store_true", help="print every RGB triple of a file larger than 768 bytes")
@@ -75,6 +76,8 @@ def main():
     raw = palette_bytes(a.name, blob)
     if not raw:
         print(f"{a.name} in {pak}: no palette"); return 1
+    if len(raw) % 3:
+        raise ValueError(f"{a.name}: incomplete RGB triple")
     print(f"{a.name.upper()} in {pak}: {len(raw)} palette bytes = {len(raw) // 3} colours"
           + ("" if len(raw) <= 768 or a.all else "; first 256 shown (--all for every one)"))
     print("index  6-bit r  g  b   8-bit   r   g   b  hex")
@@ -90,4 +93,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Disassemble Lands of Lore 1 EMC2 scripts without executing bytecode."""
 
-import argparse
+from cli_errors import ReaderArgumentParser, run_cli
 from collections import defaultdict
 from dataclasses import dataclass
 import json
@@ -320,7 +320,7 @@ def write_stdout(text, stream=None):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = ReaderArgumentParser(description=__doc__)
     parser.add_argument("input", type=Path, help="Loose INF/INI script, or DOS PAK with --entry; "
                         "a bare name such as L01.PAK is looked up in --data")
     parser.add_argument("--data", type=Path, default=os.environ.get("LOL1_DATA"),
@@ -351,8 +351,8 @@ def main():
     except BrokenPipeError:
         quiet_broken_pipe()
     except (OSError, ValueError, struct.error) as error:
-        parser.exit(1, f"{parser.prog}: {error}\n")
+        parser.exit(1, str(error))
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(run_cli(main))

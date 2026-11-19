@@ -12,13 +12,13 @@ the PAK directory. Layout: docs/formats/pak.md.
                                        # under --game-dir grouped by extension)
 """
 
+from cli_errors import run_cli
 import os
 import json
 import struct
 from pathlib import Path
 from collections import defaultdict
 
-import sys
 
 import lol1lib as L
 
@@ -160,4 +160,4 @@ def main():
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

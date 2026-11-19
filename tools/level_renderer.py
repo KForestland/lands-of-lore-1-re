@@ -37,9 +37,9 @@ overview, not the in-game 3D view: one flat colour per wall type, no textures.
   level_renderer.py --check                        # every wall page resolves; lists wall types
                                                    # missing from the level's WLL; no PNGs written
 """
+from cli_errors import run_cli
 import os
 import struct
-import sys
 from collections import Counter
 
 import lol1lib as L
@@ -261,4 +261,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

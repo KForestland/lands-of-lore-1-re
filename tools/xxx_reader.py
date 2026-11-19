@@ -14,7 +14,8 @@ Block index = x + y * 32.
   xxx_reader.py LEVEL1.XXX
   xxx_reader.py --check
 """
-import argparse, struct, sys
+from cli_errors import ReaderArgumentParser, run_cli
+import argparse, struct
 import lol1lib as L
 
 FIELDS = ("symbol_x", "symbol_y", "symbol", "reveal_x", "reveal_y", "string_id")
@@ -25,7 +26,7 @@ def parse(b):
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("name", nargs="?")
     ap.add_argument("--lang", default="ENG", help="language of the legend text: ENG, FRE or GER")
     ap.add_argument("--check", action="store_true")
@@ -62,4 +63,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

@@ -30,7 +30,8 @@ away; pieces 0-4, 6, 8 are side walls seen at an angle.
                                                  # (floor/ceiling 22x15 first)
   vcn_vmp_reader.py --check
 """
-import argparse, struct, sys
+from cli_errors import ReaderArgumentParser, run_cli
+import argparse, struct
 import lol1lib as L
 
 # (columns, rows) of the nine pieces of a 431-word wall page, in storage order
@@ -124,7 +125,7 @@ def walls_image(words, tiles, col, shift, pal, scale=2, bg=(40, 40, 52)):
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("area", nargs="?", help="area name, e.g. KEEP, CAVE1, YVEL2")
     ap.add_argument("--png", help="write the 8x8 tiles in file order (32 per row) here")
     ap.add_argument("--walls-png", help="write the wall pages assembled from the VMP here: one row per page, "
@@ -171,4 +172,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

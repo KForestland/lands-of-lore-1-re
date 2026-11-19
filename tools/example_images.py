@@ -7,6 +7,7 @@
 Each example is listed in EXAMPLES with the tool command that makes it (also in examples/README.md).
 Pixels are compared after conversion to RGBA, so PNG compression settings do not matter.
 """
+from cli_errors import run_cli
 import os
 import subprocess
 import sys
@@ -79,4 +80,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

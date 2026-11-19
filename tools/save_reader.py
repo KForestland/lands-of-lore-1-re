@@ -18,6 +18,7 @@ gzip wrapper). Field names follow the documentation.
       and every ScummVM LoL save in --saves (only when given),
       and checks that each file ends exactly where the layout says.
 """
+from cli_errors import ReaderArgumentParser, run_cli
 import argparse
 import glob
 import gzip
@@ -266,7 +267,7 @@ def default_save_dir():
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("file", nargs="?")
     ap.add_argument("--json", help="write every field as JSON")
     ap.add_argument("--check", action="store_true")
@@ -314,4 +315,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

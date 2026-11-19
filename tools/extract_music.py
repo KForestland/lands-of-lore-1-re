@@ -10,10 +10,10 @@ header. See docs/formats/music.md. No conversion to MIDI is done here.
   extract_music.py --check                 # files, sizes and IFF trees vs data/music_inventory.json
 """
 
+from cli_errors import run_cli
 import json
 import struct
 import os
-import sys
 
 import lol1lib as L
 
@@ -258,4 +258,4 @@ def main():
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

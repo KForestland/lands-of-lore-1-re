@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Extract a finite MIDI note timeline from an original LoL1 ADL track."""
+from cli_errors import run_cli
 from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
 import struct
-import sys
 
 import lol1lib as L
 from xmi_to_midi import to_smf, verify_smf
@@ -340,4 +340,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

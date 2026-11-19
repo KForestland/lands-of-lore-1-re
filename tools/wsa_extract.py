@@ -23,9 +23,9 @@ picture (wsamovie.cpp:133-147, :208-218). Entry n is the loop-back frame.
   wsa_extract.py NAME.WSA --out-dir f/ [--all]    # frame 0 PNG, or every frame
   wsa_extract.py --check                          # decode every frame of every WSA
 """
+from cli_errors import run_cli
 import os
 import struct
-import sys
 
 import lol1lib as L
 
@@ -144,4 +144,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

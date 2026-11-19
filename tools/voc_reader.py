@@ -16,7 +16,8 @@ Layout (ScummVM audio/decoders/voc.h:55-60, voc.cpp:38-62, 255-300):
   voc_reader.py 01.TLK:000_0.01 --wav out.wav
   voc_reader.py --check        # every VOC in PAKs and TLKs
 """
-import argparse, os, struct, sys, wave
+from cli_errors import ReaderArgumentParser, run_cli
+import argparse, os, struct, wave
 from collections import Counter
 import lol1lib as L
 
@@ -31,12 +32,16 @@ def parse(blob):
     if blob[:19] != b"Creative Voice File":
         raise ValueError("no VOC signature")
     first, ver, chk = struct.unpack_from("<HHH", blob, 20)
+    if not 26 <= first < len(blob):
+        raise ValueError("VOC header points outside the file")
     pos = first; blocks = []; pcm = bytearray(); rate = None
     while pos < len(blob):
         t = blob[pos]
         if t == 0:
             break
         ln = blob[pos + 1] | blob[pos + 2] << 8 | blob[pos + 3] << 16
+        if pos + 4 + ln > len(blob):
+            raise ValueError(f"truncated VOC block at offset {pos}")
         body = blob[pos + 4:pos + 4 + ln]
         blocks.append((t, ln))
         if t == 1:
@@ -61,7 +66,7 @@ def iter_all(data_dir):
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("ref", nargs="?", help="CONTAINER:MEMBER or a member name")
     ap.add_argument("--wav", help="write 8-bit mono WAV")
     ap.add_argument("--check", action="store_true")
@@ -98,4 +103,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

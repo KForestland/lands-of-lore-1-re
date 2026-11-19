@@ -10,11 +10,11 @@ non-ASCII bytes; decode_dialogue.py turns them into readable text.
   extract_dialogue.py --check               # counts vs data/dialogue_summary.json
 """
 
+from cli_errors import run_cli
 import json
 import os
 import struct
 
-import sys
 import lol1lib as L
 
 LANG_EXTENSIONS = (".ENG", ".FRE", ".GER")
@@ -109,4 +109,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

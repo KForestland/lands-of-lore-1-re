@@ -8,6 +8,7 @@
                                                     # both editions, files named directly
 Reads only; writes nothing. Prints one CHECK line per edition.
 """
+from cli_errors import ReaderArgumentParser, run_cli
 import argparse
 import os
 import struct
@@ -170,7 +171,7 @@ def check_edition(label, path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--data", default=os.environ.get("LOL1_DATA"),
                         help="the game's DATA folder (default: $LOL1_DATA); its MAIN.EXE is checked")
     parser.add_argument("--pak", help=argparse.SUPPRESS)   # accepted for check_all.py symmetry; unused
@@ -197,4 +198,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

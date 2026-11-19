@@ -20,9 +20,9 @@ engines/kyra/sound/sound_lol.cpp:59-81):
   tlk_verify.py --out tlk.json   # per-file details
   tlk_verify.py --check          # one line, exit 1 on any failure
 """
+from cli_errors import run_cli
 import os
 import re
-import sys
 
 import lol1lib as L
 import voc_reader
@@ -81,4 +81,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

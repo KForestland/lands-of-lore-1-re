@@ -19,6 +19,7 @@ The game DATA folder comes from --data or the $LOL1_DATA environment
 variable. No game data is stored in this repository.
 """
 
+from cli_errors import ReaderArgumentParser
 import os
 import struct
 
@@ -48,9 +49,11 @@ def pak_entries(data):
         pos = end + 1
         if not name:
             break
+        if not (pos <= offset <= size) or names and offset < names[-1][1]:
+            raise ValueError(f"PAK member {name} has offset {offset} outside its data area")
         names.append((name, offset))
         if pos + 4 > size:
-            break
+            raise ValueError("truncated PAK directory")
         offset = struct.unpack_from("<I", data, pos)[0]
         pos += 4
         if offset == 0 or offset == size:
@@ -80,6 +83,8 @@ def tlk_entries(data):
     for i in range(count):
         fid, off = struct.unpack_from("<II", data, 2 + i * 8)
         sz = struct.unpack_from("<I", data, off)[0]
+        if off < 2 + count * 8 or off + 4 + sz > len(data):
+            raise ValueError(f"TLK member {fid} lies outside the file")
         out.append((fid, off + 4, sz))
     return out
 
@@ -220,7 +225,7 @@ REPO_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data
 def tool_args(doc, out_help="write the JSON result here (default: print a summary only)"):
     """argparse parser with --data, --pak, --out and --check."""
     import argparse
-    ap = argparse.ArgumentParser(description=doc, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = ReaderArgumentParser(description=doc, formatter_class=argparse.RawDescriptionHelpFormatter)
     add_data_arg(ap)
     ap.add_argument("--out", help=out_help)
     ap.add_argument("--check", action="store_true",

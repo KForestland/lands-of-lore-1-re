@@ -15,7 +15,8 @@ Used when drawing shapes and TIM animations with transparency
   tlc_reader.py LEVEL01.TLC --full   # table1 and all 20 rows of table2, 256 values each (hex)
   tlc_reader.py --check
 """
-import argparse, struct, sys
+from cli_errors import ReaderArgumentParser, run_cli
+import argparse, struct
 import lol1lib as L
 
 # Weight 70 -> (70 << 6) // 100 = 44 parts screen colour, 20 parts effect colour.
@@ -83,7 +84,7 @@ def full_rows(table):
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("name", nargs="?")
     ap.add_argument("--full", action="store_true", help="print table1 and every table2 row in full")
     ap.add_argument("--check", action="store_true")
@@ -131,4 +132,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

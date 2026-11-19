@@ -22,8 +22,8 @@ Two sources per level:
   tileset_mapper.py --out map.json  # JSON
   tileset_mapper.py --check         # every level has a WLL area and >= 1 graphics load
 """
+from cli_errors import run_cli
 import struct
-import sys
 
 import lol1lib as L
 
@@ -117,4 +117,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))

@@ -10,10 +10,10 @@ FACE.CPS for BLEND2.TAB): all but the last four bytes match.
 
   lol1_loose.py --check
 """
+from cli_errors import ReaderArgumentParser, run_cli
 import argparse
 import os
 import struct
-import sys
 
 import fnt_reader
 import lol1lib as L
@@ -931,7 +931,7 @@ def check(data_dir):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--check", action="store_true")
     L.add_data_arg(parser)
     args = parser.parse_args()
@@ -942,4 +942,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(run_cli(main))
