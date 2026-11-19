@@ -229,7 +229,8 @@ filename. The two intro filename calls and their fixed tables can
 thus be located without a runtime breakpoint.
 
 **UNCONFIRMED** Higher-level names for several unused native
-callbacks remain open. A name needs a traced in-game effect for that
-callback; the static reads above are all the code shows.
+callbacks remain open. No shipped script calls them, so play alone cannot show their effect.
+Running an edited TIM that calls one of these callbacks, with a break at
+its callback address in the nested tables above, would show what it does.
 
 **CONFIRMED** TEXT offsets in these files are little-endian. floppy `VICTOR4.TIM` stores its initial offsets as `06 00 3C 00 BF 00` at `CHAPTER1.PAK+0xE7926`; the floppy `0A` handler reads the offset word directly at `MAIN.EXE+0x96CC`. The equivalent read in ScummVM is `engines/kyra/script/script_tim.cpp:643,703,756`.

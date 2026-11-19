@@ -23,7 +23,7 @@
 - Either nibble produces lookup index `0x30 | 3 = 0x33`. The byte at decoded VCN offset `2 + 1282 + 0x33 = 0x537` is `0x64`, palette index 100.
 - The next VMP word is `FB 80`, an overlay using tile 251 and its own stored shift. VMP word 0 selects floor tile 1, with shift `0x70`. Its first nibble is 1 and maps to palette index 98 through lookup index `0x71`.
 
-**UNCONFIRMED** The original authoring procedure that assigned the shift bytes is open. The table inspection and executable trace establish where the renderer gets every bank. To identify whether an artist or a tool chose bank 3 for KEEP tile 250, the specific evidence needed is an original tileset source with that tile's bank metadata or an exporter that reproduces the shift table.
+**UNCONFIRMED** The original authoring procedure that assigned the shift bytes is open. The table inspection and executable trace establish where the renderer gets every bank. To identify whether an artist or a tool chose bank 3 for KEEP tile 250, the specific evidence needed is an original tileset source with that tile's bank metadata or an exporter that reproduces the shift table. Neither ships with the game, so no read of the shipped files or the program can settle this.
 
 ## Shift values in KEEP.VCN
 

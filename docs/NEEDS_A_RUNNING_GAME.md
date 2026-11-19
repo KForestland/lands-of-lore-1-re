@@ -335,6 +335,17 @@ the top of this page.
   row 40 (file `0x1D1D0`), and that caller is the answer. No stop over
   the whole finale means the row was not used in that run. Details:
   [00000.VOC](unknowns/10_nnnnn_voc.md#what-would-settle-it).
+- **Level 22 block 27: what the wall shows (not run).** Settles the
+  last open point of [Q4](OPEN_QUESTIONS.md). Setup: a game-written slot
+  in level 22, in both editions. Watch: nothing; this is a look.
+  Play: walk to block 27 and face each of its four sides. All four
+  faces use wall type 24, VMP page 5, which ScummVM indexes as words
+  2054–2484, past the 2054 words of both YVEL sets; the loader copies
+  4500 VMP bytes (2250 words), and the rest of the buffer is whatever
+  followed the file. Result: a clean wall face, a blank face or stray
+  tiles shows whether the renderer reads VMP entries past 2054.
+  Details: [YVEL2](unknowns/04_yvel2.md) and the
+  [wall page](formats/vcn_vmp.md).
 
 ## Answered probes
 

@@ -4,6 +4,7 @@ Newest first. One line per question worked on, new tool or visible change; each 
 
 ## 19 November 2026
 
+- **Settling tests.** Two open statements now name the read that would settle them: the compression-type switch for CPS types 1 and 3, and a search of the wall drawers for the nine piece start offsets ([CPS](formats/cps.md), [walls](formats/vcn_vmp.md)). The view of level 22 block 27 is listed under [probes not yet run](NEEDS_A_RUNNING_GAME.md#probes-not-yet-run).
 - **Close-out.** Six open questions (Q1, Q7, Q10, Q14, Q17, Q18) each end with what was measured, what was tried, and what would settle the rest. States stay as they are ([open questions](OPEN_QUESTIONS.md)).
 - **Readme bytes.** `README.ENG`, beside `DATA` and outside the counted files, holds `LANDS OF` at file +0x72. `lol1_loose.py --check` re-reads those eight bytes ([loose files](formats/loose.md)).
 - **Transparency tables.** Table1 of the level files is the twenty colour indexes in `FXPAL.SHP`. The weight-70 nearest-colour mix of `FXPAL.COL` with the KEEP palette matches 3611 of 5120 bytes of `LEVEL01.TLC`; the rule that matches every byte stays open ([transparency tables](formats/tlc.md)).

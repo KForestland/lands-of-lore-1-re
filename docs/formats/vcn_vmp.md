@@ -46,7 +46,7 @@ Pieces of a wall page. The view draws a wall face with one of nine pieces (side 
 | 7 | 16 x 12 | 192 | 239 | walls one square ahead (3, row 1; also -13 and 19, cut by the view edge) |
 | 8 | 3 x 15 | 45 | 0 | side walls of the player's own square (0, row 0; mirrored at 19) |
 
-The nine pieces tile the 431 words exactly, without gap or overlap. CONFIRMED as a layout by drawing: `tools/vcn_vmp_reader.py AREA --walls-png` assembles every piece of every page on KEEP, CAVE1, RUIN and SWAMP (CD and floppy) into clean perspective wall faces (KEEP page 1 plain stone, 2 window, 3 open archway, 4 bird relief, 5 fountain niche, 6 double door). The offset table itself was not found as nine consecutive 16-bit words in either `MAIN.EXE` (it may sit in the code as immediates); UNCONFIRMED in the program.
+The nine pieces tile the 431 words exactly, without gap or overlap. CONFIRMED as a layout by drawing: `tools/vcn_vmp_reader.py AREA --walls-png` assembles every piece of every page on KEEP, CAVE1, RUIN and SWAMP (CD and floppy) into clean perspective wall faces (KEEP page 1 plain stone, 2 window, 3 open archway, 4 bird relief, 5 fountain niche, 6 double door). The offset table itself was not found as nine consecutive 16-bit words in either `MAIN.EXE` (it may sit in the code as immediates); UNCONFIRMED in the program. Searching both `MAIN.EXE` wall drawers for the nine start offsets 102, 97, 129, 117, 81, 159, 45, 239 and 0 as immediates would settle whether the program stores the table.
 
 Each word: tile index into the VCN; bit 0x4000 = mirror horizontally (`scene_rpg.cpp:297`, `:365-368`); 0 = transparent (keep what is below).
 
