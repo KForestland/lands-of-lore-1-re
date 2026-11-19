@@ -10,10 +10,61 @@ Python tools that read the data files of *Lands of Lore: The Throne of Chaos* (D
 ## Rules every tool follows
 
 - `--help` prints usage and changes nothing.
-- The game folder comes from `--data` or `$LOL1_DATA`; there are no built-in paths.
-- Nothing is written unless you pass `--out FILE`, `--out-dir DIR`, `--png FILE`, `--wav FILE` or `--json FILE`, and then only there. Do not point them inside this repository: `.gitignore` blocks game file types and the example output folders, and `repo_guard.py` fails if any is committed.
+- The game folder comes from `--data` or `$LOL1_DATA`; there are no built-in paths. One exception: `monster_reference_scan.py` takes the two `MAIN.EXE` files as `--cd FILE --floppy FILE`.
+- Nothing is written unless you pass `--out FILE`, `--out-dir DIR`, `--png FILE`, `--wav FILE`, `--json FILE` or `-o`/`--output FILE` (`emc2_decompile.py`), and then only there. Do not point them inside this repository: `.gitignore` blocks game file types and the example output folders, and `repo_guard.py` fails if any is committed.
 - `--check` reads every file of the tool's kind and prints one `CHECK` line; exit code 0 means it passed. On the CD edition, tools that rebuild a file in `data/` also compare with it.
 - `lol1lib.py` is the shared library (PAK listing, Frame4, bitmap header, palettes); it has no command line.
+
+## Parity: every format and table, its reader and how to look at it
+
+One row per documented format and per rules or tables page. The aim: with your own copy of the game you can look at what each page describes. Checked on 19 November 2026 against the English CD edition (every example below was run as written) and, for saves, against floppy `_LEVELn.TMP` files and ScummVM `lol-cd.NNN` saves.
+
+Legend:
+
+- **Check**: "yes" = the tool has `--check` and `check_all.py` runs it; "corpus test" = `check_all.py` runs `tests/test_emc2_corpus.py` instead; "not in check_all" = the tool has a check that `check_all.py` does not run.
+- **Look at it**: the command that shows you the content. "picture" = it writes PNG files you can open; "text" = it prints the content; "listen" = WAV or MIDI.
+- **Unit test**: a test in `tests/test_readers.py` that needs no game files (`python3 -m unittest`).
+- **Example**: a section below with the command and its expected output.
+- **gap** = missing; **part** = only partly covered (the note says what is missing).
+
+| Page | Reader | Check | Look at it | Unit test | Example |
+|------|--------|-------|-----------|-----------|---------|
+| [pak](../docs/formats/pak.md) | `pak_reader.py`, `pak_indexer.py` | yes | text: `pak_reader.py list GENERAL.PAK`; `extract … -o DIR` copies a member out | part: PAK directory parsing, but through `emc2_decompile.py`'s own reader, not `lol1lib`'s | yes |
+| [tlk](../docs/formats/tlk.md) | `tlk_verify.py`, `voc_reader.py` | yes | text: `tlk_verify.py`; listen: `voc_reader.py 01.TLK:000_0.01 --wav out.wav` | gap | yes |
+| [lcw](../docs/formats/lcw.md) | `lol1lib.py`, `decode_frame4.py` | yes | picture: `decode_frame4.py --out-dir DIR` (every CPS screen) | yes | yes |
+| [cps](../docs/formats/cps.md) | `cps_reader.py` | yes | picture: `cps_reader.py PARCH.CPS --png parch.png` | gap | yes |
+| [shp](../docs/formats/shp.md) | `shp_renderer.py` | yes | picture: one PNG per shape; monsters, items and wall decorations need `--level N`, interface shapes `--pal-from` a CPS | gap | yes |
+| [wsa](../docs/formats/wsa.md) | `wsa_extract.py`, `wsa_all_frames_extract.py` | yes (`wsa_all_frames_extract.py --check` repeats the same check, not in check_all) | picture: frame 0, or every frame with `--all` | gap | yes |
+| [voc](../docs/formats/voc.md) | `voc_reader.py` | yes | listen: `--wav` | gap | yes |
+| [music](../docs/formats/music.md) | `extract_music.py`, `xmi_to_midi.py`, `adl_to_midi.py` | yes | listen: `xmi_to_midi.py` (XMI, C55, PCS) and `adl_to_midi.py` (ADL) write MIDI files | gap | yes |
+| [text](../docs/formats/text.md) | `extract_dialogue.py`, `decode_dialogue.py` | yes | text: `decode_dialogue.py LEVEL01.ENG` | gap | yes |
+| [cmz](../docs/formats/cmz.md) | `cmz_analyzer.py`, `level_renderer.py` | yes | picture: `level_renderer.py --level N --schematic`; text: wall-type counts | gap | yes |
+| [wll](../docs/formats/wll.md) | `wll_parser.py` | yes | text: counts per level; every record only in the `--out` JSON | gap | yes |
+| [vcn_vmp](../docs/formats/vcn_vmp.md) | `vcn_vmp_reader.py`, `tileset_mapper.py` | yes | picture: `vcn_vmp_reader.py KEEP --png tiles.png`, part: the 8×8 tiles in file order, not assembled into walls | gap | yes |
+| [xxx](../docs/formats/xxx.md) | `xxx_reader.py` | yes | text: every legend record with its name | gap | yes |
+| [dat](../docs/formats/dat.md) | `dat_reader.py` | yes | text: one record per `--index` | gap | yes |
+| [tlc](../docs/formats/tlc.md) | `tlc_reader.py` | yes | text, part: first 16 bytes of each of the 20 rows | gap | yes |
+| [palette](../docs/formats/palette.md) | `cps_reader.py --pal-from` | part: only through the CPS check | gap: no swatch or value dump; you see a palette only applied to a CPS (`cps_reader.py PARCH.CPS --png p.png --pal-from FXPAL.COL`) | gap | gap |
+| [fnt](../docs/formats/fnt.md) | `fnt_reader.py` | yes | picture: glyph atlas | gap | yes |
+| [emc2](../docs/formats/emc2.md) | `emc2_decompile.py` | corpus test (the tool has no `--check`) | text: script listing | yes | yes |
+| [tim](../docs/formats/tim.md) | `parse_tim.py`, `lol1_tim_words.py` | yes | text, part: chunk structure and statistics; no command-by-command listing of one TIM file | gap | yes |
+| [drivers](../docs/formats/drivers.md) | `decode_dialogue.py` (`TRIG.TBL` only) | yes | text: `decode_dialogue.py TRIG.TBL`; the `.ADV`/`.DRV` drivers have no reader (they are program code) | gap | gap (no `TRIG.TBL` example) |
+| [loose](../docs/formats/loose.md) | `lol1_loose.py` | yes | gap: only the one `CHECK` line, no per-file dump | gap | yes |
+| [game_rules](../docs/game_rules.md) | none: the rules are read from program code | gap | gap | gap | gap |
+| [executable_tables](../docs/executable_tables.md) | none for the tables inside `MAIN.EXE` (character defaults, spell properties, experience thresholds, difficulty and price tables); item types and monster properties are script calls | part: the corpus test | part: `emc2_decompile.py STARTUP.PAK --entry ONETIME.INF` lists the item-type calls, `Lnn.PAK --entry LEVELn.INI` the monster calls; gap for the executable tables | gap | gap |
+| [savegame_format](../docs/savegame_format.md) | `save_reader.py` | yes | text; every field with `--json` | yes (original save layout) | yes |
+| [emc2_scripts](../docs/emc2_scripts.md) | `emc2_decompile.py`, `tests/test_emc2_corpus.py` | corpus test | text: script listing | yes | yes |
+| [levels/](../docs/levels/README.md) | `level_report.py` | yes | text: `level_report.py --level N` (same sheet as the page) | gap | yes |
+| [level_tileset_map](../docs/level_tileset_map.md) | `tileset_mapper.py` | yes | text | gap | yes |
+| [Q5 TRIG.TBL](../docs/unknowns/05_adv_drv_tbl.md) | `decode_dialogue.py` | yes | text: `decode_dialogue.py TRIG.TBL` | gap | gap |
+| [Q6 TIM opcodes](../docs/unknowns/06_tim_opcodes.md) | `lol1_tim_words.py` | yes | gap: no dump of the opcode tables | gap | yes (check only) |
+| [Q7 native rules](../docs/unknowns/07_native_rules.md) | none | gap | gap | gap | gap |
+| [Q13 decoration positions](../docs/unknowns/13_decoration_positions.md) | none for the cell table in `MAIN.EXE`; `dat_reader.py` for the records | gap | part: DAT records only | gap | gap |
+| [Q16 VCN colour banks](../docs/unknowns/16_vcn_colour_banks.md) | `vcn_vmp_reader.py` | yes | text: shift values; picture: tile atlas | gap | yes |
+| [Q17 native save fields](../docs/unknowns/17_native_save_fields.md) | `save_reader.py` | yes | text, `--json` | part | yes |
+| [Q18 native records](../docs/unknowns/18_native_records.md) | `monster_reference_scan.py` (needs Capstone, not in `requirements.txt`) | not in check_all | text: two `CHECK` lines | gap | gap (command only on the Q18 page) |
+
+Tools in `check_all.py` with no section below: `rating.py`. No unit test needs game data; tests exist only for PAK directories, Frame4, EMC2 and the original save layout.
 
 ## Examples and expected output
 
@@ -275,9 +326,11 @@ LORE01A #02: 8 notes, 8 controller, 3 program, 7 meta, 0 sysex events; 35.7 s; e
 
 Project an original AdLib music track to a Standard MIDI File with notes and timing. Output carries default MIDI instrument sounds. Repeat and jump handling, corpus coverage and remaining OPL effects are described in [Q15](../docs/unknowns/15_adl_and_c55.md#midi-note-projection). Choose an output path outside the checkout and the original game folder.
 
-```sh
-python3 tools/adl_to_midi.py --data DATA LORE01B.ADL --track 2 --seconds 30 --out ../lore01b.mid
-python3 tools/adl_to_midi.py --data DATA --check
+```
+$ python3 tools/adl_to_midi.py LORE01B.ADL --track 2 --seconds 30 --out ../lore01b.mid
+LORE01B.ADL slot 2: 279 notes, 2160 callbacks (time cutoff); unmapped controls: 90, 9E, AB, AE, AF, B9; stops: {}
+$ python3 tools/adl_to_midi.py --check
+CHECK ADL: 16 assets, 2207 entry projections (2158 with notes), 9 unavailable entry IDs, 0 documented out-of-range repeats, unexpected issues: none
 ```
 
 ### `parse_tim.py`
@@ -353,7 +406,7 @@ CHECK loose: 25 files reach the last byte (3 font, 6 string table, 1 inventory, 
 
 ### `repo_guard.py`
 
-Asset-policy guard, run by `check_all.py`: fails if git tracks any game file type (`.PAK`, `.CPS`, `.SHP`, `.XMI`, …), converted media (`.MID`, `.WAV`, …), a PNG outside `examples/` and `docs/images/`, a file over 300 KB (except the tables it lists by name), a machine path, or a word from an optional local word list (`.git/info/private_words`, never tracked). `--release` also checks every commit's author and committer address. Needs no game data.
+Asset-policy guard, run by `check_all.py`: fails if git tracks any game file type (`.PAK`, `.CPS`, `.SHP`, `.XMI`, …), converted media (`.MID`, `.WAV`, …), a PNG outside `examples/` and `docs/images/`, a file over 300 KB (except the tables it lists by name), a machine path, or a word from an optional local word list (`.git/info/private_words`, never tracked). `--release` also checks every commit's author and committer address. Needs no game data. `N` is the number of tracked files; with a local word list the line ends `private word list: K words` instead.
 
 ```
 $ python3 tools/repo_guard.py --check
