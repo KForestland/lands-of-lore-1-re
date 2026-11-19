@@ -32,6 +32,22 @@ Source: `scene_lol.cpp:390-402` (load), `scene_rpg.cpp:150-157` (floor/ceiling),
 | 1 .. 330 | floor and ceiling layout of the 22x15-tile (176x120 px) view; drawn mirrored on every other square (`scene_rpg.cpp:152-157`) |
 | then 431 per page | wall layout page p (WLL `vmp_map` value p, 1-based) at word 330 + (p − 1) x 431; positions within a page come from `_vmpVisOffs` (executable table) |
 
+Pieces of a wall page. The view draws a wall face with one of nine pieces (side walls at four depths, walls facing the player at three depths); each position has its own pre-drawn piece in the page. Sizes are the `numBlocks` arguments of the `generateVmpTileData` calls (`scene_rpg.cpp:161-267`); start offsets within the page are ScummVM's `_vmpOffsetsDefault` (`engines/kyra/resource/staticres_rpg.cpp:53`, used for every platform but Sega CD):
+
+| Piece | Columns x rows (8 px tiles) | Words | Start in page | Drawn at (tile column, row) |
+|-------|-----------------------------|-------|---------------|------------------------------|
+| 0 | 3 x 5 | 15 | 102 | side walls three squares ahead, outer (-2 and 2, row 3; mirrored at 21 and 17) |
+| 1 | 1 x 5 | 5 | 97 | side walls three squares ahead, inner (8, row 3; mirrored at 13) |
+| 2 | 6 x 5 | 30 | 129 | walls three squares ahead (-4, 2, 8, 14, 20, row 3) |
+| 3 | 2 x 6 | 12 | 117 | side walls two squares ahead, outer (0, row 3; mirrored at 20) |
+| 4 | 2 x 8 | 16 | 81 | side walls two squares ahead, inner (6, row 2; mirrored at 14) |
+| 5 | 10 x 8 | 80 | 159 | walls two squares ahead (-4, 6, 16, row 2) |
+| 6 | 3 x 12 | 36 | 45 | side walls of the square ahead (3, row 1; mirrored at 16) |
+| 7 | 16 x 12 | 192 | 239 | walls one square ahead (3, row 1; also -13 and 19, cut by the view edge) |
+| 8 | 3 x 15 | 45 | 0 | side walls of the player's own square (0, row 0; mirrored at 19) |
+
+The nine pieces tile the 431 words exactly, without gap or overlap. CONFIRMED as a layout by drawing: `tools/vcn_vmp_reader.py AREA --walls-png` assembles every piece of every page on KEEP, CAVE1, RUIN and SWAMP (CD and floppy) into clean perspective wall faces (KEEP page 1 plain stone, 2 window, 3 open archway, 4 bird relief, 5 fountain niche, 6 double door). The offset table itself was not found as nine consecutive 16-bit words in either `MAIN.EXE` (it may sit in the code as immediates); UNCONFIRMED in the program.
+
 Each word: tile index into the VCN; bit 0x4000 = mirror horizontally (`scene_rpg.cpp:297`, `:365-368`); 0 = transparent (keep what is below).
 
 m = 330 + 431 x pages on every set. CONFIRMED, `tools/vcn_vmp_reader.py --check` (CD):
@@ -77,4 +93,4 @@ CD `KEEP.VMP` decompressed starts `64 0b  01 00 02 00 03 00 04 00 05 00 …`: 0x
 
 ## Tool
 
-`tools/vcn_vmp_reader.py AREA [--png tiles.png]`, `--check`. Level maps: `tools/level_renderer.py --level N --out-dir d/` (top-down overview, `--check`). Level-to-set table: `tools/tileset_mapper.py` (`data/tileset_mapping.json`).
+`tools/vcn_vmp_reader.py AREA [--png tiles.png] [--walls-png walls.png]`, `--check`. `--png` writes the tiles in file order, `--walls-png` the wall pages assembled as above. Level maps: `tools/level_renderer.py --level N --out-dir d/` (top-down overview: one flat colour per wall type, the average of that type's piece 7; `--check`). Level-to-set table: `tools/tileset_mapper.py` (`data/tileset_mapping.json`).

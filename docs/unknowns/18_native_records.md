@@ -177,9 +177,10 @@ segments through the FBOV directories at `0x2FC50` and `0x36500`.
 | +0x3D | Read `0xAD87` | Read `0xACC8` |
 | +0x40 | Stores `0x47AC4`, `0x47ADD` | Stores `0x512A3`, `0x512BC` |
 
-Run the check with Python and Capstone installed.
+Run the check with Python and Capstone installed (`pip install -r requirements.txt`). With `--data` (or `$LOL1_DATA`) it checks that edition's `MAIN.EXE`; `tools/check_all.py` runs it this way.
 
 ```bash
+python3 tools/monster_reference_scan.py --check --data /path/to/DATA
 python3 tools/monster_reference_scan.py --check \
   --cd /path/to/cd/MAIN.EXE --floppy /path/to/floppy/MAIN.EXE
 ```

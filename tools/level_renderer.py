@@ -1,21 +1,33 @@
 #!/usr/bin/env python3
 """LoL1 top-down level map renderer: CMZ -> WLL -> VMP -> VCN.
 
-Rewritten 2026-11-18 on top of the checked readers (lol1lib, vcn_vmp_reader,
-tileset_mapper). Each of the 32x32 blocks becomes an 8x8 cell:
+Each of the 32x32 blocks becomes a square cell (10 px by default):
 
-  - the block's four wall types come from LEVELn.CMZ (docs/formats/cmz.md);
-  - a wall type with WLL vmp_map p > 0 (docs/formats/wll.md) is drawn with a
-    representative VCN tile of wall page p: VMP word 330 + (p-1)*431 + 165,
-    i.e. a tile from the middle of that page (docs/formats/vcn_vmp.md);
-  - pixel colour = VCN colour table[nibble | shift[tile]], then the VCN (or
-    override .PAL) palette, as ScummVM drawVcnBlocks does
-    (engines/kyra/engine/scene_rpg.cpp:429-449);
-  - blocks whose four walls have no geometry are dark floor.
+  - the block's four wall types (faces N, E, S, W) come from LEVELn.CMZ
+    (docs/formats/cmz.md);
+  - a wall type with WLL vmp_map p > 0 (docs/formats/wll.md) has geometry; it is
+    drawn in the average colour of the face the game shows for it straight ahead,
+    one square away: piece 7 (16x12 tiles) of VMP wall page p, assembled from its
+    VCN tiles with the level's palette (vcn_vmp_reader.wall_piece,
+    docs/formats/vcn_vmp.md);
+  - a block whose four faces all have geometry (solid rock) is filled with the
+    colour of the level's most common wall type; a face that can be seen (its
+    neighbour is not solid) and has another type (a window, relief, the
+    alternate wall of a two-texture pattern, a switch) adds a strip of its own
+    colour on that side;
+  - a block with some faces only (doors, gates, part walls) is floor with a strip
+    per face that has geometry;
+  - floor is the average colour of the floor rows of the area's floor/ceiling
+    layout; every wall edge that meets floor gets a dark outline;
+  - only brightness is adjusted, never hue: dark wall sets (swamp, mines) are all
+    scaled up by one factor until the brightest wall colour reaches 200, and the
+    floor is darkened, if brighter, to 30% of the main wall colour's brightness;
+  - a wall page beyond the end of the VMP would be drawn grey (none on either
+    edition; --check counts them).
 
 The tile set is the first loadLevelGraphics call of LEVELn.INI (with its
 override palette, if any), as listed by tileset_mapper.py. This is a map
-overview, not the in-game 3D view.
+overview, not the in-game 3D view: one flat colour per wall type, no textures.
 
   level_renderer.py --level 1 --out-dir maps/     # one PNG
   level_renderer.py --level 1 --out-dir maps/ --schematic
@@ -28,10 +40,14 @@ overview, not the in-game 3D view.
 import os
 import struct
 import sys
+from collections import Counter
 
 import lol1lib as L
 import tileset_mapper
 import vcn_vmp_reader as V
+
+UNKNOWN = (128, 128, 128)     # wall page past the end of the VMP
+OUTLINE = (12, 10, 8)
 
 
 def area_set(name, data_dir, cache={}):
@@ -55,7 +71,103 @@ def wll_vmp(level, data_dir):
     return {struct.unpack_from("<H", b, 2 + i * 12)[0]: b[4 + i * 12] for i in range((len(b) - 2) // 12)}
 
 
-def render(level, data_dir, check_only=False):
+def mean_colour(grid, rgb):
+    """Average RGB of the drawn pixels of an assembled grid (None = not drawn)."""
+    px = [rgb[v] for v in grid if v is not None and v < len(rgb)]
+    if not px:
+        return None
+    return tuple(sum(c[i] for c in px) // len(px) for i in range(3))
+
+
+def page_colours(words, tiles, col, shift, rgb):
+    """{wall page: average colour of its front face (piece 7)} for every page in the VMP."""
+    pages = (len(words) - V.FLOOR_WORDS) // V.PAGE_WORDS
+    out = {}
+    for p in range(1, pages + 1):
+        out[p] = mean_colour(V.wall_piece(words, p, V.FRONT_PIECE, tiles, col, shift)[2], rgb) or UNKNOWN
+    return out
+
+
+def floor_colour(words, tiles, col, shift, rgb):
+    """Average colour of the bottom 5 rows (the near floor) of the 22x15 floor/ceiling layout."""
+    _, _, grid = V.assemble(words, 10 * 22, 22, 5, tiles, col, shift)
+    return mean_colour(grid, rgb) or (40, 40, 48)
+
+
+def luma(c):
+    return 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]
+
+
+def readable(colours, floor, main_page, top=200, floor_share=0.3):
+    """Keep the hues, fix the brightness so walls read as walls: if the brightest wall
+    colour is darker than `top`, scale every wall colour up by the same factor; then
+    darken the floor (if needed) to `floor_share` of the main wall colour's brightness."""
+    peak = max((max(c) for c in colours.values()), default=0)
+    k = top / peak if 0 < peak < top else 1.0
+    colours = {p: tuple(min(255, int(v * k)) for v in c) for p, c in colours.items()}
+    target = floor_share * luma(colours.get(main_page, UNKNOWN))
+    if luma(floor) > target:
+        f = target / max(luma(floor), 1)
+        floor = tuple(int(v * f) for v in floor)
+    return colours, floor
+
+
+def classify(blocks, vmp, npages):
+    """Per block: (pages of the four faces, 0 = no geometry, -1 = page past the VMP end)."""
+    out = []
+    for walls in blocks:
+        faces = []
+        for w in walls:
+            p = vmp.get(w) or 0
+            faces.append(-1 if p > npages else p)
+        out.append(faces)
+    return out
+
+
+def draw_map(faces, colours, floor, cell=10):
+    """Draw the map from per-block face pages and {page: colour} (pure; used by the unit test)."""
+    from PIL import Image, ImageDraw
+    img = Image.new("RGB", (32 * cell, 32 * cell), floor)
+    d = ImageDraw.Draw(img)
+    colour = lambda p: UNKNOWN if p < 0 else colours.get(p, UNKNOWN)
+    strip = max(2, cell // 4)
+    solid = [all(f != 0 for f in fs) for fs in faces]
+    count = Counter(p for i, fs in enumerate(faces) if solid[i] for p in fs)
+    main = count.most_common(1)[0][0] if count else 1
+    sides = ((0, -1), (1, 0), (0, 1), (-1, 0))      # N, E, S, W
+    for i, fs in enumerate(faces):
+        bx, by = i % 32, i // 32
+        x, y = bx * cell, by * cell
+        rects = [(x, y, x + cell - 1, y + strip - 1), (x + cell - strip, y, x + cell - 1, y + cell - 1),
+                 (x, y + cell - strip, x + cell - 1, y + cell - 1), (x, y, x + strip - 1, y + cell - 1)]
+        if solid[i]:
+            # rock is the level's main wall colour; a face that can be seen (its neighbour
+            # is not solid) and is of another type shows as a strip on that side
+            d.rectangle([x, y, x + cell - 1, y + cell - 1], fill=colour(main))
+            for side, p in enumerate(fs):
+                nx, ny = bx + sides[side][0], by + sides[side][1]
+                seen = 0 <= nx < 32 and 0 <= ny < 32 and not solid[ny * 32 + nx]
+                if p != main and seen:
+                    d.rectangle(rects[side], fill=colour(p))
+        else:
+            for side, p in enumerate(fs):
+                if p:
+                    d.rectangle(rects[side], fill=colour(p))
+    # dark outline where a solid block meets a block that is not solid
+    for i in range(1024):
+        if not solid[i]:
+            continue
+        bx, by = i % 32, i // 32
+        x, y = bx * cell, by * cell
+        for dx, dy, line in ((0, -1, (x, y, x + cell - 1, y)), (1, 0, (x + cell - 1, y, x + cell - 1, y + cell - 1)),
+                             (0, 1, (x, y + cell - 1, x + cell - 1, y + cell - 1)), (-1, 0, (x, y, x, y + cell - 1))):
+            nx, ny = bx + dx, by + dy
+            if 0 <= nx < 32 and 0 <= ny < 32 and not solid[ny * 32 + nx]:
+                d.line(line, fill=OUTLINE)
+    return img
+
+
+def render(level, data_dir, check_only=False, cell=10):
     g = tileset_mapper.build(data_dir)[level]["loadLevelGraphics"]
     name, palname = g[0]["vcn_vmp"], g[0]["palette"]
     ntiles, shift, col, pal, tiles, words = area_set(name, data_dir)
@@ -63,36 +175,18 @@ def render(level, data_dir, check_only=False):
         pal = L.find_member(palname, data_dir)[1][:384]
     vmp = wll_vmp(level, data_dir)
     blocks = level_blocks(level, data_dir)
-    problems = []
-    undefined = set()   # wall types in the CMZ with no record in this level's WLL: drawn as no geometry
-    cells = []
-    for walls in blocks:
-        pages = [vmp.get(w) for w in walls]
-        for w, p in zip(walls, pages):
-            if p is None:
-                undefined.add(w)
-        page = max((p or 0) for p in pages)
-        if page == 0:
-            cells.append(None); continue
-        idx = 330 + (page - 1) * 431 + 165
-        if idx >= len(words):
-            problems.append(("page", page)); cells.append(None); continue
-        t = words[idx] & 0x3FFF
-        cells.append(t if 0 < t < ntiles else None)
+    npages = (len(words) - V.FLOOR_WORDS) // V.PAGE_WORDS
+    undefined = {w for walls in blocks for w in walls if w not in vmp}
+    faces = classify(blocks, vmp, npages)
+    problems = sorted({("page", vmp[w]) for walls in blocks for w in walls if (vmp.get(w) or 0) > npages})
     if check_only:
         return name, problems, undefined
-    from PIL import Image
-    img = Image.new("RGB", (256, 256), (20, 20, 30))
     rgb = L.vga_palette(pal)
-    for i, t in enumerate(cells):
-        if t is None:
-            continue
-        bx, by = (i % 32) * 8, (i // 32) * 8
-        for p in range(64):
-            v = tiles[t * 32 + p // 2]
-            v = (v >> 4) if not p & 1 else (v & 15)
-            c = col[v | shift[t]]
-            img.putpixel((bx + p % 8, by + p // 8), rgb[c] if c < len(rgb) else (255, 0, 255))
+    colours = page_colours(words, tiles, col, shift, rgb)
+    used = Counter(p for fs in faces if all(fs) for p in fs)
+    main = used.most_common(1)[0][0] if used else 1
+    colours, floor = readable(colours, floor_colour(words, tiles, col, shift, rgb), main)
+    img = draw_map(faces, colours, floor, cell)
     return name, img
 
 

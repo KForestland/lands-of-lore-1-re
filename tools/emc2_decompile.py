@@ -302,6 +302,23 @@ def read_entry(path, offset, size):
         return stream.read(size)
 
 
+def quiet_broken_pipe():
+    """The reader closed the pipe (e.g. `| head`): stop quietly, as cat does.
+    Point stdout at devnull so the interpreter's final flush does not complain."""
+    try:
+        devnull = os.open(os.devnull, os.O_WRONLY)
+        os.dup2(devnull, sys.stdout.fileno())
+    except (OSError, ValueError):
+        pass
+
+
+def write_stdout(text, stream=None):
+    """Write text to stdout and flush, so a closed pipe shows up here, not at exit."""
+    stream = stream or sys.stdout
+    stream.write(text)
+    stream.flush()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", type=Path, help="Loose INF/INI script, or DOS PAK with --entry; "
@@ -330,7 +347,9 @@ def main():
             with args.output.open("x", encoding="utf-8") as output:
                 output.write(listing)
         else:
-            sys.stdout.write(listing)
+            write_stdout(listing)
+    except BrokenPipeError:
+        quiet_broken_pipe()
     except (OSError, ValueError, struct.error) as error:
         parser.exit(1, f"{parser.prog}: {error}\n")
 

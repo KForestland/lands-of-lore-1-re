@@ -36,8 +36,14 @@ transparent pixels.
       (monster and item shapes: their colour table points into the 3D scene
        palette of the level that loads them, so give that level; the runtime
        colour tables of sprites_lol.cpp can still tint some monsters)
-  shp_renderer.py KEEP.SHP --out-dir shapes/ [--pal-from PARCH.CPS]
-      (interface shapes drawn over a CPS screen)
+  shp_renderer.py KEEPDOOR.SHP --out-dir shapes/ --level 1
+      (wall decorations and doors, AREA.SHP / AREADOOR.SHP: also the scene palette,
+       of a level that uses that area)
+  shp_renderer.py GAMESHP.SHP --out-dir shapes/ --pal-from PLAYFLD.CPS
+      (interface shapes: buttons, arrows, spell icons; they are drawn over the
+       game screen PLAYFLD.CPS, so take its palette; default --pal-from PARCH.CPS.
+       Shape 6, a splash, comes out magenta: PLAYFLD.CPS has 63,0,63 at that
+       index; what colour the game uses there is not checked)
   shp_renderer.py --check      # every shape in every SHP decodes exactly
   shp_renderer.py --out inv.json   # per-file inventory (data/shp_inventory.json)
 """
@@ -109,7 +115,7 @@ def read_shp(blob, alt=False):
 
 def main():
     ap = L.tool_args(__doc__)
-    ap.add_argument("name", nargs="?", help="SHP member name, e.g. KEEP.SHP")
+    ap.add_argument("name", nargs="?", help="SHP member name, e.g. GAMESHP.SHP or GUARD.SHP")
     ap.add_argument("--out-dir", help="write one PNG per shape here")
     ap.add_argument("--pal-from", default="PARCH.CPS", help="CPS (or .PAL/.COL) to take the palette from")
     ap.add_argument("--level", type=int,
