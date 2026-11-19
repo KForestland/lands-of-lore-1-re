@@ -68,7 +68,7 @@ Tools in `check_all.py` with no section below: `rating.py`. No unit test needs g
 
 ## Examples and expected output
 
-Run from the repository root with `LOL1_DATA` set to the CD edition's `DATA` folder. Long lines are cut with `...`.
+Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from another folder, use the path to the tool in place of `tools/...`. Keep generated output outside the repository and the game tree. Long lines are cut with `...`.
 
 ### `check_all.py`
 
@@ -402,17 +402,19 @@ CHECK CD monster references: 57 instance and 7 stat load candidates, 1 critical 
 
 ### `save_reader.py`
 
-Save files field by field: original `_SAVEnnn.DAT`, the original game's level files `_LEVELn.TMP`, and ScummVM's LoL saves. `--json out.json` writes every field. `--check` reads every such file in the game folder (and its parent) and, when you pass `--saves DIR`, in that ScummVM save folder, and checks each ends where the layout predicts; it also runs the original-save layout on blank files of the documented sizes, since no original `_SAVEnnn.DAT` has been available.
+Reads native `_SAVEnnn.DAT` slots, native `_LEVELn.TMP` files and ScummVM LoL saves field by field. `--json out.json` writes every field. `--check` checks the end boundary of each save in the game folder or its parent, and in a ScummVM save folder supplied with `--saves DIR`. It also checks the native layout on synthetic CD and floppy saves.
 
 ```
-$ python3 tools/save_reader.py /path/to/floppy/_LEVEL1.TMP     # a file the game wrote while you played
-level file; ends at 1621 as the layout predicts: True
-  difficulty 1, 15 changed wall bytes, 4 monster slots in use, 0 flying objects
+$ python3 tools/save_reader.py /path/to/cd/_LEVEL1.TMP
+level file; ends at 1529 as the layout predicts: True
+  difficulty 1, 0 changed wall bytes, 4 monster slots in use, 0 flying objects
 $ python3 tools/save_reader.py /path/to/scummvm/saves/lol-cd.NNN
 ScummVM save, CD, version 21: "<save name>"; ends at <size> as the layout predicts: True
   <one line per character: name, HP, MP, skills, XP>
   level <n>, block <b> (x, y), facing <f>, money <m>, <k> game flags set, levels stored [...], <i> items in use
 ```
+
+The counts and end offset depend on the save you pass.
 
 ### `example_images.py`
 
@@ -443,11 +445,11 @@ CHECK name_callers: FINALE.EXE+0x1D1D0 is the 00000.VOC catalog row (44115 bytes
 
 ### `lol1_loose.py`
 
-Walks the CD `DATA` files that are not PAK or TLK archives. Thirty-one reach their last byte (font whose parts tile the file, string table, archive inventory, icon, PIF, MZ image with its relocation table inside the header, MZ stub plus LE VxD, FBOV overlay with its directory row count, text lines, COM image, a TDINFO symbol file, and an MZ image plus a TDINFO tail). Six stay open: the blend tables. The check pins the two 65536-byte heads, the 300 stored 768-byte palettes (109 distinct; `SCROLL.CPS` keeps 240 and 233 diagonal colours), and the TDINFO table walk on each symbol block. It requires that none of those palettes has either blend table's full diagonal, and that the installer, the three finale programs and the three intro-program images contain no `B9 00 01`. On a floppy folder the check returns without comparing, and `rating.py` credits loose files only on the CD layout.
+Walks the loose CD `DATA` files. Thirty-one reach their last byte, including fonts, string tables, executable images and symbol tables. The check reproduces bytes 0–65531 of both distinct finale blend tables and pins the four-byte trailer. See the loose-file page for the palette pairings and the remaining open bytes. [Loose-file formats](../docs/formats/loose.md)
 
 ```
 $ python3 tools/lol1_loose.py --check
-CHECK loose: 31 files reach the last byte (3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com, 3 symbol, 3 mz plus symbol tail); 6 open (6 blend tables)
+CHECK loose: 31 files reach the last byte (3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com, 3 symbol, 3 mz plus symbol tail); 6 open (6 blend tables; palette self-blend 22/42 matches BLEND.TAB 65532 of 65536 from RETURN.CPS, BLEND2.TAB 65532 of 65536 from FACE.CPS, last four bytes E4 D5 02 00 open)
 ```
 
 ### `exe_tables.py`
@@ -476,7 +478,7 @@ CHECK repo_guard: N tracked files; game files, converted media, stray PNGs, file
 
 ### `tests/test_emc2_corpus.py`
 
-Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last (35th) check.
+Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last (36th) check.
 
 ```
 $ python3 tests/test_emc2_corpus.py
