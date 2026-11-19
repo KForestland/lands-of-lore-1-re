@@ -321,7 +321,7 @@ On the CD, re-reads the `00000.VOC` catalog row in `ENG/FINALE.EXE` and checks t
 
 ```
 $ python3 tools/lol1_name_callers.py --check
-CHECK name_callers: FINALE.EXE+0x1D1D0 is the 00000.VOC catalog row (44115 bytes); no instruction pushes the name; the three palettes are catalog names only, installer included
+CHECK name_callers: FINALE.EXE+0x1D1D0 is the 00000.VOC catalog row (44115 bytes); no other reference to the name's offset; the three palettes are catalog names only, installer included
 ```
 
 ### `repo_guard.py`

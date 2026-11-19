@@ -27,7 +27,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (30 checks; 
 | Format | Documented | Tool | Checked on data | Open |
 |--------|-----------|------|-----------------|------|
 | PAK container | [pak.md](formats/pak.md) | `pak_reader.py`, `pak_indexer.py` | CD 81 PAK / 1163 members (rebuilds `data/pak_index.json`), ENG 17/378, floppy 15/1213 | Q9 answered ([page](unknowns/09_pak_order.md)) |
-| TLK speech (CD) | [tlk.md](formats/tlk.md) | `tlk_verify.py`, `pak_reader.py`, `voc_reader.py`, `lol1_name_callers.py` | 30 files, 4912 VOC members; names follow the engine's speech patterns. The finale catalog row for `00000.VOC` is 44115 bytes and no instruction pushes the name | Q10 mostly answered: one padding clip ([page](unknowns/10_nnnnn_voc.md)) |
+| TLK speech (CD) | [tlk.md](formats/tlk.md) | `tlk_verify.py`, `pak_reader.py`, `voc_reader.py`, `lol1_name_callers.py` | 30 files, 4912 VOC members; names follow the engine's speech patterns. The finale catalog row for `00000.VOC` is 44115 bytes and no other reference to the name's offset | Q10 mostly answered: one padding clip ([page](unknowns/10_nnnnn_voc.md)) |
 | Frame4 / LCW | [lcw.md](formats/lcw.md) | `lol1lib.py`, `decode_frame4.py` | two independent ports agree on 140/140 CD files; every CPS/CMZ/VCN/VMP in CD, ENG, floppy decodes to its stated size | — |
 | CPS | [cps.md](formats/cps.md) | `cps_reader.py` | CD 85/85, ENG 60/60, floppy 112/112 | — |
 | SHP | [shp.md](formats/shp.md) | `shp_renderer.py` | strict decode CD 3492/3492, ENG 1269/1269, floppy 3601/3601; 2-byte-prefix variant 0/197 | Q1 (demo only) |

@@ -159,7 +159,7 @@ def main():
         if fdt[at:at + len(needle) + 1] != needle + b"\x00":
             return fail(f"{needle.decode()} is not at FILEDATA.FDT+{at:#x}")
     print("CHECK name_callers: FINALE.EXE+0x1D1D0 is the 00000.VOC catalog row (44115 bytes); "
-          "no instruction pushes the name; the three palettes are catalog names only, installer included")
+          "no other reference to the name's offset; the three palettes are catalog names only, installer included")
     return 0
 
 
