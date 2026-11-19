@@ -40,9 +40,12 @@ UNCONFIRMED a single byte. It does **not** claim that unlabelled text is
 wrong or that labelled text is complete.
 
 **Seen in the running game.** Of the probes on
-[NEEDS_A_RUNNING_GAME.md](NEEDS_A_RUNNING_GAME.md) (questions that the files
+[NEEDS_A_RUNNING_GAME.md](NEEDS_A_RUNNING_GAME.md) (tests that the files
 and the program text cannot settle alone), how many were answered by
-running the original game. Each answer holds for the setup it names (one
+running the original game. It counts probe headings under "Answered
+probes" and "Remaining probes", not numbered questions: a question can
+have more than one probe, and a probe need not belong to a numbered
+question. Each answer holds for the setup it names (one
 display, one renderer, one save). Most documented facts were never
 observed in a running game; they are proved from the program and the files
 instead, and this line does **not** count them.

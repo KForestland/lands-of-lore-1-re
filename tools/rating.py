@@ -126,7 +126,7 @@ def rating(data_dir):
     return [
         f"- **Files read:** {read} of {total} files in {folder} ({read_bytes / 2**20:,.1f} of {total_bytes / 2**20:,.1f} MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).",
         f"- **Rules traced:** the pages mark {confirmed:,} statements CONFIRMED (proved from the program code or the files) and {unconfirmed:,} UNCONFIRMED (a reading not yet proved), on {pages} current pages; old notes kept as history are not counted.",
-        f"- **Seen in the running game:** {seen} of {needed} questions that can only be settled by watching the original game run are settled.",
+        f"- **Seen in the running game:** {seen} of {needed} probes that need the original game running are answered (a question can have more than one probe).",
         f"- **Open questions:** {count} numbered questions: {answered} answered, {mostly} mostly answered, {partly} partly answered.",
     ]
 

@@ -1,6 +1,6 @@
 # LoL1 reverse-engineering status
 
-**As of:** 2026-11-18. For every file format and rules topic: what is documented, which tool reads it, what was checked on the game data, and what is still open. History: the March 2026 closure memo ([`closure_memo.md`](closure_memo.md)) called the work about "99.999%" finished; this table replaces that figure, and the corrections to the memo are listed at the end.
+**As of:** 2026-11-19. For every file format and rules topic: what is documented, which tool reads it, what was checked on the game data, and what is still open. History: the March 2026 closure memo ([`closure_memo.md`](closure_memo.md)) called the work about "99.999%" finished; this table replaces that figure, and the corrections to the memo are listed at the end.
 
 **Columns**
 
@@ -16,13 +16,13 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (31 checks; 
 <!-- rating:begin -->
 - **Files read:** 187 of 199 files in the CD `DATA` folder (287.0 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
 - **Rules traced:** the pages mark 470 statements CONFIRMED (proved from the program code or the files) and 69 UNCONFIRMED (a reading not yet proved), on 88 current pages; old notes kept as history are not counted.
-- **Seen in the running game:** 1 of 5 questions that can only be settled by watching the original game run are settled.
+- **Seen in the running game:** 1 of 5 probes that need the original game running are answered (a question can have more than one probe).
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->
 
 ## File formats
 
-**Running-game results.** In an English CD DOSBox run, all 52 declared level-1 wall flags matched the original after play (Q7). The watched save bytes stayed zero through movement, turning and two load/save cycles (Q17). In one quit from play, the game restored the saved BIOS mode and exited with status 0 (Q8). Levels 8, 23 and 27 still need played saves. [Procedures and results](NEEDS_A_RUNNING_GAME.md)
+**Running-game results.** One probe is answered: in one quit from play on the English CD, the game restored the saved BIOS mode and exited with status 0 (Q8). The other runs were controls or partial runs, not answers. All 52 declared level-1 wall flags matched the original after play (a level-1 control; the Q7 probe needs level 8). The watched save bytes stayed zero through movement, turning and two load/save cycles (a partial run of the Q17 probe). Levels 8, 23 and 27 still need played saves. [Procedures and results](NEEDS_A_RUNNING_GAME.md)
 
 | Format | Documented | Tool | Checked on data | Open |
 |--------|-----------|------|-----------------|------|
