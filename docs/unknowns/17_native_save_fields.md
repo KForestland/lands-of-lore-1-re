@@ -239,3 +239,32 @@ slot, so the selection witness is the live watch only.
 dialogue without a second active portrait or a lead-byte change.
 A native slot after a follower joins would test the selection
 and its persistence through a normal save.
+
+### Dark-lamp depletion and a stair transition
+
+**CONFIRMED, edited-save run.** Source `477b08b82ecd` was placed
+at level 8 block 113. The changed bytes were `+0x254=2D→71`,
+`+0x255=02→00`, `+0x257=0D→11`, `+0x259=11→03`,
+`+0x269=01→08`, `+0x2EF=02→0E`, `+0x461=00→02` and
+`+0x462=00→FF` (copy `26ce624904cc`). At attachment the
+lamp bytes `DS:81DC–81DE` were `04 01 07`. The oil watch
+then recorded 1 → 0 at `MAIN.EXE+0xF9FF` with next guest
+CS:IP `0D5E:0643`. The first decrement happened before
+attachment. The game-written slot `28205f83a55a` contains
+`04 00 08` at `+0x460..+0x462`. The three access watches
+on `DS:7FE4/81DF/8202` hit only during the DOS bulk write.
+All three isolated file bytes were zero in that slot.
+
+**CONFIRMED, edited-save run.** In a separate copy of the same
+source, change `+0x254=2D→D0`, `+0x255=02→00`,
+`+0x257=0D→10`, `+0x259=11→06`, `+0x263=00→03` and
+`+0x269=01→08` (`a8b3f6582059`). The active watches were
+armed at level 8 block 208. A westward step triggered block
+207's event (`LEVEL8.INF` DATA words `0x07F9–0x0805`), which
+passes level 7, block 206 and facing 3 to the load helper at
+word `0x045B`. The native I/O trace opened `L07.PAK`, and the
+globals at `DS:7FD0/7FDF/7FE5` then held 206, 3 and 7.
+The three isolated bytes stayed zero with no watch hits on
+that walk and transition. This bounds the result to those
+actions. A different native level or party change could still
+access an isolated byte.

@@ -228,3 +228,33 @@ but reached defeat before a hit in the four watched spans
 A longer-lived native party, with watches armed before the load,
 would capture the first slot-2 attack and more varied ranged/hit
 cases. The slot-1 access record is a separate control.
+
+### Read watches on the Hatchet definition
+
+**CONFIRMED, edited-save run.** The English CD original loaded
+`335aa1b42956` from source `477b08b82ecd`. Use the block-497
+placement bytes in the table above and change `+0x85..+0x88`
+from `14 00 14 00` to `F4 01 F4 01` (current and maximum HP,
+20 to 500 in the first 130-byte character row). The visible attackers
+used the two-axe shape. Their slot-2 definition is the bank-1
+record initialized at `L27.PAK+0xAD45`.
+
+The four eight-byte hardware read watches started at
+`2803:1C08/1C10/1C38/1C40` plus the loaded segment. They were armed
+in the first fight and stayed armed through a reload and a logged
+five-second replay of a forward input, two weapon clicks, an
+inventory pickup and an attempted ranged click. The first fight
+showed party damage and defeat. The ranged click in the replay
+left the item held, so it did not demonstrate a projectile.
+The guest sites include the critical byte read at
+`MAIN.EXE+0xAD87` and the speed read at `+0x12997`. Other hits
+were to neighbouring fields or to initialization stores reported
+during reload. No post-initialization read in the recorded
+ranges addressed modifiers `+0x0C/+0x0E/+0x10` or auxiliary
+word `+0x40`.
+
+**UNCONFIRMED.** A successful ranged action on these watches
+and the purposes of the four fields. Repeat with a ranged
+weapon already equipped and follow an original projectile
+through the release routine. Both slot-1 (nonzero modifiers)
+and Hatchet slot-2 (zero modifiers) now have scoped read controls.
