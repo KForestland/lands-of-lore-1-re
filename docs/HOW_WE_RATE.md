@@ -21,7 +21,9 @@ one COM program image. Files the walk refuses stay unread. The loose walk is
 credited only on the CD layout (a `DATA` folder with `L01.PAK`, the same test
 `lol1_loose.py` uses); on a floppy copy only PAK archives count. A measured tail is not enough: the symbol blocks end in a
 string pool whose length is the uint32 at byte 4, and the blend tables are
-65536 bytes that no index formula here reproduces, and neither fact puts
+65536 bytes that none of the eleven simple index formulas the tool tries
+(min, max, average, product, sum, difference, OR, AND, XOR) reproduces;
+palette-based formulas were not tried. Neither fact puts
 those files in the count. The [loose-file page](formats/loose.md) names the twelve
 CD files still in that set and the test that would finish each one. The rating
 is counted on the CD edition; `--check` does not compare it on a floppy copy. It

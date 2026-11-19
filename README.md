@@ -23,7 +23,7 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- rating:begin -->
 - **Files read:** 187 of 199 files in the CD `DATA` folder (287.0 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 468 statements CONFIRMED (proved from the program code or the files) and 69 UNCONFIRMED (a reading not yet proved), on 88 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 470 statements CONFIRMED (proved from the program code or the files) and 69 UNCONFIRMED (a reading not yet proved), on 88 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 5 questions that can only be settled by watching the original game run are settled.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->

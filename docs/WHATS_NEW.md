@@ -4,7 +4,7 @@ Newest first. One line per answered question, new tool or visible change. Detail
 
 ## 19 November 2026
 
-- **Twelve loose files, second pass.** The blend tables and the symbol blocks now have a measured layout and a settling test. They stay unread: the string pool is only the tail, and no index formula reproduces a blend table ([loose files](formats/loose.md)).
+- **Twelve loose files, second pass.** The blend tables and the symbol blocks now have a measured layout and a settling test. They stay unread: the string pool is only the tail, and none of the eleven simple index formulas tried (minimum, maximum, average rounded down or up, product /255 or >>8, sum, difference, OR, AND, XOR) reproduces a blend table; palette-based formulas were not tried ([loose files](formats/loose.md)).
 - **Loose CD files.** `lol1_loose.py` walks 25 files that are not PAK or TLK archives through their last byte. Twelve stay unread, and the page gives the test that would finish each one.
 - **TIM extra words (Q6).** Nested 0x07 and 0x0D pass those words into the `%` formatter; `lol1_tim_words.py` re-reads the pushes and the strings.
 - **Counted rating.** The README and [STATUS](STATUS.md) show four counted lines instead of a percentage; [how we rate](HOW_WE_RATE.md) explains them.

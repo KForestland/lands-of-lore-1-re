@@ -61,6 +61,16 @@ POOL_LEN = {
     "FRE/LANDS.EXE": 0xA515,
     "GER/LANDS.EXE": 0xA515,
 }
+# uint16 at +8 (TDINFO name count): the number of NUL-terminated strings in that pool.
+POOL_COUNT = {
+    "ENG/FINALE.TDS": 3593,
+    "FRE/FINALE.TDS": 3596,
+    "GER/FINALE.TDS": 3596,
+    "ENG/LANDS.EXE": 3583,
+    "FRE/LANDS.EXE": 3586,
+    "GER/LANDS.EXE": 3586,
+}
+# Borland Turbo Debugger symbol table (TDINFO): magic 0x52FB, version 0x0310.
 SYMBOL = b"\xfb\x52\x10\x03"
 BLEND_HEAD = b"\x38\xb6\xb7\xb7\xc1\x3e\x77\x3f"
 BLEND2_HEAD = b"\x13\x13\x8a\x8a\x8c\x0a\x8e\x0b"
@@ -414,11 +424,14 @@ def L_path(path):
     return path if hasattr(path, "read_bytes") else Path(path)
 
 
-def string_pool_reaches_end(block, pool_len):
-    """True when the last pool_len bytes are packed printable strings ending at EOF."""
-    if len(block) < 8 or block[:4] != SYMBOL:
+def string_pool_reaches_end(block, pool_len, pool_count):
+    """True when the last pool_len bytes are pool_count packed printable strings ending at EOF,
+    and the uint16 at +8 is that string count."""
+    if len(block) < 10 or block[:4] != SYMBOL:
         return False
     if struct.unpack_from("<I", block, 4)[0] != pool_len:
+        return False
+    if struct.unpack_from("<H", block, 8)[0] != pool_count:
         return False
     if pool_len < 8 or pool_len >= len(block):
         return False
@@ -432,7 +445,7 @@ def string_pool_reaches_end(block, pool_len):
             return False
         pos = end + 1
         count += 1
-    return count > 0
+    return count == pool_count
 
 
 def index_formula_matches(data):
@@ -458,7 +471,6 @@ def index_formula_matches(data):
         lambda row, col: row | col,
         lambda row, col: row & col,
         lambda row, col: row ^ col,
-        lambda row, col: row if row > col else col,
     )
     return any(matches(formula) for formula in formulas)
 
@@ -580,15 +592,15 @@ def check(data_dir):
                 return fail(f"{rel} tail length is a header dword")
             if struct.unpack_from("<I", tail, 0x20)[0] != declared:
                 return fail(f"{rel} tail +0x20 is not the file offset of the tail")
-            if not string_pool_reaches_end(tail, POOL_LEN[rel]):
-                return fail(f"{rel} string pool does not reach the last byte")
+            if not string_pool_reaches_end(tail, POOL_LEN[rel], POOL_COUNT[rel]):
+                return fail(f"{rel} string pool or its +8 count differs")
         elif rel in TDS_SIZE:
             if len(data) != TDS_SIZE[rel] or data[:4] != SYMBOL:
                 return fail(f"{rel} differs")
             if len(data) in struct.unpack_from("<16I", data, 0):
                 return fail(f"{rel} length is a header dword")
-            if not string_pool_reaches_end(data, POOL_LEN[rel]):
-                return fail(f"{rel} string pool does not reach the last byte")
+            if not string_pool_reaches_end(data, POOL_LEN[rel], POOL_COUNT[rel]):
+                return fail(f"{rel} string pool or its +8 count differs")
         else:
             return fail(f"unexpected open file {rel}")
     if len(blends["BLEND.TAB"]) != 3 or len(blends["BLEND2.TAB"]) != 3:
@@ -640,7 +652,8 @@ def check(data_dir):
     for needle in ABSENT_NEEDLES:
         if any(needle in blob for blob in scanned):
             return fail(f"{needle.decode()} occurs in a scanned program")
-    if any(BLEND_HEAD in blob or BLEND2_HEAD in blob for blob in scanned):
+    raw = [(root / rel).read_bytes() for rel in ABSENT_FROM] + [install]
+    if any(BLEND_HEAD in blob or BLEND2_HEAD in blob for blob in raw):
         return fail("a blend-table head occurs in a scanned program")
     print("CHECK loose: 25 files reach the last byte "
           "(3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com); "
