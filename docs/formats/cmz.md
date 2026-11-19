@@ -41,7 +41,7 @@ CD `LEVEL1.CMZ` starts `36 01  04  00  06 10 00 00  00 00 …`: 0x136 + 2 = 312 
 
 ## Correction: `data/wall_type_analysis.json`
 
-The March 2026 file was produced with the old LCW decoder (closure memo, section B.4) and had wrong wall counts on every level (headers were right). It was regenerated on 2026-11-18 with `cmz_analyzer.py`. On level 1 the solid blocks now show the expected pattern: (2,2,1,1) and (1,1,2,2) alternate 470/469 times, which is the checkerboard the floor/ceiling drawing uses (`scene_rpg.cpp:152-157`). CONFIRMED.
+The March 2026 file was produced with the old LCW decoder (closure memo, section B.4) and had wrong wall counts on every level (headers were right). It is now regenerated with `cmz_analyzer.py`. On level 1 the solid blocks now show the expected pattern: (2,2,1,1) and (1,1,2,2) alternate 470/469 times, which is the checkerboard the floor/ceiling drawing uses (`scene_rpg.cpp:152-157`). CONFIRMED.
 
 ## Open
 

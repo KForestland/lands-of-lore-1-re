@@ -1,6 +1,6 @@
 # Q10. The 59 speech-archive entries named 00000.VOC
 
-They are not 59 names. They are one clip, stored under the single name `00000.VOC`, twice in most of the speech archives. No script, sound list or play call found in this pass opens that name. Who plays it is still open.
+They are not 59 names. They are one clip, stored under the single name `00000.VOC`, twice in most of the speech archives. No script, sound list or play call found so far opens that name. Who plays it is still open.
 
 ## What was measured
 

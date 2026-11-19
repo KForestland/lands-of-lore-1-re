@@ -10,7 +10,7 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 - **What you can do today:** read every file type with a tool (pictures, sprites, animations, sound, speech, music, fonts, text, maps, scripts, saves), draw any level, disassemble every level script, and look up how combat, magic and monsters work.
 - **Start in five minutes:** the [Quick start](#quick-start-5-minutes) below, then [Start here, by goal](docs/START_HERE.md), [How the game works](docs/HOW_THE_GAME_WORKS.md) or the [worked example](docs/tutorial-one-event.md).
 - **Recipes:** [cookbook](docs/COOKBOOK.md), eight short runs with the command and the first lines it prints.
-- **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md) and counted in the [rating](#rating). Some can only be settled by watching the original game run. Answered probes are counted in the rating; which ones and how: [NEEDS_A_RUNNING_GAME](docs/NEEDS_A_RUNNING_GAME.md#answered-probes). Some probes were also tried on [edited saves](docs/EDITED_SAVES.md), copies of a game-written save with a few bytes changed.
+- **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md) and counted in the [rating](#rating). Some questions need a test in the running original game (a *probe*); [NEEDS_A_RUNNING_GAME](docs/NEEDS_A_RUNNING_GAME.md) lists them and which are answered. Some probes were also tried on [edited saves](docs/EDITED_SAVES.md), copies of a game-written save with a few bytes changed.
 - **What changed lately:** [what's new](docs/WHATS_NEW.md), newest first.
 - **The three games:** [LoL1](https://github.com/KForestland/lands-of-lore-1-re) · [LoL2](https://github.com/KForestland/lands-of-lore-2-re) · [LoL3](https://github.com/KForestland/Lands-of-lore-3-re) ([what they share](docs/series-formats.md), [how the engine changed](docs/engine-evolution.md)).
 
@@ -103,7 +103,7 @@ Two editions were read: the CD-ROM edition with speech (version CD1.02) and an E
 - [`data/`](data): tables produced by the tools (inventories, wall tables, counts)
 - [`examples/`](examples): three small example outputs, checked against today's tools by `example_images.py`
 
-[`docs/closure_memo.md`](docs/closure_memo.md), [`docs/repo_scope.md`](docs/repo_scope.md) and [`docs/level_tileset_map.md`](docs/level_tileset_map.md) are older notes from March 2026, kept as history; where they disagree with the format pages, the format pages are right.
+[`docs/closure_memo.md`](docs/closure_memo.md), [`docs/repo_scope.md`](docs/repo_scope.md) and [`docs/level_tileset_map.md`](docs/level_tileset_map.md) are older notes kept as history; where they disagree with the format pages, the format pages are right.
 
 ## Asset policy
 

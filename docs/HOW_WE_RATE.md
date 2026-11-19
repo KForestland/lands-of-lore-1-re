@@ -15,11 +15,15 @@ the first member (after its zero terminator) and the members reach the end
 of the file. A file that is not a PAK or a TLK counts when `tools/lol1_loose.py`
 walks it to the last byte: a DOS font, a uint16 string table, the archive
 inventory, a Windows icon, a Windows PIF, an MZ program whose declared image
-is the whole file, an MZ stub plus LE (Windows VxD) program, an MZ program
-whose FBOV overlay body reaches the end, a file of whole text lines, or the
+is the whole file, an MZ stub plus a 32-bit LE (Linear Executable) Windows driver, an MZ program
+whose overlay (Westwood's FBOV block) reaches the end, a file of whole text lines, or the
 one COM program image. Files the walk refuses stay unread. The loose walk is
 credited only on the CD layout (a `DATA` folder with `L01.PAK`, the same test
-`lol1_loose.py` uses); on a floppy copy only PAK archives count. A measured tail is not enough. A symbol block counts when its header counts size every table, the name and index fields stay inside those counts, and the last table, four zero bytes per module, ends exactly where the trailing string pool starts. The blend tables are
+`lol1_loose.py` uses); on a floppy copy only PAK archives count.
+
+A symbol block counts when the counts in its header give the size of every table, its name and index fields stay inside those counts, and the last table (four zero bytes per module) ends exactly where the string pool starts. A measured tail is not enough.
+
+The blend tables are
 65536 bytes that none of the eleven simple index formulas the tool tries
 (min, max, average, product, sum, difference, OR, AND, XOR) reproduces.
 A self-blend of the paired finale palette reproduces 65532 of 65536 bytes
@@ -31,8 +35,12 @@ the blend tables in the count. The [loose-file page](formats/loose.md) names the
 blend tables still in that set and the test that would finish each one. The rating
 is counted on the CD edition; `--check` does not compare it on a floppy copy. It
 does **not** mean that every entry inside is decoded or understood; the
-[STATUS](STATUS.md) table says how far each format is read. Only the `DATA` folder is counted; files the game writes while it runs
-(caches, saves) change the count on a copy that has been played.
+[STATUS](STATUS.md) table says how far each format is read.
+
+Only the folder given to `--data` is counted, every file in it and its
+sub-folders. Files the game writes there while it runs (caches, saves)
+are added to the total, and count as read only if a reader above walks
+them, so a copy that has been played can give other numbers.
 
 **Rules traced.** How many statements on the current pages carry the
 evidence label CONFIRMED (backed by a program address or a file offset
@@ -51,7 +59,10 @@ have more than one probe, and a probe need not belong to a numbered
 question. Each answer holds for the setup it names (one
 display, one renderer, one save). Most documented facts were never
 observed in a running game; they are proved from the program and the files
-instead, and this line does **not** count them.
+instead, and this line does **not** count them. Probes listed under
+"Probes not yet run" are not counted in either number; Q7b and Q7c
+also have a heading under "Remaining probes" and count there as not
+answered.
 
 The same line says how many answered probes rest on edited saves only.
 An edited save is a copy of a game-written save with a few bytes
@@ -64,7 +75,7 @@ evidence to it.
 
 **Open questions.** The state words of the At-a-glance table in
 [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md): answered, mostly answered, partly
-answered. A question may be answered for one setup only; the table says so.
+answered. *Answered*: nothing is left to settle from the files or the program. *Mostly answered*: the main question is settled; named details remain. *Partly answered*: part is settled; the main point is open. A row that says 'answered for' a setup (one renderer, one device) counts as answered for that setup only.
 
 ## What the rating does not say
 

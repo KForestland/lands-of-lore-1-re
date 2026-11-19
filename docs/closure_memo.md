@@ -1,4 +1,4 @@
-> **History (March 2026).** This memo is kept as a record of the first pass; only its machine paths were reduced to file names. Several of its statements were later corrected: see [`STATUS.md`](STATUS.md) and the pages in [`formats/`](formats/README.md); today's tools are in [`../tools/`](../tools/README.md).
+> **History (March 2026).** This memo is kept as a record of the first pass; only its machine paths were reduced to file names. Several of its statements were later corrected: see [Later corrections](#later-corrections) at the end, [`STATUS.md`](STATUS.md) and the pages in [`formats/`](formats/README.md); today's tools are in [`../tools/`](../tools/README.md).
 
 # LoL1 — Final Closure Memo
 
@@ -229,3 +229,23 @@ The rendering pipeline (CMZ → WLL → VMP → VCN) is fully documented and imp
 The remaining gap is effectively publication-only: repository curation, release packaging, and public writeup polish. Core extraction and decompilation work is complete.
 
 **The work was publication-ready.**
+
+---
+
+## Later corrections
+
+Added after the memo; the format pages give the details.
+
+1. TLK is not "uint16 count + 8-byte entries": CD TLK files are PAK archives of VOC samples ([tlk.md](formats/tlk.md)).
+2. TLC holds one 256-byte slot table and twenty 256-byte blend rows for transparency, not "lighting/effect remaps" ([tlc.md](formats/tlc.md)).
+3. VMP is 330 floor/ceiling words plus 431 words per wall page; the "8bpp VCN" variant in `level_tileset_map.md` does not occur in LoL1 ([vcn_vmp.md](formats/vcn_vmp.md)).
+4. VOC "majority 11111 Hz": the effects use the 11025 Hz divisor class, CD speech 22050 Hz ([voc.md](formats/voc.md)).
+5. "1163 files" covers only the CD top-level `DATA/` PAKs (see [Corpus coverage](STATUS.md#corpus-coverage)).
+6. SHP has no 2-byte prefix on CD or floppy. The March renderer read every shape 2 bytes early because it counted offsets from the file start instead of byte 2 ([shp.md](formats/shp.md)).
+7. The "bytes 0-3 unknown" header belongs to CMZ, not WLL ([cmz.md](formats/cmz.md)).
+8. FNT "226 glyphs per font" holds for the CD; floppy FONT6P/9P/9PN have 128 ([fnt.md](formats/fnt.md)).
+9. WSA needs no per-file palette fix: frame offsets are relative to the frame data, which starts after the palette ([wsa.md](formats/wsa.md)).
+10. `data/wall_type_analysis.json` was built with the old LCW bug and had wrong wall counts; regenerated ([cmz.md](formats/cmz.md)).
+11. `data/tileset_mapping.json` (uint16 "tile ID" guess) replaced by the real level-to-set mapping. Level 25 draws its walls with CAVE1 and CAV_PLT3.PAL, not CATWALK ([vcn_vmp.md](formats/vcn_vmp.md)).
+12. `data/tim_analysis.json` listed opcodes 112 and 176, which are not TIM commands, and copied the raw script words of 11 TIM files; regenerated without either (2.6 MB to 40 KB). Command counts: [tim.md](formats/tim.md).
+13. `data/shp_inventory.json` (frame sizes up to 12,974,107 bytes) replaced; `data/shp_render_results.json` removed (it counted the old fallback decoder's output).

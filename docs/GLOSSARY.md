@@ -25,8 +25,9 @@ These words mean the same thing in the notes for all three Lands of Lore games.
 | Placement | One recorded place where a level puts an item, a creature, or another object. |
 | Save slot | One file the original game wrote for a game in progress. Tools may read it; this repository does not store it. |
 | Probe | One check that needs the original game running. |
+| Answered, mostly answered, partly answered | The states of an open question. *Answered*: nothing is left to settle from the files or the program. *Mostly answered*: the main question is settled; named details remain. *Partly answered*: part is settled; the main point is open. A row that says 'answered for' a setup (one renderer, one device) counts as answered for that setup only. |
 | Rating | The four counted lines near the top of the README, written by `tools/rating.py`. |
-| Files read | A file whose every byte a tool here assigns to a known header, directory, entry or other named part; what is inside an entry may still be only partly understood. Files the game writes while it runs are not counted as read. |
+| Files read | A file whose every byte a tool here assigns to a known header, directory, entry or other named part; what is inside an entry may still be only partly understood. Files the game writes into the data folder while it runs are added to the total and count as read only if a reader walks them. |
 | History page | A page marked **History** at its top: an older note kept as a record. The rating does not count it; where it differs, the current pages are right. |
 | File offset | The position of a byte in a file on disk. |
 | Spell | A magic effect the player casts. Its cost is stored in the game's tables. |
@@ -43,7 +44,7 @@ These words mean the same thing in the notes for all three Lands of Lore games.
 | CD edition | The CD-ROM release with spoken dialogue (version CD1.02). Read from its `DATA/` folder. ScummVM calls it the "talkie" version. |
 | Floppy edition, LANDSoL | The English floppy release, without speech, data split into `CHAPTER1.PAK` … `CHAPTER8.PAK`. "LANDSoL" is the name of the folder the copy was read from. |
 | ScummVM | Open-source program that runs many classic games, including this one, by reimplementing their engines. Its *Kyra* engine (named after Westwood's *Legend of Kyrandia*) runs Lands of Lore. Its source code is the main written reference used here; citations point at upstream commit `3b4db303`. |
-| Closure memo | `docs/closure_memo.md`, a March 2026 summary written when this work was first called finished. Kept as history; the format pages correct it. |
+| Closure memo | `docs/closure_memo.md`, an older summary kept as history; the format pages correct it. |
 | Checked independently | A second program, written separately, gave the same result on the same files. |
 | DATA folder | The directory of this game's data files, which the tools read. Set `LOL1_DATA` to it. A DAT file, below, is an area's decoration table, not this folder. |
 
@@ -58,6 +59,8 @@ These words mean the same thing in the notes for all three Lands of Lore games.
 | Bitmap container | The 10-byte header plus optional palette used by CPS files and also by CMZ, VCN, VMP and most SHP files ([cps.md](formats/cps.md)). |
 | Chunk, IFF, FORM | A named block inside a larger file. This game uses an IFF layout: a `FORM` header, a type (`EMC2`, `AVFS`, `XDIR`), then those chunks. Used by scripts, TIM files and music. |
 | MZ executable | A DOS program file (`MAIN.EXE`). Tables of game numbers sit inside it ([executable_tables.md](executable_tables.md)). |
+| LE (Linear Executable) | A 32-bit program format; here, Windows drivers placed after an MZ stub. |
+| FBOV overlay | Westwood's block of overlay code stored after the MZ image of a program; the game loads it into memory while running, so its code has no fixed address. |
 | Far pointer | A DOS memory address of two 16-bit words (offset, segment). |
 | [ENG, FRE, GER](formats/text.md) | Text files, one set per language. Each is a string table. `LANDS.<lang>` holds the global strings and `LEVELnn.<lang>` one level's strings. The CD has 30 files per language; the floppy has only the ENG files. |
 | [Loose files](formats/loose.md) | Files in the CD `DATA` folder that are neither a PAK nor a `NN.TLK` archive. `tools/lol1_loose.py` walks 25 of the 37 to the last byte; 12 stay open. |

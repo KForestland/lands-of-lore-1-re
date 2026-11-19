@@ -19,7 +19,7 @@ Python tools that read the data files of *Lands of Lore: The Throne of Chaos* (D
 
 ## Parity: every format and table, its reader and how to look at it
 
-One row per documented format and per rules or tables page. The aim: with your own copy of the game you can look at what each page describes. Checked on 19 November 2026 against the English CD edition (every example below was run as written) and, for saves, against floppy `_LEVELn.TMP` files and ScummVM `lol-cd.NNN` saves.
+One row per documented format and per rules or tables page. The aim: with your own copy of the game you can look at what each page describes. Every example below was run as written against the English CD edition; saves were also checked against floppy `_LEVELn.TMP` files and ScummVM `lol-cd.NNN` saves.
 
 Legend:
 

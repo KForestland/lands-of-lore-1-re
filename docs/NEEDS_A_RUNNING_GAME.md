@@ -159,7 +159,7 @@ transition from a frame picked while mode 11 remains set.
 
 **CONFIRMED, edited-save run.** The position edit reached block 105. Neither active-row sample had a monster on a pose square. The mode-11 frame still needs the original monster-leaves event. [Byte changes and live placement](unknowns/07_native_rules.md#level-23-pose-squares-from-edited-placements)
 
-Parked (not run); see [Parked probes](#parked-probes-not-run).
+Not yet run; see [Probes not yet run](#probes-not-yet-run).
 
 ### Q7c. What writes mode 10 during ordinary play?
 
@@ -178,7 +178,7 @@ Record the writer, previous mode and object, then observe its
 next animation selection. The tested guard encounter used only
 modes 1 and 15.
 
-Parked (not run); see [Parked probes](#parked-probes-not-run).
+Not yet run; see [Probes not yet run](#probes-not-yet-run).
 
 ### Q17. Are the isolated save bytes touched during play?
 
@@ -273,12 +273,9 @@ result to the actions taken.
 
 **CONFIRMED, edited-save run.** A level-27 slot-1 battle read the critical byte and speed at `MAIN.EXE+0xAD87/+0x12744`. The first Hatchet slot-2 trial reached defeat without a watch hit. A second copy with 500 HP fought the Hatchets under read watches: the critical byte and speed were read (`+0xAD87/+0x12997`), and no read after initialization touched `+0x0C/+0x0E/+0x10` or `+0x40`. The ranged click did not fire, so the ranged attack is still untested. [Byte changes and fight trace](unknowns/18_native_records.md#level-27-fight-from-an-edited-placement) and [Hatchet read watches](unknowns/18_native_records.md#read-watches-on-the-hatchet-definition)
 
-## Parked probes (not run)
+## Probes not yet run
 
-These running-game tests were planned and then parked. No one will run
-them here. Each one is "not run": it has no result and the question it
-belongs to keeps its state. A reader with the original game and a
-debugger can do it. Addresses are `MAIN.EXE` file offsets unless the
+These running-game tests have no result yet. A reader with the original game and a debugger can run them; the question each belongs to keeps its state until then. Addresses are `MAIN.EXE` file offsets unless the
 line names another program; turn them into breakpoints as described at
 the top of this page.
 

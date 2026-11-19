@@ -38,7 +38,7 @@ These match the already-proven LoL1 `PAK` directory model.
 
 ## Edition / Build Difference
 
-ScummVM identifies a LoL release by the MD5 of the first 1 MiB of `GENERAL.PAK` (Kyra sets `_md5Bytes = 1024 * 1024`, `engines/kyra/detection.cpp:58`). Measured that way (2026-11-18, corrected; the earlier version of this page compared a full-file MD5 with a detection hash):
+ScummVM identifies a LoL release by the MD5 of the first 1 MiB of `GENERAL.PAK` (Kyra sets `_md5Bytes = 1024 * 1024`, `engines/kyra/detection.cpp:58`). Measured that way:
 
 | Copy | MD5 of first 1 MiB of `GENERAL.PAK` | ScummVM detection entry |
 |------|-------------------------------------|-------------------------|
