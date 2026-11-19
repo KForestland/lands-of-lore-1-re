@@ -4,6 +4,7 @@ Newest first. One line per question worked on, new tool or visible change; each 
 
 ## 19 November 2026
 
+- **Readme date.** `README.ENG` at file +0x10A is `January 10, 1994`. `lol1_loose.py --check` re-reads those sixteen bytes ([loose files](formats/loose.md)).
 - **Cross-series check.** The shared format pages already stated the same archive, movie, music and cache figures as the current notes, and the name-hash note now states the shift of 6 ([engine](engine-evolution.md)). The shared glossary words are the same text in each game ([glossary](GLOSSARY.md)).
 - **Settling tests.** Two open statements now name the read that would settle them: the compression-type switch for CPS types 1 and 3, and a search of the wall drawers for the nine piece start offsets ([CPS](formats/cps.md), [walls](formats/vcn_vmp.md)). The view of level 22 block 27 is listed under [probes not yet run](NEEDS_A_RUNNING_GAME.md#probes-not-yet-run).
 - **Close-out.** Six open questions (Q1, Q7, Q10, Q14, Q17, Q18) each end with what was measured, what was tried, and what would settle the rest. States stay as they are ([open questions](OPEN_QUESTIONS.md)).

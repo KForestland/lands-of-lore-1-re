@@ -899,6 +899,9 @@ def check(data_dir):
         handle.seek(0x72)
         if handle.read(8) != b"LANDS OF":
             return fail("README.ENG+0x72 differs")
+        handle.seek(0x10A)
+        if handle.read(16) != b"January 10, 1994":
+            return fail("README.ENG+0x10A differs")
     for offset, needle in INSTALL_PINS:
         if install[offset:offset + len(needle)] != needle:
             return fail(f"installer pin +{offset:#x} differs")
