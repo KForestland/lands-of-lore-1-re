@@ -4,6 +4,13 @@ Newest first. One line per question worked on, new tool or visible change; each 
 
 ## 19 November 2026
 
+- **Numbers at a glance.** Tables generated from the original files, with a check that the page equals the tool output ([numbers](NUMBERS.md)).
+- **How a level is put together.** The pieces a level needs, the file that holds each and the order the program loads them ([level assembly](HOW_A_LEVEL_IS_PUT_TOGETHER.md)).
+- **Tour.** One level followed end to end: its picture, sheet, exits and numbers, with the command behind each part ([tour](TOUR.md)).
+- **Across the three games.** How each game gates progress and scales its numbers, each fact linked to its evidence ([progress and numbers](series-progress-and-numbers.md)).
+- **Page index.** `docs/index.json` lists every page, the questions it answers and the tools it cites; `tools/doc_index.py --check` keeps it current ([index](index.json)).
+- **Round trip.** What each writer proves: which containers rebuild byte for byte and which data only decodes identically ([round trip](ROUND_TRIP.md)).
+- **Tool options.** One name for the data folder, the check and the output in every tool; old spellings still work as aliases ([tools](../tools/README.md)).
 - **Readme platform.** `README.ENG` at file +0xE4 is `Platform:    PC CD-ROM`. `lol1_loose.py --check` re-reads those twenty-two bytes ([loose files](formats/loose.md)).
 - **Readme date.** `README.ENG` at file +0x10A is `January 10, 1994`. `lol1_loose.py --check` re-reads those sixteen bytes ([loose files](formats/loose.md)).
 - **Cross-series check.** The shared format pages already stated the same archive, movie, music and cache figures as the current notes, and the name-hash note now states the shift of 6 ([engine](engine-evolution.md)). The shared glossary words are the same text in each game ([glossary](GLOSSARY.md)).
