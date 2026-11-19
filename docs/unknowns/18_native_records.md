@@ -136,3 +136,56 @@ in a level-27 fight. The original game was played to level 1
 and no played level-27 slot was available. A native level-27
 slot can drive the watches above and verify the +0x0A control
 while the same monster takes and deals damage.
+
+### Whole-program reference scan
+
+**CONFIRMED** The scan covered every byte of each resident load image
+and every byte of its appended FBOV area. The DOS header size comes from
+file +8 and the resident file end from +2/+4. The FBOV body length
+comes from FBOV +4. Ranges are half-open. In particular, the overlay
+contains the property setter, so a scan of the resident image alone
+would miss all five property stores.
+
+| Edition | Resident file range | FBOV header and body | Definition bank | Instance-pointer displacement aliases |
+|---|---|---|---|---|
+| CD | `0x3800–0x3CC40` | `0x3CC40–0x57240` | `2803:1B5E` | `+0x21`, `+0x161B` |
+| Floppy | `0x4800–0x45DA0` | `0x45DA0–0x5B470` | `2DCF:1B40` | `+0x21`, `+0x15FD` |
+
+**CONFIRMED** Across those ranges, decode every candidate LES/LDS
+including the explicit ES and DS forms. The instance displacements
+above yield 57 CD and 58 floppy candidates. These counts include byte
+patterns in noncode. Continue each candidate for up to 140 bytes
+through ordinary register copies and immediate offset arithmetic,
+ending at a call, jump, return, segment change or loss of its tracked
+registers. The separate +0x14 embedded-stat-pointer displacement scan
+gives seven candidates in each edition and verifies the two +0x0A
+speed controls. For each of the five slots, match every 16-bit ES
+memory displacement for its five queried field addresses. This found
+zero direct-address matches in either program. The known, indexed bank
+origins are the spawn, setter and save-load rebind, with base immediates
+at CD file `0x1472A/0x4784A/0x48837` and floppy
+`0x190C2/0x51029/0x51F07`. The overlay segment words
+`0x5F8` and `0x460` in the setters resolve to those bank
+segments through the FBOV directories at `0x2FC50` and `0x36500`.
+
+| Field | CD confirmed references | Floppy confirmed references |
+|---|---|---|
+| +0x0C | Store `0x47992` | Store `0x51171` |
+| +0x0E | Store `0x479BC` | Store `0x5119B` |
+| +0x10 | Store `0x479E6` | Store `0x511C5` |
+| +0x3D | Read `0xAD87` | Read `0xACC8` |
+| +0x40 | Stores `0x47AC4`, `0x47ADD` | Stores `0x512A3`, `0x512BC` |
+
+Run the check with Python and Capstone installed.
+
+```bash
+python3 tools/monster_reference_scan.py --check \
+  --cd /path/to/cd/MAIN.EXE --floppy /path/to/floppy/MAIN.EXE
+```
+
+**UNCONFIRMED** References through computed aliases, stack reloads or
+calls beyond the tracked block. The scan confirms one critical reader
+and the five setter stores in each edition across the tested access
+forms. A read/write watch on the slots above during a level-27 fight
+would resolve the remaining alias question and detect a write to +0x3D
+from outside the proven definition setter.

@@ -22,7 +22,7 @@ Counted by `tools/rating.py` on the English CD copy; [how we rate](docs/HOW_WE_R
 
 <!-- rating:begin -->
 - **Files read:** 162 of 199 files in the CD `DATA` folder (285.7 of 289.0 MiB) are accounted for to the last byte by a reader here.
-- **Rules traced:** 385 statements labelled CONFIRMED against the program or the files, 134 labelled UNCONFIRMED, on 86 current pages.
+- **Rules traced:** 389 statements labelled CONFIRMED against the program or the files, 136 labelled UNCONFIRMED, on 86 current pages.
 - **Seen in the running game:** 1 of 5 probes that need the original game running are answered.
 - **Open questions:** 18: 11 answered, 5 mostly, 2 partly.
 <!-- rating:end -->

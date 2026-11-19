@@ -16,7 +16,7 @@ One line per question: its state and what would settle what is left. Details are
 | Q4 | Answered | — |
 | Q5 | Answered | — |
 | Q6 | Mostly | The extra argument words in a few calls; the floppy intro and finale tables are resolved natively; 0x07 and nested 0x02 are native return-1 stubs in both editions |
-| Q7 | Mostly | A runtime trace of the WLL wall byte (the collision callers supply only masks 0, 1, 2 and 7) and the remaining monster mode branches |
+| Q7 | Mostly | A runtime trace of the WLL wall byte (the collision callers supply only masks 0, 1, 2 and 7) and the remaining mode-10 gameplay producer |
 | Q8 | Answered | The English CD Sound Blaster quit is traced; check setups with a nonzero registered callback |
 | Q9 | Answered | — |
 | Q10 | Mostly | The finale catalog row at file `0x1D1D0` names it and no other reference to the name's offset exists. A caller would reach row 40 through one of the segment-`0x1ACB` lookups (for example `0xCDD1`, whose index comes from a run-time table) or by name through the row scan at `0xF0B0` |
@@ -27,7 +27,7 @@ One line per question: its state and what would settle what is left. Details are
 | Q15 | Answered | What the letters "C55" stand for is not in the files |
 | Q16 | Answered | — |
 | Q17 | Mostly | Three single bytes; read an original `_SAVEnnn.DAT` written by the DOS game |
-| Q18 | Mostly | Trace who writes the monster critical-skill byte (zero in the image; no writer found) and the roles of a few monster modifiers; static pointer scans found no reader of modifiers +0x0C–0x10 or +0x40; would be settled by a watch on the level-27 slot-1 definition ([unknowns/18](unknowns/18_native_records.md#additional-native-pointer-tests)) |
+| Q18 | Mostly | The whole-program scan identifies the critical read and five setter stores. Computed aliases to the critical byte and modifier words remain open; would be settled by a watch on the level-27 slot-1 definition ([unknowns/18](unknowns/18_native_records.md#additional-native-pointer-tests)) |
 
 ## Questions
 

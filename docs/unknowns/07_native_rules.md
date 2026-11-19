@@ -223,3 +223,29 @@ An original runtime trace would record the instruction and input
 mask at each access to that wall-table byte and separate the known
 whole-byte EMC test from masked native checks. The watched bases
 are CD DS:531E and floppy DS:87C4, each plus the wall ID.
+
+### Additional mode branches
+
+| Mode | CONFIRMED control flow | CD MAIN.EXE | Floppy MAIN.EXE |
+|---|---|---|---|
+| 0/1 | With instance +0x19 bit 4 set, scan 30 slots and request mode 7 for every slot in mode 1. With bit 4 clear, only mode 1 enters the destination helper. | `0x121C3–0x1220B` | `0x16B61–0x16BA9` |
+| 2 | Compare both current coordinate words to the destination. If either differs, call the movement helper. When both match and +0x17 differs from +0x10, select the facing through the table at DS:241A (CD) or DS:5914 (floppy). | `0x12165–0x121B4` | `0x16B03–0x16B52` |
+| 3 | Request mode 7 on the visibility test and independently on an adjacent-block party match. The adjacency loop checks four indices. | `0x12291–0x122D4` | `0x16C2F–0x16C72` |
+| 4 | At zero counter, align to an even direction, test a step, and move if it is free. When it is blocked, use a sampled turn to change direction and load the counter. With a nonzero counter, rotate through candidate directions. Seven failed probes request mode 3. | `0x122E4–0x12365`, `0x12368–0x12421` | `0x16C82–0x16D03`, `0x16D06–0x16DBF` |
+| 12 | Increment +0x15 and mark the current block. Only a counter above 13 calls the level event, using the monster ID in both stacked ID fields. | `0x12879–0x128B4` | `0x17218–0x17253` |
+| 13/14 | Mode 13 increments +0x15, marks its block and, above 2, calls the death finalizer. The finalizer requests mode 14, marks the block and tests definition +0x3E bit 12 before setting block bit 7 on the eligible branch. The mode-14 update only clears +0x1B. | `0x1221A–0x1223B`, `0xAEBA–0xAF13`, `0x12A25–0x12A2E` | `0x16BB8–0x16BD9`, `0xADDC–0xAE35`, `0x173C4–0x173CD` |
+
+**CONFIRMED** The whole-program byte scan finds 13 near calls to
+the mode setter in each edition (target CD `0x11855`, floppy
+`0x162F1`) and seven/eight far encodings respectively. The far entry
+used by the script is CD `0x14FC1`, floppy `0x19948`. The scan
+finds no literal ES:disp8 byte store of 10 at displacement +0x14
+in either complete tested image. It corroborates the earlier
+mode-10 search over the shipped scripts.
+
+**UNCONFIRMED** The gameplay producer for mode 10. The measured
+scope includes the direct setter encodings and the literal store
+form. It leaves indirect calls and computed setter arguments open.
+A watch on the mode setter's incoming argument equal to 10, or
+the final +0x14 write at CD `0x118FA` or floppy `0x16396`,
+would settle the producer.
