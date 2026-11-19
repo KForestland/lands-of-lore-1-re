@@ -905,6 +905,9 @@ def check(data_dir):
         handle.seek(0xE4)
         if handle.read(22) != b"Platform:    PC CD-ROM":
             return fail("README.ENG+0xE4 differs")
+        handle.seek(0x5C)
+        if handle.read(10) != b"Late Notes":
+            return fail("README.ENG+0x5C differs")
     for offset, needle in INSTALL_PINS:
         if install[offset:offset + len(needle)] != needle:
             return fail(f"installer pin +{offset:#x} differs")
