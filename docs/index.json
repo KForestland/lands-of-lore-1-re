@@ -456,6 +456,7 @@
         "tools/example_images.py",
         "tools/exe_tables.py",
         "tools/level_renderer.py",
+        "tools/lol1_attack_types.py",
         "tools/lol1_loose.py",
         "tools/lol1_mode_paths.py",
         "tools/lol1_name_callers.py",
@@ -816,7 +817,8 @@
       ],
       "question_references": [],
       "tools": [
-        "tools/exe_tables.py"
+        "tools/exe_tables.py",
+        "tools/lol1_attack_types.py"
       ]
     },
     {
@@ -1392,6 +1394,7 @@
         "tools/full_report.py",
         "tools/level_renderer.py",
         "tools/level_report.py",
+        "tools/lol1_attack_types.py",
         "tools/lol1_compression_writer.py",
         "tools/lol1_level_writer.py",
         "tools/lol1_loose.py",

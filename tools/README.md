@@ -54,7 +54,7 @@ Legend:
 | [tim](../docs/formats/tim.md) | `parse_tim.py`, `lol1_tim_words.py` | yes (also re-counts the command table of Q6) | text: `parse_tim.py --list NAME.TIM`, command by command with the command names | yes (framing, walk, listing) | yes |
 | [drivers](../docs/formats/drivers.md) | `decode_dialogue.py` (`TRIG.TBL` only) | yes | text: `decode_dialogue.py TRIG.TBL`; the `.ADV`/`.DRV` drivers have no reader (they are program code) | gap | gap (no `TRIG.TBL` example) |
 | [loose](../docs/formats/loose.md) | `lol1_loose.py` | yes | gap: only the one `CHECK` line, no per-file dump | gap | yes |
-| [game_rules](../docs/game_rules.md) | `exe_tables.py` for the tables the rules use (experience thresholds, difficulty rows, spell costs, character modifier rows, movement step words); the formulas themselves are program code | part: the tables | part: `exe_tables.py --table difficulty` (text); the formulas have no reader | yes (tables) | yes |
+| [game_rules](../docs/game_rules.md) | `exe_tables.py` for the tables the rules use (experience thresholds, difficulty rows, spell costs, character modifier rows, movement step words); `lol1_attack_types.py` for the ten attack arms and six defense arms | part: the tables and the type arms | part: `exe_tables.py --table difficulty` (text); `lol1_attack_types.py --check` | yes (tables) | yes |
 | [executable_tables](../docs/executable_tables.md) | `exe_tables.py` for the tables inside `MAIN.EXE` and `MAINW.EXE` (character defaults, modifier rows, equipment layout, spell properties, experience thresholds, difficulty and price tables); item types and monster properties are script calls | yes, and the corpus test | text: `exe_tables.py` (every table, both editions); `emc2_decompile.py STARTUP.PAK --entry ONETIME.INF` lists the item-type calls, `Lnn.PAK --entry LEVELn.INI` the monster calls | yes | yes |
 | [savegame_format](../docs/savegame_format.md) | `save_reader.py` | yes | text; every field with `--json` | yes (original save layout) | yes |
 | [emc2_scripts](../docs/emc2_scripts.md) | `emc2_decompile.py`, `tests/test_emc2_corpus.py` | corpus test | text: script listing | yes | yes |
@@ -76,14 +76,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (44 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (45 checks) and print one line each, then a summary line; exit 0 when all pass. The run below shows the first three lines and the summary.
 
 ```
-$ python3 tools/check_all.py | sed -n "1,3p;45p"
+$ python3 tools/check_all.py | sed -n "1,3p;46p"
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 44 CHECKS PASSED
+ALL 45 CHECKS PASSED
 ```
 
 ### `doc_links.py`
@@ -460,6 +460,15 @@ $ python3 tools/lol1_tim_words.py --check
 CHECK tim_words: 14 CD extra words are 0; 0x07 and 0x0D pass the operand pointer and a start index; 6 level strings have one %n and 6 have none; giveItem pushes three words
 ```
 
+### `lol1_attack_types.py`
+
+Re-reads the creature attack switch (types 1 to 10) and defense switch (types 1 to 6) in `MAIN.EXE` of either edition: the bound test, the jump table, the first bytes of each arm and the arm addresses printed on the [rules page](../docs/game_rules.md#monster-attack-and-defense-types). Types 5 and 7, and any type outside the range, go straight to the routine's epilogue. The whole file, overlay bodies included, holds one same-segment call to the attack routine and one far call to the defense routine, the latter behind the test of attacker bit `0x8000`. Pass `--floppy FOLDER` to check the floppy edition in the same run. It adds no spell table: spell effects by rank are on the [casting table](../docs/unknowns/07_native_rules.md#casting).
+
+```
+$ python3 tools/lol1_attack_types.py --check
+CHECK attack_types: 10 attack arms and 6 defense arms at the page addresses; types 5 and 7 and out-of-range types go to the epilogue; one same-segment attack call and one far defense call, no other reference
+```
+
 ### `lol1_mode_paths.py`
 
 Re-reads the direct instance mode-byte stores in both editions (ten CD, eight floppy), the CD setter's call immediates, the script modes, finale catalog row 40 with its index sites and the startup sort, and the absence of the three palette row numbers as constant stride-20 indexes. Needs Capstone (`requirements.txt`). On a floppy folder the finale catalog is not present, so that half of the line is the floppy store and palette sentence. The absence checks rule out literal constants only; a computed index is not excluded.
@@ -513,7 +522,7 @@ CHECK repo_guard: N tracked files; game files, converted media, stray PNGs, file
 
 ### `tests/test_emc2_corpus.py`
 
-Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last (39th) check.
+Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last (45th) check.
 
 ```
 $ python3 tests/test_emc2_corpus.py

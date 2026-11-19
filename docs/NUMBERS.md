@@ -338,9 +338,9 @@ Each 28-byte record has four MP words at +0x02 and four HP words at +0x0E. Colum
 
 ## Creature definitions by level
 
-Rows are separate 0x3F calls, including the item script and definitions repeated later in a level. Hit factor is the argument as a percentage. The eight might-category values are the stored attack inputs. Base HP is argument 26. A new monster gets `floor(base HP × difficulty row 1 / 256)` (CD factors 102, 256 and 384, floppy 192, 256 and 384 for easy, normal and hard), then `floor(result × (192 + 1d128) / 256)`, and 1 if the signed result is not above 0; CD skips the second multiply for type 2 on level 12 (CD `MAIN.EXE+0x14740–0x147B1`, floppy `+0x190D8–0x19139`). [Spawn HP](unknowns/07_native_rules.md#monster-transitions) · [Native records](unknowns/18_native_records.md#monster-definition)
+Rows are separate 0x3F calls, including the item script and definitions repeated later in a level. Hit factor is the argument as a percentage. The eight might-category values are the stored attack inputs. Base HP is argument 26. A new monster gets `floor(base HP × difficulty row 1 / 256)` (CD factors 102, 256 and 384, floppy 192, 256 and 384 for easy, normal and hard), then `floor(result × (192 + 1d128) / 256)`, and 1 if the signed result is not above 0; CD skips the second multiply for type 2 on level 12 (CD `MAIN.EXE+0x14740–0x147B1`, floppy `+0x190D8–0x19139`). Attack chance and attack type are arguments 35 and 36; what each attack type does is in the [attack type table](game_rules.md#monster-attack-and-defense-types). [Spawn HP](unknowns/07_native_rules.md#monster-transitions) · [Native records](unknowns/18_native_records.md#monster-definition)
 
-| Script | Offset | Slot | Shape | Base HP | Hit % | Might by category | Attack chance | Attack type |
+| Script | Offset | Slot | Shape | Base HP | Hit % | Might by category | Attack chance | [Attack type](game_rules.md#monster-attack-and-defense-types) |
 |---|---|---|---|---|---|---|---|---|
 | ITEM.INF | `+0x126A` | 2 | 1 | 600 | 100 | 0 / 5 / 0 / 0 / 0 / 0 / 0 / 0 | 0 | 0 |
 | LEVEL1.INI | `+0x18E` | 1 | 0 | 200 | 200 | 90 / 0 / 0 / 0 / 0 / 0 / 0 / 0 | 10 | 4 |
