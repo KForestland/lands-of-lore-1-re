@@ -45,7 +45,7 @@ CD `LEVEL1.WLL` starts:
 |-------|---------|
 | `00 00` | area 0: `KEEP.SHP` / `KEEP.DAT` |
 | record 0: `00 00 00 00 00 00 00 00 80 00 3f 00` | wall type 0: no geometry, no shape, special 0, flags 0x80, automap 0x3F |
-| record 1: `01 00 01 00 00 00 00 00 07 00 ff ff` | wall type 1: VMP page 1, shape 1, special 0, flags 7, automap word 0xFFFF (low byte 0xFF stored) |
+| record 1: `01 00 01 00 00 00 00 00 07 00 ff ff` | wall type 1: VMP page 1, shape 0 (none), special 0, flags 7, automap word 0xFFFF (low byte 0xFF stored) |
 
 ## Tool
 

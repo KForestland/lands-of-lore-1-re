@@ -125,7 +125,7 @@
 
 **CONFIRMED** There are three literal mode-11 assignments in `LEVEL23.INF` in each edition. They find a monster in block 105, 121 or 369, play sounds 88 and 87, then invoke EMC `0x5B` with selector 0 and value 11. The native selector 0 calls the mode setter (CD `MAIN.EXE+0x14FBC–0x14FC6`, floppy `+0x19943–0x1994D`). For example, the state change for block 105 is the call at CD `L23.PAK+0xC2AE` and floppy `CHAPTER6.PAK+0x6AC2D`. The other calls are CD `+0xC2DE, +0xC310` and floppy `+0x6AC5D, +0x6AC8F`.
 
-**CONFIRMED** No shipped script requests mode 10. Every reachable mode argument to EMC `0x38` (stack slot 6) and every value argument to EMC `0x5B` with selector 0 resolves to literals, through subroutine callers where needed. That is 304 `0x38` calls in each edition (4 more are unreachable) and 38 CD / 39 floppy selector-0 `0x5B` calls. None gives 10, and the check reproduces the three mode-11 witnesses above. All 13 near callers of the native setter pass literal modes 3, 4, 5, 7, 8, 9 or 14 (CD target `0x11855`, e.g. `+0x12149`, `+0x12986`). The seven CD and eight floppy far callers pass 13 or 14, or forward one of those two script arguments (CD `+0x14826`, `+0x14FC1`; floppy `+0x191AD`, `+0x19948`). The far pointer `0D6C:0995` occurs only at the seven CD far calls. A mode-10 producer outside the setter remains open (below).
+**CONFIRMED** No shipped script requests mode 10. Every reachable mode argument to EMC `0x38` (stack slot 6) and every value argument to EMC `0x5B` with selector 0 resolves to literals, through subroutine callers where needed. That is 304 `0x38` calls in each edition (4 more are unreachable) and 38 CD / 39 floppy selector-0 `0x5B` calls. None gives 10, and the check reproduces the three mode-11 witnesses above. All 13 near callers of the native setter pass literal modes 3, 4, 5, 7, 8, 9 or 14 (CD target `0x11855`, e.g. `+0x12149`, `+0x12986`). The nine CD far callers (seven resident, two in the overlay through `0088:0995` at `+0x44824` and `+0x4490A`) and eight floppy far callers pass 13 or 14, or forward one of those two script arguments (CD `+0x14826`, `+0x14FC1`; floppy `+0x191AD`, `+0x19948`). The far pointer `0D6C:0995` occurs only at the seven CD far calls. A mode-10 producer outside the setter remains open (below).
 
 **CONFIRMED, probe setup.** The English CD launcher now reaches
 play in the documented `MAIN.EXE`. Its native starting slot has
@@ -246,7 +246,7 @@ in either complete tested image. It corroborates the earlier
 mode-10 search over the shipped scripts.
 
 **UNCONFIRMED** A gameplay producer for mode 10 outside the setter.
-The setter's 20 CD and 21 floppy callers are now resolved and none
+The setter's 22 CD and 21 floppy callers are resolved and none
 supplies 10 (see the mode-10 paragraph above). What remains is a
 byte store to +0x14 that bypasses the setter. Such stores include
 the collision-query restore (CD `0x114AC`) and a register store at
