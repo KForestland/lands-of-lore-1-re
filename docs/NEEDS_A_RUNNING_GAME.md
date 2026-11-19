@@ -167,6 +167,13 @@ Moving from block 557 to 526 and then turning at block 526
 changed the expected fields in the new slots.
 [Watch addresses and native save bytes](unknowns/17_native_save_fields.md#cd-movement-and-save-round-trip)
 
+**CONFIRMED, level-1 lamp-effect reset.** The original CD menu's
+store at `MAIN.EXE+0x4DE6C` changed `DS:81DE` from 0 to 0xFF
+while brightness and oil stayed zero. Only the bulk save/load
+calls accessed the three isolated bytes, which stayed zero at
+`+0x268/+0x463/+0x486` in both new slots.
+[Watch and native saves](unknowns/17_native_save_fields.md#cd-level-1-lamp-effect-reset)
+
 **UNCONFIRMED.** Any byte-specific writer or reader. Start a new
 game, arm read and write watches after initialization, change the
 active character and lamp state, enter another level, then save,
@@ -175,8 +182,7 @@ live values. A byte-specific access outside that path identifies a
 new producer or consumer. A stable zero and only bulk copies give
 an unused-byte witness for that play sequence. Keep the watchpoints
 active through the resume following the load. Movement, turning and
-two load/save cycles are covered above. Not reached yet: a lamp
-change, a party change and a level change, which need a later save.
+two load/save cycles are covered above. Not reached yet: an active oil or brightness change, a party change and a level change.
 
 ### Q18. Which monster definition fields does an actual fight use?
 

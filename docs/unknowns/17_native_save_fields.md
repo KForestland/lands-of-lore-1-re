@@ -76,3 +76,32 @@ Byte-specific access during a lamp change, a party change, a
 level transition, or other play. The three fields' general
 roles and the floppy runtime result remain open
 ([test Q17](../NEEDS_A_RUNNING_GAME.md#q17-are-the-isolated-save-bytes-touched-during-play)).
+
+### CD level-1 lamp-effect reset
+
+**CONFIRMED.** The English CD 1.02 slot `477b08b82ecd`
+loaded level 1, block 557 (slot +0x269 and +0x254), with
+brightness, oil and lamp effect all zero at slot `+0x460..+0x462`.
+The native rest button left those values zero. The next two menu
+saves, from that same block, wrote `00 00 00` (`ecdc069aaa57`)
+and `00 00 FF` (`6dd94ac6ac93`). All three isolated bytes
+(`+0x268/+0x463/+0x486`) were zero in both of those saves.
+
+On resume, a write watch on `DS:81DE` captured 0 → 255 and
+instruction bytes `C6 06 DE 81 FF` immediately before the
+reported IP. They match `MAIN.EXE+0x4DE6C`, with the following
+far call relocated in the running overlay. Read/write watches on
+`DS:7FE4/81DF/8202` saw only bulk file reads and writes at
+`F000:14A5` during this load/save sequence
+(`MAIN.EXE+0x4898D–0x4899D/+0x48B92–0x48BA2`).
+The menu changes the effect sentinel independently of all three
+isolated bytes, with brightness and oil zero throughout.
+
+**UNCONFIRMED.** An active lamp or oil change on this route.
+The starting level-1 state provides no lit-lamp control. To
+settle active use, start with a lit lamp and oil through ordinary
+play. Watch brightness, oil and effect at `DS:81DC–81DE` and
+the three isolated bytes. Refill once using the native lamp
+path `MAIN.EXE+0x105F3–0x1065B`, then let an admitted oil tick
+run at `+0xF9DE–0xFA04`. Compare the live accesses and the
+new slot with the menu-reset control above.
