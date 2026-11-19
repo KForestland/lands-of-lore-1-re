@@ -13,7 +13,7 @@ the files git tracks (or every file, outside a git checkout) and fails on:
     (generated listings of game content are tool output, not tracked files)
   - with --release only: in the git history, any author or committer address not in ALLOWED_AUTHORS
     (committers may also be GitHub's noreply@github.com); the address is not printed
-  - in text files: machine paths (/home/, /media/, /mnt/, C:\\Users\\) and
+  - in text files: machine paths (/home/, /media/, /mnt/, session temp dirs, C:\\Users\\) and
     words from an untracked local word list (.git/info/private_words, one per line;
     skipped with a note when absent)
 
@@ -33,7 +33,7 @@ PNG_OK = ("examples/", "docs/images/")
 
 
 # Text rules: no machine paths, and none of the words in the local word list.
-MACHINE_PATH = re.compile(r"/home/[a-z]|/media/[a-z]|/mnt/[a-z]|[A-Za-z]:\\Users\\")
+MACHINE_PATH = re.compile(r"/home/[a-z]|/media/[a-z]|/mnt/[a-z]|/tmp/claude-|-home-[a-z]+/|[A-Za-z]:\\Users\\")
 
 
 def private_words(root):
