@@ -33,11 +33,11 @@ ALL 33 CHECKS PASSED
 
 ### `doc_links.py`
 
-Resolves every relative link and anchor in `README.md` and under `docs/`. Part of `check_all.py`. A link written inside a fenced example is not followed.
+Checks links and anchors only (it runs no command shown in the pages): every relative link, image link, `<a href>` and `#anchor` in `README.md`, `tools/README.md`, `CONTRIBUTING.md`, `docs/`, and `examples/` and `evidence/` when present. Anchors follow GitHub's heading ids. A link or heading inside a fenced example is skipped. Part of `check_all.py`.
 
 ```
 $ python3 tools/doc_links.py --check
-CHECK links: every relative link and anchor in README.md and docs resolves
+CHECK links: every relative link and anchor in the README files and docs resolves
 ```
 
 ### `pak_reader.py`
