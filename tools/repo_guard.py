@@ -12,6 +12,8 @@ the files git tracks (or every file, outside a git checkout) and fails on:
   - any file larger than 300 KB, except the existing data tables in SIZE_ALLOWED
     (generated listings of game content are tool output, not tracked files)
   - with --release only: in the git history, any author or committer address not in ALLOWED_AUTHORS
+  - with --release only: any commit message with a word from the local list (the Co-Authored-By
+    trailer and quoted game text are skipped)
     (committers may also be GitHub's noreply@github.com); the address is not printed
   - in text files: machine paths (/home/, /media/, /mnt/, session temp dirs, C:\\Users\\) and
     words from an untracked local word list (.git/info/private_words, one per line;
@@ -112,6 +114,32 @@ def identity_findings(root):
     return bad
 
 
+
+def message_findings(root):
+    """Commit messages in the history of HEAD that contain a word from the local list
+    (compared without case, so a capitalised name is caught too). Co-Authored-By trailer
+    lines are skipped: they name the assistant model by design."""
+    words = {w.lower() for w in PRIVATE}
+    if not words:
+        return []
+    try:
+        out = subprocess.run(["git", "-C", root, "log", "HEAD", "--format=%h%x00%B%x01"],
+                             capture_output=True, text=True, check=True).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return []
+    bad = []
+    for record in out.split("\x01"):
+        if "\x00" not in record:
+            continue
+        h, body = record.strip("\n").split("\x00", 1)
+        # The attribution trailer names the assistant model by design; it is not a lane name.
+        text = "\n".join(l for l in body.splitlines() if not l.lower().startswith("co-authored-by:"))
+        hits = [m for m in WORD.finditer(text) if m.group(0).lower() in words
+                and not (text[m.start() - 1:m.start()] == '"' and text[m.end():m.end() + 1] == '"')]
+        if hits:  # a quoted word is game text, as for tracked files
+            bad.append(f"commit {h} (message has a word from the local list)")
+    return bad
+
 # No tracked file over 300 KB, except these existing data tables (listed by name).
 SIZE_LIMIT = 300_000
 SIZE_ALLOWED = {"data/music_inventory.json"}
@@ -120,7 +148,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--release", action="store_true",
-                    help="also require the project noreply identity on every commit (release procedure)")
+                    help="also require the project noreply identity on every commit and no word from the local list in any commit message (release procedure)")
     ap.add_argument("--data", help=argparse.SUPPRESS)
     a = ap.parse_args()
     if not a.check:
@@ -143,7 +171,8 @@ def main():
             bad.extend(text_findings(root, f))
     if getattr(a, 'release', False):
         bad.extend(identity_findings(root))
-    print(f"CHECK repo_guard: {len(files)} tracked files; game files, converted media, stray PNGs, files over 300 KB, machine paths, words from the local list, or commit identities: "
+        bad.extend(message_findings(root))
+    print(f"CHECK repo_guard: {len(files)} tracked files; game files, converted media, stray PNGs, files over 300 KB, machine paths, words from the local list, or commit identities and messages: "
           f"{bad[:5] or 'none'}{' ...' if len(bad) > 5 else ''} ({len(bad)}); {private_status}")
     return 0 if not bad else 1
 
