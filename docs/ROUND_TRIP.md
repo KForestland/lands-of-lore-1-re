@@ -1,6 +1,6 @@
 # Round-trip proof for LoL1
 
-Three writers read the original files, build a replacement in memory and compare it with the original. Their checks write nothing to disk. "Byte-identical" means the rebuilt file equals the original file. "Decode-identical" means the rebuilt file reads back through the existing readers to the same pixels and palettes, while its compressed bytes differ.
+Four writers read the original files, build a replacement in memory and compare it with the original. Their checks write nothing to disk. "Byte-identical" means the rebuilt file equals the original file. "Decode-identical" means the rebuilt file reads back through the existing readers to the same pixels and palettes, while its compressed bytes differ.
 
 The CD counts cover the `DATA` folder with its `ENG`, `FRE` and `GER` subfolders (CD1.02). The floppy counts are an English floppy installation.
 
@@ -11,6 +11,7 @@ The CD counts cover the `DATA` folder with its `ENG`, `FRE` and `GER` subfolders
 | same | WSA animations: XOR deltas and Frame4 re-encoded, frame offsets regenerated | Decode-identical: every frame through the reader | 529 files, 12,785 deltas | 254 files, 5,420 deltas |
 | same | SHP shapes: scanlines and Frame4 re-encoded, shape offsets and sizes regenerated | Decode-identical: flags, dimensions and pixels of every shape (colour tables copied) | 236 files, 7,299 shapes | 95 files, 3,601 shapes |
 | `lol1_script_writer.py` | EMC2 level and item scripts (INF/INI) and TIM cut-scene scripts, assembled from their lossless listings | Byte-identical | 60 EMC2 and 157 TIM scripts (139 in `DATA`, 6 each in `ENG`, `FRE`, `GER`) | 60 EMC2 and 147 TIM scripts |
+| `lol1_level_writer.py` | CMZ mazes (Frame4 packets kept), WLL wall tables, decoration DATs and ENG/FRE/GER string tables, from their parsed fields and strings | Byte-identical | 29 CMZ, 29 WLL, 12 DAT, 30 each of ENG, FRE and GER | 29 CMZ, 29 WLL, 13 DAT (`CIMMERIA.DAT` is in two PAKs), 30 ENG |
 
 On both editions none of the 1,085 (CD) and 516 (floppy) re-encoded files is byte-identical to its original. All Frame4 streams in them (20,354 on the CD, 9,075 on the floppy) decode to the same bytes through both Frame4 readers.
 
@@ -30,13 +31,24 @@ This proves that the formats can be written, not that the original compressor is
 
 The assembler writes only a new file given with `--out`, and refuses an existing file, a path inside the repository or `--data`, and any folder at or below one holding a PAK or TLK archive.
 
+## Levels and text
+
+**CONFIRMED.** `lol1_level_writer.py --check` rebuilds every CMZ, WLL, decoration DAT and ENG/FRE/GER string table in the PAKs of `--data` and compares it with the original; each WLL, DAT and string table must also read back through `wll_parser.py`, `dat_reader.py` and `decode_dialogue.py` to the same records and strings. WLL and DAT files are rebuilt from their parsed records. String tables are rebuilt from the parsed offset directory and strings, not copied; the offsets are kept as parsed because some tables point two entries at the same string. [Maze format](formats/cmz.md)
+
+A CMZ is a Frame4-compressed bitmap. Its maze fields (the 32 by 32 grid, the per-block length word and each block's four wall bytes) are parsed, and the writer also parses the original Frame4 stream into its packets (literal, fill, relative, absolute and long copies, end) and writes those same packets again. The CMZ files are byte-identical because the original packet choices are kept: the decode-identical encoder of `lol1_compression_writer.py` reproduces none of the 29 CMZ files on either edition. If an edited field no longer matches the kept packets, the maze is compressed afresh with that encoder (decode-identical, not the original bytes) and the size word is recomputed.
+
+`LEVEL24.CMZ` stores 9 bytes per block instead of 4. The five bytes after the walls are kept verbatim per block without a parse: both `MAIN.EXE` files copy only the four wall bytes and their meaning is open ([Q3](unknowns/03_level24_cmz.md)). No original CMZ has bytes after its Frame4 end command; the writer would keep such bytes verbatim too.
+
+Changing one wall byte, one WLL record field, one decoration offset or one string (with the later offsets moved by `replace_string`) gives a different file that reads back through the existing readers with only that change. The checks write nothing; the writer has no output option.
+
 ## Run the checks
 
 ```bash
 python3 tools/lol1_pak_writer.py --data "$LOL1_DATA" --check
 python3 tools/lol1_compression_writer.py --data "$LOL1_DATA" --check
 python3 tools/lol1_script_writer.py --data "$LOL1_DATA" --check
+python3 tools/lol1_level_writer.py --data "$LOL1_DATA" --check
 python3 -m unittest tests.test_round_trip tests.test_structures_write
 ```
 
-All three checks run in `tools/check_all.py`. The PAK and compression writers have no output option; the script assembler writes one new file only when given a listing and `--out`. The unit tests use synthetic archives and pictures and need no game files: member order, duplicate names and the end of the directory; refused names and a final empty member; Frame4 literals, fills, back-references and the end command; a WSA skip and closing delta; a SHP colour table and a long transparent run. `tests.test_structures_write` covers a duplicate EMC2 mnemonic, a TIM tail and alignment byte, and the refused output folders.
+All four checks run in `tools/check_all.py`. The PAK, compression and level writers have no output option; the script assembler writes one new file only when given a listing and `--out`. The unit tests use synthetic archives and pictures and need no game files: member order, duplicate names and the end of the directory; refused names and a final empty member; Frame4 literals, fills, back-references and the end command; a WSA skip and closing delta; a SHP colour table and a long transparent run. `tests.test_structures_write` covers a duplicate EMC2 mnemonic, a TIM tail and alignment byte, the refused output folders, a 9-byte maze block with kept Frame4 packets, an edited maze wall, WLL high bytes and duplicate or moved string offsets.
