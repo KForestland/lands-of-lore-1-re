@@ -51,6 +51,15 @@ display, one renderer, one save). Most documented facts were never
 observed in a running game; they are proved from the program and the files
 instead, and this line does **not** count them.
 
+The same line says how many answered probes rest on edited saves only.
+An edited save is a copy of a game-written save with a few bytes
+changed by hand; [edited saves](EDITED_SAVES.md) lists each such run.
+An answered probe counts here when its section says "edited-save run"
+and none of its bold labels says "answered" without "edited-save". A
+label like that marks a run on a save the game wrote itself. A probe
+that is still open is not counted, even when an edited-save run added
+evidence to it.
+
 **Open questions.** The state words of the At-a-glance table in
 [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md): answered, mostly answered, partly
 answered. A question may be answered for one setup only; the table says so.

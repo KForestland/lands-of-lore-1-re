@@ -8,6 +8,7 @@ The lines are explained in docs/HOW_WE_RATE.md:
   Files read      DATA files whose every byte a reader here accounts for, by count and by bytes
   Rules traced    evidence labels on the current pages: CONFIRMED against UNCONFIRMED
   Running game    probes on docs/NEEDS_A_RUNNING_GAME.md answered, out of all probes there
+                  and how many of the answered ones rest on edited saves only
   Open questions  the state words of the At-a-glance table in docs/OPEN_QUESTIONS.md
 """
 import re
@@ -97,16 +98,33 @@ def labels():
     return confirmed, unconfirmed, pages
 
 
+def edited_only(body):
+    """An answered probe rests on edited saves only when its section says "edited-save run" and none of its
+    bold labels says "answered" without "edited-save" (a run on a game-written save)."""
+    if "edited-save run" not in "\n".join(body):
+        return False
+    labels = [line[2:].split("**", 1)[0].lower() for line in body if line.startswith("**")]
+    return not any("answered" in label and "edited-save" not in label for label in labels)
+
+
 def probes():
+    """Probe headings under "Answered probes" and "Remaining probes", and how many answered ones rest on
+    edited saves only (edited_only)."""
     text = (ROOT / "docs" / "NEEDS_A_RUNNING_GAME.md").read_text(encoding="utf-8")
-    counts, section = {"answered": 0, "remaining": 0}, None
+    counts, section, bodies = {"answered": 0, "remaining": 0}, None, []
     for line in text.splitlines():
         if line.startswith("## "):
             low = line.lower()
             section = "answered" if "answered probes" in low else "remaining" if "remaining probes" in low else None
         elif line.startswith("### ") and section:
             counts[section] += 1
-    return counts["answered"], counts["answered"] + counts["remaining"]
+            if section == "answered":
+                bodies.append([])
+                continue
+        if section == "answered" and bodies and not line.startswith("## "):
+            bodies[-1].append(line)
+    edited = sum(edited_only(body) for body in bodies)
+    return counts["answered"], counts["answered"] + counts["remaining"], edited
 
 
 def questions():
@@ -122,13 +140,13 @@ def questions():
 def rating(data_dir):
     read, total, read_bytes, total_bytes = files_read(data_dir)
     confirmed, unconfirmed, pages = labels()
-    seen, needed = probes()
+    seen, needed, edited = probes()
     answered, mostly, partly, count = questions()
     folder = "the CD `DATA` folder" if lol1lib.is_cd_layout(data_dir) else "the floppy game folder"
     return [
         f"- **Files read:** {read} of {total} files in {folder} ({read_bytes / 2**20:,.1f} of {total_bytes / 2**20:,.1f} MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).",
         f"- **Rules traced:** the pages mark {confirmed:,} statements CONFIRMED (proved from the program code or the files) and {unconfirmed:,} UNCONFIRMED (a reading not yet proved), on {pages} current pages; old notes kept as history are not counted.",
-        f"- **Seen in the running game:** {seen} of {needed} probes that need the original game running are answered (a question can have more than one probe).",
+        f"- **Seen in the running game:** {seen} of {needed} probes that need the original game running are answered (a question can have more than one probe); {edited} of them rest on edited saves only.",
         f"- **Open questions:** {count} numbered questions: {answered} answered, {mostly} mostly answered, {partly} partly answered.",
     ]
 

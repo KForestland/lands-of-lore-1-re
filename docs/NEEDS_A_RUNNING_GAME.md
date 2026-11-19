@@ -20,6 +20,8 @@ Code in the FBOV overlay (CD file offsets from 0x3CC40, floppy from
 conventional memory for its bytes and break at the match (the
 procedures below give the pattern where one is needed).
 
+Some probes were also tried on edited saves: copies of a game-written save with a few bytes changed. [Edited saves](EDITED_SAVES.md) lists those runs and what a game-written save would still add.
+
 ## Working launch for the English DOS CD
 
 **CONFIRMED.** DOSBox 0.74-3 reached character selection and
