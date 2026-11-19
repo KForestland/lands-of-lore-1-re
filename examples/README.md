@@ -1,6 +1,6 @@
 # Examples
 
-Three small images made by today's tools from the English CD edition, to show what the output looks like. `tools/example_images.py --check` (part of `check_all.py`) regenerates each one from the game files and fails if a tracked image differs from today's output, so a stale picture cannot stay. Make them yourself with your own copy of the game:
+Three small images made by today's tools from the English CD edition, to show what the output looks like. `tools/example_images.py --check` (part of `check_all.py`) regenerates each one from the game files and fails if a tracked image differs from today's output, so a stale picture cannot stay. It also checks the two level schematics in `docs/images/` (levels 1 and 12). Make them yourself with your own copy of the game:
 
 | Image | Command | What it shows |
 |-------|---------|---------------|

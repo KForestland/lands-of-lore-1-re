@@ -416,11 +416,11 @@ ScummVM save, CD, version 21: "<save name>"; ends at <size> as the layout predic
 
 ### `example_images.py`
 
-Regenerates each image in `examples/` with the command listed in `examples/README.md` and compares pixels; part of `check_all.py`. `--out-dir` writes today's versions.
+Regenerates each image in `examples/` and the two level schematics in `docs/images/` with its listed command and compares pixels; part of `check_all.py`. `--out-dir` writes today's versions.
 
 ```
 $ python3 tools/example_images.py --check
-CHECK example_images: 3 example images equal today's tool output pixel for pixel
+CHECK example_images: 5 shown images (examples/ and docs/images/) equal today's tool output pixel for pixel
 ```
 
 ### `lol1_tim_words.py`

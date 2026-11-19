@@ -19,10 +19,13 @@ EXAMPLES_DIR = os.path.join(HERE, "..", "examples")
 
 # example file -> (tool, arguments, the file the tool writes)
 EXAMPLES = {
-    "guard_frame_000.png": ("shp_renderer.py", ["GUARD.SHP", "--level", "1"], "guard_000.png"),
-    "knowltk1_frame_000.png": ("wsa_extract.py", ["KNOWLTK1.WSA", "--pal-from", "KNOWLTK.CPS"], "knowltk1_000.png"),
-    "level01_schematic.png": ("level_renderer.py", ["--level", "1", "--schematic"], "level01_schematic.png"),
+    "examples/guard_frame_000.png": ("shp_renderer.py", ["GUARD.SHP", "--level", "1"], "guard_000.png"),
+    "examples/knowltk1_frame_000.png": ("wsa_extract.py", ["KNOWLTK1.WSA", "--pal-from", "KNOWLTK.CPS"], "knowltk1_000.png"),
+    "examples/level01_schematic.png": ("level_renderer.py", ["--level", "1", "--schematic"], "level01_schematic.png"),
+    "docs/images/level01_schematic.png": ("level_renderer.py", ["--level", "1", "--schematic"], "level01_schematic.png"),
+    "docs/images/level12_schematic.png": ("level_renderer.py", ["--level", "12", "--schematic"], "level12_schematic.png"),
 }
+ROOT = os.path.normpath(os.path.join(HERE, ".."))
 
 
 def make(data_dir, name, out_dir):
@@ -37,7 +40,7 @@ def make(data_dir, name, out_dir):
             data = f.read()
     if out_dir:
         os.makedirs(out_dir, exist_ok=True)
-        with open(os.path.join(out_dir, name), "wb") as f:
+        with open(os.path.join(out_dir, os.path.basename(name)), "wb") as f:
             f.write(data)
     return data
 
@@ -55,14 +58,15 @@ def main():
     a = ap.parse_args()
     if not (a.check or a.out_dir):
         ap.print_help(); return 2
-    tracked = sorted(n for n in os.listdir(EXAMPLES_DIR) if n.lower().endswith(".png"))
+    tracked = sorted(f"{d}/{n}" for d in ("examples", "docs/images")
+                     for n in os.listdir(os.path.join(ROOT, d)) if n.lower().endswith(".png"))
     if not L.is_cd_layout(a.data):
         print("CHECK example_images: the examples are made from the CD edition; this copy is not compared")
         return 0
     stale = []
     for name in sorted(EXAMPLES):
         today = make(a.data, name, a.out_dir)
-        path = os.path.join(EXAMPLES_DIR, name)
+        path = os.path.join(ROOT, name)
         if a.check and (not os.path.exists(path) or pixels(open(path, "rb").read()) != pixels(today)):
             stale.append(name)
     unlisted = [n for n in tracked if n not in EXAMPLES]
@@ -70,7 +74,7 @@ def main():
         if stale or unlisted:
             print(f"CHECK example_images: FAIL stale {stale or 'none'}, not made by a listed command {unlisted or 'none'}")
             return 1
-        print(f"CHECK example_images: {len(EXAMPLES)} example images equal today's tool output pixel for pixel")
+        print(f"CHECK example_images: {len(EXAMPLES)} shown images (examples/ and docs/images/) equal today's tool output pixel for pixel")
     return 0
 
 
