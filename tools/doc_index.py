@@ -10,6 +10,7 @@ from collections import defaultdict
 import json
 from pathlib import Path
 import re
+import subprocess
 import sys
 from urllib.parse import unquote, urlsplit
 
@@ -27,10 +28,30 @@ FRONT_MATTER = re.compile(r"\A---\n(.*?)\n---(?:\n|$)", re.DOTALL)
 YAML_NAME = re.compile(r"^name:[ \t]*([^\n]+)", re.MULTILINE)
 
 
+def tracked_pages(root):
+    """Return the Markdown files git tracks, or None outside a git checkout."""
+    try:
+        top = subprocess.run(["git", "-C", str(root), "rev-parse", "--show-toplevel"],
+                             capture_output=True, text=True, check=True).stdout.strip()
+        if Path(top).resolve() != root.resolve():
+            return None
+        listed = subprocess.run(["git", "-C", str(root), "ls-files", "-z", "--", "*.md"],
+                                capture_output=True, check=True).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return [root / name for name in listed.decode("utf-8").split("\0") if name]
+
+
 def page_paths(root):
-    paths = list(root.glob("*.md"))
-    for name in PAGE_FOLDERS:
-        paths.extend((root / name).rglob("*.md"))
+    # Inside a checkout, untracked local notes stay out of the index.
+    tracked = tracked_pages(root)
+    if tracked is None:
+        paths = list(root.glob("*.md"))
+        for name in PAGE_FOLDERS:
+            paths.extend((root / name).rglob("*.md"))
+    else:
+        paths = [path for path in tracked if path.is_file() and (
+            path.parent == root or path.relative_to(root).parts[0] in PAGE_FOLDERS)]
     return sorted(path.relative_to(root).as_posix() for path in paths)
 
 

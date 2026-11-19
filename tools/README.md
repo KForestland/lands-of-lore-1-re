@@ -510,7 +510,8 @@ Its `pages` records include the title, original path, question IDs and cited too
 `question_references` records other references to the same IDs. The top-level `questions`
 object preserves the published state and lists each question's answer pages. Tool citations
 include command examples. The index covers the Markdown files shipped in the repository,
-including the root pages, example and evidence notes, and issue templates.
+including the root pages, example and evidence notes, and issue templates. In a git checkout
+it reads only tracked pages, so local untracked notes do not change the check.
 
 ```bash
 python3 tools/doc_index.py --out docs/index.json
