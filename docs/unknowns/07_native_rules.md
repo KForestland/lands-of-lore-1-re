@@ -366,7 +366,7 @@ CD `2803:15FA` plus the load segment, before and after the wall click
 and attempted move. The party was still on 105 in both samples.
 
 **UNCONFIRMED.** Mode-11 frame selection in a live pose event. A
-nearby party alone did not provide the monster-leaves event
+nearby party alone did not provide the monster event (0x0800)
 (`L23.PAK+0xC2AE` for 105). Use a native save with an active monster
 approaching a pose square, then follow that instance from the
 `MAIN.EXE+0x14FC1` setter call into the overlay frame selector.
@@ -420,6 +420,69 @@ no fetch. The party was five blocks away; no picture shows a monster
 on 105, and the monster's animation type was not recorded. The
 pictures do show a blue projectile and 32 damage on the portrait after
 the mode-11 write, which no log explains.
+
+### The mode-11 row seen from behind
+
+**CONFIRMED, edited-save run with a live placement (2026-11-20).**
+The copy above was changed once more: block 110 → 107 (`0x254`
+`6E → 6B`) and X high byte 14 → 11 (`0x257` `0E → 0B`), so from the
+source `477b08b82ecd` the changed bytes are those of the table above
+with `0x254/0x255` `2D 02 → 6B 00` and `0x257` `0D → 0B`. Re-applied
+to a fresh copy this gives `36312116a36b`; the loaded copy was not
+kept, but the debugger read level 23, block 107, facing west after
+the load. A debugger write then put monster row 0 on block 106 in
+mode 2, heading west (destination block 104 in two windows, 105 in
+one); the save holds no such row.
+
+- The row stepped from 106 onto 105. The mode byte went 15 → 2 at
+  the collision query, then 11 at the setter store (stop
+  `0F0E:0A3E`, `MAIN.EXE+0x118FE`, right after the store at
+  `+0x118FA`).
+- The draw that followed called the type-0 selector (`+0x3DC34`) for
+  that row with argument 8, subframe 1, damage word 0, mode 11.
+- In the second window, eight draws of the same row in mode 2, each
+  with argument 8, returned 10, 11, 8 and 9 (twice each) for subframes
+  2, 3, 0 and 1 (read at the shared exit `+0x3DCCE`): the selector's
+  result is the frame index, argument + subframe. That window ended
+  before a mode-11 draw was logged, so the value 9 for the mode-11
+  draw comes from the code below, not from a logged return.
+
+**CONFIRMED, static (re-read).** The argument is a view offset, not
+the monster's walking direction. The draw routine (`+0x3DE75–0x3DE96`)
+takes monster facing (+0x18) and party facing (`DS:7FDF`), reads
+`DS:052F + 4 × party + monster` (file `+0x31FFF`, rows
+`8 20 0 4 / 4 8 20 0 / 0 4 8 20 / 20 0 4 8`) and passes the value
+with bit 0x10 (the mirror flag) cleared. Same facing gives 8 (seen
+from behind), opposite facing gives 0 (seen from the front), the
+sides give 4. With a nonzero argument the selector tests only for
+mode 13 (`+0x3DC3C–0x3DC4B`) and returns argument + subframe
+(`+0x3DCC2–0x3DCCC`); the mode table and the frame-14 arm
+(`+0x3DC8A`) are reached only with argument 0. Party and monster
+both faced west, so this mode-11 draw was frame 9, and the frame-14
+arm could not be fetched. The same rule explains the
+[earlier run](#the-mode-11-setter-on-a-pose-square): the row came
+back onto 105 walking west, away from a party facing west.
+
+The monster event 0x0800 runs for the block a monster **enters**:
+after the block store at `+0x11673`, the routine compares the new
+block with the old one and, if they differ, pushes `0x0800` with the
+new block (`+0x11711–0x11735`; ScummVM `placeMonster`, the same
+order). The level pages call this event "monster leaves". Both
+runs agree: the setter ran when the row stepped onto 105, not when it
+stepped off.
+
+**Pictures.** The figure in the corridor matches the back-view
+walking frames 8–11 of `CABAL.SHP` (sword over the left shoulder, no
+face), darkened by distance, not the sword-swing frame 14. The
+pictures carry no time, so they cannot be tied to one logged draw.
+
+**UNCONFIRMED.** Fixed frame 14 on screen. It needs argument 0: a
+mode-11 monster facing the party. On level 23 block 104 is solid,
+so a row that walks onto 105 along the corridor faces west, away from
+a party standing east of it. Next test: the same run, then after the
+mode-11 store a live write of facing +0x18 = 1 (east) with the party
+on 107 facing west (table value 0), a read watch on `+0x3DC8A`, the
+selector's return and a picture.
 
 ## Close-out
 

@@ -131,7 +131,7 @@ bit-`0x40` contrast stays open.
 
 Question: [Q7 in OPEN_QUESTIONS](OPEN_QUESTIONS.md).
 
-**CONFIRMED.** In level 23 the monster-leaves script for block 105 selects
+**CONFIRMED.** In level 23 the monster script (event 0x0800) for block 105 selects
 mode 11 through function 0x5B (CD `L23.PAK+0xC2AE`, floppy
 `CHAPTER6.PAK+0x6AC2D`). The original CD frame selectors are reached
 from `MAIN.EXE+0x3DDEF–0x3DE52`; the floppy range is
@@ -146,7 +146,8 @@ slot was available for this run.
 
 **UNCONFIRMED.** Which selector and frame that encounter presents
 on screen. Use the [level 23 sheet](levels/level23.md) to locate the
-block. Let a monster leave that block to send event 0x0800. Break on
+block. Let a monster step onto that block to send event 0x0800 (it runs
+for the block a monster enters). Break on
 the far call to the script's mode setter at CD `+0x14FC1` or floppy `+0x19948`
 (arguments pushed from CD `+0x14FBC` / floppy `+0x19943`).
 Then capture the next draw of that same instance, recording the shape
@@ -157,7 +158,7 @@ for by the captured selector or draw flags. A write watch on that
 instance's mode byte +0x14 also distinguishes an actual mode-10
 transition from a frame picked while mode 11 remains set.
 
-**CONFIRMED, edited-save run.** The position edit reached block 105. Neither active-row sample had a monster on a pose square. The mode-11 frame still needs the original monster-leaves event. [Byte changes and live placement](unknowns/07_native_rules.md#level-23-pose-squares-from-edited-placements)
+**CONFIRMED, edited-save run.** The position edit reached block 105. Neither active-row sample had a monster on a pose square. The mode-11 frame still needs the original monster event (0x0800). [Byte changes and live placement](unknowns/07_native_rules.md#level-23-pose-squares-from-edited-placements)
 
 **CONFIRMED, edited-save run with a live placement (2026-11-20).**
 A copy of `477b08b82ecd` set to level 23, block 110, facing west and
@@ -179,6 +180,27 @@ monster there, so the row was probably not drawn; its animation type
 was not recorded. Next: the same placement with the party one or two
 blocks from 105 and facing it, logging the selector's instance and the
 monster's animation type, with a picture of the frame.
+
+**CONFIRMED, edited-save run with a live placement (2026-11-20).**
+The same copy moved to block 107 (two blocks from 105, facing west),
+with a debugger-placed row on block 106 heading west. The row stepped
+onto 105, the setter wrote 11, and the next draw called the type-0
+selector with argument 8, subframe 1 and no damage. The argument is a
+view offset from the table at `DS:052F` (party facing × monster
+facing): 8 means the monster faces away from the party. With a
+nonzero argument the selector returns argument + subframe and never
+reaches the mode table, so this draw was frame 9, the ordinary
+back-view frame (from the code; eight logged mode-2 draws of the row
+returned 8 + subframe). The figure in the pictures matches the back view of
+`CABAL.SHP`. Event 0x0800 runs for the block a monster enters
+(`MAIN.EXE+0x11711–0x11735`), so the pose script runs when a monster
+steps onto 105. [Byte changes, selector and view table](unknowns/07_native_rules.md#the-mode-11-row-seen-from-behind)
+
+**UNCONFIRMED.** Fixed frame 14 on screen, which needs view argument 0
+(a mode-11 monster facing the party). Next: the same run with a live
+write of the row's facing +0x18 to 1 (east) after the mode-11 store,
+the party on 107 facing west, a read watch on the frame-14 arm
+`+0x3DC8A`, the selector's return and a picture.
 
 Not yet run on a native save; see [Probes not yet run](#probes-not-yet-run).
 
@@ -304,6 +326,22 @@ result to the actions taken.
 
 **CONFIRMED, edited-save run.** A level-27 slot-1 battle read the critical byte and speed at `MAIN.EXE+0xAD87/+0x12744`. The first Hatchet slot-2 trial reached defeat without a watch hit. A second copy with 500 HP fought the Hatchets under read watches: the critical byte and speed were read (`+0xAD87/+0x12997`), and no read after initialization touched `+0x0C/+0x0E/+0x10` or `+0x40`. The ranged click did not fire, so the ranged attack is still untested. [Byte changes and fight trace](unknowns/18_native_records.md#level-27-fight-from-an-edited-placement) and [Hatchet read watches](unknowns/18_native_records.md#read-watches-on-the-hatchet-definition)
 
+**Not a test (2026-11-20).** An edited copy at block 497 holding item
+type 216 (a Salve) in the cursor ([recipe](EDITED_SAVES.md#q18-held-item-on-level-27))
+reached "You have been defeated" twice. The launch routine
+`MAIN.EXE+0xF1DF` (thrown items and monster missiles) was never
+fetched, so no ranged attack happened, and +0x0C, +0x0E and +0x40 were
+not read in that window; +0x10 was not watched. **CONFIRMED, static.**
+The Hatchets cannot make one: the slot-2 definition call
+(`LEVEL27.INI`, DATA `+0x23E`) passes 0 for all five ranged words
+(+0x42–0x4A), and the monster missile path loads the weapon word and
+skips the launch unless bit 0xC000 is set (`+0x1253F–0x12593`). The
+slot-1 call (`+0x1B2`) passes ranged words −1, 1 and `0x8009` (item 9).
+Next test: the slot-1 copy (block 345) with read watches on the slot-1
+words +0x0C/+0x0E/+0x10/+0x40, standing in a line two or more blocks
+from a slot-1 monster so that it throws, or a party throw of a held
+item at a Hatchet; record the launch fetch at `+0xF1DF` and a picture.
+
 ## Probes not yet run
 
 These running-game tests have no result yet. A reader with the original game and a debugger can run them; the question each belongs to keeps its state until then. Addresses are `MAIN.EXE` file offsets unless the
@@ -315,19 +353,20 @@ the top of this page.
   [Q7b](#q7b-which-animation-actually-displays-when-a-script-selects-mode-11).
   Setup: an edited copy of a level-1 slot set to level 23, as in the
   [pose-square recipe](unknowns/07_native_rules.md#level-23-pose-squares-from-edited-placements),
-  but with the party one block beside block 105 (or 121, 369) while a
-  monster stands on that square. Watch: the far call to the mode setter
+  but with the party near block 105 (or 121, 369) while a monster
+  walks toward that square. Watch: the far call to the mode setter
   at CD `+0x14FC1` (floppy `+0x19948`), then the overlay frame selector
   found by its byte pattern, and a write watch on that monster's byte
-  +0x14. Play: wait until the monster walks off the pose square, so the
+  +0x14. Play: wait until the monster walks onto the pose square, so the
   script at CD `L23.PAK+0xC2AE` runs. Result: frame 14 with selector 0
-  and no direction or damage offset means the fixed mode-11 frame
+  and no view or damage offset means the fixed mode-11 frame
   reached the screen. Any other frame must match the captured selector
   or draw flags. A write of 10 to +0x14 means a real mode-10 change.
-  An edited-save run with a live placement (2026-11-20) saw the setter
-  write 11 with the party five blocks away, but no frame
+  Two edited-save runs with a live placement (2026-11-20) saw the setter
+  write 11; in the second the row was drawn from behind, frame 9
   ([result](#q7b-which-animation-actually-displays-when-a-script-selects-mode-11));
-  the party must stand where the square is drawn.
+  frame 14 needs the monster to face the party. The event fires when a
+  monster steps onto the square, not off it.
 - **Mode 10 in ordinary play (not run).** Tests the static result
   for the mode-10 producer of [Q7](OPEN_QUESTIONS.md). Full test:
   [Q7c](#q7c-what-writes-mode-10-during-ordinary-play). Setup: any

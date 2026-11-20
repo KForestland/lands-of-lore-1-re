@@ -14,7 +14,7 @@ rules the tested edits kept (same section lengths, same file size, no
 digest recomputed) are in
 [editing a copy of an original slot](savegame_format.md#editing-a-copy-of-an-original-slot).
 
-All nine runs below belong to probes that are still open. None of them
+All eleven runs below belong to probes that are still open. None of them
 answers a probe on its own; the [rating](../README.md#rating) counts how
 many answered probes rest on edited saves only.
 
@@ -96,7 +96,7 @@ many answered probes rest on edited saves only.
   monster stood on a pose square in either sample, so no mode-11 frame
   was seen.
 - **A native save would add:** an active monster approaching a pose
-  square, so the monster-leaves event fires and its frame can be traced.
+  square, so the block's monster event (0x0800) fires and its frame can be traced.
 
 ## Q7b. Mode-11 setter on level 23
 
@@ -112,6 +112,26 @@ many answered probes rest on edited saves only.
   five blocks away, so no mode-11 frame was seen.
 - **A native save would add:** a monster that reaches the square in
   ordinary play, with the party close enough for it to be drawn.
+
+## Q7b. Mode-11 row seen from behind on level 23
+
+- **Question:** the same probe, with the party two blocks from the
+  square.
+- **Edited:** the copy above with block 110 → 107 and the X high byte
+  14 → 11 (`0x254` `6E → 6B`, `0x257` `0E → 0B`); from the source
+  slot, eleven bytes in all, giving `36312116a36b`
+  ([byte table](unknowns/07_native_rules.md#the-mode-11-row-seen-from-behind)).
+  The loaded copy was not kept; the recipe was re-applied to a fresh
+  copy. A monster row was again written into memory by the debugger
+  (block 106, mode 2, heading west), not into the save.
+- **Showed:** the row stepped onto 105 and the setter wrote 11. The
+  following draw passed view argument 8 (monster and party both facing
+  west), so the selector returned the back-view frame, argument +
+  subframe = 9, and the frame-14 arm was out of reach. The figure in
+  the pictures matches the back-view frames of `CABAL.SHP`.
+- **A native save would add:** a monster that reaches a pose square in
+  ordinary play while facing the party, so the fixed frame 14 can be
+  reached.
 
 ## Q18. Fight on level 27
 
@@ -144,3 +164,22 @@ many answered probes rest on edited saves only.
   ranged attack was seen.
 - **A native save would add:** a party with a ranged weapon ready,
   to follow a real projectile through the release routine.
+
+## Q18. Held item on level 27
+
+- **Question:** the same probe, for a ranged attack.
+- **Edited:** the Hatchet copy `335aa1b42956` with the hand handle
+  `0x2CC` `00 → 01`, so the cursor holds item row 1 (type 216, a
+  Salve, not a weapon). Re-applied to a fresh copy this gives
+  `2b45ac3378df`, identical to the loaded copy. No live edits.
+- **Showed:** nothing for the question. Both fights ended in "You have
+  been defeated". The launch routine (`MAIN.EXE+0xF1DF`, which every
+  thrown item and monster missile goes through) was never fetched, so
+  nothing was thrown, and definition words +0x0C, +0x0E and +0x40 were
+  not read in that window (+0x10 was not watched: the four hardware
+  watches were in use).
+- **A native save would add:** a party next to level-27 slot-1
+  monsters; of the two level-27 definitions only slot 1 carries a
+  missile (see
+  [Q18](NEEDS_A_RUNNING_GAME.md#q18-which-monster-definition-fields-does-an-actual-fight-use));
+  the Hatchets carry none.
