@@ -57,7 +57,7 @@ Legend:
 | [game_rules](../docs/game_rules.md) | `exe_tables.py` for the tables the rules use (experience thresholds, difficulty rows, spell costs, character modifier rows, movement step words); `lol1_attack_types.py` for the ten attack arms and six defense arms | part: the tables and the type arms | part: `exe_tables.py --table difficulty` (text); `lol1_attack_types.py --check` | yes (tables) | yes |
 | [executable_tables](../docs/executable_tables.md) | `exe_tables.py` for the tables inside `MAIN.EXE` and `MAINW.EXE` (character defaults, modifier rows, equipment layout, spell properties, experience thresholds, difficulty and price tables); item types and monster properties are script calls | yes, and the corpus test | text: `exe_tables.py` (every table, both editions); `emc2_decompile.py STARTUP.PAK --entry ONETIME.INF` lists the item-type calls, `Lnn.PAK --entry LEVELn.INI` the monster calls | yes | yes |
 | [savegame_format](../docs/savegame_format.md) | `save_reader.py` | yes | text; every field with `--json` | yes (original save layout) | yes |
-| [emc2_scripts](../docs/emc2_scripts.md) | `emc2_decompile.py`, `tests/test_emc2_corpus.py` | corpus test | text: script listing | yes | yes |
+| [emc2_scripts](../docs/emc2_scripts.md) | `emc2_decompile.py`, `tests/test_emc2_corpus.py`, `exe_tables.py --table emc2` | corpus and executable table checks | text: script listing or original entry and body offsets | yes | yes |
 | [levels/](../docs/levels/README.md) | `level_report.py` | yes | text: `level_report.py --level N` (same sheet as the page) | gap | yes |
 | [level_tileset_map](../docs/level_tileset_map.md) | `tileset_mapper.py` | yes | text | gap | yes |
 | [Q5 TRIG.TBL](../docs/unknowns/05_adv_drv_tbl.md) | `decode_dialogue.py` | yes | text: `decode_dialogue.py TRIG.TBL` | gap | gap |
@@ -508,7 +508,7 @@ row 1 (+0x2B85C): easy/normal/hard = [102, 256, 384]
 row 2 (+0x2B862): easy/normal/hard = [256, 256, 192]
 row 3 (+0x2B868): easy/normal/hard = [320, 256, 128]
 $ python3 tools/exe_tables.py --check
-CHECK exe_tables: CD MAIN.EXE, CD MAINW.EXE: character rows 0,0,0,1,0,0,1,2,4, spells, experience, difficulty rows, prices, timers, mode flags, spell/wall/TIM pointers as the pages give, bad=none
+CHECK exe_tables: CD MAIN.EXE, CD MAINW.EXE: character rows 0,0,0,1,0,0,1,2,4, spells, experience, difficulty rows, prices, timers, mode flags, spell/wall/TIM/EMC2 pointers as the pages give, bad=none
 ```
 
 ### `repo_guard.py`

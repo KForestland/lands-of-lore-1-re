@@ -2,7 +2,8 @@
 """Print the static tables inside the LoL1 game program (MAIN.EXE, and on the CD MAINW.EXE).
 
 Every table, offset and field name comes from docs/executable_tables.md,
-docs/game_rules.md, docs/unknowns/06_tim_opcodes.md and docs/unknowns/07_native_rules.md.
+docs/game_rules.md, docs/emc2_scripts.md, docs/unknowns/06_tim_opcodes.md and
+docs/unknowns/07_native_rules.md.
 Offsets are file offsets in the named program. A field the pages mark UNCONFIRMED
 is printed as a raw value with its record offset, not under a name.
 
@@ -18,6 +19,7 @@ Prints to stdout only; writes nothing.
 """
 from cli_errors import ReaderArgumentParser, run_cli
 import argparse, os, struct
+from hashlib import sha256
 import lol1lib as L
 
 IMAGES = {  # size -> (key, label); docs/executable_tables.md "Locating the executables"
@@ -41,6 +43,7 @@ OFFSETS = {
     "steps":        {"cd": 0x33F0A},
     "spell_effects": {"cd": 0x32EF4, "floppy": 0x39604},
     "wall_click":   {"cd": 0x342FC, "floppy": 0x3D558},
+    "emc2":          {"cd": 0x33F64, "cdw": 0x33A08, "floppy": 0x3D1EE},
     "tim_commands": {"cd": 0x3389C, "floppy": 0x39768},
     "tim_nested":   {"cd": 0x33918, "floppy": 0x397E0},
 }
@@ -58,8 +61,16 @@ TITLES = {
     "steps": "Movement step words (game_rules.md: steps add 32 along each axis); count and layout not on the page: 16 raw words",
     "spell_effects": "Spell effect far pointers, 17 entries (unknowns/07_native_rules.md)",
     "wall_click": "Wall special-type click table, 7 far pointers, slot 0 null (unknowns/07_native_rules.md)",
+    "emc2": "EMC2 dispatch slots, resident entries and overlay bodies (emc2_scripts.md)",
     "tim_commands": "In-game TIM command far pointers up to the nested table; slot names from the ScummVM LoL table (unknowns/06_tim_opcodes.md)",
     "tim_nested": "In-game TIM nested (0x19) far pointers, 17 registered; names from the ScummVM list (unknowns/06_tim_opcodes.md)",
+}
+
+# Digests of the ordered (resident entry offset, body offset) u32 pairs.
+EMC2_TABLES = {
+    "cd": (192, 52, "eae7807717ab45fc22e38e1eda7cbe7ac0fa259393ed3c2f5c000640d5adeceb"),
+    "cdw": (192, 52, "ccfd2cfdf8a9bfae7d3a4d8277b938700c94e26c8ae97d4d83e3b28af23304f1"),
+    "floppy": (187, 51, "fc9c1bec8aace79f7bba6cdfbc19439a0d351fb679d9149337aa07bf420022eb"),
 }
 
 # Character default record, docs/executable_tables.md "Character default record".
@@ -119,6 +130,62 @@ def resolve(exe, off):
     """File offset a resident far pointer points to (header + segment x 16 + offset); 0 for null."""
     o, s = far(exe, off)
     return 0 if (o, s) == (0, 0) else header_size(exe) + s * 16 + o
+
+
+def emc2_handlers(exe, table):
+    """Walk the relocated table and resolve resident FBOV stubs to file offsets."""
+    from lol1_loose import mz_declared
+
+    header = header_size(exe)
+    image_end = mz_declared(exe)
+    if image_end is None or exe[image_end:image_end + 4] != b"FBOV":
+        raise ValueError("EMC2 table: missing FBOV after the DOS image")
+    count = struct.unpack_from("<H", exe, 6)[0]
+    reloc_at = struct.unpack_from("<H", exe, 0x18)[0]
+    if reloc_at + 4 * count > header:
+        raise ValueError("EMC2 table: MZ relocations cross the DOS header")
+    relocations = {header + segment * 16 + offset for offset, segment in
+                   struct.iter_unpack("<HH", exe[reloc_at:reloc_at + 4 * count])}
+    rows = []
+    while table + 2 in relocations:
+        offset, segment = far(exe, table)
+        base = header + 16 * segment
+        stub = base + offset
+        if not header <= stub < image_end:
+            raise ValueError(f"EMC2 entry at +{table:#x} leaves resident code")
+        body = stub
+        if exe[stub:stub + 2] == b"\xcd\x3f":
+            if (exe[base:base + 4] != b"\xcd\x3f\0\0"
+                    or offset < 0x20 or (offset - 0x20) % 5):
+                raise ValueError(f"invalid FBOV stub at +{stub:#x}")
+            bank, length = struct.unpack_from("<IH", exe, base + 4)
+            entry = struct.unpack_from("<H", exe, stub + 2)[0]
+            bank_at = image_end + 16 + bank
+            if entry >= length or bank_at + length > len(exe):
+                raise ValueError(f"FBOV target at +{stub:#x} leaves its code bank")
+            body = bank_at + entry
+        rows.append((stub, body))
+        table += 4
+    return rows
+
+
+def emc2_page_columns():
+    """CD and floppy handler cells of the function table in docs/emc2_scripts.md, by slot."""
+    page = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "emc2_scripts.md")
+    cols = {"cd": {}, "floppy": {}}
+    with open(page, encoding="utf-8") as f:
+        for line in f:
+            cells = [c.strip() for c in line.split("|")]
+            if len(cells) == 12 and len(cells[1]) == 2 and all(ch in "0123456789ABCDEF" for ch in cells[1]):
+                cols["cd"][int(cells[1], 16)] = cells[7]
+                cols["floppy"][int(cells[1], 16)] = cells[8]
+    return cols
+
+
+def emc2_cell(row):
+    """Page form of one (entry, body) pair: the entry, then the overlay body after an arrow."""
+    stub, body = row
+    return f"`0x{stub:X}`" if stub == body else f"`0x{stub:X}` → `0x{body:X}`"
 
 
 def characters(exe, base):
@@ -237,6 +304,12 @@ def print_table(t, img, exe, off, name_of):
         print("modes 0-14:", list(exe[off:off + 15]))
     elif t == "steps":
         print("raw signed words:", words(exe, off, 16, "h"))
+    elif t == "emc2":
+        from emc2_decompile import FUNCTIONS
+
+        for i, (stub, body) in enumerate(emc2_handlers(exe, off)):
+            label = FUNCTIONS[i] if i < len(FUNCTIONS) and FUNCTIONS[i] else "unnamed"
+            print(f"0x{i:02X} {label}: table +0x{off + i * 4:X}, entry +0x{stub:X}, body +0x{body:X}")
     elif t in ("spell_effects", "wall_click", "tim_commands", "tim_nested"):
         n = {"spell_effects": 17, "wall_click": 7, "tim_nested": 17,
              "tim_commands": (OFFSETS["tim_nested"][img] - off) // 4}[t]
@@ -302,6 +375,17 @@ def check(found):
                 need(resolve(exe, o["tim_nested"][img] + op * 4) == want, f"{img}:tim 19/0x{op:02X}")
         if "steps" in o and img in o["steps"]:
             need(set(words(exe, o["steps"][img], 16, "h")) <= {0, 32, -32}, f"{img}:steps")
+        rows = emc2_handlers(exe, o["emc2"][img])
+        count, overlay_count, digest = EMC2_TABLES[img]
+        need(len(rows) == count, f"{img}:EMC2 count")
+        need(sum(stub != body for stub, body in rows) == overlay_count, f"{img}:EMC2 overlay count")
+        offsets = b"".join(struct.pack("<II", stub, body) for stub, body in rows)
+        need(sha256(offsets).hexdigest() == digest, f"{img}:EMC2 entry/body offsets")
+        if img in ("cd", "floppy"):  # the function table's handler columns equal the resolved rows
+            cells = emc2_page_columns()[img]
+            want = {i: emc2_cell(r) for i, r in enumerate(rows)}
+            need(all(cells.get(i) == c for i, c in want.items())
+                 and all(c == "—" for i, c in cells.items() if i not in want), f"{img}:EMC2 page handler column")
         msgs.append(label)
     # across programs: spell rows byte-identical; character records equal except the segment word at +0x15
     imgs = list(by)
@@ -316,7 +400,7 @@ def check(found):
     if not found:
         bad.append("no known MAIN.EXE or MAINW.EXE (CD DATA/HARDRIVE or floppy folder)")
     print(f"CHECK exe_tables: {', '.join(msgs) or 'no program'}: character rows 0,0,0,1,0,0,1,2,4, spells, "
-          f"experience, difficulty rows, prices, timers, mode flags, spell/wall/TIM pointers as the pages give, "
+          f"experience, difficulty rows, prices, timers, mode flags, spell/wall/TIM/EMC2 pointers as the pages give, "
           f"bad={bad or 'none'}")
     return 0 if not bad else 1
 

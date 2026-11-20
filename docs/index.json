@@ -505,12 +505,22 @@
       "tools": []
     },
     {
+      "path": "docs/emc2_native_handlers.md",
+      "title": "Native EMC2 handler comparison",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/exe_tables.py"
+      ]
+    },
+    {
       "path": "docs/emc2_scripts.md",
       "title": "Lands of Lore 1 EMC2 scripts",
       "answers": [],
       "question_references": [],
       "tools": [
-        "tools/emc2_decompile.py"
+        "tools/emc2_decompile.py",
+        "tools/exe_tables.py"
       ]
     },
     {
