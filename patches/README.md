@@ -23,7 +23,7 @@ python3 tools/patch.py apply --data "/path/to/your game copy/DATA" --out "restor
 
 `0x75` is the single letter u. `0xb3` is the bigram ou, so the compressed string stays the same length and no later string moves. `0x9b` is the bigram al and `0x8e` is el. French string 436 already reads "Clef de Nathaniel" and German string 436 already reads "Nathaniels Schlüssel", so only the English key byte changes. The talkie engine loads `STARTUP.PAK` and then `LANDS.<lang>`, so the same data file is what ScummVM reads. `STARTUP.PAK` is not one of the ScummVM detection filenames.
 
-An edited level-1 save placed items 228 and 199 in the pack. Before these four bytes the message line read the old spellings. After the patch, that same save read "Double ring taken." and "Nathaniel's Key taken." The French and German members were checked by decoding the patched archive, not on that English screen. Applying the undo file restored the original archive bytes.
+An edited level-1 save placed items 228 and 199 in the pack. Before these four bytes the message line read the old spellings. After the patch, that same save read "Double ring taken." and "Nathaniel's Key taken." The French and German members were checked by decoding the patched archive, not on that English screen. Applying the undo file restored the original archive bytes. That in-game check was made in a run that did not meet the project's launch-record rules (see [running-game probes](../docs/NEEDS_A_RUNNING_GAME.md#launch-record-rule-and-the-runs-of-20-november)); the four bytes and all four decoded names are verified from the files, and a re-test in the game under the rules is pending.
 
 ## Named faults with no patch in this folder
 

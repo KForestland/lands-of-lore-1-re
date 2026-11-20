@@ -89,6 +89,13 @@ segment was `01EB` and `DS` was `3018`. `DS:3618` was `0000` and
 
 `DATA/ENG/LANDS.EXE` (357,509 bytes) is the intro and character-generation program; it does not contain the `MAIN.EXE` prologues used for breakpoints. After character select it starts `MAIN.EXE` with one argument, and the `MAIN.EXE` breakpoints apply from then on (a new PSP).
 
+## Launch-record rule and the runs of 20 November
+
+Since 20 November 08:41 UTC every game launch must show four things in its record: (a) any debugger port listens on the local machine only, shown in the run log while it is up; (b) one new folder and one set of logs per launch, nothing overwritten; (c) a process listing after each launch; (d) every launch reported, failed ones included, with every live memory edit listed by address and bytes. The runs of 20 November below were made before that rule and did not meet it; their results stay as recorded observations, and no question state rests on them alone. A later run under the rule can confirm or replace them.
+
+- The run for Q7b, Q7c, Q14 and Q10 (mode-11 setter, palettes, finale): (a) not shown, the debugger attached to the emulator process but no listing of open ports was recorded; (b) not met, scripts and a cleanup record were overwritten between sessions; (c) not met, one listing for several sessions; (d) not met, two earlier sessions that ended in defeat were not reported.
+- The run for Q7b and Q18 (pose from behind; the level 27 fight): (a) not shown; (b) not met, three game processes in one folder and a probe script rewritten; (c) not met; (d) not met, the three launches were not each reported. Its live memory writes were three placements of monster row 0 (linear `0x2B04F`: `6a 00 80 0a 80 03`; `0x2B05E`: `02`; `0x2B06F`: `00`; `0x2B056`: `80 08 80 03`, `80 09 80 03`, `80 08 80 03`).
+
 ## Remaining probes
 
 ### Q7a. Can wall bit 0x40 change anything besides the EMC byte test?
