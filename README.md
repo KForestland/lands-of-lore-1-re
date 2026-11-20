@@ -11,6 +11,7 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 - **Start in five minutes:** the [Quick start](#quick-start-5-minutes) below, then [Start here, by goal](docs/START_HERE.md), [How the game works](docs/HOW_THE_GAME_WORKS.md) or the [worked example](docs/tutorial-one-event.md).
 - **Recipes:** [cookbook](docs/COOKBOOK.md), eight short runs with the command and the first lines it prints.
 - **Change the game, safely:** [change a number in your own copy](#change-a-number-in-your-own-copy) with the mod kit, share it as a small [patch](docs/formats/patch.md) that can be undone, or change a field in a copy of a save; your game folder is only read.
+- **Patches:** [original faults and the item-name spelling patch](patches/README.md).
 - **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md) and counted in the [rating](#rating). Some questions need a test in the running original game (a *probe*); [NEEDS_A_RUNNING_GAME](docs/NEEDS_A_RUNNING_GAME.md) lists them and which are answered. Some probes were also tried on [edited saves](docs/EDITED_SAVES.md), copies of a game-written save with a few bytes changed.
 - **What changed lately:** [what's new](docs/WHATS_NEW.md), newest first.
 - **What we got wrong:** [corrections](docs/CORRECTIONS.md), each with how it was caught and the commit that fixed it.

@@ -1,0 +1,37 @@
+{
+  "format": "lol-patch-2",
+  "game": "lol1",
+  "kind": "data",
+  "title": "Item name spellings",
+  "description": "Corrects two misspelled item names (Duble ring, Nathanial's Key) in the CD start-up text tables of all three languages, one byte each.",
+  "changes": [
+    {
+      "file": "STARTUP.PAK",
+      "entry": 3,
+      "offset": 6103,
+      "old": "75",
+      "new": "b3"
+    },
+    {
+      "file": "STARTUP.PAK",
+      "entry": 3,
+      "offset": 7148,
+      "old": "9b",
+      "new": "8e"
+    },
+    {
+      "file": "STARTUP.PAK",
+      "entry": 4,
+      "offset": 7155,
+      "old": "75",
+      "new": "b3"
+    },
+    {
+      "file": "STARTUP.PAK",
+      "entry": 5,
+      "offset": 7062,
+      "old": "75",
+      "new": "b3"
+    }
+  ]
+}
