@@ -507,11 +507,20 @@ CHECK name_callers: FINALE.EXE+0x1D1D0 is the 00000.VOC catalog row (44115 bytes
 
 ### `lol1_loose.py`
 
-Walks the loose CD `DATA` files. Thirty-one reach their last byte, including fonts, string tables, executable images and symbol tables. The check reproduces bytes 0–65531 of both distinct finale blend tables and pins the four-byte trailer. It also re-reads `README.ENG` beside `DATA` at file +0x72, the eight bytes `LANDS OF`. See the loose-file page for the palette pairings and the remaining open bytes. [Loose-file formats](../docs/formats/loose.md)
+Walks the loose CD `DATA` files. Thirty-seven reach their last byte, including fonts, string tables, executable images, symbol tables and the six finale blend tables (one 256 × 256 grid each). The check reproduces bytes 0–65531 of both distinct finale blend tables and pins the four-byte trailer. It runs the `lol1_blend_indices.py` census. It also re-reads `README.ENG` beside `DATA` at file +0x72, the eight bytes `LANDS OF`. See the loose-file page for the palette pairings and the bytes whose writer is open. [Loose-file formats](../docs/formats/loose.md)
 
 ```
 $ python3 tools/lol1_loose.py --check
-CHECK loose: 31 files reach the last byte (3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com, 3 symbol, 3 mz plus symbol tail); 6 open (6 blend tables; palette self-blend 22/42 matches BLEND.TAB 65532 of 65536 from RETURN.CPS, BLEND2.TAB 65532 of 65536 from FACE.CPS, last four bytes E4 D5 02 00 open)
+CHECK loose: 37 files reach the last byte (3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com, 3 symbol, 3 mz plus symbol tail, 6 blend table); 0 open; palette self-blend 22/42 matches BLEND.TAB 65532 of 65536 from RETURN.CPS, BLEND2.TAB 65532 of 65536 from FACE.CPS; last four bytes E4 D5 02 00 are row FF, never indexed, writer open
+```
+
+### `lol1_blend_indices.py`
+
+Pins the finale blend reader in the three CD `FINALE.EXE` files and the floppy one: slot 5, the 65536-byte read, the page-4 source and page-2 destination, the shared page-4/5 buffer, the three passes and the `table[source*256+destination]` lookup. It decodes the four source pictures and checks the source rows each table can be indexed with (199 and 190, none above `EF`). On the CD it also models the destination pages and pins the cells met. `--indices` lists the ranges. [Finale blend table inputs](../docs/formats/finale-blend-indices.md)
+
+```
+$ python3 tools/lol1_blend_indices.py --check
+CHECK finale blend: 3 languages, 4 calls, 3 passes each; source rows BLEND.TAB 199, BLEND2.TAB 190 (highest EF); modelled cells BLEND.TAB 7696, BLEND2.TAB 7876; no source 255
 ```
 
 ### `exe_tables.py`

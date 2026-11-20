@@ -16,26 +16,39 @@ of the file. A file that is not a PAK or a TLK counts when `tools/lol1_loose.py`
 walks it to the last byte: a DOS font, a uint16 string table, the archive
 inventory, a Windows icon, a Windows PIF, an MZ program whose declared image
 is the whole file, an MZ stub plus a 32-bit LE (Linear Executable) Windows driver, an MZ program
-whose overlay (Westwood's FBOV block) reaches the end, a file of whole text lines, or the
-one COM program image. Files the walk refuses stay unread. The loose walk is
+whose overlay (Westwood's FBOV block) reaches the end, a file of whole text lines, the
+one COM program image, or a 65536-byte finale blend table. Files the walk refuses stay unread. The loose walk is
 credited only on the CD layout (a `DATA` folder with `L01.PAK`, the same test
 `lol1_loose.py` uses); on a floppy copy only PAK archives count.
 
 A symbol block counts when the counts in its header give the size of every table, its name and index fields stay inside those counts, and the last table (four zero bytes per module) ends exactly where the string pool starts. A measured tail is not enough.
 
-The blend tables are
-65536 bytes that none of the eleven simple index formulas the tool tries
-(min, max, average, product, sum, difference, OR, AND, XOR) reproduces.
-A self-blend of the paired finale palette reproduces 65532 of 65536 bytes
-of each table. The English finale draw indexes every byte as
-`source*256+destination`, so the last four are the entries for source colour
-255; no paired picture uses that colour, so they are never read there. Their
-values are not reproduced and their writer is still open, so the six files
-are not yet counted as read.
-No stored 768-byte palette (300 read, 109 different) keeps the colour on all
-256 diagonal entries; the nearest keeps 240 of 256. Neither fact puts
-the blend tables in the count. The [loose-file page](formats/loose.md) names the six
-blend tables still in that set and the test that would finish each one. The rating
+A finale blend table counts as read. `BLEND.TAB` and `BLEND2.TAB` (three
+byte-identical copies of each, in `ENG`, `FRE` and `GER`) are each one
+256 × 256 grid of one-byte entries. Every finale reader (the three CD
+`FINALE.EXE` files and the floppy one) reads all 65536 bytes in one request
+and looks a colour up as `table[source*256+destination]`, so every byte is an
+entry of a known layout and the rule above is met. A self-blend of the paired
+finale palette reproduces bytes 0 to 65531 of each table. That covers every
+cell the shipped finale can index: the source byte is always a pixel of the
+picture the call names (`RETURN` or `RICHARDF` for `BLEND.TAB`, `FACE` or
+`TAPPING` for `BLEND2.TAB`), and those pictures use 199 and 190 colours, none
+above 239. The last four bytes, `E4 D5 02 00`, are row 255 (destinations 252
+to 255), which no call can index; their values and their writer stay open
+([finale blend inputs](formats/finale-blend-indices.md), [loose files](formats/loose.md)).
+
+What would make this wrong. The count is wrong if a program reads a blend
+table with another extent or another index than one 65536-byte read looked
+up as `source*256+destination`. "Never indexed" is wrong if a shipped call
+can supply source colour 255: a slot-5 call naming another picture, a pixel
+of colour 255 in one of the four pictures as decoded, a remap of the source
+byte before the lookup, or a write to the source page between the picture
+load and the last pass. "The model covers every reachable cell" is wrong if
+a cell in rows 0 to 239 differs from the self-blend.
+`tools/lol1_blend_indices.py --check` fails when the reader code, the calls
+or the source colours change, and `lol1_loose.py --check` when the model
+stops matching bytes 0 to 65531.
+The rating
 is counted on the CD edition; `--check` does not compare it on a floppy copy. It
 does **not** mean that every entry inside is decoded or understood; the
 [STATUS](STATUS.md) table says how far each format is read.

@@ -2,16 +2,17 @@
 """Walk the CD DATA files that are not PAK or TLK archives.
 
 A file counts as read when every byte sits in a header, a directory or an
-entry. The six blend tables fail that walk and stay unread. The check pins
-the structure that was measured: the blend-table sizes, the installer status
-text, README.ENG at file +0x72, and the TDINFO tables on each symbol block. It also rebuilds both blend
-tables as a self-blend of the paired finale palette (RETURN.CPS for BLEND.TAB,
-FACE.CPS for BLEND2.TAB): all but the last four bytes match. It also pins
-the English finale bytes that open a table and look a colour up as
-table[source*256+destination], and decodes the four paired pictures (the
-source of that lookup) to check that none uses colour 255, so the last four
-entries are never read there. The printed line still calls those four bytes
-open, because their values are not reproduced and the writer is open.
+entry. A blend table is one 256 x 256 grid of entries: the finale reads all
+65536 bytes at once and looks a colour up as table[source*256+destination].
+The check pins the structure that was measured: the blend-table sizes, the
+installer status text, README.ENG at file +0x72, and the TDINFO tables on each
+symbol block. It also rebuilds both blend tables as a self-blend of the paired
+finale palette (RETURN.CPS for BLEND.TAB, FACE.CPS for BLEND2.TAB): all but
+the last four bytes match. It also pins the English finale bytes that open a
+table and look a colour up, and runs lol1_blend_indices, which checks that no
+source picture of the three CD readers uses colour 255, so the last four
+entries are never read. The printed line still calls the values of those four
+bytes unexplained, because the writer is open.
 
   lol1_loose.py --check
 """
@@ -21,6 +22,7 @@ import os
 import struct
 
 import fnt_reader
+import lol1_blend_indices as blend_indices
 import lol1lib as L
 
 COVERED = {
@@ -37,11 +39,12 @@ COVERED = {
     "FRE/STATE.RST", "HARDRIVE/VISBIOS.COM",
     "ENG/FINALE.TDS", "FRE/FINALE.TDS", "GER/FINALE.TDS",
     "ENG/LANDS.EXE", "FRE/LANDS.EXE", "GER/LANDS.EXE",
-}
-OPEN = {
     "ENG/BLEND.TAB", "FRE/BLEND.TAB", "GER/BLEND.TAB",
     "ENG/BLEND2.TAB", "FRE/BLEND2.TAB", "GER/BLEND2.TAB",
 }
+# No loose CD file is left unread. The blend tables count since the finale
+# source-colour check (docs/formats/finale-blend-indices.md).
+OPEN = set()
 # Declared MZ image size and header length, for the seven files whose image is the whole file.
 MZ_EXACT = {
     "ENG/FINALE.EXE": (132328, 8704),
@@ -441,6 +444,8 @@ def covers(filename, data):
         return le_covers(data)
     if suffix == "TDS":
         return symbol_block_covers(data)
+    if suffix == "TAB":
+        return blend_covers(filename, data)
     if suffix == "EXE":
         if mz_exact(data) or overlay_covers(data):
             return True
@@ -454,6 +459,11 @@ def covers(filename, data):
             return False
         return symbol_block_covers(data[declared:])
     return False
+
+
+def blend_covers(filename, data):
+    """A finale blend table: 256 rows (source colour) of 256 entries (destination colour)."""
+    return filename.upper() in ("BLEND.TAB", "BLEND2.TAB") and len(data) == 256 * 256
 
 
 def covered(path):
@@ -679,8 +689,6 @@ def cps_palette(member):
 
 def open_kind(filename, data):
     upper = filename.upper()
-    if upper in ("BLEND.TAB", "BLEND2.TAB") and len(data) == 65536:
-        return "blend"
     if upper == "FINALE.TDS" and data[:4] == SYMBOL:
         return "symbol"
     if upper == "LANDS.EXE":
@@ -748,7 +756,10 @@ def check(data_dir):
     from pathlib import Path
     root = Path(data_dir)
     if not L.is_cd_layout(data_dir):
-        print("CHECK loose: floppy layout, the loose-file count is taken on the CD edition")
+        rows = blend_indices.floppy_sources(root)
+        print("CHECK loose: floppy layout, the loose-file count is taken on the CD edition; "
+              "finale blend reader pinned, source rows "
+              + ", ".join(f"{name} {count}" for name, (count, _) in rows.items()) + ", no source 255")
         return 0
     read, left = {}, {}
     for path in sorted(item for item in root.rglob("*") if item.is_file()):
@@ -828,12 +839,12 @@ def check(data_dir):
         return fail("SETUPENG.DIP string 1 differs")
     if not read["FRE/STATE.RST"].startswith(b"[edit-]\r\n") or len(read["FRE/STATE.RST"]) != 187:
         return fail("STATE.RST differs")
+    if left:
+        return fail(f"unexpected open file {sorted(left)[0]}")
     blends = {}
-    for rel, (kind, data) in left.items():
-        if kind == "blend":
+    for rel, data in read.items():
+        if Path(rel).suffix.upper() == ".TAB":
             blends.setdefault(Path(rel).name, []).append(data)
-        else:
-            return fail(f"unexpected open file {rel}")
     for rel, (size, declared) in LANDS.items():
         data = read[rel]
         if len(data) != size or mz_declared(data) != declared or header_bytes(data) != 10240:
@@ -883,11 +894,9 @@ def check(data_dir):
             return fail(f"{name} self-blend of {scenes[0]} matches {same} bytes, not the first {BLEND_MODEL_MATCH}")
         if table[BLEND_MODEL_MATCH:] != BLEND_TRAILER:
             return fail(f"{name} last four bytes are not E4 D5 02 00")
-        for scene in scenes:
-            pixels = L.load_bitmap(finale1[scene])[2]
-            if len(pixels) != 64000 or 255 in pixels:
-                return fail(f"{scene} uses colour 255 or is not 64000 pixels")
         model_rates.append(f"{name} {same} of 65536 from {scenes[0]}")
+    if blend_indices.inspect(root, False) != blend_indices.EXPECTED:
+        return fail("finale blend index census differs")
     palettes = stored_palettes(root)
     if len(palettes) != STORED_PALETTES:
         return fail(f"stored palette count is {len(palettes)}, not {STORED_PALETTES}")
@@ -972,11 +981,10 @@ def check(data_dir):
     raw = [(root / rel).read_bytes() for rel in ABSENT_FROM] + [install]
     if any(BLEND_HEAD in blob or BLEND2_HEAD in blob for blob in raw):
         return fail("a blend-table head occurs in a scanned program")
-    print("CHECK loose: 31 files reach the last byte "
+    print("CHECK loose: 37 files reach the last byte "
           "(3 font, 6 string table, 1 inventory, 2 icon, 2 pif, 5 mz, 2 le, 2 overlay, 1 text, 1 com, "
-          "3 symbol, 3 mz plus symbol tail); "
-          "6 open (6 blend tables; palette self-blend 22/42 matches "
-          + ", ".join(model_rates) + ", last four bytes E4 D5 02 00 open)")
+          "3 symbol, 3 mz plus symbol tail, 6 blend table); 0 open; palette self-blend 22/42 matches "
+          + ", ".join(model_rates) + "; last four bytes E4 D5 02 00 are row FF, never indexed, writer open")
     return 0
 
 

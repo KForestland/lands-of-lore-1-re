@@ -255,6 +255,7 @@
       "question_references": [],
       "tools": [
         "tools/check_all.py",
+        "tools/lol1_blend_indices.py",
         "tools/lol1_loose.py",
         "tools/rating.py"
       ]
@@ -660,6 +661,15 @@
       "question_references": [],
       "tools": [
         "tools/emc2_decompile.py"
+      ]
+    },
+    {
+      "path": "docs/formats/finale-blend-indices.md",
+      "title": "Finale blend table inputs",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/lol1_blend_indices.py"
       ]
     },
     {
@@ -1440,6 +1450,7 @@
         "tools/level_renderer.py",
         "tools/level_report.py",
         "tools/lol1_attack_types.py",
+        "tools/lol1_blend_indices.py",
         "tools/lol1_compression_writer.py",
         "tools/lol1_driver_tables.py",
         "tools/lol1_level_writer.py",
