@@ -84,6 +84,21 @@ What you can look at with your own copy of the game. Run from the clone with `ex
 | Music as standard MIDI | `python3 tools/xmi_to_midi.py LORE01A.XMI --out ../lol1-out/midi` |
 | A saved game you made | `python3 tools/save_reader.py /path/to/your/save` |
 
+| Tool | Command | Example result |
+|---|---|---|
+| Job menu | `python tools/lol.py --help` | level, text, translate, music, save, patch, mod |
+| Interactive map | `python tools/level_viewer.py --data "$LOL1_DATA" --check` | level01 page with 1,082 entries |
+| Level copy editor | `python tools/level_edit.py --data "$LOL1_DATA" --check` | 29 original levels copied byte-identically and 29 edited levels read back |
+| Translation tables | `python tools/translate.py --data "$LOL1_DATA" --check` | 213 tables, 7,760 rows, 28 indexed fonts |
+| Edition fingerprints | `python tools/edition.py --data "$LOL1_DATA" --check` | English CD 1.02, all 12 fingerprints match |
+| Fields from a save | `python tools/lol.py save page "/path/to/my save.dat" --out ../lol1-out/save.html` | Writes save.html with stored values and commands for making an edited copy |
+| Archive workspace | `python tools/modkit.py --data "$LOL1_DATA" --check` | Byte-identical rebuild of 62 archives from 289 editable entries on the measured CD |
+| Patch maker | `python tools/patch.py make --data "$LOL1_DATA" "my mod output" --title "My edit" --out ../lol1-out/edit.json` | Writes a version 3 patch and reports the changed files |
+| Progression and doors | `python tools/lol1_progression.py --data "$LOL1_DATA" --check` | 71 level changes, 136 door calls and 29 linked level sheets |
+| Sound driver entries | `python tools/lol1_driver_tables.py --data "$LOL1_DATA" --check` | 6 ADV tables per archive and 3 identical CD language copies |
+| Finale blend indices | `python tools/lol1_blend_indices.py --data "$LOL1_DATA" --check` | 3 languages, 4 calls and 3 passes per call |
+| Possible spelling mistakes | `python tools/list_likely_spellings.py --data "$LOL1_DATA" --check` | 30 tables per language, 6,495 strings and 0 bad tables or bigrams on the measured CD. Candidate counts depend on the word list. |
+
 ## Change a number in your own copy
 
 The [mod kit](tools/README.md#modkitpy) turns the game's tables into files you can edit, and the [patch tool](docs/formats/patch.md) turns your change into a small patch file that can be applied and undone. The tools only read your game folder; everything they write goes into new folders you name, outside the game and this repository. Try changes on a **copy** of the game, never on the folder you play from. Patches must not remove or bypass copy protection.
