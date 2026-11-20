@@ -17,7 +17,7 @@ IFF `FORM` with type `EMC2`; chunks `TEXT` (optional strings), `ORDR` (function 
 ## Open
 
 - [Q8](../OPEN_QUESTIONS.md), answered: function 0x7E exits the game to DOS ([`../unknowns/08_native_script_exit.md`](../unknowns/08_native_script_exit.md)). Before that was known: the original executables keep their own function tables (192 far pointers at CD `MAIN.EXE+0x33F64`, 187 at floppy `MAIN.EXE+0x3D1EE`, entries 0x00-0xBA: the floppy program simply has no functions 0xBB-0xBF, which only the CD scripts call). Entry 0x7E points to a handler that takes no arguments, calls one engine routine and returns 1. CONFIRMED (disassembled). Its downstream effect is CONFIRMED: shutdown preparation, then DOS exit with status 0 (CD `MAIN.EXE+0xC846–0xC857, +0x396B–0x3973`; floppy `+0x10062–0x10073, +0x496B–0x4973`; see the Q8 page).
-- Native bodies are checked for the VM step routine, the `eval` selectors, and functions 0x00, 0x05, 0x17, 0x2B, 0x2C, 0x34, 0x42, 0x43, 0x4D, 0x76, 0x77, 0x7D, 0x7E, 0x90, 0x91, 0x95, 0xA1, 0xA2 and 0xBA (see [`../emc2_scripts.md`](../emc2_scripts.md)) and 0xBD ([`../unknowns/18_native_records.md`](../unknowns/18_native_records.md#item-price-in-the-original-scripts)). CONFIRMED. Other function effects are ScummVM's (UNCONFIRMED for the original until their native handler is read).
+- **CONFIRMED.** The [native comparison](../emc2_native_handlers.md) covers all 192 CD slots and gives their original body and argument evidence. Partial rows identify downstream effects that still need a callee trace.
 
 ## Worked example
 

@@ -80,7 +80,7 @@ python3 tests/test_emc2_corpus.py /path/to/CD/DATA /path/to/floppy
 
 ## LoL1 system functions
 
-Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` for a string-table index and `lang ID` for a separate localized text identifier. Arguments can be read conditionally. Columns CD and Floppy count static call sites (**CONFIRMED**, corpus locations below). Unless a row cites native behavior, the names, arguments and effects describe the ScummVM implementation (**UNCONFIRMED** native semantics). The native comparison column gives the extent of the comparison with this reference. Agrees means the stated effect is **CONFIRMED** in the original handler at the listed CD and floppy offsets. Differs and Differs in floppy rows state the native behavior. Partial confirms only the part named on the evidence page, and the rest of the row stays the ScummVM reading. Open means **UNCONFIRMED** behavior from ScummVM. The [native evidence](emc2_native_handlers.md) records the body and callee reads behind the comparison. A vacant ScummVM slot returns 0 in that interpreter (LoL:2683–2974, ABI:63–69, VM:309–321).
+Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` for a string-table index and `lang ID` for a separate localized text identifier. Arguments can be read conditionally. Columns CD and Floppy count static call sites (**CONFIRMED**, corpus locations below). The names and upstream source locations identify the reference. Agrees confirms the stated operation in the original. Differs and Differs in floppy give a native correction. Partial confirms the input reads and the operations described on the evidence page. Any effect beyond that evidence stays **UNCONFIRMED**. The [native evidence](emc2_native_handlers.md) records the body and callee reads behind the comparison. A vacant ScummVM slot returns 0 in that interpreter (LoL:2683–2974, ABI:63–69, VM:309–321).
 
 **CONFIRMED** Native tables are arrays of relocated 16:16 pointers with the offset word first. CD `MAIN.EXE+0x33F64` and `MAINW.EXE+0x33A08` have 192 entries. floppy `MAIN.EXE+0x3D1EE` has 187 entries, ending at ID 0xBA. All segment words are MZ relocation targets. Table ends are the first following addresses without a segment relocation at this stride. The native handler columns give file offsets in the two `MAIN.EXE` files. For overlay handlers, the entry stub is followed by its body offset. `exe_tables.py --table emc2` also lists the resolved MAINW offsets. Resolve a table entry using image header bytes plus pointer segment × 16 plus pointer offset. The original stack accessor is visible in the CD and floppy 0x40 wrappers at `+0x148FC` and `+0x19283`. See [Executable tables](executable_tables.md#locating-the-executables) for the CD archive coordinates.
 
@@ -88,195 +88,195 @@ Numbering is hexadecimal. Arguments run from stack slot 0 upward, with `TEXT` fo
 | --- | --- | --- | --- | ---: | ---: | --- | --- | --- | --- |
 | 00 | setWallType | block, side, wall ID | Sets wall type and may remove monsters if the new wall has flag 4. Side −1 sets all four walls (native CD loop `0x16C09–0x16C22`, [tutorial](tutorial-one-event.md)). | 907 | 890 | `0x1345F` | `0x17E22` | Partial | LoL:2689, LoL:95–103 |
 | 01 | getWallType | block, side | Reads wall type as a signed byte, masking side to 0–3. | 612 | 610 | `0x134BD` | `0x17E80` | Agrees | LoL:2690, LoL:105–108 |
-| 02 | drawScene | draw mode | Draws the dungeon scene. | 80 | 81 | `0x1352B` | `0x17EEE` | Open | LoL:2691, LoL:110–114 |
+| 02 | drawScene | draw mode | Draws the dungeon scene. | 80 | 81 | `0x1352B` | `0x17EEE` | Partial | LoL:2691, LoL:110–114 |
 | 03 | rollDice | count, sides | Rolls dice and returns the sum. | 439 | 437 | `0x13433` | `0x17DF6` | Agrees | LoL:2692, LoL:116–119 |
-| 04 | moveParty | move mode | Moves or rotates the party. Modes 0–5 use relative controls, 6–9 transform a compass movement, and 10–13 use the facing-change branch. | 85 | 85 | `0x13548` | `0x17F0B` | Open | LoL:2695, LoL:121–180 |
+| 04 | moveParty | move mode | Moves or rotates the party. Modes 6–9 normalize relative to current facing. For modes 10–13 the original turns using the signed target-minus-current delta. | 85 | 85 | `0x13548` | `0x17F0B` | Differs | LoL:2695, LoL:121–180 |
 | 05 | Unimplemented | string (TEXT) | VM returns 0 in ScummVM. **CONFIRMED** native: reads argument 0 as a TEXT index, calls a setup routine with 3, sets `DS:3713` to `0xFE`, passes the string to a text routine and returns 1 (CD `+0x135FA–0x13652`, floppy `+0x17FBD–0x18015`). | 0 | 0 | `0x135FA` | `0x17FBD` | Differs | LoL:2696, VM:309–321 |
 | 06 | delay | ticks | Delays in engine ticks while updating. | 92 | 100 | `0x13653` | `0x18016` | Agrees | LoL:2697, LoL:183–187 |
 | 07 | setGameFlag | flag ID, enabled | Sets or clears game flag. | 531 | 517 | `0x13670` | `0x18033` | Agrees | LoL:2698, LoL:189–198 |
 | 08 | testGameFlag | flag ID | Tests game flag. Negative ID returns 0. | 638 | 625 | `0x136C8` | `0x1808B` | Agrees | LoL:2701, LoL:200–206 |
-| 09 | loadLevelGraphics | base filename (TEXT), special color, weight, VCN length, VMP length, palette filename (TEXT or −1) | Loads level graphics. A length of −1 uses the loader's default. | 35 | 35 | `0x30B49` → `0x474C3` | `0x37154` → `0x50CA6` | Open | LoL:2702, LoL:208–212 |
-| 0A | loadBlockProperties | filename (TEXT) | Loads block collision and map properties. | 29 | 29 | `0x30B4E` → `0x475D3` | `0x37159` → `0x50DB6` | Open | LoL:2703, LoL:214–218 |
-| 0B | loadMonsterShapes | filename (TEXT), monster shape slot, animation type | Loads monster shapes. | 77 | 78 | `0x30B53` → `0x4761D` | `0x3715E` → `0x50E00` | Open | LoL:2704, LoL:220–224 |
+| 09 | loadLevelGraphics | base filename (TEXT), special color, weight, VCN length, VMP length, palette filename (TEXT or −1) | Loads level graphics. A length of −1 uses the loader's default. | 35 | 35 | `0x30B49` → `0x474C3` | `0x37154` → `0x50CA6` | Partial | LoL:2702, LoL:208–212 |
+| 0A | loadBlockProperties | filename (TEXT) | Loads block collision and map properties. | 29 | 29 | `0x30B4E` → `0x475D3` | `0x37159` → `0x50DB6` | Partial | LoL:2703, LoL:214–218 |
+| 0B | loadMonsterShapes | filename (TEXT), monster shape slot, animation type | Loads monster shapes. | 77 | 78 | `0x30B53` → `0x4761D` | `0x3715E` → `0x50E00` | Partial | LoL:2704, LoL:220–224 |
 | 0C | deleteHandItem | — | Deletes and clears held item. Returns old handle. | 80 | 80 | `0x13702` | `0x180C5` | Agrees | LoL:2707, LoL:226–232 |
-| 0D | allocItemPropertiesBuffer | count | Reallocates item property records. | 1 | 1 | `0x30D3E` → `0x4A59B` | `0x3733E` → `0x53B6F` | Open | LoL:2708, LoL:234–239 |
-| 0E | setItemProperty | type index, name ID, shape, type, script entry, might, skill, protection, flags, extra word | Sets the item property record. ScummVM changes type 5 to 0 at index 264. | 285 | 285 | `0x30D43` → `0x4A5CC` | `0x37343` → `0x53BA0` | Open | LoL:2709, LoL:241–261 |
-| 0F | makeItem | type index, shape/frame flags, placed flag | Creates an item instance and returns its handle. | 110 | 110 | `0x13721` | `0x180E4` | Open | LoL:2710, LoL:263–266 |
-| 10 | placeMoveLevelItem | item, level, block, local X, local Y, flying height | Places or moves an existing item. Masks local coordinates to one byte. | 10 | 10 | `0x1375F` | `0x18122` | Open | LoL:2713, LoL:268–272 |
-| 11 | createLevelItem | type index, frame flags, placed flag, level, block, local X, local Y, flying height | Creates and positions an item. Returns handle or failure. | 228 | 228 | `0x137DC` | `0x1819F` | Open | LoL:2714, LoL:274–281 |
-| 12 | getItemPara | item, selector | Reads block, position, level, type, frame/flags, name, shape, script or combat fields according to selector. See LoL:283–333. | 259 | 260 | `0x13888` | `0x1824B` | Open | LoL:2715, LoL:283–333 |
-| 13 | getCharacterStat | character, selector, subindex | Reads character flags, race/class/sex, HP/MP, equipment, protection, might, skill or ID. See LoL:335–385. | 36 | 31 | `0x13A57` | `0x1841A` | Open | LoL:2716, LoL:335–385 |
-| 14 | setCharacterStat | character, selector, subindex, value | Writes a selected stat. Equipment selector 10 clears the selected slot. See LoL:387–450. | 17 | 17 | `0x13B7E` | `0x18541` | Open | LoL:2719, LoL:387–450 |
-| 15 | loadLevelShapes | SHP filename (TEXT), DAT filename (TEXT) | Loads level shapes and decoration definitions. | 17 | 17 | `0x30B58` → `0x47689` | `0x37163` → `0x50E6C` | Open | LoL:2720, LoL:452–456 |
-| 16 | closeLevelShapeFile | — | Closes the level shape file. | 17 | 17 | `0x30B5D` → `0x47708` | `0x37168` → `0x50EEB` | Open | LoL:2721, LoL:458–463 |
+| 0D | allocItemPropertiesBuffer | count | Reallocates item property records. | 1 | 1 | `0x30D3E` → `0x4A59B` | `0x3733E` → `0x53B6F` | Agrees | LoL:2708, LoL:234–239 |
+| 0E | setItemProperty | type index, name ID, shape, type, script entry, might, skill, protection, flags, extra word | Writes the native 13-byte item definition. The original stores the supplied type. ScummVM substitutes type 0 for type 5 at index 264. | 285 | 285 | `0x30D43` → `0x4A5CC` | `0x37343` → `0x53BA0` | Differs | LoL:2709, LoL:241–261 |
+| 0F | makeItem | type index, shape/frame flags, placed flag | Creates an item instance and returns its handle. | 110 | 110 | `0x13721` | `0x180E4` | Partial | LoL:2710, LoL:263–266 |
+| 10 | placeMoveLevelItem | item, level, block, local X, local Y, flying height | Places or moves an existing item. Masks local coordinates to one byte. | 10 | 10 | `0x1375F` | `0x18122` | Partial | LoL:2713, LoL:268–272 |
+| 11 | createLevelItem | type index, frame flags, placed flag, level, block, local X, local Y, flying height | Creates and positions an item. Returns handle or failure. | 228 | 228 | `0x137DC` | `0x1819F` | Agrees | LoL:2714, LoL:274–281 |
+| 12 | getItemPara | item, selector | Reads block, position, level, type, frame/flags, name, shape, script or combat fields according to selector. See LoL:283–333. | 259 | 260 | `0x13888` | `0x1824B` | Partial | LoL:2715, LoL:283–333 |
+| 13 | getCharacterStat | character, selector, subindex | Reads character flags, race/class/sex, HP/MP, equipment, protection, might, skill or ID. See LoL:335–385. | 36 | 31 | `0x13A57` | `0x1841A` | Partial | LoL:2716, LoL:335–385 |
+| 14 | setCharacterStat | character, selector, subindex, value | Writes a selected character field. Native selector 10 stores the supplied equipment word into the selected slot. ScummVM clears that slot. | 17 | 17 | `0x13B7E` | `0x18541` | Differs | LoL:2719, LoL:387–450 |
+| 15 | loadLevelShapes | SHP filename (TEXT), DAT filename (TEXT) | Loads level shapes and decoration definitions. | 17 | 17 | `0x30B58` → `0x47689` | `0x37163` → `0x50E6C` | Partial | LoL:2720, LoL:452–456 |
+| 16 | closeLevelShapeFile | — | Closes the level shape file. | 17 | 17 | `0x30B5D` → `0x47708` | `0x37168` → `0x50EEB` | Partial | LoL:2721, LoL:458–463 |
 | 17 | Unimplemented | — | **CONFIRMED** The native handler returns 0, sharing a stub with CD 0xBF. ScummVM leaves 0x17 unimplemented. | 0 | 0 | `0x1342C` | `0x17DEF` | Agrees | LoL:2722, VM:309–321 |
-| 18 | loadDoorShapes | filename (TEXT), shape 0, shape 1, first group override, second group override | Loads two door graphics and initializes door wall flags. | 21 | 21 | `0x30B62` → `0x47714` | `0x3716D` → `0x50EF7` | Open | LoL:2725, LoL:465–496 |
-| 19 | initAnimStruct | filename (TEXT), animation slot, X, Y, delay, flags | Initializes a TIM animation structure, returning success. | 175 | 174 | `0x30EC9` → `0x4D595` | `0x374A9` → `0x5612D` | Open | LoL:2726, LoL:498–503 |
-| 1A | playAnimationPart | animation slot, first frame, last frame, delay | Plays a frame interval. | 209 | 208 | `0x13CAB` | `0x1866E` | Open | LoL:2727, LoL:505–509 |
-| 1B | freeAnimStruct | animation slot | Frees the animation structure if present. | 121 | 120 | `0x30ECE` → `0x4D648` | `0x374AE` → `0x561E0` | Open | LoL:2728, LoL:511–516 |
+| 18 | loadDoorShapes | filename (TEXT), shape 0, shape 1, first group override, second group override | Loads two door graphics and initializes door wall flags. | 21 | 21 | `0x30B62` → `0x47714` | `0x3716D` → `0x50EF7` | Agrees | LoL:2725, LoL:465–496 |
+| 19 | initAnimStruct | filename (TEXT), animation slot, X, Y, delay, flags | Initializes a TIM animation structure, returning success. | 175 | 174 | `0x30EC9` → `0x4D595` | `0x374A9` → `0x5612D` | Partial | LoL:2726, LoL:498–503 |
+| 1A | playAnimationPart | animation slot, first frame, last frame, delay | Plays a frame interval. | 209 | 208 | `0x13CAB` | `0x1866E` | Agrees | LoL:2727, LoL:505–509 |
+| 1B | freeAnimStruct | animation slot | Frees the animation structure if present. | 121 | 120 | `0x30ECE` → `0x4D648` | `0x374AE` → `0x561E0` | Partial | LoL:2728, LoL:511–516 |
 | 1C | getDirection | — | Returns current party facing. | 279 | 279 | `0x13E2A` | `0x187F7` | Agrees | LoL:2731, LoL:518–521 |
-| 1D | characterSurpriseFeedback | — | Plays a character-specific surprise sound for the first eligible active character. | 36 | 36 | `0x1657D` | `0x1AE7F` | Open | LoL:2732, LoL:523–535 |
-| 1E | setMusicTrack | theme | Sets current music theme. | 31 | 31 | `0x30B9E` → `0x47F57` | `0x371A9` → `0x51738` | Open | LoL:2733, LoL:537–541 |
-| 1F | setSequenceButtons | X, Y, width, height, enable flags | Sets sequence buttons for the supplied rectangle. | 3 | 3 | `0x30F14` → `0x4DDF3` | `0x374F4` → `0x56950` | Open | LoL:2734, LoL:543–547 |
-| 20 | setDefaultButtonState | — | Restores default button state. | 3 | 3 | `0x30F19` → `0x4DE57` | `0x374F9` → `0x569B4` | Open | LoL:2737, LoL:549–553 |
-| 21 | checkRectForMousePointer | left, top, right, bottom | Tests whether the pointer is in the rectangle. | 477 | 391 | `0x13E32` | `0x187FF` | Open | LoL:2738, LoL:555–558 |
-| 22 | clearDialogueField | — | Clears dialogue and resets text positions when allowed by control and text modes. | 85 | 85 | `0x13E82` | `0x1884F` | Open | LoL:2739, LoL:560–572 |
-| 23 | setupBackgroundAnimationPart | animation slot, part, first frame, last frame, cycles, next part, part delay, flag, SFX index, SFX frame | Configures a background animation part. | 173 | 170 | `0x13EEF` | `0x188AC` | Open | LoL:2740, LoL:574–578 |
-| 24 | startBackgroundAnimation | animation slot, part | Starts background animation. | 133 | 127 | `0x13FF1` | `0x189AE` | Open | LoL:2743, LoL:580–584 |
-| 25 | hideMouse | — | Hides pointer. | 12 | 9 | `0x14020` | `0x189DD` | Open | LoL:2744, V1:53–57 |
-| 26 | showMouse | — | Shows pointer. | 12 | 9 | `0x1402D` | `0x189EA` | Open | LoL:2745, V1:59–63 |
-| 27 | fadeToBlack | — | Fades screen to black. | 33 | 33 | `0x1403A` | `0x189F7` | Open | LoL:2746, LoL:586–590 |
-| 28 | fadePalette | — | Fades to loaded palette or reapplies brightness in 16-color mode. | 14 | 14 | `0x1404A` | `0x18A07` | Open | LoL:2749, LoL:592–600 |
-| 29 | loadBitmap | filename (TEXT), destination page | Loads a bitmap and its palette, optionally copying to another page. | 52 | 52 | `0x1406A` | `0x18A24` | Open | LoL:2750, LoL:602–608 |
-| 2A | stopBackgroundAnimation | animation slot | Stops background animation. | 69 | 61 | `0x140F7` | `0x18AB9` | Open | LoL:2751, LoL:610–614 |
+| 1D | characterSurpriseFeedback | — | Plays a character-specific surprise sound for the first eligible active character. | 36 | 36 | `0x1657D` | `0x1AE7F` | Agrees | LoL:2732, LoL:523–535 |
+| 1E | setMusicTrack | theme | Sets current music theme. | 31 | 31 | `0x30B9E` → `0x47F57` | `0x371A9` → `0x51738` | Agrees | LoL:2733, LoL:537–541 |
+| 1F | setSequenceButtons | X, Y, width, height, enable flags | Sets sequence buttons for the supplied rectangle. | 3 | 3 | `0x30F14` → `0x4DDF3` | `0x374F4` → `0x56950` | Partial | LoL:2734, LoL:543–547 |
+| 20 | setDefaultButtonState | — | Restores default button state. | 3 | 3 | `0x30F19` → `0x4DE57` | `0x374F9` → `0x569B4` | Partial | LoL:2737, LoL:549–553 |
+| 21 | checkRectForMousePointer | left, top, right, bottom | Tests whether the pointer is in the rectangle. | 477 | 391 | `0x13E32` | `0x187FF` | Partial | LoL:2738, LoL:555–558 |
+| 22 | clearDialogueField | — | Clears the dialogue rectangle and zeros the text positions. CD first checks two control/text fields. Floppy enters the clear path directly. | 85 | 85 | `0x13E82` | `0x1884F` | Differs in floppy | LoL:2739, LoL:560–572 |
+| 23 | setupBackgroundAnimationPart | animation slot, part, first frame, last frame, cycles, next part, part delay, flag, SFX index, SFX frame | Configures a background animation part. | 173 | 170 | `0x13EEF` | `0x188AC` | Agrees | LoL:2740, LoL:574–578 |
+| 24 | startBackgroundAnimation | animation slot, part | Starts background animation. | 133 | 127 | `0x13FF1` | `0x189AE` | Partial | LoL:2743, LoL:580–584 |
+| 25 | hideMouse | — | Hides pointer. | 12 | 9 | `0x14020` | `0x189DD` | Partial | LoL:2744, V1:53–57 |
+| 26 | showMouse | — | Shows pointer. | 12 | 9 | `0x1402D` | `0x189EA` | Partial | LoL:2745, V1:59–63 |
+| 27 | fadeToBlack | — | Fades screen to black. | 33 | 33 | `0x1403A` | `0x189F7` | Partial | LoL:2746, LoL:586–590 |
+| 28 | fadePalette | — | Fades to loaded palette or reapplies brightness in 16-color mode. | 14 | 14 | `0x1404A` | `0x18A07` | Partial | LoL:2749, LoL:592–600 |
+| 29 | loadBitmap | filename (TEXT), destination page | Loads a bitmap and its palette, optionally copying to another page. | 52 | 52 | `0x1406A` | `0x18A24` | Agrees | LoL:2750, LoL:602–608 |
+| 2A | stopBackgroundAnimation | animation slot | Stops background animation. | 69 | 61 | `0x140F7` | `0x18AB9` | Partial | LoL:2751, LoL:610–614 |
 | 2B | Unimplemented | index | VM returns 0 in ScummVM. **CONFIRMED** native: sets byte `+1` of the 0xB5-byte record chosen by argument 0 to 1 and returns 1 (CD byte `DS:4EED` + 0xB5 × index, `+0x14114–0x14133`; floppy `DS:8393`, `+0x18AD6–0x18AF5`). | 0 | 0 | `0x14114` | `0x18AD6` | Differs | LoL:2752, VM:309–321 |
 | 2C | Unimplemented | index | VM returns 0 in ScummVM. **CONFIRMED** native: sets bytes `+0` and `+1` of the same record to 1 and returns 1 (CD `+0x14134–0x1416B`, floppy `+0x18AF6–0x18B2D`). | 0 | 0 | `0x14134` | `0x18AF6` | Differs | LoL:2755, VM:309–321 |
 | 2D | getGlobalScriptVar | index | Reads one of 24 script globals. | 26 | 30 | `0x14199` | `0x18B5B` | Partial | LoL:2756, LoL:616–620 |
 | 2E | setGlobalScriptVar | index, value | Sets one of 24 script globals. | 20 | 20 | `0x1416C` | `0x18B2E` | Partial | LoL:2757, LoL:622–627 |
-| 2F | getGlobalVar | selector, subindex | Reads a selected engine global, including position, level, hand, brightness, money, lamp or control state. See LoL:629–666. | 75 | 65 | `0x141B3` | `0x18B75` | Open | LoL:2758, LoL:629–666 |
-| 30 | setGlobalVar | selector, subindex or value, value | Changes an engine global, with selector-specific side effects. Selectors 11–12 take their value from slot 1. See LoL:668–740. | 404 | 404 | `0x14261` | `0x18C16` | Open | LoL:2761, LoL:668–740 |
-| 31 | triggerDoorSwitch | block, switch action | Processes a door switch. | 111 | 111 | `0x14374` | `0x18D0A` | Open | LoL:2762, LoL:742–746 |
-| 32 | checkEquippedItemScriptFlags | — | Tests whether any of the first four equipment slots of active characters refer to item script entry 0 or 2. | 2 | 2 | `0x143C7` | `0x18D5D` | Open | LoL:2763, LoL:748–760 |
+| 2F | getGlobalVar | selector, subindex | Reads a selected engine global. CD supports selectors through 14 and floppy through 12. See LoL:629–666 for the reference names. | 75 | 65 | `0x141B3` | `0x18B75` | Differs in floppy | LoL:2758, LoL:629–666 |
+| 30 | setGlobalVar | selector, subindex or value, value | Changes an engine global, with selector-specific side effects. Selectors 11–12 take their value from slot 1. See LoL:668–740. | 404 | 404 | `0x14261` | `0x18C16` | Agrees | LoL:2761, LoL:668–740 |
+| 31 | triggerDoorSwitch | block, switch action | Processes a door switch. | 111 | 111 | `0x14374` | `0x18D0A` | Agrees | LoL:2762, LoL:742–746 |
+| 32 | checkEquippedItemScriptFlags | — | Tests whether any of the first four equipment slots of active characters refer to item script entry 0 or 2. | 2 | 2 | `0x143C7` | `0x18D5D` | Agrees | LoL:2763, LoL:748–760 |
 | 33 | setDoorState | block, state | Sets or clears block flag 0x20, clearing 0x10 when setting it. | 15 | 15 | `0x1651B` | `0x1AE1D` | Agrees | LoL:2764, LoL:762–769 |
 | 34 | updateBlockAnimations | block, side, wall A, wall B | Toggles wall type between A and B. Side −1 sets all four walls. **CONFIRMED** on DOS: for side −1 the handler compares wall A with side 0 of the block (CD `+0x144AF–0x144F3`, floppy `+0x18E4A–0x18E8B`). It then calls the wall setter with side −1, whose loop writes all four sides (CD `+0x16C09–0x16C22`, floppy `+0x1B374–0x1B38D`). The handler returns 0. | 55 | 55 | `0x14443` | `0x18DD9` | Agrees | LoL:2767, LoL:771–777 |
-| 35 | assignLevelDecorationShape | wall/decoration index | Assigns level decoration shapes. | 14 | 14 | `0x30B94` → `0x47E1E` | `0x3719F` → `0x51602` | Open | LoL:2768, LoL:779–782 |
-| 36 | resetBlockShapeAssignment | replacement byte | Resets two groups of five wall-to-shape mappings. | 14 | 14 | `0x30B8F` → `0x47DE1` | `0x3719A` → `0x515C5` | Open | LoL:2769, LoL:784–790 |
-| 37 | copyRegion | source X, source Y, destination X, destination Y, width, height, source page, destination page | Copies a screen region and updates the visible screen for page 0. | 203 | 201 | `0x14506` | `0x18E9C` | Open | LoL:2770, LoL:792–799 |
-| 38 | initMonster | block, X, Y, facing, type slot, flags, mode, optional four equipment shapes | Places a monster in a free runtime slot, initializes scaled HP and returns slot or −1. | 308 | 308 | `0x14619` | `0x18FB1` | Open | LoL:2773, LoL:801–851 |
-| 39 | fadeClearSceneWindow | — | Fades and clears the scene window. | 64 | 64 | `0x145AB` | `0x18F46` | Open | LoL:2774, LoL:853–857 |
-| 3A | fadeSequencePalette | — | Fades to the sequence palette. | 67 | 67 | `0x145BB` | `0x18F56` | Open | LoL:2775, LoL:859–870 |
-| 3B | redrawPlayfield | — | Redraws playfield and reapplies brightness. | 10 | 11 | `0x1460C` | `0x18FA4` | Open | LoL:2776, LoL:872–880 |
-| 3C | loadNewLevel | level, block, facing | Snapshots the old level, loads a new one and stops this script. | 71 | 71 | `0x30B8A` → `0x47CF1` | `0x37195` → `0x514D0` | Open | LoL:2779, LoL:882–908 |
-| 3D | getNearestMonsterFromCharacter | character | Returns nearest monster to the character. | 0 | 0 | `0x148DB` | `0x19262` | Open | LoL:2780, LoL:910–913 |
+| 35 | assignLevelDecorationShape | wall/decoration index | Assigns level decoration shapes. | 14 | 14 | `0x30B94` → `0x47E1E` | `0x3719F` → `0x51602` | Partial | LoL:2768, LoL:779–782 |
+| 36 | resetBlockShapeAssignment | replacement byte | Resets two groups of five wall-to-shape mappings. | 14 | 14 | `0x30B8F` → `0x47DE1` | `0x3719A` → `0x515C5` | Agrees | LoL:2769, LoL:784–790 |
+| 37 | copyRegion | source X, source Y, destination X, destination Y, width, height, source page, destination page | Copies a screen region and updates the visible screen for page 0. | 203 | 201 | `0x14506` | `0x18E9C` | Partial | LoL:2770, LoL:792–799 |
+| 38 | initMonster | block, X, Y, facing, type slot, flags, mode, optional four equipment shapes | Places a monster in a free runtime slot, initializes scaled HP and returns slot or −1. | 308 | 308 | `0x14619` | `0x18FB1` | Agrees | LoL:2773, LoL:801–851 |
+| 39 | fadeClearSceneWindow | — | Fades and clears the scene window. | 64 | 64 | `0x145AB` | `0x18F46` | Partial | LoL:2774, LoL:853–857 |
+| 3A | fadeSequencePalette | — | Fades to the sequence palette. | 67 | 67 | `0x145BB` | `0x18F56` | Agrees | LoL:2775, LoL:859–870 |
+| 3B | redrawPlayfield | — | Redraws playfield and reapplies brightness. | 10 | 11 | `0x1460C` | `0x18FA4` | Partial | LoL:2776, LoL:872–880 |
+| 3C | loadNewLevel | level, block, facing | Snapshots the old level, loads a new one and stops this script. | 71 | 71 | `0x30B8A` → `0x47CF1` | `0x37195` → `0x514D0` | Agrees | LoL:2779, LoL:882–908 |
+| 3D | getNearestMonsterFromCharacter | character | Returns nearest monster to the character. | 0 | 0 | `0x148DB` | `0x19262` | Partial | LoL:2780, LoL:910–913 |
 | 3E | dummy0 | — | Returns 0. | 1 | 1 | `0x148F5` | `0x1927C` | Agrees | LoL:2781, LoL:915–917 |
-| 3F | loadMonsterProperties | property slot, shape, combat values, equipment strengths/resistances, HP, flags, ranged and skill settings, sounds | Loads a 42-position property definition. Argument layout is in [Executable and script tables](executable_tables.md), and the source assignments are at LoL:919–977. | 79 | 79 | `0x30B67` → `0x47830` | `0x37172` → `0x5100F` | Open | LoL:2782, LoL:919–978 |
-| 40 | battleHitSkillTest | attacker, target, skill | Returns battle hit test result. | 4 | 4 | `0x148FC` | `0x19283` | Open | LoL:2785, LoL:980–983 |
-| 41 | inflictDamage | target or −1, damage, attacker, skill, death flags | Applies damage to one entity or all four party slots for target −1. | 66 | 66 | `0x1493A` | `0x192C1` | Open | LoL:2786, LoL:985–995 |
+| 3F | loadMonsterProperties | property slot, shape, combat values, equipment strengths/resistances, HP, flags, ranged and skill settings, sounds | Loads a 42-position property definition. Argument layout is in [Executable and script tables](executable_tables.md), and the source assignments are at LoL:919–977. | 79 | 79 | `0x30B67` → `0x47830` | `0x37172` → `0x5100F` | Agrees | LoL:2782, LoL:919–978 |
+| 40 | battleHitSkillTest | attacker, target, skill | Returns battle hit test result. | 4 | 4 | `0x148FC` | `0x19283` | Agrees | LoL:2785, LoL:980–983 |
+| 41 | inflictDamage | target or −1, damage, attacker, skill, death flags | Applies damage to one entity or all four party slots for target −1. | 66 | 66 | `0x1493A` | `0x192C1` | Agrees | LoL:2786, LoL:985–995 |
 | 42 | Unimplemented | value | VM returns 0 in ScummVM. **CONFIRMED** native: sets bit 0x80 of the word at CD `DS:804C` (floppy `DS:B4F2`) when argument 0 is nonzero and clears it otherwise, passes argument 0 to an overlay routine and returns 1 (overlay body CD `+0x4DDB8–0x4DDE6`, floppy `+0x56915–0x56943`). | 0 | 0 | `0x30F0A` → `0x4DDB8` | `0x374EA` → `0x56915` | Differs | LoL:2787, VM:309–321 |
 | 43 | Unimplemented | — | VM returns 0 in ScummVM. **CONFIRMED** native: reads no argument, calls one overlay routine and returns 1 (overlay body CD `+0x4DDE7`, floppy `+0x56944`). | 0 | 0 | `0x30F0F` → `0x4DDE7` | `0x374EF` → `0x56944` | Differs | LoL:2788, VM:309–321 |
-| 44 | moveMonster | monster, block, X, Y, facing | Sets movement destination and facing for modes 1 or 2. | 17 | 17 | `0x14A0C` | `0x19393` | Open | LoL:2791, LoL:997–1009 |
-| 45 | setupDialogueButtons | count, three lang IDs | Creates dialogue choices from their localized labels. | 103 | 106 | `0x14AEF` | `0x19476` | Open | LoL:2792, LoL:1011–1015 |
-| 46 | giveTakeMoney | signed credits | Gives positive credits or takes the magnitude of a negative amount. | 41 | 41 | `0x14B64` | `0x194EB` | Open | LoL:2793, LoL:1017–1026 |
-| 47 | checkMoney | credits | Tests whether the party has at least this many credits. | 14 | 14 | `0x14B98` | `0x1951F` | Open | LoL:2794, LoL:1028–1031 |
-| 48 | setScriptTimer | timer index, tick count | Schedules timer 0x50 + index or disables it for count zero. | 59 | 59 | `0x14BB9` | `0x19540` | Open | LoL:2797, LoL:1033–1046 |
-| 49 | createHandItem | type index, frame flags, placed flag | Creates a held item if the cursor has no item. | 207 | 207 | `0x14BFB` | `0x19582` | Open | LoL:2798, LoL:1048–1055 |
-| 4A | playAttackSound | type index | Plays an attack sound selected by item skill and type. | 1 | 1 | `0x1646B` | `0x1AD6D` | Open | LoL:2799, LoL:1057–1069 |
-| 4B | addRemoveCharacter | signed character ID | Adds a character for a nonnegative ID. A negative ID removes that character from the active party. | 7 | 7 | `0x30F6A` → `0x4E302` | `0x3753F` → `0x56DAC` | Open | LoL:2800, LoL:1071–1098 |
-| 4C | giveItem | type index, frame flags, placed flag | Creates an item for the inventory. Deletes it again if placement fails. | 12 | 13 | `0x14C50` | `0x195D7` | Open | LoL:2803, LoL:1100–1108 |
+| 44 | moveMonster | monster, block, X, Y, facing | Sets movement destination and facing for modes 1 or 2. | 17 | 17 | `0x14A0C` | `0x19393` | Agrees | LoL:2791, LoL:997–1009 |
+| 45 | setupDialogueButtons | count, three lang IDs | Creates dialogue choices from their localized labels. | 103 | 106 | `0x14AEF` | `0x19476` | Partial | LoL:2792, LoL:1011–1015 |
+| 46 | giveTakeMoney | signed credits | Gives positive credits or takes the magnitude of a negative amount. | 41 | 41 | `0x14B64` | `0x194EB` | Agrees | LoL:2793, LoL:1017–1026 |
+| 47 | checkMoney | credits | Tests whether the party has at least this many credits. | 14 | 14 | `0x14B98` | `0x1951F` | Agrees | LoL:2794, LoL:1028–1031 |
+| 48 | setScriptTimer | timer index, tick count | Selects row 5 + timer index in the native array. A count of zero disables the timer. ScummVM uses timer ID 0x50 + index. | 59 | 59 | `0x14BB9` | `0x19540` | Agrees | LoL:2797, LoL:1033–1046 |
+| 49 | createHandItem | type index, frame flags, placed flag | Creates a held item if the cursor has no item. | 207 | 207 | `0x14BFB` | `0x19582` | Agrees | LoL:2798, LoL:1048–1055 |
+| 4A | playAttackSound | type index | Plays an attack sound selected by item skill and type. | 1 | 1 | `0x1646B` | `0x1AD6D` | Agrees | LoL:2799, LoL:1057–1069 |
+| 4B | addRemoveCharacter | signed character ID | Adds a character for a nonnegative ID. A negative ID removes that character from the active party. | 7 | 7 | `0x30F6A` → `0x4E302` | `0x3753F` → `0x56DAC` | Agrees | LoL:2800, LoL:1071–1098 |
+| 4C | giveItem | type index, frame flags, placed flag | Creates an item for the inventory. Deletes it again if placement fails. | 12 | 13 | `0x14C50` | `0x195D7` | Agrees | LoL:2803, LoL:1100–1108 |
 | 4D | Unimplemented | three values | VM returns 0 in ScummVM. **CONFIRMED** native: passes arguments 0 and 1 and argument 2 sign-extended to 32 bits to one routine and returns 1 (CD `+0x14CAB–0x14CEF`, floppy `+0x19632–0x19676`). | 0 | 0 | `0x14CAB` | `0x19632` | Differs | LoL:2804, VM:309–321 |
-| 4E | loadTimScript | TIM slot, TIM stem (TEXT) | Loads the named TIM in an empty slot. | 91 | 87 | `0x14CF0` | `0x19677` | Open | LoL:2805, LoL:1110–1117 |
-| 4F | runTimScript | TIM slot, loop mode | Executes the active TIM and returns its result. | 77 | 80 | `0x14D8D` | `0x19714` | Open | LoL:2806, LoL:1119–1122 |
-| 50 | releaseTimScript | TIM slot | Unloads the TIM. | 89 | 88 | `0x14DC1` | `0x19748` | Open | LoL:2809, LoL:1124–1128 |
-| 51 | initSceneWindowDialogue | dialogue mode | Initializes scene-window dialogue. | 15 | 15 | `0x30F00` → `0x4DD80` | `0x374E0` → `0x568DD` | Open | LoL:2810, LoL:1130–1134 |
-| 52 | restoreAfterSceneWindowDialogue | restore mode | Restores scene window after dialogue. | 17 | 17 | `0x30F05` → `0x4DD9C` | `0x374E5` → `0x568F9` | Open | LoL:2811, LoL:1136–1140 |
+| 4E | loadTimScript | TIM slot, TIM stem (TEXT) | Loads the named TIM in an empty slot. | 91 | 87 | `0x14CF0` | `0x19677` | Agrees | LoL:2805, LoL:1110–1117 |
+| 4F | runTimScript | TIM slot, loop mode | Executes the active TIM and returns its result. | 77 | 80 | `0x14D8D` | `0x19714` | Partial | LoL:2806, LoL:1119–1122 |
+| 50 | releaseTimScript | TIM slot | Unloads the TIM. | 89 | 88 | `0x14DC1` | `0x19748` | Agrees | LoL:2809, LoL:1124–1128 |
+| 51 | initSceneWindowDialogue | dialogue mode | Initializes scene-window dialogue. | 15 | 15 | `0x30F00` → `0x4DD80` | `0x374E0` → `0x568DD` | Partial | LoL:2810, LoL:1130–1134 |
+| 52 | restoreAfterSceneWindowDialogue | restore mode | Restores scene window after dialogue. | 17 | 17 | `0x30F05` → `0x4DD9C` | `0x374E5` → `0x568F9` | Partial | LoL:2811, LoL:1136–1140 |
 | 53 | getItemInHand | — | Returns held item handle. | 211 | 132 | `0x14DFD` | `0x19784` | Agrees | LoL:2812, LoL:1142–1145 |
-| 54 | checkMagic | character, spell, level | Tests whether the character can pay the spell's resource costs. | 1 | 1 | `0x16624` | `0x1AF26` | Open | LoL:2815, LoL:1147–1150 |
+| 54 | checkMagic | character, spell, level | Returns 1 if the spell costs more MP than the character holds or costs at least their current HP. Returns 0 when the costs can be paid. | 1 | 1 | `0x16624` | `0x1AF26` | Agrees | LoL:2815, LoL:1147–1150, `engine/lol.cpp:3386–3396` |
 | 55 | giveItemToMonster | monster, item | Gives an item to a monster, or returns 0 for monster −1. | 49 | 49 | `0x14E07` | `0x1978E` | Partial | LoL:2816, LoL:1152–1158 |
-| 56 | loadLangFile | basename (TEXT) | Loads basename plus the current language extension. | 29 | 29 | `0x30B6C` → `0x47B77` | `0x37177` → `0x51356` | Open | LoL:2817, LoL:1160–1166 |
-| 57 | playSoundEffect | sound ID | Plays a sound effect. | 640 | 604 | `0x14E52` | `0x197D9` | Open | LoL:2818, LoL:1168–1172 |
-| 58 | processDialogue | — | Processes dialogue and returns its result. | 29 | 33 | `0x14B5A` | `0x194E1` | Open | LoL:2821, LoL:1174–1177 |
-| 59 | stopTimScript | TIM slot | Stops all functions in the active TIM. | 41 | 42 | `0x14EB1` | `0x19838` | Open | LoL:2822, LoL:1179–1183 |
+| 56 | loadLangFile | basename (TEXT) | Loads basename plus the current language extension. | 29 | 29 | `0x30B6C` → `0x47B77` | `0x37177` → `0x51356` | Partial | LoL:2817, LoL:1160–1166 |
+| 57 | playSoundEffect | sound ID | Plays a sound effect. | 640 | 604 | `0x14E52` | `0x197D9` | Partial | LoL:2818, LoL:1168–1172 |
+| 58 | processDialogue | — | Processes dialogue and returns its result. | 29 | 33 | `0x14B5A` | `0x194E1` | Partial | LoL:2821, LoL:1174–1177 |
+| 59 | stopTimScript | TIM slot | Stops all functions in the active TIM. | 41 | 42 | `0x14EB1` | `0x19838` | Agrees | LoL:2822, LoL:1179–1183 |
 | 5A | getWallFlags | block, side | Reads wall flags for the wall on that side. | 4 | 4 | `0x134F0` | `0x17EB3` | Agrees | LoL:2823, LoL:1185–1188 |
-| 5B | changeMonsterStat | monster, selector, value | Changes monster mode, HP, block, facing or flags. See LoL:1190–1229. | 47 | 49 | `0x14F00` | `0x19887` | Open | LoL:2824, LoL:1190–1229 |
-| 5C | getMonsterStat | monster, selector | Reads monster mode, HP, block, facing, type, base HP, runtime or property flags, or animation type. See LoL:1231–1263. | 23 | 19 | `0x14FF7` | `0x1997E` | Open | LoL:2827, LoL:1231–1263 |
-| 5D | releaseMonsterShapes | — | Releases shapes for all three monster slots. | 2 | 2 | `0x1671F` | `0x1AFB9` | Open | LoL:2828, LoL:1265–1270 |
-| 5E | playCharacterScriptChat | character selector, speech parameter, lang ID | Plays script chat. In talkie mode it first stops current speech and portrait animation. | 744 | 584 | `0x150D7` | `0x19A5E` | Open | LoL:2829, LoL:1272–1279 |
-| 5F | update | — | Runs the engine update. | 42 | 32 | `0x150CA` | `0x19A51` | Open | LoL:2830, LoL:1288–1292 |
-| 60 | playEnvironmentalSfx | sound ID, block or −1 | Plays environmental SFX at the given block or current block. | 57 | 57 | `0x14E73` | `0x197FA` | Open | LoL:2833, LoL:1281–1286 |
-| 61 | healCharacter | character, amount or heal level, redraw, magic mode | Uses spell healing when magic mode is set, otherwise adds HP and optionally redraws. | 5 | 5 | `0x15138` | `0x19AB2` | Open | LoL:2834, LoL:1294–1304 |
-| 62 | drawExitButton | layout index, disabled overlay | Draws an exit button and optionally adds a grid overlay. | 174 | 174 | `0x30EF6` → `0x4DBFB` | `0x374D6` → `0x56758` | Open | LoL:2835, LoL:1306–1335 |
-| 63 | loadSoundFile | sound file index | Loads sound file. | 134 | 134 | `0x151D1` | `0x19B4B` | Open | LoL:2836, LoL:1337–1341 |
-| 64 | playMusicTrack | track | Plays a music track. | 121 | 120 | `0x151EE` | `0x19B68` | Open | LoL:2839, LoL:1343–1346 |
-| 65 | deleteMonstersFromBlock | block | Removes monsters from a block. | 1 | 1 | `0x1672B` | `0x1AFC5` | Open | LoL:2840, LoL:1348–1352 |
+| 5B | changeMonsterStat | monster, selector, value | Changes monster mode, HP, block, facing or flags. See LoL:1190–1229. | 47 | 49 | `0x14F00` | `0x19887` | Agrees | LoL:2824, LoL:1190–1229 |
+| 5C | getMonsterStat | monster, selector | Reads monster mode, HP, block, facing, type, base HP, runtime or property flags, or animation type. See LoL:1231–1263. | 23 | 19 | `0x14FF7` | `0x1997E` | Agrees | LoL:2827, LoL:1231–1263 |
+| 5D | releaseMonsterShapes | — | Releases shapes for all three monster slots. | 2 | 2 | `0x1671F` | `0x1AFB9` | Partial | LoL:2828, LoL:1265–1270 |
+| 5E | playCharacterScriptChat | character selector, speech parameter, lang ID | Plays script chat. In talkie mode it first stops current speech and portrait animation. | 744 | 584 | `0x150D7` | `0x19A5E` | Partial | LoL:2829, LoL:1272–1279 |
+| 5F | update | — | Runs the engine update. | 42 | 32 | `0x150CA` | `0x19A51` | Partial | LoL:2830, LoL:1288–1292 |
+| 60 | playEnvironmentalSfx | sound ID, block or −1 | Plays environmental SFX at the given block or current block. | 57 | 57 | `0x14E73` | `0x197FA` | Agrees | LoL:2833, LoL:1281–1286 |
+| 61 | healCharacter | character, amount or heal level, redraw, magic mode | Uses spell healing when magic mode is set, otherwise adds HP and optionally redraws. | 5 | 5 | `0x15138` | `0x19AB2` | Agrees | LoL:2834, LoL:1294–1304 |
+| 62 | drawExitButton | layout index, disabled overlay | Draws an exit button and optionally adds a grid overlay. | 174 | 174 | `0x30EF6` → `0x4DBFB` | `0x374D6` → `0x56758` | Agrees | LoL:2835, LoL:1306–1335 |
+| 63 | loadSoundFile | sound file index | Loads sound file. | 134 | 134 | `0x151D1` | `0x19B4B` | Partial | LoL:2836, LoL:1337–1341 |
+| 64 | playMusicTrack | track | Plays a music track. | 121 | 120 | `0x151EE` | `0x19B68` | Partial | LoL:2839, LoL:1343–1346 |
+| 65 | deleteMonstersFromBlock | block | Removes monsters from a block. | 1 | 1 | `0x1672B` | `0x1AFC5` | Partial | LoL:2840, LoL:1348–1352 |
 | 66 | countBlockItems | block | Counts assigned items, skipping monsters. | 27 | 27 | `0x15208` | `0x19B82` | Agrees | LoL:2841, LoL:1354–1366 |
 | 67 | characterSkillTest | skill, native score bonus | Native (`0x1529C`–`0x152AF`): 10 × (skill level + modifier) + the second script argument + 25 for slots 0 to n−1, where n counts the characters with flag 1 (`+0x4E1A0`; the slots' own flags are not tested); returns the first slot with the highest positive value if 1d100 is at most that value, otherwise −1 (CD `+0x152C7–0x152E4`, floppy `+0x19C41–0x19C5E`). ScummVM has no ×10 and ignores the second argument. **CONFIRMED** (CD; the floppy body `0x19BC6` is the same). | 67 | 67 | `0x1524C` | `0x19BC6` | Differs | LoL:2842, LoL:1368–1384 |
 | 68 | countAllMonsters | — | Counts positive-HP monsters except mode 13. | 4 | 4 | `0x152E5` | `0x19C5F` | Agrees | LoL:2845, LoL:1386–1396 |
-| 69 | playEndSequence | — | Plays ending and quits or fades in demo mode. | 1 | 1 | `0x16662` | `0x1AF64` | Open | LoL:2846, LoL:1398–1428 |
-| 6A | stopPortraitSpeechAnim | — | Stops portrait speech animation and stops audio speech in talkie mode. | 73 | 41 | `0x15319` | `0x19C93` | Open | LoL:2847, LoL:1430–1436 |
+| 69 | playEndSequence | — | Plays ending and quits or fades in demo mode. | 1 | 1 | `0x16662` | `0x1AF64` | Partial | LoL:2846, LoL:1398–1428 |
+| 6A | stopPortraitSpeechAnim | — | Stops portrait speech animation and stops audio speech in talkie mode. | 73 | 41 | `0x15319` | `0x19C93` | Partial | LoL:2847, LoL:1430–1436 |
 | 6B | setPaletteBrightness | brightness, apply now | Changes brightness and returns previous value. | 39 | 39 | `0x30B85` → `0x47C99` | `0x37190` → `0x51478` | Partial | LoL:2848, LoL:1438–1445 |
-| 6C | calcInflictableDamage | attacker, target, hit type | Calculates maximum inflictable damage across item categories. | 2 | 2 | `0x15467` | `0x19DD9` | Open | LoL:2851, LoL:1447–1450 |
+| 6C | calcInflictableDamage | attacker, target, hit type | Calculates maximum inflictable damage across item categories. | 2 | 2 | `0x15467` | `0x19DD9` | Agrees | LoL:2851, LoL:1447–1450 |
 | 6D | getInflictedDamage | maximum | Rolls two dice with the supplied number of sides. | 8 | 8 | `0x154A5` | `0x19E17` | Agrees | LoL:2852, LoL:1452–1456 |
 | 6E | checkForCertainPartyMember | character ID | Tests matching character ID in slots whose flags intersect 9. | 19 | 17 | `0x1532E` | `0x19CA0` | Agrees | LoL:2853, LoL:1458–1465 |
-| 6F | printMessage | style, lang ID, optional SFX, up to seven formatting values | Prints a localized message and may play a sound. | 139 | 176 | `0x15380` | `0x19CF2` | Open | LoL:2854, LoL:1467–1476 |
-| 70 | deleteLevelItem | item | Unlinks a placed item and deletes it. | 7 | 7 | `0x154BF` | `0x19E31` | Open | LoL:2857, LoL:1478–1486 |
-| 71 | calcInflictableDamagePerItem | attacker, target, category, base damage, hit type | Calculates inflictable damage for one item category. | 6 | 6 | `0x15506` | `0x19E78` | Open | LoL:2858, LoL:1488–1491 |
-| 72 | distanceAttack | object type, item, block, X, Y, height, facing, unused, attacker/flags | Launches a flying item. Uses block center unless bit 15 of slot 8 is set. Deletes item on failure. | 57 | 57 | `0x15568` | `0x19EDA` | Open | LoL:2859, LoL:1493–1511 |
-| 73 | removeCharacterEffects | character, effect selector, redraw | Removes selected character effects. | 3 | 3 | `0x15670` | `0x19FE2` | Open | LoL:2860, LoL:1513–1517 |
+| 6F | printMessage | style, lang ID, optional SFX, up to seven formatting values | Prints a localized message and may play a sound. | 139 | 176 | `0x15380` | `0x19CF2` | Agrees | LoL:2854, LoL:1467–1476 |
+| 70 | deleteLevelItem | item | Unlinks a placed item and deletes it. | 7 | 7 | `0x154BF` | `0x19E31` | Agrees | LoL:2857, LoL:1478–1486 |
+| 71 | calcInflictableDamagePerItem | attacker, target, category, base damage, hit type | Calculates inflictable damage for one item category. | 6 | 6 | `0x15506` | `0x19E78` | Agrees | LoL:2858, LoL:1488–1491 |
+| 72 | distanceAttack | object type, item, block, local X, local Y, height, facing, flying record byte, attacker/flags | Launches a flying item. Uses block center unless slot 8 bit 15 selects the supplied local position. Copies the low byte of slot 7 to flying record +0x0B and deletes the item on failure. | 57 | 57 | `0x15568` | `0x19EDA` | Agrees | LoL:2859, LoL:1493–1511 |
+| 73 | removeCharacterEffects | character, effect selector, redraw | Removes selected character effects. | 3 | 3 | `0x15670` | `0x19FE2` | Partial | LoL:2860, LoL:1513–1517 |
 | 74 | checkInventoryFull | — | **CONFIRMED** Native returns 0 on the first empty slot and 1 when all 48 slots are occupied. The ScummVM reference returns 0 on the first occupied slot and 1 when all 48 are empty. | 13 | 14 | `0x156BC` | `0x1A02E` | Differs | LoL:2863, LoL:1519–1526 |
-| 75 | moveBlockObjects | from block, to block, level, include monsters, run script, include items | Removes selected monsters and moves eligible placed items. May dispatch destination event 0x80. | 89 | 89 | `0x156DB` | `0x1A04D` | Open | LoL:2864, LoL:1528–1578 |
+| 75 | moveBlockObjects | from block, to block, level, include monsters, run script, include items | Removes selected monsters and moves eligible placed items. Both editions compare the current level to slot 2 for the destination event. CD moves only items with flag 0x4000 when slot 5 is set; floppy moves every item. Neither has ScummVM's level-21 workaround. | 89 | 89 | `0x156DB` | `0x1A04D` | Differs | LoL:2864, LoL:1528–1578 |
 | 76 | Unimplemented | slot 0 unused, value | VM returns 0 in ScummVM. **CONFIRMED** native: reads only argument 1. When it is nonzero it calls one routine, otherwise another with 0, then returns 1 (CD `+0x1586A–0x15893`, floppy `+0x1A1A5–0x1A1CE`). | 0 | 0 | `0x1586A` | `0x1A1A5` | Differs | LoL:2865, VM:309–321 |
 | 77 | Unimplemented | — | VM returns 0 in ScummVM. **CONFIRMED** native: reads no argument, calls one overlay routine and returns 1 (overlay body CD `+0x47C8D`, floppy `+0x5146C`). | 0 | 0 | `0x30B80` → `0x47C8D` | `0x3718B` → `0x5146C` | Differs | LoL:2866, VM:309–321 |
-| 78 | addSpellToScroll | spell, availability flag | Changes spell scroll availability. | 2 | 2 | `0x31094` → `0x4FB35` | `0x376D4` → `0x59E64` | Open | LoL:2869, LoL:1580–1584 |
-| 79 | playDialogueText | lang ID, formatting arguments | Prints dialogue text. | 1 | 35 | `0x15894` | `0x1A1CF` | Open | LoL:2870, LoL:1586–1590 |
-| 7A | playDialogueTalkText | speech/lang ID, formatting arguments | Plays speech and prints dialogue if speech fails or text is enabled. | 60 | 61 | `0x158C9` | `0x1A204` | Open | LoL:2871, LoL:1592–1602 |
+| 78 | addSpellToScroll | spell, availability flag | Changes spell scroll availability. | 2 | 2 | `0x31094` → `0x4FB35` | `0x376D4` → `0x59E64` | Agrees | LoL:2869, LoL:1580–1584 |
+| 79 | playDialogueText | lang ID, formatting arguments | Prints dialogue text. | 1 | 35 | `0x15894` | `0x1A1CF` | Agrees | LoL:2870, LoL:1586–1590 |
+| 7A | playDialogueTalkText | speech/lang ID, formatting arguments | Plays speech and prints dialogue if speech fails or text is enabled. | 60 | 61 | `0x158C9` | `0x1A204` | Agrees | LoL:2871, LoL:1592–1602 |
 | 7B | checkMonsterTypeHostility | type or −1 | Checks the first matching monster. Returns 0 for mode 1, otherwise 1. | 8 | 8 | `0x1592C` | `0x1A239` | Agrees | LoL:2872, LoL:1604–1612 |
-| 7C | setNextFunc | entry number | Sets the next script function. | 5 | 5 | `0x1598A` | `0x1A297` | Open | LoL:2875, LoL:1614–1618 |
+| 7C | setNextFunc | entry number | Sets the next script function. | 5 | 5 | `0x1598A` | `0x1A297` | Partial | LoL:2875, LoL:1614–1618 |
 | 7D | dummy1 | floppy uses two arguments | **CONFIRMED** CD returns 1. floppy passes both arguments to a native comparison routine and returns its result, which guards 0x7E. | 1 | 2 | `0x30F90` → `0x4E3E0` | `0x37575` → `0x57071` | Differs in floppy | CD `MAIN.EXE+0x4E3E0–0x4E3E7`; floppy `+0x57071–0x5709B`; LoL:2876, LoL:1620–1622 |
 | 7E | exitGame | — | **CONFIRMED** Prepare game shutdown and terminate to DOS with status 0. ScummVM leaves the slot unimplemented. | 1 | 2 | `0x159A4` | `0x1A2B1` | Differs | CD `MAIN.EXE+0xC846–0xC857, +0x396B–0x3973`; floppy `+0x10062–0x10073, +0x496B–0x4973`; LoL:2877. [Native exit and script branch](unknowns/08_native_script_exit.md) |
-| 7F | suspendMonster | monster | Sets mode 14 and removes its placement. | 26 | 24 | `0x159B1` | `0x1A2BE` | Open | LoL:2878, LoL:1624–1631 |
+| 7F | suspendMonster | monster | Sets mode 14 and removes its placement. | 26 | 24 | `0x159B1` | `0x1A2BE` | Agrees | LoL:2878, LoL:1624–1631 |
 | 80 | setScriptTextParameter | value | Sets the script text formatting parameter. | 0 | 1 | `0x15A0D` | `0x1A31A` | Partial | LoL:2881, LoL:1633–1637 |
-| 81 | triggerEventOnMouseButtonClick | event ID | Polls input and optionally triggers the event. Returns whether it handled input. | 3 | 4 | `0x15A27` | `0x1A334` | Open | LoL:2882, LoL:1639–1658 |
-| 82 | printWindowText | text dimension, flags, lang ID, formatting arguments | Clears or resets the text area as requested, then prints localized text. | 14 | 14 | `0x15A7D` | `0x1A385` | Open | LoL:2883, LoL:1660–1671 |
+| 81 | triggerEventOnMouseButtonClick | forward polled event flag | Polls input. A nonzero argument forwards the polled event code in the original. ScummVM forwards the argument value itself. | 3 | 4 | `0x15A27` | `0x1A334` | Differs | LoL:2882, LoL:1639–1658 |
+| 82 | printWindowText | text dimension, flags, lang ID, formatting arguments | Clears or resets the text area as requested, then prints localized text. | 14 | 14 | `0x15A7D` | `0x1A385` | Agrees | LoL:2883, LoL:1660–1671 |
 | 83 | countSpecificMonsters | type IDs followed by −1 | Counts monsters of those types in modes below 14. | 4 | 4 | `0x15B05` | `0x1A40D` | Agrees | LoL:2884, LoL:1673–1688 |
-| 84 | updateBlockAnimations2 | block, side, frame, frame count, wall IDs | Selects a wall from the list using frame modulo frame count. | 25 | 25 | `0x15B78` | `0x1A480` | Open | LoL:2887, LoL:1690–1697 |
-| 85 | checkPartyForItemType | character or −1, type index, equipped only | Checks equipped items and optionally inventory and cursor. | 21 | 13 | `0x15BD6` | `0x1A4DE` | Open | LoL:2888, LoL:1699–1723 |
+| 84 | updateBlockAnimations2 | block, side, frame, frame count, wall IDs | Selects a wall from the list using frame modulo frame count. | 25 | 25 | `0x15B78` | `0x1A480` | Agrees | LoL:2887, LoL:1690–1697 |
+| 85 | checkPartyForItemType | character or −1, type index, equipped only | Checks equipped items and optionally inventory and cursor. | 21 | 13 | `0x15BD6` | `0x1A4DE` | Agrees | LoL:2888, LoL:1699–1723 |
 | 86 | blockDoor | block | Sets the blocked-door block and returns it. | 10 | 10 | `0x15C95` | `0x1A59D` | Agrees | LoL:2889, LoL:1725–1729 |
-| 87 | resetTimDialogueState | TIM slot | Resets TIM dialogue state. | 19 | 17 | `0x15CAC` | `0x1A5B4` | Open | LoL:2890, LoL:1731–1735 |
-| 88 | getItemOnPos | block, local X or −1, local Y or −1, restart | Looks up a placed item with optional coordinate filters using a cursor state. | 21 | 21 | `0x15D02` | `0x1A5F5` | Open | LoL:2893, LoL:1737–1774 |
-| 89 | removeLevelItem | item, block | Unlinks an item from a level block. | 1 | 1 | `0x15DD0` | `0x1A6C3` | Open | LoL:2894, LoL:1776–1780 |
+| 87 | resetTimDialogueState | TIM slot | Resets the TIM dialogue state. CD substitutes 1 for a zero configured value at TIM +4. Floppy stores the configured value directly. | 19 | 17 | `0x15CAC` | `0x1A5B4` | Differs in floppy | LoL:2890, LoL:1731–1735 |
+| 88 | getItemOnPos | block, local X or −1, local Y or −1, restart | Looks up a placed item with optional coordinate filters using a cursor state. | 21 | 21 | `0x15D02` | `0x1A5F5` | Partial | LoL:2893, LoL:1737–1774 |
+| 89 | removeLevelItem | item, block | Unlinks an item from a level block. | 1 | 1 | `0x15DD0` | `0x1A6C3` | Partial | LoL:2894, LoL:1776–1780 |
 | 8A | savePage5 | — | **CONFIRMED** The native routine backs up page 5 when the backup flag is clear, then returns 1. ScummVM returns 1. | 40 | 40 | `0x30E83` → `0x4D311` | `0x37463` → `0x55EA9` | Differs | LoL:2895, LoL:1782–1788 |
 | 8B | restorePage5 | — | **CONFIRMED** The native routine frees animation slots with addresses in the saved page-5 range, restores the page, clears the backup flag and returns 1. ScummVM frees all six slots and returns 1. | 42 | 42 | `0x30E88` → `0x4D31D` | `0x37468` → `0x55EB5` | Differs | LoL:2896, LoL:1790–1798 |
-| 8C | initDialogueSequence | mode, dialogue flag | Initializes a dialogue sequence. | 26 | 24 | `0x30E8D` → `0x4D329` | `0x3746D` → `0x55EC1` | Open | LoL:2899, LoL:1800–1804 |
-| 8D | restoreAfterDialogueSequence | restore mode | Restores after dialogue sequence. | 21 | 20 | `0x30E92` → `0x4D357` | `0x37472` → `0x55EEF` | Open | LoL:2900, LoL:1806–1810 |
-| 8E | setSpecialSceneButtons | X, Y, width, height, enable flags | Sets special-scene buttons in the rectangle. | 5 | 5 | `0x30E97` → `0x4D373` | `0x37477` → `0x55F0B` | Open | LoL:2901, LoL:1812–1816 |
-| 8F | restoreButtonsAfterSpecialScene | — | Restores normal buttons after a special scene. | 4 | 4 | `0x30E9C` → `0x4D3D7` | `0x3747C` → `0x55F6F` | Open | LoL:2902, LoL:1818–1822 |
+| 8C | initDialogueSequence | mode, dialogue flag | Initializes a dialogue sequence. | 26 | 24 | `0x30E8D` → `0x4D329` | `0x3746D` → `0x55EC1` | Partial | LoL:2899, LoL:1800–1804 |
+| 8D | restoreAfterDialogueSequence | restore mode | Restores after dialogue sequence. | 21 | 20 | `0x30E92` → `0x4D357` | `0x37472` → `0x55EEF` | Partial | LoL:2900, LoL:1806–1810 |
+| 8E | setSpecialSceneButtons | X, Y, width, height, enable flags | Sets special-scene buttons in the rectangle. | 5 | 5 | `0x30E97` → `0x4D373` | `0x37477` → `0x55F0B` | Partial | LoL:2901, LoL:1812–1816 |
+| 8F | restoreButtonsAfterSpecialScene | — | Restores normal buttons after a special scene. | 4 | 4 | `0x30E9C` → `0x4D3D7` | `0x3747C` → `0x55F6F` | Partial | LoL:2902, LoL:1818–1822 |
 | 90 | Unimplemented | value | VM returns 0 in ScummVM. **CONFIRMED** native: passes argument 0 to one overlay routine and returns 1 (overlay body CD `+0x4D3E3`, floppy `+0x55F7B`). | 0 | 0 | `0x30EA1` → `0x4D3E3` | `0x37481` → `0x55F7B` | Differs | LoL:2905, VM:309–321 |
 | 91 | Unimplemented | value | VM returns 0 in ScummVM. **CONFIRMED** native: passes argument 0 to a different overlay routine and returns 1 (overlay body CD `+0x4D3FF`, floppy `+0x55F97`). | 0 | 0 | `0x30EA6` → `0x4D3FF` | `0x37486` → `0x55F97` | Differs | LoL:2906, VM:309–321 |
-| 92 | prepareSpecialScene | field type, dialogue flag, suspend GUI, allow scene update, control mode, fade flag | Prepares a special scene. | 37 | 37 | `0x30EAB` → `0x4D41B` | `0x3748B` → `0x55FB3` | Open | LoL:2907, LoL:1824–1828 |
-| 93 | restoreAfterSpecialScene | fade flag, redraw playfield, release TIM scripts, scene update mode | Restores after a special scene and returns status. | 45 | 45 | `0x30EB0` → `0x4D491` | `0x37490` → `0x56029` | Open | LoL:2908, LoL:1830–1833 |
-| 94 | assignCustomSfx | filename (TEXT), sound ID | Assigns a custom filename to a mapped sound entry. | 203 | 202 | `0x30B76` → `0x47C0E` | `0x37181` → `0x513ED` | Open | LoL:2911, LoL:1835–1851 |
+| 92 | prepareSpecialScene | field type, dialogue flag, suspend GUI, allow scene update, control mode, fade flag | Prepares a special scene. | 37 | 37 | `0x30EAB` → `0x4D41B` | `0x3748B` → `0x55FB3` | Partial | LoL:2907, LoL:1824–1828 |
+| 93 | restoreAfterSpecialScene | fade flag, redraw playfield, release TIM scripts, scene update mode | Restores after a special scene and returns status. | 45 | 45 | `0x30EB0` → `0x4D491` | `0x37490` → `0x56029` | Partial | LoL:2908, LoL:1830–1833 |
+| 94 | assignCustomSfx | filename (TEXT), sound ID | Assigns a custom filename to a mapped sound entry. | 203 | 202 | `0x30B76` → `0x47C0E` | `0x37181` → `0x513ED` | Agrees | LoL:2911, LoL:1835–1851 |
 | 95 | Unimplemented | value | VM returns 0 in ScummVM. **CONFIRMED** native: passes argument 0 to one routine and returns 1 if its 32-bit result is nonzero, otherwise 0 (overlay body CD `+0x47C68–0x47C8C`, floppy `+0x51447–0x5146B`). | 0 | 0 | `0x30B7B` → `0x47C68` | `0x37186` → `0x51447` | Differs | LoL:2912, VM:309–321 |
 | 96 | findAssignedMonster | block, previous object or −1 | Returns next assigned monster index or −1. | 22 | 22 | `0x15DFF` | `0x1A6F2` | Agrees | LoL:2913, LoL:1853–1862 |
 | 97 | checkBlockForMonster | block, monster or −1 | Looks for a monster within the initial monster portion of the block list. | 4 | 4 | `0x15E77` | `0x1A76A` | Agrees | LoL:2914, LoL:1864–1876 |
-| 98 | crossFadeRegion | source X, source Y, destination X, destination Y, width, height, source page, destination page | Crossfades a screen region. | 10 | 10 | `0x15EDF` | `0x1A7D2` | Open | LoL:2917, LoL:1878–1882 |
+| 98 | crossFadeRegion | source X, source Y, destination X, destination Y, width, height, source page, destination page | Crossfades a screen region. | 10 | 10 | `0x15EDF` | `0x1A7D2` | Partial | LoL:2917, LoL:1878–1882 |
 | 99 | calcCoordinatesAddDirectionOffset | X, Y, direction, return X flag | Offsets coordinates in a direction and returns one axis. | 4 | 4 | `0x15F84` | `0x1A877` | Partial | LoL:2918, LoL:1884–1890 |
-| 9A | resetPortraitsAndDisableSysTimer | — | Resets portraits and suspends the system timer. | 15 | 15 | `0x30EB5` → `0x4D4E0` | `0x37495` → `0x56078` | Open | LoL:2919, LoL:1892–1896 |
+| 9A | resetPortraitsAndDisableSysTimer | — | Resets portraits and suspends the system timer. | 15 | 15 | `0x30EB5` → `0x4D4E0` | `0x37495` → `0x56078` | Agrees | LoL:2919, LoL:1892–1896 |
 | 9B | enableSysTimer | — | Clears scene restore request and enables system timer 2. | 18 | 17 | `0x30EBA` → `0x4D4EC` | `0x3749A` → `0x56084` | Partial | LoL:2920, LoL:1898–1903 |
 | 9C | checkNeedSceneRestore | — | Reads scene restore request. | 13 | 13 | `0x30EBF` → `0x4D4F8` | `0x3749F` → `0x56090` | Agrees | LoL:2923, LoL:1905–1908 |
 | 9D | getNextActiveCharacter | restart | Starts or advances active-character iteration and returns slot or −1. | 4 | 4 | `0x15FF2` | `0x1A8E5` | Agrees | LoL:2924, LoL:1910–1923 |
-| 9E | paralyzePoisonCharacter | character, effect type flag, immunity flags, hit chance, redraw | Attempts a paralysis or poison effect. | 4 | 4 | `0x1603C` | `0x1A92F` | Open | LoL:2925, LoL:1925–1928 |
-| 9F | drawCharPortrait | character or −1 | Redraws a portrait and stats or redraws all of them. | 1 | 1 | `0x1609E` | `0x1A991` | Open | LoL:2926, LoL:1930–1938 |
+| 9E | paralyzePoisonCharacter | character, effect type flag, immunity flags, hit chance, redraw | Attempts a paralysis or poison effect. | 4 | 4 | `0x1603C` | `0x1A92F` | Partial | LoL:2925, LoL:1925–1928 |
+| 9F | drawCharPortrait | character or −1 | Redraws a portrait and stats or redraws all of them. | 1 | 1 | `0x1609E` | `0x1A991` | Agrees | LoL:2926, LoL:1930–1938 |
 | A0 | removeInventoryItem | type index | Removes the first matching inventory or equipment reference and returns success. | 1 | 1 | `0x160D4` | `0x1A9C7` | Agrees | LoL:2929, LoL:1940–1963 |
 | A1 | Unimplemented | value | VM returns 0 in ScummVM. **CONFIRMED** native: passes argument 0 to one routine and returns 1 (CD `+0x161A7–0x161C3`, floppy `+0x1AA9A–0x1AAB6`). | 0 | 0 | `0x161A7` | `0x1AA9A` | Differs | LoL:2930, VM:309–321 |
 | A2 | Unimplemented | value | VM returns 0 in ScummVM. **CONFIRMED** native: passes argument 0 to a different routine and returns 1 (CD `+0x161C4–0x161E0`, floppy `+0x1AAB7–0x1AAD3`). | 0 | 0 | `0x161C4` | `0x1AAB7` | Differs | LoL:2931, VM:309–321 |
-| A3 | getAnimationLastPart | animation slot | Returns and resets the last animation part. | 9 | 9 | `0x161E1` | `0x1AAD4` | Open | LoL:2932, LoL:1965–1968 |
-| A4 | assignSpecialGuiShape | wall shape index, subshape, X, Y, mirror | Sets a special GUI shape, or clears it for first argument 0. | 2 | 2 | `0x30CAD` → `0x498C0` | `0x372AD` → `0x52F05` | Open | LoL:2935, LoL:1970–1983 |
-| A5 | findInventoryItem | skip inventory flag, character selector, type index | Returns 0 for inventory hit, otherwise an eligible character slot or −1. In this handler the equipment loop covers all four slots for selector −1 and is empty for a concrete slot. | 3 | 3 | `0x1621F` | `0x1AB12` | Open | LoL:2936, LoL:1985–2012 |
-| A6 | restoreFadePalette | — | Restores and applies saved palette colors. | 1 | 1 | `0x1625D` | `0x1AB50` | Open | LoL:2937, LoL:2014–2020 |
+| A3 | getAnimationLastPart | animation slot | Returns and resets the last animation part. | 9 | 9 | `0x161E1` | `0x1AAD4` | Agrees | LoL:2932, LoL:1965–1968 |
+| A4 | assignSpecialGuiShape | wall shape index, subshape, X, Y, mirror | Sets a special GUI shape, or clears it for first argument 0. | 2 | 2 | `0x30CAD` → `0x498C0` | `0x372AD` → `0x52F05` | Agrees | LoL:2935, LoL:1970–1983 |
+| A5 | findInventoryItem | skip inventory flag, character selector, type index | Returns 0 for inventory hit, otherwise an eligible character slot or −1. In this handler the equipment loop covers all four slots for selector −1 and is empty for a concrete slot. | 3 | 3 | `0x1621F` | `0x1AB12` | Agrees | LoL:2936, LoL:1985–2012 |
+| A6 | restoreFadePalette | — | Restores and applies saved palette colors. | 1 | 1 | `0x1625D` | `0x1AB50` | Agrees | LoL:2937, LoL:2014–2020 |
 | A7 | calcNewBlockPosition | block, direction | Returns the neighboring block in that direction. | 4 | 4 | `0x162AA` | `0x1AB9A` | Agrees | LoL:2938, LoL:2275–2278 |
-| A8 | getSelectedCharacter | — | Returns selected character slot. | 1 | 1 | `0x162A1` | `0x1AB91` | Open | LoL:2941, LoL:2022–2025 |
+| A8 | getSelectedCharacter | — | Returns selected character slot. | 1 | 1 | `0x162A1` | `0x1AB91` | Agrees | LoL:2941, LoL:2022–2025 |
 | A9 | setHandItem | item | Sets held item. | 1 | 1 | `0x162D6` | `0x1ABC6` | Agrees | LoL:2942, LoL:2027–2031 |
-| AA | drinkBezelCup | cup variant selector, character | Applies Bezel Cup use with variant 3 minus the selector. | 1 | 1 | `0x30729` → `0x4109F` | `0x36CFF` → `0x4A288` | Open | LoL:2943, LoL:2033–2037 |
-| AB | changeItemTypeOrFlag | item, selector, value | Writes type for selector 4 or the low 13 frame/flag bits for selector 15. | 2 | 2 | `0x139DA` | `0x1839D` | Open | LoL:2944, LoL:2039–2055 |
-| AC | placeInventoryItemInHand | type index, redraw | Swaps the first matching inventory item with the held item and returns the old hand handle or −1. | 12 | 13 | `0x162F3` | `0x1ABE3` | Open | LoL:2947, LoL:2057–2080 |
-| AD | castSpell | character, spell, level | Casts a spell and returns its status. | 5 | 5 | `0x1631F` | `0x1AC0F` | Open | LoL:2948, LoL:2082–2085 |
-| AE | pitDrop | mode | Plays a pit-drop animation, sound and optional shake. | 28 | 28 | `0x30FF5` → `0x4EB3C` | `0x375D5` → `0x5781C` | Open | LoL:2949, LoL:2087–2118 |
-| AF | increaseSkill | character, skill | Grants enough experience to reach the current threshold and returns the level increase. | 1 | 1 | `0x30EC4` → `0x4D501` | `0x374A4` → `0x56099` | Open | LoL:2950, LoL:2120–2127 |
-| B0 | paletteFlash | color selector | Flashes and restores the palette. | 11 | 11 | `0x1635D` | `0x1AC4D` | Open | LoL:2953, LoL:2129–2182 |
-| B1 | restoreMagicShroud | — | Plays the magic shroud restoration animation and palettes. | 1 | 1 | `0x16461` | `0x1AD63` | Open | LoL:2954, LoL:2184–2251 |
-| B2 | dummy1 | — | ScummVM returns 1 through the same reference handler as 0x7D. | 9 | 8 | `0x30EDD` → `0x4D683` | `0x374BD` → `0x5621B` | Open | LoL:2955, LoL:1620–1622 |
-| B3 | disableControls | mode | Disables controls. | 6 | 6 | `0x30ED3` → `0x4D661` | `0x374B3` → `0x561F9` | Open | LoL:2956, LoL:2253–2256 |
-| B4 | enableControls | — | Enables controls. | 4 | 4 | `0x30ED8` → `0x4D67A` | `0x374B8` → `0x56212` | Open | LoL:2959, LoL:2258–2261 |
-| B5 | shakeScene | duration, width, height | Shakes scene and restores it afterwards. | 6 | 6 | `0x164D8` | `0x1ADDA` | Open | LoL:2960, LoL:2263–2267 |
-| B6 | gasExplosion | block | Processes a gas explosion. | 3 | 3 | `0x308CF` → `0x42C44` | `0x36E9F` → `0x4BE64` | Open | LoL:2961, LoL:2269–2273 |
+| AA | drinkBezelCup | cup variant selector, character | Applies Bezel Cup use with variant 3 minus the selector. | 1 | 1 | `0x30729` → `0x4109F` | `0x36CFF` → `0x4A288` | Partial | LoL:2943, LoL:2033–2037 |
+| AB | changeItemTypeOrFlag | item, selector, value | Writes type for selector 4 or the low 13 frame/flag bits for selector 15. | 2 | 2 | `0x139DA` | `0x1839D` | Agrees | LoL:2944, LoL:2039–2055 |
+| AC | placeInventoryItemInHand | type index, redraw | Swaps the first matching inventory item with the held item and returns the old hand handle or −1. | 12 | 13 | `0x162F3` | `0x1ABE3` | Partial | LoL:2947, LoL:2057–2080 |
+| AD | castSpell | character, spell, level | Casts a spell and returns its status. | 5 | 5 | `0x1631F` | `0x1AC0F` | Agrees | LoL:2948, LoL:2082–2085 |
+| AE | pitDrop | mode | Plays a pit-drop animation, sound and optional shake. | 28 | 28 | `0x30FF5` → `0x4EB3C` | `0x375D5` → `0x5781C` | Agrees | LoL:2949, LoL:2087–2118 |
+| AF | increaseSkill | character, skill | Grants enough experience to reach the current threshold and returns the level increase. | 1 | 1 | `0x30EC4` → `0x4D501` | `0x374A4` → `0x56099` | Agrees | LoL:2950, LoL:2120–2127 |
+| B0 | paletteFlash | color selector | Flashes and restores the palette. | 11 | 11 | `0x1635D` | `0x1AC4D` | Agrees | LoL:2953, LoL:2129–2182 |
+| B1 | restoreMagicShroud | — | Plays the magic shroud restoration animation and palettes. | 1 | 1 | `0x16461` | `0x1AD63` | Partial | LoL:2954, LoL:2184–2251 |
+| B2 | dummy1 | page selector (2, 4, or 6), row count | Updates a page-related dword to the signed row count × 320 and returns 1. ScummVM's dummy handler returns 1. | 9 | 8 | `0x30EDD` → `0x4D683` | `0x374BD` → `0x5621B` | Differs | LoL:2955, LoL:1620–1622 |
+| B3 | disableControls | mode | Disables controls. | 6 | 6 | `0x30ED3` → `0x4D661` | `0x374B3` → `0x561F9` | Partial | LoL:2956, LoL:2253–2256 |
+| B4 | enableControls | — | Enables controls. | 4 | 4 | `0x30ED8` → `0x4D67A` | `0x374B8` → `0x56212` | Partial | LoL:2959, LoL:2258–2261 |
+| B5 | shakeScene | duration, width, height | Shakes scene and restores it afterwards. | 6 | 6 | `0x164D8` | `0x1ADDA` | Partial | LoL:2960, LoL:2263–2267 |
+| B6 | gasExplosion | block | Processes a gas explosion. | 3 | 3 | `0x308CF` → `0x42C44` | `0x36E9F` → `0x4BE64` | Partial | LoL:2961, LoL:2269–2273 |
 | B7 | calcNewBlockPosition | block, direction | Returns neighboring block, alias of 0xA7. | 1 | 1 | `0x165F8` | `0x1AEFA` | Agrees | LoL:2962, LoL:2275–2278 |
-| B8 | crossFadeScene | — | Draws and crossfades the scene, then refreshes page 2. | 3 | 3 | `0x1674F` | `0x1AFE9` | Open | LoL:2965, LoL:2280–2286 |
-| B9 | updateDrawPage2 | — | Updates draw page 2. | 13 | 13 | `0x16788` | `0x1B022` | Open | LoL:2966, LoL:2288–2292 |
+| B8 | crossFadeScene | — | Draws and crossfades the scene, then refreshes page 2. | 3 | 3 | `0x1674F` | `0x1AFE9` | Agrees | LoL:2965, LoL:2280–2286 |
+| B9 | updateDrawPage2 | — | Updates draw page 2. | 13 | 13 | `0x16788` | `0x1B022` | Partial | LoL:2966, LoL:2288–2292 |
 | BA | setMouseCursor | cursor mode | Sets icon 133 for mode 1, otherwise uses the held item cursor. **CONFIRMED** The floppy slot points to the return-zero stub. | 2 | 0 | `0x30F28` → `0x4DED7` | `0x17DEF` | Differs in floppy | LoL:2967, LoL:2294–2301 |
 | BB | characterSays | track, character ID, redraw | In talkie mode plays speech, stops it for track −1 or polls it for track −2. ScummVM returns 0 in floppy mode. The original floppy executable has no slot 0xBB. | 20 | 0 | `0x16795` | — | Partial | LoL:2968, LoL:2303–2318 |
 | BC | queueSpeech | speech ID, speaker | Queues speech ID plus 1000 if both arguments are nonzero. | 8 | 0 | `0x1680B` | — | Agrees | LoL:2971, LoL:2320–2327 |
 | BD | getItemPrice | price operand | For negative input, rounds the magnitude up to a hundred with a 50 minimum for values below 50. For nonnegative input, chooses the first price threshold at least that large or returns 0. | 11 | 0 | `0x16837` | — | Partial | LoL:2972, LoL:2329–2347 |
-| BE | getLanguage | — | Returns current language index. | 5 | 0 | `0x16898` | — | Open | LoL:2973, LoL:2349–2352 |
+| BE | getLanguage | — | Returns current language index. | 5 | 0 | `0x16898` | — | Agrees | LoL:2973, LoL:2349–2352 |
 | BF | dummy0 | — | Returns 0. The original CD slot shares the 0x17 stub. ScummVM shares the 0x3E handler. | 0 | 0 | `0x1342C` | — | Agrees | LoL:2974, LoL:915–917 |
 
 ## Edition differences and verification
