@@ -55,13 +55,20 @@ def game_path(folder, *parts):
     path = Path(folder)
     for component in Path(*parts).parts:
         wanted = path / component
-        if wanted.exists() or not path.is_dir():
+        if component in (".", "..") or Path(component).is_absolute() or not path.is_dir():
             path = wanted
             continue
-        matches = [entry for entry in path.iterdir() if entry.name.casefold() == component.casefold()]
-        if len(matches) > 1:
+        # Existence alone cannot tell us the stored spelling on Windows or macOS.
+        try:
+            matches = [entry for entry in path.iterdir() if entry.name.casefold() == component.casefold()]
+        except PermissionError:
+            if not wanted.exists():
+                raise
+            matches = []
+        exact = next((entry for entry in matches if entry.name == component), None)
+        if exact is None and len(matches) > 1:
             raise ValueError(f"Several files in {path} match {component}. Give the exact name.")
-        path = matches[0] if matches else wanted
+        path = exact or (matches[0] if matches else wanted)
     return path
 
 
@@ -77,10 +84,9 @@ def data_folder(folder):
 def input_path(path):
     """Honor the given spelling first, then try each missing component by name."""
     path = Path(path)
-    if path.exists() or path == path.parent:
+    if path == path.parent:
         return path
-    parent = path.absolute().parent if path.parent == Path(".") else input_path(path.parent)
-    return game_path(parent, path.name)
+    return game_path(input_path(path.parent), path.name)
 
 
 class ReaderArgumentParser(argparse.ArgumentParser):

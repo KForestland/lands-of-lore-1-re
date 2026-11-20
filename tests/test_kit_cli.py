@@ -131,7 +131,8 @@ class ToolKit(unittest.TestCase):
             self.skipTest("LoL1's level viewer requires Pillow")
         self.assertIn("CHECK level viewer", self.job("level", "--data", self.game, "--level", fixture.LEVEL, "--check"))
         out = self.root / "level pages"
-        self.assertIn("Wrote 1 level page", self.job("level", "--data", self.data, "--level", fixture.LEVEL, "--out", out))
+        self.assertIn("Wrote 1 level page", self.job("level", "--data", self.data.with_name(fixture.DATA),
+                                                    "--level", fixture.LEVEL, "--out", out))
         page, = out.glob("*.html")
         self.assertIn("level plan", page.read_text(encoding="utf-8").lower())
 
