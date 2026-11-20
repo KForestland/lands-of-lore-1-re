@@ -296,7 +296,7 @@ def check(adapter, data):
 
 def main(adapter):
     parser = ReaderArgumentParser(
-        description=f"Unpack editable {adapter.GAME.upper()} text and numbers into a work folder, "
+        description=f"Unpack editable {adapter.GAME.replace('lol', 'LoL')} text and numbers into a work folder, "
                     "rebuild changed copies into a separate output folder and verify them.",
         epilog="Steps: modkit.py unpack GAME WORK; edit the files in WORK/edits; "
                "modkit.py build GAME WORK OUTPUT; modkit.py verify GAME WORK OUTPUT. "

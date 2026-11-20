@@ -21,11 +21,12 @@ Choose an output folder outside the game and clone. Use a fresh folder for each 
 ## Draw a level schematic
 
 ```bash
-python3 tools/level_renderer.py --level 1 --schematic --out ../lol1-out
+mkdir -p ../lol1-out
+python3 tools/level_renderer.py --level level01 --schematic --out ../lol1-out/schematic
 ```
 
 ```text
-wrote ../lol1-out/level01_schematic.png
+Wrote schematic for level01 to ../lol1-out/schematic/level01_schematic.png.
 ```
 
 The picture is a top-down drawing of level 1: light floors, dark walls, orange doors and switches, red marks on decorated walls. No game pixels.

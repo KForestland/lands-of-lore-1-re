@@ -2,15 +2,16 @@
 """Find and run an original Lands of Lore file tool."""
 from argparse import RawDescriptionHelpFormatter
 from pathlib import Path
-import subprocess
+from runpy import run_path
 import sys
 
+import cli_errors
 from cli_errors import ReaderArgumentParser, run_cli
 
 JOBS = {
     "level": ("level_viewer.py", (), "Look at an interactive level plan"),
-    "text": ("decode_dialogue.py", (), "Read a dialogue or language table"),
-    "music": ("xmi_to_midi.py", (), "Convert one XMIDI music member to MIDI"),
+    "text": ("decode_dialogue.py", (), "Read original game text"),
+    "music": ("xmi_to_midi.py", (), "Inspect original game music (convert XMIDI to MIDI)"),
     "save": ("save_edit.py", (), "Edit a copy of a saved game"),
     "patch": ("patch.py", (), "Make or apply a patch and its undo"),
     "mod": ("modkit.py", (), "Unpack or build an editable workspace"),
@@ -20,6 +21,7 @@ JOBS = {
 def main():
     menu = "\n".join(f"  {name:7} {spec[2]}" for name, spec in JOBS.items())
     parser = ReaderArgumentParser(
+        prog="lol.py",
         description="Choose a job for your copy of the original game.",
         usage="python tools/lol.py JOB [OPTIONS]",
         epilog="Jobs\n" + menu + "\n\nUse python tools/lol.py JOB --help for the job's options.",
@@ -34,9 +36,15 @@ def main():
     job, options = args[0], args[1:]
     script, prefix, label = JOBS[job]
     if not options or options[-1] in ("-h", "--help"):
-        print(f"{label}. Use python tools/lol.py {job} [OPTIONS].", flush=True)
+        print(f"{label}.", flush=True)
     program = Path(__file__).resolve().with_name(script)
-    return subprocess.run([sys.executable, str(program), *prefix, *(options or ["--help"])]).returncode
+    old_argv, old_name = sys.argv, cli_errors.JOB_NAME
+    try:
+        sys.argv = [str(program), *prefix, *(options or ["--help"])]
+        cli_errors.JOB_NAME = f"lol.py {job}"
+        run_path(str(program), run_name="__main__")
+    finally:
+        sys.argv, cli_errors.JOB_NAME = old_argv, old_name
 
 
 if __name__ == "__main__":

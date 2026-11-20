@@ -17,7 +17,7 @@ if it differs.
 ## Windows
 
 Open **Windows PowerShell** from the Start menu. Run `py -3 --version`.
-If the command is missing or the version is below 3.8, install a
+If the command is missing or the version is below 3.10, install a
 current Python 3 release with the Python launcher, then reopen PowerShell.
 [Python for Windows](https://www.python.org/downloads/windows/)
 
@@ -41,13 +41,13 @@ py -3 -m venv .venv
 Draw the level and open the picture.
 
 ```powershell
-.\.venv\Scripts\python.exe tools/level_renderer.py --data "$data" --level 1 --schematic --out "$out"
-Start-Process "$out\level01_schematic.png"
+.\.venv\Scripts\python.exe tools/level_renderer.py --data "$data" --level level01 --schematic --out "$out\schematic"
+Start-Process "$out\schematic\level01_schematic.png"
 ```
 
 ## Linux
 
-Open a terminal. If `python3 --version` reports a version below 3.8,
+Open a terminal. If `python3 --version` reports a version below 3.10,
 install a newer Python with your distribution's package manager. On Ubuntu or Debian, `sudo apt install python3-venv` installs the venv module.
 Paste these lines, replacing the path after `data=` with the folder you
 found above.
@@ -59,14 +59,16 @@ out="$HOME/Downloads/LoL1 output"
 mkdir -p "$out"
 python3 -m venv .venv
 .venv/bin/python -m pip install Pillow
-.venv/bin/python tools/level_renderer.py --data "$data" --level 1 --schematic --out "$out"
-xdg-open "$out/level01_schematic.png"
+.venv/bin/python tools/level_renderer.py --data "$data" --level level01 --schematic --out "$out/schematic"
+xdg-open "$out/schematic/level01_schematic.png"
 ```
 
-You should see a grid of light floor squares, dark walls, and orange wall features.
+Light squares are open floor, dark squares have walls on all four sides, and orange squares have some walls. Red marks sit on decorated faces.
 If the tool cannot find a game file, check that the path points to the
 folder containing `GENERAL.PAK`. If the open command fails, open
-`level01_schematic.png` from the output folder in your browser.
+`level01_schematic.png` from the schematic folder in your browser.
+
+To draw the picture again, choose a new schematic folder name in both lines.
 
 [More recipes](COOKBOOK.md) · [Terms used in the guides](GLOSSARY.md)
 

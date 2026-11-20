@@ -21,8 +21,8 @@ XMIDI as read by ScummVM (audio/midiparser_xmidi.cpp, upstream 3b4db303):
 Output: standard MIDI file format 0, division 60, a 500000 us tempo at time
 0, note-offs generated from the durations.
 
-  xmi_to_midi.py LOREINTR.XMI --out midi/     # one .mid per sequence
-  xmi_to_midi.py LOREINTR.XMI                     # list sequences and event counts
+  xmi_to_midi.py LORE01A.XMI --out midi/     # one .mid per sequence
+  xmi_to_midi.py LORE01A.XMI                     # list sequences and event counts
   xmi_to_midi.py --check   # every sequence of every XMI (and C55, PCS) parses to its end-of-track,
                            # and the written MIDI re-reads cleanly with every note closed
 """
@@ -172,7 +172,7 @@ def verify_smf(smf, division=60):
 
 def main():
     ap = L.tool_args(__doc__, out_help="write one MIDI per sequence to this directory", out_aliases=("--out-dir",))
-    ap.add_argument("name", nargs="?", help="music member, e.g. LOREINTR.XMI")
+    ap.add_argument("name", nargs="?", help="music member, e.g. LORE01A.XMI")
 
     a = ap.parse_args()
     if a.check:

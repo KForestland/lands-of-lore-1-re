@@ -3,6 +3,7 @@ from collections import Counter
 from html import escape
 import json
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from cli_errors import ReaderArgumentParser
 from modkit_core import output_folder
@@ -234,9 +235,9 @@ def find_data(path, child, marker):
     if root.is_dir():
         for folder in (root, *(entry for entry in root.iterdir()
                                if entry.is_dir() and entry.name.upper() == child)):
-            if any(entry.name.upper() == marker for entry in folder.iterdir()):
+            if any(entry.is_file() and entry.name.upper() == marker for entry in folder.iterdir()):
                 return folder
-    raise ValueError(f"Cannot find {marker}. Give --data the game folder or its {child} folder.")
+    raise ValueError(f"Cannot find {marker} in {root}. Give --data the game folder or its {child} folder.")
 
 
 def installation_root(data):
@@ -247,14 +248,41 @@ def installation_root(data):
     return data
 
 
+def write_plan(folder, stem, plan):
+    path = folder / f"{stem}.html"
+    path.write_text(plan.render(), encoding="utf-8")
+    return path
+
+
+def check_plan(stem, plan):
+    with TemporaryDirectory(prefix="lol-level-check-") as temp:
+        html = write_plan(Path(temp), stem, plan).read_text(encoding="utf-8")
+    marker = '<script id="records" type="application/json">'
+    if '<svg id="map"' not in html or marker not in html or not plan.records or not plan.shapes:
+        raise ValueError(f"{stem} did not produce a map with searchable entries.")
+    rows = json.loads(html.split(marker, 1)[1].split("</script>", 1)[0])
+    if len(rows) != len(plan.records):
+        raise ValueError(f"{stem} page lost searchable entries.")
+    print(f"CHECK level viewer: {stem} page written and read back with {counted(len(rows), 'entry', 'entries')}.")
+    return 0
+
+
 def main(description, child, marker, default, levels, build, progression=None):
     parser = ReaderArgumentParser(description=description)
     parser.add_argument("--data", required=True, help=f"your game folder or its {child} folder")
     parser.add_argument("--level", default=default, help=f"level to show (default: {default}; use all for every level)")
-    parser.add_argument("--out", required=True, help="new output folder for the HTML pages")
+    destination = parser.add_mutually_exclusive_group(required=True)
+    destination.add_argument("--out", help="new output folder for the HTML pages")
+    destination.add_argument("--check", action="store_true", help="write and verify one level page in a temporary folder")
     args = parser.parse_args()
+    if args.check and args.level.upper() == "ALL":
+        parser.error("--check takes one level.")
     data = find_data(args.data, child, marker)
     selected = levels(data, args.level.upper())
+    if args.check:
+        stem, = selected
+        gates = progression(data, selected) if progression else {}
+        return check_plan(stem, build(data, stem, gates.get(stem, ())))
     total = 0
     with output_folder(args.out, installation_root(data), args.data) as folder:
         if args.level.upper() == "ALL":
@@ -262,7 +290,7 @@ def main(description, child, marker, default, levels, build, progression=None):
         gates = progression(data, selected) if progression else {}
         for stem in selected:
             plan = build(data, stem, gates.get(stem, ()))
-            (folder / f"{stem}.html").write_text(plan.render(), encoding="utf-8")
+            write_plan(folder, stem, plan)
             total += len(plan.records)
     print(f"Wrote {counted(len(selected), 'level page')} with {counted(total, 'entry', 'entries')} to {args.out}.")
     print(f"Open {selected[0]}.html in your browser.")

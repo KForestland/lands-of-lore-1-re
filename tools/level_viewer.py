@@ -11,7 +11,7 @@ from cli_errors import run_cli
 import decode_dialogue as text
 import emc2_decompile as emc
 from level_html import Plan, main
-from level_renderer import level_blocks, render_schematic
+from level_renderer import level_blocks, level_numbers, render_schematic
 from level_report import calls_by_entry, entry_label, events, item_names
 from lol1_progression import collect
 from lol1lib import level_member
@@ -19,12 +19,7 @@ from lol1lib import level_member
 
 def levels(_data, selection):
     import_module("PIL.Image")
-    if selection == "ALL":
-        return [f"level{i:02d}" for i in range(1, 30)]
-    value = selection[5:] if selection.startswith("LEVEL") else selection
-    if not value.isdecimal() or not 1 <= int(value) <= 29:
-        raise ValueError("Choose a level number from 1 to 29 or all.")
-    return [f"level{int(value):02d}"]
+    return [f"level{i:02d}" for i in level_numbers(selection)]
 
 
 def progression(data, selected):
@@ -86,10 +81,10 @@ def place(plan, level, ext, entry, calls, items, counts):
 def view(data, stem, gates):
     level = int(stem[5:])
     plan = Plan(f"Level {level} plan", [(0, 0), (32, 32)],
-                f"Map from LEVEL{level}.CMZ and WLL. Markers show static script calls and automap legend entries.",
+                f"The wall map comes from LEVEL{level}.CMZ and WLL. Markers show entries in the stored scripts and map symbols.",
                 north_up=False)
     plan.legend.update({"Open square": "#ebe8dc", "Solid square": "#282830",
-                        "Mixed wall features": "#e69632", "Decorated face": "#c81e1e",
+                        "Squares with some walls": "#e69632", "Decorated face": "#c81e1e",
                         "Exit square": "var(--exit)"})
 
     picture = BytesIO()

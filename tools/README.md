@@ -7,8 +7,8 @@ Python tools that read the data files of *Lands of Lore: The Throne of Chaos* (D
 The numeric tables can be regenerated with `python3 tools/lol1_numbers.py`. On the CD edition, `--check` prints `CHECK numbers: CD tables match docs/NUMBERS.md`. [Numbers at a glance](../docs/NUMBERS.md)
 
 The `lol.py` job menu opens with `python tools/lol.py`. Add `JOB --help`
-to see the job's options. `level_viewer.py` writes an offline HTML plan with clickable
-details, sharing the drawing and interface in `level_html.py`.
+to see the job's options. `level_viewer.py` writes an offline HTML plan with clickable details using `level_html.py`.
+Use `level_viewer.py --check` to write and read back one plan in a temporary folder.
 
 [First ten minutes](../docs/FIRST_TEN_MINUTES.md) ·
 [Interactive plans](../docs/COOKBOOK.md#open-an-interactive-level-plan)
@@ -83,14 +83,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (49 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (50 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
 
 ```
 $ python3 tools/check_all.py | sed -n '1,3p;$p'
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 49 CHECKS PASSED
+ALL 50 CHECKS PASSED
 ```
 
 ### `modkit.py`
@@ -330,9 +330,9 @@ Top-down map PNG of a level (10 px per square). Without `--schematic`, solid roc
 
 ```
 $ python3 tools/level_renderer.py --level 1 --out maps
-wrote maps/level01_keep.png
-$ python3 tools/level_renderer.py --level 1 --out maps --schematic
-wrote maps/level01_schematic.png
+Wrote map for level01 to maps/level01_keep.png.
+$ python3 tools/level_renderer.py --level 1 --out schematic --schematic
+Wrote schematic for level01 to schematic/level01_schematic.png.
 ```
 
 ### `xxx_reader.py`
@@ -614,7 +614,7 @@ CHECK repo_guard: N tracked files; game files, converted media, stray PNGs, file
 
 ### `tests/test_emc2_corpus.py`
 
-Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last (47th) check.
+Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last check.
 
 ```
 $ python3 tests/test_emc2_corpus.py

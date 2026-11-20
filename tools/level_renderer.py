@@ -38,9 +38,12 @@ overview, not the in-game 3D view: one flat colour per wall type, no textures.
                                                    # missing from the level's WLL; no PNGs written
 """
 from cli_errors import run_cli
-import os
+from pathlib import Path
 import struct
 from collections import Counter
+
+from level_html import counted, find_data, installation_root
+from modkit_core import output_folder
 
 import lol1lib as L
 import tileset_mapper
@@ -60,14 +63,31 @@ def area_set(name, data_dir, cache={}):
     return cache[key]
 
 
+def map_member(level, extension, data_dir):
+    raw = L.level_member(level, extension, data_dir)
+    if raw is None:
+        raise ValueError(f"LEVEL{level}.{extension} is missing from {data_dir}. Give --data the complete game folder or its DATA folder.")
+    return raw
+
+
+def level_numbers(selection):
+    selection = selection.upper()
+    if selection == "ALL":
+        return list(range(1, 30))
+    number = selection.removeprefix("LEVEL")
+    if not number.isascii() or not number.isdecimal() or not 1 <= int(number) <= 29:
+        raise ValueError("Choose a level from 1 to 29 (for example level01), or all.")
+    return [int(number)]
+
+
 def level_blocks(level, data_dir):
-    d = L.load_bitmap(L.level_member(level, "CMZ", data_dir))[2]
+    d = L.load_bitmap(map_member(level, "CMZ", data_dir))[2]
     ln = struct.unpack_from("<H", d, 4)[0]
     return [tuple(d[6 + i * ln:10 + i * ln]) for i in range(1024)]
 
 
 def wll_vmp(level, data_dir):
-    b = L.level_member(level, "WLL", data_dir)
+    b = map_member(level, "WLL", data_dir)
     return {struct.unpack_from("<H", b, 2 + i * 12)[0]: b[4 + i * 12] for i in range((len(b) - 2) // 12)}
 
 
@@ -191,7 +211,7 @@ def render(level, data_dir, check_only=False, cell=10):
 
 
 def wll_records(level, data_dir):
-    b = L.level_member(level, "WLL", data_dir)
+    b = map_member(level, "WLL", data_dir)
     out = {}
     for i in range((len(b) - 2) // 12):
         o = 2 + i * 12
@@ -228,15 +248,16 @@ def render_schematic(level, data_dir, cell=10):
 
 def main():
     ap = L.tool_args(__doc__, out_help="write each map PNG to this directory", out_aliases=("--out-dir",))
-    ap.add_argument("--level", type=int, help="1..29 (default: all)")
+    ap.add_argument("--level", default="all", help="level number or page name such as level01 (default: all)")
 
     ap.add_argument("--schematic", action="store_true", help="line drawing without game pixels")
     a = ap.parse_args()
-    levels = [a.level] if a.level else range(1, 30)
+    data = find_data(a.data, "DATA", "GENERAL.PAK")
+    levels = level_numbers(a.level)
     if a.check:
         bad = []; undef = {}
         for lv in levels:
-            name, problems, undefined = render(lv, a.data, check_only=True)
+            name, problems, undefined = render(lv, data, check_only=True)
             if problems:
                 bad.append(f"L{lv}:{len(problems)}")
             if undefined:
@@ -246,17 +267,21 @@ def main():
               f"CMZ wall types without a WLL record (open point, drawn empty): {undef or 'none'}")
         return 0 if not bad else 1
     if not a.out:
-        ap.error("--out-dir is required to write map images")
-    os.makedirs(a.out, exist_ok=True)
-    for lv in levels:
-        if a.schematic:
-            img = render_schematic(lv, a.data)
-            p = os.path.join(a.out, f"level{lv:02d}_schematic.png")
-            img.save(p); print("wrote", p); continue
-        name, img = render(lv, a.data)
-        p = os.path.join(a.out, f"level{lv:02d}_{name.lower()}.png")
-        img.save(p)
-        print("wrote", p)
+        ap.error("Use --out for a new output folder, or --check.")
+    for level in levels:
+        for extension in ("CMZ", "WLL"):
+            map_member(level, extension, data)
+    with output_folder(a.out, installation_root(data), a.data) as folder:
+        for lv in levels:
+            if a.schematic:
+                name, image = "schematic", render_schematic(lv, data)
+            else:
+                name, image = render(lv, data)
+            path = folder / f"level{lv:02d}_{name.lower()}.png"
+            image.save(path)
+    destination = Path(a.out) / path.name if len(levels) == 1 else Path(a.out)
+    level = f"level{levels[0]:02d}" if len(levels) == 1 else counted(len(levels), "level")
+    print(f"Wrote {'schematic' if a.schematic else 'map'} for {level} to {destination}.")
     return 0
 
 

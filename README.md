@@ -45,7 +45,7 @@ python3 -m venv .venv && . .venv/bin/activate
 python3 -m pip install -r requirements.txt
 export LOL1_DATA="/path/to/your/LOL1/DATA"      # the folder holding GENERAL.PAK (CD: DATA inside the install folder, which also holds INSTALL.EXE and README.ENG that two checks read; floppy: the install folder)
 python3 tools/check_all.py --quick              # lists the checks it skips
-python3 tools/check_all.py                      # full suite of 49 checks
+python3 tools/check_all.py                      # full suite of 50 checks
 python3 -m unittest discover -s tests
 python3 tools/level_renderer.py --level 1 --out ../maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
@@ -64,8 +64,8 @@ What you can look at with your own copy of the game. Run from the clone with `ex
 
 | To see | Command |
 |---|---|
-| A level as a map | `python3 tools/level_renderer.py --level 1 --schematic --out ../lol1-out` |
-| A level's walls in their colours | `python3 tools/level_renderer.py --level 1 --out ../lol1-out` |
+| A level as a map | `python3 tools/level_renderer.py --level level01 --schematic --out ../lol1-out/schematic` |
+| A level's walls in their colours | `python3 tools/level_renderer.py --level level01 --out ../lol1-out/wall-map` |
 | A level sheet (scripts, items, monsters) | `python3 tools/level_report.py --level 1 --out ../lol1-out` |
 | A monster in its colours | `python3 tools/shp_renderer.py GUARD.SHP --level 1 --out ../lol1-out/guard` |
 | An area's walls as the game draws them | `python3 tools/vcn_vmp_reader.py KEEP --walls-png ../lol1-out/keep_walls.png` |

@@ -32,11 +32,12 @@ ROOT = os.path.normpath(os.path.join(HERE, ".."))
 def make(data_dir, name, out_dir):
     tool, args, produced = EXAMPLES[name]
     with tempfile.TemporaryDirectory() as tmp:
-        p = subprocess.run([sys.executable, os.path.join(HERE, tool), *args, "--data", data_dir, "--out", tmp],
+        output = os.path.join(tmp, "image")
+        p = subprocess.run([sys.executable, os.path.join(HERE, tool), *args, "--data", data_dir, "--out", output],
                            capture_output=True, text=True)
         if p.returncode:
             raise ValueError(f"{name}: {tool} failed: {(p.stderr or p.stdout).strip()[-200:]}")
-        source = os.path.join(tmp, produced)
+        source = os.path.join(output, produced)
         with open(source, "rb") as f:
             data = f.read()
     if out_dir:

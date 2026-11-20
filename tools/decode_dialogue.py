@@ -207,7 +207,7 @@ USAGE = """
 def main():
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import lol1lib as L
-    ap = L.tool_args(__doc__ + USAGE, out_help="write decoded JSON files to this directory", out_aliases=("--out-dir",))
+    ap = L.tool_args("Read original game text from LoL1 language tables.\n" + USAGE, out_help="write decoded JSON files to this directory", out_aliases=("--out-dir",))
     ap.add_argument("name", nargs="?")
     ap.add_argument("--index", type=int)
     ap.add_argument("--in-dir")
