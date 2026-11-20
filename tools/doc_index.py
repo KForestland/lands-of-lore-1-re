@@ -179,7 +179,7 @@ def main():
     result = build(ROOT)
     rendered = (json.dumps(result, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
     if args.check:
-        if (ROOT / INDEX).read_bytes() != rendered:
+        if (ROOT / INDEX).read_bytes().replace(b"\r\n", b"\n") != rendered:
             raise ValueError(f"{INDEX} differs from the current pages; regenerate with --out {INDEX}")
         print(f"CHECK doc_index: {len(result['pages'])} pages and {len(result['questions'])} questions match {INDEX}")
     elif args.out:

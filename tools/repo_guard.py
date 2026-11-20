@@ -144,6 +144,15 @@ def message_findings(root):
 
 # No tracked file over 300 KB, except these existing data tables (listed by name).
 SIZE_LIMIT = 300_000
+
+
+def stored_size(path):
+    """Size as committed: a checkout with Windows line endings must not count the extra CR bytes."""
+    with open(path, "rb") as handle:
+        data = handle.read()
+    return len(data) if b"\0" in data[:8000] else len(data.replace(b"\r\n", b"\n"))
+
+
 SIZE_ALLOWED = {"data/music_inventory.json"}
 
 def main():
@@ -167,7 +176,7 @@ def main():
             bad.append(f"{f} (game file type)")
         elif ext in (".png", ".svg") and not f.startswith(PNG_OK):
             bad.append(f"{f} (PNG outside examples/ and docs/images/)")
-        elif os.path.isfile(p) and os.path.getsize(p) > SIZE_LIMIT and f not in SIZE_ALLOWED:
+        elif os.path.isfile(p) and stored_size(p) > SIZE_LIMIT and f not in SIZE_ALLOWED:
             bad.append(f"{f} (larger than 300 KB)")
         if os.path.isfile(p):
             bad.extend(text_findings(root, f))

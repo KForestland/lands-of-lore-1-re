@@ -1,4 +1,5 @@
 """Synthetic witnesses for script and field assembly."""
+import os
 import json
 from pathlib import Path
 import struct
@@ -10,6 +11,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from lol1_level_writer import parse_walls, write_walls
 from lol1_script_writer import assemble, listing
 from parse_tim import tim_listing
+
+# No PATH, so the tools cannot call other programs; Windows still needs SYSTEMROOT to start Python.
+BARE_ENV = {"PATH": "", **{key: os.environ[key] for key in ("SYSTEMROOT",) if key in os.environ}}
 
 
 def form(kind, chunks, bias):
@@ -60,12 +64,12 @@ class ScriptAssembly(unittest.TestCase):
             listing_path.write_text(json.dumps(listing(script)))
             for target in (data / "NEW.INF", data / "ENG" / "NEW.INF"):
                 done = subprocess.run([sys.executable, str(tool), str(listing_path), "--out", str(target)],
-                                      capture_output=True, text=True, env={"PATH": ""})
+                                      capture_output=True, text=True, env=BARE_ENV)
                 self.assertEqual(done.returncode, 2)
                 self.assertFalse(target.exists())
             fine = Path(folder) / "NEW.INF"
             subprocess.run([sys.executable, str(tool), str(listing_path), "--out", str(fine)], check=True,
-                           capture_output=True, env={"PATH": ""})
+                           capture_output=True, env=BARE_ENV)
             self.assertTrue(fine.exists())
 
     def assert_listing_guard(self, command, data, name, original):
@@ -85,14 +89,14 @@ class ScriptAssembly(unittest.TestCase):
                        repo / "no-such-folder" / "NEW.json")
             for target in refused:
                 with self.subTest(target=target):
-                    done = subprocess.run(command(target), capture_output=True, text=True, env={"PATH": ""})
+                    done = subprocess.run(command(target), capture_output=True, text=True, env=BARE_ENV)
                     self.assertEqual(done.returncode, 2, done.stderr)
                     self.assertIn("give an output path outside", done.stderr)
                     self.assertFalse(target.exists())
             fine = root / "NEW.json"
-            subprocess.run(command(fine), check=True, capture_output=True, env={"PATH": ""})
+            subprocess.run(command(fine), check=True, capture_output=True, env=BARE_ENV)
             self.assertEqual(assemble(json.loads(fine.read_text())), original)
-            again = subprocess.run(command(fine), capture_output=True, env={"PATH": ""})
+            again = subprocess.run(command(fine), capture_output=True, env=BARE_ENV)
             self.assertNotEqual(again.returncode, 0)
 
     def test_emc2_assembly_listing_refused_in_game_folders(self):
