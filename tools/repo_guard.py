@@ -174,6 +174,10 @@ def main():
         p = os.path.join(root, f)
         if ext in GAME:
             bad.append(f"{f} (game file type)")
+        elif ext in (".mkv", ".obj", ".mtl", ".wav", ".mid"):
+            bad.append(f"{f} (converted or exported media; these belong in the user's own output folder)")
+        elif ext in (".html", ".htm"):
+            bad.append(f"{f} (generated page; level pages are written into the user's own output folder)")
         elif ext in (".png", ".svg") and not f.startswith(PNG_OK):
             bad.append(f"{f} (PNG outside examples/ and docs/images/)")
         elif os.path.isfile(p) and stored_size(p) > SIZE_LIMIT and f not in SIZE_ALLOWED:
