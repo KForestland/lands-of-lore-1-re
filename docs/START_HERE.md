@@ -2,7 +2,7 @@
 
 [Format quick reference](QUICK_REFERENCE.md) pairs each documented game format with a command and its evidence.
 
-Use Python 3.8 or later and your own copy of *Lands of Lore: The Throne of Chaos* for DOS. Install Pillow and Capstone before running the full check. Point the tools at the folder holding `GENERAL.PAK` (on the CD the `DATA` folder, on the floppy the install folder). Six checks skip comparison with the CD tables when reading the floppy edition.
+Use Python 3.10 or later and your own copy of *Lands of Lore: The Throne of Chaos* for DOS. Install Pillow and Capstone before running the full check. Point the tools at the folder holding `GENERAL.PAK` (on the CD the `DATA` folder, on the floppy the install folder). Six checks skip comparison with the CD tables when reading the floppy edition.
 
 ```bash
 export LOL1_DATA=/path/to/your/LOL1/DATA

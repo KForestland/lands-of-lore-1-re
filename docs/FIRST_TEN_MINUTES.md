@@ -1,7 +1,7 @@
 # First ten minutes
 
 Draw a level from your own installed copy of Lands of Lore I.
-You need Python 3.8 or later with the Pillow package, a web browser, and the
+You need Python 3.10 or later with the Pillow package, a web browser, and the
 game's `DATA` folder. Find the folder containing `GENERAL.PAK`.
 For the floppy edition, the folder containing `GENERAL.PAK` may be the installation folder itself.
 

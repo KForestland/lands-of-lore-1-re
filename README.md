@@ -1,6 +1,6 @@
 # Lands of Lore I: file formats and game rules
 
-[First ten minutes](docs/FIRST_TEN_MINUTES.md)
+**New here?** Start with the [first ten minutes](docs/FIRST_TEN_MINUTES.md): download, one command, a level picture on your screen.
 
 *Lands of Lore: The Throne of Chaos* is a first-person role-playing game for DOS by Westwood Studios (1993; CD-ROM edition with speech later). This repository explains how its data files and its rules work, and gives you Python tools that read every file type from your own copy of the game.
 
@@ -10,7 +10,7 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 
 - **What this is:** documentation of every type of data file and the main rules of the original 1993 DOS game (CD and floppy editions), checked against the game files and the original program.
 - **What you can do today:** read every file type with a tool (pictures, sprites, animations, sound, speech, music, fonts, text, maps, scripts, saves), draw any level, disassemble every level script, and look up how combat, magic and monsters work.
-- **Start in five minutes:** the [Quick start](#quick-start-5-minutes) below, then [Start here, by goal](docs/START_HERE.md), [How the game works](docs/HOW_THE_GAME_WORKS.md) or the [worked example](docs/tutorial-one-event.md).
+- **Using git?** The [quick start with git](#quick-start-with-git-for-people-who-use-git) below, then [Start here, by goal](docs/START_HERE.md), [How the game works](docs/HOW_THE_GAME_WORKS.md) or the [worked example](docs/tutorial-one-event.md).
 - **Recipes:** [cookbook](docs/COOKBOOK.md), short recipes with the command and the first lines it prints.
 - **Change the game, safely:** [change a number in your own copy](#change-a-number-in-your-own-copy) with the mod kit, share it as a small [patch](docs/formats/patch.md) that can be undone, or change a field in a copy of a save; your game folder is only read.
 - **Patches:** [original faults and the item-name spelling patch](patches/README.md).
@@ -34,9 +34,9 @@ These are counts of work done, not a percentage of how complete the project is. 
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->
 
-## Quick start (5 minutes)
+## Quick start with git (for people who use git)
 
-Use Python 3.8 or later and your own copy of the DOS game (CD or floppy edition). Install Pillow for the image tools and Capstone for the executable reference scan. The full check uses both packages.
+Use Python 3.10 or later and your own copy of the DOS game (CD or floppy edition). Install Pillow for the image tools and Capstone for the executable reference scan. The full check uses both packages.
 
 ```bash
 git clone https://github.com/KForestland/lands-of-lore-1-re.git
