@@ -119,15 +119,15 @@ Descriptions summarize calls found by a bounded static walk. Different calls can
 | block 85 (x 21, y 2) | `0x0DA4` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 85 to type 28; operates the door switch at block 84 with action -1; checks the north wall of block 85; plays a sound (ID 80) |
 | block 89 (x 25, y 2) | `0x13B0` | wall clicked | deals damage to target ? (amount ?); plays chat/dialogue text ID 0x001e; plays a sound (ID 162) |
 | block 102 (x 6, y 3) | `0x0C2C` | party arrives (second path) | requests engine global change, selector 12, operands 1, 0 |
-| block 105 (x 9, y 3) | `0x0D03` | monster leaves | sets the south wall of block 81 to type ?; sets monster ? mode to 11; plays a sound (ID 88); plays a sound (ID 87); plays a sound (ID 94) |
+| block 105 (x 9, y 3) | `0x0D03` | monster enters | sets the south wall of block 81 to type ?; sets monster ? mode to 11; plays a sound (ID 88); plays a sound (ID 87); plays a sound (ID 94) |
 | block 114 (x 18, y 3) | `0x0D4C` | wall clicked | places item ? (?) on block 81; sets game flag 579; tests game flag 579; checks the south wall of block 81 |
-| block 121 (x 25, y 3) | `0x0D1B` | monster leaves | sets the south wall of block 81 to type ?; sets monster ? mode to 11; plays a sound (ID 88); plays a sound (ID 87); plays a sound (ID 94) |
+| block 121 (x 25, y 3) | `0x0D1B` | monster enters | sets the south wall of block 81 to type ?; sets monster ? mode to 11; plays a sound (ID 88); plays a sound (ID 87); plays a sound (ID 94) |
 | block 137 (x 9, y 4) | `0x1441` | wall clicked | deals damage to target ? (amount ?); plays chat/dialogue text ID 0x001e; plays a sound (ID 162) |
 | block 153 (x 25, y 4) | `0x13CD` | wall clicked | deals damage to target ? (amount ?); plays chat/dialogue text ID 0x001e; plays a sound (ID 162) |
 | block 154 (x 26, y 4) | `0x11DA` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 154 to type 28; operates the door switch at block 186 with action 0; checks the north wall of block 154; plays a sound (ID 80) |
 | block 162 (x 2, y 5) | `0x0AEF` | party arrives (second path), item put down | checks the north wall of block 162 |
-| block 169 (x 9, y 5) | `0x135C` | monster leaves | delete monsters from block; tests game flag 408 |
-| block 201 (x 9, y 6) | `0x1355` | monster leaves | delete monsters from block; tests game flag 408 |
+| block 169 (x 9, y 5) | `0x135C` | monster enters | delete monsters from block; tests game flag 408 |
+| block 201 (x 9, y 6) | `0x1355` | monster enters | delete monsters from block; tests game flag 408 |
 | block 218 (x 26, y 6) | `0x11EE` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 218 to type 28; operates the door switch at block 186 with action 0; checks the north wall of block 218; plays a sound (ID 80) |
 | block 226 (x 2, y 7) | `0x0BE1` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 226 to type 28; toggles all four walls of block 162 between types 0 and 40; checks the north wall of block 226; plays a sound (ID 80) |
 | block 227 (x 3, y 7) | `0x0B60` | party arrives (second path), item put down | drops the party through a pit; deals damage to the party (amount ?); moves the party to level 25, block 227, facing ?; removes monsters from block 227; sets game flag 46; moves items from block 227 to level 25, block 227; checks the north wall of block 227 |
@@ -149,10 +149,10 @@ Descriptions summarize calls found by a bounded static walk. Different calls can
 | block 356 (x 4, y 11) | `0x0B04` | party arrives (second path), item put down | places a monster of type slot 2 on block 483 in mode 4; checks the north wall of block 356 |
 | block 359 (x 7, y 11) | `0x0A47` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 359 to type 28; operates the door switch at block 327 with action 0; checks the north wall of block 359; plays a sound (ID 80) |
 | block 368 (x 16, y 11) | `0x13EA` | wall clicked | deals damage to target ? (amount ?); plays chat/dialogue text ID 0x001e; plays a sound (ID 162) |
-| block 369 (x 17, y 11) | `0x0D33` | monster leaves | sets the south wall of block 81 to type ?; sets monster ? mode to 11; plays a sound (ID 88); plays a sound (ID 87); plays a sound (ID 94) |
+| block 369 (x 17, y 11) | `0x0D33` | monster enters | sets the south wall of block 81 to type ?; sets monster ? mode to 11; plays a sound (ID 88); plays a sound (ID 87); plays a sound (ID 94) |
 | block 370 (x 18, y 11) | `0x1407` | wall clicked | deals damage to target ? (amount ?); plays chat/dialogue text ID 0x001e; plays a sound (ID 162) |
 | block 405 (x 21, y 12) | `0x1231` | wall clicked | operates the door switch at block 374 with action 0 |
-| block 408 (x 24, y 12) | `0x1363` | monster leaves | delete monsters from block; tests game flag 408 |
+| block 408 (x 24, y 12) | `0x1363` | monster enters | delete monsters from block; tests game flag 408 |
 | block 412 (x 28, y 12) | `0x1238` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 412 to type 28; operates the door switch at block 444 with action 0; checks the north wall of block 412; plays a sound (ID 80) |
 | block 417 (x 1, y 13) | `0x0B74` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 417 to type 28; sets all four walls of block 162 to type 40; sets all four walls of block 162 to type 0; sets/clears game flag 404; checks the north wall of block 417; plays a sound (ID 80); tests game flag 404; tests game flag 405 … |
 | block 419 (x 3, y 13) | `0x0B8C` | party arrives (second path), party leaves (second path), item put down, item taken | sets all four walls of block 419 to type 28; sets all four walls of block 162 to type 40; sets all four walls of block 162 to type 0; sets/clears game flag 405; checks the north wall of block 419; plays a sound (ID 80); tests game flag 404; tests game flag 405 … |
@@ -206,7 +206,7 @@ Descriptions summarize calls found by a bounded static walk. Different calls can
 | block 823 (x 23, y 25) | `0x0DE8` | wall clicked | operates the door switch at block 856 with action 1; plays chat/dialogue text ID 0x0018; sets game flag 402; tests game flag 403 |
 | block 832 (x 0, y 26) | `0x0994` | wall clicked | operates the door switch at block 833 with action 0 |
 | block 840 (x 8, y 26) | `0x091A` | party arrives (second path) | sets all four walls of block 841 to type 1; checks the north wall of block 841; plays a sound (ID 38) |
-| block 846 (x 14, y 26) | `0x136A` | monster leaves | delete monsters from block; tests game flag 408 |
+| block 846 (x 14, y 26) | `0x136A` | monster enters | delete monsters from block; tests game flag 408 |
 | block 857 (x 25, y 26) | `0x0ECC` | party arrives (second path) | plays music track 324; plays chat/dialogue text ID 0x000d; plays chat/dialogue text ID 0x000f; sets game flag 420; plays music track 268; tests game flag 420 |
 | block 859 (x 27, y 26) | `0x12F8` | wall clicked | puts item 53 (Great axe "Master") on an empty cursor; puts item 248 (Oil Flask) on an empty cursor; puts item 215 (Bannon's reserve) on an empty cursor; puts item 189 (Small Key) on an empty cursor; puts item 269 (Guardian) on an empty cursor |
 | block 861 (x 29, y 26) | `0x12DF` | wall clicked | operates the door switch at block 828 with action 0 |
@@ -216,7 +216,7 @@ Descriptions summarize calls found by a bounded static walk. Different calls can
 | block 920 (x 24, y 28) | `0x1114` | party arrives (second path), item put down | removes monsters from block 920; sets game flag 583; moves items from block 920 to level 26, block 211; tests game flag 582 |
 | block 933 (x 5, y 29) | `0x0957` | wall clicked | sets all four walls of block 934 to type 0; plays chat/dialogue text ID 0x001d; checks the north wall of block 934; plays a sound (ID 38) |
 | block 939 (x 11, y 29) | `0x06D5` | wall clicked | sets the east wall of block 906 to type 31; checks the east wall of block 906; plays a sound (ID 38) |
-| block 942 (x 14, y 29) | `0x1371` | monster leaves | delete monsters from block; tests game flag 408 |
+| block 942 (x 14, y 29) | `0x1371` | monster enters | delete monsters from block; tests game flag 408 |
 | block 953 (x 25, y 29) | `0x1465` | wall clicked | plays chat/dialogue text ID 0x0020 |
 | block 964 (x 4, y 30) | `0x092F` | wall clicked | sets all four walls of block 996 to type 0; plays chat/dialogue text ID 0x001d; checks the north wall of block 996; plays a sound (ID 38) |
 | block 995 (x 3, y 31) | `0x097F` | party arrives (second path) | sets all four walls of block 996 to type 1; checks the north wall of block 996; plays a sound (ID 38) |

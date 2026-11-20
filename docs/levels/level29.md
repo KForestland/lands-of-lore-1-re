@@ -230,7 +230,7 @@ Descriptions summarize calls found by a bounded static walk. Different calls can
 | block 472 (x 24, y 14) | `0x1136` | party arrives (second path), wall clicked | deals damage to the party (amount ?); move party |
 | block 477 (x 29, y 14) | `0x0F69` | bits 0x400 (no engine caller found) | no action summarized |
 | block 490 (x 10, y 15) | `0x100F` | party arrives (second path) | places a monster of type slot 1 on block 489 in mode 12; sets game flag 454; plays music track 304; plays chat/dialogue text ID 0x0006; requests engine global change, selector 10, operands 0, 0; loads monster sprites SCO_TOAD.SHP into slot 0; loads monster sprites TOAD.SHP into slot 1; defines monster type 1 … |
-| block 496 (x 16, y 15) | `0x0FD3` | monster leaves | sets all four walls of block 497 to type 0; plays a sound (ID 38) |
+| block 496 (x 16, y 15) | `0x0FD3` | monster enters | sets all four walls of block 497 to type 0; plays a sound (ID 38) |
 | block 517 (x 5, y 16) | `0x0C8F` | wall clicked | plays chat/dialogue text ID 0x0013 |
 | block 534 (x 22, y 16) | `0x0CC1` | party arrives (second path), party leaves (second path) | sets all four walls of block 534 to type 28; sets all four walls of block 566 to type 2; checks the south wall of block 534; plays a sound (ID 80); checks the north wall of block 566; plays a sound (ID 38) |
 | block 559 (x 15, y 17) | `0x0D7E` | party arrives (second path) | operates the door switch at block 591 with action -1; clears game flag 463; clears game flag 464; checks the north wall of block 591 |

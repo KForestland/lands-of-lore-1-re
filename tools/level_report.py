@@ -47,7 +47,7 @@ EVENTS = [
     (0x0080, "item put down"),               # engine/items_lol.cpp:374
     (0x0100, "item taken"),                  # items_lol.cpp:382
     (0x0200, "fireball passes"),             # engine/lol.cpp:2577
-    (0x0800, "monster leaves"),              # engine/sprites_lol.cpp:289
+    (0x0800, "monster enters"),              # MAIN.EXE+0x11711-0x11735 (CD); ScummVM placeMonster, sprites_lol.cpp:289
     (0x8000, "thrown item hits"),            # items_lol.cpp:493
 ]
 SPECIAL_ENTRIES = {0x400: "level loaded", 0x401: "script timer 0", 0x402: "script timer 1",
@@ -483,7 +483,7 @@ One page per level, written by `tools/level_report.py` from the level's own file
 | 0x0080 | item put down | `engines/kyra/engine/items_lol.cpp:374` |
 | 0x0100 | item taken | `items_lol.cpp:382` |
 | 0x0200 | a fireball passes | `lol.cpp:2577` |
-| 0x0800 | a monster leaves the block | `engines/kyra/engine/sprites_lol.cpp:289` |
+| 0x0800 | a monster enters the block (the original raises it for the block just stored, `MAIN.EXE+0x11711`–`0x11735` on the CD) | `engines/kyra/engine/sprites_lol.cpp:289` |
 | 0x8000 | a thrown item hits | `items_lol.cpp:493` |
 
 Bits 1 and 2 (and 4 and 8) are not different player actions. They are two stages of the same step. Every step the party takes runs 4 on the old block and 1 on the new block before the view moves. After the move is drawn it runs 8 on the old block and 2 on the new block, but only if no script from the first pair set the stop flag (ScummVM `_flagsTable[73]` bit 2) and the party is still on the new block. Bit 2 also runs on the block queued by the `setNextFunc` script function. **CONFIRMED** in both DOS programs: CD `MAIN.EXE` file offsets 0xD785-0xD815 (step) and 0x10E4C-0x10E61 (queued block); floppy 0x10F0B-0x10F9A and 0x15755-0x15762. No other resident call passes these bits.

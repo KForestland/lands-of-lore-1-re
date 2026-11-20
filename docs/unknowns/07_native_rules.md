@@ -467,7 +467,7 @@ The monster event 0x0800 runs for the block a monster **enters**:
 after the block store at `+0x11673`, the routine compares the new
 block with the old one and, if they differ, pushes `0x0800` with the
 new block (`+0x11711–0x11735`; ScummVM `placeMonster`, the same
-order). The level pages call this event "monster leaves". Both
+order). The level pages called this event "monster leaves" until 20 November; they now say "monster enters". Both
 runs agree: the setter ran when the row stepped onto 105, not when it
 stepped off.
 
