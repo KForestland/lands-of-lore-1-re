@@ -81,13 +81,18 @@ class PatchTool(unittest.TestCase):
         said = self.run_tool("patch.py", "make", "--data", self.game, out, "--title", "Test edit",
                              "--out", patch_file)
         patch = json.loads(patch_file.read_text(encoding="utf-8"))
-        self.assertEqual((patch["game"], patch["kind"]), (GAME, "data"))
+        self.assertEqual((patch["format"], patch["game"], patch["kind"]), ("lol-patch-3", GAME, "data"))
+        self.assertTrue(all("old" not in change and "old_sha256" in change for change in patch["changes"]))
         self.assertIn("in 1 file (", said)
         self.assertNotIn("1 files", said)
         patched = self.root / "patched files"
         said = self.run_tool("patch.py", "apply", "--data", self.game, patch_file, "--out", patched)
         self.assertIn("apply: 1 file (", said)
         check_edit(self, self.game, patched)
+        undo = json.loads((patched / patch_tool.UNDO).read_text(encoding="utf-8"))
+        self.assertEqual(undo["format"], "lol-patch-undo-1")
+        self.assertIn("Do not share", undo["description"])
+        self.assertTrue(all("old" not in change for change in undo["changes"]))
         copy = self.install(self.game, patched, "game copy")
         # The same patch on the patched copy is refused: the old bytes are gone.
         again = self.root / "again"
@@ -169,7 +174,8 @@ class PatchTool(unittest.TestCase):
         patch = json.loads(patch_file.read_text(encoding="utf-8"))
         self.assertEqual(patch["kind"], "program")
         self.assertEqual(set(patch["sha256"]), {PROGRAM})
-        self.assertEqual([(c["old"], c["new"]) for c in patch["changes"]], [("48", "4a")])
+        self.assertEqual([(c["old_length"], c["old_sha256"], c["new"]) for c in patch["changes"]],
+                         [(1, patch_tool.digest(b"H"), "4a")])
         patched = self.root / "patched program"
         self.run_tool("patch.py", "apply", "--data", self.game, patch_file, "--out", patched)
         self.assertEqual((patched / PROGRAM).read_bytes(), (changed / PROGRAM).read_bytes())
@@ -196,7 +202,7 @@ class PatchTool(unittest.TestCase):
 
     def test_caps(self):
         def change(old, new, offset=0):
-            return {"file": "DAT/X", "entry": 0, "offset": offset, "old": old.hex(), "new": new.hex()}
+            return patch_tool.record("DAT/X", 0, offset, old, new)
         data = patch_tool.document("data", "T", "D", [change(b"a" * 256, b"b" * 256)])
         patch_tool.check_document(data)
         for changes in ([change(b"a" * 257, b"b")],
@@ -209,6 +215,62 @@ class PatchTool(unittest.TestCase):
         program["changes"] = [change(b"a", b"bb")]
         with self.assertRaisesRegex(ValueError, "same number of bytes"):
             patch_tool.check_document(program)
+
+    def test_legacy_patch_stays_readable_and_undoes(self):
+        original = program_image()
+        (self.game / PROGRAM).write_bytes(original)
+        self.before = files(self.game)
+        change = {"file": PROGRAM, "entry": 0, "offset": original.index(b"Hello"),
+                  "old": b"Hello".hex(), "new": b"Jello".hex()}
+        legacy = patch_tool.document("program", "Test", "Legacy test", [change],
+                                     {PROGRAM: patch_tool.digest(original)}, version="lol-patch-2")
+        path = self.root / "legacy.json"
+        path.write_text(json.dumps(legacy), encoding="utf-8")
+        out = self.root / "patched legacy"
+        self.run_tool("patch.py", "apply", "--data", self.game, path, "--out", out)
+        self.assertEqual((out / PROGRAM).read_bytes(), original.replace(b"Hello", b"Jello"))
+        undo = self.root / "undid legacy"
+        self.run_tool("patch.py", "apply", "--data", out, out / patch_tool.UNDO, "--out", undo)
+        self.assertEqual((undo / PROGRAM).read_bytes(), original)
+
+    def test_v3_span_matching_and_trimming_on_resize(self):
+        old = b"p" * 1700 + b"Here!Here!" + b"s" * 5300
+        new = b"p" * 1700 + b"!!Here!Here!??" + b"s" * 5300
+        changes = list(patch_tool.byte_deltas("DAT/X", 0, old, new))
+        self.assertEqual([(row["offset"], row["old_length"], row["new"]) for row in changes],
+                         [(1700, 0, "2121"), (1710, 0, "3f3f")])
+        patch = patch_tool.document("data", "Synthetic", "Resize", changes)
+        edits = patch_tool.check_document(patch)["DAT/X"][0]
+        output, undo = patch_tool.splice("DAT/X", 0, old, edits)
+        self.assertEqual(output, new)
+        inverse = patch_tool.document("data", "Undo", "Synthetic", undo, version=patch_tool.UNDO_FORMAT)
+        edits = patch_tool.check_document(inverse)["DAT/X"][0]
+        self.assertEqual(patch_tool.splice("DAT/X", 0, new, edits)[0], old)
+        with self.assertRaisesRegex(ValueError, "does not hold the bytes"):
+            patch_tool.splice("DAT/X", 0, new.replace(b"??", b"XX"), edits)
+
+    def test_make_refuses_long_shared_runs(self):
+        old, new = b"XABCDEFGHY", b"ZQABCDEFGH"
+        original = program_image() + old
+        (self.game / PROGRAM).write_bytes(original)
+        self.before = files(self.game)
+        changed = self.root / "change with a shared run"
+        changed.mkdir()
+        (changed / PROGRAM).write_bytes(program_image() + new)
+        with self.assertRaisesRegex(ValueError, "8 or more shared bytes"):
+            patch_tool.make(self.game, changed, "Synthetic", "Shared run")
+
+    def test_v3_span_refuses_equal_edges_and_bad_hash(self):
+        change = patch_tool.record("DAT/X", 0, 0, b"aBc", b"aDc")
+        patch = patch_tool.document("data", "Synthetic", "Equal edges", [change])
+        edits = patch_tool.check_document(patch)["DAT/X"][0]
+        with self.assertRaisesRegex(ValueError, "trim matching bytes"):
+            patch_tool.splice("DAT/X", 0, b"aBc", edits)
+        with self.assertRaisesRegex(ValueError, "does not hold the bytes"):
+            patch_tool.splice("DAT/X", 0, b"aEc", edits)
+        change["old_sha256"] = "missing"
+        with self.assertRaisesRegex(ValueError, "64 lowercase hexadecimal digits"):
+            patch_tool.check_document(patch)
 
     def test_errors_are_one_sentence(self):
         out = self.built(self.game)
@@ -225,7 +287,7 @@ class PatchTool(unittest.TestCase):
         missing.write_text(json.dumps(dict(patch, changes=[dict(c, file="DAT/NOPE.ARC") for c in patch["changes"]])),
                            encoding="utf-8")
         large = self.root / "large.json"
-        large.write_text(json.dumps(dict(patch, changes=[dict(patch["changes"][0], old="00" * 300)])),
+        large.write_text(json.dumps(dict(patch, changes=[dict(patch["changes"][0], old_length=300)])),
                          encoding="utf-8")
         target = self.root / "never written"
         cases = [

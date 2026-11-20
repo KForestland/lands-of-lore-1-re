@@ -229,7 +229,7 @@ The [README](../README.md#change-a-number-in-your-own-copy) walks through the wh
 
 - `make` compares the game folder (`--data`) with a folder of changed files. The output folder of `modkit.py build` works as it is, and so does a copy of the game folder in which only some files changed.
 - File names in the patch start at the folder holding the PAK archives (the CD's `DATA` folder, or the floppy game folder). A patch made from the folder above `DATA` names the same files, and a patch made from either applies to both.
-- `apply` writes nothing until every check has passed: the old bytes, for a program patch the whole file's SHA-256, and the undo. Applying a patch twice, or to another edition, is refused with one sentence.
+- `apply` writes nothing until every check has passed: each replaced span's SHA-256, the whole-file SHA-256 for a program patch, and the undo. Keep `undo.json` private because it holds original game bytes.
 - Program patches: copy the program file (CD: `HARDRIVE/MAIN.EXE` below `DATA`; floppy: `MAIN.EXE`) into a new folder, at the same path it has in the game folder, change a byte with a hex editor, for example one letter of a message, and run `make` with that folder. The patch records the program's SHA-256 and applies only to that exact file. A program change may replace at most 16 bytes at a time and 256 in all, never changes the file length, and never touches copy-protection code.
 - `make` and `apply` warn when a patch changes a file ScummVM uses to recognize the game ([ScummVM detection](formats/patch.md#scummvm-detection)).
 

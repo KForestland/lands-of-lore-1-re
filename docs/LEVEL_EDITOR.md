@@ -46,7 +46,7 @@ Windows PowerShell
 .\.venv\Scripts\python.exe tools/level_edit.py --data "C:\Games\LoL1" "level02-changes.json" --out "..\edited level" --patch
 ```
 
-The tool reports how many archives, square edits and placement edits it verified. The folder holds the affected PAK archive copies. Every other member in those archives reads back unchanged. An empty edit file produces byte-identical copies. With `--patch` and edits, the folder also holds `level-patch.json` and `undo.json`. The shared format limits how many old and new bytes a patch can carry. A limit error names the archive entry and its relative offset when relevant. If it refuses a large change, apply without `--patch` for a local copy or export smaller sets of edits. [Patch size limits](formats/patch.md#size-limits)
+The tool reports how many archives, square edits and placement edits it verified. The folder holds the affected PAK archive copies. Every other member in those archives reads back unchanged. An empty edit file produces byte-identical copies. With `--patch` and edits, the folder also holds `level-patch.json` and `undo.json`. The shared format limits the size of each replaced span and its replacement. A limit error names the archive entry and its relative offset when relevant. If it refuses a large change, apply without `--patch` for a local copy or export smaller sets of edits. [Patch size limits](formats/patch.md#size-limits)
 
 Share `level-patch.json` with someone who has the matching edition. They apply it to a fresh folder. To reverse a patch, use the patched output as the data source, its `undo.json` as the patch, and a fresh output folder. Keep backup copies if you later install an edited archive. [Apply and undo commands](formats/patch.md#make-apply-and-undo)
 

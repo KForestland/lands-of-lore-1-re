@@ -72,8 +72,8 @@ python3 tools/lol.py patch make "/path/to/translated files" --data "/path/to/gam
 python3 tools/lol.py patch apply "/path/to/translation.json" --data "/path/to/game" --out "/path/to/test copy"
 ```
 
-The patch checks old bytes and makes a matching undo file. Keep both
-files private while this format stores original bytes. If the size limit rejects the patch,
+The patch checks the SHA-256 of each replaced span and makes a matching
+undo file. Keep `undo.json` private because it holds original game bytes. If the size limit rejects the patch,
 use smaller batches or keep replacements the same encoded size. A single
 longer early row can shift enough offsets to hit the limit. You can still
 keep the rebuilt files for your private copy.

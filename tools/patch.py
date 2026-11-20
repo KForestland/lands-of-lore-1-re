@@ -17,14 +17,16 @@ from cli_errors import ReaderArgumentParser, run_cli
 import modkit as adapter
 import modkit_core as core
 
-FORMAT = "lol-patch-2"
+FORMAT = "lol-patch-3"
+LEGACY_FORMAT = "lol-patch-2"
+UNDO_FORMAT = "lol-patch-undo-1"
 KINDS = ("data", "program")
 UNDO = "undo.json"
 MAX_CHANGES = 1024
-# Old and new bytes are each capped per change and per patch, so a patch cannot
-# carry more than a few lines of original game text or code.
+# Cap both the replaced span and its replacement, including in local undo files.
 LIMITS = {"data": (256, 4096), "program": (16, 256)}
 MAX_RESIZED = 65536
+SHARED_RUN = 8
 HEX = re.compile(r"(?:[0-9a-f]{2})*\Z")
 SHA = re.compile(r"[0-9a-f]{64}\Z")
 NAMES = {"lol1": "LoL1", "lol2": "LoL2", "lol3": "LoL3"}
@@ -139,8 +141,8 @@ def read_source(base, name):
 
 # ---------------------------------------------------------------- patch documents
 
-def document(kind, title, description, changes, programs=None):
-    patch = {"format": FORMAT, "game": adapter.GAME, "kind": kind, "title": title,
+def document(kind, title, description, changes, programs=None, *, version=FORMAT):
+    patch = {"format": version, "game": adapter.GAME, "kind": kind, "title": title,
              "description": description}
     if kind == "program":
         patch["sha256"] = dict(sorted(programs.items()))
@@ -149,16 +151,19 @@ def document(kind, title, description, changes, programs=None):
 
 
 def record(file, entry, offset, old, new):
-    return {"file": file, "entry": entry, "offset": offset, "old": old.hex(), "new": new.hex()}
+    return {"file": file, "entry": entry, "offset": offset, "old_length": len(old),
+            "old_sha256": digest(old), "new": new.hex()}
 
 
 def check_document(patch):
     """Check a patch and group its changes by file and entry. Errors are sentences."""
-    if not isinstance(patch, dict) or patch.get("format") != FORMAT:
-        raise ValueError(f"this is not a {FORMAT} patch file")
+    version = patch.get("format") if isinstance(patch, dict) else None
+    if version not in (FORMAT, LEGACY_FORMAT, UNDO_FORMAT):
+        raise ValueError(f"this is not a {FORMAT}, {LEGACY_FORMAT} or local undo file")
+    legacy = version == LEGACY_FORMAT
     game = patch.get("game")
     if game != adapter.GAME:
-        if game in NAMES:
+        if isinstance(game, str) and game in NAMES:
             raise ValueError(f"this patch is for {NAMES[game]}; use patch.py from the "
                              f"{NAMES[game]} repository")
         raise ValueError("the patch does not say which game it is for (its \"game\" entry)")
@@ -169,7 +174,7 @@ def check_document(patch):
     keys |= {"sha256"} if kind == "program" else set()
     if set(patch) != keys:
         extra = sorted(set(patch) - keys) or sorted(keys - set(patch))
-        raise ValueError(f"the patch entries differ from the {FORMAT} format (check: {', '.join(extra)})")
+        raise ValueError(f"the patch entries differ from the {version} format (check: {', '.join(extra)})")
     for key, limit in (("title", 120), ("description", 1000)):
         value = patch[key]
         if not isinstance(value, str) or not value.strip() or len(value) > limit:
@@ -182,11 +187,12 @@ def check_document(patch):
     span, total = LIMITS[kind]
     sizes = [0, 0]
     groups = defaultdict(lambda: defaultdict(list))
+    fields = ("file", "entry", "offset", "new") + (("old",) if legacy else ("old_length", "old_sha256"))
     for number, edit in enumerate(changes, 1):
         where = f"change {number}"
-        if not isinstance(edit, dict) or set(edit) != {"file", "entry", "offset", "old", "new"}:
-            raise ValueError(f"{where} needs exactly file, entry, offset, old and new")
-        file, entry, offset, old, new = (edit[k] for k in ("file", "entry", "offset", "old", "new"))
+        if not isinstance(edit, dict) or set(edit) != set(fields):
+            raise ValueError(f"{where} needs exactly {', '.join(fields)}")
+        file, entry, offset, new = (edit[k] for k in ("file", "entry", "offset", "new"))
         if not isinstance(file, str) or not file:
             raise ValueError(f"{where}: the file must be a name such as DAT/GLOBAL.MIX")
         try:
@@ -195,24 +201,38 @@ def check_document(patch):
             raise ValueError(f"{where}: {file!r} is not a plain relative file name such as DAT/GLOBAL.MIX") from None
         if type(entry) is not int or entry < 0 or type(offset) is not int or offset < 0:
             raise ValueError(f"{where}: entry and offset must be whole numbers of 0 or more")
-        if any(not isinstance(v, str) or not HEX.fullmatch(v) for v in (old, new)):
-            raise ValueError(f"{where}: old and new must be lowercase hexadecimal byte pairs")
-        if old == new:
-            raise ValueError(f"{where} changes nothing")
-        old, new = bytes.fromhex(old), bytes.fromhex(new)
-        if kind == "program" and (entry != 0 or len(old) != len(new) or not old):
+        if not isinstance(new, str) or not HEX.fullmatch(new):
+            raise ValueError(f"{where}: new must be lowercase hexadecimal byte pairs")
+        if legacy:
+            old = edit["old"]
+            if not isinstance(old, str) or not HEX.fullmatch(old):
+                raise ValueError(f"{where}: old must be lowercase hexadecimal byte pairs")
+            old_length = len(old) // 2
+        else:
+            old_length, old_sha = edit["old_length"], edit["old_sha256"]
+            if type(old_length) is not int or old_length < 0:
+                raise ValueError(f"{where}: old_length must be a whole number of 0 or more")
+            if not isinstance(old_sha, str) or not SHA.fullmatch(old_sha):
+                raise ValueError(f"{where}: old_sha256 must be 64 lowercase hexadecimal digits")
+        new_length = len(new) // 2
+        if kind == "program" and (entry != 0 or old_length != new_length or not old_length):
             raise ValueError(f"{where}: a program change uses entry 0 and replaces bytes "
                              "with the same number of bytes")
-        if max(len(old), len(new)) > span:
+        if max(old_length, new_length) > span:
             raise PatchLimitError(f"{where} ({file}, entry {entry}, entry-relative offset +{offset:#x}) "
-                                  f"has {max(len(old), len(new))} bytes; "
+                                  f"has {max(old_length, new_length)} bytes; "
                                   f"a {kind} patch allows at most {span} bytes per change")
-        sizes[0] += len(old)
-        sizes[1] += len(new)
+        sizes[0] += old_length
+        sizes[1] += new_length
         if max(sizes) > total:
-            raise PatchLimitError(f"the patch carries more than {total:,} bytes of old or new values; "
-                                  f"a {kind} patch allows at most {total:,} of each")
-        groups[file][entry].append((offset, old, new))
+            raise PatchLimitError(f"a {kind} patch allows at most {total:,} bytes each "
+                                  "of replaced spans and replacement values")
+        new = bytes.fromhex(new)
+        if legacy:
+            old_sha = digest(bytes.fromhex(old))
+        if old_length == new_length and old_sha == digest(new):
+            raise ValueError(f"{where} changes nothing")
+        groups[file][entry].append((offset, old_length, old_sha, new, version == FORMAT))
     if kind == "program":
         programs = patch["sha256"]
         if (not isinstance(programs, dict) or set(programs) != set(groups)
@@ -235,20 +255,47 @@ def read_patch(path):
 
 # ---------------------------------------------------------------- byte edits
 
+def trim(old, new):
+    """Return the common prefix length and the two trimmed spans."""
+    first = 0
+    for left, right in zip(old, new):
+        if left != right:
+            break
+        first += 1
+    last = 0
+    for left, right in zip(reversed(old[first:]), reversed(new[first:])):
+        if left != right:
+            break
+        last += 1
+    return first, old[first:len(old) - last], new[first:len(new) - last]
+
+
+def validate_minimal(old, new, where):
+    _, before, after = trim(old, new)
+    if len(before) != len(old) or len(after) != len(new):
+        raise ValueError(f"{where}: trim matching bytes from the ends of this change")
+    if any(old[i:i + SHARED_RUN] in new for i in range(len(old) - SHARED_RUN + 1)):
+        raise ValueError(f"{where}: split this change around the run of {SHARED_RUN} or more shared bytes")
+
+
 def splice(name, entry, blob, changes):
     result, undo = bytearray(), []
     cursor = 0
     where = name if entry is None else f"{name} entry {entry}"
-    for offset, old, new in sorted(changes):
+    for offset, length, expected, new, minimal in sorted(changes, key=lambda change: change[0]):
         if offset < cursor or (undo and offset == cursor):
             raise ValueError(f"{where}: two changes overlap or touch at +{offset:#x}")
-        if offset > len(blob) or blob[offset:offset + len(old)] != old:
+        end = offset + length
+        old = blob[offset:end]
+        if offset > len(blob) or end > len(blob) or digest(old) != expected:
             raise ValueError(f"{where} +{offset:#x} does not hold the bytes this patch expects; "
                              "the patch is for another version, or it is already applied")
+        if minimal:
+            validate_minimal(old, new, f"{where} +{offset:#x}")
         result.extend(blob[cursor:offset])
         undo.append(record(name, entry or 0, len(result), new, old))
         result.extend(new)
-        cursor = offset + len(old)
+        cursor = end
     result.extend(blob[cursor:])
     return bytes(result), undo
 
@@ -311,9 +358,12 @@ def byte_deltas(name, index, old, new):
     if max(len(old), len(new)) > MAX_RESIZED:
         raise PatchLimitError(f"{name} entry {index} changed size and is larger than {MAX_RESIZED:,} "
                               "bytes; keep its length or make a smaller edit")
-    for change, a, b, c, d in SequenceMatcher(None, old, new).get_opcodes():
+    base, old, new = trim(old, new)
+    for change, a, b, c, d in SequenceMatcher(None, old, new, autojunk=False).get_opcodes():
         if change != "equal":
-            yield record(name, index, a, old[a:b], new[c:d])
+            first, before, after = trim(old[a:b], new[c:d])
+            if before or after:
+                yield record(name, index, base + a + first, before, after)
 
 
 def file_deltas(kind, name, original, edited):
@@ -425,13 +475,15 @@ def prepare(root, patch):
                              "differs); a program patch fits only the same edition and version")
         changed, undo = edit_file(kind, name, original, entries)
         programs[name] = digest(changed)
-        undo_groups = check_document(document(kind, "Undo", "Undo", undo, {name: programs[name]}))
+        undo_groups = check_document(document(kind, "Undo", "Undo", undo, {name: programs[name]}, version=UNDO_FORMAT))
         if edit_file(kind, name, changed, undo_groups[name])[0] != original:
             raise ValueError(f"{name}: the undo would not restore the file exactly")
         files[name] = changed
         reverse.extend(undo)
     title = "Undo " + patch["title"][:115]
-    undo = document(kind, title, "Restores the bytes the patch replaced.", reverse, programs)
+    undo = document(kind, title, "Private undo file. It holds original game bytes. Do not share it.",
+                    reverse, programs, version=UNDO_FORMAT)
+    check_document(undo)
     return base, files, undo
 
 
@@ -491,8 +543,9 @@ def run(argv=None):
     make_parser.add_argument("--description", help="one or two sentences (default: the title)")
     make_parser.add_argument("--out", required=True, type=Path, help="the new patch file to write")
     apply_parser = commands.add_parser(
-        "apply", help="write patched copies of the changed files and undo.json into a new folder",
-        description="Write the files a patch changes, patched, and undo.json into a new folder.")
+        "apply", help="write patched copies and a private undo.json into a new folder",
+        description="Write patched copies and undo.json into a new folder. "
+                    "Keep undo.json private because it holds original game bytes.")
     apply_parser.add_argument("paths", nargs="+", metavar="PATCH_FILE",
                               help="the patch (or an undo.json); the game folder may come first instead of --data")
     apply_parser.add_argument("--out", required=True, type=Path, help="the new folder to write")
@@ -514,7 +567,7 @@ def run(argv=None):
         patch = read_patch(path)
         base, names = apply(root, patch, args.out)
         print(f"apply: {plural(len(names), 'file')} ({', '.join(names)}) and {UNDO} written to "
-              f"{args.out.resolve()}; copy the files except {UNDO}, with their folders, "
+              f"{args.out.resolve()}; keep {UNDO} private and copy the patched files, with their folders, "
               f"into a copy of {BASE[adapter.GAME]}")
     report_compatibility(patch)
     return 0

@@ -1,13 +1,13 @@
 # Patches
 
-Small checked edits for a reader's own copy of the original game. A patch file holds the changed bytes and the expected old bytes, not a game file. A patch must not remove or bypass a disc check, a serial check or any other copy protection, and none here does. The format and its limits are on the [patch format page](../docs/formats/patch.md).
+Small checked edits for a reader's own copy of the original game. A patch records the replacement bytes and a hash of the span it replaces. A patch must not remove or bypass a disc check, a serial check or any other copy protection, and none here does. The format and its limits are on the [patch format page](../docs/formats/patch.md).
 
-The file format is `lol-patch-2`. `kind` is `data` (a game data file) or `program` (the game's own program). The patch names its game (`game`). Each change has `file`, `entry` (archive member index, or 0 for a loose file), `offset` (decimal, from the start of that member), `old` and `new` (lowercase hex). Apply and undo with the patch tool on a copy:
+The format is `lol-patch-3`. Each change lists its file, entry, offset, old span length and SHA-256, and new bytes. Keep `undo.json` private. It holds original game bytes from your copy. Apply and undo with the patch tool on a copy:
 
 ```sh
-python3 tools/patch.py apply --data "/path/to/your/DATA" --out "patched files" patches/item-name-spellings.json
-# copy "patched files/STARTUP.PAK" into a copy of your game; to undo:
-python3 tools/patch.py apply --data "/path/to/your game copy/DATA" --out "restored files" "patched files/undo.json"
+python3 tools/patch.py apply --data "/path/to/your/DATA" --out "../patched files" patches/item-name-spellings.json
+# copy "../patched files/STARTUP.PAK" into a copy of your game; to undo:
+python3 tools/patch.py apply --data "/path/to/your game copy/DATA" --out "../restored files" "../patched files/undo.json"
 ```
 
 ## Shipped patch
