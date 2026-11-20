@@ -4,6 +4,12 @@ Newest first. One line per question worked on, new tool or visible change; each 
 
 ## 20 November 2026
 
+- **Level editor.** Change walls, doors, item and monster placements on the level plan, apply to a copy, share as a patch and undo ([level editor](LEVEL_EDITOR.md)).
+- **Spelling patch tested in the game.** The four-byte item-name patch was tried in the original game on 20 November: unpatched "Duble ring taken.", patched "Double ring taken." and "Nathaniel's Key taken." ([patches](../patches/README.md)). A running page ([running](../patches/RUNNING.md)) and a lister of likely misspellings for a person to judge (`tools/list_likely_spellings.py`) were added.
+- **Translation kit.** Export the game's text tables to CSV files in your own folder, translate them, build a copy and check that every character exists in the game's fonts ([translation](TRANSLATION.md)). The exported text stays private.
+- **Patch format, version 3.** A shared patch now stores only the length and SHA-256 of each original span, never the original bytes; applying still refuses a mismatch, and undo uses the private `undo.json` written on your own machine, which holds original bytes and must not be shared ([patch format](formats/patch.md)). Older patches still apply.
+- **Editions and unused material.** Which releases were measured, with sizes and SHA-256 fingerprints ([editions](EDITIONS.md)), and what is in the files but not reached, counted and described, not extracted ([unused](UNUSED.md)).
+- **Python 3.10 or later.** One minimum for all three repositories; the automatic checks run Python 3.10 and 3.12 on Linux, Windows and macOS.
 - **Tools for your own copy.** A mod kit changes text and numbers in a separate folder and checks the result; with it you can also open interactive level plans. Start with the [first ten minutes](FIRST_TEN_MINUTES.md) page or `python3 tools/lol.py`.
 - **Corrections.** A new page lists what these pages got wrong, how it was caught and the commit that fixed it ([corrections](CORRECTIONS.md)).
 - **Checks on three systems.** The automatic checks now run on Linux, Windows and macOS; the size and index checks no longer depend on line endings.

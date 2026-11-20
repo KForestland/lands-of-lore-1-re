@@ -225,7 +225,9 @@
       "title": "Corrections",
       "answers": [],
       "question_references": [],
-      "tools": []
+      "tools": [
+        "tools/save_edit.py"
+      ]
     },
     {
       "path": "docs/EDITED_SAVES.md",
@@ -572,6 +574,7 @@
         "tools/example_images.py",
         "tools/exe_tables.py",
         "tools/level_renderer.py",
+        "tools/list_likely_spellings.py",
         "tools/lol.py",
         "tools/lol1_attack_types.py",
         "tools/lol1_loose.py",
