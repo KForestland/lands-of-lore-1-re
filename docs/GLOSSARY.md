@@ -36,6 +36,11 @@ These words mean the same thing in the notes for all three Lands of Lore games.
 | Combat | How an attack is resolved: whether it hits, and what the hit changes. |
 | Hash | A number computed from other bytes. A file hash identifies a whole file. A name hash stands in for a file name. |
 | LCW, format 80 | Westwood's byte-oriented compression, also called format 80. |
+| Mod kit | `tools/modkit.py`: it unpacks the game's text and number tables into files you can edit and builds changed copies of the archives into a new folder ([tools](../tools/README.md)). |
+| Patch | A small file (`lol-patch-2`) listing changed bytes, the bytes they replace and the game it is for, made and applied by `tools/patch.py` ([patch format](formats/patch.md)). A *data patch* changes archives and tables; a *program patch* changes the game program and fits only the file with the recorded SHA-256. |
+| Undo patch | The `undo.json` that `patch.py apply` writes beside the patched files; applied to the patched copy it gives back the original bytes. |
+| Copy of the game | A separate copy of your game folder for trying changes. The tools never write into the game folder you give them. |
+| Money | The party's money in a native save (`u16`); `save_reader.py` prints it and `save_edit.py` sets it under this name ([save format](savegame_format.md#global-state)). |
 
 ## Editions and sources
 

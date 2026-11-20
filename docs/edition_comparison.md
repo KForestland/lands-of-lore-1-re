@@ -38,13 +38,17 @@ These match the already-proven LoL1 `PAK` directory model.
 
 ## Edition / Build Difference
 
-ScummVM identifies a LoL release by the MD5 of the first 1 MiB of `GENERAL.PAK` (Kyra sets `_md5Bytes = 1024 * 1024`, `engines/kyra/detection.cpp:58`). Measured that way:
+ScummVM's Kyra detector hashes up to the first 1 MiB of each file in
+the release's detection entry (`engines/kyra/detection.cpp:55–60`).
+The two full editions here each match a pair of archives. The language
+subfolders instead match the warning row, which also checks size.
+[Detection rules and patch warnings](formats/patch.md#scummvm-detection)
 
-| Copy | MD5 of first 1 MiB of `GENERAL.PAK` | ScummVM detection entry |
-|------|-------------------------------------|-------------------------|
-| CD `DATA/` | `05a4f588fb81dc9c0ef1f2ec20d89e24` | "Lands of Lore CD", English (`engines/kyra/detection_tables.h:1349`) |
-| CD `DATA/ENG` (also FRE, GER) | `2dd5305434b11b40cbda565c0f729913` | the warning entry "You added the game incorrectly. Please add the root folder of the game." (`:1434`): the language folders are part of the CD layout, not a game on their own |
-| floppy | `0f1fabc1f67b772a30d8e05ece720ac5` | English floppy, labelled "Extracted", no speech (`:1716`, `LOL_FLOPPY_FLAGS`) |
+| Copy | `GENERAL.PAK` MD5 | Companion file and MD5 | ScummVM row |
+| --- | --- | --- | --- |
+| CD `DATA/` | `05a4f588fb81dc9c0ef1f2ec20d89e24` | `L01.PAK` `759a0ac26808d77ea968bd392355ba1d` | English CD (`engines/kyra/detection_tables.h:1349–1350`) |
+| CD `DATA/ENG` (also FRE, GER) | `2dd5305434b11b40cbda565c0f729913` | The warning row checks 1,225,285 bytes for `GENERAL.PAK`. | Use the root folder (`:1433–1435`). |
+| Floppy | `0f1fabc1f67b772a30d8e05ece720ac5` | `CHAPTER7.PAK` `482308aba1c40ee32449b91b0c63b990` | English extracted floppy (`:1714–1717`). |
 
 Full-file MD5s: CD `DATA/` `a7dbbf23c4438967f89dc221bc659e88`, floppy `74aa23c530155c2c9a7f894a616b4464`.
 

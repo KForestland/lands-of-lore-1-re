@@ -68,7 +68,7 @@ Legend:
 | [Q17 native save fields](../docs/unknowns/17_native_save_fields.md) | `save_reader.py` | yes | text, `--json` | part | yes |
 | [Q18 native records](../docs/unknowns/18_native_records.md) | `monster_reference_scan.py` (needs Capstone, in `requirements.txt`) | yes (the edition of `--data`) | text: one `CHECK` line per edition | part: folder handling and `--help`, not the census | yes |
 
-Tools in `check_all.py` with no section below: `rating.py`. No unit test needs game data; tests cover PAK directories, Frame4, EMC2 (with the closed-pipe case), the original save layout (`tests/test_readers.py`), PAL/CPS palettes, WLL, TLC, XXX, FNT, VOC headers, TIM framing and the executable tables (`tests/test_formats.py`), and wall assembly (VCN/VMP), the level map drawing, `shp_renderer.py --help` and `monster_reference_scan.py`'s folder handling (`tests/test_gap_tools.py`), and the PAK writer: order, duplicate names, the end-offset and five zero bytes, and refused inputs (`tests/test_round_trip.py`), and the mod kit on synthetic PAK files: text compression, edit, byte-identical rebuild, refused folders and one-line errors (`tests/test_modkit.py`).
+Tools in `check_all.py` with no section below: `rating.py`. No unit test needs game data; tests cover PAK directories, Frame4, EMC2 (with the closed-pipe case), the original save layout (`tests/test_readers.py`), PAL/CPS palettes, WLL, TLC, XXX, FNT, VOC headers, TIM framing and the executable tables (`tests/test_formats.py`), and wall assembly (VCN/VMP), the level map drawing, `shp_renderer.py --help` and `monster_reference_scan.py`'s folder handling (`tests/test_gap_tools.py`), and the PAK writer: order, duplicate names, the end-offset and five zero bytes, and refused inputs (`tests/test_round_trip.py`), and the mod kit on synthetic PAK files: text compression, edit, byte-identical rebuild, refused folders and one-line errors (`tests/test_modkit.py`), the patch tool: make, apply, undo, file names from the DATA folder or the folder above, program patches and size limits (`tests/test_patch.py`), and the save editor on synthetic slots (`tests/test_save_edit.py`).
 
 ## Examples and expected output
 
@@ -108,6 +108,41 @@ python3 tools/modkit.py verify "/path/to/LoL1/DATA" "my mod work" "my mod output
 $ python3 tools/modkit.py --check
 CHECK modkit: 62 archives or loose tables rebuilt byte-identically from 289 unpacked entries; outputs in the game, work, archive and repository folders refused
 ```
+
+### `patch.py`
+
+Makes, applies and undoes small patches for your own copy of the game ([format, rules and limits](../docs/formats/patch.md)). `patch.py` is the same file in the three repositories. Your game folder is only read. Run it from any folder and put quotes around paths with spaces:
+
+```bash
+python3 tools/patch.py make --data "/path/to/LoL1/DATA" "my mod output" --title "Stronger item" --out "stronger item.json"
+python3 tools/patch.py apply --data "/path/to/LoL1 test copy/DATA" "stronger item.json" --out "patched files"
+python3 tools/patch.py apply --data "/path/to/LoL1 test copy/DATA" "patched files/undo.json" --out "restored files"
+```
+
+- `--data` is the folder holding the PAK archives (the CD `DATA` folder or the floppy game folder); given the folder above `DATA`, the tool reads `DATA` (default: `$LOL1_DATA`). It may also be given as the first path, as `modkit.py` takes it.
+- `make` writes a new patch file from the differences between the game folder and a folder of changed files, such as the output of `modkit.py build`. `--title` is required; `--description` is optional; `--kind data` or `--kind program` is found from the changed files when left out.
+- `apply` checks every old byte, the program's SHA-256 for a program patch and the undo before it writes anything, then writes the patched files and `undo.json` into the new `--out` folder. Copy the files except `undo.json`, with their folders, into a copy of the game. Applying `undo.json` to that copy gives the original bytes back.
+- Refused, with one sentence saying why: a missing or unchanged changed folder, a patch for another game, edition or version, a patch already applied, a patch over the size limits (data: 256 bytes per change and 4,096 per patch; program: 16 and 256), an output that already exists, whose folder does not exist, or that lies inside the game folder, a folder holding game archives or this repository.
+- Tests on synthetic files: `tests/test_patch.py` (the same file in the three repositories).
+
+```
+$ python3 tools/patch.py make --data "/path/to/LoL1/DATA" "my mod output" --title "Stronger item" --out "stronger item.json"
+make: data patch with 1 change in 1 file (STARTUP.PAK) written to /path/to/stronger item.json
+Data patches are for the original program under DOSBox; ScummVM also reads the changed data when it still recognizes the release.
+```
+
+### `save_edit.py`
+
+Writes a copy of an original save with one field changed; the save itself is only read. Each run prints the old and the new value and one line saying whether the game has been shown to load such an edit (CONFIRMED) or not yet (UNCONFIRMED). Fields and their status: [cookbook](../docs/COOKBOOK.md#change-a-saved-game-a-copy).
+
+```
+$ python3 tools/save_edit.py set "/path/to/your/_SAVE001.DAT" money 5000 --out "my edited save.DAT"
+set: money OLD -> 5000; copy written to /path/to/my edited save.DAT; the original save was only read
+UNCONFIRMED: no edited copy of this field has been loaded by the game yet; keep a backup of your saves
+```
+
+- Fields: `name` (the slot description), `block` (0–1023), `facing` (0–3), `money` (0–65535, the field `save_reader.py` prints as money) and `lamp-oil` (0–100), for CD 1.02 slots and floppy `.13` slots. Numbers can be decimal or start with `0x`.
+- Refused, with one sentence saying why: a missing or damaged save, a value out of range, a name that is not plain ASCII, a donor save from another level or version, and an output that already exists, lies in the save's own folder, in the game folder or in this repository. Tests on synthetic slots: `tests/test_save_edit.py`.
 
 ### `doc_links.py`
 

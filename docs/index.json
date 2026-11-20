@@ -163,10 +163,13 @@
         "tools/full_report.py",
         "tools/level_renderer.py",
         "tools/level_report.py",
+        "tools/modkit.py",
         "tools/palette_reader.py",
         "tools/parse_tim.py",
+        "tools/patch.py",
         "tools/rating.py",
         "tools/repo_guard.py",
+        "tools/save_edit.py",
         "tools/save_reader.py",
         "tools/shp_renderer.py",
         "tools/vcn_vmp_reader.py",
@@ -209,6 +212,7 @@
         "tools/level_report.py",
         "tools/modkit.py",
         "tools/parse_tim.py",
+        "tools/save_edit.py",
         "tools/save_reader.py",
         "tools/wll_parser.py",
         "tools/xmi_to_midi.py"
@@ -238,7 +242,11 @@
       "question_references": [],
       "tools": [
         "tools/lol1_loose.py",
+        "tools/modkit.py",
+        "tools/patch.py",
         "tools/rating.py",
+        "tools/save_edit.py",
+        "tools/save_reader.py",
         "tools/voc_reader.py"
       ]
     },
@@ -465,6 +473,20 @@
       ]
     },
     {
+      "path": "docs/TOOL_MAKERS.md",
+      "title": "Next steps for tool makers",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/level_renderer.py",
+        "tools/lol1_level_writer.py",
+        "tools/lol1_pak_writer.py",
+        "tools/lol1_script_writer.py",
+        "tools/tileset_mapper.py",
+        "tools/vcn_vmp_reader.py"
+      ]
+    },
+    {
       "path": "docs/TOUR.md",
       "title": "Follow LoL1 level 1 from map to exit",
       "answers": [],
@@ -505,7 +527,9 @@
         "tools/lol1_tim_words.py",
         "tools/palette_reader.py",
         "tools/parse_tim.py",
+        "tools/patch.py",
         "tools/rating.py",
+        "tools/save_edit.py",
         "tools/shp_renderer.py",
         "tools/vcn_vmp_reader.py"
       ]
@@ -599,6 +623,7 @@
         "tools/pak_indexer.py",
         "tools/pak_reader.py",
         "tools/parse_tim.py",
+        "tools/patch.py",
         "tools/shp_renderer.py",
         "tools/tileset_mapper.py",
         "tools/tlc_reader.py",
@@ -757,6 +782,16 @@
         "tools/cps_reader.py",
         "tools/palette_reader.py",
         "tools/tileset_mapper.py"
+      ]
+    },
+    {
+      "path": "docs/formats/patch.md",
+      "title": "Lands of Lore patch format",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/modkit.py",
+        "tools/patch.py"
       ]
     },
     {
@@ -1479,8 +1514,10 @@
         "tools/pak_reader.py",
         "tools/palette_reader.py",
         "tools/parse_tim.py",
+        "tools/patch.py",
         "tools/rating.py",
         "tools/repo_guard.py",
+        "tools/save_edit.py",
         "tools/save_reader.py",
         "tools/shp_renderer.py",
         "tools/tileset_mapper.py",

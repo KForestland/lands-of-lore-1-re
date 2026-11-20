@@ -154,7 +154,7 @@ The [mod kit](../tools/README.md#modkitpy) writes the game's text tables and scr
 python3 tools/modkit.py unpack "/path/to/LoL1/DATA" "my mod work"
 ```
 
-Open `my mod work/edits/0000_L01.PAK_LEVEL01.ENG.json` in a text editor and change `Welcome to Gladstone Keep.` to `Welcome to Gladstone Castle.` inside `"value"`. Then build and verify:
+Open the file in `my mod work/edits/` whose name ends in `_L01.PAK_LEVEL01.ENG.json` (the number in front may differ on your copy) in a text editor and change `Welcome to Gladstone Keep.` to `Welcome to Gladstone Castle.` inside `"value"`. Then build and verify:
 
 ```bash
 python3 tools/modkit.py build "/path/to/LoL1/DATA" "my mod work" "my mod output"
@@ -221,3 +221,37 @@ python3 tools/wll_parser.py --data "$out/DATA" --level 1 | sed -n '1,4p'
 In row 0, the automap column still reads `0x3F`. The last of the four
 displayed high bytes is now `01`. The original and copied archive have
 the same length, and the single difference is at `L01.PAK+0x109D0`.
+
+## Share a change as a patch
+
+The [README](../README.md#change-a-number-in-your-own-copy) walks through the whole route on your own copy: unpack, change one number, build, make a patch, apply it to a copy, read it back and undo it. The [patch format](formats/patch.md) page gives every rule and limit.
+
+- `make` compares the game folder (`--data`) with a folder of changed files. The output folder of `modkit.py build` works as it is, and so does a copy of the game folder in which only some files changed.
+- File names in the patch start at the folder holding the PAK archives (the CD's `DATA` folder, or the floppy game folder). A patch made from the folder above `DATA` names the same files, and a patch made from either applies to both.
+- `apply` writes nothing until every check has passed: the old bytes, for a program patch the whole file's SHA-256, and the undo. Applying a patch twice, or to another edition, is refused with one sentence.
+- Program patches: copy the program file (CD: `HARDRIVE/MAIN.EXE` below `DATA`; floppy: `MAIN.EXE`) into a new folder, at the same path it has in the game folder, change a byte with a hex editor, for example one letter of a message, and run `make` with that folder. The patch records the program's SHA-256 and applies only to that exact file. A program change may replace at most 16 bytes at a time and 256 in all, never changes the file length, and never touches copy-protection code.
+- `make` and `apply` warn when a patch changes a file ScummVM uses to recognize the game ([ScummVM detection](formats/patch.md#scummvm-detection)).
+
+## Change a saved game (a copy)
+
+```bash
+python3 tools/save_edit.py set "/path/to/your/_SAVE001.DAT" money 5000 --out "my edited save.DAT"
+python3 tools/save_reader.py "my edited save.DAT"
+```
+
+The first command prints `set: money OLD -> 5000; copy written to ...`, with your save's old value for OLD, then one line saying how far the field is proven. The save itself is only read, and the copy must go outside the game and save folders. Copy it over a save in a **copy** of your game to load it.
+
+| Field | Value | Proven |
+| --- | --- | --- |
+| `block` | 0–1023; writes the block and its centred X and Y | tested on the CD 1.02 (edited-save run) |
+| `facing` | 0–3 | tested on the CD 1.02 |
+| `lamp-oil` | 0–100; also sets the lamp effect by the documented oil rule | tested on the CD 1.02 |
+| `money` | 0–65535; the same field `save_reader.py` prints as money | not yet tested: no edited copy loaded yet |
+| `name` | the slot description, printable ASCII | not yet tested: no edited copy loaded yet |
+
+The editor accepts CD 1.02 slots and floppy `.13` slots with the matching header and size. Not yet tested for any floppy field: no edited floppy save has been loaded by the game, and the floppy offsets differ. For `block`, choose a block you know can be walked on the current level. Numbers can be decimal or start with `0x`.
+[Save offsets](savegame_format.md#global-state) ·
+[What an edited copy must keep](savegame_format.md#editing-a-copy-of-an-original-slot) ·
+[Lamp rule](unknowns/07_native_rules.md#lamp-regeneration-and-the-clock)
+
+Map viewer and editor notes for tool makers: [tool makers](TOOL_MAKERS.md).

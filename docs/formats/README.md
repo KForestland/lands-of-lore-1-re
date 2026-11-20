@@ -39,6 +39,7 @@ One page per file type of *Lands of Lore: The Throne of Chaos* (Westwood, 1993, 
 | [tim.md](tim.md) | `*.TIM` | `tools/parse_tim.py` | CONFIRMED: container and command use (Q6 answered) |
 | [drivers.md](drivers.md) | `*.ADV *.DRV *.TBL` | `tools/decode_dialogue.py` (TRIG.TBL) | CONFIRMED: drivers identified (code, not documented inside); TRIG.TBL decoded (Q5 answered) |
 | [loose.md](loose.md) | loose CD files that are not PAK or TLK | `tools/lol1_loose.py` | 37 walked to the last byte, the six blend tables included; their writer is open |
+| [patch.md](patch.md) | patch files you make (`*.json`); not a game file | `tools/patch.py` | this project's format; tested on synthetic files and on copies of the CD and floppy |
 
 How the game works (scripts, rules, saves): [`../emc2_scripts.md`](../emc2_scripts.md), [`../executable_tables.md`](../executable_tables.md), [`../game_rules.md`](../game_rules.md), [`../savegame_format.md`](../savegame_format.md). Answered questions in detail: [`../unknowns/`](../unknowns/).
 
