@@ -6,6 +6,13 @@ Python tools that read the data files of *Lands of Lore: The Throne of Chaos* (D
 
 The numeric tables can be regenerated with `python3 tools/lol1_numbers.py`. On the CD edition, `--check` prints `CHECK numbers: CD tables match docs/NUMBERS.md`. [Numbers at a glance](../docs/NUMBERS.md)
 
+The `lol.py` job menu opens with `python tools/lol.py`. Add `JOB --help`
+to see the job's options. `level_viewer.py` writes an offline HTML plan with clickable
+details, sharing the drawing and interface in `level_html.py`.
+
+[First ten minutes](../docs/FIRST_TEN_MINUTES.md) ·
+[Interactive plans](../docs/COOKBOOK.md#open-an-interactive-level-plan)
+
 ## Setup
 
 - Python 3.8+ and Pillow (`pip install -r requirements.txt`) for the tools that write PNG files; Capstone (in the same file) for `monster_reference_scan.py`.

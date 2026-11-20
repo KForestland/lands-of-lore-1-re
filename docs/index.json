@@ -210,6 +210,8 @@
         "tools/full_report.py",
         "tools/level_renderer.py",
         "tools/level_report.py",
+        "tools/level_viewer.py",
+        "tools/lol.py",
         "tools/modkit.py",
         "tools/parse_tim.py",
         "tools/save_edit.py",
@@ -234,6 +236,16 @@
         "Q18"
       ],
       "tools": []
+    },
+    {
+      "path": "docs/FIRST_TEN_MINUTES.md",
+      "title": "First ten minutes",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/level_renderer.py",
+        "tools/lol.py"
+      ]
     },
     {
       "path": "docs/GLOSSARY.md",
@@ -1490,8 +1502,11 @@
         "tools/extract_music.py",
         "tools/fnt_reader.py",
         "tools/full_report.py",
+        "tools/level_html.py",
         "tools/level_renderer.py",
         "tools/level_report.py",
+        "tools/level_viewer.py",
+        "tools/lol.py",
         "tools/lol1_attack_types.py",
         "tools/lol1_blend_indices.py",
         "tools/lol1_compression_writer.py",

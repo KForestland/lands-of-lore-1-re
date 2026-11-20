@@ -255,3 +255,30 @@ The editor accepts CD 1.02 slots and floppy `.13` slots with the matching header
 [Lamp rule](unknowns/07_native_rules.md#lamp-regeneration-and-the-clock)
 
 Map viewer and editor notes for tool makers: [tool makers](TOOL_MAKERS.md).
+
+## Open an interactive level plan
+
+```sh
+python3 tools/level_viewer.py --data "$LOL1_DATA" --level 1 --out "../LoL1 plans"
+```
+
+Open `level01.html` in the new folder. Click a square to see its wall types.
+Choose **Automap legend** to find symbol and exploration squares. Choose
+**Script entries** to see their event masks and DATA words, or **Exits** to
+see conditions on the level changes. The placement markers are static
+calls read from the scripts. Computed values remain in the list.
+Use `--level all` for the 29 levels.
+[Automap legend fields](formats/xxx.md) · [Script entries](formats/emc2.md) ·
+[Exit conditions](PROGRESSION.md#level-to-level)
+
+## Find a tool by job
+
+Run `python3 tools/lol.py` to see the job names. This example reads one
+row of a text table.
+
+```sh
+python3 tools/lol.py text --data "$LOL1_DATA" LEVEL01.ENG --index 0
+```
+
+Use `python3 tools/lol.py level --help` to see the level viewer's options.
+The original tool filenames also work.

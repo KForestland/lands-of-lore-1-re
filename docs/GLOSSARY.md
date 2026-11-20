@@ -122,3 +122,13 @@ These words mean the same thing in the notes for all three Lands of Lore games.
 | Monster mode | A monster's current behaviour state (0-16): waiting, chasing, fleeing, dying … ([game_rules.md](game_rules.md)). |
 | Save file | The original name of a save slot is `_SAVEnnn.DAT`. Layout: [savegame_format.md](savegame_format.md). |
 | `_LEVELn.TMP` | A snapshot of one level that the original program writes while it runs: map changes, monsters and flying objects. It is not shipped. A save slot holds a copy of it. The four studied here came from the floppy edition ([savegame_format.md](savegame_format.md)). |
+
+## Reader tools
+
+| Term | Meaning |
+| --- | --- |
+| Level plan | An overhead drawing from the level's geometry. The HTML plan opens in a web browser and lets you choose a map feature to read its details. |
+| Gate | A script condition that can control a level change. See [Progression](PROGRESSION.md). |
+| Output folder | A directory you choose for the files a tool writes. The level and media tools use a new folder outside the game and the repository. |
+| Computed | The static walkthrough could not produce a constant argument or condition from this script. |
+| DATA word | A two-byte position in the script's DATA chunk. The plan shows it in hexadecimal so you can find the entry in a script listing. |

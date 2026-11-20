@@ -1,5 +1,7 @@
 # Lands of Lore I: file formats and game rules
 
+[First ten minutes](docs/FIRST_TEN_MINUTES.md)
+
 *Lands of Lore: The Throne of Chaos* is a first-person role-playing game for DOS by Westwood Studios (1993; CD-ROM edition with speech later). This repository explains how its data files and its rules work, and gives you Python tools that read every file type from your own copy of the game.
 
 It contains documentation, tools and small tables of numbers. It contains no game files and no dumps of game pictures, sounds or text; the only game-derived images are five small ones: three examples in `examples/` and two level schematics in `docs/images/`.
@@ -27,7 +29,7 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- rating:begin -->
 - **Files read:** 199 of 199 files in the CD `DATA` folder (289.0 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 547 statements CONFIRMED (proved from the program code or the files) and 93 UNCONFIRMED (a reading not yet proved), on 102 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 547 statements CONFIRMED (proved from the program code or the files) and 93 UNCONFIRMED (a reading not yet proved), on 103 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->

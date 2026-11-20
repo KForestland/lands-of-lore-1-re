@@ -531,9 +531,9 @@ def row_for(level, ext, addr, rec, masks):
     }
 
 
-def collect(data_dir):
+def collect(data_dir, levels=range(1, 30)):
     exits, doors, stopped = [], [], []
-    for level in range(1, 30):
+    for level in levels:
         for ext in ("INF", "INI"):
             blob = L.level_member(level, ext, data_dir)
             if blob is None:

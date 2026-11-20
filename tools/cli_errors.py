@@ -1,6 +1,7 @@
 """Command-line diagnostics shared by the file readers."""
 import argparse
 import os
+import shlex
 import struct
 import sys
 from pathlib import Path
@@ -76,6 +77,12 @@ def run_cli(main, *args):
             os.dup2(sink.fileno(), sys.stdout.fileno())
         return 0
     except (OSError, EOFError, ImportError, ValueError, struct.error, IndexError, KeyError) as error:
-        message = one_line(error) or type(error).__name__
+        module = (error.name or "").partition(".")[0] if isinstance(error, ImportError) else ""
+        package = {"PIL": "Pillow", "numpy": "numpy", "capstone": "capstone"}.get(module)
+        if package:
+            python = f'& "{sys.executable}"' if os.name == "nt" else shlex.quote(sys.executable)
+            message = f"This job needs {package}: run {python} -m pip install {package}."
+        else:
+            message = one_line(error) or type(error).__name__
         print(f"{Path(sys.argv[0]).name}: {message}", file=sys.stderr)
         return 1
