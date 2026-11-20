@@ -4,6 +4,7 @@ Newest first. One line per question worked on, new tool or visible change; each 
 
 ## 20 November 2026
 
+- **Readme title.** `README.ENG` at file +0x81 is `The Throne of Chaos`. `lol1_loose.py --check` re-reads those nineteen bytes ([loose files](formats/loose.md)).
 - **Confirmed statements re-derived.** Two samples of 30 statements labelled confirmed were checked again from the original bytes. The first: at most 27 held, 1 wrong, 2 not re-derived. The second: 20 held, 5 held in part, 1 wrong and 2 overstated, 2 not re-derived. The wrong and overstated statements are corrected: the bitmap writer recalculates the size word, the edited-save statement is limited to the tested edits, and the callback search covers explicit operands only ([samples](CONFIRMED_SAMPLE.md)).
 
 ## 19 November 2026
