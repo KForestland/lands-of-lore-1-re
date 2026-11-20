@@ -215,6 +215,13 @@
       ]
     },
     {
+      "path": "docs/CORRECTIONS.md",
+      "title": "Corrections",
+      "answers": [],
+      "question_references": [],
+      "tools": []
+    },
+    {
       "path": "docs/EDITED_SAVES.md",
       "title": "Runs on edited saves",
       "answers": [],

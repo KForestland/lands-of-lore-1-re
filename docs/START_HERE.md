@@ -58,4 +58,4 @@ Words you do not know are in the [glossary](GLOSSARY.md). Short worked commands,
 
 ## I want to help
 
-Pick an open question in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md). See [STATUS.md](STATUS.md) for what is done and how it was checked.
+Pick an open question in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md). See [STATUS.md](STATUS.md) for what is done and how it was checked. [CORRECTIONS.md](CORRECTIONS.md) lists what these pages got wrong and how it was caught.
