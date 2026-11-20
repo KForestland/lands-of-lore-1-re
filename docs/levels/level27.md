@@ -2,7 +2,7 @@
 
 Made by `tools/level_report.py` from `LEVEL27.CMZ`, `.WLL`, `.XXX`, `.INI`, `.INF` (CD edition). How to read it: [README](README.md). Formats: [cmz](../formats/cmz.md), [wll](../formats/wll.md), [emc2](../formats/emc2.md), [xxx](../formats/xxx.md).
 
-[Item, spell and creature numbers](../NUMBERS.md).
+Related references: [Progression rows for level 27](../PROGRESSION.md#level-27) and [item, spell and creature numbers](../NUMBERS.md).
 
 ## Size, area and graphics
 

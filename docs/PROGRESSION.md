@@ -8,75 +8,75 @@ Made by `tools/lol1_progression.py` from each level's `LEVEL<n>.INF` and `LEVEL<
 
 | From | To | Block | Facing | Word | Entries | Event | Conditions |
 |---:|---|---|---|---:|---|---|---|
-| 1 | 2 | 106 | 2 | 0x130C | 621 | party steps in, wall clicked | computed; facing == 2 |
-| 2 | 1 | 589 | 0 | 0x01F0 | 74 | party steps in, wall clicked | computed; (facing == 0) and (flag 41 == 0); flag 67 != 1 or computed; flag 41 == 0; flag 67 != 1 |
+| <a name="level-1"></a>[1](levels/level01.md) | 2 | 106 | 2 | 0x130C | 621 | party steps in, wall clicked | computed; facing == 2 |
+| <a name="level-2"></a>[2](levels/level02.md) | 1 | 589 | 0 | 0x01F0 | 74 | party steps in, wall clicked | computed; (facing == 0) and (flag 41 == 0); flag 67 != 1 or computed; flag 41 == 0; flag 67 != 1 |
 | 2 | 3 | 526 | 2 | 0x0729 | 392 | wall clicked | computed; flag 41 == 0; hand item shape == 40 |
 | 2 | 6 | 449 | 0 | 0x08E9 | 13 | party steps in, party arrives (second path), wall clicked, item put down | computed |
 | 2 | 10 | 713 | 0 | 0x0AD6 | 300, 301 | 300: party steps in, party arrives (second path), party leaves, wall clicked, bit 0x4000; 301: party steps in, wall clicked | computed; facing == 1; flag 67 == 1 or flag 67 == 1; computed |
 | 2 | 5 | 260 | 3 | 0x0CFB | 99 | party steps in, bit 0x4000 | facing == 3; flag 35 != 1; computed |
 | 2 | 5 | 260 | 3 | 0x0DA9 | 96 | party steps in, party arrives (second path), wall clicked, item put down | computed; facing == 3 |
-| 3 | 2 | 328 | 0 | 0x029A | 494 | party steps in, wall clicked | computed; ((flag 27 != 0) or (flag 29 != 0)) or (flag 192 != 0); flag 29 != 0; party member 2 != 1; credits >= 100 or computed; ((flag 27 != 0) or (flag 29 != 0)) or (flag 192 != 0); flag 29 != 0; party member 2 == 1; credits >= 200 or computed; facing == 0; ((flag 27 != 0) or (flag 29 != 0)) or (flag 192 != 0); flag 29 != 0; party member 2 != 1; credits >= 100 or computed; facing == 0; ((flag 27 != 0) or (flag 29 != 0)) or (flag 192 != 0); flag 29 != 0; party member 2 == 1; credits >= 200 |
+| <a name="level-3"></a>[3](levels/level03.md) | 2 | 328 | 0 | 0x029A | 494 | party steps in, wall clicked | computed; ((flag 27 != 0) or (flag 29 != 0)) or (flag 192 != 0); flag 29 != 0; party member 2 != 1; credits >= 100 or computed; ((flag 27 != 0) or (flag 29 != 0)) or (flag 192 != 0); flag 29 != 0; party member 2 == 1; credits >= 200 or computed; facing == 0; ((flag 27 != 0) or (flag 29 != 0)) or (flag 192 != 0); flag 29 != 0; party member 2 != 1; credits >= 100 or computed; facing == 0; ((flag 27 != 0) or (flag 29 != 0)) or (flag 192 != 0); flag 29 != 0; party member 2 == 1; credits >= 200 |
 | 3 | 4 | 167 | 0 | 0x0C65 | 772 | party steps in, wall clicked | computed; facing == 0 |
-| 4 | 3 | 804 | 2 | 0x02D3 | 199 | party steps in, party arrives (second path), item put down | computed; facing == 2 |
-| 5 | 2 | 97 | 1 | 0x02FE | 261 | party steps in, party arrives (second path), item put down | (computed) or (facing == 1); computed |
-| 6 | 7 | 258 or 86 | 0 | 0x003F | 118, 258 | 118: party steps in, party arrives (second path), item put down; 258: party steps in, party arrives (second path), wall clicked, item put down | computed; facing == 0 |
+| <a name="level-4"></a>[4](levels/level04.md) | 3 | 804 | 2 | 0x02D3 | 199 | party steps in, party arrives (second path), item put down | computed; facing == 2 |
+| <a name="level-5"></a>[5](levels/level05.md) | 2 | 97 | 1 | 0x02FE | 261 | party steps in, party arrives (second path), item put down | (computed) or (facing == 1); computed |
+| <a name="level-6"></a>[6](levels/level06.md) | 7 | 258 or 86 | 0 | 0x003F | 118, 258 | 118: party steps in, party arrives (second path), item put down; 258: party steps in, party arrives (second path), wall clicked, item put down | computed; facing == 0 |
 | 6 | 7 | 162 or 163 or 194 or 195 or 225 | ? | 0x008B | 161, 162, 163, 194, 195, 225, 256, 258, 289, 455 | 161: party arrives (second path); 162: party arrives (second path), item put down; 163: party arrives (second path), item put down; 194: party arrives (second path), item put down; 195: party arrives (second path), item put down; 225: party arrives (second path), item put down; 256: wall clicked; 258: party steps in, party arrives (second path), wall clicked, item put down; 289: wall clicked; 455: party arrives (second path), item put down | computed |
 | 6 | 7 | 162 or 163 or 194 or 195 or 225 or 455 | ? | 0x0132 | 162, 163, 194, 195, 225, 455 | party arrives (second path), item put down | computed |
 | 6 | 2 | 45 | 2 | 0x0314 | 481 | party steps in, party arrives (second path), item put down | computed; facing == 2 |
-| 7 | 6 or 6 or 8 or 8 or 8 | 150 or 322 or 156 or 208 or 527 | 2 or 2 or 2 or 1 or 2 | 0x0060 | 118, 124, 207, 290, 495 | party steps in, party arrives (second path), item put down | computed; facing == 1 or computed; facing == 2 |
+| <a name="level-7"></a>[7](levels/level07.md) | 6 or 6 or 8 or 8 or 8 | 150 or 322 or 156 or 208 or 527 | 2 or 2 or 2 or 1 or 2 | 0x0060 | 118, 124, 207, 290, 495 | party steps in, party arrives (second path), item put down | computed; facing == 1 or computed; facing == 2 |
 | 7 | 8 | 367 or 430 or 431 or 432 | ? | 0x01D3 | 366, 430, 431, 433 | 366: wall clicked, thrown item hits; 430: party arrives (second path), item put down; 431: party arrives (second path), item put down; 433: wall clicked, thrown item hits | computed |
 | 7 | 8 | 367 or 430 or 431 or 432 | ? | 0x021D | 367, 430, 431, 432 | party arrives (second path), item put down | computed |
-| 8 | 7 or 7 or 7 or 9 or 9 | 206 or 463 or 92 or 217 or 477 | 3 or 0 or 0 or 3 or 0 | 0x045B | 124, 207, 218, 495, 509 | party steps in, party arrives (second path), item put down | computed; facing == 0 or computed; facing == 3 |
-| 9 | 8 | 219 or 541 | 1 or 2 | 0x00A9 | 218, 509 | party steps in, party arrives (second path), item put down | computed; facing == 1 or computed; facing == 2 |
-| 10 | 11 or 12 | 641 or 412 | 0 or 1 | 0x04EC | 129, 703 | 129: party steps in, party arrives (second path), item put down; 703: party steps in, party arrives (second path), wall clicked | computed; facing == 0 or computed; facing == 1 |
-| 11 | 10 or 17 | 161 or 705 | 2 or 1 | 0x0192 | 673, 735 | party steps in, party arrives (second path), item put down | computed; facing == 1 or computed; facing == 2 |
+| <a name="level-8"></a>[8](levels/level08.md) | 7 or 7 or 7 or 9 or 9 | 206 or 463 or 92 or 217 or 477 | 3 or 0 or 0 or 3 or 0 | 0x045B | 124, 207, 218, 495, 509 | party steps in, party arrives (second path), item put down | computed; facing == 0 or computed; facing == 3 |
+| <a name="level-9"></a>[9](levels/level09.md) | 8 | 219 or 541 | 1 or 2 | 0x00A9 | 218, 509 | party steps in, party arrives (second path), item put down | computed; facing == 1 or computed; facing == 2 |
+| <a name="level-10"></a>[10](levels/level10.md) | 11 or 12 | 641 or 412 | 0 or 1 | 0x04EC | 129, 703 | 129: party steps in, party arrives (second path), item put down; 703: party steps in, party arrives (second path), wall clicked | computed; facing == 0 or computed; facing == 1 |
+| <a name="level-11"></a>[11](levels/level11.md) | 10 or 17 | 161 or 705 | 2 or 1 | 0x0192 | 673, 735 | party steps in, party arrives (second path), item put down | computed; facing == 1 or computed; facing == 2 |
 | 11 | 11 | 109 | 3 | 0x1860 | 45 | wall clicked | flag 84 == 0; computed; flag 282 == 0 |
-| 12 | 10 or 13 or 17 | 702 or 111 or 760 | 3 or 0 or 0 | 0x06CB | 92, 175, 411 | party steps in, party arrives (second path), item put down | computed; facing == 0 or computed; facing == 3 |
-| 13 | 14 | 442 or 444 or 483 | ? | 0x0070 | 313, 349, 356 | wall clicked | computed |
+| <a name="level-12"></a>[12](levels/level12.md) | 10 or 13 or 17 | 702 or 111 or 760 | 3 or 0 or 0 | 0x06CB | 92, 175, 411 | party steps in, party arrives (second path), item put down | computed; facing == 0 or computed; facing == 3 |
+| <a name="level-13"></a>[13](levels/level13.md) | 14 | 442 or 444 or 483 | ? | 0x0070 | 313, 349, 356 | wall clicked | computed |
 | 13 | 12 or 14 | 246 or 332 | ? | 0x009F | 116 | party steps in, party arrives (second path), item put down | computed |
 | 13 | 12 or 14 | 207 or 323 | 2 or 0 | 0x0104 | 143, 227 | party steps in, party arrives (second path), item put down | computed; facing == 0 or computed; facing == 2 |
 | 13 | 14 | 180 or 442 or 444 or 483 | ? | 0x018C | 52, 314, 316, 355 | party arrives (second path), item put down | computed |
-| 14 | 15 | 324 or 355 | ? | 0x0064 | 419 | party arrives (second path), party leaves (second path), item put down, item taken | computed |
+| <a name="level-14"></a>[14](levels/level14.md) | 15 | 324 or 355 | ? | 0x0064 | 419 | party arrives (second path), party leaves (second path), item put down, item taken | computed |
 | 14 | 12 | 246 | ? | 0x03A5 | 413 | party steps in, party arrives (second path), item put down | computed |
 | 14 | 13 or 15 | 259 or 262 | 2 or 3 | 0x040A | 355, 359 | 355: party steps in, party arrives (second path), item put down; 359: party steps in, party arrives (second path), wall clicked, item put down | computed; facing == 2 or computed; facing == 3 |
 | 14 | 15 | 324 or 355 or 53 or 54 | ? | 0x0439 | 149, 181, 182, 420, 451 | 149: wall clicked; 181: party arrives (second path), item put down; 182: party arrives (second path), item put down; 420: party arrives (second path), item put down; 451: party arrives (second path), item put down | computed |
-| 15 | 14 or 16 | 360 or 292 | 1 or 3 | 0x04C0 | 263, 328 | party steps in, party arrives (second path), item put down | computed; facing == 1 or computed; facing == 3 |
+| <a name="level-15"></a>[15](levels/level15.md) | 14 or 16 | 360 or 292 | 1 or 3 | 0x04C0 | 263, 328 | party steps in, party arrives (second path), item put down | computed; facing == 1 or computed; facing == 3 |
 | 15 | 12 | 246 | ? | 0x04F5 | 52 | party steps in, party arrives (second path), item put down | computed |
-| 16 | 12 or 14 | 246 or 332 | ? | 0x0067 | 174, 238 | party steps in, party arrives (second path), item put down | computed |
+| <a name="level-16"></a>[16](levels/level16.md) | 12 or 14 | 246 or 332 | ? | 0x0067 | 174, 238 | party steps in, party arrives (second path), item put down | computed |
 | 16 | 15 | 329 | 1 | 0x00CC | 293 | party steps in, party arrives (second path), item put down | computed; facing == 1 |
-| 17 | 11 or 12 or 24 | 734 or 124 or 910 | 3 or 2 or 0 | 0x01B0 | 78, 704, 792 | 78: party steps in, party arrives (second path), item put down; 704: party steps in, party arrives (second path); 792: party steps in, party arrives (second path), wall clicked | computed; facing == 0 or computed; facing == 2 or computed; facing == 3 |
-| 18 | 19 or 20 or 20 or 24 | 198 or 329 or 335 or 689 | 2 or 3 or 1 or 2 | 0x017B | 330, 334, 449, 620 | 330: party steps in, party arrives (second path), item put down; 334: party steps in, party arrives (second path), item put down; 449: party steps in, party arrives (second path), item put down; 620: party steps in, party arrives (second path), item put down, fireball passes | computed; facing == 1 or computed; facing == 2 or computed; facing == 3 |
-| 19 | 18 | 417 | 0 | 0x0120 | 166 | party steps in, party arrives (second path), item put down | computed; facing == 0 |
+| <a name="level-17"></a>[17](levels/level17.md) | 11 or 12 or 24 | 734 or 124 or 910 | 3 or 2 or 0 | 0x01B0 | 78, 704, 792 | 78: party steps in, party arrives (second path), item put down; 704: party steps in, party arrives (second path); 792: party steps in, party arrives (second path), wall clicked | computed; facing == 0 or computed; facing == 2 or computed; facing == 3 |
+| <a name="level-18"></a>[18](levels/level18.md) | 19 or 20 or 20 or 24 | 198 or 329 or 335 or 689 | 2 or 3 or 1 or 2 | 0x017B | 330, 334, 449, 620 | 330: party steps in, party arrives (second path), item put down; 334: party steps in, party arrives (second path), item put down; 449: party steps in, party arrives (second path), item put down; 620: party steps in, party arrives (second path), item put down, fireball passes | computed; facing == 1 or computed; facing == 2 or computed; facing == 3 |
+| <a name="level-19"></a>[19](levels/level19.md) | 18 | 417 | 0 | 0x0120 | 166 | party steps in, party arrives (second path), item put down | computed; facing == 0 |
 | 19 | ? | ? | ? | 0x014C | none | none | none |
-| 20 | 18 | 401 or 495 | ? | 0x0040 | 397, 559 | wall clicked | computed |
+| <a name="level-20"></a>[20](levels/level20.md) | 18 | 401 or 495 | ? | 0x0040 | 397, 559 | wall clicked | computed |
 | 20 | 18 or 18 or 21 | 331 or 333 or 586 | 1 or 3 or 1 | 0x00C2 | 330, 334, 584 | party steps in, party arrives (second path), item put down | computed; facing == 1 or computed; facing == 3 |
 | 20 | 18 | 401 or 430 or 431 or 433 or 465 or 495 | ? | 0x0136 | 401, 430, 431, 433, 465, 495 | party arrives (second path), item put down | computed |
-| 21 | 20 | 583 | 3 | 0x00F9 | 585 | party steps in, party arrives (second path), item put down | computed; facing == 3 |
+| <a name="level-21"></a>[21](levels/level21.md) | 20 | 583 | 3 | 0x00F9 | 585 | party steps in, party arrives (second path), item put down | computed; facing == 3 |
 | 21 | 20 | 199 | ? | 0x092D | 199 | party arrives (second path), item put down | computed |
-| 22 | 23 | 977 | 0 | 0x02EB | 27 | party steps in, party arrives (second path), item put down | computed; facing == 0 |
+| <a name="level-22"></a>[22](levels/level22.md) | 23 | 977 | 0 | 0x02EB | 27 | party steps in, party arrives (second path), item put down | computed; facing == 0 |
 | 22 | 24 | 674 | 2 | 0x0949 | 1003 | party steps in, wall clicked | facing == 2 |
-| 23 | 25 | 674 or 706 or 736 or 738 or 768 | ? | 0x0061 | 705, 739, 767, 772 | wall clicked | computed |
+| <a name="level-23"></a>[23](levels/level23.md) | 25 | 674 or 706 or 736 or 738 or 768 | ? | 0x0061 | 705, 739, 767, 772 | wall clicked | computed |
 | 23 | 22 or 25 | 59 or 293 | 2 or 0 | 0x00A3 | 325, 1009 | party steps in, party arrives (second path), item put down | computed; facing == 2 |
 | 23 | 26 | 211 or 910 | ? | 0x00CC | 792, 920 | party arrives (second path), item put down | computed |
 | 23 | 25 | 227 or 291 or 674 or 706 or 736 or 738 or 768 or 769 | ? | 0x04FF | 227, 291, 674, 706, 736, 738, 768, 769 | 227: party arrives (second path), item put down; 291: party arrives (second path), item put down; 674: party arrives (second path); 706: party arrives (second path); 736: party arrives (second path); 738: party arrives (second path); 768: party arrives (second path); 769: party arrives (second path) | computed |
 | 23 | ? | ? | ? | 0x051D | none | none | none |
-| 24 | 17 or 18 | 110 or 588 | 2 or 0 | 0x0109 | 657, 942 | 657: party steps in, party arrives (second path), wall clicked; 942: party steps in, party arrives (second path), item put down | computed; facing == 0 or computed; facing == 2 |
+| <a name="level-24"></a>[24](levels/level24.md) | 17 or 18 | 110 or 588 | 2 or 0 | 0x0109 | 657, 942 | 657: party steps in, party arrives (second path), wall clicked; 942: party steps in, party arrives (second path), item put down | computed; facing == 0 or computed; facing == 2 |
 | 24 | 22 | 971 | 0 | 0x0699 | 642 | party steps in, party arrives (second path), item put down | computed |
 | 24 | 26 | 427 | 2 | 0x0718 | 427 | party arrives (second path), wall clicked, item put down, fireball passes, thrown item hits | computed; facing == 2 |
-| 25 | 23 | 801 | ? | 0x0026 | 771 | party steps in, party arrives (second path), item put down | computed |
+| <a name="level-25"></a>[25](levels/level25.md) | 23 | 801 | ? | 0x0026 | 771 | party steps in, party arrives (second path), item put down | computed |
 | 25 | 23 | 293 | 0 | 0x0068 | 325 | party steps in, party arrives (second path), item put down | computed; facing == 2 |
-| 26 | 24 or 27 | 395 or 437 | 0 | 0x0614 | 254, 469 | party steps in, party arrives (second path), item put down | computed; facing == 0 or computed; facing == 1 |
+| <a name="level-26"></a>[26](levels/level26.md) | 24 or 27 | 395 or 437 | 0 | 0x0614 | 254, 469 | party steps in, party arrives (second path), item put down | computed; facing == 0 or computed; facing == 1 |
 | 26 | 23 | 857 | ? | 0x1132 | 734 | party arrives (second path), item put down | computed |
-| 27 | 26 | 104 or 742 or 746 or 810 or 816 or 818 or 840 | ? | 0x0340 | 71, 72, 678, 682, 786, 806, 816, 842, 850 | 71: wall clicked; 72: party arrives (second path); 678: party arrives (second path), party leaves (second path), item put down, item taken; 682: party arrives (second path), party leaves (second path), item put down, item taken; 786: wall clicked; 806: party arrives (second path), party leaves (second path), item put down, item taken; 816: party arrives (second path), item put down; 842: party arrives (second path), party leaves (second path), item put down, item taken; 850: wall clicked | computed |
+| <a name="level-27"></a>[27](levels/level27.md) | 26 | 104 or 742 or 746 or 810 or 816 or 818 or 840 | ? | 0x0340 | 71, 72, 678, 682, 786, 806, 816, 842, 850 | 71: wall clicked; 72: party arrives (second path); 678: party arrives (second path), party leaves (second path), item put down, item taken; 682: party arrives (second path), party leaves (second path), item put down, item taken; 786: wall clicked; 806: party arrives (second path), party leaves (second path), item put down, item taken; 816: party arrives (second path), item put down; 842: party arrives (second path), party leaves (second path), item put down, item taken; 850: wall clicked | computed |
 | 27 | 26 | 104 or 677 or 680 or 681 or 711 or 713 or 715 or 741 or 742 or 746 or 776 or 805 or 807 or 809 or 810 or 811 or 816 or 818 or 840 | ? | 0x03C9 | 104, 677, 680, 681, 711, 713, 715, 741, 742, 746, 776, 805, 807, 809, 810, 811, 816, 818, 840 | party arrives (second path), item put down | computed |
 | 27 | ? | ? | ? | 0x0418 | none | none | none |
 | 27 | 26 | 503 | ? | 0x0469 | 650, 683 | party steps in, party arrives (second path), item put down | computed |
 | 27 | 26 or 28 | 501 or 936 | 2 | 0x04CA | 469, 936 | party steps in, party arrives (second path), item put down | computed; facing == 2 |
-| 28 | 26 or 27 or 27 or 27 | 517 or 169 or 618 or 649 | ? | 0x03B3 | 171, 202, 549, 650, 652 | 171: party arrives (second path); 202: wall clicked; 549: wall clicked; 650: item put down, item taken; 652: party arrives (second path), party leaves (second path), item put down, item taken | computed |
+| <a name="level-28"></a>[28](levels/level28.md) | 26 or 27 or 27 or 27 | 517 or 169 or 618 or 649 | ? | 0x03B3 | 171, 202, 549, 650, 652 | 171: party arrives (second path); 202: wall clicked; 549: wall clicked; 650: item put down, item taken; 652: party arrives (second path), party leaves (second path), item put down, item taken | computed |
 | 28 | 27 | 169 or 618 | ? | 0x03DC | 169, 618 | party arrives (second path), item put down | computed |
 | 28 | 26 | 517 | ? | 0x0413 | 517 | party arrives (second path), item put down | computed |
 | 28 | 27 or 29 | 904 or 721 | 0 or 2 | 0x045E | 657, 904 | party steps in, party arrives (second path), item put down | computed; facing == 0 or computed; facing == 2 |
-| 29 | ? | ? | ? | 0x02F6 | none | none | none |
+| <a name="level-29"></a>[29](levels/level29.md) | ? | ? | ? | 0x02F6 | none | none | none |
 | 29 | 28 | 873 or 878 or 889 | ? | 0x031F | 873, 878, 889 | party arrives (second path), item put down | computed |
 | 29 | 28 | 625 | 0 | 0x036A | 689 | party steps in, party arrives (second path), item put down | computed; facing == 0 |
 

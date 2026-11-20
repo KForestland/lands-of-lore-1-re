@@ -303,11 +303,11 @@ $ python3 tools/level_report.py --level 1 | grep -E "^- Area|^\| block 621 "
 
 ### `lol1_progression.py`
 
-The level-to-level table and the door calls, one row per static call with the entries that reach it and the tests that guard it. `--check` on the CD edition requires `docs/PROGRESSION.md` to equal the text it prints. On the floppy edition it still reads every level script and does not compare that page.
+The level-to-level table and the door calls, one row per static call with the entries that reach it and the tests that guard it. `--check` on the CD edition requires `docs/PROGRESSION.md` to equal the text it prints, every level in the table to have a sheet in `docs/levels/` and every sheet to have rows, and each sheet to link its anchored rows (`PROGRESSION.md#level-N`) and `NUMBERS.md`. On the floppy edition it still reads every level script and does not compare that page.
 
 ```
 $ python3 tools/lol1_progression.py --check
-CHECK progression: 71 level changes, 136 door calls; docs/PROGRESSION.md matches
+CHECK progression: 71 level changes, 136 door calls; docs/PROGRESSION.md matches; 29 linked level sheets
 ```
 
 ### `tlc_reader.py`

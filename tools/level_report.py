@@ -371,7 +371,9 @@ def render(r):
          f"Made by `tools/level_report.py` from `LEVEL{lv}.CMZ`, `.WLL`, `.XXX`, `.INI`, `.INF` ({EDITION}). "
          "How to read it: [README](README.md). Formats: [cmz](../formats/cmz.md), [wll](../formats/wll.md), "
          "[emc2](../formats/emc2.md), [xxx](../formats/xxx.md).", "",
-         "[Item, spell and creature numbers](../NUMBERS.md).", ""]
+         (f"Related references: [Progression rows for level {lv}](../PROGRESSION.md#level-{lv}) and "
+          "[item, spell and creature numbers](../NUMBERS.md)." if EDITION == "CD edition" else
+          "[Item, spell and creature numbers](../NUMBERS.md)."), ""]
     g = r["gfx"]["loadLevelGraphics"]
     o += ["## Size, area and graphics", "",
           f"- Map: 32 x 32 blocks, {r['len']} bytes per block in the CMZ.",

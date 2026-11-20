@@ -15,7 +15,8 @@ the stack.
 
   lol1_progression.py              # print the page
   lol1_progression.py --out FILE   # write the page
-  lol1_progression.py --check      # the CD page equals docs/PROGRESSION.md
+  lol1_progression.py --check      # the CD page equals docs/PROGRESSION.md and
+                                   # every level sheet links its rows (both ways)
 """
 from cli_errors import run_cli
 from collections import defaultdict, deque
@@ -586,6 +587,38 @@ def reachable_from(edges, start):
     return seen
 
 
+def level_cell(level, pending):
+    """The From cell. The first row of each level carries its anchor and its sheet link."""
+    if level in pending:
+        pending.remove(level)
+        return f'<a name="level-{level}"></a>[{level}](levels/level{level:02d}.md)'
+    return level
+
+
+def check_level_sheets(exits):
+    """Two-way check: every level in the table has a sheet, every sheet has rows,
+    and each sheet links its rows here and the numbers page."""
+    directory = os.path.join(os.path.dirname(PAGE), "levels")
+    mentioned = {row["level"] for row in exits}
+    for row in exits:
+        for part in row["args"][0].split(" or ") if row["args"] else []:
+            if part.isdigit():
+                mentioned.add(int(part))
+    sheets = {int(name[5:7]) for name in os.listdir(directory)
+              if len(name) == 10 and name.startswith("level") and name.endswith(".md") and name[5:7].isdigit()}
+    sources = {row["level"] for row in exits}
+    if sheets != mentioned or not sheets <= sources:
+        raise ValueError(f"without a sheet: {sorted(mentioned - sheets)}; "
+                         f"without a progression row: {sorted((sheets - mentioned) | (sheets - sources))}")
+    for level in sorted(sheets):
+        with open(os.path.join(directory, f"level{level:02d}.md"), encoding="utf-8") as source:
+            text = source.read()
+        for link in (f"](../PROGRESSION.md#level-{level})", "](../NUMBERS.md)"):
+            if link not in text:
+                raise ValueError(f"missing {link[2:-1]} link in level{level:02d}.md")
+    return len(sheets)
+
+
 def page(exits, doors, stopped):
     lines = [
         "# Progression",
@@ -617,9 +650,10 @@ def page(exits, doors, stopped):
         "| From | To | Block | Facing | Word | Entries | Event | Conditions |",
         "|---:|---|---|---|---:|---|---|---|",
     ]
+    pending = set(range(1, 30))
     for row in exits:
         args = (row["args"] + ["?", "?", "?"])[:3]
-        parts = [row["level"], args[0], args[1], args[2], f"0x{row['word']:04X}",
+        parts = [level_cell(row["level"], pending), args[0], args[1], args[2], f"0x{row['word']:04X}",
                  row["entries"], row["event"], row["conditions"]]
         lines.append("| " + " | ".join(cell(part) for part in parts) + " |")
     lines += [
@@ -719,7 +753,11 @@ def main():
             stored = open(PAGE, encoding="utf-8").read() if os.path.isfile(PAGE) else ""
             if stored != text:
                 parser.exit(1, "CHECK progression: docs/PROGRESSION.md differs from the script table\n")
-            note = "docs/PROGRESSION.md matches"
+            try:
+                covered = check_level_sheets(exits)
+            except (OSError, ValueError) as error:
+                parser.exit(1, f"CHECK progression: {error}\n")
+            note = f"docs/PROGRESSION.md matches; {covered} linked level sheets"
         else:
             note = "CD page not compared"
         print(f"CHECK progression: {len(exits)} level changes, {len(doors)} door calls; {note}")
