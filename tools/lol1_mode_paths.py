@@ -63,6 +63,26 @@ CD_CALLS = {
 }
 
 
+# Two blit loops in each program. mov bx, es; add bx, 0x14; mov es, bx;
+# mov bx, ds; add bx, 0x14; mov ds, bx. A picture segment step, not the mode byte.
+BLIT_STEP = bytes.fromhex("8cc383c3148ec38cdb83c3148edb")
+CD_BLIT = (0x1E577, 0x1E692)
+FL_BLIT = (0x1EC0F, 0x1ED2A)
+# Register adds of 20 other than add bx, 0x14 (83 C3 14) that a pointer to the
+# mode byte would need: none of these encodings occurs in either file.
+NO_ADD20 = ("81c31400", "83c614", "81c61400", "83c714", "81c71400")
+# The three add dx, 0x14 in each file follow mov dx, es:[bx+array+0x21], the
+# instance's definition offset, so dx points 20 bytes into the definition.
+CD_DEF20 = bytes.fromhex("268b971b1683c214")
+FL_DEF20 = bytes.fromhex("268b97fd1583c214")
+# The one mov byte [mem], 10 in each whole file: les bx, [bp-4]; add bx, si;
+# mov byte es:[bx+0x78], 10. [bp-4] is the party record base (segment, offset)
+# stored at the routine's entry, stride 0x82, not the 46-byte monster array.
+TEN_STORE = bytes.fromhex("c45efc03de26c647780a")
+CD_TEN = (0xF649, 0xF503, bytes.fromhex("c746fe0328c746fc2d36"))
+FL_TEN = (0x14037, 0x13EF1, bytes.fromhex("c746fecf2dc746fc0f36"))
+
+
 def fail(message):
     print(f"CHECK mode_paths FAILED: {message}")
     return 1
@@ -423,6 +443,53 @@ def no_constant_index(data, rows):
     return None
 
 
+def byte_ten_stores(data):
+    """File offsets of every mov byte [mem], 10 (C6 /0 ib) at any byte offset after the header."""
+    hits = []
+    for i in range(header_size(data), len(data) - 6):
+        if data[i] != 0xC6:
+            continue
+        modrm = data[i + 1]
+        mod, reg, rm = modrm >> 6, (modrm >> 3) & 7, modrm & 7
+        if reg or mod == 3:
+            continue
+        disp = 2 if mod == 2 or (mod == 0 and rm == 6) else mod
+        if data[i + 2 + disp] == 10:
+            hits.append(i)
+    return hits
+
+
+def byte_ten(data, site, label):
+    """The one byte store of 10 in the file writes a party record, not the mode byte."""
+    at, entry, base = site
+    hits = byte_ten_stores(data)
+    if hits != [at + 6]:
+        return f"{label} mov byte [mem], 10 at {[hex(h) for h in hits]}, not {at + 6:#x}"
+    if data[at:at + len(TEN_STORE)] != TEN_STORE:
+        return f"{label} byte store of 10 at {at:#x} differs"
+    if data[entry:entry + 3] != b"\x55\x8B\xEC" or data[entry + 8:entry + 18] != base:
+        return f"{label} routine {entry:#x} does not load the party record base"
+    return None
+
+
+def blit_steps(data, sites, def20, label):
+    """The only add bx, 0x14 encodings are the two picture-segment steps.
+
+    No other add of 20 to bx, si or di is encoded, and every add dx, 0x14
+    steps a definition offset just loaded from an instance."""
+    if data.count(bytes.fromhex("83c214")) != 3 or data.count(def20) != 3:
+        return f"{label} add dx, 0x14 is not the three definition-offset steps"
+    if data.count(bytes.fromhex("83c314")) != 4:
+        return f"{label} add bx, 0x14 count is not 4"
+    for pattern in NO_ADD20:
+        if bytes.fromhex(pattern) in data:
+            return f"{label} contains {pattern}, an add of 20 to bx, si or di"
+    for offset in sites:
+        if data[offset:offset + len(BLIT_STEP)] != BLIT_STEP:
+            return f"{label} blit step at {offset:#x} differs"
+    return None
+
+
 def check_image(data, expected, array_add, label):
     found, error = mode_stores(data, array_add)
     if error:
@@ -448,6 +515,9 @@ def check_cd(data_dir):
     if len(image) != 0x57240:
         return fail(f"CD MAIN.EXE is {len(image):#x} bytes")
     error = check_image(image, CD_STORES, 0x15FA, "CD")
+    if error:
+        return fail(error)
+    error = byte_ten(image, CD_TEN, "CD") or blit_steps(image, CD_BLIT, CD_DEF20, "CD")
     if error:
         return fail(error)
     pushed, error = call_immediates(image, CD_CALLS)
@@ -489,7 +559,8 @@ def check_cd(data_dir):
     error = no_constant_index(image, (122, 204, 206))
     if error:
         return fail(error)
-    print("CHECK mode_paths: 10 CD mode-byte stores, none stores 10, no resolved caller or script passes 10, "
+    print("CHECK mode_paths: 10 CD mode-byte stores, none stores 10, the file's one byte store of 10 writes a party record, "
+          "add bx, 0x14 only steps blit segments, no resolved caller or script passes 10, "
           "3 LEVEL23 calls pass 11; finale row 40 is one of 93 catalog rows, no index site loads the constant 40, "
           "startup sorts rows 4-92; no stride-20 site loads palette rows 122, 204 or 206 as a constant")
     return 0
@@ -503,6 +574,9 @@ def check_floppy(data_dir):
     if len(image) != 0x5B470:
         return fail(f"floppy MAIN.EXE is {len(image):#x} bytes")
     error = check_image(image, FL_STORES, 0x15DC, "floppy")
+    if error:
+        return fail(error)
+    error = byte_ten(image, FL_TEN, "floppy") or blit_steps(image, FL_BLIT, FL_DEF20, "floppy")
     if error:
         return fail(error)
     error = palette_rows_floppy(image)
@@ -521,7 +595,8 @@ def check_floppy(data_dir):
     elevens = [key for key, group in sel0.items() if 11 in group]
     if len(elevens) != 3 or any(name != "LEVEL23.INF" for name, _addr in elevens):
         return fail(f"floppy mode 11 sites {elevens}")
-    print("CHECK mode_paths: floppy layout, 8 mode-byte stores, none stores 10, no resolved script passes 10, "
+    print("CHECK mode_paths: floppy layout, 8 mode-byte stores, none stores 10, the file's one byte store of 10 writes a party record, "
+          "add bx, 0x14 only steps blit segments, no resolved script passes 10, "
           "3 LEVEL23 calls pass 11; no stride-20 site loads palette rows 227, 229 or 232 as a constant")
     return 0
 
