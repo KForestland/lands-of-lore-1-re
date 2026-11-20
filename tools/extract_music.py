@@ -214,7 +214,7 @@ def build(data_dir, out_dir=None):
                 with open(os.path.join(out_dir, name), 'wb') as f:
                     f.write(raw)
             ext = name.rsplit('.', 1)[1].upper()
-            info = {'filename': name, 'source_pak': pak, 'format': ext, 'size': size, 'pak_offset': off}
+            info = {'filename': name, 'source_pak': pak.upper(), 'format': ext, 'size': size, 'pak_offset': off}
             if ext == 'ADL':
                 info['adl_info'] = analyse_adl(raw)
             else:

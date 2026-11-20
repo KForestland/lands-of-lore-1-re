@@ -23,6 +23,8 @@ def files(folder):
 
 
 class ToolKit(unittest.TestCase):
+    lowercase = False
+
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(prefix="tool kit ")
         self.addCleanup(temporary.cleanup)
@@ -30,10 +32,13 @@ class ToolKit(unittest.TestCase):
         self.game = self.root / "Test Land"
         self.slot = self.game / "slot.dat"
         self.slot.write_bytes(fixture.make_fixture(self.game))
+        if self.lowercase:
+            fixture.lowercase(self.game)
         self.original = files(self.game)
         self.addCleanup(lambda: self.assertEqual(files(self.game), self.original))
-        self.data = self.game / fixture.DATA
+        self.data = self.game / (fixture.DATA.lower() if self.lowercase else fixture.DATA)
         self.base = self.data if fixture.DATA == "DATA" else self.game
+        self.archive = fixture.ARCHIVE.lower() if self.lowercase else fixture.ARCHIVE
 
     def run_tool(self, tool, *args, ok=True):
         env = dict(os.environ, PYTHONIOENCODING="utf-8")
@@ -56,14 +61,14 @@ class ToolKit(unittest.TestCase):
 
     def test_mod_patch_and_private_undo(self):
         work, built, applied, reverted = [self.root / name for name in ("work", "built", "applied", "reverted")]
-        self.assertIn("editable entries", self.job("mod", "unpack", self.base, work))
+        self.assertIn("editable entries", self.job("mod", "unpack", self.game, work))
         edits = {p.name: json.loads(p.read_text(encoding="utf-8")) for p in sorted((work / "edits").iterdir())}
         name, document = edit(edits)
         (work / "edits" / name).write_text(json.dumps(document), encoding="utf-8")
         self.assertIn("1 changed", self.job("mod", "build", self.base, work, built))
-        self.assertIn("1 changed", self.job("mod", "verify", self.base, work, built))
-        expected = (built / fixture.ARCHIVE).read_bytes()
-        original = (self.base / fixture.ARCHIVE).read_bytes()
+        self.assertIn("1 changed", self.job("mod", "verify", self.data, work, built))
+        expected = (built / self.archive).read_bytes()
+        original = (self.base / self.archive).read_bytes()
         self.assertNotEqual(expected, original)
 
         share = self.root / "share.json"
@@ -71,16 +76,21 @@ class ToolKit(unittest.TestCase):
                                            "--title", "Fixture change", "--out", share))
         patch = json.loads(share.read_text(encoding="utf-8"))
         self.assertEqual(patch["format"], "lol-patch-3")
+        if self.lowercase:
+            # A patch authored against an uppercase installation still applies.
+            for change in patch["changes"]:
+                change["file"] = change["file"].upper()
+            share.write_text(json.dumps(patch), encoding="utf-8")
         self.assertNotIn('"old":', share.read_text(encoding="utf-8"))
         self.assertIn("keep undo.json private", self.job("patch", "apply", share, "--data", self.base, "--out", applied))
-        self.assertEqual((applied / fixture.ARCHIVE).read_bytes(), expected)
+        self.assertEqual((applied / self.archive).read_bytes(), expected)
 
         changed = self.root / "another copy"
         shutil.copytree(self.base, changed)
-        (changed / fixture.ARCHIVE).write_bytes(expected)
+        (changed / self.archive).write_bytes(expected)
         undo = applied / "undo.json"
         self.assertIn("1 file", self.job("patch", "apply", undo, "--data", changed, "--out", reverted))
-        self.assertEqual((reverted / fixture.ARCHIVE).read_bytes(), original)
+        self.assertEqual((reverted / self.archive).read_bytes(), original)
 
     def test_translate_edit_build_and_verify(self):
         work, built = self.root / "translation", self.root / "translated files"
@@ -134,3 +144,7 @@ class ToolKit(unittest.TestCase):
         page = self.root / "saved game.html"
         self.job("save", "page", self.slot, "--out", page)
         self.assertIn(fixture.SAVE_FIELD, page.read_text(encoding="utf-8").lower())
+
+
+class LowercaseToolKit(ToolKit):
+    lowercase = True

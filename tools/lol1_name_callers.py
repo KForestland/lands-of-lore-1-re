@@ -8,7 +8,7 @@ On the CD edition:
 
   lol1_name_callers.py --data DATA --check
 """
-from cli_errors import run_cli
+from cli_errors import run_cli, game_path
 import os
 import struct
 
@@ -59,7 +59,7 @@ def exe_hits(data_dir, needle):
                     break
                 hits.append((os.path.relpath(path, data_dir), at))
                 start = at + 1
-    install = os.path.join(os.path.dirname(os.path.abspath(data_dir)), "INSTALL.EXE")
+    install = str(game_path(os.path.dirname(os.path.abspath(data_dir)), "INSTALL.EXE"))
     if os.path.isfile(install):
         data = open(install, "rb").read()
         start = 0
@@ -119,7 +119,7 @@ def main():
     if not L.is_cd_layout(data_dir):
         print("CHECK name_callers: floppy layout, CD finale catalog is not in this folder")
         return 0
-    finale_path = os.path.join(data_dir, "ENG", "FINALE.EXE")
+    finale_path = str(game_path(data_dir, "ENG", "FINALE.EXE"))
     try:
         finale = open(finale_path, "rb").read()
     except OSError as exc:
@@ -128,7 +128,7 @@ def main():
     if error:
         return fail(error)
     for lang, name_at in OTHERS.items():
-        path = os.path.join(data_dir, lang, "FINALE.EXE")
+        path = str(game_path(data_dir, lang, "FINALE.EXE"))
         if not os.path.isfile(path):
             continue
         other = open(path, "rb").read()
@@ -137,7 +137,7 @@ def main():
         got = finale_row(other, name_at)
         if got is None or got[3] != 44115 or got[4] != 0x1000:
             return fail(f"{lang} catalog row is {got}")
-    install = os.path.join(os.path.dirname(os.path.abspath(data_dir)), "INSTALL.EXE")
+    install = str(game_path(os.path.dirname(os.path.abspath(data_dir)), "INSTALL.EXE"))
     if not os.path.isfile(install):
         return fail("INSTALL.EXE is not beside DATA")
     for needle in PALETTES + (b"00000.VOC",):
@@ -154,7 +154,7 @@ def main():
             return fail(f"control name {needle.decode()} is missing from script text")
     if payload_hits(data_dir, b"00000.VOC"):
         return fail("00000.VOC is inside an archive payload")
-    fdt_path = os.path.join(data_dir, "FILEDATA.FDT")
+    fdt_path = str(game_path(data_dir, "FILEDATA.FDT"))
     fdt = open(fdt_path, "rb").read()
     for needle, at in FDT_AT.items():
         if fdt[at:at + len(needle) + 1] != needle + b"\x00":

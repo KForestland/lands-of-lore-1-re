@@ -14,7 +14,7 @@ from hashlib import sha256
 from pathlib import Path
 from struct import unpack_from
 
-from cli_errors import run_cli
+from cli_errors import run_cli, game_path
 from fnt_reader import parse as font
 import lol1lib as L
 from parse_tim import tim_chunks, tim_text, walk_avtl
@@ -146,14 +146,14 @@ def check_floppy_program(image):
 
 def floppy_sources(root):
     """Floppy edition: the same reader and tables; check the four sources only."""
-    check_floppy_program((root / "FINALE.EXE").read_bytes())
-    assets = L.read_pak(root / "FINALE1.PAK")
-    raw = L.read_pak(root / "FINALE2.PAK")["LOLFINAL.TIM"]
+    check_floppy_program(game_path(root, "FINALE.EXE").read_bytes())
+    assets = L.read_pak(game_path(root, "FINALE1.PAK"))
+    raw = L.read_pak(game_path(root, "FINALE2.PAK"))["LOLFINAL.TIM"]
     require(sha256(raw).hexdigest() == FLOPPY_TIM_SHA, "floppy LOLFINAL.TIM differs from the checked schedule")
     require(call_rows(raw) == FLOPPY_PAIRS, "floppy LOLFINAL.TIM blend calls differ")
     rows = {name: set() for name in TABLE_SHA}
     for _, stem, name in FLOPPY_PAIRS:
-        table = (root / name).read_bytes()
+        table = game_path(root, name).read_bytes()
         require(sha256(table).hexdigest() == TABLE_SHA[name], f"floppy {name} differs from the CD table")
         source = bitmap(assets, stem)
         require(max(source) < 255, f"floppy {stem} uses source 255")
@@ -284,14 +284,14 @@ def inspect(root, list_indices):
     scene_unions = {stem: [set() for _ in range(3)] for _, stem, _ in PAIRS}
     scene_common = {stem: None for _, stem, _ in PAIRS}
     for locale in LOCALES:
-        folder = root / locale
-        check_program((folder / "FINALE.EXE").read_bytes(), locale)
-        assets = L.read_pak(folder / "FINALE1.PAK")
-        script = L.read_pak(folder / "FINALE2.PAK")
+        folder = game_path(root, locale)
+        check_program(game_path(folder, "FINALE.EXE").read_bytes(), locale)
+        assets = L.read_pak(game_path(folder, "FINALE1.PAK"))
+        script = L.read_pak(game_path(folder, "FINALE2.PAK"))
         destinations = scene_inputs(assets, script, locale)
         for _, stem, name in invocation_rows(script["LOLFINAL.TIM"]):
             source = bitmap(assets, stem)
-            table = (folder / name).read_bytes()
+            table = game_path(folder, name).read_bytes()
             require(len(table) == 0x10000 and max(source) < 255, f"{locale} {stem} blend extent or source 255")
             require(sha256(table).hexdigest() == TABLE_SHA[name], f"{locale} {name} differs")
             rows[name].update(source)

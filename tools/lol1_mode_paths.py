@@ -10,7 +10,7 @@ On the CD folder the check reads HARDRIVE/MAIN.EXE, ENG/FINALE.EXE and
 FILEDATA.FDT. On a floppy folder it reads MAIN.EXE. Pass --floppy as well
 to check that edition in the same run.
 """
-from cli_errors import ReaderArgumentParser, run_cli
+from cli_errors import ReaderArgumentParser, run_cli, game_path
 import struct
 import sys
 from pathlib import Path
@@ -506,9 +506,9 @@ def check_image(data, expected, array_add, label):
 
 
 def check_cd(data_dir):
-    main = Path(data_dir) / "HARDRIVE" / "MAIN.EXE"
-    finale = Path(data_dir) / "ENG" / "FINALE.EXE"
-    fdt = Path(data_dir) / "FILEDATA.FDT"
+    main = game_path(Path(data_dir), "HARDRIVE", "MAIN.EXE")
+    finale = game_path(Path(data_dir), "ENG", "FINALE.EXE")
+    fdt = game_path(Path(data_dir), "FILEDATA.FDT")
     if not main.is_file():
         return fail("CD MAIN.EXE is not in HARDRIVE")
     image = main.read_bytes()
@@ -567,7 +567,7 @@ def check_cd(data_dir):
 
 
 def check_floppy(data_dir):
-    main = Path(data_dir) / "MAIN.EXE"
+    main = game_path(Path(data_dir), "MAIN.EXE")
     if not main.is_file():
         return fail("floppy MAIN.EXE is not in the folder")
     image = main.read_bytes()

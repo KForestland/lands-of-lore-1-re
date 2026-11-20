@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Parse LoL1 TIM files from PAK containers and document their IFF chunk structure."""
 
-from cli_errors import output_refusal, run_cli
+from cli_errors import output_refusal, run_cli, game_path
 import json
 import struct
 import os
@@ -341,7 +341,7 @@ def main():
         blob = open(os.path.join(a.data, pak_name), "rb").read()
         for name, off, size in L.pak_entries(blob):
             if name.upper().endswith(".TIM"):
-                tim_files.append({"pak": pak_name, "name": name, "offset": off, "size": size})
+                tim_files.append({"pak": pak_name.upper(), "name": name.upper(), "offset": off, "size": size})
 
     tim_files.sort(key=lambda x: (x["pak"], x["name"]))
 
@@ -370,7 +370,7 @@ def main():
     size_stats = {"min": 999999, "max": 0, "total": 0}
 
     for tf in tim_files:
-        pak_path = os.path.join(DATA_DIR, tf["pak"])
+        pak_path = game_path(DATA_DIR, tf["pak"])
         if not os.path.exists(pak_path):
             continue
 
@@ -467,7 +467,7 @@ def main():
             if tf["name"].upper() in seen:
                 continue
             seen.add(tf["name"].upper())
-            blob = read_pak_entry(os.path.join(DATA_DIR, tf["pak"]), tf["offset"], tf["size"])
+            blob = read_pak_entry(game_path(DATA_DIR, tf["pak"]), tf["offset"], tf["size"])
             words = tim_chunks(blob).get("AVTL", b"")
             instrs, n = walk_avtl([struct.unpack_from("<H", words, i * 2)[0] for i in range(len(words) // 2)])
             stops += n

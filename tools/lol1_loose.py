@@ -16,7 +16,7 @@ bytes unexplained, because the writer is open.
 
   lol1_loose.py --check
 """
-from cli_errors import ReaderArgumentParser, run_cli
+from cli_errors import ReaderArgumentParser, run_cli, game_path
 import argparse
 import os
 import struct
@@ -722,7 +722,7 @@ def diagonal_hits(palette, indexes):
 
 def scroll_palette(root):
     """The 768-byte palette of GENERAL.PAK SCROLL.CPS, or None."""
-    path = root / "GENERAL.PAK"
+    path = game_path(root, "GENERAL.PAK")
     if not path.is_file():
         return None
     data = path.read_bytes()
@@ -736,7 +736,7 @@ def scroll_palette(root):
 def stored_palettes(root):
     """768-byte palettes: PAL and COL members, and picture palettes of that size."""
     found = []
-    for path in sorted(item for item in root.rglob("*.PAK") if item.is_file()):
+    for path in sorted(item for item in root.rglob("*") if item.is_file() and item.suffix.upper() == ".PAK"):
         data = path.read_bytes()
         for name, offset, size in L.pak_entries(data):
             upper = name.upper()
@@ -765,7 +765,7 @@ def check(data_dir):
     for path in sorted(item for item in root.rglob("*") if item.is_file()):
         if path.suffix.lower() in (".pak", ".tlk"):
             continue
-        rel = path.relative_to(root).as_posix()
+        rel = path.relative_to(root).as_posix().upper()
         data = path.read_bytes()
         if covers(path.name, data):
             read[rel] = data
@@ -882,7 +882,7 @@ def check(data_dir):
         return fail("BLEND.TAB first two rows are equal")
     if index_formula_matches(blends["BLEND.TAB"][0]) or index_formula_matches(blends["BLEND2.TAB"][0]):
         return fail("a blend table matches a 256-by-256 index formula")
-    finale1 = L.read_pak(str(root / "ENG" / "FINALE1.PAK"))
+    finale1 = L.read_pak(str(game_path(root, "ENG", "FINALE1.PAK")))
     model_rates = []
     for name, scenes in BLEND_SCENES.items():
         palette = cps_palette(finale1.get(scenes[0], b""))
@@ -919,13 +919,13 @@ def check(data_dir):
         blob = read[rel] if rel in read else left[rel][1]
         if blob[offset:offset + len(needle)] != needle:
             return fail(f"name pin {rel}+{offset:#x} differs")
-    install_path = os.path.join(os.path.dirname(os.path.abspath(data_dir)), "INSTALL.EXE")
+    install_path = str(game_path(os.path.dirname(os.path.abspath(data_dir)), "INSTALL.EXE"))
     if not os.path.isfile(install_path):
         return fail("INSTALL.EXE is not beside DATA")
     install = Path(install_path).read_bytes()
     if len(install) != 134819:
         return fail("INSTALL.EXE length differs")
-    readme_path = os.path.join(os.path.dirname(os.path.abspath(data_dir)), "README.ENG")
+    readme_path = str(game_path(os.path.dirname(os.path.abspath(data_dir)), "README.ENG"))
     if not os.path.isfile(readme_path):
         return fail("README.ENG is not beside DATA")
     with open(readme_path, "rb") as handle:
@@ -961,7 +961,7 @@ def check(data_dir):
     for label, blob in programs:
         if has_mov_cx_256(blob):
             return fail(f"{label} contains mov cx, 256")
-    finale2 = (root / "ENG" / "FINALE2.PAK").read_bytes()
+    finale2 = game_path(root, "ENG", "FINALE2.PAK").read_bytes()
     for offset, needle in FINALE_BLEND:
         if finale2[offset:offset + len(needle)] != needle:
             return fail(f"ENG/FINALE2.PAK+{offset:#x} differs")
@@ -973,12 +973,12 @@ def check(data_dir):
     for offset, needle in VISBIOS_PINS:
         if visbios[offset:offset + len(needle)] != needle:
             return fail(f"VISBIOS.COM+{offset:#x} differs")
-    scanned = [(root / rel).read_bytes().lower() for rel in ABSENT_FROM]
+    scanned = [game_path(root, rel).read_bytes().lower() for rel in ABSENT_FROM]
     scanned.append(install.lower())
     for needle in ABSENT_NEEDLES:
         if any(needle in blob for blob in scanned):
             return fail(f"{needle.decode()} occurs in a scanned program")
-    raw = [(root / rel).read_bytes() for rel in ABSENT_FROM] + [install]
+    raw = [game_path(root, rel).read_bytes() for rel in ABSENT_FROM] + [install]
     if any(BLEND_HEAD in blob or BLEND2_HEAD in blob for blob in raw):
         return fail("a blend-table head occurs in a scanned program")
     print("CHECK loose: 37 files reach the last byte "

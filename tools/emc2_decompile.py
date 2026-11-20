@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read an original LoL1 EMC2 script from a file or PAK member."""
 
-from cli_errors import ReaderArgumentParser, output_refusal, run_cli
+from cli_errors import ReaderArgumentParser, game_path, input_path, output_refusal, run_cli
 from collections import defaultdict
 from dataclasses import dataclass
 import json
@@ -334,19 +334,20 @@ def main():
         if refusal:
             parser.error(refusal)
     try:
-        if not args.input.exists() and args.data and (args.data / args.input).exists():
-            args.input = args.data / args.input
-        name = args.input.name
+        source = input_path(args.input)
+        if not source.exists() and args.data and not args.input.is_absolute():
+            source = game_path(args.data, args.input)
+        name = source.name
         if args.entry:
-            for entry, offset, size in pak_entries(args.input):
+            for entry, offset, size in pak_entries(source):
                 if entry.casefold() == args.entry.casefold():
-                    data = read_entry(args.input, offset, size)
+                    data = read_entry(source, offset, size)
                     name += f"/{entry} (PAK+0x{offset:X})"
                     break
             else:
                 raise ValueError(f"{args.entry} is absent from the PAK")
         else:
-            data = args.input.read_bytes()
+            data = source.read_bytes()
         if args.assembly:
             from lol1_script_writer import listing as assembly_listing
             listing = json.dumps(assembly_listing(data), indent=2, ensure_ascii=True) + "\n"

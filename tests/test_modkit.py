@@ -28,7 +28,7 @@ def make_game(folder):
 
 
 def edit(edits):
-    name, document = next((n, d) for n, d in edits.items() if d["key"] == "LEVEL01.ENG")
+    name, document = next((n, d) for n, d in edits.items() if d["key"].upper() == "LEVEL01.ENG")
     assert document["value"][:2] == LINES
     document["value"][0] = "Welcome to the much longer test castle.\r"
     return name, document

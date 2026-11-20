@@ -378,7 +378,7 @@ def apply(data, document, output, *protected, share=False):
         for name, updates in sorted(by_archive.items()):
             original = (data / name).read_bytes()
             members = modkit.members(original)
-            indices = {i: updates[key] for i, (key, _, _) in enumerate(members) if key in updates}
+            indices = {i: updates[key.upper()] for i, (key, _, _) in enumerate(members) if key.upper() in updates}
             if len(indices) != len(updates):
                 raise ValueError(f"{name} does not contain one copy of each requested level member.")
             rebuilt = replace_members(modkit, name, original, members, indices)
@@ -388,7 +388,7 @@ def apply(data, document, output, *protected, share=False):
             if ([(key, value) for key, _, value in reread] !=
                     [(key, indices.get(i, value)) for i, (key, _, value) in enumerate(members)]):
                 raise ValueError(f"{name} did not read back as the requested archive.")
-            verified.update({key: value for key, _, value in reread if key in updates})
+            verified.update({key.upper(): value for key, _, value in reread if key.upper() in updates})
         if (parse_maze(verified[source["CMZ"][1]])[3] != rows
                 or Counter(p.args for p in placement_sites(emc.read_script(verified[source["INI"][1]]), level)[0].values()) != items):
             raise ValueError("The copied level does not read back as the requested changes.")

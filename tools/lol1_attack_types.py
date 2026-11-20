@@ -12,7 +12,7 @@ reads MAIN.EXE. Pass --floppy as well to check that edition in the same run.
 import struct
 from pathlib import Path
 
-from cli_errors import ReaderArgumentParser, run_cli
+from cli_errors import ReaderArgumentParser, run_cli, game_path
 import lol1lib as L
 
 
@@ -237,8 +237,8 @@ def check_image(data):
 def main_exe(data_dir):
     root = Path(data_dir)
     if L.is_cd_layout(data_dir):
-        return root / "HARDRIVE" / "MAIN.EXE"
-    return root / "MAIN.EXE"
+        return game_path(root, "HARDRIVE", "MAIN.EXE")
+    return game_path(root, "MAIN.EXE")
 
 
 def check_dir(data_dir):

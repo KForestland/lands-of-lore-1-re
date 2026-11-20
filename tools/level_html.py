@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from cli_errors import ReaderArgumentParser
+from cli_errors import ReaderArgumentParser, game_path, input_path
 from modkit_core import output_folder
 
 WIDTH, HEIGHT = 900, 630
@@ -236,7 +236,7 @@ class Plan:
 
 
 def find_data(path, child, marker):
-    root = Path(path).resolve()
+    root = input_path(path).resolve()
     if root.is_dir():
         for folder in (root, *(entry for entry in root.iterdir()
                                if entry.is_dir() and entry.name.upper() == child)):
@@ -247,7 +247,7 @@ def find_data(path, child, marker):
 
 def installation_root(data):
     if data.name.upper() == "DAT" or (
-        data.name.upper() == "DATA" and (data.parent / "WESTWOOD.001").is_file()
+        data.name.upper() == "DATA" and game_path(data.parent, "WESTWOOD.001").is_file()
     ):
         return data.parent
     return data

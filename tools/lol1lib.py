@@ -19,7 +19,7 @@ The game DATA folder comes from --data or the $LOL1_DATA environment
 variable. No game data is stored in this repository.
 """
 
-from cli_errors import ReaderArgumentParser
+from cli_errors import ReaderArgumentParser, game_path
 import os
 import struct
 
@@ -104,14 +104,15 @@ def find_member(name, data_dir=DEFAULT_DATA, pak=None):
     the DATA folder is returned with pak_name None.
     """
     name = name.upper()
-    loose = os.path.join(data_dir, name)
+    loose = str(game_path(data_dir, name))
     if pak is None and os.path.isfile(loose):
         with open(loose, "rb") as f:
             return None, f.read()
     for p in ([pak] if pak else list_paks(data_dir)):
-        members = read_pak(os.path.join(data_dir, p))
+        archive = game_path(data_dir, p)
+        members = read_pak(archive)
         if name in members:
-            return p, members[name]
+            return archive.name, members[name]
     raise FileNotFoundError(f"{name} not found in {data_dir}")
 
 
@@ -119,7 +120,7 @@ def find_all(suffix, data_dir=DEFAULT_DATA):
     """Yield (pak_name, member_name, bytes) for every member ending in suffix."""
     suffix = suffix.upper()
     for p in list_paks(data_dir):
-        for name, blob in read_pak(os.path.join(data_dir, p)).items():
+        for name, blob in read_pak(str(game_path(data_dir, p))).items():
             if name.endswith(suffix):
                 yield p, name, blob
 
@@ -241,7 +242,7 @@ def level_member(level, ext, data_dir=DEFAULT_DATA):
     name = f"LEVEL{level}.{ext}"
     for pak in (f"L{level:02d}.PAK", None):
         try:
-            if pak and not os.path.isfile(os.path.join(data_dir, pak)):
+            if pak and not os.path.isfile(str(game_path(data_dir, pak))):
                 continue
             return find_member(name, data_dir, pak)[1]
         except (FileNotFoundError, OSError):
@@ -252,7 +253,7 @@ def level_member(level, ext, data_dir=DEFAULT_DATA):
 def is_cd_layout(data_dir):
     """True when data_dir looks like the CD edition's DATA folder, the corpus
     the files in data/ were made from (L01.PAK present)."""
-    return os.path.isfile(os.path.join(data_dir, "L01.PAK"))
+    return os.path.isfile(str(game_path(data_dir, "L01.PAK")))
 
 
 def repo_json(name, data_dir=None):

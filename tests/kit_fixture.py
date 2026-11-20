@@ -69,3 +69,17 @@ def inspect_jobs(test):
     out = test.root / "midi files"
     test.assertIn("end-of-track: True", test.job("music", "--data", test.data, "TEST.XMI", "--out", out))
     test.assertEqual((out / "TEST_00.mid").read_bytes()[:4], b"MThd")
+
+
+def lowercase(root):
+    """Rename a generated installation as a lower-case filesystem copy."""
+    for path in sorted(root.rglob("*"), key=lambda p: len(p.parts), reverse=True):
+        if path.suffix.upper() == ".PAK":
+            raw = path.read_bytes()
+            path.write_bytes(write_pak((name.lower(), raw[at:at + size]) for name, at, size in pak_entries(raw)))
+        lower = path.with_name(path.name.lower())
+        if lower.name != path.name:
+            # The intermediate name also makes a case-only rename portable.
+            temporary = path.with_name(path.name + ".renaming")
+            path.rename(temporary)
+            temporary.rename(lower)

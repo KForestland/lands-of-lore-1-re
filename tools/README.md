@@ -50,6 +50,8 @@ The [reader tool check audit](../docs/TOOL_CHECK_AUDIT.md) lists the mistakes te
 
 ## Setup
 
+For game data, give `--data` either your installation folder or its `DATA` folder. The readers accept mixed, uppercase or lowercase filenames and keep the spelling of files they copy.
+
 - Python 3.10 or later and Pillow (`pip install -r requirements.txt`) for the tools that write PNG files; Capstone (in the same file) for `monster_reference_scan.py`.
 - Your own copy of the game. Point the tools at its main `DATA` folder (the one holding `GENERAL.PAK` and, on the CD, `L01.PAK`) with `--data /path/to/DATA`, or once with `export LOL1_DATA=/path/to/DATA`. A language subfolder such as the CD's `DATA/ENG` is not a complete game folder.
 

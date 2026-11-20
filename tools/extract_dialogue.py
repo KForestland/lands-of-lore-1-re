@@ -77,7 +77,7 @@ def main():
     files = []
     for pak, name, data in L.find_all("", a.data):
         if name.endswith(LANG_EXTENSIONS):
-            files.append((name, pak, extract_strings(data)))
+            files.append((name, pak.upper(), extract_strings(data)))
     files.sort()
     summary = {"total_files": len(files), "total_strings": 0,
                "by_language": {"ENG": 0, "FRE": 0, "GER": 0}, "files": []}
