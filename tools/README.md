@@ -423,6 +423,14 @@ $ python3 tools/extract_dialogue.py
 
 Readable text straight from the game files (any language file; also `TRIG.TBL`).
 
+### `list_likely_spellings.py`
+
+Prints English words in the text tables that are one small edit from a system-dictionary word, for a person to judge. French and German are checked only for a broken string table. It writes no patch. `--check` exits nonzero when a table or a bigram is out of range.
+
+```
+$ python3 tools/list_likely_spellings.py --data DATA --check
+```
+
 ```
 $ python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
 [0] Welcome to Gladstone Keep.  King Richard awaits you in the throne room.
