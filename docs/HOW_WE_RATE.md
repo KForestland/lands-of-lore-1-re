@@ -27,8 +27,11 @@ The blend tables are
 65536 bytes that none of the eleven simple index formulas the tool tries
 (min, max, average, product, sum, difference, OR, AND, XOR) reproduces.
 A self-blend of the paired finale palette reproduces 65532 of 65536 bytes
-of each table; the last four bytes are not explained, so the six files are
-not yet counted as read.
+of each table. The English finale draw indexes every byte as
+`source*256+destination`, so the last four are the entries for source colour
+255; no paired picture uses that colour, so they are never read there. Their
+values are not reproduced and their writer is still open, so the six files
+are not yet counted as read.
 No stored 768-byte palette (300 read, 109 different) keeps the colour on all
 256 diagonal entries; the nearest keeps 240 of 256. Neither fact puts
 the blend tables in the count. The [loose-file page](formats/loose.md) names the six

@@ -6,7 +6,12 @@ entry. The six blend tables fail that walk and stay unread. The check pins
 the structure that was measured: the blend-table sizes, the installer status
 text, README.ENG at file +0x72, and the TDINFO tables on each symbol block. It also rebuilds both blend
 tables as a self-blend of the paired finale palette (RETURN.CPS for BLEND.TAB,
-FACE.CPS for BLEND2.TAB): all but the last four bytes match.
+FACE.CPS for BLEND2.TAB): all but the last four bytes match. It also pins
+the English finale bytes that open a table and look a colour up as
+table[source*256+destination], and decodes the four paired pictures (the
+source of that lookup) to check that none uses colour 255, so the last four
+entries are never read there. The printed line still calls those four bytes
+open, because their values are not reproduced and the writer is open.
 
   lol1_loose.py --check
 """
@@ -127,6 +132,21 @@ FINALE_BLEND = (
     (0xCB08F, b"BLEND2.TAB\x00"),
     (0xC9D49, bytes.fromhex("05000000190106000300")),
     (0xCA45B, bytes.fromhex("05000000190106001e00")),
+)
+# English CD FINALE.EXE only. Dispatcher shift-and-call, slot 5, the 65536-byte
+# read, the source page 4 and destination page 2, the picture loaded to page 5,
+# the page-pair mask, the colour lookup, and the 32000-byte chunk cap. A moved opener fails
+# here. The printed CHECK line stays on the writer, which is still open.
+FINALE_OPEN = (
+    (0x9EB4, bytes.fromhex("b102d3e3ff9ffc0e")),
+    (0x1E6C0, bytes.fromhex("85108504")),
+    (0x7B9E, bytes.fromhex("b8010033d25052")),
+    (0x7B0B, bytes.fromhex("b80400")),
+    (0x7B1B, bytes.fromhex("b80200")),
+    (0x7C22, bytes.fromhex("b80500")),
+    (0x14CB0, bytes.fromhex("83e10f8bd983e3fe")),
+    (0xADEC, bytes.fromhex("8af88ac232db65d7")),
+    (0xD7E3, bytes.fromhex("817e0c007d")),
 )
 VISBIOS_PINS = (
     (0x1C4, b"VIS video emulation"),
@@ -863,6 +883,10 @@ def check(data_dir):
             return fail(f"{name} self-blend of {scenes[0]} matches {same} bytes, not the first {BLEND_MODEL_MATCH}")
         if table[BLEND_MODEL_MATCH:] != BLEND_TRAILER:
             return fail(f"{name} last four bytes are not E4 D5 02 00")
+        for scene in scenes:
+            pixels = L.load_bitmap(finale1[scene])[2]
+            if len(pixels) != 64000 or 255 in pixels:
+                return fail(f"{scene} uses colour 255 or is not 64000 pixels")
         model_rates.append(f"{name} {same} of 65536 from {scenes[0]}")
     palettes = stored_palettes(root)
     if len(palettes) != STORED_PALETTES:
@@ -929,6 +953,10 @@ def check(data_dir):
     for offset, needle in FINALE_BLEND:
         if finale2[offset:offset + len(needle)] != needle:
             return fail(f"ENG/FINALE2.PAK+{offset:#x} differs")
+    finale = read["ENG/FINALE.EXE"]
+    for offset, needle in FINALE_OPEN:
+        if finale[offset:offset + len(needle)] != needle:
+            return fail(f"ENG/FINALE.EXE+{offset:#x} differs")
     visbios = read["HARDRIVE/VISBIOS.COM"]
     for offset, needle in VISBIOS_PINS:
         if visbios[offset:offset + len(needle)] != needle:
