@@ -32,6 +32,8 @@ This proves that the formats can be written, not that the original compressor is
 
 The assembler writes only a new file given with `--out`, and refuses an existing file, a path inside the repository or `--data`, and any folder at or below one holding a PAK or TLK archive.
 
+The [native EMC2 function table](emc2_native_handlers.md) compares all 192 CD slots starting at `MAIN.EXE+0x33F64` with the documentation. The byte comparison above covers the script operands and encoding. Each native-handler verdict records how far the original body explains its effect.
+
 ## Levels and text
 
 **CONFIRMED.** `lol1_level_writer.py --check` rebuilds every CMZ, WLL, decoration DAT and ENG/FRE/GER string table in the PAKs of `--data` and compares it with the original; each WLL, DAT and string table must also read back through `wll_parser.py`, `dat_reader.py` and `decode_dialogue.py` to the same records and strings. WLL and DAT files are rebuilt from their parsed records. String tables are rebuilt from the parsed offset directory and strings, not copied; the offsets are kept as parsed because some tables point two entries at the same string. [Maze format](formats/cmz.md)
