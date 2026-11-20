@@ -425,7 +425,7 @@ Readable text straight from the game files (any language file; also `TRIG.TBL`).
 
 ### `list_likely_spellings.py`
 
-Prints English words in the text tables that are one small edit from a system-dictionary word, for a person to judge. French and German are checked only for a broken string table. It writes no patch. `--check` exits nonzero when a table or a bigram is out of range.
+Prints English words in the text tables that are one small edit from a system-dictionary word, for a person to judge. French and German are checked only for a broken string table. It writes no patch. It reads the English word list at `/usr/share/dict/words` (Linux and macOS); on Windows, or for another list, give one with `--words FILE`. `--check` exits nonzero when a table or a bigram is out of range.
 
 ```
 $ python3 tools/list_likely_spellings.py --data DATA --check

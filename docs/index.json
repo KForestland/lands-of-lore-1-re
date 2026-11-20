@@ -1550,6 +1550,7 @@
         "tools/level_renderer.py",
         "tools/level_report.py",
         "tools/level_viewer.py",
+        "tools/list_likely_spellings.py",
         "tools/lol.py",
         "tools/lol1_attack_types.py",
         "tools/lol1_blend_indices.py",

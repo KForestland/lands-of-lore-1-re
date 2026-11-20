@@ -14,6 +14,7 @@ import struct
 import sys
 
 import decode_dialogue as D
+from cli_errors import run_cli
 import lol1lib as L
 
 LETTERS = "abcdefghijklmnopqrstuvwxyz"
@@ -22,9 +23,17 @@ TOKEN = re.compile(r"[A-Za-z]+(?:'[A-Za-z]+)?")
 CTRL = re.compile(r"\[(?:CTRL:[0-9A-F]{2}|PARA)\]")
 
 
-def dictionary():
+DEFAULT_WORDS = "/usr/share/dict/words"
+
+
+def dictionary(path=DEFAULT_WORDS):
     words = set()
-    with open("/usr/share/dict/words", encoding="latin-1") as handle:
+    try:
+        handle = open(path, encoding="latin-1")
+    except OSError:
+        raise ValueError(f"No English word list at {path}. Give one with --words FILE "
+                         "(a plain text file, one word per line).") from None
+    with handle:
         for line in handle:
             word = line.strip().lower()
             if word.isalpha() and len(word) >= 3:
@@ -169,11 +178,13 @@ def scan(data_dir, words):
 
 def main():
     parser = L.tool_args(__doc__, writes=False)
+    parser.add_argument("--words", default=DEFAULT_WORDS,
+                        help=f"English word list, one word per line (default: {DEFAULT_WORDS})")
     args = parser.parse_args()
     if not args.data:
         print("name a DATA folder with --data", file=sys.stderr)
         return 1
-    files, string_count, bad_table, bad_bigram, rows = scan(args.data, dictionary())
+    files, string_count, bad_table, bad_bigram, rows = scan(args.data, dictionary(args.words))
     print(
         f"tables ENG {files.get('ENG', 0)} FRE {files.get('FRE', 0)} GER {files.get('GER', 0)} "
         f"strings {string_count} bad-table {bad_table} bad-bigram {bad_bigram} "
@@ -188,4 +199,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(run_cli(main))
