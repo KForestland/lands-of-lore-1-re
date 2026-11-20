@@ -1,6 +1,6 @@
 """Unit tests for the wall assembler, the level map drawing, the monster scan's
 folder handling, the EMC2 listing's broken-pipe handling and the blend-table
-palette mix. Synthetic bytes only;
+palette mix, and the sound-driver entry tables. Synthetic bytes only;
 no game files needed."""
 import os
 import struct
@@ -184,6 +184,47 @@ class BlendModelTests(unittest.TestCase):
         self.assertEqual(list(table[4:7]), [0, 1, 3])
         # row 2: red*22>>6 = (21, 0, 0)
         self.assertEqual(list(table[8:11]), [0, 1, 3])
+
+
+class DriverTableTests(unittest.TestCase):
+    """A synthetic ADV and ALFX member in the shipped layout."""
+
+    @staticmethod
+    def adv(target_prologue=b"\x55\x8b\xec"):
+        import lol1_driver_tables as D
+        head = D.ADV_COPYRIGHT + b"\x1a"
+        table = 2 + len(head)
+        code = table + 12
+        rows = struct.pack("<4H", 100, code, 101, code + 3) + b"\xff\xff\x00\x00"
+        return struct.pack("<H", table) + head + rows + target_prologue + b"\x55\x8b\xec"
+
+    def test_adv_rows(self):
+        import lol1_driver_tables as D
+        start, rows = D.adv_entries(self.adv())
+        self.assertEqual(start, 45)
+        self.assertEqual(rows, [(100, 57), (101, 60)])
+
+    def test_adv_without_prologue_fails(self):
+        import lol1_driver_tables as D
+        with self.assertRaises(ValueError):
+            D.adv_entries(self.adv(b"\x90\x90\x90"))
+
+    def test_alfx_dispatch(self):
+        import lol1_driver_tables as D
+        # +0 jmp dispatch, +3 jmp helper, helper iret at 6, two wrappers, out-of-range iret, table, dispatcher
+        body = bytearray(b"\xe9\x00\x00\xe9\x00\x00")
+        body += b"\xcf"                      # +6 helper
+        body += b"\x0e\xcf" + b"\x0e\xcf"    # +7, +9 wrappers
+        body += b"\xcf"                      # +0xB otherwise
+        table = len(body)
+        body += struct.pack("<2H", 7, 9)
+        dispatch = len(body)
+        body += b"\x83\xfb\x01\x77" + bytes([(0xB - (dispatch + 5)) & 0xFF])
+        body += b"\xd1\xe3\x2e\xff\xa7" + struct.pack("<H", table)
+        struct.pack_into("<h", body, 1, dispatch - 3)
+        struct.pack_into("<h", body, 4, 6 - 6)
+        got_table, rows, got_dispatch, helper = D.alfx_entries(bytes(body))
+        self.assertEqual((got_table, rows, got_dispatch, helper), (table, [(0, 7), (1, 9)], dispatch, 6))
 
 
 if __name__ == "__main__":

@@ -2,11 +2,11 @@
 
 `.ADV` and `.DRV` in `DRIVERS.PAK` are Miles Design DOS sound-driver code. The one `.TBL` in the game data is `TRIG.TBL`, a 166-byte table. ScummVM's Kyra engine does not load either kind. The DOS executables name them.
 
-This note stops at the copyright string and the file's first instruction byte. The rest of each driver is code and is not disassembled.
+The checked [driver table reader](../formats/drivers.md#sound-drivers-driverspak) follows each entry table and the `ALFX.DRV` dispatcher in both editions.
 
 ## Drivers in DRIVERS.PAK
 
-CONFIRMED. Both editions have one `DRIVERS.PAK`. The directory names seven files: six `.ADV` files and `ALFX.DRV`. At directory offset 109 both archives store a 0 byte and a uint32 0, and the first file begins at offset 114. That last slot is the end marker. Sizes differ. The CD file and the floppy file of each name are different bytes.
+CONFIRMED. The floppy edition has one `DRIVERS.PAK`. The CD has the root `DATA/DRIVERS.PAK` described in this table and a second copy in `DATA/ENG`, `FRE` and `GER` (44,561 bytes, byte-identical in the three folders): see [drivers](../formats/drivers.md#sound-drivers-driverspak). The directory names seven files: six `.ADV` files and `ALFX.DRV`. At directory offset 109 both archives store a 0 byte and a uint32 0, and the first file begins at offset 114. That last slot is the end marker. Sizes differ. The CD file and the floppy file of each name are different bytes.
 
 | Name | CD size | CD bytes 0-1 | floppy size | floppy bytes 0-1 | Identity string at byte 2, unless noted |
 | --- | --- | --- | --- | --- | --- |

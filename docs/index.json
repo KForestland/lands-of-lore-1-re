@@ -432,6 +432,7 @@
         "tools/fnt_reader.py",
         "tools/level_renderer.py",
         "tools/level_report.py",
+        "tools/lol1_driver_tables.py",
         "tools/lol1_name_callers.py",
         "tools/lol1_numbers.py",
         "tools/lol1_tim_words.py",
@@ -646,6 +647,7 @@
       "question_references": [],
       "tools": [
         "tools/decode_dialogue.py",
+        "tools/lol1_driver_tables.py",
         "tools/pak_reader.py"
       ]
     },
@@ -1439,6 +1441,7 @@
         "tools/level_report.py",
         "tools/lol1_attack_types.py",
         "tools/lol1_compression_writer.py",
+        "tools/lol1_driver_tables.py",
         "tools/lol1_level_writer.py",
         "tools/lol1_loose.py",
         "tools/lol1_mode_paths.py",

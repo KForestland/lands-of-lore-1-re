@@ -52,7 +52,7 @@ Legend:
 | [fnt](../docs/formats/fnt.md) | `fnt_reader.py` | yes | picture: glyph atlas | yes (header and glyph tables) | yes |
 | [emc2](../docs/formats/emc2.md) | `emc2_decompile.py` | corpus test (the tool has no `--check`) | text: script listing (stops quietly when the reader closes the pipe, e.g. `\| head`) | yes | yes |
 | [tim](../docs/formats/tim.md) | `parse_tim.py`, `lol1_tim_words.py` | yes (also re-counts the command table of Q6) | text: `parse_tim.py --list NAME.TIM`, command by command with the command names | yes (framing, walk, listing) | yes |
-| [drivers](../docs/formats/drivers.md) | `decode_dialogue.py` (`TRIG.TBL` only) | yes | text: `decode_dialogue.py TRIG.TBL`; the `.ADV`/`.DRV` drivers have no reader (they are program code) | gap | gap (no `TRIG.TBL` example) |
+| [drivers](../docs/formats/drivers.md) | `decode_dialogue.py` (`TRIG.TBL`), `lol1_driver_tables.py` (driver entry tables) | yes | text: `decode_dialogue.py TRIG.TBL`; `lol1_driver_tables.py` lists each `.ADV` entry ID and the `ALFX.DRV` selectors; the routine bodies have no reader (they are program code) | part: `tests/test_gap_tools.py` (synthetic driver tables; none for `TRIG.TBL`) | part (driver tables only; no `TRIG.TBL` example) |
 | [loose](../docs/formats/loose.md) | `lol1_loose.py` | yes | gap: only the one `CHECK` line, no per-file dump | gap | yes |
 | [game_rules](../docs/game_rules.md) | `exe_tables.py` for the tables the rules use (experience thresholds, difficulty rows, spell costs, character modifier rows, movement step words); `lol1_attack_types.py` for the ten attack arms and six defense arms | part: the tables and the type arms | part: `exe_tables.py --table difficulty` (text); `lol1_attack_types.py --check` | yes (tables) | yes |
 | [executable_tables](../docs/executable_tables.md) | `exe_tables.py` for the tables inside `MAIN.EXE` and `MAINW.EXE` (character defaults, modifier rows, equipment layout, spell properties, experience thresholds, difficulty and price tables); item types and monster properties are script calls | yes, and the corpus test | text: `exe_tables.py` (every table, both editions); `emc2_decompile.py STARTUP.PAK --entry ONETIME.INF` lists the item-type calls, `Lnn.PAK --entry LEVELn.INI` the monster calls | yes | yes |
@@ -76,14 +76,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (47 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (48 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
 
 ```
 $ python3 tools/check_all.py | sed -n '1,3p;$p'
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 47 CHECKS PASSED
+ALL 48 CHECKS PASSED
 ```
 
 ### `doc_links.py`
@@ -467,6 +467,15 @@ Re-reads the extra TIM argument words. On the CD, nested 0x07 and 0x0D push the 
 ```
 $ python3 tools/lol1_tim_words.py --check
 CHECK tim_words: 14 CD extra words are 0; 0x07 and 0x0D pass the operand pointer and a start index; 6 level strings have one %n and 6 have none; giveItem pushes three words
+```
+
+### `lol1_driver_tables.py`
+
+Reads the entry table of each `.ADV` member in `DRIVERS.PAK` (ID, routine offset, `55 8B EC` prologue) and the `ALFX.DRV` selector dispatch. On the CD it also reads the `ENG`, `FRE` and `GER` copies of `DRIVERS.PAK` and requires them to be identical. See the [driver page](../docs/formats/drivers.md#sound-drivers-driverspak).
+
+```
+$ python3 tools/lol1_driver_tables.py --check
+CHECK drivers: 6 ADV tables per archive; CD 150 entries, ALFX +0x1A8E 24 wrappers; CD language 146 entries, ALFX +0x1A8E 24 wrappers; 3 identical language copies
 ```
 
 ### `lol1_attack_types.py`
