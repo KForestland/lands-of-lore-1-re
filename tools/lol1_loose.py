@@ -935,6 +935,9 @@ def check(data_dir):
         handle.seek(0x81)
         if handle.read(19) != b"The Throne of Chaos":
             return fail("README.ENG+0x81 differs")
+        handle.seek(0x122)
+        if handle.read(21) != b"NEW to the CD version":
+            return fail("README.ENG+0x122 differs")
     for offset, needle in INSTALL_PINS:
         if install[offset:offset + len(needle)] != needle:
             return fail(f"installer pin +{offset:#x} differs")
