@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Extract a finite MIDI note timeline from an original LoL1 ADL track."""
+from __future__ import annotations
 from cli_errors import run_cli
 from collections import Counter
 from dataclasses import dataclass, field

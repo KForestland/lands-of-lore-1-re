@@ -517,7 +517,7 @@ Asset-policy guard, run by `check_all.py`: fails if git tracks any game file typ
 
 ```
 $ python3 tools/repo_guard.py --check
-CHECK repo_guard: N tracked files; game files, converted media, stray PNGs, files over 300 KB, machine paths, words from the local list, or commit identities: none (0); private word list: not present, skipped
+CHECK repo_guard: N tracked files; game files, converted media, stray PNGs, files over 300 KB, machine paths, words from the local list, or commit identities and messages: none (0); private word list: not present, skipped
 ```
 
 ### `tests/test_emc2_corpus.py`
