@@ -371,6 +371,56 @@ nearby party alone did not provide the monster-leaves event
 approaching a pose square, then follow that instance from the
 `MAIN.EXE+0x14FC1` setter call into the overlay frame selector.
 
+### The mode-11 setter on a pose square
+
+**CONFIRMED, edited-save run with a live placement (2026-11-20).**
+A copy of `477b08b82ecd` was changed in ten bytes and loaded in the
+English CD original as `74e3550b9d82`: level 23, block 110 (X 0x0E80,
+Y 0x0380), facing west, current and maximum HP 30000.
+
+| Slot offset | Old → new |
+|---|---|
+| `0x85–0x88` | `14 00 14 00 → 30 75 30 75` |
+| `0x254/0x255` | `2D 02 → 6E 00` |
+| `0x257` | `0D → 0E` |
+| `0x259` | `11 → 03` |
+| `0x263` | `00 → 03` |
+| `0x269` | `01 → 17` |
+
+After the load a debugger write into guest memory (the save holds no
+such row) set monster row 0 of the array at CD `2803:15FA` plus the
+load segment: block 105 at +5, X 0x0980 and Y 0x0380, destination
+X 0x0E80 and Y 0x0380 (block 110) at +0xC, mode 2 at +0x14 and
+byte +0x25 = 0. Hardware watches with load segment `01A2` recorded:
+
+- block word +5: 106, 107, 106, 105, each written at `MAIN.EXE+0x11673`;
+- mode byte +0x14: only 15 → 2 pairs (`+0x11474`, `+0x114AC`, the
+  collision query) during the walk;
+- right after the row's return to 105, one fetch of the far call at
+  `+0x14FC1` (`call far 0D6C:0995`, pushing `dx` and the instance
+  pointer; selector 0 of EMC `0x5B`), then 11 written by the setter's
+  general store at `+0x118FA`, with `bx` = `0x15FA` (row 0).
+
+A later read of the row gave mode 11, block 105, damage word +0x1B = 0
+and subframe +0x13 = 0. For that state the type-0 selector
+(`+0x3DC34`) takes the zero-direction branch, finds no damage and
+jumps through the table at `+0x3DCD2` to `+0x3DC8A`, `mov bx, 0Eh`
+(frame 14).
+
+The leaving of 105 that followed the live placement did not call the
+setter; the return did. Because the placement bypassed the game's own
+occupancy writes, this run does not tell an arriving monster from a
+leaving one.
+
+**UNCONFIRMED.** The frame on screen. A read watch on the selector's
+`or cx, cx` (`+0x3DC3A`, found in the loaded overlay) saw direction
+argument 0 six times before it was removed, without recording the
+instance. Read watches on the frame-14 arm in two other windows saw
+no fetch. The party was five blocks away; no picture shows a monster
+on 105, and the monster's animation type was not recorded. The
+pictures do show a blue projectile and 32 damage on the portrait after
+the mode-11 write, which no log explains.
+
 ## Close-out
 
 **What was measured.** A 16-bit decode of `HARDRIVE/MAIN.EXE` found 15 `test` instructions whose memory displacement is the wall-flag base `0x531E`. None of the 15 immediates is `0x40`; they are 1, 2, 4, 7, 8 and `0x20`, and the test at file `+0x14395` is the five bytes `F6 87 1E 53 08`.

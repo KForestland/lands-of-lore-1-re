@@ -14,7 +14,7 @@ rules the tested edits kept (same section lengths, same file size, no
 digest recomputed) are in
 [editing a copy of an original slot](savegame_format.md#editing-a-copy-of-an-original-slot).
 
-All eight runs below belong to probes that are still open. None of them
+All nine runs below belong to probes that are still open. None of them
 answers a probe on its own; the [rating](../README.md#rating) counts how
 many answered probes rest on edited saves only.
 
@@ -97,6 +97,21 @@ many answered probes rest on edited saves only.
   was seen.
 - **A native save would add:** an active monster approaching a pose
   square, so the monster-leaves event fires and its frame can be traced.
+
+## Q7b. Mode-11 setter on level 23
+
+- **Question:** the same probe, with a monster on the pose square.
+  ([probe](NEEDS_A_RUNNING_GAME.md#q7b-which-animation-actually-displays-when-a-script-selects-mode-11))
+- **Edited:** level 23, block 110, facing west, 30000 HP
+  ([byte table](unknowns/07_native_rules.md#the-mode-11-setter-on-a-pose-square)).
+  A monster row was then written into memory by the debugger (block
+  105, mode 2, heading for the party), not into the save.
+- **Showed:** the row walked off 105 and back. On its return the far
+  call at `MAIN.EXE+0x14FC1` ran and the setter store at `+0x118FA`
+  wrote 11. The frame-14 arm was not fetched while the party stood
+  five blocks away, so no mode-11 frame was seen.
+- **A native save would add:** a monster that reaches the square in
+  ordinary play, with the party close enough for it to be drawn.
 
 ## Q18. Fight on level 27
 

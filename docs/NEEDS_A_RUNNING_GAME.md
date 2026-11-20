@@ -159,7 +159,28 @@ transition from a frame picked while mode 11 remains set.
 
 **CONFIRMED, edited-save run.** The position edit reached block 105. Neither active-row sample had a monster on a pose square. The mode-11 frame still needs the original monster-leaves event. [Byte changes and live placement](unknowns/07_native_rules.md#level-23-pose-squares-from-edited-placements)
 
-Not yet run; see [Probes not yet run](#probes-not-yet-run).
+**CONFIRMED, edited-save run with a live placement (2026-11-20).**
+A copy of `477b08b82ecd` set to level 23, block 110, facing west and
+30000 HP (bytes in [the setter on a pose square](unknowns/07_native_rules.md#the-mode-11-setter-on-a-pose-square))
+loaded in the original. A debugger write into memory, not the save,
+then put monster row 0 on block 105 in mode 2 with the party block as
+destination. It walked 105, 106, 107, 106 and back to 105, its mode
+byte changing only 15 → 2 at `MAIN.EXE+0x11474/+0x114AC`. On its
+return to 105 the far call at CD `+0x14FC1` ran once and the setter
+store at `+0x118FA` wrote 11 into row 0. Damage word +0x1B and
+subframe +0x13 then read 0.
+
+**UNCONFIRMED.** The mode-11 frame. The type-0 selector ran with
+direction argument 0 (the watch stopped after six reads and did not
+record the instance). The frame-14 arm (`+0x3DC8A`, the mode-11 entry
+of the jump table at `+0x3DCD2`) was never fetched in two later
+windows. The party stood five blocks from 105, and no picture shows a
+monster there, so the row was probably not drawn; its animation type
+was not recorded. Next: the same placement with the party one or two
+blocks from 105 and facing it, logging the selector's instance and the
+monster's animation type, with a picture of the frame.
+
+Not yet run on a native save; see [Probes not yet run](#probes-not-yet-run).
 
 ### Q7c. What writes mode 10 during ordinary play?
 
@@ -180,7 +201,15 @@ Record the writer, previous mode and object, then observe its
 next animation selection. The tested guard encounter used only
 modes 1 and 15.
 
-Not yet run; see [Probes not yet run](#probes-not-yet-run).
+**CONFIRMED, edited-save run with a live placement (2026-11-20).**
+The level-23 row of [Q7b](#q7b-which-animation-actually-displays-when-a-script-selects-mode-11)
+took only 2, 15 and 11 under the write watch; no 10. A read watch on
+the first byte of the one byte store of 10 (CD `+0xF64E`, which
+writes party byte +0x78, not a monster) saw no fetch of that store
+before the watch was removed after eight other reads, early in the
+same walk. Both bound only that stretch of play.
+
+Not yet run on a native save; see [Probes not yet run](#probes-not-yet-run).
 
 ### Q17. Are the isolated save bytes touched during play?
 
@@ -295,6 +324,10 @@ the top of this page.
   and no direction or damage offset means the fixed mode-11 frame
   reached the screen. Any other frame must match the captured selector
   or draw flags. A write of 10 to +0x14 means a real mode-10 change.
+  An edited-save run with a live placement (2026-11-20) saw the setter
+  write 11 with the party five blocks away, but no frame
+  ([result](#q7b-which-animation-actually-displays-when-a-script-selects-mode-11));
+  the party must stand where the square is drawn.
 - **Mode 10 in ordinary play (not run).** Tests the static result
   for the mode-10 producer of [Q7](OPEN_QUESTIONS.md). Full test:
   [Q7c](#q7c-what-writes-mode-10-during-ordinary-play). Setup: any
@@ -324,6 +357,13 @@ the top of this page.
   `CAV_PLT3.PAL`) are positive controls for the breakpoint. No stop
   over the whole run bounds only what was played. Details:
   [palette callers](unknowns/14_palette_callers.md#remaining-question).
+  A partial run (2026-11-20, edited-save run with the Q7b bytes) broke
+  on the DOS open: the introduction up to `RICH3.WSA` opened
+  `BWPAL.PAL` and `COLPAL.PAL` only, and the level-23 load opened no
+  palette. The game asks for the loose name before the archive, so the
+  name break also sees archive members. Neither window covers a cave
+  or forest level, the positive controls or the finale, so this bounds
+  nothing for the three names.
 - **Who plays `00000.VOC` in the finale (not run).** Settles
   [Q10](OPEN_QUESTIONS.md). Setup: the finale program
   `ENG/FINALE.EXE`. Its addresses are its own file offsets; use the
@@ -338,6 +378,10 @@ the top of this page.
   clip's catalog row (file `0x1D1D0`), and that caller is the answer. No stop over
   the whole finale means the row was not used in that run. Details:
   [00000.VOC](unknowns/10_nnnnn_voc.md#what-would-settle-it).
+  Blocked (2026-11-20): started on its own from the CD, `FINALE.EXE`
+  printed "Please run 'LANDS.EXE' from your hard drive" and returned
+  to the prompt, so no finale ran. The test needs the game's own route
+  into the finale.
 - **Level 22 block 27: what the wall shows (not run).** Settles the
   last open point of [Q4](OPEN_QUESTIONS.md). Setup: a game-written slot
   in level 22, in both editions. Watch: nothing; this is a look.
