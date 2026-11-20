@@ -77,3 +77,28 @@ class TranslationTools(unittest.TestCase):
         self.assertIn("&lt;10 / 20&gt;", html)
         self.assertIn("tools/lol.py save set --out", html)
         self.assertIn('value="../edited-save.000"', html)
+
+
+    def test_unencodable_character_names_the_csv_row(self):
+        with TemporaryDirectory() as tmp:
+            game = Path(tmp) / "original"
+            game.mkdir()
+            source(game)
+            work = game.parent / "work"
+            translate.export(game, work)
+            table, = work.glob("*.csv")
+            with table.open(encoding="utf-8-sig", newline="") as stream:
+                rows = list(csv.reader(stream))
+            rows[1][2] = "œ"
+            with table.open("w", encoding="utf-8-sig", newline="") as stream:
+                csv.writer(stream).writerows(rows)
+            with self.assertRaisesRegex(ValueError, "row 2.*œ.*Try 'oe'"):
+                translate.build(game, work, game.parent / "copy")
+
+    def test_gameplay_text_excludes_prologue_fonts(self):
+        from translate_data import warning_fonts
+
+        selects = warning_fonts("STARTUP.PAK", "LANDS.ENG")
+        self.assertTrue(selects("STARTUP.PAK/FONT9P.FNT"))
+        self.assertFalse(selects("ENG/STARTUP.PAK/INTRO.FNT"))
+        self.assertFalse(selects("INTRO.PAK/FONT9P.FNT"))

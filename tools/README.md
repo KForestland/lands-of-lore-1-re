@@ -87,14 +87,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (52 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (53 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
 
 ```
 $ python3 tools/check_all.py | sed -n '1,3p;$p'
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 52 CHECKS PASSED
+ALL 53 CHECKS PASSED
 ```
 
 ### `modkit.py`

@@ -113,6 +113,9 @@ instead of bytes.
 ## LoL1
 
 The [level editor](../LEVEL_EDITOR.md) writes the same format with `--patch`.
+Data patches accept PAKs at any depth below the data folder and loose
+`.ENG`, `.FRE`, `.GER`, `.TIM`, `.INI` and `.INF` files. The patch
+checks that each changed member matches a supported reader and writer.
 For `.CMZ` members, the tool checks that only the four decoded wall bytes
 per square change. It also preserves the palette, header fields other
 than the derived stored size, and extra bytes outside those wall fields.

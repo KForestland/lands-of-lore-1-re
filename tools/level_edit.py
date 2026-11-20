@@ -11,7 +11,7 @@ from tempfile import TemporaryDirectory
 from cli_errors import ReaderArgumentParser, run_cli
 import emc2_decompile as emc
 from level_html import counted, find_data
-from level_report import item_names
+from level_report import calls_by_entry, item_names
 from lol1_level_writer import parse_maze, parse_walls, write_maze
 import lol1lib as game
 import modkit
@@ -104,6 +104,29 @@ def monster_types(script):
                    and arg.opcode in (3, 4) and 0 <= arg.argument <= 4})
 
 
+def monster_names(script):
+    shape_names = defaultdict(set)
+    definitions = defaultdict(set)
+    for _, calls in calls_by_entry(script).values():
+        for fn, args in calls:
+            if len(args) < 2:
+                continue
+            first, second = args[:2]
+            if fn == 0x0B and first is not None and 0 <= first < len(script.strings) and second is not None:
+                name = Path(script.strings[first][1].decode("cp437")).stem
+                if name:
+                    shape_names[second].add(name.title())
+            if fn == 0x3F and first is not None and second is not None:
+                definitions[first].add(second)
+    return {kind: " / ".join(sorted({name for slot in slots for name in shape_names[slot]}))
+            for kind, slots in definitions.items()}
+
+
+def solid_squares(rows, wall_blob):
+    visible = {row[0] for row in parse_walls(wall_blob)[1] if row[1] & 255}
+    return {block for block, (faces, _) in enumerate(rows) if all(face in visible for face in faces)}
+
+
 def door_states(rows):
     table = {row[0]: row for row in rows if row[0] <= 255}
     states = {}
@@ -122,7 +145,7 @@ def door_states(rows):
     return states
 
 
-def edit_monsters(raw, replacements, changes, types):
+def edit_monsters(raw, replacements, changes, types, solid=()):
     script = emc.read_script(raw)
     sites = monsters(script)
     expected = {site: args for site, (args, _) in sites.items()}
@@ -136,6 +159,8 @@ def edit_monsters(raw, replacements, changes, types):
         for value, hi, name in zip(values, (1023, 255, 255, 3, 4), ("square", "X", "Y", "facing", "type")):
             integer(value, 0, hi, f"Monster {name} must be between 0 and {hi}.")
         old, words = sites[site]
+        if values[0] != old[0] and values[0] in solid:
+            raise ValueError(f"Square {values[0]} has four solid faces. Choose an open square for this monster.")
         if values[4] != old[4] and values[4] not in types:
             raise ValueError("Choose a monster type defined by this level.")
         expected[site] = tuple(values)
@@ -176,6 +201,7 @@ def editor_data(sources, level, names):
         "monsters": [[extension, site, *args] for extension in ("INI", "INF")
                      for site, (args, _) in monsters(emc.read_script(blobs[extension])).items()],
         "monster_types": monster_types(ini),
+        "monster_names": monster_names(ini),
         "squares": [walls for walls, _ in parse_maze(blobs["CMZ"])[3]],
         "items": [[site, p.args[0], *p.args[4:8]] for site, p in sites.items()],
         "names": sorted(names.items(), key=lambda pair: (pair[1].casefold(), pair[0])),
@@ -332,9 +358,10 @@ def apply(data, document, output, *protected, share=False):
         raise ValueError("Monster edits must be lists grouped under INI or INF.")
     repl = {"INI": {}, "INF": {}}
     allowed = monster_types(emc.read_script(source["INI"][2]))
+    solid = solid_squares(rows, source["WLL"][2])
     expected, monster_count = {}, 0
     for extension in ("INI", "INF"):
-        expected[extension], count = edit_monsters(source[extension][2], repl[extension], edits.get(extension, []), allowed)
+        expected[extension], count = edit_monsters(source[extension][2], repl[extension], edits.get(extension, []), allowed, solid)
         monster_count += count
     ini, items, item_count = changed_script(source["INI"][2], level, document["items"], document["add"], names, repl["INI"])
     inf = script_write(source["INF"][2], emc.read_script(source["INF"][2]), repl["INF"])
@@ -411,7 +438,9 @@ def check(data):
             apply(data, changed, folder / f"edit-{level}", share=True)
             if model["monsters"]:
                 extension, site, block, x, y, facing, kind = model["monsters"][0]
-                values = [(block + 32) % 1024, x, y, (facing + 1) % 4, kind]
+                solid = solid_squares(parse_maze(source["CMZ"][2])[3], source["WLL"][2])
+                target = next((block + diff) % 1024 for diff in range(1, 1024) if ((block + diff) % 1024) not in solid)
+                values = [target, x, y, (facing + 1) % 4, kind]
                 monster_levels += 1
                 apply(data, {**original, "monsters": {extension: [[site, values]]}}, folder / f"monster-{level}")
             flags = {row[0]: row[4] for row in model["types"]}

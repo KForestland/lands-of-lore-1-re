@@ -1,5 +1,6 @@
 """Read glyph coverage from original Westwood FNT resources."""
 from struct import unpack_from
+from unicodedata import normalize
 
 from translate_data import decode, encode, font_sources
 
@@ -42,6 +43,19 @@ def show(root):
         print(f"{name}: {text}")
 
 
+def character(char):
+    return f"‘{char}’" if char.isprintable() else f"U+{ord(char):04X}"
+
+
+def substitute(char, fonts=()):
+    replacements = {"ß": "ss", "Æ": "AE", "æ": "ae", "Œ": "OE", "œ": "oe",
+                    "Ł": "L", "ł": "l", "–": "-", "—": "-", "’": "'", "“": '"', "”": '"'}
+    plain = replacements.get(char, normalize("NFKD", char).encode("ascii", errors="ignore").decode("ascii"))
+    if plain and plain != char and all(all(byte in drawn for byte in plain.encode("ascii")) for _, drawn in fonts):
+        return f"Try {plain!r} instead."
+    return "Try an unaccented spelling or a character listed by translate fonts."
+
+
 def missing(text, fonts):
     for char in sorted(set(text)):
         # Game controls are byte values too, but they do not need glyphs.
@@ -53,4 +67,4 @@ def missing(text, fonts):
             continue  # The table writer reports unrepresentable text separately.
         blanks = [name for name, drawn in fonts if len(raw) != 1 or raw[0] not in drawn]
         if blanks:
-            yield f"{ascii(char)} has no drawn glyph in {', '.join(blanks)}. Choose a listed character or leave the original."
+            yield f"{character(char)} has no drawn glyph in {', '.join(blanks)}. {substitute(char, fonts)}"

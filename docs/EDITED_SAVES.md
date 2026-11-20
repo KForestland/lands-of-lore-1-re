@@ -195,7 +195,7 @@ python3 tools/lol.py save page '/path/to/your/original save' --out "../my save f
 
 Open the page in your browser. It displays the current values and the evidence
 status for each editable field. Choose your terminal and a new save path outside the repository and save folder.
-For a field you want to change, enter the value and copy its command. Run the
+Enter a different value in the field and copy the command that appears. Run the
 command from the tools repository. It writes one edited copy. For a second edit
 to the same save, generate a page from the first copy and choose another output
 filename. Keep the page private because it contains your save name and path.

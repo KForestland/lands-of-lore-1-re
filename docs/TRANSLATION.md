@@ -19,8 +19,8 @@ blank. Build rereads each changed archive. Verify compares every output byte to
 the result computed from the original and your CSVs. To try the output, copy it
 over a separate copy of your game.
 
-**The CSVs contain original game text. Keep them, the export manifest and the
-rebuilt archives private. Share only a patch made from your own changes.**
+**Keep your CSVs, the manifest and the rebuilt files private. The CSVs
+contain original game text.**
 
 **CONFIRMED.** The export includes separate language tables in PAKs or loose
 files and TEXT chunks in EMC2 and AVFS scripts. CD `L01.PAK+0x6327` and floppy
@@ -31,34 +31,49 @@ bytes available for that row if no other edited row grows. Actual limits apply
 to the whole table. The tool uses code page 437 and leaves script resource-like
 single tokens locked. Alias rows must still share the same text.
 
+**CONFIRMED in ScummVM.** The root `DATA/STARTUP.PAK` provides the in-game
+`LANDS` tables when `FILEDATA.FDT` is loaded. The prologue loads the selected
+language's `ENG/STARTUP.PAK`, `FRE/STARTUP.PAK` or `GER/STARTUP.PAK` for
+`LOLINTRO.TIM` and its fonts. Both are exported with their own paths. In the CD witness, the root
+text resources begin at `STARTUP.PAK+0x8AE8, +0xB233, +0xDFE1, +0x10D25`.
+All three language archives carry the prologue TIM at `+0x14F2F`.
+The prologue TIM name is absent from the root archive, so the two
+`STARTUP.PAK` names do not duplicate any exported table.
+Upstream `engines/kyra/engine/lol.cpp:531–538` and
+`engines/kyra/sequence/sequences_lol.cpp:151–156,176–186`.
+**UNCONFIRMED.** A conflicting resource's priority in the original DOS
+opener. [PAK load order](unknowns/09_pak_order.md#cd)
+
 ## Check characters before building
 
 ```sh
 python3 tools/lol.py translate fonts --data "/path/to/game"
 ```
 
-The list comes from the installed bitmap fonts. Build warns if a replacement
-uses a character absent from any listed font. Shorten or reword the translation
-with characters the fonts have, or leave the original row. A glyph warning
-still allows a copy to build. An input character the writer cannot encode stops
-the build. A drawn glyph can look different across fonts.
+The list comes from the installed bitmap fonts. Build checks each edited
+row against the font or fonts identified for that table. The warning names
+the CSV row and suggests a substitute when one is available. An input
+character the writer cannot encode stops the build. For a table whose
+font is still unconfirmed, use the font listing to check likely choices.
 
 **CONFIRMED.** The LoL1 check measures the normal, automap and other installed FNT files, including loose CD replacements. A FNT header has the glyph offset table pointer at
 `+0x06`, widths pointer at `+0x08` and height table pointer at `+0x0C`. See
 the edition comparison and source lines on the [FNT page](formats/fnt.md).
-Floppy normal fonts have 128 indexed entries. For example, try an unaccented
+Floppy normal fonts have 128 indexed entries. Build checks base language
+tables against `FONT6P` and `FONT9P`, and CD `LOLINTRO.TIM` against the
+selected language folder's two prologue fonts (upstream
+`engines/kyra/sequence/sequences_lol.cpp:249–253`). For example, try an unaccented
 replacement when a floppy font reports a missing accented letter.
 
-## Make a small translation patch
+## Verify a private translation patch
 
 ```sh
 python3 tools/lol.py patch make "/path/to/translated files" --data "/path/to/game" --title "My translation" --out "/path/to/translation.json"
 python3 tools/lol.py patch apply "/path/to/translation.json" --data "/path/to/game" --out "/path/to/test copy"
 ```
 
-The patch checks old bytes and makes a matching undo file. It carries the old
-and new bytes for the changes, so keep it small and share it only where you
-have permission to share those bytes. If the size limit rejects the patch,
+The patch checks old bytes and makes a matching undo file. Keep both
+files private while this format stores original bytes. If the size limit rejects the patch,
 use smaller batches or keep replacements the same encoded size. A single
 longer early row can shift enough offsets to hit the limit. You can still
 keep the rebuilt files for your private copy.

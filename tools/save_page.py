@@ -21,9 +21,9 @@ dd{margin:0;overflow-wrap:anywhere} .settings,.edits{display:grid;gap:.8rem}
 .settings{grid-template-columns:1fr 2fr}
 article{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:.85rem 1rem}
 label{display:block;font-weight:600;margin-top:.5rem}
-button,input,select,textarea{font:inherit;color:inherit;background:#101a24;border:1px solid var(--border);border-radius:4px;padding:.4rem .55rem}
-input,textarea{display:block;width:100%} button{cursor:pointer;margin-top:.35rem}
-textarea{font:.85rem/1.45 ui-monospace,monospace;resize:vertical;margin-top:.35rem}
+button,input,select,pre{font:inherit;color:inherit;background:#101a24;border:1px solid var(--border);border-radius:4px;padding:.4rem .55rem}
+input,pre{display:block;width:100%} pre[hidden]{display:none} button{cursor:pointer;margin-top:.35rem}
+pre{font:.85rem/1.45 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:.35rem 0 0}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .current{font-weight:400;color:var(--accent);overflow-wrap:anywhere}
 @media(max-width:540px){.settings{grid-template-columns:1fr}}
@@ -50,13 +50,13 @@ for (const [id, label, current, value, max, status] of data.fields) {
     input.value = value ?? '';
     input.required = true;
     if (typeof value === 'number') { input.min = '0'; input.max = max; input.step = '1'; }
-    else if (max !== null) input.maxLength = max;
+    else if (id !== 'heading' && max !== null) input.maxLength = max;
+    if (id === 'heading') input.placeholder = '0x0000 or 0–65535';
     if (id === 'position-from') input.placeholder = 'Path to the donor save';
     const named = make('label', id === 'position-from' ? 'Donor save from the same level and version' : 'New value');
     named.htmlFor = input.id;
-    const command = make('textarea');
-    command.readOnly = true;
-    command.rows = 2;
+    const command = make('pre');
+    command.tabIndex = 0;
     command.setAttribute('aria-label', label + ' command');
     const copy = make('button', 'Copy command');
     copy.type = 'button';
@@ -74,17 +74,30 @@ for (const [id, label, current, value, max, status] of data.fields) {
     function update() {
         const quote = shell.value === 'ps' ? quotePs : quoteSh;
         const python = shell.value === 'ps' ? 'python' : 'python3';
-        const valid = output.value.trim() && input.value && input.checkValidity() &&
-            (id !== 'name' || /^[ -~]+$/.test(input.value));
-        command.value = valid ? python + ' tools/lol.py save set --out ' + quote(output.value) +
+        const heading = id === 'heading';
+        const entered = input.value;
+        const validHeading = !heading || (/^(?:0x[0-9a-f]+|[0-9]+)$/i.test(entered) && Number(entered) <= 65535);
+        const same = id === 'position-from' ? entered === data.source :
+            heading || typeof value === 'number' ? Number(entered) === Number(value) : entered === value;
+        const valid = output.value.trim() && entered && input.checkValidity() && validHeading && !same &&
+            (id !== 'name' || /^[ -~]+$/.test(entered));
+        command.hidden = !valid;
+        command.textContent = valid ? python + ' tools/lol.py save set --out ' + quote(output.value) +
             ' -- ' + [data.source, id, input.value].map(quote).join(' ') : '';
-        copy.disabled = !valid;
-        note.textContent = '';
+        copy.hidden = !valid;
+        note.textContent = heading && entered && !validHeading ? 'Enter a heading from 0x0000 to 0xFFFF.' : '';
     }
     input.addEventListener('input', update);
     copy.onclick = async () => {
-        try { await navigator.clipboard.writeText(command.value); note.textContent = ' Copied'; }
-        catch (_) { command.select(); note.textContent = ' Press Ctrl+C or Command+C to copy.'; }
+        try { await navigator.clipboard.writeText(command.textContent); note.textContent = ' Copied'; }
+        catch (_) {
+            const range = document.createRange();
+            range.selectNodeContents(command);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            note.textContent = ' Press Ctrl+C or Command+C to copy.';
+        }
     };
     rows.push(update);
 }

@@ -112,7 +112,21 @@ def translation(resource, csv_path, report=None):
             continue
         if limit == "locked":
             raise ValueError(f"{csv_path.name} row {i + 2} is a resource name or tag. Keep its new column empty.")
-        translated[i] = literal(line[2])
+        text = literal(line[2])
+        preserve = getattr(data, "preserve_controls", None)
+        if preserve:
+            text = preserve(literal(original), text)
+        try:
+            data.encode(text)
+        except UnicodeEncodeError as error:
+            char = error.object[error.start]
+            raise ValueError(f"{csv_path.name} row {i + 2}: {fonts.character(char)} is outside "
+                             f"{data.CHARSET}. {fonts.substitute(char)}") from None
+        if "\0" in text:
+            raise ValueError(f"{csv_path.name} row {i + 2}: NUL ends a string. Remove that control code.")
+        if text == literal(original):
+            continue
+        translated[i] = text
     if not translated:
         return resource.raw
     try:
@@ -125,8 +139,8 @@ def translation(resource, csv_path, report=None):
     if [(str(ident), text) for ident, text, _ in after] != expected:
         raise ValueError(f"{csv_path.name} did not read back as the requested rows.")
     if report is not None:
-        for text in translated.values():
-            report.update(text)
+        for i, text in translated.items():
+            report(resource, csv_path.name, i + 2, text)
     return changed
 
 
@@ -148,7 +162,7 @@ def updated_files(root, work, report=None):
             index = table["entry"]
             if type(index) is not int or not 0 <= index < len(rows):
                 raise ValueError(f"{name}: table entry is no longer present. Export from this copy again.")
-            key, offset, raw = rows[index]
+            _, offset, raw = rows[index]
             if offset != table["offset"] or digest(raw) != table["sha256"]:
                 raise ValueError(f"{name}: the text tables differ from the export. Use the same original copy.")
             resource = Resource(name, index, table["label"], offset, raw)
@@ -157,22 +171,35 @@ def updated_files(root, work, report=None):
             if edited != raw:
                 changes[index] = edited
         if changes:
-            yield name, replace_members(modkit, name, original, rows, changes)
+            result = replace_members(modkit, name, original, rows, changes)
+            yield name, result
+            mirrors = getattr(data, "mirror_files", None)
+            if mirrors:
+                for mirror in mirrors(root, name):
+                    yield mirror, result
 
 
 def build(root, work, output):
     count = 0
-    chars = set()
     notes = []
+    installed = None
+
+    def report(resource, name, row, text):
+        nonlocal installed
+        select = data.warning_fonts(resource.file, resource.label)
+        if not select:
+            return
+        if installed is None:
+            installed = fonts.installed(root)
+        relevant = [(name, drawn) for name, drawn in installed if select(name)]
+        notes.extend(f"{name} row {row}: {note}" for note in fonts.missing(text, relevant))
+
     with output_folder(output, root, work, *protected(root)) as folder:
-        for name, raw in updated_files(root, work, chars):
+        for name, raw in updated_files(root, work, report):
             target = local_path(folder, name)
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(raw)
             count += 1
-        installed = fonts.installed(root) if chars else []
-        if chars:
-            notes = list(fonts.missing(chars, installed)) if installed else ["No named font resources were found to check."]
     for note in notes:
         print(f"Glyph warning: {note}", file=sys.stderr)
     return count
@@ -241,10 +268,10 @@ def main():
         print(f"Exported {tables:,} private CSV tables with {rows:,} rows to {args.destination}.")
     elif args.job == "build":
         count = build(root, args.work.resolve(), args.destination)
-        print(f"Built and read back {count:,} changed files in {args.destination}.")
+        print(f"Built and read back {count:,} changed file{'' if count == 1 else 's'} in {args.destination}.")
     else:
         count = verify(root, args.work.resolve(), args.destination.resolve())
-        print(f"Verified {count:,} changed files in {args.destination}.")
+        print(f"Verified {count:,} changed file{'' if count == 1 else 's'} in {args.destination}.")
     return 0
 
 

@@ -40,6 +40,7 @@ CONTROLS = """
 <div class="edit-buttons"><button id="edit-monster-square-use" type="button">Use selected square</button>
 <button id="edit-monster-stage" type="button">Stage monster edit</button></div>
 </fieldset>
+<p id="edit-monster-warning" role="status" class="muted" hidden></p>
 <p id="edit-count" role="status"></p>
 <div class="edit-buttons"><button id="edit-export">Download changes</button>
 <button id="edit-reset" disabled>Clear edits</button></div>
@@ -78,6 +79,7 @@ const added = new Map();
 const walls = new Map();
 const originalMonsters = new Map(model.monsters.map(([file, site, ...values]) => [file + ':' + site, values]));
 const pendingMonsters = new Map();
+const monsterName = type => model.monster_names[type] || 'Creature slot ' + type;
 const monster = button('monster');
 const monsterFields = ['square', 'x', 'y', 'facing', 'type'].map(name => button('monster-' + name));
 const door = button('door-state');
@@ -175,7 +177,7 @@ function updateMonsters() {
     const picked = monster.value;
     monster.replaceChildren(new Option('Choose a placement', ''), ...[...originalMonsters].map(([key, values]) => {
         const [block, , , , type] = pendingMonsters.get(key) || values;
-        return new Option(key + ' · type ' + type + ' · square ' + block, key);
+        return new Option(monsterName(type) + ' · square ' + block + ' · ' + key, key);
     }));
     monster.value = picked;
     selectMonster();
@@ -183,10 +185,11 @@ function updateMonsters() {
 function selectMonster() {
     const before = originalMonsters.get(monster.value);
     button('monster-fields').disabled = !before;
+    button('monster-warning').hidden = true;
     if (before) {
         const values = pendingMonsters.get(monster.value) || before;
         const types = [...new Set([...model.monster_types, before[4]])].sort((a, b) => a - b);
-        monsterFields[4].replaceChildren(...types.map(type => new Option('Type ' + type, type)));
+        monsterFields[4].replaceChildren(...types.map(type => new Option(monsterName(type) + ' · slot ' + type, type)));
         monsterFields.forEach((field, i) => field.value = values[i]);
     }
     syncButtons();
@@ -253,6 +256,16 @@ button('monster-stage').onclick = () => {
     const invalid = monsterFields.find(field => !field.value || !field.checkValidity());
     if (invalid) { invalid.reportValidity(); return; }
     const values = monsterFields.map(field => Number(field.value));
+    const [block] = values;
+    const notice = button('monster-warning');
+    const faces = walls.get(block) || model.squares[block];
+    const solid = faces.every(face => wallTypes.get(face)?.[2]);
+    if (block !== originalMonsters.get(monster.value)[0] && solid) {
+        notice.textContent = 'Square ' + block + ' has four solid faces. Choose an open square.';
+        notice.hidden = false;
+        return;
+    }
+    notice.hidden = true;
     if (values.every((value, i) => originalMonsters.get(monster.value)[i] === value)) pendingMonsters.delete(monster.value);
     else pendingMonsters.set(monster.value, values);
     updateMonsters();

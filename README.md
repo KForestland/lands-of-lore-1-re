@@ -31,7 +31,7 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- rating:begin -->
 - **Files read:** 199 of 199 files in the CD `DATA` folder (289.0 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 568 statements CONFIRMED (proved from the program code or the files) and 98 UNCONFIRMED (a reading not yet proved), on 107 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 569 statements CONFIRMED (proved from the program code or the files) and 99 UNCONFIRMED (a reading not yet proved), on 107 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->
@@ -47,7 +47,7 @@ python3 -m venv .venv && . .venv/bin/activate
 python3 -m pip install -r requirements.txt
 export LOL1_DATA="/path/to/your/LOL1/DATA"      # the folder holding GENERAL.PAK (CD: DATA inside the install folder, which also holds INSTALL.EXE and README.ENG that two checks read; floppy: the install folder)
 python3 tools/check_all.py --quick              # lists the checks it skips
-python3 tools/check_all.py                      # full suite of 52 checks
+python3 tools/check_all.py                      # full suite of 53 checks
 python3 -m unittest discover -s tests
 python3 tools/level_renderer.py --level 1 --out ../maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0

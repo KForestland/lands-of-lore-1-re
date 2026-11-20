@@ -11,6 +11,24 @@ from lol1lib import pak_entries
 LOOSE = LANGUAGES | {".TIM", ".INI", ".INF"}
 
 
+CHARSET = "code page 437"
+
+
+def warning_fonts(file, label):
+    # The separately loaded prologue fonts do not draw the gameplay text.
+    path = Path(file)
+    language = path.parts[0].upper() if len(path.parts) > 1 else ""
+    if path.name.upper() == "STARTUP.PAK" and language in {"ENG", "FRE", "GER"} and label.upper() == "LOLINTRO.TIM":
+        return lambda name: name.upper().startswith(language + "/") and name.upper().endswith(
+            ("/INTRO.FNT", "/NEW8P.FNT"))
+    if Path(label).suffix.upper() in LANGUAGES and not language:
+        return lambda name: name.upper() in {
+            f"{archive}/{font}" for archive in ("STARTUP.PAK", "GENERAL.PAK")
+            for font in ("FONT6P.FNT", "FONT9P.FNT")
+        }
+    return None
+
+
 def decode(raw):
     return raw.decode("cp437")
 
@@ -122,17 +140,20 @@ def write(label, blob, changes):
         if i in changes:
             text = changes[i]
             if locked(decoded(old, compressed), compressed):
-                raise ValueError(f"Row {i} is a script resource name.")
+                raise ValueError(f"CSV row {i + 2} is a script resource name.")
             try:
                 value = encode(text)
             except UnicodeError:
-                raise ValueError(f"Row {i} has a character outside code page 437. Choose a character the game can store.") from None
+                raise ValueError(f"CSV row {i + 2} has a character outside code page 437. Choose a character the game can store.") from None
             if compressed:
-                value = encode_string(value)
+                try:
+                    value = encode_string(value)
+                except ValueError as error:
+                    raise ValueError(f"CSV row {i + 2}: {error}. Use another character or control code.") from None
             if b"\0" in value:
-                raise ValueError(f"Row {i} contains a NUL, which ends a string.")
+                raise ValueError(f"CSV row {i + 2} contains a NUL, which ends a string.")
         if at in expected and expected[at] != value:
-            raise ValueError(f"Row {i} shares its stored string with another row. Give both the same translation.")
+            raise ValueError(f"CSV row {i + 2} shares its stored string with another row. Give both the same translation.")
         expected[at] = value
         if value != old:
             replacements[at] = (len(old), value)
@@ -140,7 +161,7 @@ def write(label, blob, changes):
     output, cursor = bytearray(), 0
     for at, (length, value) in changes_by_offset:
         if at < cursor or any(at < item <= at + length for item in offsets):
-            raise ValueError(f"Text at +{at:#x} overlaps a second row. Leave that string unchanged.")
+            raise ValueError(f"CSV row {offsets.index(at) + 2}: text at +{at:#x} overlaps a second row. Leave it unchanged.")
         output.extend(raw[cursor:at])
         output.extend(value)
         cursor = at + length

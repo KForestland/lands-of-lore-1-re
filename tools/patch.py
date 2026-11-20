@@ -261,7 +261,7 @@ def edit_archive(name, original, entries):
         if not 0 <= index < len(rows):
             raise ValueError(f"{name} has no entry {index}; the patch is for another version")
         key, _, blob = rows[index]
-        validate = validator_for(key) if validator_for else None
+        validate = validator_for(name, key, blob) if validator_for else None
         if validate:
             edited, reverse = splice(name, index, blob, edits)
             validate(blob, edited)

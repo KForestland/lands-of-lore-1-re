@@ -38,7 +38,7 @@ def is_loose(name):
     return Path(name).suffix.upper() in LANGUAGES | {".TIM", ".INI", ".INF"}
 
 
-def patch_validator(key):
+def patch_validator(_name, key, _blob):
     """Allow checked wall edits from the level editor without exposing CMZ in the mod kit."""
     return validate_maze_edit if key is not None and Path(key).suffix.upper() == ".CMZ" else None
 
