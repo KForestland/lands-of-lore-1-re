@@ -114,6 +114,29 @@ def decode_string2(raw_bytes):
     return bytes(result)
 
 
+# Every pair the bigram bytes stand for; no pair has two codes.
+BIGRAMS = {(decodeTable1[v >> 3], decodeTable2[v]): 0x80 | v for v in range(len(decodeTable2))}
+
+
+def encode_string(text):
+    """Inverse of decode_string2(decode_string1(...)): escape bytes from 0x80 as
+    0x1B + (byte - 0x7F), then join pairs into bigram bytes from the left. This
+    re-creates every string of the CD and floppy editions byte for byte."""
+    escaped = bytearray()
+    for b in text:
+        escaped.extend((0x1B, b - 0x7F) if b >= 0x80 else (b,))
+    result = bytearray()
+    i = 0
+    while i < len(escaped):
+        code = BIGRAMS.get(tuple(escaped[i:i + 2]))
+        result.append(code or escaped[i])
+        i += 2 if code else 1
+    result = bytes(result)
+    if decode_string2(decode_string1(result)) != text:
+        raise ValueError("text cannot be stored (a 0x1B or 0xFF byte)")
+    return result
+
+
 def format_control_codes(decoded_bytes):
     """Convert decoded bytes to readable string, marking control codes."""
     result = []

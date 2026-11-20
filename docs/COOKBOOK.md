@@ -146,6 +146,23 @@ python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
 [0] Welcome to Gladstone Keep. …
 ```
 
+## Change text or numbers with the mod kit
+
+The [mod kit](../tools/README.md#modkitpy) writes the game's text tables and script listings as files you can edit, and builds changed archives into a new folder. The game folder is only read.
+
+```bash
+python3 tools/modkit.py unpack "/path/to/LoL1/DATA" "my mod work"
+```
+
+Open `my mod work/edits/0000_L01.PAK_LEVEL01.ENG.json` in a text editor and change `Welcome to Gladstone Keep.` to `Welcome to Gladstone Castle.` inside `"value"`. Then build and verify:
+
+```bash
+python3 tools/modkit.py build "/path/to/LoL1/DATA" "my mod work" "my mod output"
+python3 tools/modkit.py verify "/path/to/LoL1/DATA" "my mod work" "my mod output"
+```
+
+Each command ends with one summary line; build and verify print `62 archives or loose tables, 1 changed (L01.PAK)`. Copy `L01.PAK` from the output folder over a backup copy of your game to try it.
+
 ## Change one thing safely
 
 This example copies an English CD installation. It changes only the high

@@ -68,7 +68,7 @@ Legend:
 | [Q17 native save fields](../docs/unknowns/17_native_save_fields.md) | `save_reader.py` | yes | text, `--json` | part | yes |
 | [Q18 native records](../docs/unknowns/18_native_records.md) | `monster_reference_scan.py` (needs Capstone, in `requirements.txt`) | yes (the edition of `--data`) | text: one `CHECK` line per edition | part: folder handling and `--help`, not the census | yes |
 
-Tools in `check_all.py` with no section below: `rating.py`. No unit test needs game data; tests cover PAK directories, Frame4, EMC2 (with the closed-pipe case), the original save layout (`tests/test_readers.py`), PAL/CPS palettes, WLL, TLC, XXX, FNT, VOC headers, TIM framing and the executable tables (`tests/test_formats.py`), and wall assembly (VCN/VMP), the level map drawing, `shp_renderer.py --help` and `monster_reference_scan.py`'s folder handling (`tests/test_gap_tools.py`), and the PAK writer: order, duplicate names, the end-offset and five zero bytes, and refused inputs (`tests/test_round_trip.py`).
+Tools in `check_all.py` with no section below: `rating.py`. No unit test needs game data; tests cover PAK directories, Frame4, EMC2 (with the closed-pipe case), the original save layout (`tests/test_readers.py`), PAL/CPS palettes, WLL, TLC, XXX, FNT, VOC headers, TIM framing and the executable tables (`tests/test_formats.py`), and wall assembly (VCN/VMP), the level map drawing, `shp_renderer.py --help` and `monster_reference_scan.py`'s folder handling (`tests/test_gap_tools.py`), and the PAK writer: order, duplicate names, the end-offset and five zero bytes, and refused inputs (`tests/test_round_trip.py`), and the mod kit on synthetic PAK files: text compression, edit, byte-identical rebuild, refused folders and one-line errors (`tests/test_modkit.py`).
 
 ## Examples and expected output
 
@@ -76,14 +76,37 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (48 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (49 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
 
 ```
 $ python3 tools/check_all.py | sed -n '1,3p;$p'
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 48 CHECKS PASSED
+ALL 49 CHECKS PASSED
+```
+
+### `modkit.py`
+
+The mod kit changes game text and numbers in copies; your game folder is only read. Run it from any folder and put quotes around paths with spaces:
+
+```bash
+python3 tools/modkit.py unpack "/path/to/LoL1/DATA" "my mod work"
+# change the files in "my mod work/edits", then:
+python3 tools/modkit.py build "/path/to/LoL1/DATA" "my mod work" "my mod output"
+python3 tools/modkit.py verify "/path/to/LoL1/DATA" "my mod work" "my mod output"
+```
+
+- `modkit.py` names the LoL1 tables; `modkit_core.py`, the same file in the three repositories, does the unpack, build, verify and folder checks.
+- The game folder is the CD `DATA` folder or the floppy game folder (the one holding `GENERAL.PAK`). Language subfolders such as the CD's `DATA/ENG` are not read; give one as the game folder to edit its scripts.
+- `unpack` creates the work folder with `manifest.json`, a `README.txt` and one JSON file per table in `edits/`: every `.ENG`, `.FRE` and `.GER` text table as plain text (the game's bigram compression is undone; accented letters use code page 437, as the game's font does) and every EMC2 (`.INF`, `.INI`) and AVFS (`.TIM`) script as an editable listing, in which the item and monster definition calls name their fields (`definition_field`). Change only `"value"`; keep the number of rows, the field names and codes such as `\r` or `\u0002`.
+- `build` creates the output folder and writes every unpacked file into it, changed or not (about 8 MB on the CD), and names the changed files. `verify` reads the output back with the archive and table readers and checks it against the work folder. Copy the changed files over a backup copy of your game to try them.
+- Refused, with one line saying why: a work or output folder that already exists, lies inside the game folder, inside a folder holding PAK or TLK, or inside this repository, and an output inside the work folder.
+- An unchanged work folder rebuilds byte for byte: CD: 62 PAK files from 289 entries; floppy: 11 PAK files from 237 entries. `--check` does unpack, build and verify in a temporary folder (`--data` or `$LOL1_DATA`) and is part of `check_all.py`:
+
+```
+$ python3 tools/modkit.py --check
+CHECK modkit: 62 archives or loose tables rebuilt byte-identically from 289 unpacked entries; outputs in the game, work, archive and repository folders refused
 ```
 
 ### `doc_links.py`
