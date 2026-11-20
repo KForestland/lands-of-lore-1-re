@@ -28,13 +28,19 @@ def sources(root):
     return core.game_files(root, {".PAK"})
 
 
+def patch_sources(root):
+    for path in sorted(root.rglob("*")):
+        if path.is_file() and (path.suffix.upper() == ".PAK" or is_loose(path.name)):
+            yield path.relative_to(root).as_posix()
+
+
 def is_loose(name):
-    return False
+    return Path(name).suffix.upper() in LANGUAGES | {".TIM", ".INI", ".INF"}
 
 
 def patch_validator(key):
     """Allow checked wall edits from the level editor without exposing CMZ in the mod kit."""
-    return validate_maze_edit if Path(key).suffix.upper() == ".CMZ" else None
+    return validate_maze_edit if key is not None and Path(key).suffix.upper() == ".CMZ" else None
 
 
 def members(raw):
@@ -65,7 +71,8 @@ def decode_text(stored):
     return decode_string2(decode_string1(stored.encode("latin-1"))).decode("cp437")
 
 
-def view(_name, key, payload):
+def view(name, key, payload):
+    key = key or Path(name).name
     if Path(key).suffix.upper() in LANGUAGES:
         return "text", [decode_text(s) for s in binary_strings(payload, "<")["strings"]]
     if payload[:4] == b"FORM" and payload[8:12] in (b"EMC2", b"AVFS"):

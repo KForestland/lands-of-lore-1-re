@@ -235,7 +235,9 @@
         "Q17",
         "Q18"
       ],
-      "tools": []
+      "tools": [
+        "tools/lol.py"
+      ]
     },
     {
       "path": "docs/EDITIONS.md",
@@ -529,6 +531,15 @@
         "tools/level_renderer.py",
         "tools/level_report.py",
         "tools/lol1_numbers.py"
+      ]
+    },
+    {
+      "path": "docs/TRANSLATION.md",
+      "title": "Translate the original text",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/lol.py"
       ]
     },
     {
@@ -1566,11 +1577,15 @@
         "tools/rating.py",
         "tools/repo_guard.py",
         "tools/save_edit.py",
+        "tools/save_page.py",
         "tools/save_reader.py",
         "tools/shp_renderer.py",
         "tools/tileset_mapper.py",
         "tools/tlc_reader.py",
         "tools/tlk_verify.py",
+        "tools/translate.py",
+        "tools/translate_data.py",
+        "tools/translate_fonts.py",
         "tools/vcn_vmp_reader.py",
         "tools/voc_reader.py",
         "tools/wll_parser.py",

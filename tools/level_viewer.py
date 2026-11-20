@@ -49,7 +49,7 @@ def argument(values, i):
     return values[i] if i < len(values) and values[i] is not None else "computed"
 
 
-def place(plan, level, ext, entry, calls, items, counts, edit_sites):
+def place(plan, level, ext, entry, calls, items, counts, edit_sites, monster_sites, monster_markers):
     for function, args, site in calls:
         layer = ""
         if function == 0x11:
@@ -67,12 +67,18 @@ def place(plan, level, ext, entry, calls, items, counts, edit_sites):
             info = {"Block": block, "Facing": argument(args, 3), "Type slot": argument(args, 4),
                     "Mode": argument(args, 6)}
             on_map = map_block(block)
+            editable = (ext, site) in monster_sites
+            layer = "editable-monster" if editable else "read-only-item"
+            info["Editor"] = "Editable placement" if editable else "Read-only script placement"
+            info["Inside square X / Y"] = f"{argument(args, 1)} / {argument(args, 2)}"
             color, prefix, x, y = "#ffadbb", "M", .68, .68
         else:
             continue
         counts[kind] += 1
         slot = counts[kind]
         key = f"{prefix}-{slot}"
+        if layer == "editable-monster":
+            monster_markers[key] = f"{ext}:{site}"
         label = f"{kind[:-1]} placement {slot}"
         if function == 0x11 and info["Name"] != "Unknown":
             label = f"{info['Name']} — item placement {slot}"
@@ -118,6 +124,8 @@ def view(data, stem, gates):
     items, lands = names(data)
     model = editor_data(dict(level_sources(data, level)), level, items)
     edit_sites = {site for site, *_ in model["items"]}
+    monster_sites = {(extension, site) for extension, site, *_ in model["monsters"]}
+    model["monster_markers"] = {}
     counts = defaultdict(int)
     for ext in ("INI", "INF"):
         raw = level_member(level, ext, data)
@@ -134,7 +142,7 @@ def view(data, stem, gates):
                 plan.dot(spot(entry, .25, .72), key, label, "Script entries", details, "#aabdfa", entry)
             else:
                 plan.note(key, label, "Script entries", details)
-            place(plan, level, ext, entry, calls, items, counts, edit_sites)
+            place(plan, level, ext, entry, calls, items, counts, edit_sites, monster_sites, model["monster_markers"])
 
     legend = level_member(level, "XXX", data) or b""
     for i, (x, y, shape, rx, ry, sid) in enumerate(iter_unpack("<6H", legend[:32*12]), 1):

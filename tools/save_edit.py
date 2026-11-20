@@ -5,6 +5,7 @@ import struct
 
 from cli_errors import ReaderArgumentParser, run_cli
 from modkit_core import output_path
+import save_page
 from save_reader import read_original_save
 
 FIELDS = ("name", "block", "facing", "money", "lamp-oil")
@@ -105,6 +106,24 @@ def status(raw, field):
     return "UNCONFIRMED: no edited copy of this field has been loaded by the game yet; keep a backup of your saves"
 
 
+def page_fields(raw):
+    layout(raw)
+    save = read_original_save(raw)
+    state = save["state"]
+    names = (("name", "Slot name", save["description"], 59),
+             ("block", "Block", state["block"], 1023),
+             ("facing", "Facing", state["facing"], 3),
+             ("money", "Crowns", state["money"], 65535),
+             ("lamp-oil", "Lamp oil", state["lamp_oil"], 100))
+    facts = [("Edition", save.get("version_text", save["tag"])),
+             ("Location (X / Y)", f'{state["x"]} / {state["y"]}'),
+             ("Current level", state["level"]),
+             ("Lamp brightness", state["brightness"]),
+             ("Visited levels stored", len(save["levels"]))]
+    return [(key, label, value, value, max_value, status(raw, key))
+            for key, label, value, max_value in names], facts
+
+
 def main():
     try:
         return run()
@@ -117,7 +136,7 @@ def run():
     parser = ReaderArgumentParser(
         description=__doc__,
         epilog="Example: save_edit.py set \"/path/to/my saves/_SAVE001.DAT\" money 5000 --out \"my edited save.DAT\"")
-    commands = parser.add_subparsers(dest="command", metavar="set")
+    commands = parser.add_subparsers(dest="command", metavar="{page,set}")
     commands.required = True
     setter = commands.add_parser("set", help="write a copy of the save with one field changed",
                                  description="Write a copy of the save with one field changed.")
@@ -125,9 +144,20 @@ def run():
     setter.add_argument("field", choices=FIELDS)
     setter.add_argument("value", help="the new value: a name, block 0-1023, facing 0-3, money 0-65535 or lamp oil 0-100")
     setter.add_argument("--out", required=True, type=Path, help="the new save file to write, outside the game and save folders")
+    viewer = commands.add_parser("page", help="write an offline page for the save's documented fields")
+    viewer.add_argument("save", type=Path, help="an original save file; only read")
+    viewer.add_argument("--out", required=True, type=Path, help="a new .html file outside the game and save folders")
     args = parser.parse_args()
     if not args.save.is_file():
         raise ValueError(f"save not found: {args.save}")
+    if args.command == "page":
+        try:
+            fields, facts = page_fields(args.save.read_bytes())
+        except (struct.error, IndexError, KeyError, UnicodeError):
+            raise ValueError("The save could not be read as an original LoL1 slot.") from None
+        path = save_page.write(args.save, args.out, "LoL1", fields, facts)
+        print(f"Wrote {path}. Open it in your browser.")
+        return 0
     path = output_path(args.out, args.save.resolve().parent, args.save)
     if not path.parent.is_dir():
         raise ValueError(f"the folder {path.parent} does not exist; create it first or choose another place")

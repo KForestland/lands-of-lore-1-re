@@ -31,7 +31,7 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- rating:begin -->
 - **Files read:** 199 of 199 files in the CD `DATA` folder (289.0 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 563 statements CONFIRMED (proved from the program code or the files) and 98 UNCONFIRMED (a reading not yet proved), on 106 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 568 statements CONFIRMED (proved from the program code or the files) and 98 UNCONFIRMED (a reading not yet proved), on 107 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->
@@ -90,6 +90,8 @@ The [mod kit](tools/README.md#modkitpy) turns the game's tables into files you c
 
 Type these in this repository's folder. Put quotes around paths with spaces. On Windows type `py -3` instead of `python3`, and `\` instead of `/` inside paths if you like; copy folders with Explorer. Each command ends with one summary line, or one sentence saying what is wrong.
 
+[Translate text tables](docs/TRANSLATION.md).
+
 1. Unpack: `python3 tools/modkit.py unpack "/path/to/LoL1/DATA" "my mod work"`. Give the folder holding the PAK archives: the CD's `DATA` folder, or the floppy game folder.
 2. Change one number: the item definitions are in the start-up script. Open the file in `my mod work/edits/` whose name ends in `_STARTUP.PAK_ONETIME.INF.json` (floppy: ends in `_GENERAL.PAK_ONETIME.INF.json`; the number in front may differ on your copy) in a text editor and search for `"might"`. The second match is in a row that reads `"argument": 8`; change the 8 to 9 (an item's might, [numbers](docs/NUMBERS.md)). Change nothing else.
 3. Build and check: `python3 tools/modkit.py build "/path/to/LoL1/DATA" "my mod work" "my mod output"`, then the same with `verify`. Both end with `62 archives or loose tables, 1 changed (STARTUP.PAK)` (floppy: `11 ..., 1 changed (GENERAL.PAK)`).
@@ -98,6 +100,8 @@ Type these in this repository's folder. Put quotes around paths with spaces. On 
 6. Apply the patch to the copy: `python3 tools/patch.py apply --data "/path/to/LoL1 test copy/DATA" "stronger item.json" --out "patched files"`. Copy everything in `patched files` except `undo.json` into the copy's `DATA` folder (floppy: the copy itself), replacing the files there.
 7. Read it back: `python3 tools/modkit.py unpack "/path/to/LoL1 test copy/DATA" "check work"`; the same file in `check work/edits` now says 9. Play the copy to try it.
 8. Undo: `python3 tools/patch.py apply --data "/path/to/LoL1 test copy/DATA" "patched files/undo.json" --out "restored files"`, then copy the files in `restored files` (except `undo.json`) into the copy in the same way. The copy is then byte for byte the original again.
+
+[Open the documented fields of a save in your browser](docs/EDITED_SAVES.md#see-the-fields-in-an-offline-page).
 
 A saved game can be changed in a copy too: `python3 tools/save_edit.py set "/path/to/your/_SAVE001.DAT" money 5000 --out "my edited save.DAT"` prints the old and the new value. More in the [cookbook](docs/COOKBOOK.md#share-a-change-as-a-patch).
 

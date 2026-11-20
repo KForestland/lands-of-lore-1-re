@@ -11,6 +11,7 @@ from cli_errors import ReaderArgumentParser, run_cli
 JOBS = {
     "level": ("level_viewer.py", (), "Look at an interactive level plan"),
     "text": ("decode_dialogue.py", (), "Read original game text"),
+    "translate": ("translate.py", (), "Export, build and verify translations"),
     "music": ("xmi_to_midi.py", (), "Inspect original game music (convert XMIDI to MIDI)"),
     "save": ("save_edit.py", (), "Edit a copy of a saved game"),
     "patch": ("patch.py", (), "Make or apply a patch and its undo"),

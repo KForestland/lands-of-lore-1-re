@@ -19,7 +19,7 @@ import patch
 from modkit_core import digest, output_folder, replace_members, write_json
 
 FORMAT = "lol1-level-changes-1"
-EXTENSIONS = ("CMZ", "WLL", "INI")
+EXTENSIONS = ("CMZ", "WLL", "INI", "INF")
 SPECIAL = {1: "Clickable shape", 2: "Next wall on click", 3: "Previous wall on click",
            4: "Click event", 5: "Door switch", 6: "Item niche"}
 
@@ -75,6 +75,76 @@ def level_sources(data, level):
             raise ValueError(f"{name} is missing. Give --data the complete game folder or its DATA folder.")
 
 
+def monsters(script):
+    """The last five pushes to initMonster hold its location, facing and type."""
+    rows = script.instructions
+    targets = {ins.target for ins in rows} | set(script.entries)
+    found = {}
+    for i, ins in enumerate(rows):
+        if (ins.opcode, ins.argument) != (14, 0x38) or i < 5 or i + 1 == len(rows):
+            continue
+        cleanup = rows[i + 1]
+        if cleanup.opcode != 12 or cleanup.argument not in range(8, 12):
+            continue
+        if any(push.opcode not in (3, 4) for push in rows[i - 5:i]):
+            continue
+        if any(op.address in targets for op in rows[i - 4:i + 1]):
+            continue
+        pushes = rows[i - 5:i][::-1]
+        block, x, y, facing, kind = args = tuple(op.argument for op in pushes)
+        if 0 <= block < 1024 and 0 <= x < 256 and 0 <= y < 256 and 0 <= facing < 4:
+            found[ins.address] = args, tuple(op.address for op in pushes)
+    return found
+
+
+def monster_types(script):
+    rows = script.instructions
+    return sorted({arg.argument for arg, call in zip(rows, rows[1:])
+                   if (call.opcode, call.argument) == (14, 0x3F)
+                   and arg.opcode in (3, 4) and 0 <= arg.argument <= 4})
+
+
+def door_states(rows):
+    table = {row[0]: row for row in rows if row[0] <= 255}
+    states = {}
+    for wall, row in table.items():
+        if row[4] & 0x38 != 0x28:
+            continue
+        for at in range(wall + 1, min(wall + 6, 256)):
+            following = table.get(at)
+            if not following or following[1:4] != row[1:4] or not following[4] & 8:
+                break
+            if following[4] & 0x30:
+                if following[4] & 0x30 == 0x10:
+                    for frame in range(wall, at + 1):
+                        states[frame] = [wall, at]
+                break
+    return states
+
+
+def edit_monsters(raw, replacements, changes, types):
+    script = emc.read_script(raw)
+    sites = monsters(script)
+    expected = {site: args for site, (args, _) in sites.items()}
+    seen = set()
+    for site, values in pairs(changes, "monster change"):
+        if type(site) is not int or site not in sites or site in seen:
+            raise ValueError("A monster placement was repeated or is unavailable in this script.")
+        if not isinstance(values, list) or len(values) != 5:
+            raise ValueError("A monster change needs square, X, Y, facing and type.")
+        seen.add(site)
+        for value, hi, name in zip(values, (1023, 255, 255, 3, 4), ("square", "X", "Y", "facing", "type")):
+            integer(value, 0, hi, f"Monster {name} must be between 0 and {hi}.")
+        old, words = sites[site]
+        if values[4] != old[4] and values[4] not in types:
+            raise ValueError("Choose a monster type defined by this level.")
+        expected[site] = tuple(values)
+        for word, before, after in zip(words, old, values):
+            if before != after:
+                replacements[word] = push(after)
+    return Counter(expected.values()), sum(expected[site] != args for site, (args, _) in sites.items())
+
+
 def wall_name(row):
     ident, vmp, shape, special, flags, _ = row
     if special & 255 in SPECIAL:
@@ -83,6 +153,9 @@ def wall_name(row):
         label = "Door side"
     else:
         label = f"Wall graphic {vmp & 255}" if vmp & 255 else "No wall graphic"
+    if flags & 8:
+        state = {0x10: "open", 0x20: "closed"}.get(flags & 0x30, "moving frame")
+        label += f", {state}"
     if shape > 0:
         label += f", decoration {shape}"
     return f"{ident} · {label}"
@@ -90,13 +163,19 @@ def wall_name(row):
 
 def editor_data(sources, level, names):
     blobs = {key: row[2] for key, row in sources.items()}
-    sites, _ = placement_sites(emc.read_script(blobs["INI"]), level)
+    ini = emc.read_script(blobs["INI"])
+    sites, _ = placement_sites(ini, level)
+    wall_rows = parse_walls(blobs["WLL"])[1]
     return {
         "format": FORMAT,
         "level": level,
         "source": {key: digest(raw) for key, raw in blobs.items()},
-        "types": [[row[0], wall_name(row), bool(row[1] & 255), row[2] > 0]
-                  for row in parse_walls(blobs["WLL"])[1] if row[0] <= 255],
+        "types": [[row[0], wall_name(row), bool(row[1] & 255), row[2] > 0, row[4]]
+                  for row in wall_rows if row[0] <= 255],
+        "doors": door_states(wall_rows),
+        "monsters": [[extension, site, *args] for extension in ("INI", "INF")
+                     for site, (args, _) in monsters(emc.read_script(blobs[extension])).items()],
+        "monster_types": monster_types(ini),
         "squares": [walls for walls, _ in parse_maze(blobs["CMZ"])[3]],
         "items": [[site, p.args[0], *p.args[4:8]] for site, p in sites.items()],
         "names": sorted(names.items(), key=lambda pair: (pair[1].casefold(), pair[0])),
@@ -188,11 +267,13 @@ def changed_maze(raw, wall_blob, changes):
     return edited, rows, sum(a != b for a, b in zip(original, rows))
 
 
-def changed_script(raw, level, changes, additions, names):
+def changed_script(raw, level, changes, additions, names, replacements=None):
     script = emc.read_script(raw)
     sites, end = placement_sites(script, level)
     expected = {site: p.args for site, p in sites.items()}
-    replacements, seen = {}, set()
+    replacements = {} if replacements is None else replacements.copy()
+    seen = set()
+    prior = len(replacements)
     for site, block in pairs(changes, "item change"):
         integer(site, 0, 32767, "An item placement address must be a whole number.")
         p = sites.get(site)
@@ -218,16 +299,24 @@ def changed_script(raw, level, changes, additions, names):
         added.append((item, 0, 0, level, block, 128, 128, 0))
     if extra:
         replacements[end] = [0x0200, *extra, 0x0800, script.words[end]]
-    return script_write(raw, script, replacements), Counter([*expected.values(), *added]), len(replacements) - bool(extra) + len(added)
+    return script_write(raw, script, replacements), Counter([*expected.values(), *added]), len(replacements) - prior - bool(extra) + len(added)
 
 
 def validate_document(document, source, level):
-    if (not isinstance(document, dict) or set(document) != {"format", "level", "source", "walls", "items", "add"}
+    base = {"format", "level", "source", "walls", "items", "add"}
+    has_monsters = "monsters" in document
+    if (set(document) != (base | {"monsters"} if has_monsters else base)
             or document["format"] != FORMAT or document["level"] != level
-            or any(not isinstance(document[key], list) for key in ("walls", "items", "add"))):
+            or any(not isinstance(document[key], list) for key in ("walls", "items", "add"))
+            or has_monsters and not isinstance(document["monsters"], dict)):
         raise ValueError("Give a level change file exported by the LoL1 editor.")
-    if document["source"] != {key: digest(row[2]) for key, row in source.items()}:
+    keys = source if has_monsters else base_source(source)
+    if document["source"] != {key: digest(row[2]) for key, row in keys.items()}:
         raise ValueError("This change file came from different level files. Open a plan from this copy and export again.")
+
+
+def base_source(source):
+    return {key: row for key, row in source.items() if key != "INF"}
 
 
 def apply(data, document, output, *protected, share=False):
@@ -238,9 +327,23 @@ def apply(data, document, output, *protected, share=False):
     validate_document(document, source, level)
     cmz, rows, wall_count = changed_maze(source["CMZ"][2], source["WLL"][2], document["walls"])
     names = item_names(data)[0] if document["add"] else {}
-    ini, items, item_count = changed_script(source["INI"][2], level, document["items"], document["add"], names)
+    edits = document.get("monsters", {})
+    if set(edits) - {"INI", "INF"} or any(not isinstance(rows, list) for rows in edits.values()):
+        raise ValueError("Monster edits must be lists grouped under INI or INF.")
+    repl = {"INI": {}, "INF": {}}
+    allowed = monster_types(emc.read_script(source["INI"][2]))
+    expected, monster_count = {}, 0
+    for extension in ("INI", "INF"):
+        expected[extension], count = edit_monsters(source[extension][2], repl[extension], edits.get(extension, []), allowed)
+        monster_count += count
+    ini, items, item_count = changed_script(source["INI"][2], level, document["items"], document["add"], names, repl["INI"])
+    inf = script_write(source["INF"][2], emc.read_script(source["INF"][2]), repl["INF"])
+
     by_archive = defaultdict(dict)
-    for extension, value in (("CMZ", cmz), ("INI", ini)):
+    updates = [("CMZ", cmz), ("INI", ini)]
+    if repl["INF"]:
+        updates.append(("INF", inf))
+    for extension, value in updates:
         archive, name, _ = source[extension]
         by_archive[archive][name] = value
     with output_folder(output, data, *protected) as stage:
@@ -262,10 +365,14 @@ def apply(data, document, output, *protected, share=False):
         if (parse_maze(verified[source["CMZ"][1]])[3] != rows
                 or Counter(p.args for p in placement_sites(emc.read_script(verified[source["INI"][1]]), level)[0].values()) != items):
             raise ValueError("The copied level does not read back as the requested changes.")
-        if share and (wall_count or item_count):
+        for extension in ("INI", "INF"):
+            raw = verified.get(source[extension][1], source[extension][2])
+            if Counter(args for args, _ in monsters(emc.read_script(raw)).values()) != expected[extension]:
+                raise ValueError(f"The copied {extension} does not read back as the requested monster placements.")
+        if share and (wall_count or item_count or monster_count):
             title = f"Level {level} edits"
             try:
-                shareable = patch.make(data, stage, title, "Walls or item placements edited on a LoL1 level plan.", kind="data")
+                shareable = patch.make(data, stage, title, "Walls, items or monsters edited on a LoL1 level plan.", kind="data")
                 _, files, undo = patch.prepare(data, shareable)
             except patch.PatchLimitError as error:
                 raise ValueError(f"{error}. Apply without --patch to write the copied archives, or export smaller edits.") from None
@@ -273,19 +380,19 @@ def apply(data, document, output, *protected, share=False):
                 raise ValueError("The level patch did not reproduce the copied archive.")
             write_json(stage / "level-patch.json", shareable)
             write_json(stage / patch.UNDO, undo)
-    return level, len(by_archive), wall_count, item_count
+    return level, len(by_archive), wall_count, item_count + monster_count
 
 
 def check(data):
     names = item_names(data)[0]
-    sites_count = 0
+    sites_count = monster_levels = door_levels = 0
     with TemporaryDirectory(prefix="lol-level-edit-check-") as tmp:
         folder = Path(tmp)
         for level in range(1, 30):
             source = dict(level_sources(data, level))
             model = editor_data(source, level, names)
             example = {key: model[key] for key in ("format", "level", "source")}
-            original = {**example, "walls": [], "items": [], "add": []}
+            original = {**example, "walls": [], "items": [], "add": [], "monsters": {}}
             unchanged = folder / f"same-{level}"
             apply(data, original, unchanged)
             if any(raw.read_bytes() != (data / raw.name).read_bytes() for raw in unchanged.iterdir()):
@@ -300,10 +407,29 @@ def check(data):
                 edits.append([sites[0][0], (sites[0][2] + 500) % 1024])
             if len(sites) > 1:
                 edits.append([sites[1][0], None])
-            changed = {**example, "walls": [[block, sides]], "items": edits, "add": [[121, block]]}
+            changed = {**example, "walls": [[block, sides]], "items": edits, "add": [[121, block]], "monsters": {}}
             apply(data, changed, folder / f"edit-{level}", share=True)
+            if model["monsters"]:
+                extension, site, block, x, y, facing, kind = model["monsters"][0]
+                values = [(block + 32) % 1024, x, y, (facing + 1) % 4, kind]
+                monster_levels += 1
+                apply(data, {**original, "monsters": {extension: [[site, values]]}}, folder / f"monster-{level}")
+            flags = {row[0]: row[4] for row in model["types"]}
+            for square, faces in enumerate(model["squares"]):
+                side = 0 if flags.get(faces[0], 0) & 8 else 1
+                endpoints = model["doors"].get(faces[side])
+                if endpoints and faces[side] == faces[side ^ 2]:
+                    door_levels += 1
+                    faces = list(faces)
+                    new = endpoints[0] if faces[side] == endpoints[1] else endpoints[1]
+                    faces[side] = faces[side ^ 2] = new
+                    apply(data, {**original, "walls": [[square, faces]]}, folder / f"door-{level}")
+                    break
+    if not door_levels or not monster_levels:
+        raise ValueError("No door or monster fixture was checked.")
     print(f"CHECK level editor: 29 unchanged levels copy byte-identically. "
-          f"29 edited levels read back, share and undo exactly. {sites_count} editable item placements.")
+          f"29 edited levels read back, share and undo exactly. {sites_count} editable item placements. "
+          f"{door_levels} door and {monster_levels} monster copies verified.")
     return 0
 
 
@@ -337,7 +463,7 @@ def main():
     level, archives, walls, items = apply(data, read_changes(Path(args.changes)), args.out, *protected, share=args.patch)
     extra = " Patch and undo included." if args.patch and (walls or items) else ""
     print(f"Level {level}: verified {counted(archives, 'archive')}, {counted(walls, 'square edit')} "
-          f"and {counted(items, 'item edit')} in {args.out}.{extra}")
+          f"and {counted(items, 'placement edit')} in {args.out}.{extra}")
     return 0
 
 

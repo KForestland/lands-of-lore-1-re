@@ -183,3 +183,24 @@ many answered probes rest on edited saves only.
   missile (see
   [Q18](NEEDS_A_RUNNING_GAME.md#q18-which-monster-definition-fields-does-an-actual-fight-use));
   the Hatchets carry none.
+
+## See the fields in an offline page
+
+Run from the tools repository with Python 3.10 or newer. Use a fresh HTML
+file outside the game and save folders.
+
+```sh
+python3 tools/lol.py save page '/path/to/your/original save' --out "../my save fields.html"
+```
+
+Open the page in your browser. It displays the current values and the evidence
+status for each editable field. Choose your terminal and a new save path outside the repository and save folder.
+For a field you want to change, enter the value and copy its command. Run the
+command from the tools repository. It writes one edited copy. For a second edit
+to the same save, generate a page from the first copy and choose another output
+filename. Keep the page private because it contains your save name and path.
+
+**CONFIRMED.** The page reads the stored block and X/Y at CD slot `+0x254`
+and floppy `+0x249`. Facing is the word 15 bytes beyond that point. The
+lamp and crowns fields follow in the same global block. See
+[the documented save layout](savegame_format.md).

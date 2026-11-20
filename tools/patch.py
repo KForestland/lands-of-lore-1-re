@@ -129,7 +129,7 @@ def program_files(base):
 
 def source_files(base, kind):
     if kind == "data":
-        return set(adapter.sources(base))
+        return set(getattr(adapter, "patch_sources", adapter.sources)(base))
     return set(program_files(base))
 
 

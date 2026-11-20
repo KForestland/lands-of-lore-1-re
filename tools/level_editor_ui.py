@@ -15,6 +15,10 @@ CONTROLS = """
 <label>South <select aria-label="South wall"></select></label>
 <label>West <select aria-label="West wall"></select></label>
 </fieldset>
+<div id="edit-door" hidden>
+<label for="edit-door-state">Stored door state</label><select id="edit-door-state">
+<option value="">Choose a state</option><option value="closed">Closed</option><option value="open">Open</option>
+</select></div>
 <label for="edit-item">Placed item</label><select id="edit-item"></select>
 <p class="muted">Items placed by other scripts remain on the plan as read-only markers.</p>
 <p id="edit-position" class="muted" role="status" hidden></p>
@@ -22,6 +26,20 @@ CONTROLS = """
 <button id="edit-remove" disabled>Remove item</button></div>
 <label for="edit-type">Item type to add</label><select id="edit-type"></select>
 <div class="edit-buttons"><button id="edit-add" disabled>Add to square</button></div>
+<label for="edit-monster">Monster placement</label><select id="edit-monster"></select>
+<fieldset id="edit-monster-fields" disabled><legend>Monster location and type</legend>
+<div class="edit-position-fields">
+<label>Square <input id="edit-monster-square" type="number" min="0" max="1023" step="1"></label>
+<label>X <input id="edit-monster-x" type="number" min="0" max="255" step="1"></label>
+<label>Y <input id="edit-monster-y" type="number" min="0" max="255" step="1"></label>
+</div>
+<label>Facing <select id="edit-monster-facing">
+<option value="0">North</option><option value="1">East</option>
+<option value="2">South</option><option value="3">West</option></select></label>
+<label>Type <select id="edit-monster-type"></select></label>
+<div class="edit-buttons"><button id="edit-monster-square-use" type="button">Use selected square</button>
+<button id="edit-monster-stage" type="button">Stage monster edit</button></div>
+</fieldset>
 <p id="edit-count" role="status"></p>
 <div class="edit-buttons"><button id="edit-export">Download changes</button>
 <button id="edit-reset" disabled>Clear edits</button></div>
@@ -35,9 +53,11 @@ STYLE = """
 #editor fieldset select{margin-bottom:.4rem}#editor label{font-size:.9rem}
 .edit-buttons{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.65rem}
 .edit-buttons button{font-size:.87rem}#edit-count{font-weight:600}
-.editing .editable-item,.editing .editable-item + .num{display:none}
+#editor .edit-position-fields{display:grid;grid-template-columns:2fr 1fr 1fr;gap:.35rem}
+.editing .editable-item,.editing .editable-item + .num,.editing .editable-monster,.editing .editable-monster + .num{display:none}
 .editing .read-only-item:not(.chosen){opacity:.65}
 #edit-overlay{pointer-events:none}
+@media(min-width:950px){main figure{position:sticky;top:.5rem;align-self:start}}
 """
 
 SCRIPT = """
@@ -56,6 +76,12 @@ const original = new Map(model.items.map(([site, type, block, x, y, height]) => 
 const pending = new Map();
 const added = new Map();
 const walls = new Map();
+const originalMonsters = new Map(model.monsters.map(([file, site, ...values]) => [file + ':' + site, values]));
+const pendingMonsters = new Map();
+const monster = button('monster');
+const monsterFields = ['square', 'x', 'y', 'facing', 'type'].map(name => button('monster-' + name));
+const door = button('door-state');
+let doorPair = null;
 const svgNS = 'http://www.w3.org/2000/svg';
 let square = null, nextItem = -1;
 const overlay = document.createElementNS(svgNS, 'g');
@@ -103,6 +129,20 @@ function renderEdits() {
         label.textContent = 'I' + item.type;
         overlay.append(label);
     }
+    for (const [key, before] of originalMonsters) {
+        const [block, x, y, facing, type] = pendingMonsters.get(key) || before;
+        const [left, top, size] = point(block);
+        const cx = left + size * (.18 + x / 400), cy = top + size * (.18 + y / 400);
+        overlay.append(element('circle', {cx, cy, class: key === monster.value ? 'marker chosen' : 'marker', fill:'#ffadbb'}));
+        const label = element('text', {x:cx, y:cy, class:'num', dx:'.5em', dy:'-.5em'});
+        label.textContent = 'M' + type;
+        overlay.append(label);
+        if (key === monster.value) {
+            const [dx, dy] = [[0,-1],[1,0],[0,1],[-1,0]][facing];
+            overlay.append(element('line', {x1:cx, y1:cy, x2:cx+dx*size*.24, y2:cy+dy*size*.24,
+                                            stroke:'#ffadbb', 'stroke-width':2}));
+        }
+    }
 }
 function syncButtons() {
     const chosen = placed.value !== '';
@@ -116,10 +156,12 @@ function syncButtons() {
     button('move').disabled = square === null || !chosen;
     button('remove').disabled = !chosen;
     button('add').disabled = square === null || types.value === '';
-    button('reset').disabled = !(walls.size || pending.size || added.size);
+    button('reset').disabled = !(walls.size || pending.size || added.size || pendingMonsters.size);
+    button('monster-square-use').disabled = square === null;
     const count = (n, one, many) => n + ' ' + (n === 1 ? one : many);
     button('count').textContent = count(walls.size, 'square edited', 'squares edited') + ' · ' +
-        count(pending.size + added.size, 'item edit', 'item edits');
+        count(pending.size + added.size, 'item edit', 'item edits') + ' · ' +
+        count(pendingMonsters.size, 'monster edit', 'monster edits');
     renderEdits();
 }
 function updateItems(preferred = placed.value) {
@@ -128,6 +170,34 @@ function updateItems(preferred = placed.value) {
             (names.get(row.type) || 'Item ' + row.type) + ' · square ' + row.block, row.site)));
     if ([...placed.options].some(option => option.value === preferred)) placed.value = preferred;
     syncButtons();
+}
+function updateMonsters() {
+    const picked = monster.value;
+    monster.replaceChildren(new Option('Choose a placement', ''), ...[...originalMonsters].map(([key, values]) => {
+        const [block, , , , type] = pendingMonsters.get(key) || values;
+        return new Option(key + ' · type ' + type + ' · square ' + block, key);
+    }));
+    monster.value = picked;
+    selectMonster();
+}
+function selectMonster() {
+    const before = originalMonsters.get(monster.value);
+    button('monster-fields').disabled = !before;
+    if (before) {
+        const values = pendingMonsters.get(monster.value) || before;
+        const types = [...new Set([...model.monster_types, before[4]])].sort((a, b) => a - b);
+        monsterFields[4].replaceChildren(...types.map(type => new Option('Type ' + type, type)));
+        monsterFields.forEach((field, i) => field.value = values[i]);
+    }
+    syncButtons();
+}
+function updateDoor(values) {
+    const side = values && (wallTypes.get(values[0])?.[4] & 8 ? 0 : 1);
+    const id = values?.[side];
+    const ends = model.doors[id];
+    doorPair = ends && id === values[side ^ 2] ? {side, ends} : null;
+    button('door').hidden = !doorPair;
+    door.value = doorPair ? (id === ends[0] ? 'closed' : id === ends[1] ? 'open' : '') : '';
 }
 function updateSquare(block) {
     square = Number.isInteger(block) && block >= 0 && block < 1024 ? block : null;
@@ -141,6 +211,7 @@ function updateSquare(block) {
         if (!wallTypes.has(id)) field.add(new Option(id + ' · Stored wall without a local definition', id));
         field.value = String(id);
     });
+    updateDoor(values);
     syncButtons();
 }
 
@@ -154,13 +225,37 @@ button('toggle').onclick = () => {
 document.addEventListener('plan-selected', event => {
     const id = event.detail;
     if (id.startsWith('block-')) updateSquare(Number(id.slice(6)));
+    const key = model.monster_markers[id];
+    if (key) {
+        monster.value = key;
+        selectMonster();
+    }
 });
 squareField.onchange = () => updateSquare(squareField.valueAsNumber);
 wallPanel.onchange = () => {
     const values = wallFields.map(field => Number(field.value));
     if (values.every((id, k) => id === model.squares[square][k])) walls.delete(square);
     else walls.set(square, values);
+    updateDoor(values);
     syncButtons();
+};
+door.onchange = () => {
+    if (!doorPair || !door.value) return;
+    const {side, ends} = doorPair;
+    wallFields[side].value = wallFields[side ^ 2].value = ends[Number(door.value === 'open')];
+    wallPanel.onchange();
+};
+monster.onchange = selectMonster;
+button('monster-square-use').onclick = () => {
+    button('monster-square').value = square;
+};
+button('monster-stage').onclick = () => {
+    const invalid = monsterFields.find(field => !field.value || !field.checkValidity());
+    if (invalid) { invalid.reportValidity(); return; }
+    const values = monsterFields.map(field => Number(field.value));
+    if (values.every((value, i) => originalMonsters.get(monster.value)[i] === value)) pendingMonsters.delete(monster.value);
+    else pendingMonsters.set(monster.value, values);
+    updateMonsters();
 };
 types.replaceChildren(new Option('Choose an item type', ''),
     ...model.names.map(([id, name]) => new Option(name + ' · type ' + id, id)));
@@ -184,16 +279,23 @@ button('add').onclick = () => {
     updateItems(String(site));
 };
 button('reset').onclick = () => {
-    walls.clear(); pending.clear(); added.clear();
+    walls.clear(); pending.clear(); added.clear(); pendingMonsters.clear();
+    updateMonsters();
     updateSquare(square);
     updateItems('');
 };
 function changeFile() {
+    const monsters = {INI: [], INF: []};
+    for (const [key, values] of pendingMonsters) {
+        const [file, site] = key.split(':');
+        monsters[file].push([Number(site), values]);
+    }
     return {
         format: model.format, level: model.level, source: model.source,
         walls: [...walls].sort((a,b) => a[0]-b[0]),
         items: [...pending].sort((a,b) => a[0]-b[0]),
-        add: [...added.values()].map(({type, block}) => [type, block])
+        add: [...added.values()].map(({type, block}) => [type, block]),
+        monsters
     };
 }
 button('export').onclick = () => {
@@ -206,6 +308,7 @@ button('export').onclick = () => {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 updateItems();
+updateMonsters();
 }
 """
 
