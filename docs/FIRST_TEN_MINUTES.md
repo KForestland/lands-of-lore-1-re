@@ -88,7 +88,7 @@ Linux
 xdg-open "$out/plans/level01.html"
 ```
 
-Click a region or placement to see its details. Turn on **Map numbers**
+Click a square or a marker to see its details. Turn on **Map numbers**
 to show the placement numbers. To repeat the command, choose a new
 subfolder such as `plans-2` in both lines.
 

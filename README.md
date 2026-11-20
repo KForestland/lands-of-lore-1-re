@@ -11,7 +11,7 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 - **What this is:** documentation of every type of data file and the main rules of the original 1993 DOS game (CD and floppy editions), checked against the game files and the original program.
 - **What you can do today:** read every file type with a tool (pictures, sprites, animations, sound, speech, music, fonts, text, maps, scripts, saves), draw any level, disassemble every level script, and look up how combat, magic and monsters work.
 - **Start in five minutes:** the [Quick start](#quick-start-5-minutes) below, then [Start here, by goal](docs/START_HERE.md), [How the game works](docs/HOW_THE_GAME_WORKS.md) or the [worked example](docs/tutorial-one-event.md).
-- **Recipes:** [cookbook](docs/COOKBOOK.md), eight short runs with the command and the first lines it prints.
+- **Recipes:** [cookbook](docs/COOKBOOK.md), short recipes with the command and the first lines it prints.
 - **Change the game, safely:** [change a number in your own copy](#change-a-number-in-your-own-copy) with the mod kit, share it as a small [patch](docs/formats/patch.md) that can be undone, or change a field in a copy of a save; your game folder is only read.
 - **Patches:** [original faults and the item-name spelling patch](patches/README.md).
 - **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md) and counted in the [rating](#rating). Some questions need a test in the running original game (a *probe*); [NEEDS_A_RUNNING_GAME](docs/NEEDS_A_RUNNING_GAME.md) lists them and which are answered. Some probes were also tried on [edited saves](docs/EDITED_SAVES.md), copies of a game-written save with a few bytes changed.
@@ -43,7 +43,7 @@ git clone https://github.com/KForestland/lands-of-lore-1-re.git
 cd lands-of-lore-1-re
 python3 -m venv .venv && . .venv/bin/activate
 python3 -m pip install -r requirements.txt
-export LOL1_DATA="/path/to/your/LOL1/DATA"      # the folder holding GENERAL.PAK (CD: DATA; floppy: the install folder)
+export LOL1_DATA="/path/to/your/LOL1/DATA"      # the folder holding GENERAL.PAK (CD: DATA inside the install folder, which also holds INSTALL.EXE and README.ENG that two checks read; floppy: the install folder)
 python3 tools/check_all.py --quick              # lists the checks it skips
 python3 tools/check_all.py                      # full suite of 49 checks
 python3 -m unittest discover -s tests
@@ -103,7 +103,7 @@ A saved game can be changed in a copy too: `python3 tools/save_edit.py set "/pat
 
 - **One page per file format** in [`docs/formats/`](docs/formats/README.md): layout, a worked example with real bytes, which part of the game reads it, and how it was checked.
 - **How the game works**: [`docs/HOW_THE_GAME_WORKS.md`](docs/HOW_THE_GAME_WORKS.md), with the details in [scripts](docs/emc2_scripts.md), [rules](docs/game_rules.md), [tables in the program](docs/executable_tables.md) and [save files](docs/savegame_format.md).
-- **Tools** in [`tools/`](tools/README.md): a reader for every format, map and sprite renderers, a script disassembler, text and sound extractors. Each has `--help`, writes only where you tell it, and has a `--check` that tests it against every file of its kind (the script disassembler is tested by `tests/test_emc2_corpus.py` instead).
+- **Tools** in [`tools/`](tools/README.md): a reader for every format, map and sprite renderers, a script disassembler, text and sound extractors. Each has `--help`, writes only where you tell it, and the readers have a `--check` that tests it against every file of its kind (the script disassembler is tested by `tests/test_emc2_corpus.py` instead).
 - **[Level sheets](docs/levels/README.md)**: one page per level, made from its files: graphics, wall types, clickable walls, every script entry with a one-line description, items and monsters placed, automap legend.
 - **[Start here, by goal](docs/START_HERE.md)** and a **[glossary](docs/GLOSSARY.md)**.
 

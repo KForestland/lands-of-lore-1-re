@@ -26,7 +26,7 @@ A dated snapshot; the work continues and the table below is kept current.
 
 - **Known.** Every file in the CD `DATA` folder has its whole layout read by a tool here (199 of 199, the six blend tables included since 20 November; see [how we rate](HOW_WE_RATE.md)). All 192 CD script functions have a verdict from the original program's own handlers ([native handlers](emc2_native_handlers.md)). Every level change and door call is listed with its guarding conditions ([progression](PROGRESSION.md)).
 - **Open.** 6 of 18 numbered questions are not fully answered: Q1 (floppy shape headers), Q7 (monster mode frames and wall bit 0x40), Q10 (the finale's row-40 file), Q14 (three palette files), Q17 and Q18 (save bytes and fight fields read in play) ([open questions](OPEN_QUESTIONS.md)).
-- **Tests a reader with the game can run.** Each open point that needs the running game has its test, the save it needs and what a run on 20 November did and did not show ([running-game probes](NEEDS_A_RUNNING_GAME.md)); runs from 20 November 08:41 UTC on follow the [launch-record rule](NEEDS_A_RUNNING_GAME.md#launch-record-rule-and-the-runs-of-20-november).
+- **Tests a reader with the game can run.** Each open point that needs the running game has its test, the save it needs and what a run on 20 November did and did not show ([running-game probes](NEEDS_A_RUNNING_GAME.md)).
 - **Tools for your own copy.** Change text or numbers with the mod kit, make and undo patches, edit a saved game, and open interactive level plans: start with the [first ten minutes](FIRST_TEN_MINUTES.md) page or `python3 tools/lol.py`. Known original faults and the one shipped fix: [patches](../patches/README.md). What these pages got wrong: [corrections](CORRECTIONS.md).
 
 ## File formats
@@ -85,7 +85,7 @@ Pages: [executable_tables.md](executable_tables.md), [savegame_format.md](savega
 
 ## Tools
 
-All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given an output option (`--out`, `--out-dir`, `--png`, `--wav`; `emc2_decompile.py` uses `-o`/`--output`), and has a `--check`, except `emc2_decompile.py`, which `tests/test_emc2_corpus.py` checks on every script; `tools/check_all.py` runs the 48 checks.
+All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given an output option (`--out`, `--out-dir`, `--png`, `--wav`; `emc2_decompile.py` uses `-o`/`--output`), and has a `--check`, except `emc2_decompile.py`, which `tests/test_emc2_corpus.py` checks on every script; `tools/check_all.py` runs the 49 checks.
 
 ## Corrections to the closure memo
 

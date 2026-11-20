@@ -416,6 +416,7 @@
         "tools/level_renderer.py",
         "tools/level_report.py",
         "tools/pak_reader.py",
+        "tools/save_edit.py",
         "tools/save_reader.py",
         "tools/shp_renderer.py",
         "tools/tileset_mapper.py",
