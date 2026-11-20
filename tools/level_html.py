@@ -100,6 +100,7 @@ function select(id) {
         details.append(term, description);
     }
     if ([...results.options].some(option => option.value === id)) results.value = id;
+    document.dispatchEvent(new CustomEvent('plan-selected', {detail: id}));
 }
 function update() {
     const wanted = query.value.trim().toLowerCase();
@@ -155,6 +156,7 @@ class Plan:
         self.title, self.source = title, source
         self.shapes, self.records, self.legend = [], [], {}
         self.counts = Counter()
+        self.edit_controls = self.edit_script = ""
         self.fixed = fixed
         x, y = zip(*points)
         self.left, self.top, self.bottom = min(x), max(y), min(y)
@@ -186,11 +188,12 @@ class Plan:
     def line(self, points, style):
         self.shapes.append(f'<polyline class="{style}" points="{self.points(points)}"/>')
 
-    def dot(self, xy, key, label, kind, details, color, number):
+    def dot(self, xy, key, label, kind, details, color, number, *, layer=""):
         self.note(key, label, kind, details)
         self.legend[kind] = color
         x, y = self.point(xy)
-        self.shapes.append(f'<circle id="{key}" class="hit marker" cx="{x:.3f}" cy="{y:.3f}" r="3.1" fill="{color}"/>'
+        classes = f"hit marker {layer}" if layer else "hit marker"
+        self.shapes.append(f'<circle id="{key}" class="{classes}" cx="{x:.3f}" cy="{y:.3f}" r="3.1" fill="{color}"/>'
                            f'<text class="num" x="{x:.3f}" y="{y:.3f}" dx=".5em" dy="-.5em">{escape(str(number))}</text>')
 
     def render(self):
@@ -214,6 +217,7 @@ class Plan:
 <figcaption class="legend">{legends}</figcaption>
 </figure>
 <aside>
+{self.edit_controls}
 <h2>Find on the plan</h2>
 <label for="filter">Show</label><select id="filter"><option value="">Everything</option>{options}</select>
 <label for="query">Name or number</label><input id="query" type="search" placeholder="Filter the list">
@@ -226,6 +230,7 @@ class Plan:
 <footer>{source}</footer>
 <script id="records" type="application/json">{records}</script>
 <script>{SCRIPT}</script>
+{self.edit_script}
 </html>
 """
 

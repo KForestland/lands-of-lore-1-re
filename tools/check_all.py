@@ -13,7 +13,7 @@ READERS = ["pak_reader", "lol1_pak_writer", "pak_indexer", "tlk_verify", "decode
            "fnt_reader", "xxx_reader", "dat_reader", "tlc_reader", "vcn_vmp_reader",
            "wll_parser", "cmz_analyzer", "lol1_level_writer", "tileset_mapper", "level_renderer", "shp_renderer",
            "wsa_extract", "extract_dialogue", "decode_dialogue", "extract_music", "adl_to_midi", "parse_tim", "lol1_script_writer",
-           "save_reader", "xmi_to_midi", "lol1_xmi_writer", "level_viewer", "level_report", "lol1_progression", "repo_guard", "rating", "example_images",
+           "save_reader", "xmi_to_midi", "lol1_xmi_writer", "level_viewer", "level_edit", "level_report", "lol1_progression", "repo_guard", "edition", "rating", "example_images",
            "lol1_name_callers", "lol1_tim_words", "lol1_driver_tables", "lol1_loose", "exe_tables", "palette_reader", "doc_index", "doc_links", "doc_format_offsets", "monster_reference_scan", "lol1_numbers", "lol1_mode_paths", "lol1_attack_types", "modkit"]
 
 QUICK_SKIP = {"lol1_compression_writer", "lol1_progression"}

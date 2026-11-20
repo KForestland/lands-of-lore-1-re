@@ -94,6 +94,8 @@ Click a square or a marker to see its details. Turn on **Map numbers**
 to show the placement numbers. To repeat the command, choose a new
 subfolder such as `plans-2` in both lines.
 
+[Edit walls and item placements](LEVEL_EDITOR.md) when you are ready to make a copy.
+
 ## Find another job
 
 Use the same Python command with `tools/lol.py` to list the jobs.

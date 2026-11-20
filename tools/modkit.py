@@ -7,7 +7,7 @@ import sys
 
 from cli_errors import run_cli
 from decode_dialogue import decode_string1, decode_string2, encode_string
-from lol1_level_writer import LANGUAGES, replace_string
+from lol1_level_writer import LANGUAGES, replace_string, validate_maze_edit
 from lol1_pak_writer import write_pak
 from lol1_script_writer import assemble, binary_strings, listing, write_strings
 from lol1lib import pak_entries
@@ -30,6 +30,11 @@ def sources(root):
 
 def is_loose(name):
     return False
+
+
+def patch_validator(key):
+    """Allow checked wall edits from the level editor without exposing CMZ in the mod kit."""
+    return validate_maze_edit if Path(key).suffix.upper() == ".CMZ" else None
 
 
 def members(raw):

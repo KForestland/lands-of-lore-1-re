@@ -60,12 +60,13 @@ EVAL = {8: lambda b, a: b + a, 9: lambda b, a: b - a, 10: lambda b, a: b * a, 12
         13: lambda b, a: b << a, 14: lambda b, a: b & a, 15: lambda b, a: b | a, 17: lambda b, a: b ^ a}
 
 
-def simulate(script, start, stop, caller=None, depth=0, budget=None):
+def simulate(script, start, stop, caller=None, depth=0, budget=None, *, with_sites=False):
     """Walk instructions from DATA word `start` (exclusive) up to `stop`, with a
     small stack model: constants are tracked, other values are None. A call into
     a subroutine (pushRetOrPos 1 + jmp, engines/kyra/script/script.cpp:236-251)
     is followed one level deep; there `pushBPAdd k` reads the caller's k-th-last
-    push (stack[bp + k - 1], script.cpp:265-267). Returns [(function id, args)]."""
+    push (stack[bp + k - 1], script.cpp:265-267). Returns (function ID, arguments) pairs.
+    With with_sites, each result also holds the syscall's DATA word address."""
     ins = script.instructions
     at = script._addr_index
     budget = budget if budget is not None else [4000]
@@ -88,7 +89,7 @@ def simulate(script, start, stop, caller=None, depth=0, budget=None):
         elif op == 2 and arg == 1:
             nxt = ins[k + 1] if k + 1 < len(ins) else None
             if nxt is not None and nxt.opcode == 0 and depth < 1:
-                calls += simulate(script, nxt.argument - 1, None, list(stack), depth + 1, budget)
+                calls += simulate(script, nxt.argument - 1, None, list(stack), depth + 1, budget, with_sites=with_sites)
                 k += 2
                 continue
             stack.clear()
@@ -100,7 +101,8 @@ def simulate(script, start, stop, caller=None, depth=0, budget=None):
         elif op == 14:
             n = ins[k + 1].argument if k + 1 < len(ins) and ins[k + 1].opcode == 12 else 0
             args = list(reversed(stack[-n:])) if n else []
-            calls.append((arg, args + [None] * (n - len(args))))
+            args += [None] * (n - len(args))
+            calls.append((arg, args, x.address) if with_sites else (arg, args))
         elif op == 12:
             if arg:
                 del stack[-arg:]
@@ -114,14 +116,14 @@ def simulate(script, start, stop, caller=None, depth=0, budget=None):
     return calls
 
 
-def calls_by_entry(script):
-    """{entry number: (event mask, [(function id, [args or None])])}."""
+def calls_by_entry(script, *, with_sites=False):
+    """Group calls by entry number, keeping each event mask and optionally call addresses."""
     object.__setattr__(script, "_addr_index", {x.address: k for k, x in enumerate(script.instructions)})
     starts = sorted(script.entries)            # header word addresses
     out = {}
     for k, h in enumerate(starts):
         stop = starts[k + 1] if k + 1 < len(starts) else len(script.words)
-        calls = simulate(script, h, stop)
+        calls = simulate(script, h, stop, with_sites=with_sites)
         mask = script.words[h]
         for e in script.entries[h]:
             out[e] = (mask, calls)

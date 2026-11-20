@@ -8,10 +8,12 @@ The numeric tables can be regenerated with `python3 tools/lol1_numbers.py`. On t
 
 The `lol.py` job menu opens with `python tools/lol.py`. Add `JOB --help`
 to see the job's options. `level_viewer.py` writes an offline HTML plan with clickable details using `level_html.py`.
-Use `level_viewer.py --check` to write and read back one plan in a temporary folder.
+Use `level_viewer.py --check` to write and read back one plan in a temporary folder. [Level editor](../docs/LEVEL_EDITOR.md) documents `level_edit.py` and its patch and undo output.
 
 [First ten minutes](../docs/FIRST_TEN_MINUTES.md) ·
 [Interactive plans](../docs/COOKBOOK.md#open-an-interactive-level-plan)
+
+`edition.py` reads names, file sizes and SHA-256 to identify a measured game copy. `--check` verifies the full fingerprint in `check_all.py`. [Edition fingerprints](../docs/EDITIONS.md)
 
 ## Setup
 
@@ -83,14 +85,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (50 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (52 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
 
 ```
 $ python3 tools/check_all.py | sed -n '1,3p;$p'
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 50 CHECKS PASSED
+ALL 52 CHECKS PASSED
 ```
 
 ### `modkit.py`

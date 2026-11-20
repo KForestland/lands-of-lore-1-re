@@ -132,3 +132,5 @@ These words mean the same thing in the notes for all three Lands of Lore games.
 | Output folder | A directory you choose for the files a tool writes. The level and media tools use a new folder outside the game and the repository. |
 | Computed | The static walkthrough could not produce a constant argument or condition from this script. |
 | DATA word | A two-byte position in the script's DATA chunk. The plan shows it in hexadecimal so you can find the entry in a script listing. |
+| Edition fingerprint | A group of file names, byte counts and full SHA-256 checksums used to identify a measured release. See [Editions](EDITIONS.md). |
+| Level change file | The small download from the level editor. It gives edited walls and item placements plus checksums of the source level members. See [Level editor](LEVEL_EDITOR.md). |

@@ -65,6 +65,10 @@ LOL1_DETECTION_FILES = {
 }
 
 
+class PatchLimitError(ValueError):
+    """The change cannot fit the shared patch format's limits."""
+
+
 def plural(count, word):
     return f"{count:,} {word}" + ("" if count == 1 else "s")
 
@@ -174,7 +178,7 @@ def check_document(patch):
     if not isinstance(changes, list) or not changes:
         raise ValueError("the patch has no changes")
     if len(changes) > MAX_CHANGES:
-        raise ValueError(f"the patch has {len(changes):,} changes; the limit is {MAX_CHANGES:,}")
+        raise PatchLimitError(f"the patch has {len(changes):,} changes; the limit is {MAX_CHANGES:,}")
     span, total = LIMITS[kind]
     sizes = [0, 0]
     groups = defaultdict(lambda: defaultdict(list))
@@ -200,13 +204,14 @@ def check_document(patch):
             raise ValueError(f"{where}: a program change uses entry 0 and replaces bytes "
                              "with the same number of bytes")
         if max(len(old), len(new)) > span:
-            raise ValueError(f"{where} ({file} +{offset:#x}) has {max(len(old), len(new))} bytes; "
-                             f"a {kind} patch allows at most {span} bytes per change")
+            raise PatchLimitError(f"{where} ({file}, entry {entry}, entry-relative offset +{offset:#x}) "
+                                  f"has {max(len(old), len(new))} bytes; "
+                                  f"a {kind} patch allows at most {span} bytes per change")
         sizes[0] += len(old)
         sizes[1] += len(new)
         if max(sizes) > total:
-            raise ValueError(f"the patch carries more than {total:,} bytes of old or new values; "
-                             f"a {kind} patch allows at most {total:,} of each")
+            raise PatchLimitError(f"the patch carries more than {total:,} bytes of old or new values; "
+                                  f"a {kind} patch allows at most {total:,} of each")
         groups[file][entry].append((offset, old, new))
     if kind == "program":
         programs = patch["sha256"]
@@ -251,19 +256,25 @@ def splice(name, entry, blob, changes):
 def edit_archive(name, original, entries):
     rows = core.archive_parts(adapter, name, original)
     changes, undo = {}, []
+    validator_for = getattr(adapter, "patch_validator", None)
     for index, edits in sorted(entries.items()):
         if not 0 <= index < len(rows):
             raise ValueError(f"{name} has no entry {index}; the patch is for another version")
         key, _, blob = rows[index]
-        before = adapter.view(name, key, blob)
-        if before is None:
-            raise ValueError(f"{name} entry {index} is not a table or text the mod kit can edit")
-        edited, reverse = splice(name, index, blob, edits)
-        after = adapter.view(name, key, edited)
-        if (after is None or before[0] != after[0]
-                or adapter.encode(name, key, blob, *after) != edited
-                or adapter.encode(name, key, edited, *before) != blob):
-            raise ValueError(f"{name} entry {index}: the change goes outside the fields the mod kit edits")
+        validate = validator_for(key) if validator_for else None
+        if validate:
+            edited, reverse = splice(name, index, blob, edits)
+            validate(blob, edited)
+        else:
+            before = adapter.view(name, key, blob)
+            if before is None:
+                raise ValueError(f"{name} entry {index} is not a table or text the mod kit can edit")
+            edited, reverse = splice(name, index, blob, edits)
+            after = adapter.view(name, key, edited)
+            if (after is None or before[0] != after[0]
+                    or adapter.encode(name, key, blob, *after) != edited
+                    or adapter.encode(name, key, edited, *before) != blob):
+                raise ValueError(f"{name} entry {index}: the change goes outside the fields the mod kit edits")
         changes[index] = edited
         undo.extend(reverse)
     return core.replace_members(adapter, name, original, rows, changes), undo
@@ -298,8 +309,8 @@ def byte_deltas(name, index, old, new):
             yield record(name, index, start, old[start:], new[start:])
         return
     if max(len(old), len(new)) > MAX_RESIZED:
-        raise ValueError(f"{name} entry {index} changed size and is larger than {MAX_RESIZED:,} "
-                         "bytes; keep its length or make a smaller edit")
+        raise PatchLimitError(f"{name} entry {index} changed size and is larger than {MAX_RESIZED:,} "
+                              "bytes; keep its length or make a smaller edit")
     for change, a, b, c, d in SequenceMatcher(None, old, new).get_opcodes():
         if change != "equal":
             yield record(name, index, a, old[a:b], new[c:d])

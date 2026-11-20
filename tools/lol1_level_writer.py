@@ -5,8 +5,9 @@ A CMZ is rebuilt from its parsed fields and the parsed Frame4 packets of the
 original: byte-identical because those packet choices are kept
 (lol1_compression_writer's encoder is decode-identical only). Level 24's five
 extra bytes per block are kept verbatim, unparsed (meaning open, docs/unknowns/03).
-An edited field that the packets no longer decode to is compressed afresh."""
+Edited wall fields keep the packets that still decode to the intended bytes."""
 from collections import Counter
+from itertools import groupby
 from pathlib import Path
 import struct
 
@@ -92,6 +93,51 @@ def parse_maze(blob):
     return header, palette, (first, second, stride), rows, storage
 
 
+def copy_packet(at, source, length):
+    distance = at - source
+    if length <= 10 and 0 < distance <= 0xFFF:
+        return ("relative", length, distance)
+    if length <= 64:
+        return ("absolute", length, source)
+    return ("long", length, source)
+
+
+def update_frame4(packets, raw):
+    """Keep the original packets that still decode to the requested bytes."""
+    result = bytearray()
+    at = 0
+    for packet in packets:
+        kind, *params = packet
+        if kind == "end":
+            break
+        length = len(params[0]) if kind == "literal" else params[0]
+        part = raw[at:at + length]
+        if kind == "literal":
+            result.extend(write_frame4([("literal", part)], b""))
+        else:
+            source = at - params[1] if kind == "relative" else params[1]
+            reference = bytes([params[1]]) * length if kind == "fill" else raw[source:source + length]
+            if reference == part:
+                result.extend(write_frame4([packet], b""))
+            else:
+                other = raw.find(part, 0, at + length - 1) if length >= 3 else -1
+                if 0 <= other < at:
+                    result.extend(write_frame4([copy_packet(at, other, length)], b""))
+                else:
+                    start = 0
+                    for same, run in groupby(a == b for a, b in zip(part, reference)):
+                        width = sum(1 for _ in run)
+                        if same and kind != "fill" and width >= 3:
+                            kept = copy_packet(at + start, source + start, width)
+                            result.extend(write_frame4([kept], b""))
+                        else:
+                            result.extend(encode_frame4(part[start:start + width])[:-1])
+                        start += width
+        at += length
+    result.append(0x80)
+    return bytes(result)
+
+
 def write_maze(fields):
     header, palette, grid, rows, (packets, tail) = fields
     raw = struct.pack("<3H", *grid) + b"".join(bytes(walls) + unknown for walls, unknown in rows)
@@ -101,13 +147,26 @@ def write_maze(fields):
     else:
         stored = write_frame4(packets, tail)
         if L.decode_frame4(stored, len(raw)) != raw:
-            # An edited field: the original packet choices no longer fit, so
-            # compress afresh (decode-identical, not the original bytes).
-            stored = encode_frame4(raw)
+            stored = update_frame4(packets, raw)
             verified_frame4(stored, raw)
             stored += tail
             size = 8 + len(palette) + len(stored)
     return struct.pack("<HBBIH", size, header["comp_type"], header["byte3"], len(raw), len(palette)) + palette + stored
+
+
+def validate_maze_edit(original, edited):
+    """Only decoded wall bytes may differ. Frame4 packet choices can change."""
+    def unchanged_fields(raw):
+        header, palette, grid, rows, (_, tail) = parse_maze(raw)
+        if header["size_field"] != len(raw) - 2:
+            raise ValueError("The CMZ size field disagrees with its length.")
+        stable = (raw[2:10], palette, grid, tuple(extra for _, extra in rows), tail)
+        return stable, tuple(walls for walls, _ in rows)
+
+    before, walls = unchanged_fields(original)
+    after, new_walls = unchanged_fields(edited)
+    if before != after or walls == new_walls:
+        raise ValueError("The CMZ patch must change only the four wall types per square.")
 
 
 def replace_string(fields, index, text):

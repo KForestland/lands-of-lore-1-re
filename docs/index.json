@@ -238,6 +238,15 @@
       "tools": []
     },
     {
+      "path": "docs/EDITIONS.md",
+      "title": "Identify your edition",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/edition.py"
+      ]
+    },
+    {
       "path": "docs/FIRST_TEN_MINUTES.md",
       "title": "First ten minutes",
       "answers": [],
@@ -286,6 +295,16 @@
         "tools/lol1_blend_indices.py",
         "tools/lol1_loose.py",
         "tools/rating.py"
+      ]
+    },
+    {
+      "path": "docs/LEVEL_EDITOR.md",
+      "title": "Edit a level on its plan",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/level_edit.py",
+        "tools/lol.py"
       ]
     },
     {
@@ -510,6 +529,15 @@
         "tools/level_renderer.py",
         "tools/level_report.py",
         "tools/lol1_numbers.py"
+      ]
+    },
+    {
+      "path": "docs/UNUSED.md",
+      "title": "Unused content and development leftovers",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/lol1_loose.py"
       ]
     },
     {
@@ -1498,6 +1526,7 @@
         "tools/doc_format_offsets.py",
         "tools/doc_index.py",
         "tools/doc_links.py",
+        "tools/edition.py",
         "tools/emc2_decompile.py",
         "tools/example_images.py",
         "tools/exe_tables.py",
@@ -1505,6 +1534,7 @@
         "tools/extract_music.py",
         "tools/fnt_reader.py",
         "tools/full_report.py",
+        "tools/level_edit.py",
         "tools/level_html.py",
         "tools/level_renderer.py",
         "tools/level_report.py",

@@ -112,6 +112,13 @@ instead of bytes.
 
 ## LoL1
 
+The [level editor](../LEVEL_EDITOR.md) writes the same format with `--patch`.
+For `.CMZ` members, the tool checks that only the four decoded wall bytes
+per square change. It also preserves the palette, header fields other
+than the derived stored size, and extra bytes outside those wall fields.
+The original CMZ loaders at CD `MAIN.EXE+0x48540` and floppy `+0x51C10`
+read the four wall bytes. [CMZ layout](cmz.md)
+
 **File names** start at the folder holding the PAK archives: the CD's
 `DATA` folder, or the floppy game folder. If you give the folder above
 `DATA`, the tool uses `DATA`. An output folder inside the installation

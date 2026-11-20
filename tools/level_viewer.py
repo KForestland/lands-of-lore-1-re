@@ -10,6 +10,8 @@ from struct import iter_unpack
 from cli_errors import run_cli
 import decode_dialogue as text
 import emc2_decompile as emc
+from level_edit import editor_data, level_sources
+from level_editor_ui import sections
 from level_html import Plan, main
 from level_renderer import level_blocks, level_numbers, render_schematic
 from level_report import calls_by_entry, entry_label, events, item_names
@@ -47,13 +49,17 @@ def argument(values, i):
     return values[i] if i < len(values) and values[i] is not None else "computed"
 
 
-def place(plan, level, ext, entry, calls, items, counts):
-    for function, args in calls:
+def place(plan, level, ext, entry, calls, items, counts, edit_sites):
+    for function, args, site in calls:
+        layer = ""
         if function == 0x11:
             item, destination, block = (argument(args, i) for i in (0, 3, 4))
             kind = "Items"
             info = {"Item type": item, "Name": items.get(item, "Unknown"), "Level": destination, "Block": block}
             on_map = map_block(block) and destination == level
+            editable = ext == "INI" and entry == 1 and site in edit_sites
+            layer = "editable-item" if editable else "read-only-item"
+            info["Editor"] = "Editable initial placement" if editable else "Read-only script placement"
             color, prefix, x, y = "#79e3c8", "I", .68, .30
         elif function == 0x38:
             block = argument(args, 0)
@@ -73,7 +79,7 @@ def place(plan, level, ext, entry, calls, items, counts):
         info["Script entry"] = f"LEVEL{level}.{ext} entry {entry}"
         plan.legend[kind] = color
         if on_map:
-            plan.dot(spot(block, x, y), key, label, kind, info, color, f"{prefix}{slot}")
+            plan.dot(spot(block, x, y), key, label, kind, info, color, f"{prefix}{slot}", layer=layer)
         else:
             plan.note(key, label, kind, info)
 
@@ -110,6 +116,8 @@ def view(data, stem, gates):
                      "Squares", details, "cell exit-region" if block in linked else "cell")
 
     items, lands = names(data)
+    model = editor_data(dict(level_sources(data, level)), level, items)
+    edit_sites = {site for site, *_ in model["items"]}
     counts = defaultdict(int)
     for ext in ("INI", "INF"):
         raw = level_member(level, ext, data)
@@ -117,7 +125,7 @@ def view(data, stem, gates):
             continue
         script = emc.read_script(raw)
         addresses = {entry: word for word, entries in script.entries.items() for entry in entries}
-        for entry, (mask, calls) in sorted(calls_by_entry(script).items()):
+        for entry, (mask, calls) in sorted(calls_by_entry(script, with_sites=True).items()):
             key = f"{ext}-{entry}"
             label = f"{ext} entry {entry}"
             details = {"Entry": entry_label(entry, ext).replace("`", ""), "Events": events(mask, entry, ext),
@@ -126,7 +134,7 @@ def view(data, stem, gates):
                 plan.dot(spot(entry, .25, .72), key, label, "Script entries", details, "#aabdfa", entry)
             else:
                 plan.note(key, label, "Script entries", details)
-            place(plan, level, ext, entry, calls, items, counts)
+            place(plan, level, ext, entry, calls, items, counts, edit_sites)
 
     legend = level_member(level, "XXX", data) or b""
     for i, (x, y, shape, rx, ry, sid) in enumerate(iter_unpack("<6H", legend[:32*12]), 1):
@@ -143,6 +151,7 @@ def view(data, stem, gates):
                   {"Gate": row["conditions"], "Event": row["event"], "Entries": row["entries"],
                    "Destination square / facing": f"{block} / {facing}", "DATA word": f"{row['word']:#x}"},
                   target=f"block-{source}" if source is not None else None)
+    plan.edit_controls, plan.edit_script = sections(model, plan)
     return plan
 
 
