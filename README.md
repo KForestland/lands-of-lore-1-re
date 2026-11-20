@@ -24,7 +24,7 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- rating:begin -->
 - **Files read:** 193 of 199 files in the CD `DATA` folder (288.6 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 523 statements CONFIRMED (proved from the program code or the files) and 84 UNCONFIRMED (a reading not yet proved), on 97 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 524 statements CONFIRMED (proved from the program code or the files) and 85 UNCONFIRMED (a reading not yet proved), on 98 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->
@@ -40,14 +40,14 @@ python3 -m venv .venv && . .venv/bin/activate
 python3 -m pip install -r requirements.txt
 export LOL1_DATA="/path/to/your/LOL1/DATA"      # the folder holding GENERAL.PAK (CD: DATA; floppy: the install folder)
 python3 tools/check_all.py --quick              # lists the checks it skips
-python3 tools/check_all.py                      # full suite of 46 checks
+python3 tools/check_all.py                      # full suite of 47 checks
 python3 -m unittest discover -s tests
 python3 tools/level_renderer.py --level 1 --out ../maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0
 python3 tools/full_report.py --out "../lol1-out/report"
 ```
 
-On the reference CD installation, the full suite took about 73 seconds and `--quick` about 16; on the floppy edition, about 33 and 18. Quick mode skips the Frame4, WSA and SHP re-encoding check and prints each skip. Each run prints the time per check and the total. [Check audit](docs/CHECK_AUDIT.md)
+On the reference CD installation, the full suite took about 102 seconds and `--quick` about 16; on the floppy edition, about 59 and 19. Quick mode skips the Frame4, WSA and SHP re-encoding check and the progression walk, and prints each skip. Each run prints the time per check and the total. [Check audit](docs/CHECK_AUDIT.md)
 
 The dialogue command prints `[0] Welcome to Gladstone Keep.  King Richard awaits you in the throne room.` The report command writes an inventory, level sheets and text counts to the named folder. On Windows, use `py -3 -m venv .venv` and `.\.venv\Scripts\python.exe` in place of `python3`. Set `$env:LOL1_DATA = 'D:\Games\LoL1\DATA'` in PowerShell, or pass `--data` with a quoted folder path to each tool.
 

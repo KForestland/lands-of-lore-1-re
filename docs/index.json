@@ -313,6 +313,15 @@
       ]
     },
     {
+      "path": "docs/PROGRESSION.md",
+      "title": "Progression",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/lol1_progression.py"
+      ]
+    },
+    {
       "path": "docs/QUICK_REFERENCE.md",
       "title": "Format quick reference",
       "answers": [],
@@ -482,6 +491,7 @@
         "tools/lol1_loose.py",
         "tools/lol1_mode_paths.py",
         "tools/lol1_name_callers.py",
+        "tools/lol1_progression.py",
         "tools/lol1_tim_words.py",
         "tools/palette_reader.py",
         "tools/parse_tim.py",
@@ -1435,6 +1445,7 @@
         "tools/lol1_name_callers.py",
         "tools/lol1_numbers.py",
         "tools/lol1_pak_writer.py",
+        "tools/lol1_progression.py",
         "tools/lol1_script_writer.py",
         "tools/lol1_tim_words.py",
         "tools/lol1_xmi_writer.py",

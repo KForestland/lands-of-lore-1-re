@@ -76,14 +76,14 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (46 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` (47 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
 
 ```
 $ python3 tools/check_all.py | sed -n '1,3p;$p'
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 46 CHECKS PASSED
+ALL 47 CHECKS PASSED
 ```
 
 ### `doc_links.py`
@@ -299,6 +299,15 @@ A sheet per level made from its files: graphics loaded, wall types used, clickab
 $ python3 tools/level_report.py --level 1 | grep -E "^- Area|^\| block 621 "
 - Area (WLL header): 0 = KEEP (decorations `KEEP.SHP` / `.DAT`).
 | block 621 (x 13, y 19) | `0x12D2` | party steps in, wall clicked | moves the party to level 2, block 106, facing 2; ...
+```
+
+### `lol1_progression.py`
+
+The level-to-level table and the door calls, one row per static call with the entries that reach it and the tests that guard it. `--check` on the CD edition requires `docs/PROGRESSION.md` to equal the text it prints. On the floppy edition it still reads every level script and does not compare that page.
+
+```
+$ python3 tools/lol1_progression.py --check
+CHECK progression: 71 level changes, 136 door calls; docs/PROGRESSION.md matches
 ```
 
 ### `tlc_reader.py`
@@ -522,7 +531,7 @@ CHECK repo_guard: N tracked files; game files, converted media, stray PNGs, file
 
 ### `tests/test_emc2_corpus.py`
 
-Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last (46th) check.
+Disassembles every level and item script (60 per edition) and fails on any unknown opcode, function or branch target. `check_all.py` runs it as its last (47th) check.
 
 ```
 $ python3 tests/test_emc2_corpus.py
@@ -570,4 +579,4 @@ The check also runs in `check_all.py` and GitHub Actions. It needs no game data.
 
 `doc_format_offsets.py` checks six format-page offsets against the readers that decode those fields, using small synthetic files. It runs in `check_all.py` and needs no game data. [Check audit](../docs/CHECK_AUDIT.md)
 
-`check_all.py --quick` skips the Frame4, WSA and SHP re-encoding check. It lists each skip and reports the total elapsed time for the checks it ran.
+`check_all.py --quick` skips the Frame4, WSA and SHP re-encoding check and the progression walk. It lists each skip and reports the total elapsed time for the checks it ran.
