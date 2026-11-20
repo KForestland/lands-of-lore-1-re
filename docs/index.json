@@ -508,6 +508,15 @@
       ]
     },
     {
+      "path": "docs/TOOL_CHECK_AUDIT.md",
+      "title": "Reader tool check audit",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/doc_links.py"
+      ]
+    },
+    {
       "path": "docs/TOOL_MAKERS.md",
       "title": "Next steps for tool makers",
       "answers": [],

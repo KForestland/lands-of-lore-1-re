@@ -108,6 +108,15 @@ class ModKit(unittest.TestCase):
         target.write_bytes(bytes(damaged))
         self.assertIn("differs", self.run_kit("verify", self.game, self.work, out, ok=False))
 
+    def test_modified_entry_identity_is_refused(self):
+        edits = self.edits()
+        name, document = edit(edits)
+        document["entry"] += 1
+        self.save(name, document)
+        out = self.root / "out"
+        self.assertIn("identity differs", self.run_kit("build", self.game, self.work, out, ok=False))
+        self.assertFalse(out.exists())
+
     def test_refused_outputs(self):
         archives = self.root / "archives"
         archives.mkdir()

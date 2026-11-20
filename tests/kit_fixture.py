@@ -59,6 +59,11 @@ def make_fixture(game):
     return source_slot()
 
 
+def foreign_level_edit():
+    return {"format": "lol1-level-changes-1", "level": 1, "source": {},
+            "walls": [], "items": [], "add": [], "monsters": {}}
+
+
 def inspect_jobs(test):
     test.assertIn(TRANSLATE_FROM, test.job("text", "--data", test.data, "LANDS.ENG", "--index", "0"))
     out = test.root / "midi files"

@@ -7,8 +7,9 @@ from collections import Counter
 from pathlib import Path
 import sys
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from emc2_decompile import format_listing, pak_entries, read_entry, read_script
+from emc2_decompile import OPCODES, format_listing, pak_entries, read_entry, read_script
 
 
 EXPECTED = {"ITEM.INF", "ONETIME.INF"} | {
@@ -17,6 +18,9 @@ EXPECTED = {"ITEM.INF", "ONETIME.INF"} | {
 
 
 def check_corpus(root):
+    from tests.test_unused import summary
+
+    opcodes = set()
     counts = Counter()
     seen = set()
     for path in sorted(root.iterdir()):
@@ -35,6 +39,7 @@ def check_corpus(root):
             seen.add(name)
             try:
                 script = read_script(raw)
+                opcodes.update(instruction.opcode for instruction in script.instructions)
                 listing = "\n".join(format_listing(script, witness))
                 if name == "LEVEL1.INI":
                     # Original TEXT index 0 points to its first actual filename.
@@ -50,6 +55,9 @@ def check_corpus(root):
                           strings=len(script.strings))
     if seen != EXPECTED:
         raise ValueError(f"missing {sorted(EXPECTED - seen)}, unexpected {sorted(seen - EXPECTED)}")
+    documented, _, absent = summary()
+    if documented != len(opcodes) or absent != set(range(len(OPCODES))) - opcodes:
+        raise ValueError("UNUSED.md opcode claims differ from the corpus")
     return counts
 
 

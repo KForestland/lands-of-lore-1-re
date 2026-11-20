@@ -266,8 +266,8 @@ def check_plan(stem, plan):
     if '<svg id="map"' not in html or marker not in html or not plan.records or not plan.shapes:
         raise ValueError(f"{stem} did not produce a map with searchable entries.")
     rows = json.loads(html.split(marker, 1)[1].split("</script>", 1)[0])
-    if len(rows) != len(plan.records):
-        raise ValueError(f"{stem} page lost searchable entries.")
+    if rows != plan.records:
+        raise ValueError(f"{stem} page changed its searchable entries.")
     print(f"CHECK level viewer: {stem} page written and read back with {counted(len(rows), 'entry', 'entries')}.")
     return 0
 

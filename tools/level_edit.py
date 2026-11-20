@@ -435,7 +435,9 @@ def check(data):
             if len(sites) > 1:
                 edits.append([sites[1][0], None])
             changed = {**example, "walls": [[block, sides]], "items": edits, "add": [[121, block]], "monsters": {}}
-            apply(data, changed, folder / f"edit-{level}", share=True)
+            _, _, wall_count, _ = apply(data, changed, folder / f"edit-{level}", share=True)
+            if wall_count != 1:
+                raise ValueError(f"Level {level} did not apply the test wall edit.")
             if model["monsters"]:
                 extension, site, block, x, y, facing, kind = model["monsters"][0]
                 solid = solid_squares(parse_maze(source["CMZ"][2])[3], source["WLL"][2])

@@ -35,12 +35,12 @@ class ToolKit(unittest.TestCase):
         self.data = self.game / fixture.DATA
         self.base = self.data if fixture.DATA == "DATA" else self.game
 
-    def run_tool(self, tool, *args):
+    def run_tool(self, tool, *args, ok=True):
         env = dict(os.environ, PYTHONIOENCODING="utf-8")
         run = subprocess.run([sys.executable, str(TOOLS / tool), *map(str, args)],
                              capture_output=True, encoding="utf-8", env=env, cwd=self.root, timeout=90)
-        self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
-        return run.stdout
+        self.assertEqual(run.returncode == 0, ok, run.stdout + run.stderr)
+        return run.stdout if ok else run.stderr
 
     def job(self, *args):
         return self.run_tool("lol.py", *args)
@@ -107,6 +107,14 @@ class ToolKit(unittest.TestCase):
 
     def test_level_editor_check(self):
         self.assertIn("byte-identical", self.run_tool("level_edit.py", "--data", self.game, "--check"))
+
+    def test_level_editor_refuses_a_different_source(self):
+        edits = self.root / "foreign.json"
+        edits.write_text(json.dumps(fixture.foreign_level_edit()), encoding="utf-8")
+        out = self.root / "foreign result"
+        error = self.run_tool("level_edit.py", edits, "--data", self.data, "--out", out, ok=False)
+        self.assertIn("different", error)
+        self.assertFalse(out.exists())
 
     def test_level_viewer_check_and_page(self):
         if fixture.DATA == "DATA" and find_spec("PIL") is None:
