@@ -3,11 +3,12 @@ import pathlib
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "tools"))
 
 import page_facts
-from page_facts_auto import observed, probes
+from page_facts_auto import observed, probes, x86_operand
 
 
 class PageFactsTests(unittest.TestCase):
@@ -77,6 +78,37 @@ CONFIRMED `OUTSIDE.DAT` has 2 records.
             got = probes(body, dict(page_facts.measured_lines(body)), {})
             values = [observed(claim, original.parent, None, lambda root, name: root / name)[0] for claim in got]
             self.assertEqual(values, [b"\x02\0", ".odf"])
+
+
+    def test_common_citation_forms_read_the_independent_sources(self):
+        body = '''CONFIRMED. `EXAMPLE.DAT+0x0` holds `02 00`.
+The string `example` is stored at `EXAMPLE.DAT+0x2`.
+`EXAMPLE.DAT` (10 bytes) is the executable.
+`reader_demo.py --check` walks 34 rows.
+`-DEMO` occurs in `EXAMPLE.DAT`.
+The pointer is at `0x1234` (`0x1000`).
+'''
+        config = {"executable": "EXAMPLE.DAT", "loose_files": ["*.DAT"],
+                  "absolute_operands": True, "counts": {"reader_demo.py": {"rows": "entries"}}}
+        found = probes(body, dict(page_facts.measured_lines(body)), config)
+        self.assertEqual([claim.reader[0] for claim in found],
+                         ["bytes_at", "string_at", "file_size", "absolute_operand", "string_in", "check_count"])
+        with tempfile.TemporaryDirectory() as folder:
+            data = pathlib.Path(folder)
+            path = data / "EXAMPLE.DAT"
+            path.write_bytes(b"\x02\0example\0-DEMO\0")
+            file_for = lambda root, name: root / name
+            operand = lambda root, spec: (0x5678, "fixture instruction")
+            with patch("page_facts_auto.check_output", return_value="CHECK: 33 entries"):
+                values = [observed(claim, data, operand, file_for)[0] for claim in found]
+        self.assertEqual(values, [b"\x02\0", "example", 16, 0x5678, "-DEMO", 33])
+
+    def test_absolute_operands_use_the_original_instruction_width(self):
+        self.assertEqual(x86_operand(bytes.fromhex("68 34 12"), 2), 0x1234)
+        self.assertEqual(x86_operand(bytes.fromhex("8b 05 78 56 34 12"), 4), 0x12345678)
+        self.assertEqual(x86_operand(bytes.fromhex("c7 00 74 25 02 00"), 4), 0x22574)
+        with self.assertRaisesRegex(ValueError, "unsupported"):
+            x86_operand(bytes.fromhex("eb 00"), 4)
 
 
 if __name__ == "__main__":
