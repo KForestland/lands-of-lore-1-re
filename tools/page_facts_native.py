@@ -3,6 +3,7 @@ from functools import lru_cache
 from struct import unpack_from
 
 from cli_errors import game_path
+from page_facts_auto import x86_operand
 
 DATA_ENV = "LOL1_DATA"
 
@@ -19,7 +20,11 @@ def game_file(data, name):
     name = name.replace(chr(92), "/")
     if name.upper() == "MUSIC.PAK" and not is_cd(data):
         raise WitnessUnavailable("MUSIC.PAK citation applies to the CD edition")
-    if name.upper().startswith("HARDRIVE/"):
+    if name.upper() == "INSTALL.EXE":
+        if not is_cd(data):
+            raise WitnessUnavailable("INSTALL.EXE CD installer citations do not apply to floppy")
+        root = data.resolve().parent
+    elif name.upper().startswith("HARDRIVE/"):
         if not is_cd(data):
             raise WitnessUnavailable("HARDRIVE file citations apply to the CD edition")
         root = game_path(data, "HARDRIVE")
@@ -169,6 +174,13 @@ def colour_width(wrapped):
 def read_witness(data, spec):
     kind, *args = spec
     cd = is_cd(data)
+    if kind == "absolute_operand":
+        name, address = args
+        path = game_file(data, name)
+        with path.open("rb") as source:
+            source.seek(address)
+            code = source.read(6)
+        return x86_operand(code, 2), f"{path.name}+{address:#x}"
     if kind in {"loose_size", "loose_uint16", "loose_string"}:
         paths = [game_file(data, name) for name in args if isinstance(name, str)]
         if kind == "loose_size":

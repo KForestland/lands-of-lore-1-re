@@ -155,10 +155,15 @@
     "executable": "MAIN.EXE",
     "counts": {
       "tlk_verify.py": {
-        "members": [
-          "tlk_count"
-        ]
+        "members": "members"
       }
-    }
+    },
+    "absolute_operands": true,
+    "loose_files": [
+      "HARDRIVE/*",
+      "DAT/*",
+      "INSTALL.EXE",
+      "LOLCD.EXE"
+    ]
   }
 }
