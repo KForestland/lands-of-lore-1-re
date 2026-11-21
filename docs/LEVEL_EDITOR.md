@@ -67,7 +67,7 @@ Both DOSBox comparisons started a new game in CD 1.02. From the throne, one clic
 
 - **CONFIRMED in the running game.** Launch 0104 showed an empty floor. Launch 0105 used the edited archive (`513c19ce`). The Halberd appeared on the floor and stayed there after the click.
 - **CONFIRMED in the running game.** The screenshots from launch 0108 showed the empty floor again. Launch 0109 used the nearer placement (`b0ab3383`). Its native save before the click shows the party facing east on square 557 and item 7, the Halberd, on square 558. The save after the click puts item 7 in the cursor hand. The party stayed on square 557.
-- **CONFIRMED.** The CD floor-pick routine adds the absolute X and Y differences (`MAIN.EXE+0xC0FF`) and skips ground items at distances of 320 units or more (`MAIN.EXE+0x3F0C7`). From the party’s position, the first edit placed the Halberd 384 units away. The second edit put it 256 units away.
+- **CONFIRMED.** The CD floor-pick routine calls `0040:04AF` at `MAIN.EXE+0x3F0BF`. The FBOV directory row at `+0x2FC90` gives resident segment `0x0845`, so the MZ header size plus `0x0845 × 16 + 0x04AF` resolves to `+0xC0FF`, which adds the absolute X and Y differences. The routine skips ground items at distances of 320 units or more (`+0x3F0C7`). From the party’s position, the first edit placed the Halberd 384 units away. The second edit put it 256 units away.
 
 ## Outside this version
 
