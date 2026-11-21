@@ -79,6 +79,24 @@ CONFIRMED `OUTSIDE.DAT` has 2 records.
             values = [observed(claim, original.parent, None, lambda root, name: root / name)[0] for claim in got]
             self.assertEqual(values, [b"\x02\0", ".odf"])
 
+    def test_malformed_byte_citations_are_scan_errors_without_game_data(self):
+        body = """CONFIRMED. `EXAMPLE.DAT+0x20` with `00 01 FQ FF`.
+`EXAMPLE.DAT+0x30` contains bytes `GG`.
+LE `+0x2` and `+0x4` (file `+0x102` and `+0x104`, bytes `AB CD` and `EF FQ`).
+`EXAMPLE.DAT+0x40` holds `OK`.
+"""
+        with tempfile.TemporaryDirectory() as folder:
+            root = pathlib.Path(folder)
+            (root / "docs").mkdir()
+            (root / "docs" / "example.md").write_text(body, encoding="utf-8")
+            _, _, _, errors, claims = page_facts.scan(root, {}, {"executable": "EXAMPLE.DAT"})
+        self.assertEqual(errors, [
+            "docs/example.md:1: malformed hexadecimal byte list '00 01 FQ FF' at EXAMPLE.DAT+0x20",
+            "docs/example.md:2: malformed hexadecimal byte list 'GG' at EXAMPLE.DAT+0x30",
+            "docs/example.md:3: malformed hexadecimal byte list 'EF FQ' at EXAMPLE.DAT+0x104",
+        ])
+        self.assertEqual([claim.expected for _, claim in claims], ["OK", b"\xab\xcd"])
+
 
     def test_common_citation_forms_read_the_independent_sources(self):
         body = '''CONFIRMED. `EXAMPLE.DAT+0x0` holds `02 00`.

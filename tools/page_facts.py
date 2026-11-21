@@ -184,6 +184,9 @@ def scan(root, registry, automatic=None):
         measured = dict(measured_lines(body))
         if automatic:
             for claim in automatic_probes(body, measured, automatic):
+                if claim.error:
+                    issues.append(f"{page}:{claim.line}: {claim.error}")
+                    continue
                 inferred.append((page, claim))
                 if claim.reader[0] != "arithmetic":
                     anchors[page][(claim.line, claim.shown)] += 1
