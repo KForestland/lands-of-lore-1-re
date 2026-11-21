@@ -484,6 +484,30 @@ mode-11 store a live write of facing +0x18 = 1 (east) with the party
 on 107 facing west (table value 0), a read watch on `+0x3DC8A`, the
 selector's return and a picture.
 
+**CONFIRMED (original geometry and floppy selector).** In either edition,
+test the wall facing the pose square on each of its four neighbours.
+Level 23 permits one cardinal approach per pose square in the original
+CMZ and WLL. These are the neighbour wall types in north/east/south/west
+order, and the direction of a straight step into the square.
+
+| Pose square | Neighbour wall types | Open approach | Facing on arrival |
+|---|---|---|---|
+| 105 | 50, 0, 50, 2 | 106 to the east | West |
+| 121 | 50, 1, 50, 0 | 120 to the west | East |
+| 369 | 0, 50, 2, 50 | 337 to the north | South |
+
+Types 1, 2 and 50 carry mask `0x07`; type 0 carries `0x80`.
+In all three cases a party in the open approach looks in the same
+direction as the arriving monster, giving argument 8. Switching pose
+squares alone leaves that geometry in place. The floppy facing table
+at `MAIN.EXE+0x37E11` is identical to the CD table. The floppy draw
+passes the table entry with bit `0x10` removed at `+0x46FBB–0x46FD5`.
+With zero direction and zero damage, selector type 0 indexes mode 11
+as `11 − 5` and loads frame 14 at `+0x46DDE` (CD `+0x3DC8A`).
+`lol1_mode_paths.py --check` pins these tables and the original wall
+layouts. A front-facing screen capture still needs the same-instance
+setup above.
+
 ## Close-out
 
 **What was measured.** A 16-bit decode of `HARDRIVE/MAIN.EXE` found 15 `test` instructions whose memory displacement is the wall-flag base `0x531E`. None of the 15 immediates is `0x40`; they are 1, 2, 4, 7, 8 and `0x20`, and the test at file `+0x14395` is the five bytes `F6 87 1E 53 08`.

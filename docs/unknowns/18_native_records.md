@@ -275,6 +275,31 @@ weapon already equipped and follow an original projectile
 through the release routine. Both slot-1 (nonzero modifiers)
 and Hatchet slot-2 (zero modifiers) now have scoped read controls.
 
+### Level-27 missile setup from shipped placements
+
+**CONFIRMED.** In both editions, `LEVEL27.INI` entry 1 places two
+slot-1 monsters in block 499, both facing west (EMC `0x38` at DATA
+words `0xD9` and `0xE7`). The original CMZ and WLL give open edges
+across 499 → 498 → 497. A party on 497 facing east has a two-block
+line to those placements without changing their original facing.
+Keep the slot-2 Hatchet on 496 separate when logging the instance.
+
+The slot-1 definition sets unlimited charges (`−1`), one missile
+entry and word `0x8009`. With distance greater than one, the native
+missile branch masks that word to item type 9 at CD `+0x125C6` and
+floppy `+0x16F64`. The far launch call at CD `+0x12601` reaches
+`+0xF1DF`; floppy `+0x16F9F` reaches `+0x13BCC`. The five ranged
+words are zero in the slot-2 definition. `lol1_mode_paths.py
+--check` verifies the stored setup and launch call in either edition.
+
+**UNCONFIRMED.** The launch and the four definition reads in a live
+slot-1 encounter. Use a party on 497 facing east with the original
+slot-1 row still on 499. Record entry to the mode-7 ranged path,
+the call above, the launcher result and the firing row. Check +0x0A
+as a control and watch definition +0x0C/+0x0E/+0x10/+0x40 and the
+critical byte +0x3D. A launcher result without the originating row
+would leave the data read question open.
+
 ## Close-out
 
 **What was measured.** After `les bx, es:[bx+0x21]` at `HARDRIVE/MAIN.EXE` `+0x147B6`, file `+0x147BA` reads definition byte `+0x42` with `26 8A 47 42`. The same pointer at `+0x1253B` is followed at `+0x1253F` by `26 8B 57 44`, a word read of definition `+0x44`.

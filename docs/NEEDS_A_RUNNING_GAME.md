@@ -344,10 +344,11 @@ The Hatchets cannot make one: the slot-2 definition call
 (+0x42–0x4A), and the monster missile path loads the weapon word and
 skips the launch unless bit 0xC000 is set (`+0x1253F–0x12593`). The
 slot-1 call (`+0x1B2`) passes ranged words −1, 1 and `0x8009` (item 9).
-Next test: the slot-1 copy (block 345) with read watches on the slot-1
-words +0x0C/+0x0E/+0x10/+0x40, standing in a line two or more blocks
-from a slot-1 monster so that it throws, or a party throw of a held
-item at a Hatchet; record the launch fetch at `+0xF1DF` and a picture.
+Next test: party on 497 facing east. The two slot-1 placements on 499
+face west and have an open two-block line to the party. Record the firing
+row and the launch at CD `+0xF1DF` or floppy `+0x13BCC`. Watch slot-1
+words +0x0C/+0x0E/+0x10/+0x40 and the critical byte before the action.
+[Original placements and call sites](unknowns/18_native_records.md#level-27-missile-setup-from-shipped-placements)
 
 ## Probes not yet run
 

@@ -17,6 +17,7 @@ from pathlib import Path
 
 import emc2_decompile as E
 import lol1lib as L
+from level_report import calls_by_entry
 
 try:
     from capstone import CS_ARCH_X86, CS_MODE_16, Cs
@@ -505,6 +506,48 @@ def check_image(data, expected, array_add, label):
     return None
 
 
+def pose_and_missile_sites(data_dir, image, cd):
+    """Check the stored setup for the level-23 and level-27 probes."""
+    for level, expected in (
+        (23, {105: (7, 0, 7, 7), 121: (7, 7, 7, 0), 369: (0, 7, 7, 7)}),
+        (27, {497: (7, 0, 7, 0), 498: (0, 0, 7, 0), 499: (7, 7, 7, 0)}),
+    ):
+        maze = L.load_bitmap(L.level_member(level, "CMZ", data_dir))[2]
+        stride, = struct.unpack_from("<H", maze, 4)
+        wll = L.level_member(level, "WLL", data_dir)
+        flags = {struct.unpack_from("<H", wll, at)[0]: wll[at + 8]
+                 for at in range(2, len(wll) - 11, 12)}
+        for block, want in expected.items():
+            neighbours = tuple(flags[maze[6 + (block + delta) * stride + (side ^ 2)]] & 7
+                               for side, delta in enumerate((-32, 1, 32, -1)))
+            if neighbours != want:
+                return f"level {level} block {block} neighbour flags {neighbours} differ"
+
+    facing_table, selector, dispatch, frame14 = ((0x31FFF, 0x3DC3A, 0x3DCD2, 0x3DC8A) if cd
+                                                  else (0x37E11, 0x46D8E, 0x46E26, 0x46DDE))
+    table = bytes((8, 20, 0, 4, 4, 8, 20, 0, 0, 4, 8, 20, 20, 0, 4, 8))
+    if (image[facing_table:facing_table + 16] != table
+            or image[selector:selector + 4] != bytes.fromhex("0bc97416")
+            or struct.unpack_from("<H", image, dispatch + 2 * (11 - 5))[0] != (0x103A if cd else 0x102E)
+            or image[frame14:frame14 + 5] != bytes.fromhex("bb0e00eb3f")):
+        return "type-0 mode-11 facing/direction or fixed-frame witness differs"
+
+    script = E.read_script(L.level_member(27, "INI", data_dir))
+    calls = calls_by_entry(script, with_sites=True)
+    definitions = {args[0]: args[30:35] for fn, args, _ in calls[0][1] if fn == 0x3F}
+    if definitions != {1: [-1, 1, -32759, 0, 0], 2: [0, 0, 0, 0, 0]}:
+        return "level 27 ranged definition words differ"
+    placements = [(site, args[3], args[4]) for fn, args, site in calls[1][1]
+                  if fn == 0x38 and args[0] == 499]
+    if placements != [(0xD9, 3, 1), (0xE7, 3, 1)]:
+        return "level 27 block 499 no longer has two west-facing slot-1 placements"
+    test, release, target = (0x12589, 0x12601, 0xF1DF) if cd else (0x16F27, 0x16F9F, 0x13BCC)
+    offset, segment = struct.unpack_from("<HH", image, release + 1)
+    if (image[test:test + 8] != bytes.fromhex("26 8b 77 42 f7 c6 00 c0")
+            or image[release] != 0x9A or header_size(image) + 16 * segment + offset != target):
+        return "level 27 ranged type test or launch call differs"
+
+
 def check_cd(data_dir):
     main = game_path(Path(data_dir), "HARDRIVE", "MAIN.EXE")
     finale = game_path(Path(data_dir), "ENG", "FINALE.EXE")
@@ -559,10 +602,14 @@ def check_cd(data_dir):
     error = no_constant_index(image, (122, 204, 206))
     if error:
         return fail(error)
+    error = pose_and_missile_sites(data_dir, image, cd=True)
+    if error:
+        return fail(error)
     print("CHECK mode_paths: 10 CD mode-byte stores, none stores 10, the file's one byte store of 10 writes a party record, "
           "add bx, 0x14 only steps blit segments, no resolved caller or script passes 10, "
           "3 LEVEL23 calls pass 11; finale row 40 is one of 93 catalog rows, no index site loads the constant 40, "
-          "startup sorts rows 4-92; no stride-20 site loads palette rows 122, 204 or 206 as a constant")
+          "startup sorts rows 4-92; no stride-20 site loads palette rows 122, 204 or 206 as a constant; "
+          "level 23 pose directions and level 27 missile setup agree")
     return 0
 
 
@@ -595,9 +642,13 @@ def check_floppy(data_dir):
     elevens = [key for key, group in sel0.items() if 11 in group]
     if len(elevens) != 3 or any(name != "LEVEL23.INF" for name, _addr in elevens):
         return fail(f"floppy mode 11 sites {elevens}")
+    error = pose_and_missile_sites(data_dir, image, cd=False)
+    if error:
+        return fail(error)
     print("CHECK mode_paths: floppy layout, 8 mode-byte stores, none stores 10, the file's one byte store of 10 writes a party record, "
           "add bx, 0x14 only steps blit segments, no resolved script passes 10, "
-          "3 LEVEL23 calls pass 11; no stride-20 site loads palette rows 227, 229 or 232 as a constant")
+          "3 LEVEL23 calls pass 11; no stride-20 site loads palette rows 227, 229 or 232 as a constant; "
+          "level 23 pose directions and level 27 missile setup agree")
     return 0
 
 

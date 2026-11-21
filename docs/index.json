@@ -1518,6 +1518,7 @@
       ],
       "tools": [
         "tools/check_all.py",
+        "tools/lol1_mode_paths.py",
         "tools/monster_reference_scan.py"
       ]
     },
