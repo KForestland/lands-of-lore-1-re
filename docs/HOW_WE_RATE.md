@@ -96,7 +96,7 @@ answered. *Answered*: nothing is left to settle from the files or the program. *
 
 **Page facts.** The scanner counts offsets, names and numbers in passages
 marked as proved, in measured examples, and at the registry's explicit anchors.
-On 21 November 2026, the tool registered independent checks for 24 of 6,878
+On 21 November 2026, the tool registered independent checks for 24 of 6,883
 candidate literals (0.35%).
 Registered witnesses independently read the named original files. The scanner
 recognizes quoted bytes or strings at file offsets, loose-file sizes, counts
