@@ -10,14 +10,15 @@ import sys
 
 FILE = r"(?:(?:DAT|HARDRIVE)[/\\])?[A-Za-z0-9_][A-Za-z0-9_.-]*\.[A-Za-z0-9_]{1,4}"
 OFFSET = r"0x[0-9A-Fa-f]+"
-BYTE = r"[\da-fA-F]{2}"
-BYTES = BYTE + r"(?:[ \t]+" + BYTE + r"){1,31}"
+HEX_BYTE = re.compile(r"[0-9a-fA-F]{2}")
+HEX_BYTES = re.compile(rf"{HEX_BYTE.pattern}(?:[ \t]+{HEX_BYTE.pattern}){{0,31}}")
+BYTE_WORDS = re.compile(r"[0-9A-Za-z]{2}(?:[ \t]+[0-9A-Za-z]{2}){1,31}")
 DECIMAL = r"(?:\d{1,3}(?:,\d{3})+|\d+)"
 QUOTED = r"[^`\n]{1,96}"
 ADDRESS = rf"`(?P<file>{FILE})\+(?P<offset>{OFFSET})`"
 FORWARD = re.compile(
     rf"{ADDRESS}\s+(?P<verb>has|holds|starts with|contains|is|stores|with)\s+"
-    rf"(?:(?:the full|the literal|bytes)\s+)?`(?P<value>{QUOTED})`"
+    rf"(?:(?P<qualifier>the full|the literal|bytes)\s+)?`(?P<value>{QUOTED})`"
 )
 REVERSE = re.compile(
     rf"(?:\b(?:suffix|literal|string)\s+`(?P<value>{QUOTED})`\s+(?:at|from)\s+"
@@ -28,7 +29,7 @@ PAIR_SIZE = re.compile(rf"`(?P<a>{FILE})` and `(?P<b>{FILE})`\s+are (?P<value>{D
 PAIRED = re.compile(
     rf"\b(?:LE|PE) `\+{OFFSET}` and `\+{OFFSET}`"
     rf"\s*\(file `\+(?P<a>{OFFSET})` and `\+(?P<b>{OFFSET})`,"
-    rf"\s+bytes `(?P<x>{BYTES})` and `(?P<y>{BYTES})`\)"
+    r"\s+bytes `(?P<x>[^`\n]+)` and `(?P<y>[^`\n]+)`\)"
 )
 RECORD = re.compile(
     rf"\btable of (?P<total>{DECIMAL})-byte [^.\n]+\s+definitions\.\s*"
@@ -60,6 +61,7 @@ class Claim:
     expected: object
     reader: tuple
     edition: str = ""
+    error: str = ""
 
 
 def parse_number(text):
@@ -74,9 +76,21 @@ def edition_hint(text, offset):
     return "CD" if qualifiers[-1].upper() == "CD" else "floppy"
 
 
-def quoted_claim(line, value, name, offset, *, verb="", edition=""):
-    if re.fullmatch(BYTES, value):
-        return Claim(line, value, bytes.fromhex(value), ("bytes_at", name, offset), edition)
+def byte_claim(line, value, name, offset, *, shown, edition=""):
+    reader = ("bytes_at", name, offset)
+    if HEX_BYTES.fullmatch(value):
+        return Claim(line, shown, bytes.fromhex(value), reader, edition)
+    return Claim(line, shown, None, reader, edition,
+                 f"malformed hexadecimal byte list {value!r} at {name}+{offset:#x}")
+
+
+def quoted_claim(line, value, name, offset, *, verb="", qualifier="", edition=""):
+    # An unlabelled list can have one mistyped byte word and still be a byte citation.
+    byte_words = BYTE_WORDS.fullmatch(value) and sum(
+        not HEX_BYTE.fullmatch(token) for token in value.split()
+    ) <= 1
+    if qualifier == "bytes" or byte_words:
+        return byte_claim(line, value, name, offset, shown=value, edition=edition)
     # A quoted number or field expression is not a NUL-terminated string.
     if re.fullmatch(r"[+−-]?(?:0x[\da-fA-F]+|\d+)", value):
         return None
@@ -112,7 +126,8 @@ def probes(text, measured, config):
             fields = match.groupdict()
             key = "value" if fields.get("value") is not None else "stored"
             claim = quoted_claim(line(match.start(key)), match[key], match["file"], int(match["offset"], 16),
-                                 verb=fields.get("verb", ""), edition=edition_hint(text, match.start()))
+                                 verb=fields.get("verb", ""), qualifier=fields.get("qualifier", ""),
+                                 edition=edition_hint(text, match.start()))
             if claim:
                 found.append(claim)
     for match in SIZE.finditer(text):
@@ -131,8 +146,8 @@ def probes(text, measured, config):
         for match in PAIRED.finditer(text):
             if eligible(match):
                 for offset, value in (("a", "x"), ("b", "y")):
-                    found.append(Claim(line(match.start(offset)), match[offset], bytes.fromhex(match[value]),
-                                       ("bytes_at", executable, int(match[offset], 16))))
+                    found.append(byte_claim(line(match.start(offset)), match[value], executable,
+                                            int(match[offset], 16), shown=match[offset]))
         for match in OPTION_LIST.finditer(text):
             if eligible(match):
                 names = re.findall(r"`(-[A-Z][A-Z0-9_-]*)`", match["names"])

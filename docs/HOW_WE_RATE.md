@@ -96,6 +96,8 @@ answered. *Answered*: nothing is left to settle from the files or the program. *
 
 **Page facts.** The scanner counts offsets, names and numbers in passages
 marked as proved, in measured examples, and at the registry's explicit anchors.
+On 21 November 2026, the tool registered independent checks for 24 of 6,878
+candidate literals (0.35%).
 Registered witnesses independently read the named original files. The scanner
 recognizes quoted bytes or strings at file offsets, loose-file sizes, counts
 from named check commands, named literals in original files, and absolute
@@ -105,8 +107,8 @@ consistency. Run
 `python3 tools/page_facts.py --list` to see the prose-only claims and their reason.
 The prose inventory flags changes for review. Its fingerprints do not establish
 what the bytes say. After verifying a documentation change, review the output
-of `python3 tools/page_facts.py --inventory` before recording the revised inventory. Handoffs list the changed
-prose-only lines and the evidence used to review them.
+of `python3 tools/page_facts.py --inventory` before recording the revised inventory.
+Handoffs list the changed proved lines, and the reviewer re-derives each one before merging.
 
 ## What the rating does not say
 
