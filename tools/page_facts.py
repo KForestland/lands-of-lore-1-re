@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = "data/page_facts.json"
 INVENTORY = "data/page_facts_coverage.json"
 PROSE_REASON = "No independent byte reader is registered for this claim yet."
-LABEL = re.compile(r"\b(CONFIRMED|PROVEN|UNCONFIRMED|UNKNOWN)\b")
+LABEL = re.compile(r"(?<!\w)\*{0,2}(CONFIRMED|PROVEN|UNCONFIRMED|UNKNOWN)\b\*{0,2}")
 HEADING = re.compile(r"^(#{1,6})\s+(.+)")
 MEASURED = re.compile(r"^(?:confirmed\b|worked example\b)", re.I)
 EXCLUDED = {"CORRECTIONS.md", "GLOSSARY.md", "HOW_WE_RATE.md"}
@@ -64,6 +64,21 @@ def read_pages(root):
         yield path.relative_to(root).as_posix(), body
 
 
+def measured_fragment(prose, active):
+    """Keep only the parts of a line within a positive evidence label."""
+    parts = []
+    pos = 0
+    for index, match in enumerate(LABEL.finditer(prose)):
+        positive = match[1] in {"CONFIRMED", "PROVEN"}
+        if active or (index == 0 and positive):
+            parts.append(prose[pos:match.start()])
+        active = positive
+        pos = match.start()
+    if active:
+        parts.append(prose[pos:])
+    return " ".join(part.strip() for part in parts if part.strip()), active
+
+
 def measured_lines(body):
     """Keep physical line numbers through comments, fences, headings and tables."""
     sections = []
@@ -80,11 +95,9 @@ def measured_lines(body):
         if labels_in_group and set(labels_in_group) <= {"CONFIRMED", "PROVEN"}:
             measured = True
         for line, prose in group:
-            labels = LABEL.findall(prose)
-            if labels:
-                measured = labels[-1] in {"CONFIRMED", "PROVEN"}
-            if measured or intro or set(labels) & {"CONFIRMED", "PROVEN"}:
-                yield line, prose
+            fragment, measured = measured_fragment(prose, measured or intro)
+            if fragment:
+                yield line, fragment
 
     for line, prose in enumerate(lines, 1):
         if fence:
@@ -118,8 +131,9 @@ def measured_lines(body):
                 sections.append((depth, measured))
                 intro = False
                 continue
-            if intro or (sections and sections[-1][1]) or set(LABEL.findall(prose)) & {"CONFIRMED", "PROVEN"}:
-                yield line, prose
+            fragment, _ = measured_fragment(prose, bool(intro or (sections and sections[-1][1])))
+            if fragment:
+                yield line, fragment
             continue
         if not group and intro and not re.match(r"\s*(?:[-*]|\d+\.)\s", prose):
             intro = False

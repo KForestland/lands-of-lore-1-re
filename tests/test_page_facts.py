@@ -29,7 +29,7 @@ CONFIRMED `OUTSIDE.DAT` has 2 records.
 
     def test_confirmed_prefix_of_a_mixed_label_line_is_inventoried(self):
         body = "CONFIRMED. The string is at 0x70. UNCONFIRMED. The date is unknown."
-        self.assertEqual(dict(page_facts.measured_lines(body)), {1: body})
+        self.assertEqual(dict(page_facts.measured_lines(body)), {1: "CONFIRMED. The string is at 0x70."})
 
     def test_mutation_reports_the_original_page_line(self):
         with tempfile.TemporaryDirectory() as kind:
