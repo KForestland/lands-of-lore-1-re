@@ -1,0 +1,102 @@
+{
+  "edition": "LoL1 CD 1.02 and floppy 1.05",
+  "facts": {
+    "emc2.level1.ordr1": {
+      "reader": [
+        "ordr_word",
+        "L01.PAK",
+        "CHAPTER1.PAK",
+        "LEVEL1.INI",
+        1
+      ],
+      "anchors": [
+        {
+          "page": "docs/formats/emc2.md",
+          "before": "DATA word 0x1B and ",
+          "after": ");",
+          "kind": "hex"
+        },
+        {
+          "page": "docs/emc2_scripts.md",
+          "before": "words `0x1B` and `",
+          "after": "`, with code",
+          "kind": "hex"
+        }
+      ]
+    },
+    "map.level24.cmz_size": {
+      "reader": [
+        "member_size",
+        "L24.PAK",
+        "CHAPTER6.PAK",
+        "LEVEL24.CMZ"
+      ],
+      "anchors": [
+        {
+          "page": "docs/formats/cmz.md",
+          "before": "`LEVEL24.CMZ` (",
+          "after": " bytes)",
+          "kind": "number"
+        },
+        {
+          "page": "docs/unknowns/03_level24_cmz.md",
+          "before": "`LEVEL24.CMZ` is ",
+          "after": " bytes",
+          "kind": "number"
+        }
+      ]
+    },
+    "pak.cd_data.members": {
+      "reader": [
+        "pak_count"
+      ],
+      "anchors": [
+        {
+          "page": "docs/formats/pak.md",
+          "before": "111 containers, ",
+          "after": " members",
+          "kind": "number"
+        },
+        {
+          "page": "docs/formats/pak.md",
+          "before": "members ",
+          "after": " + 3 \u00d7 378",
+          "kind": "number"
+        }
+      ]
+    },
+    "wll.keep.dat": {
+      "reader": [
+        "wll_decoration",
+        "L01.PAK",
+        "CHAPTER1.PAK",
+        "LEVEL1.INI",
+        0
+      ],
+      "anchors": [
+        {
+          "page": "docs/formats/wll.md",
+          "before": "area 0: `KEEP.SHP` / `",
+          "after": "` |",
+          "kind": "name"
+        }
+      ]
+    },
+    "shp.colour_count_width": {
+      "reader": [
+        "colour_width",
+        "GENERAL.PAK",
+        "GENERAL.PAK",
+        "FXPAL.SHP"
+      ],
+      "anchors": [
+        {
+          "page": "docs/formats/shp.md",
+          "before": "bit 2 = a colour-count ",
+          "after": " precedes the colour table",
+          "kind": "word"
+        }
+      ]
+    }
+  }
+}
