@@ -2,6 +2,16 @@
 
 Newest first. One line per question worked on, new tool or visible change; each question bullet gives its state. Details are on the linked pages; the counts are in the [rating](../README.md#rating).
 
+## 21 November 2026
+
+- **Finding your game folder.** The [first ten minutes](FIRST_TEN_MINUTES.md) page now starts by saying which folder to give: the CD `DATA` folder with both `L01.PAK` and `GENERAL.PAK`, or the floppy folder with `CHAPTER8.PAK` and `GENERAL.PAK`. Lowercase names also work.
+- **Spelling patch, second run.** The item-name patch was tried again under the launch-record rules: folder 0013 (unpatched) shows the old spellings, folder 0014 (patched) the corrected ones, and `undo.json` restores the archive byte for byte ([patches](../patches/README.md)).
+- **Damaged saves.** A save file cut in half is refused with one line and no output file; a test now keeps it that way.
+- **Level 23 pose squares and level 27 missiles (Q7 and Q18 stay mostly answered).** Each of the three level-23 pose squares has exactly one open approach in the original walls, listed with the facing it gives; the floppy facing table matches the CD one. On level 27, the two thrower monsters placed on block 499 face west with an open line to block 497, which is where the next running-game test stands ([running-game probes](NEEDS_A_RUNNING_GAME.md)). `lol1_mode_paths.py --check` pins both.
+- **Level editor in the game, not yet seen.** A copy with the Stick moved on level 2 was tried on 21 November, but the party did not get through the level-1 gate in that run, so the moved item was not seen ([level editor](LEVEL_EDITOR.md)).
+- **Glossary.** Job, `--data`, `--out`, `--check`, translation table and SHA-256 are explained in plain words ([glossary](GLOSSARY.md)).
+- **Checks.** A failed check now prints the last twenty lines of its error output. The workspace check no longer rejects a folder whose path goes through a symbolic link (the Windows and macOS checks are green again).
+
 ## 20 November 2026
 
 - **Level editor.** Change walls, doors, item and monster placements on the level plan, apply to a copy, share as a patch and undo ([level editor](LEVEL_EDITOR.md)).

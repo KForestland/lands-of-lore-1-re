@@ -1,6 +1,6 @@
 # LoL1 reverse-engineering status
 
-**As of:** 2026-11-20. For every file format and rules topic: what is documented, which tool reads it, what was checked on the game data, and what is still open. Older notes kept as history ([`closure_memo.md`](closure_memo.md)) gave a single percentage; this table replaces it.
+**As of:** 2026-11-21. For every file format and rules topic: what is documented, which tool reads it, what was checked on the game data, and what is still open. Older notes kept as history ([`closure_memo.md`](closure_memo.md)) gave a single percentage; this table replaces it.
 
 **Columns**
 
@@ -20,7 +20,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (53 checks; 
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->
 
-## Where things stand (20 November 2026)
+## Where things stand (21 November 2026)
 
 A dated snapshot; the work continues and the table below is kept current.
 
