@@ -10,6 +10,9 @@ Open the folder for your own copy of the game in your file manager.
 - **CD edition:** open `DATA`. Use the folder that contains both `L01.PAK` and `GENERAL.PAK` directly.
 - **Floppy edition:** use the installation folder that contains both `CHAPTER8.PAK` and `GENERAL.PAK` directly.
 
+If you have both editions, either works. Start with the CD's `DATA` folder.
+If you have several copies of an edition, use the one you normally play.
+
 If a search finds several copies of `GENERAL.PAK`, use the one next to the
 edition's marker above. The CD's language folders and demos can have their
 own `GENERAL.PAK`. Lowercase names such as `l01.pak` also work. Copy the
@@ -83,8 +86,8 @@ xdg-open "$out/schematic/level01_schematic.png"
 
 Light squares are open floor, dark squares have walls on all four sides, and orange squares have some walls. Red marks sit on decorated faces.
 If the tool cannot find a game file, check the markers in
-[Find your game files](#find-your-game-files). If the open command fails, open
-`level01_schematic.png` from the schematic folder in your browser.
+[Find your game files](#find-your-game-files). If no window opens, open
+`level01_schematic.png` from the schematic folder in a browser on your desktop.
 
 To draw the picture again, choose a new schematic folder name in both lines.
 
