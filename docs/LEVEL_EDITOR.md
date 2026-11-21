@@ -61,6 +61,14 @@ Share `level-patch.json` with someone who has the matching edition. They apply i
   CD handlers are `MAIN.EXE+0x47830` and `+0x4761D`. [Script functions](emc2_scripts.md)
 - **CONFIRMED static check.** `level_edit.py --data "/path/to/LoL1" --check` wrote unchanged copies for all 29 levels in each edition and re-read an edited copy of each level. It also verified patch creation and byte-identical undo. The call filter found 197 editable placements in each edition. On CD 1.02, one prepared copy of `L02.PAK` moves the Stick from square 69 to 138. The reader verifies that placement and undo reproduces the original archive. **UNCONFIRMED in the running game.** A fresh visit to level 2 on that copy can check the moved item from arrival square 106. Use a save from before the first visit, so the game reads the edited archive for the level. On 21 November a fresh CD 1.02 copy with that archive, and an untouched copy, were each stood at the level-1 gate that leads to level 2; forward steps and clicks on the gate left the party in the keep, level 2 was not entered, and the moved item was not seen (launch folders 0063, 0064 and 0065).
 
+## Keep placement in the original game
+
+Both DOSBox comparisons started a new game in CD 1.02. From the throne, one click on the curved turn arrow faced the arch without taking a step. The edited copies used a same-length `L01.PAK` patch that moved a guard’s Halberd onto square 558. Applying the undo restored the archive byte for byte.
+
+- **CONFIRMED in the running game.** Launch 0104 showed an empty floor. Launch 0105 used the edited archive (`513c19ce`). The Halberd appeared on the floor and stayed there after the click.
+- **CONFIRMED in the running game.** The screenshots from launch 0108 showed the empty floor again. Launch 0109 used the nearer placement (`b0ab3383`). Its native save before the click shows the party facing east on square 557 and item 7, the Halberd, on square 558. The save after the click puts item 7 in the cursor hand. The party stayed on square 557.
+- **CONFIRMED.** The CD floor-pick routine adds the absolute X and Y differences (`MAIN.EXE+0xC0FF`) and skips ground items at distances of 320 units or more (`MAIN.EXE+0x3F0C7`). From the party’s position, the first edit placed the Halberd 384 units away. The second edit put it 256 units away.
+
 ## Outside this version
 
 | What | What an editor would need |
