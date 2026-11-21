@@ -1,11 +1,11 @@
 # How we rate this repository
 
-The README and [STATUS](STATUS.md) carry four counted lines instead of a
+The README and [STATUS](STATUS.md) carry five counted lines instead of a
 single percentage. `python3 tools/rating.py --data <DATA>` prints them from
 your copy of the game and the pages; `--check` (part of `check_all.py`)
 fails when the README or STATUS lines differ from the counts.
 
-## The four lines
+## The five lines
 
 **Files read.** How many files in the CD edition's `DATA` folder (sub-folders
 included) a reader in this repository accounts for to the last byte, by
@@ -94,9 +94,21 @@ evidence to it.
 [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md): answered, mostly answered, partly
 answered. *Answered*: nothing is left to settle from the files or the program. *Mostly answered*: the main question is settled; named details remain. *Partly answered*: part is settled; the main point is open. A row that says 'answered for' a setup (one renderer, one device) counts as answered for that setup only.
 
+**Page facts.** The scanner counts offsets, names and numbers in passages
+marked as proved, in measured examples, and at the registry's explicit anchors.
+Registered witnesses independently read the named original files. Supported
+byte and string citations and measured corpus counts also form witnesses.
+Record-size arithmetic is checked for consistency. Run
+`python3 tools/page_facts.py --check --data DATA` to compare those values or
+`python3 tools/page_facts.py --list` to see the prose-only claims and their reason.
+The prose inventory flags changes for review. Its fingerprints do not establish
+what the bytes say. After verifying a documentation change, review the output
+of `python3 tools/page_facts.py --inventory` before recording the revised inventory. Handoffs list the changed
+prose-only lines and the evidence used to review them.
+
 ## What the rating does not say
 
 It is not a measure of completeness and cannot be turned into one: the
-four lines count different things and none of them has a known total for
+five lines count different things and none of them has a known total for
 "everything the game does". Older notes in this repository that gave a
 percentage are kept as history and are marked so.

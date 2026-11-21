@@ -180,7 +180,12 @@ def main():
                         bad.append(f"{name}#{i}")
             except Exception as ex:
                 bad.append(f"{name}:{type(ex).__name__}")
-        detail = "; documented colour count agrees with FXPAL.SHP shape 0" if checked_colour_count else ""
+        if checked_colour_count:
+            detail = "; documented colour count agrees with FXPAL.SHP shape 0"
+        elif a.alt_header:
+            detail = "; colour-count width skipped: alternate shape header"
+        else:
+            detail = "; colour-count width skipped: FXPAL.SHP absent"
         print(f"CHECK shp: {files} files, {shapes} shapes (+{empty} empty slots), decoded exactly "
               f"(rows fill width, line data == frame size, height == height copy): {exact}/{shapes}, "
               f"bad={bad[:8] or 'none'}{' ...' if len(bad) > 8 else ''} ({len(bad)}){detail}")

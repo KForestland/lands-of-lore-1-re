@@ -310,6 +310,7 @@
         "tools/check_all.py",
         "tools/lol1_blend_indices.py",
         "tools/lol1_loose.py",
+        "tools/page_facts.py",
         "tools/rating.py"
       ]
     },
