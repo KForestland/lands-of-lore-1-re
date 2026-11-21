@@ -146,6 +146,17 @@ class ToolKit(unittest.TestCase):
         self.job("save", "page", self.slot, "--out", page)
         self.assertIn(fixture.SAVE_FIELD, page.read_text(encoding="utf-8").lower())
 
+    def test_truncated_save_is_refused_without_output(self):
+        contents = self.slot.read_bytes()
+        truncated = self.root / "damaged saves" / "truncated slot.dat"
+        truncated.parent.mkdir()
+        truncated.write_bytes(contents[:len(contents) // 2])
+        page = self.root / "unreadable slot.html"
+        error = self.run_tool("lol.py", "save", "page", truncated, "--out", page, ok=False)
+        self.assertEqual(len(error.strip().splitlines()), 1)
+        self.assertRegex(error.lower(), r"size|damaged|could not be read")
+        self.assertFalse(page.exists())
+
 
 class LowercaseToolKit(ToolKit):
     lowercase = True

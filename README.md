@@ -108,7 +108,7 @@ Type these in this repository's folder. Put quotes around paths with spaces. On 
 [Translate text tables](docs/TRANSLATION.md).
 
 1. Unpack: `python3 tools/modkit.py unpack "/path/to/LoL1/DATA" "my mod work"`. Give the folder holding the PAK archives: the CD's `DATA` folder, or the floppy game folder.
-2. Change one number: the item definitions are in the start-up script. Open the file in `my mod work/edits/` whose name ends in `_STARTUP.PAK_ONETIME.INF.json` (floppy: ends in `_GENERAL.PAK_ONETIME.INF.json`; the number in front may differ on your copy) in a text editor and search for `"might"`. The second match is in a row that reads `"argument": 8`; change the 8 to 9 (an item's might, [numbers](docs/NUMBERS.md)). Change nothing else.
+2. Change one number: the item definitions are in the start-up script. Open the file in `my mod work/edits/` whose name ends in `_STARTUP.PAK_ONETIME.INF.json` (floppy: `_GENERAL.PAK_ONETIME.INF.json`). The letters may be lowercase. In your editor, find the second match for `"might"`. Two lines above it, change `"argument": 8` to `"argument": 9` (an item's might, [numbers](docs/NUMBERS.md)).
 3. Build and check: `python3 tools/modkit.py build "/path/to/LoL1/DATA" "my mod work" "my mod output"`, then the same with `verify`. Both end with `62 archives or loose tables, 1 changed (STARTUP.PAK)` (floppy: `11 ..., 1 changed (GENERAL.PAK)`).
 4. Make the patch: `python3 tools/patch.py make --data "/path/to/LoL1/DATA" "my mod output" --title "Stronger item" --out "stronger item.json"` prints `make: data patch with 1 change in 1 file (STARTUP.PAK) ...`.
 5. Copy your whole game folder to a new folder, for example `LoL1 test copy`.

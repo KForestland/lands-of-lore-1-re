@@ -59,7 +59,7 @@ Share `level-patch.json` with someone who has the matching edition. They apply i
   and read the shape filename from the INI TEXT directory. In level 2, the
   INI loads `BOAR.SHP` into shape slot 0 and property slot 2 selects it. The
   CD handlers are `MAIN.EXE+0x47830` and `+0x4761D`. [Script functions](emc2_scripts.md)
-- **CONFIRMED static check.** `level_edit.py --data "/path/to/LoL1" --check` wrote unchanged copies for all 29 levels in each edition and re-read an edited copy of each level. It also verified patch creation and byte-identical undo. The call filter found 197 editable placements in each edition. **UNCONFIRMED in the running game.** The first edition-specific play test would load a fresh level 2 into a copy with the archive replaced, then check the changed wall and all three item operations.
+- **CONFIRMED static check.** `level_edit.py --data "/path/to/LoL1" --check` wrote unchanged copies for all 29 levels in each edition and re-read an edited copy of each level. It also verified patch creation and byte-identical undo. The call filter found 197 editable placements in each edition. On CD 1.02, one prepared copy of `L02.PAK` moves the Stick from square 69 to 138. The reader verifies that placement and undo reproduces the original archive. **UNCONFIRMED in the running game.** A fresh visit to level 2 on that copy can check the moved item from arrival square 106. Use a save from before the first visit, so the game reads the edited archive for the level.
 
 ## Outside this version
 

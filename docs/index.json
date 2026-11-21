@@ -275,6 +275,7 @@
       "answers": [],
       "question_references": [],
       "tools": [
+        "tools/lol.py",
         "tools/lol1_loose.py",
         "tools/modkit.py",
         "tools/patch.py",

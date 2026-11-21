@@ -130,6 +130,12 @@ These words mean the same thing in the notes for all three Lands of Lore games.
 | Level plan | An overhead drawing from the level's geometry. The HTML plan opens in a web browser and lets you choose a map feature to read its details. |
 | Gate | A script condition that can control a level change. See [Progression](PROGRESSION.md). |
 | Output folder | A directory you choose for the files a tool writes. The level and media tools use a new folder outside the game and the repository. |
+| Job | An action chosen through `tools/lol.py JOB`. Run `python3 tools/lol.py JOB --help` to see its options. |
+| `--data` | The folder to read. Game readers accept the installation folder or its data folder as described in [First ten minutes](FIRST_TEN_MINUTES.md). |
+| `--out` | The file or folder you choose for the output. See the example for the tool to tell which it expects. |
+| `--check` | Run the tool’s built-in checks and print a result. Checks can use temporary copies. |
+| Translation table | A list of the game’s text entries. The translation tool writes a spreadsheet-friendly CSV file for each editable table. |
+| SHA-256 | A checksum used to compare a file or a byte span with a known copy. |
 | Computed | The static walkthrough could not produce a constant argument or condition from this script. |
 | DATA word | A two-byte position in the script's DATA chunk. The plan shows it in hexadecimal so you can find the entry in a script listing. |
 | Edition fingerprint | A group of file names, byte counts and full SHA-256 checksums used to identify a measured release. See [Editions](EDITIONS.md). |
