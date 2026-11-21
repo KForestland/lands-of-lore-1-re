@@ -10,6 +10,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
 import modkit
+from modkit_core import local_path
 from save_page import render
 import translate
 from translate_fonts import coverage
@@ -38,6 +39,26 @@ def source(game):
 
 
 class TranslationTools(unittest.TestCase):
+    def test_workspace_paths_accept_an_alias_to_the_parent(self):
+        with TemporaryDirectory() as temp:
+            base = Path(temp)
+            parent = base / "parent"
+            work = parent / "private tables"
+            work.mkdir(parents=True)
+            plain = work / "words.csv"
+            plain.write_text("ordinary file", encoding="utf-8")
+            alias = base / "alias"
+            try:
+                alias.symlink_to(parent, target_is_directory=True)
+                (work / "linked.csv").symlink_to(plain)
+            except (OSError, NotImplementedError):
+                self.skipTest("creating symlinks is unavailable")
+
+            aliased_work = alias / work.name
+            self.assertEqual(local_path(aliased_work, plain.name).read_text(encoding="utf-8"), "ordinary file")
+            with self.assertRaisesRegex(ValueError, "symbolic links"):
+                local_path(aliased_work, "linked.csv")
+
     def test_copy_rebuild_with_growing_text_and_tamper(self):
         with TemporaryDirectory() as temp:
             base = Path(temp)

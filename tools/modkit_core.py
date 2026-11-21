@@ -62,7 +62,7 @@ def local_path(root, name, links=False):
             or relative.as_posix() != name or any(c in name for c in "\\:\0")):
         raise ValueError(f"invalid relative file name {name!r}")
     path = root.joinpath(*relative.parts)
-    if not links and path.resolve() != path:
+    if not links and path.resolve() != root.resolve().joinpath(*relative.parts):
         raise ValueError(f"symbolic links are outside the workspace contract: {name}")
     return path
 
