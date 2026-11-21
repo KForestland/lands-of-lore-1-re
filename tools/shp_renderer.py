@@ -49,6 +49,8 @@ transparent pixels.
 """
 from cli_errors import run_cli
 import os
+from pathlib import Path
+import re
 import struct
 
 import lol1lib as L
@@ -66,7 +68,7 @@ def shape_offsets(d):
     return [struct.unpack_from("<I", d, 2 + 4 * i)[0] for i in range(n)]
 
 
-def decode_shape(d, pos, alt=False):
+def decode_shape(d, pos, alt=False, *, colour_count_width=1):
     """Return dict(width, height, flags, pixels, consumed_ok) for the shape at pos."""
     if alt:
         pos += 2
@@ -74,7 +76,8 @@ def decode_shape(d, pos, alt=False):
     p = pos + 10
     ncol = 16
     if flags & 4:
-        ncol = d[p]; p += 1
+        ncol = int.from_bytes(d[p:p + colour_count_width], "little")
+        p += colour_count_width
     ctab = None
     if flags & 1:
         ctab = d[p:p + ncol]; p += ncol
@@ -113,6 +116,37 @@ def read_shp(blob, alt=False):
     return out
 
 
+def check_colour_count_width(blob):
+    """Use the first FXPAL shape, present in both original retail editions."""
+    page = "docs/formats/shp.md"
+    text = (Path(__file__).resolve().parents[1] / page).read_text(encoding="utf-8")
+    widths = {"byte": 1, "word": 2, "dword": 4}
+    flag = re.findall(r"bit 2 = a colour-count (\w+) precedes the colour table", text)
+    field = re.findall(r"^\| 10 \| \[uint(\d+)\] \| colour count\b", text, re.M)
+    if len(flag) != 1 or flag[0] not in widths or len(field) != 1:
+        raise ValueError(f"{page}: expected the bit 2 and +10 colour-count widths")
+
+    data = unwrap(blob)
+    pos = shape_offsets(data)[0] + 2
+    flags, _, _, _, size, _ = struct.unpack_from("<HBHBHH", data, pos)
+    if flags & 7 != 5 or pos + size > len(data):
+        raise ValueError("FXPAL.SHP shape 0 is not a complete variable-palette Frame4 shape")
+    record = data[pos:pos + size]
+    valid = []
+    for width in widths.values():
+        try:
+            if decode_shape(record, 0, colour_count_width=width)["exact"]:
+                valid.append(width)
+        except IndexError:
+            # A shifted Frame4 stream can start with a copy from missing pixels.
+            continue
+    if len(valid) != 1:
+        raise ValueError(f"FXPAL.SHP shape 0: ambiguous colour-count width {valid}")
+    if widths[flag[0]] != valid[0] or int(field[0]) != 8 * valid[0]:
+        raise ValueError(f"{page}: bit 2 says {flag[0]}, +10 says uint{field[0]}, "
+                         f"FXPAL.SHP shape 0 decodes only with {valid[0]} byte(s)")
+
+
 def main():
     ap = L.tool_args(__doc__, out_help="write shape PNGs to this directory, or a JSON inventory without a member")
     ap.add_argument("name", nargs="?", help="SHP member name, e.g. GAMESHP.SHP or GUARD.SHP")
@@ -129,8 +163,12 @@ def main():
         a.out_dir = a.out
     if a.check:
         files = shapes = exact = empty = 0; bad = []
+        checked_colour_count = False
         for pak, name, blob in L.find_all(".SHP", a.data):
             files += 1
+            if name == "FXPAL.SHP" and not a.alt_header:
+                check_colour_count_width(blob)
+                checked_colour_count = True
             try:
                 for i, sh in enumerate(read_shp(blob, a.alt_header)):
                     if sh is None:
@@ -142,9 +180,10 @@ def main():
                         bad.append(f"{name}#{i}")
             except Exception as ex:
                 bad.append(f"{name}:{type(ex).__name__}")
+        detail = "; documented colour count agrees with FXPAL.SHP shape 0" if checked_colour_count else ""
         print(f"CHECK shp: {files} files, {shapes} shapes (+{empty} empty slots), decoded exactly "
               f"(rows fill width, line data == frame size, height == height copy): {exact}/{shapes}, "
-              f"bad={bad[:8] or 'none'}{' ...' if len(bad) > 8 else ''} ({len(bad)})")
+              f"bad={bad[:8] or 'none'}{' ...' if len(bad) > 8 else ''} ({len(bad)}){detail}")
         return 0 if not bad else 1
     if a.out and not a.name:
         files = []
