@@ -16,13 +16,18 @@ def is_cd(data):
 
 
 def game_file(data, name):
+    name = name.replace(chr(92), "/")
     if name.upper() == "MUSIC.PAK" and not is_cd(data):
         raise WitnessUnavailable("MUSIC.PAK citation applies to the CD edition")
-    if name.upper() in {"MAIN.EXE", "MAINW.EXE"}:
+    if name.upper().startswith("HARDRIVE/"):
+        if not is_cd(data):
+            raise WitnessUnavailable("HARDRIVE file citations apply to the CD edition")
+        root = game_path(data, "HARDRIVE")
+    elif name.upper() in {"MAIN.EXE", "MAINW.EXE"}:
         root = game_path(data, "HARDRIVE") if is_cd(data) else data
     else:
         root = data
-    return game_path(root, name.replace(chr(92), "/").split("/")[-1])
+    return game_path(root, name.split("/")[-1])
 
 
 def edition_status(data):
@@ -164,6 +169,39 @@ def colour_width(wrapped):
 def read_witness(data, spec):
     kind, *args = spec
     cd = is_cd(data)
+    if kind in {"loose_size", "loose_uint16", "loose_string"}:
+        paths = [game_file(data, name) for name in args if isinstance(name, str)]
+        if kind == "loose_size":
+            results = {path.stat().st_size for path in paths}
+        else:
+            offset = args[-1]
+            with_bytes = [path.read_bytes() for path in paths]
+            results = ({unpack_from("<H", raw, offset)[0] for raw in with_bytes}
+                       if kind == "loose_uint16" else
+                       {raw[offset:raw.index(b"\0", offset)].decode("ascii") for raw in with_bytes})
+        if len(results) != 1:
+            raise ValueError("the named loose files do not agree")
+        return results.pop(), ", ".join(path.name for path in paths)
+    if kind == "wsa_flags":
+        if not cd:
+            raise WitnessUnavailable("CD WSA flag census does not apply to floppy")
+        flag = args[0]
+        matches = 0
+        for path in sorted(data.iterdir()):
+            if path.suffix.upper() != ".PAK":
+                continue
+            for name, offset in pak_rows(path)[0]:
+                if name.upper().endswith(".WSA"):
+                    with path.open("rb") as source:
+                        source.seek(offset)
+                        header = source.read(18)
+                    frames, = unpack_from("<H", header)
+                    flags, first = unpack_from("<HI", header, 12)
+                    data_start = 14 + 4 * (frames + 2) + (768 if flags & 1 else 0)
+                    if (first == data_start) != (flags == 0):
+                        raise ValueError(f"{name}: first frame offset and WSA flags disagree")
+                    matches += flags == flag
+        return matches, f"CD DATA PAK members, WSA +0xC flags {flag}"
     if kind in {"pak_count", "tlk_count"}:
         if not cd:
             raise WitnessUnavailable("CD DATA archive censuses do not apply to floppy")

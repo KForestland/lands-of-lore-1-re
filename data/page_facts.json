@@ -97,6 +97,58 @@
           "kind": "word"
         }
       ]
+    },
+    "wsa.cd.flags_zero": {
+      "reader": [
+        "wsa_flags",
+        0
+      ],
+      "anchors": [
+        {
+          "page": "docs/formats/wsa.md",
+          "before": "Flags on the CD data: ",
+          "after": " files flags 0",
+          "kind": "number"
+        },
+        {
+          "page": "docs/formats/wsa.md",
+          "before": "start of the frame data in ",
+          "after": " of 241 CD files",
+          "kind": "number"
+        }
+      ]
+    },
+    "loose.ico.type": {
+      "reader": [
+        "loose_uint16",
+        "HARDRIVE/LANDS.ICO",
+        "HARDRIVE/SETUP.ICO",
+        2
+      ],
+      "anchors": [
+        {
+          "page": "docs/formats/loose.md",
+          "before": "directory says reserved 0, type ",
+          "after": ", count",
+          "kind": "number"
+        }
+      ]
+    },
+    "loose.pif.signature": {
+      "reader": [
+        "loose_string",
+        "HARDRIVE/LANDS.PIF",
+        "HARDRIVE/DOSETUP.PIF",
+        369
+      ],
+      "anchors": [
+        {
+          "page": "docs/formats/loose.md",
+          "before": "At `0x171` the section name is `",
+          "after": "`. Its data field",
+          "kind": "text"
+        }
+      ]
     }
   },
   "automatic": {

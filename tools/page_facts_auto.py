@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 import re
 
-FILE = r"(?:DAT[/\\])?[A-Za-z0-9_][A-Za-z0-9_.-]*\.(?:DAT|EXE|MIX|PAK|WSX|TLK|LCF|HDR)"
+FILE = r"(?:(?:DAT|HARDRIVE)[/\\])?[A-Za-z0-9_][A-Za-z0-9_.-]*\.(?:DAT|EXE|MIX|PAK|WSX|TLK|LCF|HDR|ICO|PIF)"
 OFFSET = r"0x[0-9A-Fa-f]+"
 BYTE = r"[\da-fA-F]{2}"
 BYTES = BYTE + r"(?:[ \t]+" + BYTE + r"){1,31}"
@@ -12,6 +12,10 @@ DIRECT = re.compile(
     rf"(?:has|holds|starts with|contains|is|with)\s+(?:bytes\s+)?`(?P<value>{BYTES})`"
 )
 SIZE = re.compile(rf"`(?P<file>DAT[/\\][A-Za-z0-9_.-]+)`\s*\((?P<value>{DECIMAL}) bytes\)")
+PAIR_SIZE = re.compile(rf"`(?P<a>HARDRIVE[/\\][\w.]+)` and `(?P<b>HARDRIVE[/\\][\w.]+)`"
+                       rf"\s+are (?P<value>{DECIMAL}) bytes\b")
+STORES = re.compile(rf"`(?P<file>{FILE})\+(?P<offset>{OFFSET})`\s+stores\s+"
+                    r"(?:the full )?`(?P<value>[^`\n]+)`")
 STRING = re.compile(
     rf"\b(?:suffix|literal|string)\s+`(?P<value>[^\s`]+)`\s+(?:at|from)\s+"
     rf"`(?P<file>{FILE})\+(?P<offset>{OFFSET})`"
@@ -55,7 +59,7 @@ def probes(text, measured, config):
         return qualifiers[-1] if qualifiers else ""
 
     found = []
-    for regex, kind in ((DIRECT, "bytes_at"), (STRING, "string_at")):
+    for regex, kind in ((DIRECT, "bytes_at"), (STRING, "string_at"), (STORES, "string_at")):
         for match in regex.finditer(text):
             if eligible(match):
                 value = match["value"]
@@ -67,6 +71,11 @@ def probes(text, measured, config):
             value = match["value"]
             found.append(Claim(line(match.start("value")), value, parse_number(value),
                                ("file_size", match["file"])))
+    for match in PAIR_SIZE.finditer(text):
+        if eligible(match):
+            value = match["value"]
+            found.append(Claim(line(match.start("value")), value, parse_number(value),
+                               ("loose_size", match["a"], match["b"]), "CD"))
     if config.get("executable"):
         for match in PAIRED.finditer(text):
             if eligible(match):

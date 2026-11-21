@@ -39,6 +39,7 @@ VALUE = {
     "name": r"[a-zA-Z0-9_./\\-]+",
     "step": r"[+−-]\d+",
     "word": r"[a-zA-Z]+",
+    "text": r"[^`\n]+",
 }
 HTML_COMMENT = re.compile(r"<!--.*?-->", re.S)
 
@@ -82,7 +83,7 @@ def measured_lines(body):
             labels = LABEL.findall(prose)
             if labels:
                 measured = labels[-1] in {"CONFIRMED", "PROVEN"}
-            if measured or intro:
+            if measured or intro or set(labels) & {"CONFIRMED", "PROVEN"}:
                 yield line, prose
 
     for line, prose in enumerate(lines, 1):
