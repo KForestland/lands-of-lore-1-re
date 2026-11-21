@@ -1,9 +1,19 @@
 # First ten minutes
 
 Draw a level from your own installed copy of Lands of Lore I.
-You need Python 3.10 or later with the Pillow package, a web browser, and the
-game's `DATA` folder. Find the folder containing `GENERAL.PAK`.
-For the floppy edition, the folder containing `GENERAL.PAK` may be the installation folder itself.
+You need Python 3.10 or later, the Pillow package and a web browser.
+
+## Find your game files
+
+Open the folder for your own copy of the game in your file manager.
+
+- **CD edition:** open `DATA`. Use the folder that contains both `L01.PAK` and `GENERAL.PAK` directly.
+- **Floppy edition:** use the installation folder that contains both `CHAPTER8.PAK` and `GENERAL.PAK` directly.
+
+If a search finds several copies of `GENERAL.PAK`, use the one next to the
+edition's marker above. The CD's language folders and demos can have their
+own `GENERAL.PAK`. Lowercase names such as `l01.pak` also work. Copy the
+full path of the folder itself.
 
 ## Download the tools
 
@@ -21,12 +31,16 @@ If the command is missing or the version is below 3.10, install a
 current Python 3 release with the Python launcher, then reopen PowerShell.
 [Python for Windows](https://www.python.org/downloads/windows/)
 
-Paste these lines, replacing the path after `$data =` with
-the folder you found above. Keep the quotation marks around paths.
+Run this line, then paste the folder path when PowerShell asks for it.
+
+```powershell
+$data = (Read-Host 'Paste the path to your game folder').Trim('"')
+```
+
+Then paste these lines.
 
 ```powershell
 Set-Location "$HOME\Downloads\lands-of-lore-1-re-main"
-$data = 'C:\Games\Lands of Lore I\DATA'
 $out = "$HOME\Downloads\LoL1 output"
 New-Item -ItemType Directory -Force "$out" | Out-Null
 ```
@@ -49,12 +63,16 @@ Start-Process "$out\schematic\level01_schematic.png"
 
 Open a terminal. If `python3 --version` reports a version below 3.10,
 install a newer Python with your distribution's package manager. On Ubuntu or Debian, `sudo apt install python3-venv` installs the venv module.
-Paste these lines, replacing the path after `data=` with the folder you
-found above.
+Run this line, paste the folder path and press Enter again.
+
+```sh
+IFS= read -r data
+```
+
+Then paste these lines.
 
 ```sh
 cd "$HOME/Downloads/lands-of-lore-1-re-main"
-data="$HOME/Games/Lands of Lore I/DATA"
 out="$HOME/Downloads/LoL1 output"
 mkdir -p "$out"
 python3 -m venv .venv
@@ -64,8 +82,8 @@ xdg-open "$out/schematic/level01_schematic.png"
 ```
 
 Light squares are open floor, dark squares have walls on all four sides, and orange squares have some walls. Red marks sit on decorated faces.
-If the tool cannot find a game file, check that the path points to the
-folder containing `GENERAL.PAK`. If the open command fails, open
+If the tool cannot find a game file, check the markers in
+[Find your game files](#find-your-game-files). If the open command fails, open
 `level01_schematic.png` from the schematic folder in your browser.
 
 To draw the picture again, choose a new schematic folder name in both lines.
