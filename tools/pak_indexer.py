@@ -120,6 +120,7 @@ def build_index(data_dir):
     flat = []
     for pak in L.list_paks(data_dir):
         blob = open(os.path.join(data_dir, pak), 'rb').read()
+        pak = pak.upper()
         entries = []
         pos = 0
         for name, off, size in L.pak_entries(blob):

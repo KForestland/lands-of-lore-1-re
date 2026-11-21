@@ -17,7 +17,40 @@ Use `level_viewer.py --check` to write and read back one plan in a temporary fol
 
 `edition.py` reads names, file sizes and SHA-256 to identify a measured game copy. `--check` verifies the full fingerprint in `check_all.py`. [Edition fingerprints](../docs/EDITIONS.md)
 
+## Reader tool examples
+
+Run these from the repository folder. Set the data variable as shown under Setup. Create `../lol1-out` before using the save or patch example, and set `LOL1_SLOT` to your save file.
+
+| Tool | Example | Output |
+|---|---|---|
+| Job menu | `python tools/lol.py --help` | level, text, translate, music, save, patch, mod |
+| Interactive map | `python tools/level_viewer.py --data "$LOL1_DATA" --check` | level01 page with 1,082 entries |
+| Level copy editor | `python tools/level_edit.py --data "$LOL1_DATA" --check` | 29 original levels copied byte-identically and 29 edited levels read back |
+| Translation tables | `python tools/translate.py --data "$LOL1_DATA" --check` | 213 tables, 7,760 rows, 28 indexed fonts |
+| Edition fingerprints | `python tools/edition.py --data "$LOL1_DATA" --check` | English CD 1.02, all 12 fingerprints match |
+| Fields from a save | `python tools/lol.py save page "$LOL1_SLOT" --out ../lol1-out/save.html` | Writes save.html with stored values and commands for making an edited copy |
+| Archive workspace | `python tools/modkit.py --data "$LOL1_DATA" --check` | Byte-identical rebuild of 62 archives from 289 editable entries on the measured CD |
+| Patch maker | `python tools/patch.py make --data "$LOL1_DATA" "my mod output" --title "My edit" --out ../lol1-out/edit.json` | Writes a version 3 patch and reports the changed files |
+| Progression and doors | `python tools/lol1_progression.py --data "$LOL1_DATA" --check` | 71 level changes, 136 door calls and 29 linked level sheets |
+| Sound driver entries | `python tools/lol1_driver_tables.py --data "$LOL1_DATA" --check` | 6 ADV tables per archive and 3 identical CD language copies |
+| Finale blend indices | `python tools/lol1_blend_indices.py --data "$LOL1_DATA" --check` | 3 languages, 4 calls and 3 passes per call |
+| Possible spelling mistakes | `python tools/list_likely_spellings.py --data "$LOL1_DATA" --check` | 30 tables per language, 6,495 strings and 0 bad tables or bigrams on the measured CD. Candidate counts depend on the word list. |
+
+The commands also exercise these Python modules through their user-facing tools.
+
+| Modules | Command above | What they produce |
+|---|---|---|
+| `level_html.py` | Interactive map | Searchable entries and drawing in one offline page |
+| `level_editor_ui.py` supplies the LoL1 wall, item and monster controls | Level copy editor | Controls in the offline map and placement data for the editor |
+| `save_edit.py`, `save_page.py` | Fields from a save | An offline field page with one command per editable field |
+| `modkit_core.py` | Archive workspace | Manifest, editable entries and verified archive copies |
+| `translate_data.py`, `translate_fonts.py` | Translation tables | Counts for the rebuilt text tables and indexed fonts |
+
+The [reader tool check audit](../docs/TOOL_CHECK_AUDIT.md) lists the mistakes tested on generated files.
+
 ## Setup
+
+For game data, give `--data` either your installation folder or its `DATA` folder. The readers accept mixed, uppercase or lowercase filenames and keep the spelling of files they copy.
 
 - Python 3.10 or later and Pillow (`pip install -r requirements.txt`) for the tools that write PNG files; Capstone (in the same file) for `monster_reference_scan.py`.
 - Your own copy of the game. Point the tools at its main `DATA` folder (the one holding `GENERAL.PAK` and, on the CD, `L01.PAK`) with `--data /path/to/DATA`, or once with `export LOL1_DATA=/path/to/DATA`. A language subfolder such as the CD's `DATA/ENG` is not a complete game folder.
@@ -429,6 +462,7 @@ Prints English words in the text tables that are one small edit from a system-di
 
 ```
 $ python3 tools/list_likely_spellings.py --data DATA --check
+tables ENG 30 FRE 30 GER 30 strings 6495 bad-table 0 bad-bigram 0 candidates 32
 ```
 
 ```

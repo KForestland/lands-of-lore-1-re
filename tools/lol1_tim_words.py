@@ -7,7 +7,7 @@ three words and does not pass the pointer.
 
   lol1_tim_words.py --data DATA --check
 """
-from cli_errors import run_cli
+from cli_errors import run_cli, game_path
 import os
 import struct
 
@@ -108,7 +108,7 @@ def extra_sites(data_dir):
     for name in sorted(os.listdir(data_dir)):
         if not name.upper().endswith(".PAK"):
             continue
-        raw = open(os.path.join(data_dir, name), "rb").read()
+        raw = open(str(game_path(data_dir, name)), "rb").read()
         try:
             entries = L.pak_entries(raw)
         except (OSError, ValueError, struct.error):
@@ -145,7 +145,7 @@ def conversions(text):
 
 
 def string_at(data_dir, pak, member, index):
-    raw = open(os.path.join(data_dir, pak), "rb").read()
+    raw = open(str(game_path(data_dir, pak)), "rb").read()
     for name, offset, size in L.pak_entries(raw):
         if name.upper() != member:
             continue
@@ -166,7 +166,7 @@ def check_strings(data_dir, rows):
 
 
 def check_cd(data_dir):
-    exe_path = os.path.join(data_dir, "HARDRIVE", "MAIN.EXE")
+    exe_path = str(game_path(data_dir, "HARDRIVE", "MAIN.EXE"))
     try:
         exe = open(exe_path, "rb").read()
     except OSError as exc:
@@ -208,7 +208,7 @@ def check_cd(data_dir):
     bad = check_strings(data_dir, CD_STRINGS)
     if bad:
         return fail(bad)
-    pak = open(os.path.join(data_dir, "O02B.PAK"), "rb").read()
+    pak = open(str(game_path(data_dir, "O02B.PAK")), "rb").read()
     if pak[0xCEE1:0xCEE1 + 10] != bytes.fromhex("05000000190102000000"):
         return fail("O02B.PAK+0xCEE1 is not the 19/02 instruction whose argument is 0 at +0xCEE9")
     print("CHECK tim_words: 14 CD extra words are 0; 0x07 and 0x0D pass the operand pointer and a start index; "
@@ -217,7 +217,7 @@ def check_cd(data_dir):
 
 
 def check_floppy(data_dir):
-    exe = open(os.path.join(data_dir, "MAIN.EXE"), "rb").read()
+    exe = open(str(game_path(data_dir, "MAIN.EXE")), "rb").read()
     if len(exe) != 373872 or struct.unpack_from("<H", exe, 8)[0] * 16 != 18432:
         return fail(f"floppy MAIN.EXE is {len(exe)} bytes")
     fl_talk = bytes.fromhex("558bec6a0166ff7606")
@@ -243,7 +243,7 @@ def check_floppy(data_dir):
     bad = check_strings(data_dir, FL_STRINGS)
     if bad:
         return fail(bad)
-    pak = open(os.path.join(data_dir, "CHAPTER1.PAK"), "rb").read()
+    pak = open(str(game_path(data_dir, "CHAPTER1.PAK")), "rb").read()
     if pak[0xE7548:0xE7548 + 10] != bytes.fromhex("05000000190102000000"):
         return fail("CHAPTER1.PAK+0xE7548 is not the 19/02 instruction whose argument is 0 at +0xE7550")
     print("CHECK tim_words: floppy 0x07 and 0x0D push the operand pointer and a start index; "
@@ -258,7 +258,7 @@ def main():
         parser.error("this tool only checks; pass --check")
     if L.is_cd_layout(args.data):
         return check_cd(args.data)
-    if not os.path.isfile(os.path.join(args.data, "MAIN.EXE")):
+    if not os.path.isfile(str(game_path(args.data, "MAIN.EXE"))):
         print("CHECK tim_words: floppy layout, MAIN.EXE is not in this folder")
         return 0
     return check_floppy(args.data)

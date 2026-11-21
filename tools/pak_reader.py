@@ -13,7 +13,7 @@ opens "%02d.TLK" with loadPakFile (engines/kyra/engine/lol.cpp:1892-1902).
   pak_reader.py extract GENERAL.PAK PARCH.CPS -o /tmp/out
   pak_reader.py --check      # parse every .PAK and .TLK in the DATA folder
 """
-from cli_errors import ReaderArgumentParser, output_refusal, run_cli
+from cli_errors import ReaderArgumentParser, output_refusal, run_cli, game_path
 import argparse, os
 import lol1lib as L
 
@@ -31,7 +31,7 @@ def main():
         names = sorted(n for n in os.listdir(a.data) if n.upper().endswith((".PAK", ".TLK")))
         total = 0; bad = []
         for n in names:
-            d = open(os.path.join(a.data, n), "rb").read()
+            d = open(str(game_path(a.data, n)), "rb").read()
             e = L.pak_entries(d)
             total += len(e)
             # members must tile the file after the directory exactly
@@ -41,7 +41,7 @@ def main():
         return 0 if not bad else 1
     if not a.cmd or not a.container:
         ap.print_help(); return 2
-    d = open(os.path.join(a.data, a.container), "rb").read()
+    d = open(str(game_path(a.data, a.container)), "rb").read()
     e = L.pak_entries(d)
     if a.cmd == "list":
         for name, off, sz in e:

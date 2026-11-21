@@ -4,7 +4,7 @@ from hashlib import sha256
 import os
 from pathlib import Path
 
-from cli_errors import ReaderArgumentParser, run_cli
+from cli_errors import ReaderArgumentParser, game_path, run_cli
 
 
 WITNESSES = {'English CD 1.02': {'HARDRIVE/MAIN.EXE': (356928, '10a9bdce8e234a917da36bbdfe5434add3d9ce01f0ea9b132a95b2fd1ef03e23'),
@@ -30,19 +30,15 @@ DATA_ENV = "LOL1_DATA"
 
 
 def locate(root, name):
-    for part in name.split("/"):
-        if not root.is_dir():
-            return None
-        root = next((entry for entry in root.iterdir() if entry.name.casefold() == part.casefold()), None)
-        if root is None:
-            return None
-    return root if root.is_file() else None
+    path = game_path(root, name)
+    return path if path.is_file() else None
 
 
 def identify(root):
     names = dict.fromkeys(name for rows in WITNESSES.values() for name in rows)
     if SUBFOLDER == "DATA":
-        root = next((p for p in root.iterdir() if p.is_dir() and p.name.upper() == SUBFOLDER), root)
+        child = game_path(root, SUBFOLDER)
+        root = child if child.is_dir() else root
     elif SUBFOLDER == "DAT" and root.name.upper() == "DAT":
         root = root.parent
     found = {}

@@ -17,7 +17,7 @@ MAINW.EXE (0x56190), floppy MAIN.EXE (0x5B470) in the game folder itself.
 
 Prints to stdout only; writes nothing.
 """
-from cli_errors import ReaderArgumentParser, run_cli
+from cli_errors import ReaderArgumentParser, run_cli, game_path
 import argparse, os, struct
 from hashlib import sha256
 import lol1lib as L
@@ -238,7 +238,7 @@ def find_images(data_dir):
     found = []
     for sub in ("HARDRIVE", ""):
         for name in ("MAIN.EXE", "MAINW.EXE"):
-            p = os.path.join(data_dir, sub, name) if sub else os.path.join(data_dir, name)
+            p = str(game_path(data_dir, sub, name)) if sub else str(game_path(data_dir, name))
             if os.path.isfile(p):
                 with open(p, "rb") as f:
                     b = f.read()

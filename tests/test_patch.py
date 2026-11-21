@@ -249,6 +249,12 @@ class PatchTool(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "does not hold the bytes"):
             patch_tool.splice("DAT/X", 0, new.replace(b"??", b"XX"), edits)
 
+    def test_resize_preserves_long_repeated_middle(self):
+        middle = b"A" * 240
+        changes = list(patch_tool.byte_deltas("example", 0, b"x" + middle + b"y", b"z" + middle + b"w!"))
+        self.assertEqual([(row["offset"], row["old_length"], row["new"]) for row in changes],
+                         [(0, 1, "7a"), (241, 1, "7721")])
+
     def test_make_refuses_long_shared_runs(self):
         old, new = b"XABCDEFGHY", b"ZQABCDEFGH"
         original = program_image() + old

@@ -503,7 +503,7 @@ def main():
     ap = L.tool_args(__doc__, out_help="write level sheets to this directory", out_aliases=("--out-dir",))
     ap.add_argument("--level", type=int)
     a = ap.parse_args()
-    EDITION = "CD edition" if any(os.path.isfile(os.path.join(a.data, n)) for n in ("L01.PAK", "l01.pak")) else "floppy edition"
+    EDITION = "CD edition" if L.is_cd_layout(a.data) else "floppy edition"
     items, lands = item_names(a.data)
     levels = [a.level] if a.level else list(range(1, 30))
     stats = {}

@@ -50,12 +50,25 @@ class TranslationTools(unittest.TestCase):
             with table.open(encoding="utf-8-sig", newline="") as f:
                 rows = list(csv.reader(f))
             self.assertEqual(rows[1][1:3], ["Novel", ""])
+            original_id = rows[1][0]
+            rows[1][0] = "Replaced ID"
+            with table.open("w", encoding="utf-8", newline="") as f:
+                csv.writer(f).writerows(rows)
+            with self.assertRaisesRegex(ValueError, "Keep the ID"):
+                translate.build(game, work, output)
+            self.assertFalse(output.exists())
+            rows[1][0] = original_id
             rows[1][2] = "A longer invented line."
             with table.open("w", encoding="utf-8", newline="") as f:
                 csv.writer(f).writerows(rows)
             with patch("translate.fonts.installed", return_value=[("font", set(range(32, 127)))]):
                 self.assertEqual(translate.build(game, work, output), 1)
             self.assertEqual(translate.verify(game, work, output), 1)
+            extra = output / "extra.txt"
+            extra.write_text("unexpected", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "unexpected files"):
+                translate.verify(game, work, output)
+            extra.unlink()
             for path, raw in before.items():
                 self.assertEqual(path.read_bytes(), raw)
             changed, = output.iterdir()
@@ -70,11 +83,12 @@ class TranslationTools(unittest.TestCase):
             coverage(raw[:-1])
 
     def test_save_page_escapes_original_values(self):
-        html = render(Path("someone's save.000"), "LoL", [
+        html = render(Path("someone's test & save.000"), "LoL", [
             ("name", "Name", "</script>", "A name", 43, "Read confirmed")
         ], [("Position", "<10 / 20>")])
         self.assertIn(r"\u003c/script>", html)
         self.assertIn("&lt;10 / 20&gt;", html)
+        self.assertIn("someone&#x27;s test &amp; save.000</p>", html)
         self.assertIn("tools/lol.py save set --out", html)
         self.assertIn('value="../edited-save.000"', html)
 

@@ -13,7 +13,7 @@ import re
 import struct
 import sys
 
-from cli_errors import ReaderArgumentParser, run_cli
+from cli_errors import ReaderArgumentParser, game_path, input_path, run_cli
 import modkit as adapter
 import modkit_core as core
 
@@ -403,7 +403,7 @@ def changed_names(root, base, changed, kinds):
         pairs = {}
         for path in paths:
             relative = path.relative_to(changed).as_posix()
-            target = place.joinpath(*relative.split("/"))
+            target = game_path(place, relative)
             try:
                 name = target.relative_to(base).as_posix()
             except ValueError:
@@ -465,12 +465,21 @@ def prepare(root, patch):
     base = base_folder(root)
     sources = source_files(base, kind)
     files, reverse, programs = {}, [], {}
-    for name, entries in sorted(groups.items()):
-        if name not in sources:
-            raise ValueError(f"the patch changes {name}, which is not in {base}; give "
-                             f"{BASE[adapter.GAME]}, of the same game and edition the patch was made for")
+    for named, entries in sorted(groups.items()):
+        if named in sources:
+            name = named
+        else:
+            matches = [candidate for candidate in sources if candidate.casefold() == named.casefold()]
+            if not matches:
+                raise ValueError(f"the patch changes {named}, which is not in {base}; give "
+                                 f"{BASE[adapter.GAME]}, of the same game and edition the patch was made for")
+            if len(matches) > 1:
+                raise ValueError(f"the patch name {named} matches several files in {base}; use the exact spelling")
+            name, = matches
+        if name in files:
+            raise ValueError(f"the patch names {name} more than once with different capitalization")
         original = read_source(base, name)
-        if kind == "program" and digest(original) != patch["sha256"][name]:
+        if kind == "program" and digest(original) != patch["sha256"][named]:
             raise ValueError(f"{name} is not the program this patch was made for (its SHA-256 "
                              "differs); a program patch fits only the same edition and version")
         changed, undo = edit_file(kind, name, original, entries)
@@ -521,7 +530,7 @@ def game_and_path(parser, args):
     data = data or os.environ.get(adapter.DATA_ENV)
     if not data:
         parser.error(f"give the game folder with --data (or set {adapter.DATA_ENV})")
-    return Path(data), Path(paths[0])
+    return input_path(data), Path(paths[0])
 
 
 def run(argv=None):

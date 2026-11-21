@@ -10,7 +10,7 @@ The CD DATA folder has a second DRIVERS.PAK, identical in ENG, FRE and GER;
 from pathlib import Path
 from struct import unpack_from
 
-from cli_errors import run_cli
+from cli_errors import run_cli, game_path
 import lol1lib as L
 
 ADV_NAMES = ("ALGDIG.ADV", "MT32MPU.ADV", "PCSPKR.ADV", "SBDIG.ADV",
@@ -101,9 +101,9 @@ def read_drivers(original, show=False):
 def main():
     parser = L.tool_args(__doc__, writes=False)
     args = parser.parse_args()
-    paths = [Path(args.pak) if args.pak else Path(args.data) / "DRIVERS.PAK"]
+    paths = [Path(args.pak) if args.pak else game_path(Path(args.data), "DRIVERS.PAK")]
     if not args.pak:
-        paths += [path for path in (Path(args.data) / lang / "DRIVERS.PAK" for lang in LANGUAGE_DIRS)
+        paths += [path for path in (game_path(Path(args.data), lang, "DRIVERS.PAK") for lang in LANGUAGE_DIRS)
                   if path.is_file()]
     images = [path.read_bytes() for path in paths]
     found = []

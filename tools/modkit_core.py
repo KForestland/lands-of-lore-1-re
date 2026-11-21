@@ -8,7 +8,7 @@ from pathlib import Path, PurePosixPath
 import struct
 from tempfile import TemporaryDirectory
 
-from cli_errors import ReaderArgumentParser, output_refusal
+from cli_errors import ReaderArgumentParser, data_folder, input_path, output_refusal
 
 MANIFEST = "manifest.json"
 WORK_FORMAT = "lol-mod-work-1"
@@ -38,8 +38,11 @@ def read_json(path):
 
 
 def game_folder(adapter, root):
+    root = input_path(root)
     if not root.is_dir():
         raise ValueError(f"game folder not found: {root}; give {adapter.FOLDER}")
+    if adapter.GAME == "lol1":
+        return data_folder(root)
     # A DAT folder is read with the game folder above it, which holds the loose tables.
     return root.parent if root.name.upper() == "DAT" else root
 
@@ -326,14 +329,18 @@ def main(adapter):
         return check(adapter, args.data)
     if not args.command:
         parser.error("give unpack, build, verify or --check --data DIR")
-    root = game_folder(adapter, args.game_folder.resolve())
+    given = input_path(args.game_folder).resolve()
+    root = game_folder(adapter, given)
     work = args.work_folder.resolve()
     if args.command == "unpack":
+        output_path(work, root, given)
         count = unpack(adapter, root, work)
         files = len(read_json(work / MANIFEST)["files"])
         print(f"unpack: {count} editable entries from {files} files written to {work}; "
               f"edit the files in its edits folder, then run build")
         return 0
+    if args.command == "build":
+        output_path(args.output_folder, root, work, given)
     run = build if args.command == "build" else verify
     count, changed = run(adapter, root, work, args.output_folder)
     done = {"build": f"written to {args.output_folder.resolve()}; run verify next",

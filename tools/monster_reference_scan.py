@@ -9,7 +9,7 @@ See docs/unknowns/18_native_records.md. Needs Capstone (pip install -r requireme
                                                     # both editions, files named directly
 Reads only; writes nothing. Prints one CHECK line per edition.
 """
-from cli_errors import ReaderArgumentParser, run_cli
+from cli_errors import ReaderArgumentParser, run_cli, game_path
 import argparse
 import os
 import struct
@@ -149,7 +149,7 @@ EDITIONS = {
 def main_exe(data_dir):
     """(edition, MAIN.EXE path) for a game DATA folder: CD keeps it in HARDRIVE/."""
     for edition, rel in (("CD", ("HARDRIVE", "MAIN.EXE")), ("floppy", ("MAIN.EXE",))):
-        p = Path(data_dir, *rel)
+        p = game_path(data_dir, *rel)
         if p.is_file():
             return edition, p
     raise OSError(f"no MAIN.EXE in {data_dir} or {data_dir}/HARDRIVE")

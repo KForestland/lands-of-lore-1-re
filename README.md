@@ -31,7 +31,7 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- rating:begin -->
 - **Files read:** 199 of 199 files in the CD `DATA` folder (289.0 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 571 statements CONFIRMED (proved from the program code or the files) and 100 UNCONFIRMED (a reading not yet proved), on 107 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 571 statements CONFIRMED (proved from the program code or the files) and 100 UNCONFIRMED (a reading not yet proved), on 108 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 <!-- rating:end -->
@@ -83,6 +83,21 @@ What you can look at with your own copy of the game. Run from the clone with `ex
 | A sound effect as WAV | `python3 tools/voc_reader.py VOC.PAK:1BOLTC.VOC --out ../lol1-out/bolt.wav` |
 | Music as standard MIDI | `python3 tools/xmi_to_midi.py LORE01A.XMI --out ../lol1-out/midi` |
 | A saved game you made | `python3 tools/save_reader.py /path/to/your/save` |
+
+| Tool | Command | Example result |
+|---|---|---|
+| Job menu | `python tools/lol.py --help` | level, text, translate, music, save, patch, mod |
+| Interactive map | `python tools/level_viewer.py --data "$LOL1_DATA" --check` | level01 page with 1,082 entries |
+| Level copy editor | `python tools/level_edit.py --data "$LOL1_DATA" --check` | 29 original levels copied byte-identically and 29 edited levels read back |
+| Translation tables | `python tools/translate.py --data "$LOL1_DATA" --check` | 213 tables, 7,760 rows, 28 indexed fonts |
+| Edition fingerprints | `python tools/edition.py --data "$LOL1_DATA" --check` | English CD 1.02, all 12 fingerprints match |
+| Fields from a save | `python tools/lol.py save page "/path/to/my save.dat" --out ../lol1-out/save.html` | Writes save.html with stored values and commands for making an edited copy |
+| Archive workspace | `python tools/modkit.py --data "$LOL1_DATA" --check` | Byte-identical rebuild of 62 archives from 289 editable entries on the measured CD |
+| Patch maker | `python tools/patch.py make --data "$LOL1_DATA" "my mod output" --title "My edit" --out ../lol1-out/edit.json` | Writes a version 3 patch and reports the changed files |
+| Progression and doors | `python tools/lol1_progression.py --data "$LOL1_DATA" --check` | 71 level changes, 136 door calls and 29 linked level sheets |
+| Sound driver entries | `python tools/lol1_driver_tables.py --data "$LOL1_DATA" --check` | 6 ADV tables per archive and 3 identical CD language copies |
+| Finale blend indices | `python tools/lol1_blend_indices.py --data "$LOL1_DATA" --check` | 3 languages, 4 calls and 3 passes per call |
+| Possible spelling mistakes | `python tools/list_likely_spellings.py --data "$LOL1_DATA" --check` | 30 tables per language, 6,495 strings and 0 bad tables or bigrams on the measured CD. Candidate counts depend on the word list. |
 
 ## Change a number in your own copy
 

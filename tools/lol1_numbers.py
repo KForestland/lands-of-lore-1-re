@@ -46,6 +46,7 @@ def render(data):
     xp = exe_tables.OFFSETS["xp"][kind]
     magic = exe_tables.OFFSETS["spells"][kind]
     setup, one_time = lol1lib.find_member("ONETIME.INF", data)
+    setup = setup.upper() if setup is not None else "loose"
     items = list(definitions(one_time, 0x0E, 10))
     if sorted(v[0] for _, v in items) != list(range(285)):
         raise ValueError("item definitions do not cover IDs 0–284")

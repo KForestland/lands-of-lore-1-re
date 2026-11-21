@@ -157,12 +157,20 @@
         "tools/check_all.py",
         "tools/cps_reader.py",
         "tools/decode_dialogue.py",
+        "tools/edition.py",
         "tools/emc2_decompile.py",
         "tools/example_images.py",
         "tools/exe_tables.py",
         "tools/full_report.py",
+        "tools/level_edit.py",
         "tools/level_renderer.py",
         "tools/level_report.py",
+        "tools/level_viewer.py",
+        "tools/list_likely_spellings.py",
+        "tools/lol.py",
+        "tools/lol1_blend_indices.py",
+        "tools/lol1_driver_tables.py",
+        "tools/lol1_progression.py",
         "tools/modkit.py",
         "tools/palette_reader.py",
         "tools/parse_tim.py",
@@ -172,6 +180,7 @@
         "tools/save_edit.py",
         "tools/save_reader.py",
         "tools/shp_renderer.py",
+        "tools/translate.py",
         "tools/vcn_vmp_reader.py",
         "tools/voc_reader.py",
         "tools/wsa_extract.py",
@@ -507,6 +516,15 @@
         "tools/wsa_extract.py",
         "tools/xmi_to_midi.py",
         "tools/xxx_reader.py"
+      ]
+    },
+    {
+      "path": "docs/TOOL_CHECK_AUDIT.md",
+      "title": "Reader tool check audit",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/doc_links.py"
       ]
     },
     {
@@ -1549,6 +1567,7 @@
         "tools/fnt_reader.py",
         "tools/full_report.py",
         "tools/level_edit.py",
+        "tools/level_editor_ui.py",
         "tools/level_html.py",
         "tools/level_renderer.py",
         "tools/level_report.py",
