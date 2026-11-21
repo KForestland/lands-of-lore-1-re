@@ -7,6 +7,7 @@ import unittest
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "tools"))
 
 import page_facts
+from page_facts_auto import observed, probes
 
 
 class PageFactsTests(unittest.TestCase):
@@ -32,9 +33,9 @@ CONFIRMED `OUTSIDE.DAT` has 2 records.
             (root / "docs").mkdir()
             page = root / "docs" / "table.md"
             page.write_text("# Table\n\nCONFIRMED. Frame size is 75 bytes.\n", encoding="utf-8")
-            _, accepted, _, _ = page_facts.scan(root, {})
+            _, accepted, _, _, _ = page_facts.scan(root, {})
             page.write_text("# Table\n\nCONFIRMED. Frame size is 76 bytes.\n", encoding="utf-8")
-            _, altered, _, _ = page_facts.scan(root, {})
+            _, altered, _, _, _ = page_facts.scan(root, {})
             self.assertIn("docs/table.md:3: unreviewed literal or changed prose-only claim",
                           list(page_facts.inventory_errors(altered, accepted)))
 
@@ -45,9 +46,9 @@ CONFIRMED `OUTSIDE.DAT` has 2 records.
             page = root / "docs" / "table.md"
             body = "# Table\n\nCONFIRMED. Frame size is 75 bytes.\n"
             page.write_text(body, encoding="utf-8")
-            _, accepted, _, _ = page_facts.scan(root, {})
+            _, accepted, _, _, _ = page_facts.scan(root, {})
             page.write_text(body.replace("# Table\n", "# Table\n\nOne sentence.\n"), encoding="utf-8")
-            _, moved, _, _ = page_facts.scan(root, {})
+            _, moved, _, _, _ = page_facts.scan(root, {})
             self.assertEqual(list(page_facts.inventory_errors(moved, accepted)), [])
 
     def test_exact_anchor_returns_value_even_if_wrong(self):
@@ -55,6 +56,23 @@ CONFIRMED `OUTSIDE.DAT` has 2 records.
         self.assertEqual(page_facts.locate("# Table\n\nfirst at `0xBED`", anchor), (3, "0xBED"))
         with self.assertRaisesRegex(ValueError, r"3: expected one anchor"):
             page_facts.locate("# Table\n\nfirst at `unknown`", anchor)
+
+
+    def test_measured_record_size_is_checked_independently_of_inventory(self):
+        body = "CONFIRMED. A table of 147-byte creature definitions. Its 136-byte body is followed by a 12-byte tag."
+        claim, = probes(body, {1: body}, {})
+        self.assertEqual(claim.expected, 136)
+        self.assertEqual(observed(claim, None, None, None)[0], 135)
+
+    def test_cited_original_bytes_and_string(self):
+        with tempfile.TemporaryDirectory() as folder:
+            original = pathlib.Path(folder) / "EXAMPLE.DAT"
+            original.write_bytes(b"\x02\0.odf\0")
+            body = "CONFIRMED. `EXAMPLE.DAT+0x0` holds `02 00`. The suffix `.obf` is from another field."
+            body += "\nIt reads suffix `.obf` from `EXAMPLE.DAT+0x2`."
+            got = probes(body, dict(page_facts.measured_lines(body)), {})
+            values = [observed(claim, original.parent, None, lambda root, name: root / name)[0] for claim in got]
+            self.assertEqual(values, [b"\x02\0", ".odf"])
 
 
 if __name__ == "__main__":

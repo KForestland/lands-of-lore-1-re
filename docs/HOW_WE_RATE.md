@@ -96,12 +96,15 @@ answered. *Answered*: nothing is left to settle from the files or the program. *
 
 **Page facts.** The scanner counts offsets, names and numbers in passages
 marked as proved, in measured examples, and at the registry's explicit anchors.
-Registered witnesses independently read the named original files. Run
+Registered witnesses independently read the named original files. Supported
+byte and string citations and measured corpus counts also form witnesses.
+Record-size arithmetic is checked for consistency. Run
 `python3 tools/page_facts.py --check --data DATA` to compare those values or
 `python3 tools/page_facts.py --list` to see the prose-only claims and their reason.
 The prose inventory flags changes for review. Its fingerprints do not establish
 what the bytes say. After verifying a documentation change, review the output
-of `python3 tools/page_facts.py --inventory` before recording the revised inventory.
+of `python3 tools/page_facts.py --inventory` before recording the revised inventory. Handoffs list the changed
+prose-only lines and the evidence used to review them.
 
 ## What the rating does not say
 

@@ -98,5 +98,15 @@
         }
       ]
     }
+  },
+  "automatic": {
+    "executable": "MAIN.EXE",
+    "counts": {
+      "tlk_verify.py": {
+        "members": [
+          "tlk_count"
+        ]
+      }
+    }
   }
 }

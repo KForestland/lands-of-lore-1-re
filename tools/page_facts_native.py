@@ -15,6 +15,16 @@ def is_cd(data):
     return game_path(data, "L01.PAK").is_file()
 
 
+def game_file(data, name):
+    if name.upper() == "MUSIC.PAK" and not is_cd(data):
+        raise WitnessUnavailable("MUSIC.PAK citation applies to the CD edition")
+    if name.upper() in {"MAIN.EXE", "MAINW.EXE"}:
+        root = game_path(data, "HARDRIVE") if is_cd(data) else data
+    else:
+        root = data
+    return game_path(root, name.replace(chr(92), "/").split("/")[-1])
+
+
 def edition_status(data):
     if is_cd(data) or game_path(data, "CHAPTER1.PAK").is_file():
         return None
@@ -154,10 +164,11 @@ def colour_width(wrapped):
 def read_witness(data, spec):
     kind, *args = spec
     cd = is_cd(data)
-    if kind == "pak_count":
+    if kind in {"pak_count", "tlk_count"}:
         if not cd:
-            raise WitnessUnavailable("CD DATA archive census does not apply to floppy")
-        paths = sorted(path for path in data.iterdir() if path.suffix.upper() in {".PAK", ".TLK"})
+            raise WitnessUnavailable("CD DATA archive censuses do not apply to floppy")
+        extensions = {".TLK"} if kind == "tlk_count" else {".PAK", ".TLK"}
+        paths = sorted(path for path in data.iterdir() if path.suffix.upper() in extensions)
         return sum(len(pak_rows(path)[0]) for path in paths), f"CD DATA, {len(paths)} PAK/TLK directories"
 
     cd_name, floppy_name, name, *params = args
