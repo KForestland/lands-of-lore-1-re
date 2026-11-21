@@ -37,20 +37,25 @@ def main():
         before = monotonic()
         p = subprocess.run([sys.executable, os.path.join(here, r + ".py"), "--check", "--data", a.data],
                            capture_output=True, text=True)
-        out = (p.stdout or p.stderr).strip().splitlines()
-        print(f"{out[-1] if out else r + ': no output'} [{monotonic() - before:.2f}s]")
+        out = (p.stdout if p.returncode else p.stdout or p.stderr).strip().splitlines()
+        summary = out[-1] if out else (f"{r}: exit {p.returncode}" if p.returncode else f"{r}: no output")
+        print(f"{summary} [{monotonic() - before:.2f}s]")
         rc |= p.returncode
         if p.returncode:
+            for line in p.stderr.splitlines()[-20:]:
+                print(f"  {line}")
             failed.append(r)
     # EMC2 script corpus test (tests/test_emc2_corpus.py): every INF/INI disassembles
     test = os.path.join(here, "..", "tests", "test_emc2_corpus.py")
     before = monotonic()
     p = subprocess.run([sys.executable, test, a.data], capture_output=True, text=True)
-    out = (p.stdout or p.stderr).strip().splitlines()
-    line = out[-1].split(": ", 1)[-1] if out else "no output"
+    out = (p.stdout if p.returncode else p.stdout or p.stderr).strip().splitlines()
+    line = out[-1].split(": ", 1)[-1] if out else (f"exit {p.returncode}" if p.returncode else "no output")
     print(f"CHECK emc2: {line} [{monotonic() - before:.2f}s]")
     rc |= p.returncode
     if p.returncode:
+        for line in p.stderr.splitlines()[-20:]:
+            print(f"  {line}")
         failed.append("emc2 corpus test")
     n = len(READERS) + 1
     print(f"Total elapsed: {monotonic() - started:.2f}s")
