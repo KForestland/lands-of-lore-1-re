@@ -28,13 +28,13 @@
 +    return true;
 +}
 +#endif
-
+ 
  static
  LRESULT CALLBACK _hidden_window_wndproc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 @@ -623,6 +647,23 @@
      startup_info.hStdOutput = _pyi_get_stream_handle(stdout);
      startup_info.hStdError = _pyi_get_stream_handle(stderr);
-
+ 
 +#if defined(WINDOWED)
 +    /* The onefile child starts Python before application code can run.
 +     * Give it an inheritable NUL handle in place of each unavailable stream. */

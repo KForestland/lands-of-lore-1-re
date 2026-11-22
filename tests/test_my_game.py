@@ -71,9 +71,9 @@ class MyGameDesktop(unittest.TestCase):
                 second = write_page(game, open_page=False)
                 with self.assertRaisesRegex(ValueError, "outside the game folder"):
                     write_page(root, open_page=False)
-            self.assertEqual(first, documents / "LoL1 My Game.html")
+            self.assertEqual(first.resolve(), (documents / "LoL1 My Game.html").resolve())
             self.assertEqual(first.read_text(encoding="utf-8"), "keep this page")
-            self.assertEqual(second, documents / "LoL1 My Game 2.html")
+            self.assertEqual(second.resolve(), (documents / "LoL1 My Game 2.html").resolve())
             self.assertEqual(second.read_text(encoding="utf-8"), "test")
 
     def test_cancel_tells_the_player_no_page_was_written(self):
