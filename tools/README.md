@@ -5,6 +5,8 @@
 - **Synthetic data.** 125 unit tests.
 <!-- suite-counts:end -->
 
+Run `python tools/suite_counts.py --write` to refresh these counts after changing either suite.
+
 To write the inventory, level sheets and text counts together, use `full_report.py`. [Cookbook](../docs/COOKBOOK.md#write-a-full-report)
 
 Python tools that read the data files of *Lands of Lore: The Throne of Chaos* (DOS) from your own copy of the game. Format pages: [`../docs/formats/`](../docs/formats/README.md); terms: [glossary](../docs/GLOSSARY.md).
@@ -132,7 +134,6 @@ $ python3 tools/check_all.py | sed -n '1,3p;$p'
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-The last line reports the result and the number of checks.
 ```
 
 ### `modkit.py`

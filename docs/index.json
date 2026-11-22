@@ -1609,6 +1609,7 @@
         "tools/save_page.py",
         "tools/save_reader.py",
         "tools/shp_renderer.py",
+        "tools/suite_counts.py",
         "tools/tileset_mapper.py",
         "tools/tlc_reader.py",
         "tools/tlk_verify.py",
