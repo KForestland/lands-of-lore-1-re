@@ -3,6 +3,7 @@ import argparse
 from base64 import b64encode
 from collections.abc import Callable
 from dataclasses import dataclass
+from gzip import compress
 from html import escape
 from io import BytesIO
 from itertools import count
@@ -55,6 +56,18 @@ for (const search of document.querySelectorAll('[data-search]')) {
         for (const row of rows) row.hidden = !row.textContent.toLocaleLowerCase().includes(query);
     });
 }
+
+async function showPlan(image) {
+    try {
+        const bytes = Uint8Array.from(atob(image.dataset.svgGzip), character => character.charCodeAt(0));
+        const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+        const plan = await new Response(stream, {headers: {'Content-Type': 'image/svg+xml'}}).blob();
+        image.src = URL.createObjectURL(plan);
+    } catch {
+        document.getElementById('plan-browser-message').hidden = false;
+    }
+}
+for (const image of document.querySelectorAll('img[data-svg-gzip]')) showPlan(image);
 """
 
 
@@ -82,19 +95,30 @@ def png_bytes(image):
 
 def maps_section(maps, legend=""):
     jumps, cards = [], []
+    packed_plans = False
     for key, title, image, format in maps:
         anchor, name = escape(f"level-{key}"), escape(title)
         jumps.append(f'<a href="#{anchor}">{name}</a>')
-        encoded = b64encode(image).decode("ascii")
+        if format == "svg+xml":
+            packed_plans = True
+            encoded = b64encode(compress(image, mtime=0)).decode("ascii")
+            source = f'data-svg-gzip="{encoded}"'
+        else:
+            encoded = b64encode(image).decode("ascii")
+            source = f'src="data:image/{format};base64,{encoded}"'
         cards.append(
             f'<article id="{anchor}"><h3>{name}</h3>'
-            f'<img src="data:image/{format};base64,{encoded}" loading="lazy" '
-            f'alt="Overhead plan of {name}"></article>'
+            f'<img {source} loading="lazy" alt="Overhead plan of {name}"></article>'
         )
+    message = ""
+    if packed_plans:
+        message = ('<p id="plan-browser-message" role="status" hidden>'
+                   'Open this page in a current browser to see the level plans.</p>'
+                   '<noscript><p>Enable JavaScript to see the level plans.</p></noscript>')
     return (
         '<section id="maps"><h2>Level plans</h2><details><summary>Jump to a level</summary>'
         f'<nav class="jump" aria-label="Jump to level">{" ".join(jumps)}</nav></details>'
-        f'{legend}<div class="levels">{"".join(cards)}</div></section>'
+        f'{legend}{message}<div class="levels">{"".join(cards)}</div></section>'
     )
 
 

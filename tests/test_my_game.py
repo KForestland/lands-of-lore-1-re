@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 from tests.test_level_tools import TOOLS
-from tests.kit_fixture import make_fixture, TRANSLATE_FROM
+from tests.kit_fixture import call, make_fixture, script, TRANSLATE_FROM
 
 from decode_dialogue import encode_string
 from lol1_script_writer import write_strings
@@ -73,13 +73,19 @@ class MyGame(unittest.TestCase):
             german.mkdir()
             label = "Ein Testname"
             text = encode_string(label.encode("cp437")).decode("latin-1")
-            (data / "LANDS.GER").write_bytes(write_strings({"offsets": [2], "strings": [text, ""]}, "<"))
+            placeholder = "[test placeholder]"
+            hidden = encode_string(placeholder.encode("cp437")).decode("latin-1")
+            (data / "LANDS.GER").write_bytes(write_strings(
+                {"offsets": [4, 5 + len(text)], "strings": [text, hidden, ""]}, "<"))
+            items = [*call(0x0E, 121, 0x4000, *([0] * 8)), *call(0x0E, 122, 0x4001, *([0] * 8))]
+            (data / "ONETIME.INF").write_bytes(script(*items))
             path = write_page(german, root / "page.html", open_page=False)
             page = path.read_text(encoding="utf-8")
             self.assertIn("German text table", page)
             self.assertIn(f"<h3>{label}</h3>", page)
             self.assertIn(f"<td>{label}</td><td>121</td>", page)
             self.assertIn(f"<td>{label}</td><td>0</td>", page)
+            self.assertNotIn(placeholder, page)
 
 
 class MyGameDesktop(unittest.TestCase):
