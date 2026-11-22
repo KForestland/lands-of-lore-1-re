@@ -1,287 +1,159 @@
-"""Build an offline page from a player's own Lands of Lore installation."""
-import argparse
-from base64 import b64encode
-from html import escape
-from io import BytesIO
-from itertools import count
-from pathlib import Path
-from struct import error as StructError
-import sys
-import webbrowser
+"""Make an offline guide from a player's copy of Lands of Lore."""
+from collections import defaultdict
 
-from cli_errors import output_refusal
+from cli_errors import game_path, input_path
+from decode_dialogue import decode_raw, file_strings
 from edition import identify, WITNESSES
-from exe_tables import find_images, OFFSETS, spell_names, spells
-from game_names import map_names
+from emc2_decompile import read_script
+from exe_tables import find_images, OFFSETS, spells
+from game_names import map_names, monster_sprites
 from level_html import find_data
 from level_renderer import level_numbers, render_schematic
-from level_report import item_names
+from level_report import calls_by_entry, item_names
+from lol1lib import find_member, level_member
+from my_game_ui import LanguageError, MyGame, catalogue, edition_label, png_bytes, report
 
 
 TITLE = "Lands of Lore · My Game"
-WRONG_FOLDER = "Choose the folder containing your complete Lands of Lore game or its DATA folder."
-CANCELLED = "No folder was chosen, so no page was written."
-
-STYLE = """
-:root{font:17px/1.5 system-ui,sans-serif;color:#282923;background:#f8f5ec}
-*{box-sizing:border-box}
-body{max-width:78rem;margin:auto;padding:1.5rem clamp(1rem,4vw,3rem) 3rem}
-h1,h2,h3{font-family:Georgia,serif;line-height:1.15}
-h1{font-size:clamp(2rem,5vw,3.5rem);margin:0}
-h2{font-size:1.85rem;margin-bottom:.5rem}
-h3{margin:0}
-a{color:#713712;text-decoration-thickness:1px;text-underline-offset:.2em}
-header{border-bottom:1px solid #c8beaa;padding-block:.7rem 1.4rem}
-header p{margin:.5rem 0 0}
-nav,.legend,.jump{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem 1rem}
-nav{margin-top:1.2rem;font-weight:650}nav a{padding-block:.3rem}
-section{margin-top:1.8rem}.legend{list-style:none;padding:0}
-.legend span{display:inline-block;width:1rem;height:1rem;vertical-align:-.12em;margin-right:.4rem;border:1px solid #514b3e}
-.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr));gap:1rem;margin-top:1rem}
-article{background:#fffdf8;border:1px solid #c8beaa;border-radius:.45rem;padding:.8rem;scroll-margin-top:1rem}
-article:target{outline:3px solid #713712}
-article img{display:block;width:100%;height:auto;margin-top:.65rem;image-rendering:pixelated;border:1px solid #777466}
-.catalogues{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,23rem),1fr));gap:1.5rem}
-.scroller{overflow:auto;max-height:29rem;border:1px solid #c8beaa;background:#fffdf8;border-radius:.45rem}
-table{width:100%;border-collapse:collapse}
-th,td{padding:.4rem .65rem;text-align:left;border-bottom:1px solid #ded5c4}
-th{background:#efe6d5;position:sticky;top:0}
-label{display:block;margin-bottom:.55rem}
-input[type=search]{background:#fffdf8;color:inherit;font:inherit;padding:.25rem .5rem;border:1px solid #867a62;border-radius:.3rem}
-:focus-visible{outline:3px solid #713712;outline-offset:2px}
-"""
-
-SCRIPT = """
-for (const search of document.querySelectorAll('[data-search]')) {
-    const rows = document.querySelectorAll('#' + search.dataset.search + ' tbody tr');
-    search.addEventListener('input', () => {
-        const query = search.value.trim().toLocaleLowerCase();
-        for (const row of rows) row.hidden = !row.textContent.toLocaleLowerCase().includes(query);
-    });
-}
-"""
-
-
-class GameFolderError(ValueError):
-    """The selection does not contain the files needed for the page."""
-
-
-def edition_label(fingerprints, image):
-    for label, expected in WITNESSES.items():
-        if all(fingerprints.get(name) == value for name, value in expected.items()):
-            return label
-    layout = "Floppy" if image == "floppy" else "CD"
-    return f"{layout} edition layout (exact version unverified)"
-
-
-def map_card(level, data, name):
-    with BytesIO() as stream:
-        render_schematic(level, data).save(stream, format="PNG")
-        image = b64encode(stream.getvalue()).decode("ascii")
-    return (
-        f'<article id="level-{level}"><h3>{escape(name)}</h3>'
-        f'<img src="data:image/png;base64,{image}" loading="lazy" '
-        f'width="320" height="320" alt="Overhead plan of {escape(name)}"></article>'
-    )
-
-
-def catalogue(key, title, columns, rows):
-    headings = "".join(f'<th scope="col">{escape(column)}</th>' for column in columns)
-    body = "".join(
-        "<tr>" + "".join(f"<td>{escape(str(cell))}</td>" for cell in row) + "</tr>" for row in rows
-    )
-    return (
-        f'<section id="{key}"><h2>{title}</h2>'
-        f'<label>Search {title.lower()} <input type="search" data-search="{key}"></label>'
-        f'<div class="scroller" tabindex="0" role="region" aria-label="{title} table"><table>'
-        f'<thead><tr>{headings}</tr></thead><tbody>{body}</tbody></table></div></section>'
-    )
-
-
-def spell_catalogue(data, image, program):
-    name_of = spell_names(data, "ENG")
-    for slot, record in enumerate(spells(program, OFFSETS["spells"][image])):
-        if not (name := name_of(record["name id"])):
-            continue
-        mana = " / ".join(map(str, record["MP"]))
-        health = " / ".join(map(str, record["HP"]))
-        yield name, slot, mana, health
-
-
-def game_page(folder):
-    try:
-        data = find_data(folder, "DATA", "GENERAL.PAK")
-        _, fingerprints = identify(data)
-        images = find_images(data)
-        if not images and data.name.upper() == "DATA":
-            images = find_images(data.parent)
-        if not images:
-            raise GameFolderError(WRONG_FOLDER)
-        image, _, _, program = images[0]
-        label = edition_label(fingerprints, image)
-        items, lands = item_names(data)
-        spell_rows = list(spell_catalogue(data, image, program))
-        if not items or not spell_rows:
-            raise GameFolderError(WRONG_FOLDER)
-        levels = level_numbers("all")
-        titles = map_names(image, program, lands)
-        maps = "\n".join(map_card(level, data, titles.get(level, f"Level {level}")) for level in levels)
-    except (ValueError, OSError, StructError, IndexError, KeyError) as error:
-        raise GameFolderError(WRONG_FOLDER) from error
-
-    jump = " ".join(
-        f'<a href="#level-{level}">{escape(titles.get(level, f"Level {level}"))} ({level})</a>'
-        if level in titles else f'<a href="#level-{level}">Level {level}</a>'
-        for level in levels
-    )
-    item_table = catalogue("items", "Items", ("Name", "Item ID"),
-                           ((name, number) for number, name in sorted(items.items(), key=lambda row: row[1].casefold())))
-    spell_table = catalogue("spells", "Spells", ("Name", "Slot", "MP by rank", "HP by rank"), spell_rows)
-    return f"""<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{TITLE}</title>
-<style>{STYLE}</style>
-</head>
-<body>
-<header>
-<h1>{TITLE}</h1>
-<p>Edition: <strong>{escape(label)}</strong></p>
-<nav aria-label="Page sections"><a href="#maps">Level plans</a><a href="#items">Items</a><a href="#spells">Spells</a></nav>
-</header>
-<main>
-<section id="maps">
-<h2>Level plans</h2>
-<details>
-<summary>Jump to a level</summary>
-<nav class="jump" aria-label="Jump to level">{jump}</nav>
-</details>
+LANGUAGES = {"ENG": "English", "FRE": "French", "GER": "German"}
+MAP_LEGEND = """
 <ul class="legend" aria-label="Map legend">
 <li><span style="background:#ebe8dc"></span>Open square</li>
 <li><span style="background:#282830"></span>Solid wall</li>
 <li><span style="background:#e69632"></span>Partial wall, door or switch</li>
 <li><span style="background:#c81e1e"></span>Decoration</li>
 </ul>
-<div class="levels">{maps}</div>
-</section>
-<div class="catalogues">{item_table}{spell_table}</div>
-</main>
-<script>{SCRIPT}</script>
-</body>
-</html>
 """
 
 
-def documents_folder():
-    if sys.platform == "win32":
-        from ctypes import create_unicode_buffer, windll
-        from ctypes.wintypes import MAX_PATH
-
-        # CSIDL_PERSONAL selects the user's Documents folder, including redirects.
-        path = create_unicode_buffer(MAX_PATH)
-        if windll.shell32.SHGetFolderPathW(None, 0x0005, None, 0, path) == 0:
-            return Path(path.value)
-    return Path.home() / "Documents"
+def game_data(folder):
+    folder = input_path(folder).resolve()
+    if folder.name.upper() in LANGUAGES and folder.parent.name.upper() == "DATA":
+        return find_data(folder.parent, "DATA", "GENERAL.PAK")
+    return find_data(folder, "DATA", "GENERAL.PAK")
 
 
-def write_new_file(out, game_root, page):
-    if output_refusal(out, game_root):
-        raise ValueError("Save the My Game page outside the game folder.")
-    stream = out.open("x", encoding="utf-8")
-    try:
-        with stream:
-            stream.write(page)
-    except OSError:
-        out.unlink(missing_ok=True)
-        raise
-
-
-def save_in_documents(game_root, page):
-    documents = documents_folder().resolve()
-    if output_refusal(documents, game_root):
-        raise ValueError("Save the My Game page outside the game folder.")
-    documents.mkdir(parents=True, exist_ok=True)
-    for number in count(1):
-        name = "LoL1 My Game.html" if number == 1 else f"LoL1 My Game {number}.html"
-        out = documents / name
-        try:
-            write_new_file(out, game_root, page)
-        except FileExistsError:
-            continue
-        return out
-
-
-def open_report(path):
-    try:
-        return webbrowser.open(path.resolve().as_uri())
-    except (OSError, webbrowser.Error):
-        return False
-
-
-def write_page(folder, out=None, *, open_page=True):
-    page = game_page(folder)
-    folder = folder.resolve()
-    game_root = folder.parent if folder.name.upper() == "DATA" else folder
-    if out is None:
-        out = save_in_documents(game_root, page)
-    else:
-        write_new_file(out, game_root, page)
-    if open_page and not open_report(out):
-        raise ValueError(f"Open the My Game page in your browser from {out}.")
-    return out
-
-
-def desktop():
-    from tkinter import TclError, Tk, filedialog, messagebox
-
-    try:
-        window = Tk()
-    except TclError as error:
-        raise ValueError("Open My Game from your desktop to choose a game folder.") from error
-    window.withdraw()
-    try:
-        while folder := filedialog.askdirectory(parent=window, title="Choose your Lands of Lore game folder"):
+def language_tables(data):
+    tables = {}
+    for code in LANGUAGES:
+        for directory in (data, game_path(data, code)):
+            if not directory.is_dir():
+                continue
             try:
-                path = write_page(Path(folder), open_page=False)
-                opened = open_report(path)
-            except GameFolderError as error:
-                messagebox.showerror(TITLE, str(error), parent=window)
-            except (OSError, ValueError, ImportError) as error:
-                messagebox.showerror(TITLE, str(error), parent=window)
-                return 1
-            else:
-                message = "Your My Game page is saved here."
-                if not opened:
-                    message = "Open your saved My Game page in your browser."
-                messagebox.showinfo(TITLE, f"{message}\n\n{path}", parent=window)
-                return 0
-        messagebox.showinfo(TITLE, CANCELLED, parent=window)
-        return 0
-    finally:
-        window.destroy()
+                _, raw = find_member("LANDS." + code, directory)
+            except FileNotFoundError:
+                continue
+            tables[code] = file_strings(raw)
+            break
+    return tables
 
 
-def main(argv=None):
-    parser = argparse.ArgumentParser(prog="lol.py mygame", description=__doc__)
-    parser.add_argument("--data", type=Path, help="use a game folder without opening the folder picker")
-    parser.add_argument("--out", type=Path, help="save to a new HTML file at this path")
-    parser.add_argument("--no-browser", action="store_true", help="save the page without opening the browser")
-    args = parser.parse_args(argv)
-    if args.data is None and (args.out or args.no_browser):
-        parser.error("Use --data with --out or --no-browser.")
-    try:
-        if args.data is None:
-            return desktop()
-        path = write_page(args.data, args.out, open_page=not args.no_browser)
-        if sys.stdout is not None:
-            print(path)
-        return 0
-    except (OSError, ValueError, ImportError) as error:
-        if sys.stderr is not None:
-            print(f"{parser.prog}: {error}", file=sys.stderr)
-        return 1
+def language_options(folder, tables=None):
+    folder = input_path(folder).resolve()
+    data = game_data(folder)
+    if tables is None:
+        tables = language_tables(data)
+    if folder.name.upper() in tables:
+        code = folder.name.upper()
+        return {code: LANGUAGES[code]}
+    candidates = {code: LANGUAGES[code] for code in tables}
+    if len(candidates) > 1:
+        # A localized CD launcher copied to the install folder identifies its language.
+        witnesses = WITNESSES["English CD 1.02"]
+        _, found = identify(data)
+        for code in candidates:
+            witness = witnesses.get(f"{code}/LANDS.EXE")
+            if witness and found.get("LANDS.EXE") == witness:
+                return {code: LANGUAGES[code]}
+    return candidates
+
+
+def spell_rows(lands, image, program):
+    for slot, record in enumerate(spells(program, OFFSETS["spells"][image])):
+        sid = record["name id"]
+        index = sid & 0x3FFF
+        if sid >> 14 != 1 or index >= len(lands):
+            continue
+        name = decode_raw(lands[index]).strip()
+        if name:
+            yield name, slot, " / ".join(map(str, record["MP"])), " / ".join(map(str, record["HP"]))
+
+
+def item_records(data, levels, titles):
+    locations = defaultdict(set)
+    for level in levels:
+        for extension, kind in (("INI", "Level setup"), ("INF", "Level event")):
+            raw = level_member(level, extension, data)
+            if raw is None:
+                continue
+            for entry, (_, calls) in calls_by_entry(read_script(raw)).items():
+                for function, args in calls:
+                    if function == 0x11 and len(args) >= 5:
+                        item, target, square = args[0], args[3], args[4]
+                        if target not in levels or square is None or not 0 <= square < 1024:
+                            continue
+                        row, column = divmod(square, 32)
+                        detail = f"Floor row {row + 1}, column {column + 1} ({kind.lower()} {entry})"
+                        locations[item].add((titles.get(target, f"Level {target}"), detail))
+                    elif function == 0x4C and args:
+                        locations[args[0]].add((titles.get(level, f"Level {level}"), f"Pack grant ({kind.lower()} {entry})"))
+    setup = read_script(find_member("ONETIME.INF", data)[1])
+    for entry, (_, calls) in calls_by_entry(setup).items():
+        for function, args in calls:
+            if function == 0x4C and args:
+                locations[args[0]].add(("Game setup", f"Pack grant (setup record {entry})"))
+    return locations
+
+
+def game_page(folder, language=None):
+    data = game_data(folder)
+    images = find_images(data)
+    if not images and data.name.upper() == "DATA":
+        images = find_images(data.parent)
+    if not images:
+        raise ValueError("missing program")
+    image, _, _, program = images[0]
+    layout = "Floppy" if image == "floppy" else "CD"
+    edition = edition_label(data, identify, WITNESSES, f"{layout} edition layout (exact version unverified)")
+    text = language_tables(data)
+    if language is None:
+        language = next(iter(language_options(folder, text)), None)
+    if language not in text:
+        if language is not None:
+            raise LanguageError(f"The selected folder has no {LANGUAGES[language]} name table.")
+        raise ValueError("missing name tables")
+    lands = text[language]
+    items, _ = item_names(data, lands)
+    items = {key: name for key, name in items.items() if name and not name.startswith("string 0x")}
+    spell_list = list(spell_rows(lands, image, program))
+    if not items or not spell_list:
+        raise ValueError("missing named items or spells")
+    levels = level_numbers("all")
+    titles = map_names(image, program, lands)
+    maps = ((level, titles.get(level, f"Level {level}"), png_bytes(render_schematic(level, data)), "png")
+            for level in levels)
+    creatures = ((name, titles.get(level, f"Level {level}"), slot)
+                 for level in levels for slot, name in sorted(monster_sprites(data, level).items()))
+    item_list = sorted(items.items(), key=lambda row: row[1].casefold())
+    tables = (
+        ("items", "Items", catalogue("items", "Items", ("Name", "Item ID"), ((name, key) for key, name in item_list))),
+        ("spells", "Spells", catalogue("spells", "Spells", ("Name", "Slot", "MP by rank", "HP by rank"), spell_list)),
+        ("creatures", "Creatures", catalogue("creatures", "Creatures", ("Sprite name", "Area", "Type"), creatures,
+                                             "These labels come from the stored creature sprites.")),
+    )
+    locations = item_records(data, levels, titles)
+    heading = "Where is it?"
+    rows = ((name, area, record) for key, name in item_list for area, record in
+            (sorted(locations[key]) or [("—", "No directly named placement or grant found.")]))
+    found = catalogue("where", heading, ("Item", "Area", "Record"), rows,
+                      "From direct placements and pack grants in the game scripts. Some depend on what you do in play.")
+    note = f"Level, item and spell names are from the {LANGUAGES[language]} text table in your game."
+    return report(TITLE, edition, maps, tables, legend=MAP_LEGEND, note=note, extras=(("where", heading, found),))
+
+
+app = MyGame("LoL1 My Game", TITLE, "Lands of Lore", "DATA", game_page, tuple(LANGUAGES), language_options)
+main = app.main
+write_page = app.write_page
 
 
 if __name__ == "__main__":
