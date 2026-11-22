@@ -199,6 +199,7 @@
         "tools/lol1_level_writer.py",
         "tools/lol1_script_writer.py",
         "tools/lol1_xmi_writer.py",
+        "tools/page_facts.py",
         "tools/parse_tim.py"
       ]
     },
