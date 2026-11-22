@@ -11,7 +11,7 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 ## Where this stands
 
 - **Nearly done, with open questions.** Tools read the layout of [199 of 199 files in the English CD DATA folder](#rating).
-- One of the six listed running-game tests is answered: the [shutdown trace](docs/NEEDS_A_RUNNING_GAME.md#q8-which-shutdown-callbacks-run-on-a-given-installation) records a quit from play on the English CD with Sound Blaster.
+- One of the six listed running-game tests is answered. The [shutdown trace](docs/NEEDS_A_RUNNING_GAME.md#q8-which-shutdown-callbacks-run-on-a-given-installation) records a quit from play on the English CD with Sound Blaster. In separate CD trials, a [moved Halberd appeared and was picked up](docs/LEVEL_EDITOR.md#keep-placement-in-the-original-game), and the [spelling patch showed two corrected item names](patches/README.md#shipped-patch) using an edited save.
 - Six of [18 numbered questions](docs/OPEN_QUESTIONS.md#at-a-glance) still have open parts, including demo shapes, monster modes and which save fields are touched in play.
 - The [rating](docs/HOW_WE_RATE.md) keeps separate counts for files, rules and tests in play. An overall percentage would combine measures of different things.
 
