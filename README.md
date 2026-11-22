@@ -8,6 +8,15 @@
 
 It contains documentation, tools and small tables of numbers. It contains no game files and no dumps of game pictures, sounds or text; the only game-derived images are five small ones: three examples in `examples/` and two level schematics in `docs/images/`.
 
+## Where this stands
+
+- **Nearly done, with open questions.** Tools read the layout of [199 of 199 files in the English CD DATA folder](#rating).
+- One of the six listed running-game tests is answered: the [shutdown trace](docs/NEEDS_A_RUNNING_GAME.md#q8-which-shutdown-callbacks-run-on-a-given-installation) records a quit from play on the English CD with Sound Blaster.
+- Six of [18 numbered questions](docs/OPEN_QUESTIONS.md#at-a-glance) still have open parts, including demo shapes, monster modes and which save fields are touched in play.
+- The [rating](docs/HOW_WE_RATE.md) keeps separate counts for files, rules and tests in play. An overall percentage would combine measures of different things.
+
+Status of the other games: [Lands of Lore II](https://github.com/KForestland/lands-of-lore-2-re#where-this-stands) · [Lands of Lore III](https://github.com/KForestland/Lands-of-lore-3-re#where-this-stands).
+
 ## At a glance
 
 - **What this is:** documentation of the original 1993 DOS game, covering the main rules, the CD data file layouts and corresponding floppy files, checked against the game files and the original program.
@@ -19,7 +28,7 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 - **What is still unknown:** a few details, listed in [open questions](docs/OPEN_QUESTIONS.md) and counted in the [rating](#rating). Some questions need a test in the running original game (a *probe*); [NEEDS_A_RUNNING_GAME](docs/NEEDS_A_RUNNING_GAME.md) lists them and which are answered. Some probes were also tried on [edited saves](docs/EDITED_SAVES.md), copies of a game-written save with a few bytes changed.
 - **What changed lately:** [what's new](docs/WHATS_NEW.md), newest first.
 - **What we got wrong:** [corrections](docs/CORRECTIONS.md), each with how it was caught and the commit that fixed it.
-- **The three games:** [LoL1](https://github.com/KForestland/lands-of-lore-1-re) · [LoL2](https://github.com/KForestland/lands-of-lore-2-re) · [LoL3](https://github.com/KForestland/Lands-of-lore-3-re) ([what they share](docs/series-formats.md), [how the engine changed](docs/engine-evolution.md), [how they gate progress and scale numbers](docs/series-progress-and-numbers.md)).
+- **Across the series:** [shared formats](docs/series-formats.md) · [engine changes](docs/engine-evolution.md) · [progression and numbers](docs/series-progress-and-numbers.md).
 
 ![Level 12 drawn by tools/level_renderer.py --schematic](docs/images/level12_schematic.png)
 

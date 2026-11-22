@@ -1,5 +1,12 @@
 # LoL1 reverse-engineering status
 
+## Where this stands
+
+- **Nearly done, with open questions.** Tools read the layout of [199 of 199 files in the English CD DATA folder](../README.md#rating).
+- One of the six listed running-game tests is answered: the [shutdown trace](NEEDS_A_RUNNING_GAME.md#q8-which-shutdown-callbacks-run-on-a-given-installation) records a quit from play on the English CD with Sound Blaster.
+- Six of [18 numbered questions](OPEN_QUESTIONS.md#at-a-glance) still have open parts, including demo shapes, monster modes and which save fields are touched in play.
+- The [rating](HOW_WE_RATE.md) keeps separate counts for files, rules and tests in play. An overall percentage would combine measures of different things.
+
 <!-- suite-counts:begin -->
 - **Original game files.** 54 checks with the required files and dependencies. Quick mode selects 52.
 - **Synthetic data.** 125 unit tests.
@@ -25,15 +32,6 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (all pass on
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
 - **Page facts:** 24/6,879 candidate literals registered with byte witnesses. The rest are inventoried so changes can be reviewed.
 <!-- rating:end -->
-
-## Where things stand (21 November 2026)
-
-A dated snapshot; the work continues and the table below is kept current.
-
-- **Known.** Every file in the CD `DATA` folder has its whole layout read by a tool here (199 of 199, the six blend tables included since 20 November; see [how we rate](HOW_WE_RATE.md)). The 192 CD script functions have verdicts from the original program's handlers, including 71 partial verdicts ([native handlers](emc2_native_handlers.md)). Every level change and door call is listed with its guarding conditions ([progression](PROGRESSION.md)).
-- **Open.** 6 of 18 numbered questions are not fully answered: Q1 (demo shape headers), Q7 (monster mode frames and wall bit 0x40), Q10 (the finale's row-40 file), Q14 (three palette files), Q17 and Q18 (save bytes and fight fields read in play) ([open questions](OPEN_QUESTIONS.md)).
-- **Tests a reader with the game can run.** Each open point that needs the running game has its test, the save it needs and what a run on 20 November did and did not show ([running-game probes](NEEDS_A_RUNNING_GAME.md)).
-- **Tools for your own copy.** Change text or numbers with the mod kit, make and undo patches, edit a saved game, and open interactive level plans: start with the [first ten minutes](FIRST_TEN_MINUTES.md) page or `python3 tools/lol.py`. Known original faults and the one shipped fix: [patches](../patches/README.md). What these pages got wrong: [corrections](CORRECTIONS.md).
 
 ## File formats
 
