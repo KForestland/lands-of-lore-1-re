@@ -5,6 +5,8 @@
 - **Synthetic data.** 127 unit tests.
 <!-- suite-counts:end -->
 
+The `game_names.py` helper joins the stored automap titles and creature sprites. The `my_game.py` job opens the offline edition, map, item and spell page.
+
 Run `python tools/suite_counts.py --write` to refresh these counts after changing either suite.
 
 To write the inventory, level sheets and text counts together, use `full_report.py`. [Cookbook](../docs/COOKBOOK.md#write-a-full-report)
