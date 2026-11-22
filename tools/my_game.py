@@ -13,6 +13,7 @@ import webbrowser
 from cli_errors import output_refusal
 from edition import identify, WITNESSES
 from exe_tables import find_images, OFFSETS, spell_names, spells
+from game_names import map_names
 from level_html import find_data
 from level_renderer import level_numbers, render_schematic
 from level_report import item_names
@@ -73,14 +74,14 @@ def edition_label(fingerprints, image):
     return f"{layout} edition layout (exact version unverified)"
 
 
-def map_card(level, data):
+def map_card(level, data, name):
     with BytesIO() as stream:
         render_schematic(level, data).save(stream, format="PNG")
         image = b64encode(stream.getvalue()).decode("ascii")
     return (
-        f'<article id="level-{level}"><h3>Level {level}</h3>'
+        f'<article id="level-{level}"><h3>{escape(name)}</h3>'
         f'<img src="data:image/png;base64,{image}" loading="lazy" '
-        f'width="320" height="320" alt="Overhead plan of level {level}"></article>'
+        f'width="320" height="320" alt="Overhead plan of {escape(name)}"></article>'
     )
 
 
@@ -118,16 +119,21 @@ def game_page(folder):
             raise GameFolderError(WRONG_FOLDER)
         image, _, _, program = images[0]
         label = edition_label(fingerprints, image)
-        items, _ = item_names(data)
+        items, lands = item_names(data)
         spell_rows = list(spell_catalogue(data, image, program))
         if not items or not spell_rows:
             raise GameFolderError(WRONG_FOLDER)
         levels = level_numbers("all")
-        maps = "\n".join(map_card(level, data) for level in levels)
+        titles = map_names(image, program, lands)
+        maps = "\n".join(map_card(level, data, titles.get(level, f"Level {level}")) for level in levels)
     except (ValueError, OSError, StructError, IndexError, KeyError) as error:
         raise GameFolderError(WRONG_FOLDER) from error
 
-    jump = " ".join(f'<a href="#level-{level}">{level}</a>' for level in levels)
+    jump = " ".join(
+        f'<a href="#level-{level}">{escape(titles.get(level, f"Level {level}"))} ({level})</a>'
+        if level in titles else f'<a href="#level-{level}">Level {level}</a>'
+        for level in levels
+    )
     item_table = catalogue("items", "Items", ("Name", "Item ID"),
                            ((name, number) for number, name in sorted(items.items(), key=lambda row: row[1].casefold())))
     spell_table = catalogue("spells", "Spells", ("Name", "Slot", "MP by rank", "HP by rank"), spell_rows)
@@ -148,7 +154,10 @@ def game_page(folder):
 <main>
 <section id="maps">
 <h2>Level plans</h2>
+<details>
+<summary>Jump to a level</summary>
 <nav class="jump" aria-label="Jump to level">{jump}</nav>
+</details>
 <ul class="legend" aria-label="Map legend">
 <li><span style="background:#ebe8dc"></span>Open square</li>
 <li><span style="background:#282830"></span>Solid wall</li>

@@ -17,6 +17,7 @@ def make_my_game_fixture(folder):
     program = bytearray(0x57240)
     program[:2] = b"MZ"
     pack_into("<HH", program, 0x2B5E0, 0x4000, 3)
+    pack_into("<HH", program, 0x287D0, 0xFFFF, 0x4000)
     (data / "MAIN.EXE").write_bytes(program)
 
 
@@ -32,6 +33,7 @@ class MyGame(unittest.TestCase):
             self.assertEqual(re.findall(r'<article id="level-(\d+)">', page), [str(i) for i in range(1, 30)])
             self.assertEqual(page.count('src="data:image/png;base64,'), 29)
             self.assertIn('aria-label="Map legend"', page)
+            self.assertIn(f'<article id="level-1"><h3>{TRANSLATE_FROM}</h3>', page)
             self.assertIn(f'<td>{TRANSLATE_FROM}</td><td>121</td>', page)
             self.assertIn(f'<td>{TRANSLATE_FROM}</td><td>0</td><td>3 / 0 / 0 / 0</td>', page)
             self.assertFalse(list(game.rglob("*.html")))
