@@ -6,6 +6,8 @@ on:
     paths:
       - '.github/workflows/windows-mygame.yml'
       - '.github/pyinstaller-windowed-stdio.patch'
+      - '.github/pyinstaller-single-instance.patch'
+      - '.github/make-mygame-art.py'
       - 'tools/**'
       - 'tests/**'
       - 'lol.py'
@@ -29,7 +31,7 @@ jobs:
         env:
           PYINSTALLER_COMPILE_BOOTLOADER: '1'
         run: |
-          # Rebuild the windowed launcher so it gives the child valid streams before Python starts.
+          # Rebuild the launcher with single-instance startup and valid child streams.
           $version = '6.22.3'
           $source = "pyinstaller-$version"
           $archive = "$source.tar.gz"
@@ -42,19 +44,37 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Could not unpack PyInstaller source.' }
           git apply --directory=$source .github/pyinstaller-windowed-stdio.patch
           if ($LASTEXITCODE -ne 0) { throw 'Could not apply the Windows launcher patch.' }
+          git apply --directory=$source .github/pyinstaller-single-instance.patch
+          if ($LASTEXITCODE -ne 0) { throw 'Could not apply the single-instance launcher patch.' }
           python -m pip install Pillow==12.3.0 "./$source"
       - name: Build the standalone app
-        run: python -m PyInstaller --noconfirm --clean --onefile --windowed --name LoL1-MyGame tools/my_game.py
+        run: |
+          python .github/make-mygame-art.py
+          if ($LASTEXITCODE -ne 0) { throw 'Could not draw the startup art.' }
+          python -m PyInstaller --noconfirm --clean --onefile --windowed --name LoL1-MyGame --splash build/mygame-art/starting.png --icon build/mygame-art/mygame.ico --add-data "build/mygame-art/mygame.ico:." tools/my_game.py
       - name: Verify the packaged file on synthetic data
         shell: pwsh
         run: |
           @'
+          import ctypes
+          from ctypes import wintypes
           from pathlib import Path
           import subprocess
           from tests.test_my_game import make_my_game_fixture
 
           make_my_game_fixture(Path("fixture"))
           exe = Path("dist/LoL1-MyGame.exe").resolve()
+          kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+          kernel.CreateMutexW.argtypes = (ctypes.c_void_p, wintypes.BOOL, wintypes.LPCWSTR)
+          kernel.CreateMutexW.restype = wintypes.HANDLE
+          kernel.CloseHandle.argtypes = (wintypes.HANDLE,)
+          instance = kernel.CreateMutexW(None, False, r"Local\KForestland.LoL1.MyGame")
+          assert instance, ctypes.WinError(ctypes.get_last_error())
+          try:
+              subprocess.run([exe], creationflags=subprocess.DETACHED_PROCESS, check=True, timeout=15)
+          finally:
+              kernel.CloseHandle(instance)
+
           subprocess.run(
               [exe, "--data", "fixture", "--out", "check.html", "--no-browser"],
               creationflags=subprocess.DETACHED_PROCESS, check=True, timeout=120,

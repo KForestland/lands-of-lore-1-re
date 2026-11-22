@@ -1,0 +1,54 @@
+--- a/bootloader/src/pyi_main.c
++++ b/bootloader/src/pyi_main.c
+@@ -105,6 +105,9 @@
+ {
+     char *env_var_value;
+     bool reset_environment;
++#if defined(_WIN32) && defined(WINDOWED)
++    HANDLE mygame_instance = NULL;
++#endif
+ 
+ #ifdef _WIN32
+     /* On Windows, both Visual C runtime and MinGW seem to buffer stderr
+@@ -458,6 +461,26 @@
+         free(env_var_value);
+     }
+ #endif  /* defined(__linux__) */
++
++#if defined(_WIN32) && defined(WINDOWED)
++    /* Hold the lock in the onefile parent before creating the extraction
++     * folder or showing the splash, until the desktop child exits. */
++    if (pyi_ctx->is_onefile && pyi_ctx->process_level == PYI_PROCESS_LEVEL_PARENT) {
++        if (pyi_ctx->argc == 1) {
++            mygame_instance = CreateMutexW(NULL, FALSE, L"Local\\KForestland.LoL1.MyGame");
++            if (mygame_instance == NULL) {
++                PYI_WINERROR_W(L"CreateMutexW", L"Could not start My Game!\n");
++                return -1;
++            }
++            if (GetLastError() == ERROR_ALREADY_EXISTS) {
++                CloseHandle(mygame_instance);
++                return 0;
++            }
++        } else {
++            pyi_ctx->suppress_splash = true;
++        }
++    }
++#endif
+ 
+     /* Infer the process type (onefile parent, onefile child, onedir),
+      * and based on that, determine the application's top-level directory. */
+@@ -874,7 +897,13 @@
+      * process / onedir process. */
+     if (pyi_ctx->is_onefile && pyi_ctx->process_level == PYI_PROCESS_LEVEL_PARENT) {
+         /* Onefile parent */
+-        return _pyi_main_onefile_parent(pyi_ctx);
++        int status = _pyi_main_onefile_parent(pyi_ctx);
++#if defined(_WIN32) && defined(WINDOWED)
++        if (mygame_instance != NULL) {
++            CloseHandle(mygame_instance);
++        }
++#endif
++        return status;
+     } else {
+         /* Onedir or onefile child */
+         return _pyi_main_onedir_or_onefile_child(pyi_ctx);

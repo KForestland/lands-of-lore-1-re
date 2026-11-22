@@ -123,7 +123,10 @@ class MyGameDesktop(unittest.TestCase):
             window, dialogs, messages = Mock(), Mock(), Mock()
             dialogs.askopenfilename.return_value = str(source)
             dialogs.askdirectory.return_value = str(root / "game")
-            with patch("my_game_ui.documents_folder", return_value=saves):
+            with (
+                patch("my_game_ui.documents_folder", return_value=saves),
+                patch("my_game_ui.read_with_progress", side_effect=lambda window, read: read()),
+            ):
                 fixture.open_saved_game(window, dialogs, messages)
             fixture.read_saved.assert_called_once_with(source, root / "game")
             messages.showerror.assert_called_once_with(
@@ -166,10 +169,31 @@ class MyGameDesktop(unittest.TestCase):
                 tkinter = Mock()
                 tkinter.TclError = RuntimeError
                 tkinter.filedialog.askdirectory.return_value = "game"
-                fixture = replace(app, language_options=None)
-                with patch("my_game_ui.MyGame.write_page", return_value=path):
-                    with patch("my_game_ui.open_report", return_value=opened):
-                        self.assertEqual(fixture.open_installation(tkinter.Tk.return_value, tkinter.filedialog,
-                                                                   tkinter.messagebox), 0)
+                operations = []
+
+                def choose(_window, choices):
+                    operations.append("choose")
+                    self.assertIn("AUTO", choices)
+                    return "GER"
+
+                def read_with_progress(_window, read):
+                    operations.append("show progress")
+                    return read()
+
+                def write(_selected, *, open_page, language):
+                    operations.append("read game")
+                    self.assertFalse(open_page)
+                    self.assertEqual(language, "GER")
+                    return path
+
+                with (
+                    patch("my_game_ui.choose_language", side_effect=choose),
+                    patch("my_game_ui.read_with_progress", side_effect=read_with_progress),
+                    patch("my_game_ui.MyGame.write_page", side_effect=write),
+                    patch("my_game_ui.open_report", return_value=opened),
+                ):
+                    self.assertEqual(app.open_installation(tkinter.Tk.return_value, tkinter.filedialog,
+                                                           tkinter.messagebox), 0)
+                self.assertEqual(operations, ["choose", "show progress", "read game"])
                 self.assertEqual(tkinter.messagebox.showinfo.call_count, 1)
                 self.assertTrue(tkinter.messagebox.showinfo.call_args.args[1].endswith(str(path)))
