@@ -1,6 +1,6 @@
 # Re-deriving a sample of confirmed statements
 
-Two samples of 30 statements labelled confirmed were taken from the
+The two 19–20 November samples of 30 statements labelled confirmed were taken from the
 current pages and checked again from the original bytes: the CD `DATA`
 folder, the floppy folder, `MAIN.EXE` at raw file offsets disassembled as
 16-bit code, and upstream ScummVM where the statement is about ScummVM.
@@ -84,3 +84,17 @@ excluded. The list was fixed at 23:01 UTC; the first byte read was at
 A review re-derived five of these from the bytes again (picked at random,
 seed 145): the PAK order, decoration positions, shutdown callback,
 symbol table and CMZ leading-word statements. All five gave the result above.
+
+## Trust round 2 on 21 November 2026
+
+Independent readers took ten randomly sampled proved table rows from each
+game's pages and checked the original files with their own readers. Across
+the three games, 30 of 30 rows held within the scope checked. The full
+statement was checked in 29 rows. On one Lands of Lore III texture row,
+the layout held and the palette-source clause was outside the check.
+
+All ten sampled Lands of Lore rows held on release `6523a4d`.
+The formats were checked against the CD, ENG and floppy files.
+
+A separate set of deliberately wrong statements tested what readers and
+checks could catch. [Check audit](CHECK_AUDIT.md#trust-round-2-on-21-november-2026)
