@@ -132,6 +132,22 @@
       "tools": []
     },
     {
+      "path": "AGENTS.md",
+      "title": "Notes for whoever continues this work",
+      "answers": [],
+      "question_references": [],
+      "tools": [
+        "tools/check_all.py",
+        "tools/doc_index.py",
+        "tools/doc_links.py",
+        "tools/page_facts.py",
+        "tools/patch.py",
+        "tools/rating.py",
+        "tools/repo_guard.py",
+        "tools/suite_counts.py"
+      ]
+    },
+    {
       "path": "CONTRIBUTING.md",
       "title": "Contributing",
       "answers": [],
