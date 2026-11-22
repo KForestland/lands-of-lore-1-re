@@ -9,6 +9,7 @@ import cli_errors
 from cli_errors import ReaderArgumentParser, run_cli
 
 JOBS = {
+    "mygame": (None, (), "Open an offline guide to your own game"),
     "level": ("level_viewer.py", (), "Look at an interactive level plan"),
     "text": ("decode_dialogue.py", (), "Read original game text"),
     "translate": ("translate.py", (), "Export, build and verify translations"),
@@ -36,6 +37,10 @@ def main():
         parser.error(f"Unknown job {args[0]}. Run python tools/lol.py to see the choices.")
     job, options = args[0], args[1:]
     script, prefix, label = JOBS[job]
+    if job == "mygame":
+        from my_game import main as my_game
+
+        return my_game(options)
     if not options or options[-1] in ("-h", "--help"):
         print(f"{label}.", flush=True)
     program = Path(__file__).resolve().with_name(script)
