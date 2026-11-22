@@ -2,8 +2,10 @@
 
 <!-- suite-counts:begin -->
 - **Original game files.** 54 checks with the required files and dependencies. Quick mode selects 52.
-- **Synthetic data.** 125 unit tests.
+- **Synthetic data.** 130 unit tests.
 <!-- suite-counts:end -->
+
+The `game_names.py` helper joins the stored automap titles and creature sprites. The `my_game.py` job opens the offline edition, map, item and spell page.
 
 Run `python tools/suite_counts.py --write` to refresh these counts after changing either suite.
 

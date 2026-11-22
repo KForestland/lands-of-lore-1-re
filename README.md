@@ -50,7 +50,7 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- suite-counts:begin -->
 - **Original game files.** 54 checks with the required files and dependencies. Quick mode selects 52.
-- **Synthetic data.** 125 unit tests.
+- **Synthetic data.** 130 unit tests.
 <!-- suite-counts:end -->
 
 Use Python 3.10 or later and your own copy of the DOS game (CD or floppy edition). Install Pillow for the image tools and Capstone for the executable reference scan. The full check uses both packages.
@@ -101,7 +101,7 @@ What you can look at with your own copy of the game. Run from the clone with `ex
 
 | Tool | Command | Example result |
 |---|---|---|
-| Job menu | `python tools/lol.py --help` | level, text, translate, music, save, patch, mod |
+| Job menu | `python tools/lol.py --help` | mygame, level, text, translate, music, save, patch, mod |
 | Interactive map | `python tools/level_viewer.py --data "$LOL1_DATA" --check` | level01 page with 1,082 entries |
 | Level copy editor | `python tools/level_edit.py --data "$LOL1_DATA" --check` | 29 original levels copied byte-identically and 29 edited levels read back |
 | Translation tables | `python tools/translate.py --data "$LOL1_DATA" --check` | 213 tables, 7,760 rows, 28 indexed fonts |
@@ -113,6 +113,12 @@ What you can look at with your own copy of the game. Run from the clone with `ex
 | Sound driver entries | `python tools/lol1_driver_tables.py --data "$LOL1_DATA" --check` | 6 ADV tables per archive and 3 identical CD language copies |
 | Finale blend indices | `python tools/lol1_blend_indices.py --data "$LOL1_DATA" --check` | 3 languages, 4 calls and 3 passes per call |
 | Possible spelling mistakes | `python tools/list_likely_spellings.py --data "$LOL1_DATA" --check` | 30 tables per language, 6,495 strings and 0 bad tables or bigrams on the measured CD. Candidate counts depend on the word list. |
+
+## My Game
+
+Open the Windows build from the [My Game workflow](https://github.com/KForestland/lands-of-lore-1-re/actions/workflows/windows-mygame.yml). Download and unzip the **LoL1-MyGame-Windows** artifact, then double-click **LoL1-MyGame.exe**. Choose your Lands of Lore installation or its DATA folder. Your browser opens one offline page with your edition, all 29 level plans under their automap titles, items and spells. The app saves **LoL1 My Game.html** in Documents and shows the full path. If the filename is taken, the app adds a number.
+
+On Linux or macOS, run `python lol.py mygame` from this repository with Pillow and a Python installation that provides Tk. The same folder picker opens.
 
 ## Change a number in your own copy
 

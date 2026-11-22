@@ -8,6 +8,7 @@ from io import BytesIO
 from struct import iter_unpack
 
 from cli_errors import run_cli
+from game_names import level_names, monster_sprites
 import decode_dialogue as text
 import emc2_decompile as emc
 from level_edit import editor_data, level_sources
@@ -49,7 +50,7 @@ def argument(values, i):
     return values[i] if i < len(values) and values[i] is not None else "computed"
 
 
-def place(plan, level, ext, entry, calls, items, counts, edit_sites, monster_sites, monster_markers):
+def place(plan, level, ext, entry, calls, items, counts, edit_sites, monster_sites, monster_markers, sprites):
     for function, args, site in calls:
         layer = ""
         if function == 0x11:
@@ -66,6 +67,8 @@ def place(plan, level, ext, entry, calls, items, counts, edit_sites, monster_sit
             kind = "Monsters"
             info = {"Block": block, "Facing": argument(args, 3), "Type slot": argument(args, 4),
                     "Mode": argument(args, 6)}
+            if sprite := sprites.get(info["Type slot"]):
+                info["Sprite name"] = sprite
             on_map = map_block(block)
             editable = (ext, site) in monster_sites
             layer = "editable-monster" if editable else "read-only-item"
@@ -82,6 +85,8 @@ def place(plan, level, ext, entry, calls, items, counts, edit_sites, monster_sit
         label = f"{kind[:-1]} placement {slot}"
         if function == 0x11 and info["Name"] != "Unknown":
             label = f"{info['Name']} — item placement {slot}"
+        if function == 0x38 and "Sprite name" in info:
+            label = f"{info['Sprite name']} — creature placement {slot}"
         info["Script entry"] = f"LEVEL{level}.{ext} entry {entry}"
         plan.legend[kind] = color
         if on_map:
@@ -92,7 +97,9 @@ def place(plan, level, ext, entry, calls, items, counts, edit_sites, monster_sit
 
 def view(data, stem, gates):
     level = int(stem[5:])
-    plan = Plan(f"Level {level} plan", [(0, 0), (32, 32)],
+    titles = level_names(data)
+    title = titles.get(level, f"Level {level}")
+    plan = Plan(f"{title} plan", [(0, 0), (32, 32)],
                 f"The wall map comes from LEVEL{level}.CMZ and WLL. Markers show entries in the stored scripts and map symbols.",
                 north_up=False)
     plan.legend.update({"Open square": "#ebe8dc", "Solid square": "#282830",
@@ -111,7 +118,9 @@ def view(data, stem, gates):
     for gate in gates:
         for block in gate["entry_ids"]:
             if map_block(block):
-                linked[block].append(f"To level {gate['args'][0]}: {gate['conditions']}")
+                destination = gate["args"][0]
+                label = titles.get(destination, f"level {destination}")
+                linked[block].append(f"To {label}: {gate['conditions']}")
     for block, walls in enumerate(level_blocks(level, data)):
         x, y = spot(block, 0, 0)
         details = {"X / Y": f"{x} / {y}", "Wall types N / E / S / W": " / ".join(map(str, walls)),
@@ -122,6 +131,7 @@ def view(data, stem, gates):
                      "Squares", details, "cell exit-region" if block in linked else "cell")
 
     items, lands = names(data)
+    sprites = monster_sprites(data, level)
     model = editor_data(dict(level_sources(data, level)), level, items)
     edit_sites = {site for site, *_ in model["items"]}
     monster_sites = {(extension, site) for extension, site, *_ in model["monsters"]}
@@ -142,7 +152,7 @@ def view(data, stem, gates):
                 plan.dot(spot(entry, .25, .72), key, label, "Script entries", details, "#aabdfa", entry)
             else:
                 plan.note(key, label, "Script entries", details)
-            place(plan, level, ext, entry, calls, items, counts, edit_sites, monster_sites, model["monster_markers"])
+            place(plan, level, ext, entry, calls, items, counts, edit_sites, monster_sites, model["monster_markers"], sprites)
 
     legend = level_member(level, "XXX", data) or b""
     for i, (x, y, shape, rx, ry, sid) in enumerate(iter_unpack("<6H", legend[:32*12]), 1):
@@ -155,7 +165,8 @@ def view(data, stem, gates):
     for i, row in enumerate(gates, 1):
         level_to, block, facing = row["args"]
         source = next((entry for entry in row["entry_ids"] if map_block(entry)), None)
-        plan.note(f"exit-{i}", f"Exit {i} to level {level_to}", "Exits",
+        destination = titles.get(level_to, f"level {level_to}")
+        plan.note(f"exit-{i}", f"Exit {i} to {destination}", "Exits",
                   {"Gate": row["conditions"], "Event": row["event"], "Entries": row["entries"],
                    "Destination square / facing": f"{block} / {facing}", "DATA word": f"{row['word']:#x}"},
                   target=f"block-{source}" if source is not None else None)

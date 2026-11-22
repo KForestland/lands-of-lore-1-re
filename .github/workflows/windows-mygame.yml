@@ -1,0 +1,77 @@
+name: Build My Game for Windows
+
+on:
+  push:
+    branches: ['**']
+    paths:
+      - '.github/workflows/windows-mygame.yml'
+      - '.github/pyinstaller-windowed-stdio.patch'
+      - 'tools/**'
+      - 'tests/**'
+      - 'lol.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Install the build dependencies
+        env:
+          PYINSTALLER_COMPILE_BOOTLOADER: '1'
+        run: |
+          # Rebuild the windowed launcher so it gives the child valid streams before Python starts.
+          $version = '6.22.3'
+          $source = "pyinstaller-$version"
+          $archive = "$source.tar.gz"
+          python -m pip download --no-deps --no-binary=:all: "PyInstaller==$version"
+          if ($LASTEXITCODE -ne 0) { throw 'Could not download PyInstaller source.' }
+          if ((Get-FileHash $archive -Algorithm SHA256).Hash -ne '05eb2f5615503e72939a7224d68b4aff572c6b0438ee4a17d0a4b481f399362d') {
+            throw 'The PyInstaller source archive checksum did not match.'
+          }
+          tar -xf $archive
+          if ($LASTEXITCODE -ne 0) { throw 'Could not unpack PyInstaller source.' }
+          git apply --directory=$source .github/pyinstaller-windowed-stdio.patch
+          if ($LASTEXITCODE -ne 0) { throw 'Could not apply the Windows launcher patch.' }
+          python -m pip install Pillow==12.3.0 "./$source"
+      - name: Build the standalone app
+        run: python -m PyInstaller --noconfirm --clean --onefile --windowed --name LoL1-MyGame tools/my_game.py
+      - name: Verify the packaged file on synthetic data
+        shell: pwsh
+        run: |
+          @'
+          from pathlib import Path
+          import subprocess
+          from tests.test_my_game import make_my_game_fixture
+
+          make_my_game_fixture(Path("fixture"))
+          exe = Path("dist/LoL1-MyGame.exe").resolve()
+          subprocess.run(
+              [exe, "--data", "fixture", "--out", "check.html", "--no-browser"],
+              creationflags=subprocess.DETACHED_PROCESS, check=True, timeout=120,
+          )
+          '@ | python -
+          if ($LASTEXITCODE -ne 0) { throw 'The packaged app failed the detached startup check.' }
+          $exe = 'dist/LoL1-MyGame.exe'
+          $page = Get-Content check.html -Raw
+          if (([regex]::Matches($page, 'data:image/png;base64,')).Count -ne 29 -or
+              $page -notmatch [regex]::Escape('<td>The test key</td><td>121</td>') -or
+              $page -notmatch [regex]::Escape('<td>The test key</td><td>0</td><td>3 / 0 / 0 / 0</td>')) {
+            throw 'The generated page is missing its maps, a named item or a named spell.'
+          }
+          $size = (Get-Item $exe).Length
+          "LoL1-MyGame.exe: $size bytes" | Add-Content $env:GITHUB_STEP_SUMMARY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: LoL1-MyGame-Windows
+          path: dist/LoL1-MyGame.exe
+          if-no-files-found: error
