@@ -21,7 +21,7 @@ MAP_LEGEND = """
 <ul class="legend" aria-label="Map legend">
 <li><span style="background:#ebe8dc"></span>Open square</li>
 <li><span style="background:#282830"></span>Solid wall</li>
-<li><span style="background:#e69632"></span>Partial wall, door or switch</li>
+<li><span style="background:#e69632"></span>Partial walls, doors, switches or niches</li>
 <li><span style="background:#c81e1e"></span>Decoration</li>
 </ul>
 """

@@ -39,6 +39,7 @@ FACE = ("face",)
 HAND = {4: "type", 8: "shape"}
 # Visits to one address, per entry, before the walk stops following that entry.
 CAP = 1000
+STATE_CAP = 400_000
 
 
 def const(value):
@@ -328,7 +329,7 @@ def walk(script):
             per_addr[addr] += 1
             # A hot address is a loop that keeps changing a register. The first
             # paths still record every call they reach. The cap stops the rest.
-            if per_addr[addr] > CAP or len(seen) > 400000:
+            if per_addr[addr] > CAP or len(seen) > STATE_CAP:
                 capped.add(entry)
                 continue
             seen.add(token)
@@ -628,7 +629,10 @@ def page(exits, doors, stopped):
         "level, block, facing. Door calls are `triggerDoorSwitch` (0x31), `setDoorState` (0x33) and "
         "`blockDoor` (0x86). The word column is the DATA word of that call. The entries column lists "
         "the script entries whose inspected paths reach the call, through jumps, both arms of `ifNotJmp` "
-        "(only the arm taken when the tested value is a constant argument), and calls. The walk can stop at its visit or state limit, so some entries are incomplete. A return ends that path, so a later subroutine is not credited to the entry. "
+        "(only the arm taken when the tested value is a constant argument), and calls. "
+        f"The walk can cut off paths after {CAP:,} visits to an address or once an entry has more than "
+        f"{STATE_CAP:,} distinct states, so some entries are incomplete. "
+        "A return ends that path, so a later subroutine is not credited to the entry. "
         "The conditions column lists the `ifNotJmp` tests still open on a path that reaches the call, "
         "outermost first. Paths that differ only in the arm of one test are merged, so a test whose two "
         "arms both lead to the call is not listed. `flag 41 == 0` means that arm of the compare. "

@@ -36,7 +36,9 @@ python3 tools/doc_index.py --check   # after adding a page: python3 tools/doc_in
 python3 tools/repo_guard.py --check --release
 ```
 
-Without game files, the unit tests, doc_index, page_facts and repo_guard still run; GitHub Actions runs those on Linux, Windows and macOS with Python 3.10 and 3.12. (run it once on the CD `DATA` folder and once on the floppy folder; both must pass) Run the full list on the exact commit you are about to hand over, not on an earlier one. The tools write only where you point them (`--out`); the tree must be clean after the checks.
+Without game files, the unit tests, doc_index, page_facts and repo_guard still run; GitHub Actions runs those on Linux, Windows and macOS with Python 3.10 and 3.12.
+
+Run `tools/check_all.py` once on the CD `DATA` folder and once on the floppy installation folder. Both runs must pass. Run the full list on the exact commit you are about to hand over, not on an earlier one. The tools write only where you point them (`--out`); the tree must be clean after the checks.
 
 ## Where the open work is
 

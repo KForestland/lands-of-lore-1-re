@@ -32,7 +32,7 @@ Status of the other games: [Lands of Lore II](https://github.com/KForestland/lan
 
 ![Level 12 drawn by tools/level_renderer.py --schematic](docs/images/level12_schematic.png)
 
-*Level 12 drawn from its map file alone (`tools/level_renderer.py --level 12 --schematic`): open squares light, walls dark, squares with partial walls, doors or switches orange, decorated walls marked red.*
+*Level 12 drawn from its map file alone (`tools/level_renderer.py --level 12 --schematic`): open squares light, walls dark, squares with partial walls, doors, switches or niches orange, decorated walls marked red.*
 
 ## Rating
 
@@ -43,7 +43,7 @@ These are counts of work done, not a percentage of how complete the project is. 
 - **Rules traced:** the pages mark 574 statements CONFIRMED (labelled as proved with a cited address or offset) and 101 UNCONFIRMED (a reading not yet proved), on 108 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
-- **Page facts:** 24/6,879 candidate literals registered with byte witnesses. The rest are inventoried so changes can be reviewed.
+- **Page facts:** 24/6,881 candidate literals registered with byte witnesses. The rest are inventoried so changes can be reviewed.
 <!-- rating:end -->
 
 ## Quick start with git (for people who use git)
@@ -116,7 +116,7 @@ What you can look at with your own copy of the game. Run from the clone with `ex
 
 ## My Game
 
-Open the Windows build from the [My Game workflow](https://github.com/KForestland/lands-of-lore-1-re/actions/workflows/windows-mygame.yml). Download and unzip the **LoL1-MyGame-Windows** artifact, then double-click **LoL1-MyGame.exe**. Choose your Lands of Lore installation or its DATA folder. Your browser opens one offline page with your edition, all 29 level plans under their automap titles, items, spells and creatures. **Where is it?** lists the game's recorded item placements and pack grants. The app saves **LoL1 My Game.html** in Documents and shows the full path. If the filename is taken, the app adds a number.
+Sign in to GitHub and open the Windows build from the [My Game workflow](https://github.com/KForestland/lands-of-lore-1-re/actions/workflows/windows-mygame.yml). Download and unzip the **LoL1-MyGame-Windows** artifact, then double-click **LoL1-MyGame.exe**. Choose your Lands of Lore installation or its DATA folder. Your browser opens one offline page with your edition, all 29 level plans under their automap titles, items, spells and creatures. **Where is it?** lists the game's recorded item placements and pack grants. The app saves **LoL1 My Game.html** in Documents and shows the full path. If the filename is taken, the app adds a number.
 
 On Linux or macOS, run `python lol.py mygame` from this repository with Pillow and a Python installation that provides Tk. The same folder picker opens. The page identifies the language used for level, item and spell names. If the installation includes several languages and the program cannot tell which one you play in, it asks you to choose. You can also use `--data` with `--language ENG`, `FRE` or `GER`.
 

@@ -30,7 +30,7 @@ Run every check at once: `python3 tools/check_all.py --data <DATA>` (all pass on
 - **Rules traced:** the pages mark 574 statements CONFIRMED (labelled as proved with a cited address or offset) and 101 UNCONFIRMED (a reading not yet proved), on 108 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
-- **Page facts:** 24/6,879 candidate literals registered with byte witnesses. The rest are inventoried so changes can be reviewed.
+- **Page facts:** 24/6,881 candidate literals registered with byte witnesses. The rest are inventoried so changes can be reviewed.
 <!-- rating:end -->
 
 ## File formats

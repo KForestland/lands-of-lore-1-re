@@ -32,7 +32,7 @@ overview, not the in-game 3D view: one flat colour per wall type, no textures.
   level_renderer.py --level 1 --out maps/     # one PNG
   level_renderer.py --level 1 --out maps/ --schematic
       # drawing from CMZ + WLL only, no game pixels: open squares light, solid dark,
-      # mixed (doors, switches, part walls) orange, decorated walls (WLL shape > 0) red marks
+      # mixed (partial walls, doors, switches or niches) orange, decorated walls (WLL shape > 0) red marks
   level_renderer.py --out maps/                # all 29
   level_renderer.py --check                        # every wall page resolves; lists wall types
                                                    # missing from the level's WLL; no PNGs written
@@ -223,7 +223,7 @@ def render_schematic(level, data_dir, cell=10):
     """Map drawing that uses only the CMZ wall bytes and the WLL table (no game pixels).
 
     open square (no wall with geometry): light; solid square (all four walls have
-    geometry): dark; mixed square (doors, switches, niches, part walls): orange;
+    geometry): dark; mixed square (partial walls, doors, switches or niches): orange;
     a wall with a decoration (WLL shape > 0) adds a red mark on that side.
     """
     from PIL import Image, ImageDraw
