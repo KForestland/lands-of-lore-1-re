@@ -2,7 +2,7 @@
 
 <!-- suite-counts:begin -->
 - **Original game files.** 54 checks with the required files and dependencies. Quick mode selects 52.
-- **Synthetic data.** 125 unit tests.
+- **Synthetic data.** 127 unit tests.
 <!-- suite-counts:end -->
 
 Run `python tools/suite_counts.py --write` to refresh these counts after changing either suite.
