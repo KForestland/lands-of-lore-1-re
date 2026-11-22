@@ -50,7 +50,7 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- suite-counts:begin -->
 - **Original game files.** 54 checks with the required files and dependencies. Quick mode selects 52.
-- **Synthetic data.** 127 unit tests.
+- **Synthetic data.** 130 unit tests.
 <!-- suite-counts:end -->
 
 Use Python 3.10 or later and your own copy of the DOS game (CD or floppy edition). Install Pillow for the image tools and Capstone for the executable reference scan. The full check uses both packages.
@@ -116,7 +116,7 @@ What you can look at with your own copy of the game. Run from the clone with `ex
 
 ## My Game
 
-Open the Windows build from the [My Game workflow](https://github.com/KForestland/lands-of-lore-1-re/actions/workflows/windows-mygame.yml). Download and unzip the **LoL1-MyGame-Windows** artifact, then double-click **LoL1-MyGame.exe**. Choose your Lands of Lore installation or its DATA folder. Your browser opens one offline page with your edition, all 29 level plans under their automap titles, items and spells. The page is saved outside your game folder.
+Open the Windows build from the [My Game workflow](https://github.com/KForestland/lands-of-lore-1-re/actions/workflows/windows-mygame.yml). Download and unzip the **LoL1-MyGame-Windows** artifact, then double-click **LoL1-MyGame.exe**. Choose your Lands of Lore installation or its DATA folder. Your browser opens one offline page with your edition, all 29 level plans under their automap titles, items and spells. The app saves **LoL1 My Game.html** in Documents and shows the full path. If the filename is taken, the app adds a number.
 
 On Linux or macOS, run `python lol.py mygame` from this repository with Pillow and a Python installation that provides Tk. The same folder picker opens.
 

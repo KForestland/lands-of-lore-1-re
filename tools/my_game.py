@@ -3,11 +3,10 @@ import argparse
 from base64 import b64encode
 from html import escape
 from io import BytesIO
-import os
+from itertools import count
 from pathlib import Path
 from struct import error as StructError
 import sys
-from tempfile import mkdtemp
 import webbrowser
 
 from cli_errors import output_refusal
@@ -21,6 +20,7 @@ from level_report import item_names
 
 TITLE = "Lands of Lore · My Game"
 WRONG_FOLDER = "Choose the folder containing your complete Lands of Lore game or its DATA folder."
+CANCELLED = "No folder was chosen, so no page was written."
 
 STYLE = """
 :root{font:17px/1.5 system-ui,sans-serif;color:#282923;background:#f8f5ec}
@@ -174,14 +174,50 @@ def game_page(folder):
 """
 
 
-def cache_folder():
+def documents_folder():
     if sys.platform == "win32":
-        base = Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
-    elif sys.platform == "darwin":
-        base = Path.home() / "Library" / "Caches"
-    else:
-        base = Path(os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache")
-    return base / "LoL1 My Game"
+        from ctypes import create_unicode_buffer, windll
+        from ctypes.wintypes import MAX_PATH
+
+        # CSIDL_PERSONAL selects the user's Documents folder, including redirects.
+        path = create_unicode_buffer(MAX_PATH)
+        if windll.shell32.SHGetFolderPathW(None, 0x0005, None, 0, path) == 0:
+            return Path(path.value)
+    return Path.home() / "Documents"
+
+
+def write_new_file(out, game_root, page):
+    if output_refusal(out, game_root):
+        raise ValueError("Save the My Game page outside the game folder.")
+    stream = out.open("x", encoding="utf-8")
+    try:
+        with stream:
+            stream.write(page)
+    except OSError:
+        out.unlink(missing_ok=True)
+        raise
+
+
+def save_in_documents(game_root, page):
+    documents = documents_folder().resolve()
+    if output_refusal(documents, game_root):
+        raise ValueError("Save the My Game page outside the game folder.")
+    documents.mkdir(parents=True, exist_ok=True)
+    for number in count(1):
+        name = "LoL1 My Game.html" if number == 1 else f"LoL1 My Game {number}.html"
+        out = documents / name
+        try:
+            write_new_file(out, game_root, page)
+        except FileExistsError:
+            continue
+        return out
+
+
+def open_report(path):
+    try:
+        return webbrowser.open(path.resolve().as_uri())
+    except (OSError, webbrowser.Error):
+        return False
 
 
 def write_page(folder, out=None, *, open_page=True):
@@ -189,21 +225,10 @@ def write_page(folder, out=None, *, open_page=True):
     folder = folder.resolve()
     game_root = folder.parent if folder.name.upper() == "DATA" else folder
     if out is None:
-        cache = cache_folder()
-        if output_refusal(cache, game_root):
-            raise ValueError("The My Game cache must be outside the game folder.")
-        cache.mkdir(parents=True, exist_ok=True)
-        out = Path(mkdtemp(prefix="report-", dir=cache)) / "My Game.html"
-    if output_refusal(out, game_root):
-        raise ValueError("Save the My Game page outside the game folder.")
-    with out.open("x", encoding="utf-8") as stream:
-        try:
-            stream.write(page)
-        except OSError:
-            stream.close()
-            out.unlink(missing_ok=True)
-            raise
-    if open_page and not webbrowser.open(out.resolve().as_uri()):
+        out = save_in_documents(game_root, page)
+    else:
+        write_new_file(out, game_root, page)
+    if open_page and not open_report(out):
         raise ValueError(f"Open the My Game page in your browser from {out}.")
     return out
 
@@ -219,13 +244,20 @@ def desktop():
     try:
         while folder := filedialog.askdirectory(parent=window, title="Choose your Lands of Lore game folder"):
             try:
-                write_page(Path(folder))
-                return 0
+                path = write_page(Path(folder), open_page=False)
+                opened = open_report(path)
             except GameFolderError as error:
                 messagebox.showerror(TITLE, str(error), parent=window)
             except (OSError, ValueError, ImportError) as error:
                 messagebox.showerror(TITLE, str(error), parent=window)
                 return 1
+            else:
+                message = "Your My Game page is saved here."
+                if not opened:
+                    message = "Open your saved My Game page in your browser."
+                messagebox.showinfo(TITLE, f"{message}\n\n{path}", parent=window)
+                return 0
+        messagebox.showinfo(TITLE, CANCELLED, parent=window)
         return 0
     finally:
         window.destroy()

@@ -1,0 +1,73 @@
+--- a/bootloader/src/pyi_utils_win32.c
++++ b/bootloader/src/pyi_utils_win32.c
+@@ -497,6 +497,30 @@
+     }
+     return handle;
+ }
++
++#if defined(WINDOWED)
++static bool
++_pyi_stream_handle_usable(HANDLE handle)
++{
++    DWORD flags;
++    if (!GetHandleInformation(handle, &flags) || !(flags & HANDLE_FLAG_INHERIT)) {
++        return false;
++    }
++    SetLastError(ERROR_SUCCESS);
++    DWORD type = GetFileType(handle);
++    if (type == FILE_TYPE_UNKNOWN) {
++        return GetLastError() == ERROR_SUCCESS;
++    }
++    if (type == FILE_TYPE_DISK) {
++        /* CPython needs file information when opening a disk stream. */
++        BY_HANDLE_FILE_INFORMATION info;
++        FILE_BASIC_INFO basic_info;
++        return GetFileInformationByHandle(handle, &info) &&
++            GetFileInformationByHandleEx(handle, FileBasicInfo, &basic_info, sizeof(basic_info));
++    }
++    return true;
++}
++#endif
+
+ static
+ LRESULT CALLBACK _hidden_window_wndproc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+@@ -623,6 +647,23 @@
+     startup_info.hStdOutput = _pyi_get_stream_handle(stdout);
+     startup_info.hStdError = _pyi_get_stream_handle(stderr);
+
++#if defined(WINDOWED)
++    /* The onefile child starts Python before application code can run.
++     * Give it an inheritable NUL handle in place of each unavailable stream. */
++    HANDLE *streams[] = { &startup_info.hStdInput, &startup_info.hStdOutput, &startup_info.hStdError };
++    HANDLE replacements[3] = { INVALID_HANDLE_VALUE, INVALID_HANDLE_VALUE, INVALID_HANDLE_VALUE };
++    for (size_t i = 0; i < 3; ++i) {
++        if (_pyi_stream_handle_usable(*streams[i])) {
++            continue;
++        }
++        replacements[i] = CreateFileW(L"NUL", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
++                                       &security_attributes, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
++        if (replacements[i] != INVALID_HANDLE_VALUE) {
++            *streams[i] = replacements[i];
++        }
++    }
++#endif
++
+     succeeded = CreateProcessW(
+         executable_filename_w, /* lpApplicationName */
+         GetCommandLineW(), /* lpCommandLine */
+@@ -635,6 +676,15 @@
+         &startup_info, /* lpStartupInfo */
+         &pyi_ctx->child_process /* lpProcessInformation */
+     );
++#if defined(WINDOWED)
++    DWORD start_error = succeeded ? ERROR_SUCCESS : GetLastError();
++    for (size_t i = 0; i < 3; ++i) {
++        if (replacements[i] != INVALID_HANDLE_VALUE) {
++            CloseHandle(replacements[i]);
++        }
++    }
++    SetLastError(start_error);
++#endif
+     if (!succeeded) {
+         PYI_WINERROR_W(L"CreateProcessW", L"Failed to create child process!\n");
+         return -1;

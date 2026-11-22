@@ -1,14 +1,16 @@
 """Check the one-page guide with invented maps and names."""
+from importlib.util import find_spec
 import re
 from pathlib import Path
 from struct import pack_into
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import Mock, patch
 
 from tests.test_level_tools import TOOLS
 from tests.kit_fixture import make_fixture, TRANSLATE_FROM
 
-from my_game import GameFolderError, WRONG_FOLDER, game_page, write_page
+from my_game import CANCELLED, GameFolderError, TITLE, WRONG_FOLDER, desktop, game_page, write_page
 
 
 def make_my_game_fixture(folder):
@@ -21,6 +23,7 @@ def make_my_game_fixture(folder):
     (data / "MAIN.EXE").write_bytes(program)
 
 
+@unittest.skipUnless(find_spec("PIL"), "Pillow not installed")
 class MyGame(unittest.TestCase):
     def test_page_for_game_root_using_local_names_and_embedded_plans(self):
         with TemporaryDirectory() as temp:
@@ -54,3 +57,43 @@ class MyGame(unittest.TestCase):
             with self.assertRaises(GameFolderError) as problem:
                 game_page(folder)
             self.assertEqual(str(problem.exception), WRONG_FOLDER)
+
+
+class MyGameDesktop(unittest.TestCase):
+    def test_default_page_uses_documents_without_overwriting(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            documents = root / "Documents"
+            game = root / "game"
+            with patch("my_game.documents_folder", return_value=documents), patch("my_game.game_page", return_value="test"):
+                first = write_page(game, open_page=False)
+                first.write_text("keep this page", encoding="utf-8")
+                second = write_page(game, open_page=False)
+                with self.assertRaisesRegex(ValueError, "outside the game folder"):
+                    write_page(root, open_page=False)
+            self.assertEqual(first, documents / "LoL1 My Game.html")
+            self.assertEqual(first.read_text(encoding="utf-8"), "keep this page")
+            self.assertEqual(second, documents / "LoL1 My Game 2.html")
+            self.assertEqual(second.read_text(encoding="utf-8"), "test")
+
+    def test_cancel_tells_the_player_no_page_was_written(self):
+        tkinter = Mock()
+        tkinter.TclError = RuntimeError
+        tkinter.filedialog.askdirectory.return_value = ""
+        with patch.dict("sys.modules", tkinter=tkinter), patch("my_game.write_page") as write:
+            self.assertEqual(desktop(), 0)
+        write.assert_not_called()
+        tkinter.messagebox.showinfo.assert_called_once_with(TITLE, CANCELLED, parent=tkinter.Tk.return_value)
+
+    def test_saved_path_is_shown_with_or_without_browser(self):
+        path = Path("Documents", "LoL1 My Game.html")
+        for opened in (True, False):
+            with self.subTest(opened=opened):
+                tkinter = Mock()
+                tkinter.TclError = RuntimeError
+                tkinter.filedialog.askdirectory.return_value = "game"
+                with patch.dict("sys.modules", tkinter=tkinter), patch("my_game.write_page", return_value=path):
+                    with patch("my_game.open_report", return_value=opened):
+                        self.assertEqual(desktop(), 0)
+                self.assertEqual(tkinter.messagebox.showinfo.call_count, 1)
+                self.assertTrue(tkinter.messagebox.showinfo.call_args.args[1].endswith(str(path)))

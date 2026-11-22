@@ -5,6 +5,7 @@ on:
     branches: ['**']
     paths:
       - '.github/workflows/windows-mygame.yml'
+      - '.github/pyinstaller-windowed-stdio.patch'
       - 'tools/**'
       - 'tests/**'
       - 'lol.py'
@@ -25,7 +26,23 @@ jobs:
           python-version: '3.12'
           architecture: x64
       - name: Install the build dependencies
-        run: python -m pip install Pillow==12.3.0 PyInstaller==6.22.3
+        env:
+          PYINSTALLER_COMPILE_BOOTLOADER: '1'
+        run: |
+          # Rebuild the windowed launcher so it gives the child valid streams before Python starts.
+          $version = '6.22.3'
+          $source = "pyinstaller-$version"
+          $archive = "$source.tar.gz"
+          python -m pip download --no-deps --no-binary=:all: "PyInstaller==$version"
+          if ($LASTEXITCODE -ne 0) { throw 'Could not download PyInstaller source.' }
+          if ((Get-FileHash $archive -Algorithm SHA256).Hash -ne '05eb2f5615503e72939a7224d68b4aff572c6b0438ee4a17d0a4b481f399362d') {
+            throw 'The PyInstaller source archive checksum did not match.'
+          }
+          tar -xf $archive
+          if ($LASTEXITCODE -ne 0) { throw 'Could not unpack PyInstaller source.' }
+          git apply --directory=$source .github/pyinstaller-windowed-stdio.patch
+          if ($LASTEXITCODE -ne 0) { throw 'Could not apply the Windows launcher patch.' }
+          python -m pip install Pillow==12.3.0 "./$source"
       - name: Build the standalone app
         run: python -m PyInstaller --noconfirm --clean --onefile --windowed --name LoL1-MyGame tools/my_game.py
       - name: Verify the packaged file on synthetic data
@@ -33,14 +50,18 @@ jobs:
         run: |
           @'
           from pathlib import Path
+          import subprocess
           from tests.test_my_game import make_my_game_fixture
+
           make_my_game_fixture(Path("fixture"))
+          exe = Path("dist/LoL1-MyGame.exe").resolve()
+          subprocess.run(
+              [exe, "--data", "fixture", "--out", "check.html", "--no-browser"],
+              creationflags=subprocess.DETACHED_PROCESS, check=True, timeout=120,
+          )
           '@ | python -
-          if ($LASTEXITCODE -ne 0) { throw 'Could not build the test fixture.' }
+          if ($LASTEXITCODE -ne 0) { throw 'The packaged app failed the detached startup check.' }
           $exe = 'dist/LoL1-MyGame.exe'
-          $test = Start-Process $exe -ArgumentList '--data fixture --out check.html --no-browser' -PassThru
-          if (!$test.WaitForExit(120000)) { $test.Kill(); throw 'The app did not stop within two minutes.' }
-          if ($test.ExitCode -ne 0) { throw "The app exited with code $($test.ExitCode)." }
           $page = Get-Content check.html -Raw
           if (([regex]::Matches($page, 'data:image/png;base64,')).Count -ne 29 -or
               $page -notmatch [regex]::Escape('<td>The test key</td><td>121</td>') -or
