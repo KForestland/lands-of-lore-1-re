@@ -13,7 +13,7 @@ python3 tools/level_renderer.py --level 1 --schematic --out ../lol1-tour
 python3 tools/level_report.py --level 1 --out ../lol1-tour
 ```
 
-**CONFIRMED.** The renderer lays out the 32 × 32 grid from `L01.PAK+0x61EF`. Each expanded block has four wall bytes. The wall table at `L01.PAK+0x109C3` assigns graphics, interaction types and flags to those IDs. The light areas are open blocks. Orange fills blocks with mixed sides (doors, switches, niches, part walls), and a red mark sits on each wall side with a decoration. [Level assembly](HOW_A_LEVEL_IS_PUT_TOGETHER.md) · [Level 1 sheet](levels/level01.md)
+**CONFIRMED.** The renderer lays out the 32 × 32 grid from `L01.PAK+0x61EF`. Each expanded block has four wall bytes. The wall table at `L01.PAK+0x109C3` assigns graphics, interaction types and flags to those IDs. The light areas are open blocks. Orange fills squares with walls on only some sides, mostly doors and partial walls, and a red mark sits on each wall side with a decoration. [Level assembly](HOW_A_LEVEL_IS_PUT_TOGETHER.md) · [Level 1 sheet](levels/level01.md)
 
 ## Follow the exit at block 621
 

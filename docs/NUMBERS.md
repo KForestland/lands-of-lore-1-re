@@ -22,6 +22,8 @@ The engine compares the cumulative total at the current skill index and advances
 
 ## Spell costs by rank
 
+The [My Game program](../README.md#my-game) shows these with their names from your own copy.
+
 Each 28-byte record has four MP words at +0x02 and four HP words at +0x0E. Columns are in rank order. Zero-filled records and the Vortex cost row are shown as stored. [Spell effect table](unknowns/07_native_rules.md#casting)
 
 | Slot | Name ID | MP | HP | MAIN.EXE offset |
@@ -45,6 +47,8 @@ Each 28-byte record has four MP words at +0x02 and four HP words at +0x0E. Colum
 | 16 | `0x0000` | 0 / 0 / 0 / 0 | 0 / 0 / 0 / 0 | `+0x2B7A0` |
 
 ## Item might and armour
+
+The [My Game program](../README.md#my-game) shows these with their names from your own copy.
 
 `STARTUP.PAK/ONETIME.INF` syscall 0x0E supplies signed might and unsigned protection (record +0x08 and +0x0A, CD setter `MAIN.EXE+0x4A6C3–0x4A6CD`, floppy `+0x53C97–0x53CA1`). The nominal range treats the listed positive might as the sides of the standard two-dice roll. Actual damage depends on the item script, hit test, other equipment and target factors. Armour is the stored item contribution. [Damage rules](game_rules.md#might-armour-and-damage)
 
