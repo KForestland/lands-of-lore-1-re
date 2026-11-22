@@ -87,8 +87,49 @@ class MyGame(unittest.TestCase):
             self.assertIn(f"<td>{label}</td><td>0</td>", page)
             self.assertNotIn(placeholder, page)
 
+    def test_save_follows_equipment_handles_and_excludes_empty_party_slots(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            game = root / "game"
+            make_my_game_fixture(game)
+            slot = bytearray(0x1427F)
+            slot[60:65] = b"CD04\0"
+            character, state = 76, 0x254
+            slot[character + 2:character + 6] = b"Hero"
+            slot[character + 132:character + 138] = b"Former"
+            pack_into("<H", slot, character, 1)
+            pack_into("<H", slot, character + 0x50, 37)
+            slot[state + 21] = 1
+            pack_into("<H", slot, state + 528, 432)
+            pack_into("<H", slot, state + 563 + 16 * 37 + 12, 121)
+            source = root / "test.dat"
+            source.write_bytes(slot)
+            page = app.read_saved(source, game)
+            self.assertIn(f"<td>Hero</td><td>{TRANSLATE_FROM}</td>", page)
+            self.assertIn(f"{TRANSLATE_FROM} · Gold 432", page)
+            self.assertNotIn("Former", page)
+            self.assertEqual(source.read_bytes(), slot)
+
 
 class MyGameDesktop(unittest.TestCase):
+    def test_save_report_refuses_to_write_into_the_save_folder(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            saves = root / "saves"
+            saves.mkdir()
+            source = saves / "slot.dat"
+            source.write_bytes(b"saved game")
+            fixture = replace(app, read_saved=Mock(return_value="save report"))
+            dialogs, messages = Mock(), Mock()
+            dialogs.askopenfilename.return_value = str(source)
+            dialogs.askdirectory.return_value = str(root / "game")
+            with patch("my_game_ui.documents_folder", return_value=saves):
+                fixture.open_saved_game(Mock(), dialogs, messages)
+            fixture.read_saved.assert_called_once_with(source, root / "game")
+            messages.showerror.assert_called_once()
+            self.assertEqual(list(saves.iterdir()), [source])
+            self.assertEqual(source.read_bytes(), b"saved game")
+
     def test_default_page_uses_documents_without_overwriting(self):
         with TemporaryDirectory() as temp:
             root = Path(temp)
@@ -110,8 +151,8 @@ class MyGameDesktop(unittest.TestCase):
         tkinter = Mock()
         tkinter.TclError = RuntimeError
         tkinter.filedialog.askdirectory.return_value = ""
-        with patch.dict("sys.modules", tkinter=tkinter), patch("my_game_ui.MyGame.write_page") as write:
-            self.assertEqual(app.desktop(), 0)
+        with patch("my_game_ui.MyGame.write_page") as write:
+            self.assertEqual(app.open_installation(tkinter.Tk.return_value, tkinter.filedialog, tkinter.messagebox), 0)
         write.assert_not_called()
         tkinter.messagebox.showinfo.assert_called_once_with(TITLE, CANCELLED, parent=tkinter.Tk.return_value)
 
@@ -123,8 +164,9 @@ class MyGameDesktop(unittest.TestCase):
                 tkinter.TclError = RuntimeError
                 tkinter.filedialog.askdirectory.return_value = "game"
                 fixture = replace(app, language_options=None)
-                with patch.dict("sys.modules", tkinter=tkinter), patch("my_game_ui.MyGame.write_page", return_value=path):
+                with patch("my_game_ui.MyGame.write_page", return_value=path):
                     with patch("my_game_ui.open_report", return_value=opened):
-                        self.assertEqual(fixture.desktop(), 0)
+                        self.assertEqual(fixture.open_installation(tkinter.Tk.return_value, tkinter.filedialog,
+                                                                   tkinter.messagebox), 0)
                 self.assertEqual(tkinter.messagebox.showinfo.call_count, 1)
                 self.assertTrue(tkinter.messagebox.showinfo.call_args.args[1].endswith(str(path)))

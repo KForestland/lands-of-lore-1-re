@@ -11,7 +11,8 @@ from level_html import find_data
 from level_renderer import level_numbers, render_schematic
 from level_report import calls_by_entry, item_names
 from lol1lib import find_member, level_member
-from my_game_ui import LanguageError, MyGame, catalogue, edition_label, png_bytes, report
+from my_game_ui import DATA_ERRORS, LanguageError, MyGame, catalogue, edition_label, png_bytes, report
+from save_reader import read_any
 
 
 TITLE = "Lands of Lore · My Game"
@@ -105,13 +106,25 @@ def item_records(data, levels, titles):
     return locations
 
 
-def game_page(folder, language=None):
-    data = game_data(folder)
+def game_images(data):
     images = find_images(data)
     if not images and data.name.upper() == "DATA":
         images = find_images(data.parent)
     if not images:
         raise ValueError("missing program")
+    return images
+
+
+def display_items(data, lands):
+    items, _ = item_names(data, lands)
+    return {key: name for key, name in items.items()
+            if name and not name.startswith("string 0x")
+            and not (name.startswith("[") and name.endswith("]"))}
+
+
+def game_page(folder, language=None):
+    data = game_data(folder)
+    images = game_images(data)
     image, _, _, program = images[0]
     layout = "Floppy" if image == "floppy" else "CD"
     edition = edition_label(data, identify, WITNESSES, f"{layout} edition layout (exact version unverified)")
@@ -123,10 +136,7 @@ def game_page(folder, language=None):
             raise LanguageError(f"The selected folder has no {LANGUAGES[language]} name table.")
         raise ValueError("missing name tables")
     lands = text[language]
-    items, _ = item_names(data, lands)
-    items = {key: name for key, name in items.items()
-             if name and not name.startswith("string 0x")
-             and not (name.startswith("[") and name.endswith("]"))}
+    items = display_items(data, lands)
     spell_list = list(spell_rows(lands, image, program))
     if not items or not spell_list:
         raise ValueError("missing named items or spells")
@@ -153,7 +163,54 @@ def game_page(folder, language=None):
     return report(TITLE, edition, maps, tables, legend=MAP_LEGEND, note=note, extras=(("where", heading, found),))
 
 
-app = MyGame("LoL1 My Game", TITLE, "Lands of Lore", "DATA", game_page, tuple(LANGUAGES), language_options)
+def saved_page(source, folder):
+    try:
+        save = read_any(source, include_handles=True)
+        if save.get("edition") not in ("CD", "floppy") or not save["size_ok"]:
+            raise ValueError("unsupported save")
+        if save["kind"] == "ScummVM save" and not 21 <= save["version"] <= 24:
+            raise ValueError("unsupported ScummVM version")
+        state = save["state"]
+        level = state["level"]
+    except (*DATA_ERRORS, EOFError) as error:
+        raise ValueError("Choose a supported Lands of Lore saved game.") from error
+
+    try:
+        data = game_data(folder)
+        image, _, _, program = next(row for row in game_images(data)
+                                    if (row[0] == "floppy") == (save["edition"] == "floppy"))
+        tables = language_tables(data)
+        language = next(iter(language_options(folder, tables)), None)
+        lands = tables[language]
+        names = display_items(data, lands)
+        area = map_names(image, program, lands).get(level, f"Level {level}")
+    except (*DATA_ERRORS, StopIteration) as error:
+        raise ValueError("Choose the game folder from the same edition as this saved game.") from error
+
+    handles = save["item_handles"]
+
+    def carried(items):
+        names_found = []
+        for handle in items:
+            if handle <= 0:
+                continue
+            row = handles.get(handle)
+            names_found.append(names.get(row["property"], "Unknown item") if row else "Unknown item")
+        return ", ".join(names_found) or "None"
+
+    # Match the native check-for-party-member test (EMC2 handler 0x6E).
+    rows = [(row["name"], carried(row["items"])) for row in save["characters"] if row["flags"] & 9 and row["name"]]
+    rows += [("Shared pack", carried(state["inventory"])), ("Held in hand", carried([state["hand_item"]]))]
+    heading = "Party and inventory"
+    table = catalogue("party", heading, ("Carrier", "Items"), rows,
+                      f"Item and level names use the {LANGUAGES[language]} text table. "
+                      "The save report omits unconfirmed fields.")
+    return report(f"{TITLE} · Saved game", save["edition"], (), (("party", heading, table),),
+                  note=f"{area} · Gold {state['money']}")
+
+
+app = MyGame("LoL1 My Game", TITLE, "Lands of Lore", "DATA", game_page, tuple(LANGUAGES), language_options,
+             read_saved=saved_page)
 main = app.main
 write_page = app.write_page
 

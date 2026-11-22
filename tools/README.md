@@ -2,7 +2,7 @@
 
 <!-- suite-counts:begin -->
 - **Original game files.** 54 checks with the required files and dependencies. Quick mode selects 52.
-- **Synthetic data.** 131 unit tests.
+- **Synthetic data.** 133 unit tests.
 <!-- suite-counts:end -->
 
 The `game_names.py` helper joins the stored automap titles and creature sprites. The `my_game.py` job opens the offline edition, map, item and spell page.

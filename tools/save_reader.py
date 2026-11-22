@@ -24,6 +24,7 @@ import glob
 import gzip
 import json
 import os
+from pathlib import Path
 import struct
 import sys
 
@@ -74,6 +75,14 @@ def item(b, o, e):
     f = struct.unpack_from(e + "HHBHHHbHH", b, o)
     return dict(zip(("next_assigned", "next_draw", "flying_height", "block", "x", "y",
                      "level", "property", "shape_and_flags"), f))
+
+
+def item_rows(b, offset, endian):
+    """Keep the table index, which is the handle stored on a character."""
+    for handle in range(400):
+        row = item(b, offset + 16 * handle, endian)
+        if not row["shape_and_flags"] & 0x8000:
+            yield handle, row
 
 
 def monster(b, o, e, native):
@@ -151,7 +160,7 @@ def global_state(b, o, scummvm):
 # file kinds
 
 
-def read_original_save(b):
+def read_original_save(b, *, include_handles=False):
     tag = b[60:65]
     cd = tag[:4] == b"CD04"
     out = {"kind": "original save", "edition": "CD" if cd else "floppy",
@@ -169,7 +178,10 @@ def read_original_save(b):
         g["cd_options"] = {"language": x[0], "text": x[1], "talk_volume": x[2], "sfx_volume": x[3],
                            "music_volume": x[4], "byte_0x232": x[5]}
     out["state"] = g
-    out["items"] = [r for r in (item(b, p + i * 16, "<") for i in range(400)) if not r["shape_and_flags"] & 0x8000]
+    rows = dict(item_rows(b, p, "<"))
+    out["items"] = list(rows.values())
+    if include_handles:
+        out["item_handles"] = rows
     p += 400 * 16
     out["levels"] = {}
     for lv in range(30):
@@ -195,7 +207,7 @@ def read_level_file(b):
     return st
 
 
-def read_scummvm(raw):
+def read_scummvm(raw, *, include_handles=False):
     b = gzip.decompress(raw) if raw[:2] == b"\x1f\x8b" else raw
     if b[:4] != b"WWSV":
         raise ValueError("not a ScummVM Westwood save")
@@ -216,7 +228,10 @@ def read_scummvm(raw):
         c, n = character(b, p, True); out["characters"].append(c); p += 126
     g, p = global_state(b, p, True)
     out["state"] = g
-    out["items"] = [r for r in (item(b, p + i * 16, ">") for i in range(400)) if not r["shape_and_flags"] & 0x8000]
+    rows = dict(item_rows(b, p, ">"))
+    out["items"] = list(rows.values())
+    if include_handles:
+        out["item_handles"] = rows
     p += 400 * 16
     out["levels"] = {}
     for lv in range(29):
@@ -231,12 +246,12 @@ def read_scummvm(raw):
     return out
 
 
-def read_any(path):
-    raw = open(path, "rb").read()
+def read_any(path, *, include_handles=False):
+    raw = Path(path).read_bytes()
     if raw[:2] == b"\x1f\x8b" or raw[:4] == b"WWSV":
-        return read_scummvm(raw)
+        return read_scummvm(raw, include_handles=include_handles)
     if len(raw) > 65 and (raw[60:64] == b"CD04" or raw[60:63] == b".13"):
-        return read_original_save(raw)
+        return read_original_save(raw, include_handles=include_handles)
     return read_level_file(raw)
 
 
