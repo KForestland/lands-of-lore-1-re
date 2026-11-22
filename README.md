@@ -32,7 +32,7 @@ Status of the other games: [Lands of Lore II](https://github.com/KForestland/lan
 
 ![Level 12 drawn by tools/level_renderer.py --schematic](docs/images/level12_schematic.png)
 
-*Level 12 drawn from its map file alone (`tools/level_renderer.py --level 12 --schematic`): open squares light, walls dark, squares with partial walls, doors, switches or niches orange, decorated walls marked red.*
+*Level 12 drawn from its map file alone (`tools/level_renderer.py --level 12 --schematic`): open squares light, walls dark, squares with walls on only some sides orange (mostly doors and partial walls), decorated walls marked red.*
 
 ## Rating
 

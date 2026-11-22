@@ -92,7 +92,7 @@ else
 fi
 ```
 
-Light squares are open floor, dark squares have walls on all four sides, and orange squares have partial walls, doors, switches or niches. Red marks sit on decorated faces.
+Light squares are open floor, dark squares have walls on all four sides, and orange squares have walls on only some sides, mostly doors and partial walls. Red marks sit on decorated faces.
 If the tool cannot find a game file, check the markers in
 [Find your game files](#find-your-game-files). If no window opens, open
 `level01_schematic.png` from the schematic folder in a browser on your desktop.

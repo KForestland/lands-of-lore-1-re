@@ -29,7 +29,7 @@ python3 tools/level_renderer.py --level level01 --schematic --out ../lol1-out/sc
 Wrote schematic for level01 to ../lol1-out/schematic/level01_schematic.png.
 ```
 
-The picture is a top-down drawing of level 1: light floors, dark walls, orange squares with partial walls, doors, switches or niches, red marks on decorated walls. No game pixels.
+The picture is a top-down drawing of level 1: light floors, dark walls, orange squares with walls on only some sides, mostly doors and partial walls, red marks on decorated walls. No game pixels.
 
 ## Find where an item is placed
 
