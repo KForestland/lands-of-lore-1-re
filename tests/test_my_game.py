@@ -112,21 +112,24 @@ class MyGame(unittest.TestCase):
 
 
 class MyGameDesktop(unittest.TestCase):
-    def test_save_report_refuses_to_write_into_the_save_folder(self):
+    def test_save_directly_in_documents_asks_to_move_a_copy(self):
         with TemporaryDirectory() as temp:
             root = Path(temp)
-            saves = root / "saves"
+            saves = root / "Documents"
             saves.mkdir()
             source = saves / "slot.dat"
             source.write_bytes(b"saved game")
             fixture = replace(app, read_saved=Mock(return_value="save report"))
-            dialogs, messages = Mock(), Mock()
+            window, dialogs, messages = Mock(), Mock(), Mock()
             dialogs.askopenfilename.return_value = str(source)
             dialogs.askdirectory.return_value = str(root / "game")
             with patch("my_game_ui.documents_folder", return_value=saves):
-                fixture.open_saved_game(Mock(), dialogs, messages)
+                fixture.open_saved_game(window, dialogs, messages)
             fixture.read_saved.assert_called_once_with(source, root / "game")
-            messages.showerror.assert_called_once()
+            messages.showerror.assert_called_once_with(
+                TITLE, "Your saved game is in Documents. Move a copy to another folder and open it from there.",
+                parent=window,
+            )
             self.assertEqual(list(saves.iterdir()), [source])
             self.assertEqual(source.read_bytes(), b"saved game")
 

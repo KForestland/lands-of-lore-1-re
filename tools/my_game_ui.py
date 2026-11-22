@@ -194,6 +194,8 @@ def write_new_file(out, game_root, page, *protected):
 
 def save_in_documents(game_root, page, filename, *protected, extension=".html"):
     documents = documents_folder().resolve()
+    if documents in protected:
+        raise ValueError("Your saved game is in Documents. Move a copy to another folder and open it from there.")
     if any(output_refusal(documents, root) for root in (game_root, *protected)):
         raise ValueError("Your Documents folder is inside a game or saved-game folder." if protected else
                          "Save the My Game page outside the game folder.")
