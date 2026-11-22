@@ -1,5 +1,10 @@
 # LoL1 reverse-engineering status
 
+<!-- suite-counts:begin -->
+- **Original game files.** 54 checks with the required files and dependencies. Quick mode selects 52.
+- **Synthetic data.** 125 unit tests.
+<!-- suite-counts:end -->
+
 **As of:** 2026-11-21. For every file format and rules topic: what is documented, which tool reads it, what was checked on the game data, and what is still open. Older notes kept as history ([`closure_memo.md`](closure_memo.md)) gave a single percentage; this table replaces it.
 
 **Columns**
@@ -9,24 +14,24 @@
 - **Checked on data**: the tool's `--check` parses every file of that kind. CD = the top-level `DATA/` folder of the CD-ROM edition with spoken dialogue (version CD1.02); ENG = its `DATA/ENG` folder; floppy = an English floppy-edition installation (no speech, chapter-based PAKs). Details: [formats/README.md](formats/README.md).
 - **Open**: what is not known yet, as numbered in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 
-Run every check at once: `python3 tools/check_all.py --data <DATA>` (53 checks; all pass on the CD and on the floppy edition, about 102 seconds on the CD and 59 on the floppy, most of it the picture re-encoding check and the progression walk). The experience, spell cost, item and creature numbers are in [numbers at a glance](NUMBERS.md), generated and checked by `tools/lol1_numbers.py`.
+Run every check at once: `python3 tools/check_all.py --data <DATA>` (all pass on the CD and on the floppy edition, about 102 seconds on the CD and 59 on the floppy, most of it the picture re-encoding check and the progression walk). The experience, spell cost, item and creature numbers are in [numbers at a glance](NUMBERS.md), generated and checked by `tools/lol1_numbers.py`.
 
 **Rating** (counted by `tools/rating.py` on the CD edition; see [how we rate](HOW_WE_RATE.md)):
 
 <!-- rating:begin -->
 - **Files read:** 199 of 199 files in the CD `DATA` folder (289.0 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 576 statements CONFIRMED (proved from the program code or the files) and 101 UNCONFIRMED (a reading not yet proved), on 108 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 574 statements CONFIRMED (labelled as proved with a cited address or offset) and 101 UNCONFIRMED (a reading not yet proved), on 108 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
-- **Page facts:** 24/6,883 candidate literals registered with byte witnesses. The other literals are inventoried as prose-only.
+- **Page facts:** 24/6,879 candidate literals registered with byte witnesses. The rest are inventoried so changes can be reviewed.
 <!-- rating:end -->
 
 ## Where things stand (21 November 2026)
 
 A dated snapshot; the work continues and the table below is kept current.
 
-- **Known.** Every file in the CD `DATA` folder has its whole layout read by a tool here (199 of 199, the six blend tables included since 20 November; see [how we rate](HOW_WE_RATE.md)). All 192 CD script functions have a verdict from the original program's own handlers ([native handlers](emc2_native_handlers.md)). Every level change and door call is listed with its guarding conditions ([progression](PROGRESSION.md)).
-- **Open.** 6 of 18 numbered questions are not fully answered: Q1 (floppy shape headers), Q7 (monster mode frames and wall bit 0x40), Q10 (the finale's row-40 file), Q14 (three palette files), Q17 and Q18 (save bytes and fight fields read in play) ([open questions](OPEN_QUESTIONS.md)).
+- **Known.** Every file in the CD `DATA` folder has its whole layout read by a tool here (199 of 199, the six blend tables included since 20 November; see [how we rate](HOW_WE_RATE.md)). The 192 CD script functions have verdicts from the original program's handlers, including 71 partial verdicts ([native handlers](emc2_native_handlers.md)). Every level change and door call is listed with its guarding conditions ([progression](PROGRESSION.md)).
+- **Open.** 6 of 18 numbered questions are not fully answered: Q1 (demo shape headers), Q7 (monster mode frames and wall bit 0x40), Q10 (the finale's row-40 file), Q14 (three palette files), Q17 and Q18 (save bytes and fight fields read in play) ([open questions](OPEN_QUESTIONS.md)).
 - **Tests a reader with the game can run.** Each open point that needs the running game has its test, the save it needs and what a run on 20 November did and did not show ([running-game probes](NEEDS_A_RUNNING_GAME.md)).
 - **Tools for your own copy.** Change text or numbers with the mod kit, make and undo patches, edit a saved game, and open interactive level plans: start with the [first ten minutes](FIRST_TEN_MINUTES.md) page or `python3 tools/lol.py`. Known original faults and the one shipped fix: [patches](../patches/README.md). What these pages got wrong: [corrections](CORRECTIONS.md).
 
@@ -56,7 +61,7 @@ A dated snapshot; the work continues and the table below is kept current.
 | FNT | [fnt.md](formats/fnt.md) | `fnt_reader.py` | CD 4, ENG 7, floppy 9 | — |
 | EMC2 scripts (INF/INI) | [emc2.md](formats/emc2.md), [emc2_scripts.md](emc2_scripts.md) | `emc2_decompile.py`, `tests/test_emc2_corpus.py` | CD 60/60, floppy 60/60, 0 unknown opcodes or functions; native table and handler reads checked for all 192 CD and 187 floppy slots | Q8 answered ([page](unknowns/08_native_script_exit.md)); 71 [partial verdicts](emc2_native_handlers.md#open-parts-of-the-comparison), including cases where the wrapper is known and the downstream effect remains open |
 | TIM sequences | [tim.md](formats/tim.md) | `parse_tim.py`, `lol1_tim_words.py` | 139/139 `FORM…AVFS`; command use counted by two independent walkers. The 14 extra CD words and the four floppy `%d` words are re-read by `lol1_tim_words.py` | Q6 answered ([page](unknowns/06_tim_opcodes.md)) |
-| ADV / DRV / TBL | [drivers.md](formats/drivers.md) | `decode_dialogue.py` (TRIG.TBL), `lol1_driver_tables.py` | drivers identified (Miles Sound System code). Entry tables of every `.ADV`: CD 150, the CD `ENG/FRE/GER` copy 146, floppy 146; `ALFX.DRV` dispatch: 24 CD and 18 floppy wrappers. TRIG.TBL decoded (copy-protection text) | the game meaning of each `.ADV` ID and `.DRV` body; the routine bodies are not read |
+| ADV / DRV / TBL | [drivers.md](formats/drivers.md) | `decode_dialogue.py` (TRIG.TBL), `lol1_driver_tables.py` | drivers identified (Miles Sound System code). Entry tables of every `.ADV`: CD 150, the CD `ENG/FRE/GER` copy 146, floppy 146; `ALFX.DRV` dispatch: 24 CD and 18 floppy wrappers. TRIG.TBL prompt text decoded. The native call that opens it remains open | the game meaning of each `.ADV` ID and `.DRV` body; the routine bodies are not read |
 
 ## Level sheets
 
@@ -86,7 +91,7 @@ Pages: [executable_tables.md](executable_tables.md), [savegame_format.md](savega
 
 ## Tools
 
-All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given an output option (`--out`, `--out-dir`, `--png`, `--wav`; `emc2_decompile.py` uses `-o`/`--output`), and has a `--check`, except `emc2_decompile.py`, which `tests/test_emc2_corpus.py` checks on every script; `tools/check_all.py` runs the 53 checks.
+All tools in `tools/` run from a fresh checkout. Each has `--help`, needs `--data` or `$LOL1_DATA`, writes nothing unless given an output option (`--out`, `--out-dir`, `--png`, `--wav`; `emc2_decompile.py` uses `-o`/`--output`), and has a `--check`, except `emc2_decompile.py`, which `tests/test_emc2_corpus.py` checks on every script; `tools/check_all.py` runs the configured checks.
 
 ## Corrections to the closure memo
 
@@ -94,6 +99,6 @@ The statements of the old closure memo that were later corrected are listed in [
 
 ## What "done" means here
 
-A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. Today 13 of the 21 format rows meet that: LCW, CPS, WSA, VOC, TLC, FNT, text, PAK, CMZ, VCN/VMP, XXX, DAT, TIM. Five more have a page, a reader and a passing check but one or more open points: TLK (why the padding clip is there), SHP (demo edition unread), WLL, EMC2 (some downstream effects), ADV/DRV/TBL (what each driver entry does). PAL/COL is only partly documented (Q14). XMI/C55/PCS and ADL have a page, readers and a check; open: what "C55" stands for, and timbre details (Q15). All five rules and tables rows are documented. Four are checked against the data; the game-rules row is checked in the original program for its core combat arithmetic, and the rest of it is now traced in both executables too ([Q7](unknowns/07_native_rules.md)); a few details stay open.
+A row is done when it has a page, a working reader, a passing check on both editions where they differ, and no open point. On 21 November 2026, 13 of the 21 format rows met that: LCW, CPS, WSA, VOC, TLC, FNT, text, PAK, CMZ, VCN/VMP, XXX, DAT, TIM. Five more have a page, a reader and a passing check but one or more open points: TLK (why the padding clip is there), SHP (demo edition unread), WLL, EMC2 (some downstream effects), ADV/DRV/TBL (what each driver entry does). PAL/COL is only partly documented (Q14). XMI/C55/PCS and ADL have a page, readers and a check; open: what "C55" stands for, and timbre details (Q15). All five rules and tables rows are documented. Four are checked against the data; the game-rules row is checked in the original program for its core combat arithmetic, and the rest of it is now traced in both executables too ([Q7](unknowns/07_native_rules.md)); a few details stay open.
 
 "Checked independently" in this page means a second program, written separately from the one that produced the claim, gave the same result on the same files (for example two separate Frame4 decoders, or two separate TIM walkers).

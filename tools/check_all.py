@@ -19,6 +19,12 @@ READERS = ["pak_reader", "lol1_pak_writer", "pak_indexer", "tlk_verify", "decode
 QUICK_SKIP = {"lol1_compression_writer", "lol1_progression"}
 
 
+def check_counts():
+    """Configured full and quick check counts, before data-dependent skips."""
+    full = len(READERS) + 1
+    return full, full - len(QUICK_SKIP)
+
+
 def main():
     ap = ReaderArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--data", default=L.DEFAULT_DATA, required=L.DEFAULT_DATA is None)
@@ -57,7 +63,7 @@ def main():
         for line in p.stderr.splitlines()[-20:]:
             print(f"  {line}")
         failed.append("emc2 corpus test")
-    n = len(READERS) + 1
+    n, _ = check_counts()
     print(f"Total elapsed: {monotonic() - started:.2f}s")
     if failed:
         print(f"{len(failed)} of {n - len(quick_skipped)} attempted checks FAILED: {', '.join(failed)}")

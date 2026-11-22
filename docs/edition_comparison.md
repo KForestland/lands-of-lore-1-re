@@ -1,4 +1,6 @@
-# LoL1 floppy Comparison (2026-03-18)
+# LoL1 floppy comparison (18 March 2026)
+
+> Historical comparison of English floppy 1.05 and the CD data folder. [Supported editions](EDITIONS.md)
 
 Scope:
 - the CD edition's `DATA/` folder, indexed in [`../data/pak_index.json`](../data/pak_index.json)

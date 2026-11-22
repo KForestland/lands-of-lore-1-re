@@ -81,11 +81,10 @@ excluded. The list was fixed at 23:01 UTC; the first byte read was at
 | 29 | [Palette](formats/palette.md), line 7 | Palette call arguments | Held | All six CD PAL members are 768 bytes. Script opcode 0x09 points at ALTPAL2 in level 2 word 0x31, ALTPAL1 in levels 3/24 words 0x69/0x0B, and CAV_PLT3 in level 25 word 0x49. |
 | 30 | [WLL header](unknowns/02_wll_header.md), line 36 | CMZ leading words | Held | In all 58 expanded files, +0x00/+0x02 are 32/32. The stride at +0x04 yields 4,102 bytes or 9,222 for level 24 in each edition. The referenced reader consumes stride and walls. |
 
-A review re-derived five of these from the bytes again (picked at random,
-seed 145): the PAK order, decoration positions, shutdown callback,
+A review re-derived five of these from the bytes again (picked at random): the PAK order, decoration positions, shutdown callback,
 symbol table and CMZ leading-word statements. All five gave the result above.
 
-## Trust round 2 on 21 November 2026
+## Independent checks on 21 November 2026
 
 Independent readers took ten randomly sampled proved table rows from each
 game's pages and checked the original files with their own readers. Across
@@ -93,8 +92,8 @@ the three games, 30 of 30 rows held within the scope checked. The full
 statement was checked in 29 rows. On one Lands of Lore III texture row,
 the layout held and the palette-source clause was outside the check.
 
-All ten sampled Lands of Lore rows held on release `6523a4d`.
+All ten sampled Lands of Lore rows held in the 21 November review.
 The formats were checked against the CD, ENG and floppy files.
 
 A separate set of deliberately wrong statements tested what readers and
-checks could catch. [Check audit](CHECK_AUDIT.md#trust-round-2-on-21-november-2026)
+checks could catch. [Check audit](CHECK_AUDIT.md#independent-checks-on-21-november-2026)

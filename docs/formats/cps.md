@@ -25,7 +25,7 @@ CONFIRMED, `tools/cps_reader.py --check`:
 - CD ENG folder: `60 files, comp types {4: 60}, 60 with palette … 60/60`.
 - floppy: `112 files, comp types {4: 112}, 112 with palette … 112/112`.
 
-Only type 4 occurs in LoL1. No file read through this header uses type 1 or 3 in either edition: every CPS, CMZ, VCN and VMP member, and every SHP member with the same header, is type 4. CONFIRMED (scan of all PAK members, CD `DATA/`, `DATA/ENG` and floppy). Types 1 and 3 are handled by ScummVM's loader for other games; whether the DOS LoL1 loader accepts them is UNCONFIRMED and does not matter for the shipped data. Following the `loadBitmap` handler (function 0x29: CD `MAIN.EXE+0x1406A`, floppy `+0x18A24`, [script functions](../emc2_scripts.md)) to its comparison on the header's compression-type word would settle whether types 1 and 3 are accepted.
+Type 4 occurred in every CPS, CMZ, VCN and VMP member in the measured CD and floppy archives. It also occurred in 224 CD and 83 floppy SHPs matching the bitmap wrapper: stored size equals the member length minus 2, high compression byte and palette length are zero, and decoded length is positive and below 2,000,000. Types 1 and 3 are handled by ScummVM's loader for other games; whether the DOS LoL1 loader accepts them is UNCONFIRMED and does not matter for the shipped data. Following the `loadBitmap` handler (function 0x29: CD `MAIN.EXE+0x1406A`, floppy `+0x18A24`, [script functions](../emc2_scripts.md)) to its comparison on the header's compression-type word would settle whether types 1 and 3 are accepted.
 
 
 ## Worked example

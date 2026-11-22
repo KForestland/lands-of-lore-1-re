@@ -1,5 +1,12 @@
 # Tools
 
+<!-- suite-counts:begin -->
+- **Original game files.** 54 checks with the required files and dependencies. Quick mode selects 52.
+- **Synthetic data.** 125 unit tests.
+<!-- suite-counts:end -->
+
+Run `python tools/suite_counts.py --write` to refresh these counts after changing either suite.
+
 To write the inventory, level sheets and text counts together, use `full_report.py`. [Cookbook](../docs/COOKBOOK.md#write-a-full-report)
 
 Python tools that read the data files of *Lands of Lore: The Throne of Chaos* (DOS) from your own copy of the game. Format pages: [`../docs/formats/`](../docs/formats/README.md); terms: [glossary](../docs/GLOSSARY.md).
@@ -120,14 +127,13 @@ Run with `LOL1_DATA` set to the CD edition's `DATA` folder. If you run from anot
 
 ### `check_all.py`
 
-Run every tool's `--check` (53 checks) and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
+Run every tool's `--check` and print one line each, then the total time and a result line. The exit code is 0 when all attempted checks pass. The run below shows the first three lines and the summary.
 
 ```
 $ python3 tools/check_all.py | sed -n '1,3p;$p'
 CHECK pak: 111 containers, 6075 members, bad=none
 CHECK pak write: 132 PAK and 30 PAK-layout TLK files, 7209 ordered members; byte-identical
 CHECK pak_index: 81 PAKs, 1163 members, matches data/pak_index.json: True
-ALL 53 CHECKS PASSED
 ```
 
 ### `modkit.py`

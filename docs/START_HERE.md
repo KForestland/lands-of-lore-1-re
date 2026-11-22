@@ -1,12 +1,17 @@
 # Start here, by goal
 
+<!-- suite-counts:begin -->
+- **Original game files.** 54 checks with the required files and dependencies. Quick mode selects 52.
+- **Synthetic data.** 125 unit tests.
+<!-- suite-counts:end -->
+
 [Format quick reference](QUICK_REFERENCE.md) pairs each documented game format with a command and its evidence.
 
 Use Python 3.10 or later and your own copy of *Lands of Lore: The Throne of Chaos* for DOS. Install Pillow and Capstone before running the full check. Point the tools at the folder holding `GENERAL.PAK` (on the CD the `DATA` folder, on the floppy the install folder). Six checks skip comparison with the CD tables when reading the floppy edition.
 
 ```bash
 export LOL1_DATA=/path/to/your/LOL1/DATA
-python3 tools/check_all.py        # 53 checks; the last line should read ALL 53 CHECKS PASSED
+python3 tools/check_all.py
 ```
 
 Words you do not know are in the [glossary](GLOSSARY.md). Short worked commands, with the first lines they print, are in the [cookbook](COOKBOOK.md). Run the examples from the clone after `mkdir -p ../lol1-out`; they write there, outside the clone, so nothing from your game ends up in the repository. To contribute, see [CONTRIBUTING](../CONTRIBUTING.md).

@@ -56,4 +56,4 @@ First 40 bytes of CD `GENERAL.PAK` (`tools/pak_reader.py list GENERAL.PAK` shows
 
 ## Open
 
-- [Q9](../OPEN_QUESTIONS.md): which PAK wins when two PAKs hold the same member name **Answered** ([unknowns/09](../unknowns/09_pak_order.md)): a loose file beats every PAK; an earlier-loaded archive beats a later one.
+- [Q9](../OPEN_QUESTIONS.md): which PAK wins when two PAKs hold the same member name **Answered** ([unknowns/09](../unknowns/09_pak_order.md)): ScummVM searches loose files first. Within one archive priority tier, the earlier-loaded archive wins. The original DOS search order remains open.

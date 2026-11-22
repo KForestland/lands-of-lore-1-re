@@ -31,7 +31,7 @@ Who loads them: the strings `ALGDIG.ADV`, `ALFX.DRV` and "Unable to load sound d
 3. "Zanthia"
 4. (empty)
 
-CONFIRMED (decoded on CD). It is the manual-lookup copy protection: the speaker name and two prompts that ask for a word from the printed manual (*Geron's Guide*). `MAIN.EXE` and `FINALE.EXE` name the file; ScummVM skips copy protection and does not read it.
+CONFIRMED (decoded on CD). It contains the speaker name and two prompts for words from the printed manual (*Geron’s Guide*). Floppy `MAIN.EXE` and `FINALE.EXE` name the file. The inspected CD programs do not name it, and its native open and comparison paths are untraced.
 
 Details: [`../unknowns/05_adv_drv_tbl.md`](../unknowns/05_adv_drv_tbl.md).
 

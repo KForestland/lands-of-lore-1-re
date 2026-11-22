@@ -305,7 +305,10 @@ def main():
         return 0 if not bad else 1
     if not a.file:
         ap.print_help(); return 2
-    r = read_any(a.file)
+    try:
+        r = read_any(a.file)
+    except (EOFError, ValueError, IndexError, struct.error) as error:
+        raise ValueError("Choose a complete LoL1 save or a temporary level file.") from error
     print(summary(r))
     if a.out:
         with open(a.out, "w") as f:

@@ -56,14 +56,14 @@ This pass judges these remaining rows as the ones to look at, and leaves them un
 
 ## Named faults with no patch in this folder
 
-- Dawn's Key softlock on floppy v1.05. Notes on the later floppy builds say v1.22 already removes it, and the CD data read here does not include that fault. No CD patch.
-- Lora remaining in the party after the Draracle, then a crash when Paulson would join. The fault is the party-size check in the program. No few-byte correction is isolated here.
-- White Tower level 3. A thrown item aimed at the stairs (level 21, block `0x3E0`) is deleted. The script sends that move to the wrong level. The bytes of that send are not isolated here.
-- A click one pixel outside the view control can take an item and lock the view. That is the view-button test in the program. No few-byte correction is isolated here.
+- Dawn's Key softlock on floppy v1.05. Notes on later floppy builds report a fix in v1.22. The cause and the applicability of the report to the CD edition were not traced here.
+- Lora remaining in the party after the Draracle, then a crash when Paulson would join. The party-size check is a possible cause. Its link to this failure remains open. No few-byte correction is isolated here.
+- White Tower level 3. A thrown item aimed at the stairs (level 21, block `0x3E0`) is deleted. A send to the wrong level has been proposed. The responsible command has not been isolated.
+- A click one pixel outside the view control can take an item and lock the view. The view-button test has been suggested. No instruction has been tied to the reported lock. No few-byte correction is isolated here.
 - Large fireballs read a width of 63. Keeping 63 is what lets them travel a corridor. This is not a correction.
 - White Tower monsters can carry sound id 255, which the program happens to play as silence. No player-facing correction.
 - Portrait speech can freeze, French automap labels sit two pixels left, and a damage target above 3 is treated as a character id. Program or script behaviour. No scene-and-byte pair is isolated here.
 - Heal III and IV underhealing, a King Richard dialogue hang, a Castle Cimmeria niche that eats items, Scotia's third form against the Whole Truth, and an endless cave-dweller spawn. Named reports. No root byte is known, so none is patched.
 - A leading zero byte on the `NECROSAP.SHP` script name has been reported. Removing it can shift later script offsets, so it is not a one-byte replace.
 - Official CD update 1.02, described in `LOLCDPCH.TXT` (24 May 1994), patches the installed program for fast-machine timing. That is an official program update, not one of these files. Floppy CPU patches are a DOS loader issue and are not included.
-- ScummVM notes that an early unpatched floppy lets item 264 be equipped as a weapon (type 5) and forces the type to 0. On this CD, `setItemProperty` for item 264 already stores type 0. No CD patch.
+- ScummVM notes that an early unpatched floppy lets item 264 be equipped as a weapon (type 5) and forces the type to 0. The CD `STARTUP.PAK/ONETIME.INF+0x2214` call already supplies type 0. [Item definition table](../docs/NUMBERS.md#item-might-and-armour) No CD patch.

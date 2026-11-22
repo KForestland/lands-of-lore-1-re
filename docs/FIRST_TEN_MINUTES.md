@@ -44,7 +44,7 @@ Then paste these lines.
 
 ```powershell
 Set-Location "$HOME\Downloads\lands-of-lore-1-re-main"
-$out = "$HOME\Downloads\LoL1 output"
+$out = Join-Path "$HOME\Downloads" ("LoL1 output " + [guid]::NewGuid().ToString("N").Substring(0, 8))
 New-Item -ItemType Directory -Force "$out" | Out-Null
 ```
 
@@ -62,34 +62,40 @@ Draw the level and open the picture.
 Start-Process "$out\schematic\level01_schematic.png"
 ```
 
-## Linux
+## Linux and macOS
 
 Open a terminal. If `python3 --version` reports a version below 3.10,
-install a newer Python with your distribution's package manager. On Ubuntu or Debian, `sudo apt install python3-venv` installs the venv module.
+install a newer Python. On macOS, use the Python installer from [python.org](https://www.python.org/downloads/macos/). On Ubuntu or Debian, `sudo apt install python3-venv` installs the venv module.
 Run this line, paste the folder path and press Enter again.
 
 ```sh
+printf '%s' 'Paste the path to your game folder: '
 IFS= read -r data
+data=${data#\"}
+data=${data%\"}
 ```
 
 Then paste these lines.
 
 ```sh
 cd "$HOME/Downloads/lands-of-lore-1-re-main"
-out="$HOME/Downloads/LoL1 output"
-mkdir -p "$out"
+out=$(mktemp -d "$HOME/Downloads/LoL1 output.XXXXXX") || exit 1
 python3 -m venv .venv
 .venv/bin/python -m pip install Pillow
 .venv/bin/python tools/level_renderer.py --data "$data" --level level01 --schematic --out "$out/schematic"
-xdg-open "$out/schematic/level01_schematic.png"
+if [ "$(uname)" = Darwin ]; then
+    open "$out/schematic/level01_schematic.png"
+else
+    xdg-open "$out/schematic/level01_schematic.png"
+fi
 ```
 
-Light squares are open floor, dark squares have walls on all four sides, and orange squares have some walls. Red marks sit on decorated faces.
+Light squares are open floor, dark squares have walls on all four sides, and orange squares have partial walls, doors or switches. Red marks sit on decorated faces.
 If the tool cannot find a game file, check the markers in
 [Find your game files](#find-your-game-files). If no window opens, open
 `level01_schematic.png` from the schematic folder in a browser on your desktop.
 
-To draw the picture again, choose a new schematic folder name in both lines.
+To draw the picture again, run the drawing commands from the point where they create the output folder. Each run creates its own folder.
 
 [More recipes](COOKBOOK.md) · [Terms used in the guides](GLOSSARY.md)
 
@@ -122,3 +128,5 @@ subfolder such as `plans-2` in both lines.
 Use the same Python command with `tools/lol.py` to list the jobs.
 Add a job name and `--help` for its options.
 [Interactive plans](COOKBOOK.md#open-an-interactive-level-plan)
+
+To run the full suite, install the packages in `requirements.txt` so the disassembly checks also have Capstone.
