@@ -2,6 +2,7 @@
 import argparse
 from base64 import b64encode
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from gzip import compress
 from html import escape
@@ -15,6 +16,7 @@ import webbrowser
 from cli_errors import output_refusal
 
 
+DESKTOP_TITLE = "Lands of Lore: My Game"
 CANCELLED = "No folder was chosen, so no page was written."
 DATA_ERRORS = (ValueError, OSError, StructError, IndexError, KeyError)
 
@@ -234,6 +236,49 @@ def choose_language(window, choices):
     return LanguageDialog(window, "Names in My Game").result
 
 
+def read_with_progress(parent, read):
+    from tkinter import Toplevel, ttk
+
+    progress = Toplevel(parent)
+    progress.title(DESKTOP_TITLE)
+    progress.transient(parent)
+    progress.resizable(False, False)
+    progress.protocol("WM_DELETE_WINDOW", lambda: None)
+    content = ttk.Frame(progress, padding=20)
+    content.pack(fill="both", expand=True)
+    ttk.Label(content, text="Reading your game...").pack(anchor="w")
+    bar = ttk.Progressbar(content, mode="indeterminate", length=290)
+    bar.pack(fill="x", pady=(8, 0))
+
+    previous_grab = parent.grab_current()
+    progress.wait_visibility()
+    progress.grab_set()
+    bar.start(50)
+
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        job = executor.submit(read)
+
+        def check_finished():
+            if job.done():
+                progress.destroy()
+            else:
+                progress.after(40, check_finished)
+
+        progress.after(40, check_finished)
+        parent.wait_window(progress)
+        if previous_grab is not None:
+            previous_grab.grab_set()
+        return job.result()
+
+
+def close_startup_splash():
+    try:
+        import pyi_splash
+    except ImportError:
+        return
+    pyi_splash.close()
+
+
 @dataclass(frozen=True)
 class MyGame:
     filename: str
@@ -241,8 +286,7 @@ class MyGame:
     game: str
     data_folder: str
     read_page: Callable[..., str]
-    languages: tuple = ()
-    language_options: Callable[[Path], dict[str, str]] | None = None
+    languages: dict[str, str] | None = None
     read_saved: Callable[..., str | tuple[str, str]] | None = None
     faults: tuple[str, ...] = ()
 
@@ -280,19 +324,17 @@ class MyGame:
             try:
                 selected = Path(folder)
                 language = None
-                if self.language_options:
-                    try:
-                        choices = self.language_options(selected)
-                    except DATA_ERRORS as error:
-                        raise GameFolderError(self.wrong_folder) from error
-                    if len(choices) > 1:
-                        language = choose_language(window, choices)
-                        if language is None:
-                            messagebox.showinfo(self.title, "No language was chosen, so no page was written.", parent=window)
-                            return 0
-                    elif choices:
-                        language = next(iter(choices))
-                path = self.write_page(selected, open_page=False, language=language)
+                if self.languages:
+                    choices = {"AUTO": "Use the game's language", **self.languages}
+                    choice = choose_language(window, choices)
+                    if choice is None:
+                        messagebox.showinfo(self.title, "No language was chosen, so no page was written.", parent=window)
+                        return 0
+                    if choice != "AUTO":
+                        language = choice
+                path = read_with_progress(
+                    window, lambda: self.write_page(selected, open_page=False, language=language),
+                )
                 opened = open_report(path)
             except GameFolderError as error:
                 messagebox.showerror(self.title, str(error), parent=window)
@@ -312,7 +354,6 @@ class MyGame:
             messagebox.showinfo(self.title, "No saved game was chosen, so no report was written.", parent=window)
             return
         source = Path(picked)
-        protected = (source.parent.resolve(), source.resolve().parent)
         purpose = "to read the game's reference values" if self.faults else "for names and maps"
         folder = filedialog.askdirectory(parent=window, title=f"Choose your {self.game} folder {purpose}")
         if not folder:
@@ -320,18 +361,23 @@ class MyGame:
             return
         folder = Path(folder)
         if self.faults:
-            self.fault_dialog(window, source, folder, protected, messagebox)
+            self.fault_dialog(window, source, folder, messagebox)
             return
-        try:
+
+        def write_saved_page():
+            protected = (source.parent.resolve(), source.resolve().parent)
             page = self.read_saved(source, folder)
-            path = save_in_documents(self.game_root(folder), page, f"{self.filename} Save", *protected)
+            return save_in_documents(self.game_root(folder), page, f"{self.filename} Save", *protected)
+
+        try:
+            path = read_with_progress(window, write_saved_page)
             open_report(path)
         except (OSError, ValueError, ImportError) as error:
             messagebox.showerror(self.title, str(error), parent=window)
         else:
             messagebox.showinfo(self.title, f"Your saved game page is here.\n\n{path}", parent=window)
 
-    def fault_dialog(self, parent, source, folder, protected, messagebox):
+    def fault_dialog(self, parent, source, folder, messagebox):
         from tkinter import Text, Toplevel, ttk
 
         window = Toplevel(parent)
@@ -353,7 +399,8 @@ class MyGame:
         def show_preview(_event):
             nonlocal report_text
             try:
-                report_text, omitted = self.read_saved(source, folder, choice.current())
+                index = choice.current()
+                report_text, omitted = read_with_progress(window, lambda: self.read_saved(source, folder, index))
                 message = report_text
             except (OSError, ValueError, ImportError) as error:
                 report_text = None
@@ -368,6 +415,7 @@ class MyGame:
 
         def save_report():
             try:
+                protected = (source.parent.resolve(), source.resolve().parent)
                 path = save_in_documents(self.game_root(folder), report_text, f"{self.filename} Fault Report",
                                          *protected, extension=".txt")
             except (OSError, ValueError) as error:
@@ -389,14 +437,23 @@ class MyGame:
         except TclError as error:
             raise ValueError("Open My Game from your desktop to choose a game folder.") from error
         try:
-            window.title(self.title)
+            window.title(DESKTOP_TITLE)
+            window.minsize(440, 190)
+            if sys.platform == "win32":
+                icon = Path(__file__).with_name("mygame.ico")
+                if icon.is_file():
+                    window.iconbitmap(default=str(icon))
             window.protocol("WM_DELETE_WINDOW", window.quit)
             frame = ttk.Frame(window, padding=20)
             frame.pack(fill="both", expand=True)
+            ttk.Label(frame, text="Make a guide from your game folder or see what’s in a saved game.",
+                      wraplength=400).pack(anchor="w", pady=(0, 14))
             ttk.Button(frame, text="Open a game folder",
                        command=lambda: self.open_installation(window, filedialog, messagebox)).pack(fill="x", pady=(0, 8))
             ttk.Button(frame, text="Open a saved game",
                        command=lambda: self.open_saved_game(window, filedialog, messagebox)).pack(fill="x")
+            window.wait_visibility()
+            close_startup_splash()
             window.mainloop()
             return 0
         finally:

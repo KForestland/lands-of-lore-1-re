@@ -209,7 +209,7 @@ def saved_page(source, folder):
                   note=f"{area} · Gold {state['money']}")
 
 
-app = MyGame("LoL1 My Game", TITLE, "Lands of Lore", "DATA", game_page, tuple(LANGUAGES), language_options,
+app = MyGame("LoL1 My Game", TITLE, "Lands of Lore", "DATA", game_page, LANGUAGES,
              read_saved=saved_page)
 main = app.main
 write_page = app.write_page
