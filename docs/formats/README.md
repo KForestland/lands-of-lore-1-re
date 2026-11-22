@@ -12,7 +12,7 @@ One page per file type of *Lands of Lore: The Throne of Chaos* (Westwood, 1993, 
   - **floppy** = an English floppy-edition installation (no speech; data in `CHAPTER1.PAK`-`CHAPTER8.PAK`, `GENERAL.PAK` etc.), named after the folder it was read from. ScummVM detects it as its English floppy entry labelled "Extracted" (`detection_tables.h:1716`). It serves as the second edition wherever the two can differ. See [`../edition_comparison.md`](../edition_comparison.md).
   - Every page says which one was read.
 - File names: level files are `LEVELn.<ext>` without a leading zero for CMZ, WLL, XXX, INF, INI (`LEVEL1.CMZ`) and with two digits for TLC and the level text files (`LEVEL01.TLC`, `LEVEL01.ENG`); `Lnn.PAK` holds them.
-- **Closure memo** = [`../closure_memo.md`](../closure_memo.md), a summary written in March 2026 when this work was first declared finished. It is kept as history; section letters (A, B.4, D.1 …) refer to its headings. These pages correct it where the data disagrees. "March 2026" tools and data files are the versions that memo describes.
+- **Closure memo** = [the March 2026 note](../closure_memo.md). Its overall closure claim was withdrawn on 18 November 2026. Section letters (A, B.4, D.1 …) refer to the memo's headings. "March 2026" tools and data files are the versions it describes. See [current status](../STATUS.md#where-this-stands).
 - Open points are numbered in [`../OPEN_QUESTIONS.md`](../OPEN_QUESTIONS.md).
 - No game data is stored in this repository. Tools take `--data <DATA folder>` or the `$LOL1_DATA` environment variable.
 

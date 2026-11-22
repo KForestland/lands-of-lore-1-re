@@ -515,7 +515,6 @@
         "tools/fnt_reader.py",
         "tools/level_renderer.py",
         "tools/level_report.py",
-        "tools/lol.py",
         "tools/lol1_driver_tables.py",
         "tools/lol1_name_callers.py",
         "tools/lol1_numbers.py",
@@ -632,7 +631,7 @@
     },
     {
       "path": "docs/closure_memo.md",
-      "title": "LoL1 — Final Closure Memo",
+      "title": "LoL1 March 2026 Research Memo",
       "answers": [],
       "question_references": [],
       "tools": []

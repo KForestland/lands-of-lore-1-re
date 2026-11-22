@@ -1,10 +1,10 @@
-> **History (March 2026).** This memo is kept as a record of the first pass; only its machine paths were reduced to file names. Several of its statements were later corrected: see [Later corrections](#later-corrections) at the end, [`STATUS.md`](STATUS.md) and the pages in [`formats/`](formats/README.md); today's tools are in [`../tools/`](../tools/README.md).
+> **History (March 2026).** The claim ~~closed at ~99.999%~~ was withdrawn on 18 November 2026. See [the current status and open questions](STATUS.md#where-this-stands) and [later corrections to this memo](#later-corrections).
 
-# LoL1 — Final Closure Memo
+# LoL1 March 2026 Research Memo
 
 **Date:** 2026-03-20
 **Scope:** LoL1 reverse-engineering and documentation only
-**Status:** CLOSED at ~99.999%
+**Status (March 2026):** ~~CLOSED at ~99.999%~~. Withdrawn on 18 November 2026. See [current status](STATUS.md#where-this-stands).
 **Publication:** Ready for GitHub/wiki publication
 
 ---
@@ -145,7 +145,7 @@ CMZ block → walls[4] uint8 wall type IDs
 
 ---
 
-## C. Final Percentage
+## C. March 2026 Estimates
 
 | Category | Estimate |
 |----------|----------|
@@ -160,16 +160,16 @@ CMZ block → walls[4] uint8 wall type IDs
 | Text / dialogue | **100%** |
 | Format documentation | **100%** |
 | EMC2 script decompilation | **100%** (60/60 scripts, 117,099 words) |
-| **Overall** | **~99.999%** |
+| **Overall (March 2026)** | **~~About 99.999%~~. Withdrawn on 18 November 2026.** See [current status](STATUS.md#where-this-stands). |
 
 ---
 
-## D. Previously Remaining Gaps (Now Closed)
+## D. Fixes Recorded in March 2026
 
 1. **WSA: 2 files failed multi-frame extraction** — FIXED. ESCAPE.WSA (51 frames) and CHANDELR.WSA (3 frames) were failing due to a palette-offset edge case where `offsets[0]` points to the embedded palette, not frame 0. Fix: `lol1_wsa_fix.py`. Result: 241/241 files, 4480/4480 frames (100%).
 2. **EMC2 script decompilation** — DONE. Full decompiler built per ScummVM `engines/kyra/script/script.cpp`. 19 VM opcodes + 192 game-specific opcodes decoded. 60/60 scripts decompiled to readable ASM-like output in `lol1_scripts_decompiled/`.
 
-**No remaining extraction or documentation gaps.** The only open work is publication: repo curation, release packaging, and writeup polish.
+The claim that only publication work remained was withdrawn on 18 November 2026. See the [open questions](OPEN_QUESTIONS.md).
 
 ---
 
@@ -222,13 +222,13 @@ CMZ block → walls[4] uint8 wall type IDs
 
 ## F. Status
 
-**This work was closed at ~99.999%.** All 1163 files in the corpus have been processed. Every major asset type — images (CPS 85/85, SHP 3492/3492 frames, WSA 241/241 fully sequenced with 4480 frames), audio (VOC 215/215), music (67/67), level maps (29/29), dialogue (6495/6495 decoded strings in 3 languages), fonts (4/4 atlases), palettes (11/11), tilesets (14/14 including YVEL2), timing scripts (139/139 parsed), and game scripts (60/60 EMC2 decompiled) — has been extracted to usable formats.
+**March 2026 claim:** ~~This work was closed at ~99.999%.~~ Withdrawn on 18 November 2026. See [current status](STATUS.md#where-this-stands).
 
-The rendering pipeline (CMZ → WLL → VMP → VCN) is fully documented and implemented. Two distinct editions are compared and characterized. All format specifications are ScummVM-cross-referenced.
+The March inventory counted 1163 entries in the CD's top-level PAK archives. It reported output for images (CPS 85/85, SHP 3492/3492 frames, WSA 241/241 sequences and 4480 frames), audio (VOC 215/215), music (67/67), level maps (29/29), dialogue (6495/6495 strings in 3 languages), fonts (4/4 atlases), palettes (11/11), tilesets (14/14 including YVEL2), timing scripts (139/139) and game scripts (60/60 EMC2). See [later corrections](#later-corrections) for the scope and errors in those results.
 
-The remaining gap is effectively publication-only: repository curation, release packaging, and public writeup polish. Core extraction and decompilation work is complete.
+The March memo reported a renderer following CMZ → WLL → VMP → VCN, a comparison of the CD and floppy editions, and format notes cross-referenced to ScummVM.
 
-**The work was publication-ready.**
+The March memo called the work publication-ready. Its closure claim was withdrawn on 18 November 2026. See [current status](STATUS.md#where-this-stands).
 
 ---
 
