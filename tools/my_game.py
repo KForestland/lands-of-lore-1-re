@@ -124,7 +124,9 @@ def game_page(folder, language=None):
         raise ValueError("missing name tables")
     lands = text[language]
     items, _ = item_names(data, lands)
-    items = {key: name for key, name in items.items() if name and not name.startswith("string 0x")}
+    items = {key: name for key, name in items.items()
+             if name and not name.startswith("string 0x")
+             and not (name.startswith("[") and name.endswith("]"))}
     spell_list = list(spell_rows(lands, image, program))
     if not items or not spell_list:
         raise ValueError("missing named items or spells")

@@ -108,6 +108,8 @@ def protected(root, base):
 
 def new_output(path, root, base, *inputs):
     """A path that does not exist yet, in an existing folder outside the game and inputs."""
+    if Path(path).exists() or Path(path).is_symlink():
+        raise ValueError(f"The output already exists: {path}. Choose a different path.")
     target = core.output_path(path, base, *inputs, *protected(root, base))
     if not target.parent.is_dir():
         raise ValueError(f"the folder {target.parent} does not exist; create it first or choose another place")
@@ -481,7 +483,7 @@ def prepare(root, patch):
         original = read_source(base, name)
         if kind == "program" and digest(original) != patch["sha256"][named]:
             raise ValueError(f"{name} is not the program this patch was made for (its SHA-256 "
-                             "differs); a program patch fits only the same edition and version")
+                             "differs). It may already be patched. Check the undo.json from the earlier patch.")
         changed, undo = edit_file(kind, name, original, entries)
         programs[name] = digest(changed)
         undo_groups = check_document(document(kind, "Undo", "Undo", undo, {name: programs[name]}, version=UNDO_FORMAT))
@@ -550,14 +552,14 @@ def run(argv=None):
                              help="data or program (default: found from the changed files)")
     make_parser.add_argument("--title", required=True, help="a short name for the patch")
     make_parser.add_argument("--description", help="one or two sentences (default: the title)")
-    make_parser.add_argument("--out", required=True, type=Path, help="the new patch file to write")
+    make_parser.add_argument("--out", dest="patch_output", required=True, type=Path, help="the new patch file to write")
     apply_parser = commands.add_parser(
         "apply", help="write patched copies and a private undo.json into a new folder",
         description="Write patched copies and undo.json into a new folder. "
                     "Keep undo.json private because it holds original game bytes.")
     apply_parser.add_argument("paths", nargs="+", metavar="PATCH_FILE",
                               help="the patch (or an undo.json); the game folder may come first instead of --data")
-    apply_parser.add_argument("--out", required=True, type=Path, help="the new folder to write")
+    apply_parser.add_argument("--out", dest="patch_output", required=True, type=Path, help="the new folder to write")
     for sub in (make_parser, apply_parser):
         sub.add_argument("--data", help=f"{BASE[adapter.GAME]} (default: ${adapter.DATA_ENV}); only read")
     args = parser.parse_args(argv)
@@ -566,7 +568,7 @@ def run(argv=None):
     if args.command == "make":
         base = base_folder(root)
         changed = path.resolve()
-        target = new_output(args.out, root, base, changed)
+        target = new_output(args.patch_output, root, base, changed)
         patch = make(root, changed, args.title, args.description or args.title, args.kind)
         core.write_json(target, patch)
         files = sorted({change["file"] for change in patch["changes"]})
@@ -574,9 +576,9 @@ def run(argv=None):
               f"{plural(len(files), 'file')} ({', '.join(files)}) written to {target}")
     else:
         patch = read_patch(path)
-        base, names = apply(root, patch, args.out)
+        base, names = apply(root, patch, args.patch_output)
         print(f"apply: {plural(len(names), 'file')} ({', '.join(names)}) and {UNDO} written to "
-              f"{args.out.resolve()}; keep {UNDO} private and copy the patched files, with their folders, "
+              f"{args.patch_output.resolve()}; keep {UNDO} private and copy the patched files, with their folders, "
               f"into a copy of {BASE[adapter.GAME]}")
     report_compatibility(patch)
     return 0
