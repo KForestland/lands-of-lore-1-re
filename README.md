@@ -4,13 +4,13 @@
 
 [Identify your edition](docs/EDITIONS.md) by the sizes and checksums of your own files. [See unused content and development leftovers](docs/UNUSED.md).
 
-*Lands of Lore: The Throne of Chaos* is a first-person role-playing game for DOS by Westwood Studios (1993; CD-ROM edition with speech later). This repository explains how its data files and its rules work, and gives you Python tools that read every file type from your own copy of the game.
+*Lands of Lore: The Throne of Chaos* is a first-person role-playing game for DOS by Westwood Studios (1993; CD-ROM edition with speech later). This repository explains how its data files and its rules work, and gives you Python tools for reading files from your own copy of the game.
 
 It contains documentation, tools and small tables of numbers. It contains no game files and no dumps of game pictures, sounds or text; the only game-derived images are five small ones: three examples in `examples/` and two level schematics in `docs/images/`.
 
 ## At a glance
 
-- **What this is:** documentation of every type of data file and the main rules of the original 1993 DOS game (CD and floppy editions), checked against the game files and the original program.
+- **What this is:** documentation of the original 1993 DOS game, covering the main rules, the CD data file layouts and corresponding floppy files, checked against the game files and the original program.
 - **What you can do today:** read every file type with a tool (pictures, sprites, animations, sound, speech, music, fonts, text, maps, scripts, saves), draw any level, disassemble every level script, and look up how combat, magic and monsters work.
 - **Using git?** The [quick start with git](#quick-start-with-git-for-people-who-use-git) below, then [Start here, by goal](docs/START_HERE.md), [How the game works](docs/HOW_THE_GAME_WORKS.md) or the [worked example](docs/tutorial-one-event.md).
 - **Recipes:** [cookbook](docs/COOKBOOK.md), short recipes with the command and the first lines it prints.
@@ -23,7 +23,7 @@ It contains documentation, tools and small tables of numbers. It contains no gam
 
 ![Level 12 drawn by tools/level_renderer.py --schematic](docs/images/level12_schematic.png)
 
-*Level 12 drawn from its map file alone (`tools/level_renderer.py --level 12 --schematic`): open squares light, walls dark, doors and switches orange, decorated walls marked red.*
+*Level 12 drawn from its map file alone (`tools/level_renderer.py --level 12 --schematic`): open squares light, walls dark, squares with partial walls, doors or switches orange, decorated walls marked red.*
 
 ## Rating
 
@@ -31,13 +31,18 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- rating:begin -->
 - **Files read:** 199 of 199 files in the CD `DATA` folder (289.0 of 289.0 MiB) have their whole layout read by a tool here: every byte belongs to a known header, directory or entry (what is inside an entry may still be only partly understood).
-- **Rules traced:** the pages mark 576 statements CONFIRMED (proved from the program code or the files) and 101 UNCONFIRMED (a reading not yet proved), on 108 current pages; old notes kept as history are not counted.
+- **Rules traced:** the pages mark 574 statements CONFIRMED (labelled as proved with a cited address or offset) and 101 UNCONFIRMED (a reading not yet proved), on 108 current pages; old notes kept as history are not counted.
 - **Seen in the running game:** 1 of 6 probes that need the original game running are answered (a question can have more than one probe); 0 of them rest on edited saves only.
 - **Open questions:** 18 numbered questions: 12 answered, 4 mostly answered, 2 partly answered.
-- **Page facts:** 24/6,883 candidate literals registered with byte witnesses. The other literals are inventoried as prose-only.
+- **Page facts:** 24/6,879 candidate literals registered with byte witnesses. The rest are inventoried so changes can be reviewed.
 <!-- rating:end -->
 
 ## Quick start with git (for people who use git)
+
+<!-- suite-counts:begin -->
+- **Original game files.** 54 checks with the required files and dependencies. Quick mode selects 52.
+- **Synthetic data.** 125 unit tests.
+<!-- suite-counts:end -->
 
 Use Python 3.10 or later and your own copy of the DOS game (CD or floppy edition). Install Pillow for the image tools and Capstone for the executable reference scan. The full check uses both packages.
 
@@ -48,7 +53,7 @@ python3 -m venv .venv && . .venv/bin/activate
 python3 -m pip install -r requirements.txt
 export LOL1_DATA="/path/to/your/LOL1/DATA"      # the folder holding GENERAL.PAK (CD: DATA inside the install folder, which also holds INSTALL.EXE and README.ENG that two checks read; floppy: the install folder)
 python3 tools/check_all.py --quick              # lists the checks it skips
-python3 tools/check_all.py                      # full suite of 53 checks
+python3 tools/check_all.py
 python3 -m unittest discover -s tests
 python3 tools/level_renderer.py --level 1 --out ../maps/ --schematic
 python3 tools/decode_dialogue.py LEVEL01.ENG --index 0

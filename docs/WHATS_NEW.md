@@ -4,11 +4,13 @@ Newest first. One line per question worked on, new tool or visible change; each 
 
 ## 21 November 2026
 
+- **Level editor verified in play.** A moved Halberd appeared on the edited copies. On the nearer placement the game moved the Halberd to the cursor when clicked. [Placement tests](LEVEL_EDITOR.md)
+
 - **Finding your game folder.** The [first ten minutes](FIRST_TEN_MINUTES.md) page now starts by saying which folder to give: the CD `DATA` folder with both `L01.PAK` and `GENERAL.PAK`, or the floppy folder with `CHAPTER8.PAK` and `GENERAL.PAK`. Lowercase names also work.
-- **Spelling patch, second run.** The item-name patch was tried again under the launch-record rules: folder 0013 (unpatched) shows the old spellings, folder 0014 (patched) the corrected ones, and `undo.json` restores the archive byte for byte ([patches](../patches/README.md)).
+- **Spelling patch, second run.** On 21 November the unpatched copy showed the old spellings, the patched copy showed the corrected ones, and `undo.json` restores the archive byte for byte ([patches](../patches/README.md)).
 - **Damaged saves.** A save file cut in half is refused with one line and no output file; a test now keeps it that way.
 - **Level 23 pose squares and level 27 missiles (Q7 and Q18 stay mostly answered).** Each of the three level-23 pose squares has exactly one open approach in the original walls, listed with the facing it gives; the floppy facing table matches the CD one. On level 27, the two thrower monsters placed on block 499 face west with an open line to block 497, which is where the next running-game test stands ([running-game probes](NEEDS_A_RUNNING_GAME.md)). `lol1_mode_paths.py --check` pins both.
-- **Level editor in the game, not yet seen.** A copy with the Stick moved on level 2 was tried on 21 November, but the party did not get through the level-1 gate in that run, so the moved item was not seen ([level editor](LEVEL_EDITOR.md)).
+- **First level-editor attempt.** A copy with the Stick moved on level 2 was tried on 21 November, but the party did not get through the level-1 gate in that run, so the moved item was not seen ([level editor](LEVEL_EDITOR.md)).
 - **Glossary.** Job, `--data`, `--out`, `--check`, translation table and SHA-256 are explained in plain words ([glossary](GLOSSARY.md)).
 - **Checks.** A failed check now prints the last twenty lines of its error output. The workspace check no longer rejects a folder whose path goes through a symbolic link (the Windows and macOS checks are green again).
 
@@ -70,7 +72,7 @@ Newest first. One line per question worked on, new tool or visible change; each 
 - **Glossary.** The [glossary](GLOSSARY.md) gives a one-line meaning to each term on the front page, the start page and the cookbook. A word shared with the other two games has the same meaning there. The rating still counts the glossary as a page, but not its label words.
 - **Link check.** `doc_links.py` resolves every relative link and anchor in the README and the docs, and `check_all.py` runs it.
 - **Twelve loose files, second pass.** The blend tables and the symbol blocks now have a measured layout and a settling test. The six symbol files were later read in full (see **Symbol tables** above); the six blend tables stay unread. None of the eleven simple index formulas tried (minimum, maximum, average rounded down or up, product /255 or >>8, sum, difference, OR, AND, XOR) reproduces a blend table ([loose files](formats/loose.md)).
-- **Loose CD files.** `lol1_loose.py` walks 25 files that are not PAK or TLK archives through their last byte; these 25 are among the files counted as read (193 of 199 today). The six not counted are the blend tables; the three `.TDS` symbol files and the three `LANDS.EXE` tails were counted later (see **Symbol tables** above). The page gives the test that would finish each blend table.
+- **Loose CD files.** `lol1_loose.py` walks 25 files that are not PAK or TLK archives through their last byte; these 25 are among the files counted as read (193 of 199 on 19 November). The six not counted are the blend tables; the three `.TDS` symbol files and the three `LANDS.EXE` tails were counted later (see **Symbol tables** above). The page gives the test that would finish each blend table.
 - **TIM extra words (Q6, answered).** Nested 0x07 and 0x0D pass those words into the `%` formatter; `lol1_tim_words.py` re-reads the pushes and the strings.
 - **Counted rating.** The README and [STATUS](STATUS.md) show four counted lines instead of a percentage; [how we rate](HOW_WE_RATE.md) explains them.
 - **Example pictures remade.** The guard is drawn in its real colours, the talking head in its backdrop's palette, and level 1 as a readable map; a check now compares each example with today's tools pixel for pixel ([examples](../examples/README.md)).

@@ -1,6 +1,6 @@
 # Q9. Which PAK wins when the name is shared
 
-A loose file wins over every archive. Among archives, the one loaded earlier wins. Inside one archive, the later directory entry replaces the earlier one. On these two discs the only names that actually collide are in the prologue, plus two identical pairs inside single archives: `CIMMERIA.DAT` twice in the floppy `CHAPTER8` and `GONG.VOC` twice in the CD `ENG/INTROVOC.PAK` (30155 bytes each, identical bytes).
+In ScummVM a loose file wins over every archive. Within an archive priority tier, the one loaded earlier wins. Inside one archive, the later directory entry replaces the earlier one. On these two discs the only names that actually collide are in the prologue, plus two identical pairs inside single archives: `CIMMERIA.DAT` twice in the floppy `CHAPTER8` and `GONG.VOC` twice in the CD `ENG/INTROVOC.PAK` (30155 bytes each, identical bytes).
 
 ## The three rules
 

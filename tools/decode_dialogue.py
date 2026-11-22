@@ -228,8 +228,11 @@ def main():
               f"strings with accented characters: {accented}")
         return 0 if bad == 0 and n else 1
     if a.name:
-        pak, data = L.find_member(a.name, a.data, a.pak)
-        for i, raw in enumerate(file_strings(data)):
+        _, data = L.find_member(a.name, a.data, a.pak)
+        strings = file_strings(data)
+        if a.index is not None and not 0 <= a.index < len(strings):
+            ap.error(f"String {a.index} is outside {a.name}, which contains {len(strings)} strings.")
+        for i, raw in enumerate(strings):
             if a.index is None or a.index == i:
                 print(f"[{i}] {decode_raw(raw)}")
         return 0

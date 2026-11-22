@@ -143,3 +143,21 @@ These words mean the same thing in the notes for all three Lands of Lore games.
 | DATA word | A two-byte position in the script's DATA chunk. The plan shows it in hexadecimal so you can find the entry in a script listing. |
 | Edition fingerprint | A group of file names, byte counts and full SHA-256 checksums used to identify a measured release. See [Editions](EDITIONS.md). |
 | Level change file | The small download from the level editor. It gives edited walls and item placements plus checksums of the source level members. See [Level editor](LEVEL_EDITOR.md). |
+
+
+## Reading the files
+
+| Term | Meaning |
+|---|---|
+| EMC2 | The bytecode stored in level scripts. |
+| ORDR | The script table that maps entries to positions in the instruction words. |
+| Syscall | A script command that asks the game engine to perform an operation. |
+| Handler | The program routine that carries out one command, action or event. |
+| Event mask | A set of bits that selects which events can start a script entry. |
+| Stride | The distance in bytes from the start of one fixed-size record to the next. |
+| Frame4 | Westwood compression used in maps, pictures and other files. |
+| Bigram | A pair of letters stored as one code in the text table. |
+| Talkie | The CD edition with recorded dialogue. |
+| XMIDI | The game’s variant of MIDI music data. |
+| Witness | A specific original byte, instruction or recorded observation that supports a statement. |
+| Page facts | The inventory of claims and the independent lookups that check some of them. |

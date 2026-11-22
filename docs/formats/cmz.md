@@ -20,7 +20,7 @@ Source: `LoLEngine::loadBlockProperties` `engines/kyra/engine/scene_lol.cpp:242-
 ## Confirmed
 
 - len = 4 for 28 levels, len = 9 for `LEVEL24.CMZ`; decompressed size = 6 + 1024 x len for all 29. CONFIRMED (CD, `lol1lib.load_bitmap`).
-- Header bytes 0-3 = `20 00 20 00` on all 29. CONFIRMED (CD). The same on all 29 levels of floppy. No engine code reads them (`loadBlockProperties`, and the save code `engines/kyra/gui/saveload_rpg.cpp:49-60`, start at offset 4). Reading them as width = 32, height = 32 fits the grid; that is a reading of the values, not of code ([Q2](../OPEN_QUESTIONS.md), answered as far as the data allows; [`../unknowns/02_wll_header.md`](../unknowns/02_wll_header.md)). (The bytes called "unknown" in `docs/level_tileset_map.md` are these CMZ header bytes; WLL has only a 2-byte header.)
+- Header bytes 0-3 = `20 00 20 00` on all 29. CONFIRMED (CD). The same on all 29 levels of floppy. The traced DOS map loaders start at header +4 (CD `MAIN.EXE+0x48540` and `+0x48764`, floppy `+0x51C10` and `+0x51E34`). The documented ScummVM paths also start at +4. Reading them as width = 32, height = 32 fits the grid; that is a reading of the values, not of code ([Q2](../OPEN_QUESTIONS.md), answered as far as the data allows; [`../unknowns/02_wll_header.md`](../unknowns/02_wll_header.md)). (The bytes called "unknown" in `docs/level_tileset_map.md` are these CMZ header bytes; WLL has only a 2-byte header.)
 - Level 24 has 9 bytes per block, i.e. 5 extra bytes; `LEVEL24.CMZ` (549 bytes) is byte-identical in both editions and decompresses to 9222 = 6 + 1024 x 9. The engine copies the 4 wall bytes and steps over the rest, with no level test. The 5 tail bytes take nine patterns: `01 01 01 01 01` on 759 blocks (all solid `(2,2,1,1)`/`(1,1,2,2)` blocks), `00 00 00 00 00` on 230 (all open), `04 00 a4 19 04` on 26, `04 00 ec 16 04` on 3, `04 00 ea 16 04` on 2, and four single blocks whose nine bytes all repeat one value (0x3A, 0x38, 0x4D, 0x3F). CONFIRMED. Both editions' `MAIN.EXE` copy only the 4 wall bytes of each block and step over the tail (CD `MAIN.EXE+0x48540`, `+0x48764`; floppy `+0x51C10`, `+0x51E34`), so the game never reads it. CONFIRMED (disassembled). What the level's author stored there is OPEN, [Q3](../OPEN_QUESTIONS.md); measurements and everything tried: [`../unknowns/03_level24_cmz.md`](../unknowns/03_level24_cmz.md). The 26 `04 00 a4 19 04` blocks sit on wall types 46, 53-57 and others; the same wall-type numbers appear undefined on levels 2 and 3 ([Q11](../OPEN_QUESTIONS.md)), also FOREST1 levels.
 
 
@@ -30,7 +30,7 @@ CD `LEVEL1.CMZ` starts `36 01  04  00  06 10 00 00  00 00 …`: 0x136 + 2 = 312 
 
 | Image bytes | Meaning |
 |-------------|---------|
-| `20 00 20 00` | 32, 32 (not read by the engine) |
+| `20 00 20 00` | 32, 32 (skipped by the traced map loaders) |
 | `04 00` | 4 bytes per block |
 | `01 01 02 02` | block 0 (x 0, y 0): walls N 1, E 1, S 2, W 2: solid wall |
 | block 429 `44 44 44 44` | x 13, y 13 (429 = 13 + 13 x 32): wall type 0x44 on all four sides. The automap legend ([xxx.md](xxx.md)) puts its symbol on this square |
