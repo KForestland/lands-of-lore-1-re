@@ -9,7 +9,7 @@
 
 <!-- suite-counts:begin -->
 - **Original game files.** 54 checks with the required files and dependencies. Quick mode selects 52.
-- **Synthetic data.** 130 unit tests.
+- **Synthetic data.** 131 unit tests.
 <!-- suite-counts:end -->
 
 **As of:** 2026-11-21. For every file format and rules topic: what is documented, which tool reads it, what was checked on the game data, and what is still open. Older notes kept as history ([`closure_memo.md`](closure_memo.md)) gave a single percentage; this table replaces it.

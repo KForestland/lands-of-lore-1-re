@@ -1,4 +1,5 @@
 """Check the one-page guide with invented maps and names."""
+from dataclasses import replace
 from importlib.util import find_spec
 import re
 from pathlib import Path
@@ -10,7 +11,10 @@ from unittest.mock import Mock, patch
 from tests.test_level_tools import TOOLS
 from tests.kit_fixture import make_fixture, TRANSLATE_FROM
 
-from my_game import CANCELLED, GameFolderError, TITLE, WRONG_FOLDER, desktop, game_page, write_page
+from decode_dialogue import encode_string
+from lol1_script_writer import write_strings
+from my_game import TITLE, app, write_page
+from my_game_ui import CANCELLED, GameFolderError
 
 
 def make_my_game_fixture(folder):
@@ -39,6 +43,7 @@ class MyGame(unittest.TestCase):
             self.assertIn(f'<article id="level-1"><h3>{TRANSLATE_FROM}</h3>', page)
             self.assertIn(f'<td>{TRANSLATE_FROM}</td><td>121</td>', page)
             self.assertIn(f'<td>{TRANSLATE_FROM}</td><td>0</td><td>3 / 0 / 0 / 0</td>', page)
+            self.assertIn("Floor row 3, column 6", page)
             self.assertFalse(list(game.rglob("*.html")))
             with self.assertRaises(FileExistsError):
                 write_page(game, path, open_page=False)
@@ -50,13 +55,31 @@ class MyGame(unittest.TestCase):
         with TemporaryDirectory() as temp:
             folder = Path(temp)
             with self.assertRaises(GameFolderError) as problem:
-                game_page(folder)
-            self.assertEqual(str(problem.exception), WRONG_FOLDER)
+                write_page(folder, open_page=False)
+            self.assertEqual(str(problem.exception), app.wrong_folder)
             make_my_game_fixture(folder)
             (folder / "DATA" / "L29.PAK").unlink()
             with self.assertRaises(GameFolderError) as problem:
-                game_page(folder)
-            self.assertEqual(str(problem.exception), WRONG_FOLDER)
+                write_page(folder, open_page=False)
+            self.assertEqual(str(problem.exception), app.wrong_folder)
+
+    def test_selected_language_is_used_in_all_three_name_tables(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            game = root / "fixture"
+            make_my_game_fixture(game)
+            data = game / "DATA"
+            german = data / "GER"
+            german.mkdir()
+            label = "Ein Testname"
+            text = encode_string(label.encode("cp437")).decode("latin-1")
+            (data / "LANDS.GER").write_bytes(write_strings({"offsets": [2], "strings": [text, ""]}, "<"))
+            path = write_page(german, root / "page.html", open_page=False)
+            page = path.read_text(encoding="utf-8")
+            self.assertIn("German text table", page)
+            self.assertIn(f"<h3>{label}</h3>", page)
+            self.assertIn(f"<td>{label}</td><td>121</td>", page)
+            self.assertIn(f"<td>{label}</td><td>0</td>", page)
 
 
 class MyGameDesktop(unittest.TestCase):
@@ -65,12 +88,13 @@ class MyGameDesktop(unittest.TestCase):
             root = Path(temp)
             documents = root / "Documents"
             game = root / "game"
-            with patch("my_game.documents_folder", return_value=documents), patch("my_game.game_page", return_value="test"):
-                first = write_page(game, open_page=False)
+            fixture = replace(app, read_page=Mock(return_value="test"))
+            with patch("my_game_ui.documents_folder", return_value=documents):
+                first = fixture.write_page(game, open_page=False)
                 first.write_text("keep this page", encoding="utf-8")
-                second = write_page(game, open_page=False)
+                second = fixture.write_page(game, open_page=False)
                 with self.assertRaisesRegex(ValueError, "outside the game folder"):
-                    write_page(root, open_page=False)
+                    fixture.write_page(root, open_page=False)
             self.assertEqual(first.resolve(), (documents / "LoL1 My Game.html").resolve())
             self.assertEqual(first.read_text(encoding="utf-8"), "keep this page")
             self.assertEqual(second.resolve(), (documents / "LoL1 My Game 2.html").resolve())
@@ -80,8 +104,8 @@ class MyGameDesktop(unittest.TestCase):
         tkinter = Mock()
         tkinter.TclError = RuntimeError
         tkinter.filedialog.askdirectory.return_value = ""
-        with patch.dict("sys.modules", tkinter=tkinter), patch("my_game.write_page") as write:
-            self.assertEqual(desktop(), 0)
+        with patch.dict("sys.modules", tkinter=tkinter), patch("my_game_ui.MyGame.write_page") as write:
+            self.assertEqual(app.desktop(), 0)
         write.assert_not_called()
         tkinter.messagebox.showinfo.assert_called_once_with(TITLE, CANCELLED, parent=tkinter.Tk.return_value)
 
@@ -92,8 +116,9 @@ class MyGameDesktop(unittest.TestCase):
                 tkinter = Mock()
                 tkinter.TclError = RuntimeError
                 tkinter.filedialog.askdirectory.return_value = "game"
-                with patch.dict("sys.modules", tkinter=tkinter), patch("my_game.write_page", return_value=path):
-                    with patch("my_game.open_report", return_value=opened):
-                        self.assertEqual(desktop(), 0)
+                fixture = replace(app, language_options=None)
+                with patch.dict("sys.modules", tkinter=tkinter), patch("my_game_ui.MyGame.write_page", return_value=path):
+                    with patch("my_game_ui.open_report", return_value=opened):
+                        self.assertEqual(fixture.desktop(), 0)
                 self.assertEqual(tkinter.messagebox.showinfo.call_count, 1)
                 self.assertTrue(tkinter.messagebox.showinfo.call_args.args[1].endswith(str(path)))

@@ -130,8 +130,9 @@ def calls_by_entry(script, *, with_sites=False):
     return out
 
 
-def item_names(data_dir):
-    lands = T.file_strings(L.find_member("LANDS.ENG", data_dir)[1])
+def item_names(data_dir, lands=None):
+    if lands is None:
+        lands = T.file_strings(L.find_member("LANDS.ENG", data_dir)[1])
     s = E.read_script(L.find_member("ONETIME.INF", data_dir)[1])
     names = {}
     for e, (mask, calls) in calls_by_entry(s).items():
