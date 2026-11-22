@@ -50,7 +50,7 @@ These are counts of work done, not a percentage of how complete the project is. 
 
 <!-- suite-counts:begin -->
 - **Original game files.** 54 checks with the required files and dependencies. Quick mode selects 52.
-- **Synthetic data.** 131 unit tests.
+- **Synthetic data.** 133 unit tests.
 <!-- suite-counts:end -->
 
 Use Python 3.10 or later and your own copy of the DOS game (CD or floppy edition). Install Pillow for the image tools and Capstone for the executable reference scan. The full check uses both packages.
@@ -119,6 +119,8 @@ What you can look at with your own copy of the game. Run from the clone with `ex
 Open the Windows build from the [My Game workflow](https://github.com/KForestland/lands-of-lore-1-re/actions/workflows/windows-mygame.yml). Download and unzip the **LoL1-MyGame-Windows** artifact, then double-click **LoL1-MyGame.exe**. Choose your Lands of Lore installation or its DATA folder. Your browser opens one offline page with your edition, all 29 level plans under their automap titles, items, spells and creatures. **Where is it?** lists the game's recorded item placements and pack grants. The app saves **LoL1 My Game.html** in Documents and shows the full path. If the filename is taken, the app adds a number.
 
 On Linux or macOS, run `python lol.py mygame` from this repository with Pillow and a Python installation that provides Tk. The same folder picker opens. The page identifies the language used for level, item and spell names. If the installation includes several languages and the program cannot tell which one you play in, it asks you to choose. You can also use `--data` with `--language ENG`, `FRE` or `GER`.
+
+Choose **Open a saved game**, select an original DOS or supported ScummVM save and point to the matching installation. The report shows the party, carried items, shared pack, gold and current level. It opens as a new page in Documents.
 
 ## Change a number in your own copy
 

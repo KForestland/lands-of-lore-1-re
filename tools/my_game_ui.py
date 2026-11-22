@@ -137,9 +137,13 @@ def catalogue(key, title, columns, rows, description=""):
 
 
 def report(title, edition, maps, tables, *, legend="", note="", extras=()):
-    sections = (("maps", "Level plans", maps_section(maps, legend)), *tables, *extras)
+    maps = tuple(maps)
+    map_sections = (("maps", "Level plans", maps_section(maps, legend)),) if maps else ()
+    sections = (*map_sections, *tables, *extras)
     nav = "".join(f'<a href="#{key}">{escape(label)}</a>' for key, label, _ in sections)
-    main = sections[0][2] + '<div class="catalogues">' + "".join(row[2] for row in tables) + '</div>'
+    main = "".join(row[2] for row in map_sections)
+    if tables:
+        main += '<div class="catalogues">' + "".join(row[2] for row in tables) + '</div>'
     main += "".join(row[2] for row in extras)
     note = f"<p>{escape(note)}</p>" if note else ""
     return f"""<!doctype html>
@@ -175,9 +179,10 @@ def documents_folder():
     return Path.home() / "Documents"
 
 
-def write_new_file(out, game_root, page):
-    if output_refusal(out, game_root):
-        raise ValueError("Save the My Game page outside the game folder.")
+def write_new_file(out, game_root, page, *protected):
+    if any(output_refusal(out, root) for root in (game_root, *protected)):
+        raise ValueError("Save the My Game report outside the game and saved-game folders." if protected else
+                         "Save the My Game page outside the game folder.")
     stream = out.open("x", encoding="utf-8")
     try:
         with stream:
@@ -187,16 +192,17 @@ def write_new_file(out, game_root, page):
         raise
 
 
-def save_in_documents(game_root, page, filename):
+def save_in_documents(game_root, page, filename, *protected, extension=".html"):
     documents = documents_folder().resolve()
-    if output_refusal(documents, game_root):
-        raise ValueError("Save the My Game page outside the game folder.")
+    if any(output_refusal(documents, root) for root in (game_root, *protected)):
+        raise ValueError("Your Documents folder is inside a game or saved-game folder." if protected else
+                         "Save the My Game page outside the game folder.")
     documents.mkdir(parents=True, exist_ok=True)
     for number in count(1):
-        name = f"{filename}.html" if number == 1 else f"{filename} {number}.html"
+        name = (filename if number == 1 else f"{filename} {number}") + extension
         out = documents / name
         try:
-            write_new_file(out, game_root, page)
+            write_new_file(out, game_root, page, *protected)
         except FileExistsError:
             continue
         return out
@@ -235,6 +241,8 @@ class MyGame:
     read_page: Callable[..., str]
     languages: tuple = ()
     language_options: Callable[[Path], dict[str, str]] | None = None
+    read_saved: Callable[..., str | tuple[str, str]] | None = None
+    faults: tuple[str, ...] = ()
 
     @property
     def wrong_folder(self):
@@ -250,14 +258,7 @@ class MyGame:
             raise
         except DATA_ERRORS as error:
             raise GameFolderError(self.wrong_folder) from error
-        folder = folder.resolve()
-        game_root = folder
-        if folder.name.upper() == self.data_folder:
-            game_root = folder.parent
-        elif self.languages and folder.name.upper() in self.languages:
-            game_root = folder.parent
-            if game_root.name.upper() == self.data_folder:
-                game_root = game_root.parent
+        game_root = self.game_root(folder)
         if out is None:
             out = save_in_documents(game_root, page, self.filename)
         else:
@@ -266,45 +267,135 @@ class MyGame:
             raise ValueError(f"Open the My Game page in your browser from {out}.")
         return out
 
+    def game_root(self, folder):
+        folder = folder.resolve()
+        if self.languages and folder.name.upper() in self.languages:
+            folder = folder.parent
+        return folder.parent if folder.name.upper() == self.data_folder else folder
+
+    def open_installation(self, window, filedialog, messagebox):
+        while folder := filedialog.askdirectory(parent=window, title=f"Choose your {self.game} folder"):
+            try:
+                selected = Path(folder)
+                language = None
+                if self.language_options:
+                    try:
+                        choices = self.language_options(selected)
+                    except DATA_ERRORS as error:
+                        raise GameFolderError(self.wrong_folder) from error
+                    if len(choices) > 1:
+                        language = choose_language(window, choices)
+                        if language is None:
+                            messagebox.showinfo(self.title, "No language was chosen, so no page was written.", parent=window)
+                            return 0
+                    elif choices:
+                        language = next(iter(choices))
+                path = self.write_page(selected, open_page=False, language=language)
+                opened = open_report(path)
+            except GameFolderError as error:
+                messagebox.showerror(self.title, str(error), parent=window)
+            except (OSError, ValueError, ImportError) as error:
+                messagebox.showerror(self.title, str(error), parent=window)
+                return 1
+            else:
+                message = "Your My Game page is saved here." if opened else "Open your saved My Game page in your browser."
+                messagebox.showinfo(self.title, f"{message}\n\n{path}", parent=window)
+                return 0
+        messagebox.showinfo(self.title, CANCELLED, parent=window)
+        return 0
+
+    def open_saved_game(self, window, filedialog, messagebox):
+        picked = filedialog.askopenfilename(parent=window, title=f"Choose your {self.game} saved game")
+        if not picked:
+            messagebox.showinfo(self.title, "No saved game was chosen, so no report was written.", parent=window)
+            return
+        source = Path(picked)
+        protected = (source.parent.resolve(), source.resolve().parent)
+        purpose = "to read the game's reference values" if self.faults else "for names and maps"
+        folder = filedialog.askdirectory(parent=window, title=f"Choose your {self.game} folder {purpose}")
+        if not folder:
+            messagebox.showinfo(self.title, "No game folder was chosen, so no report was written.", parent=window)
+            return
+        folder = Path(folder)
+        if self.faults:
+            self.fault_dialog(window, source, folder, protected, messagebox)
+            return
+        try:
+            page = self.read_saved(source, folder)
+            path = save_in_documents(self.game_root(folder), page, f"{self.filename} Save", *protected)
+            open_report(path)
+        except (OSError, ValueError, ImportError) as error:
+            messagebox.showerror(self.title, str(error), parent=window)
+        else:
+            messagebox.showinfo(self.title, f"Your saved game page is here.\n\n{path}", parent=window)
+
+    def fault_dialog(self, parent, source, folder, protected, messagebox):
+        from tkinter import Text, Toplevel, ttk
+
+        window = Toplevel(parent)
+        window.title("Report a fault")
+        window.transient(parent)
+        window.grab_set()
+        frame = ttk.Frame(window, padding=16)
+        frame.pack(fill="both", expand=True)
+        ttk.Label(frame, text="Choose the fault you saw.").pack(anchor="w")
+        choice = ttk.Combobox(frame, values=self.faults, state="readonly", width=40)
+        choice.pack(fill="x", pady=(4, 8))
+        ttk.Label(frame, text="The file contains only the listed game values and no personal data.").pack(anchor="w")
+        preview = Text(frame, width=60, height=14, wrap="word", state="disabled")
+        preview.pack(fill="both", expand=True, pady=8)
+        notes = ttk.Label(frame, wraplength=465)
+        notes.pack(anchor="w", pady=(0, 8))
+        report_text = None
+
+        def show_preview(_event):
+            nonlocal report_text
+            try:
+                report_text, omitted = self.read_saved(source, folder, choice.current())
+                message = report_text
+            except (OSError, ValueError, ImportError) as error:
+                report_text = None
+                omitted = ""
+                message = str(error)
+            preview.configure(state="normal")
+            preview.delete("1.0", "end")
+            preview.insert("1.0", message)
+            preview.configure(state="disabled")
+            notes.configure(text=omitted)
+            save_button.configure(state="normal" if report_text else "disabled")
+
+        def save_report():
+            try:
+                path = save_in_documents(self.game_root(folder), report_text, f"{self.filename} Fault Report",
+                                         *protected, extension=".txt")
+            except (OSError, ValueError) as error:
+                messagebox.showerror(self.title, str(error), parent=window)
+                return
+            messagebox.showinfo(self.title, f"Your fault report is here.\n\n{path}", parent=window)
+            window.destroy()
+
+        save_button = ttk.Button(frame, text="Save to Documents", command=save_report, state="disabled")
+        save_button.pack(side="left")
+        ttk.Button(frame, text="Cancel", command=window.destroy).pack(side="right")
+        choice.bind("<<ComboboxSelected>>", show_preview)
+
     def desktop(self):
-        from tkinter import TclError, Tk, filedialog, messagebox
+        from tkinter import TclError, Tk, filedialog, messagebox, ttk
 
         try:
             window = Tk()
         except TclError as error:
             raise ValueError("Open My Game from your desktop to choose a game folder.") from error
-        window.withdraw()
         try:
-            while folder := filedialog.askdirectory(parent=window, title=f"Choose your {self.game} folder"):
-                try:
-                    selected = Path(folder)
-                    language = None
-                    if self.language_options:
-                        try:
-                            choices = self.language_options(selected)
-                        except DATA_ERRORS as error:
-                            raise GameFolderError(self.wrong_folder) from error
-                        if len(choices) > 1:
-                            language = choose_language(window, choices)
-                            if language is None:
-                                messagebox.showinfo(self.title, "No language was chosen, so no page was written.", parent=window)
-                                return 0
-                        elif choices:
-                            language = next(iter(choices))
-                    path = self.write_page(selected, open_page=False, language=language)
-                    opened = open_report(path)
-                except GameFolderError as error:
-                    messagebox.showerror(self.title, str(error), parent=window)
-                except (OSError, ValueError, ImportError) as error:
-                    messagebox.showerror(self.title, str(error), parent=window)
-                    return 1
-                else:
-                    message = "Your My Game page is saved here."
-                    if not opened:
-                        message = "Open your saved My Game page in your browser."
-                    messagebox.showinfo(self.title, f"{message}\n\n{path}", parent=window)
-                    return 0
-            messagebox.showinfo(self.title, CANCELLED, parent=window)
+            window.title(self.title)
+            window.protocol("WM_DELETE_WINDOW", window.quit)
+            frame = ttk.Frame(window, padding=20)
+            frame.pack(fill="both", expand=True)
+            ttk.Button(frame, text="Open a game folder",
+                       command=lambda: self.open_installation(window, filedialog, messagebox)).pack(fill="x", pady=(0, 8))
+            ttk.Button(frame, text="Open a saved game",
+                       command=lambda: self.open_saved_game(window, filedialog, messagebox)).pack(fill="x")
+            window.mainloop()
             return 0
         finally:
             window.destroy()
